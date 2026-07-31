@@ -1,0 +1,4 @@
+interface:
+  display_name: "LC 刷题主流程"
+  short_description: "分析进度、选下一题、拉取力扣题目并生成 Java 测试文件"
+  default_prompt: "Use $lc-practice to start a LeetCode practice session: analyze my progress, pick the next problem, fetch it, and create the Java file with tests."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "LC 代码分析"
+  short_description: "分析解题思路错误并记录错误习惯，不直接给答案"
+  default_prompt: "Use $lc-analyze to analyze my LeetCode code after a test failure: identify my approach and where the reasoning went wrong, without writing the correct solution."

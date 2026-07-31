@@ -1,7 +1,19 @@
 {
   "updated": "2026-08-01",
-  "current_seq": 0,
-  "done": [],
+  "current_seq": 1,
+  "done": [
+    {
+      "seq": 1,
+      "id": "1",
+      "title": "两数之和",
+      "slug": "two-sum",
+      "category": "哈希表",
+      "date": "2026-08-01",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "两数之和：单遍哈希表 O(n)，一次 Accepted（65/65）"
+    }
+  ],
   "error_habits": [],
   "category_hints": {
     "哈希表": "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。",

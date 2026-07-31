@@ -1,0 +1,22 @@
+{
+  "seq": 1,
+  "id": "1",
+  "slug": "two-sum",
+  "title": "两数之和",
+  "category": "哈希表",
+  "date": "2026-08-01",
+  "verdict": "Accepted",
+  "testcases": "65/65",
+  "runtime_ms": null,
+  "memory_bytes": 47308000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "单遍哈希表（边查边存，重复值场景天然正确）",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "单遍哈希表 O(n)，一次 Accepted（65/65）",
+  "mistakes": [],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}

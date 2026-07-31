@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0001 两数之和 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.easy { background: #dcfce7; color: #166534; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+  .opt-note {
+    margin-top: 18px; border: 1px solid #fde68a; background: #fffbeb;
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .opt-head { font-weight: 700; color: #92400e; margin-bottom: 6px; }
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .cmp-label { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; }
+  @media (max-width: 700px) { .cmp { grid-template-columns: 1fr; } }
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 01</div>
+    <h1>LC0001 · 两数之和 <span style="color:#93c5fd">Two Sum</span></h1>
+    <div class="sub">从建题、踩坑、框架优化到一次 Accepted 的完整记录</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 65/65</span>
+      <span class="badge easy">难度 Easy</span>
+      <span class="badge tag">分类 哈希表</span>
+      <span class="badge plain">一次通过 · 最优解</span>
+      <span class="badge">2026-08-01</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：单遍哈希表。</b>一边遍历数组，一边把「数字 → 下标」存入 <code>HashMap</code>；
+      对每个元素检查 <code>target - nums[i]</code> 是否已经出现过——出现过就直接返回两个下标，否则把当前数字记进表里继续走。</p>
+      <p>
+        <span class="chip">时间 O(n)</span>
+        <span class="chip">空间 O(n)</span>
+        <span class="chip">边查边存，天然处理重复值</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0001_TwoSum.java</span><span>提交区</span></div>
+        <pre class="code">public int[] twoSum(int[] nums, int target) {
+    Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+    for (int i = 0; i &lt; nums.length; i++) {
+        if (map.containsKey(target - nums[i])) {
+            return new int[]{map.get(target - nums[i]), i};
+        } else {
+            map.put(nums[i], i);
+        }
+    }
+    return null;
+}</pre>
+      </div>
+      <p class="muted">最后的 <code>return null</code> 在题目保证有且仅有一个解的前提下不会被执行，作为兜底保留。</p>
+
+      <div class="opt-note">
+        <div class="opt-head">思路正确 · 但代码层面有一个可微调点</div>
+        <p>当前写法对同一个 key 做了<strong>两次哈希查找</strong>：先 <code>containsKey</code> 判断是否存在，再 <code>get</code> 取值。
+        可以合并成<strong>一次查找</strong>——先 <code>get</code>，再判断是否为 <code>null</code>。复杂度不变（均摊 O(1)），只是更紧凑。</p>
+        <div class="cmp">
+          <div>
+            <div class="cmp-label">当前写法（两次查找）</div>
+            <div class="code-wrap">
+              <div class="code-head"><span>twoSum 内</span><span>containsKey + get</span></div>
+              <pre class="code">if (map.containsKey(target - nums[i])) {
+    return new int[]{map.get(target - nums[i]), i};
+}</pre>
+            </div>
+          </div>
+          <div>
+            <div class="cmp-label">更紧凑（一次查找）</div>
+            <div class="code-wrap">
+              <div class="code-head"><span>twoSum 内</span><span>get + null 判断</span></div>
+              <pre class="code">Integer j = map.get(target - nums[i]);
+if (j != null) {
+    return new int[]{j, i};
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 选题建题<span class="tl-badge info">lc-practice</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>按推荐顺序拉取第 1 题（two-sum），生成 <code>LC0001_TwoSum.java</code>：
+          模板自带 <code>// ==== 提交代码开始/结束 ====</code> 标记区、示例测试 <code>main</code> 与辅助比较函数。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 环境：IDEA 不识别为可执行文件<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>文件在 IDEA 里没有运行按钮，排查发现两个原因叠加：</p>
+          <ul>
+            <li><code>.idea/leetCode.iml</code> 没有把 <code>src</code> 声明为 Sources Root，文件不属于模块源码；</li>
+            <li>模板方法体缺 <code>return</code>，编译失败，自然也无法运行。</li>
+          </ul>
+          <p>解决：右键 <code>src</code> → <b>Mark Directory as → Sources Root</b>，运行入口即恢复。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 踩坑①：方法缺少 return<span class="tl-badge bug">编译错误</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>模板占位只写了打印语句，没有返回值：</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>两数之和 · 提交区</span><span>错误示范</span></div>
+            <pre class="code">public int[] twoSum(int[] nums, int target) {
+    System.out.println("aaa");
+}
+// javac: 缺少返回语句</pre>
+          </div>
+          <p>Java 规定非 <code>void</code> 方法必须在所有路径上返回值，否则直接编译失败。
+          这个错误习惯被记入 <code>progress.json</code>，后续选题会提醒。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 踩坑②：return null 占位<span class="tl-badge bug">结果全错</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>改成 <code>return null</code> 绕过了编译，但没有实现任何查找逻辑：</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>两数之和 · 提交区</span><span>错误示范</span></div>
+            <pre class="code">return null;
+// 示例1 失败 ✗ 期望=[0, 1] 实际=null
+// 示例2 失败 ✗ 期望=[1, 2] 实际=null
+// 示例3 失败 ✗ 期望=[0, 1] 实际=null</pre>
+          </div>
+          <p>教训：<code>null</code> 的语义是「没有答案」，而题目每个示例都有解；
+          占位不等于实现，方法体必须真正读过 <code>nums</code> 并计算答案。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">05 · 测试框架：顺序敏感问题<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>生成的测试用字符串精确比较，暴露出两个问题：</p>
+          <ul>
+            <li><b>Map / Set 迭代顺序不稳定</b>：内容相同、插入顺序不同的两个 <code>HashMap</code> 会被误判不相等；</li>
+            <li><b>两数之和的下标对顺序无所谓</b>：返回 <code>[1, 0]</code> 和 <code>[0, 1]</code> 都合法，但严格比较会误报失败。</li>
+          </ul>
+          <p>解决：<code>norm()</code> 对 Map 按键、Set 按元素排序后输出（迭代顺序不再影响比较）；
+          新增 <code>checkEqUnordered()</code> 用于「任意顺序」答案，生成器用 <code>UNORDERED_SLUGS</code> 白名单命中本题。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">06 · 结构优化：测试工具共享化<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>比较函数不再复制进每道题，抽到共享类 <code>src/TestUtil.java</code>：</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>src/TestUtil.java</span><span>共享工具（不参与提交）</span></div>
+            <pre class="code">public static boolean checkEq(Object expected, Object actual, String label) {
+    return eq(label, norm(expected), norm(actual));
+}
+
+// 顺序无关比较：数组/List 元素顺序不同也算相等
+public static boolean checkEqUnordered(Object expected, Object actual, String label) {
+    return eq(label, normUnordered(expected), normUnordered(actual));
+}</pre>
+          </div>
+          <p>配套改进：<code>run_tests.js</code> 编译时自动带上 <code>TestUtil</code>；
+          <code>create_problem.js</code> 增加覆盖保护（文件里有你的代码就拒绝重写，需 <code>--force</code>）；
+          TODO 注释从 <code>return</code> 行尾挪到方法体第一行，不干扰编辑。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">07 · 提交：本地通过 → 一次 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>本地三个示例全部通过后准备提交。cookie 自动化上踩了边界：
+          沙箱账号（<code>codexsandboxoffline</code>）无法解密真实账号（<code>Daoxian</code>）浏览器里
+          由 app-bound 加密保护的会话 cookie，因此准备了双击即用的 <code>setup_cookie.cmd</code>，
+          最终由你提供 cookie 值写入 <code>.lc/config.json</code>（已 gitignore，不会入库）。</p>
+          <p>提交结果：<b style="color:#16a34a">Accepted</b>，65/65 用例通过，一次提交成功。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">65 / 65</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 47.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：单遍哈希表，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(n)</b>：必须遍历每个元素，O(n) 是本题下限；哈希查找把内层比较从 O(n) 降到 O(1)。</li>
+        <li><b>空间复杂度 O(n)</b>：用一张哈希表换时间，是空间换时间的标准形态。</li>
+        <li><b>正确性</b>：边查边存，重复值场景（如 <code>[3, 3]</code>、target 6）也能正确返回 <code>[0, 1]</code>。</li>
+        <li><b>结论</b>：与题目标准解法一致，无需再优化。</li>
+      </ul>
+      <h3>代码层面微优化（复杂度已达最优，仅风格）</h3>
+      <p>算法本身已是 O(n) 最优；代码层面 <code>containsKey</code> + <code>get</code> 是两次哈希查找，
+      可合并为一次 <code>get</code> + <code>null</code> 判断。对比见上方「我的解法」的优化点。</p>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 哈希表</h3>
+      <div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <p class="muted">以后遇到同类题（两数之和变体、去重、频率统计等），第一步先想「能不能用哈希表把查找降下来」。</p>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <p>按约定，环境配置与编译类问题不记入错误习惯；本轮没有算法/逻辑级的错误习惯。</p>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 01 · two-sum</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：单遍哈希表 O(n)，一次 Accepted（65/65）。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/1_two-sum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../src/LC0001_TwoSum.java">src/LC0001_TwoSum.java</a> ·
+    <a href="../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../.agents/skills/lc-practice/scripts/create_problem.js">create_problem.js</a> ·
+    <a href="../tools/setup_cookie.cmd">tools/setup_cookie.cmd</a><br>
+    生成于 2026-08-01
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

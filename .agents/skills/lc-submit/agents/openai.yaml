@@ -1,0 +1,4 @@
+interface:
+  display_name: "LC 提交与复盘"
+  short_description: "测试通过后提交力扣，分析最优性并复盘错误"
+  default_prompt: "Use $lc-submit to submit my Java solution to LeetCode after local tests pass, then review whether my approach is optimal."
