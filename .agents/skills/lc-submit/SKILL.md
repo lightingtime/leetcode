@@ -26,6 +26,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 若已最优：点评优点，简要说明为什么这个复杂度已是下限。
    - 记录完成：`node ".agents/skills/lc-practice/scripts/update_state.js" done --seq <seq> --firstPass <是否一次通过> --optimal <是否最优> --notes "<一句话复盘>" --verdict Accepted --testcases 65/65 --memory <内存字节> --approach "解法名" --time O(n) --space O(n)`。
    - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，`update_state.js analysis --slug <slug>` 可查看）。
+   - 自动打卡（无需用户提醒）：`node ".agents/skills/lc-practice/scripts/update_state.js" checkin --seq <seq>`，向根目录「训练打卡.md」追加打卡行并更新进度；随后将打卡表改动提交到 git。
    - 类似题型提醒：读取 `progress.json` 的 `category_hints`，把当前分类的宽泛思路再强调一遍，例如「以后遇到同类题，应该先想到双指针/单调栈/DP 状态定义」。
 
    **Wrong Answer / Time Limit Exceeded / Runtime Error / Compile Error**
