@@ -1,0 +1,64 @@
+{
+  "id": "1",
+  "slug": "two-sum",
+  "title": "Two Sum",
+  "titleCn": "两数之和",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/two-sum/",
+  "tags": [
+    "Array",
+    "Hash Table"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[2,7,11,15]"
+        },
+        {
+          "name": "target",
+          "value": "9"
+        }
+      ],
+      "output": "[0,1]",
+      "explain": "因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,2,4]"
+        },
+        {
+          "name": "target",
+          "value": "6"
+        }
+      ],
+      "output": "[1,2]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,3]"
+        },
+        {
+          "name": "target",
+          "value": "6"
+        }
+      ],
+      "output": "[0,1]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[2,7,11,15]\n9\n[3,2,4]\n6\n[3,3]\n6",
+  "javaSnippet": "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        \n    }\n}",
+  "fetchedAt": "2026-07-31T17:29:01.260Z"
+}
