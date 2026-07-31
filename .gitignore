@@ -3,3 +3,6 @@ out/
 *.class
 *.iml
 .DS_Store
+
+.lc/config.json
+
