@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-01",
-  "current_seq": 1,
+  "updated": "2026-08-03",
+  "current_seq": 2,
   "done": [
     {
       "seq": 1,
@@ -12,6 +12,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "两数之和：单遍哈希表 O(n)，一次 Accepted（65/65）"
+    },
+    {
+      "seq": 2,
+      "id": "169",
+      "title": "多数元素",
+      "slug": "majority-element",
+      "category": "哈希表",
+      "date": "2026-08-03",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "多数元素：Boyer-Moore 投票，一次 Accepted（54/54），已是最优 O(n)/O(1)"
     }
   ],
   "error_habits": [],

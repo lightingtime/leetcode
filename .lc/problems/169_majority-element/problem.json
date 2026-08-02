@@ -1,0 +1,48 @@
+{
+  "id": "169",
+  "slug": "majority-element",
+  "title": "Majority Element",
+  "titleCn": "多数元素",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/majority-element/",
+  "tags": [
+    "Array",
+    "Hash Table",
+    "Divide and Conquer",
+    "Counting",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表",
+    "分治",
+    "计数",
+    "排序"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,2,3]"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[2,2,1,1,1,2,2]"
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[3,2,3]\n[2,2,1,1,1,2,2]",
+  "javaSnippet": "class Solution {\n    public int majorityElement(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-02T20:21:47.841Z"
+}

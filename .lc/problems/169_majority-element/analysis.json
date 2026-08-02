@@ -1,0 +1,22 @@
+{
+  "seq": 2,
+  "id": "169",
+  "slug": "majority-element",
+  "title": "多数元素",
+  "category": "哈希表",
+  "date": "2026-08-03",
+  "verdict": "Accepted",
+  "testcases": "54/54",
+  "runtime_ms": null,
+  "memory_bytes": 56196000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Boyer-Moore 投票",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "多数元素：Boyer-Moore 投票，一次 Accepted（54/54），已是最优 O(n)/O(1)",
+  "mistakes": [],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}
