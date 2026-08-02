@@ -1,0 +1,25 @@
+{
+  "seq": 3,
+  "id": "49",
+  "slug": "group-anagrams",
+  "title": "字母异位词分组",
+  "category": "哈希表",
+  "date": "2026-08-03",
+  "verdict": "",
+  "testcases": "",
+  "runtime_ms": null,
+  "memory_bytes": null,
+  "firstPass": false,
+  "optimal": false,
+  "approach": "",
+  "time_complexity": "",
+  "space_complexity": "",
+  "notes": "",
+  "mistakes": [
+    {
+      "habit": "键编码遗漏次数：分组键只编码出现的字母集合，漏掉每个字母的出现次数，导致 'a' 与 'aa'、'ab' 与 'aab' 被错误分到同一组",
+      "count": 1
+    }
+  ],
+  "hints": []
+}

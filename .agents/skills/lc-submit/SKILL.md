@@ -33,7 +33,9 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 类似题型提醒：读取 `progress.json` 的 `category_hints`，把当前分类的宽泛思路再强调一遍，例如「以后遇到同类题，应该先想到双指针/单调栈/DP 状态定义」。
 
    **Wrong Answer / Time Limit Exceeded / Runtime Error / Compile Error**
-   - 深度分析：引用具体用例（last_testcase）、期望 vs 实际输出、出错行/异常栈，指出逻辑上具体哪里错了。
+   - 拿到失败用例（必做）：判题结果里的 `last_testcase`（输入）与 `expected_output`（期望输出）就是最可靠的回归用例；若脚本没打印出来，通过判题接口重新查询取回。
+   - 补充到本地测试（必做）：把该失败用例转成 Java 测试，加进本题文件的 `main` 测试区（示例或边界区），让本地先能稳定复现这个错误，再进入分析。
+   - 深度分析：引用该具体用例、期望 vs 实际输出、出错行/异常栈，指出逻辑上具体哪里错了。
    - 默认不直接给正确答案；只给宽泛提示与「错误出在哪一步」。用户明确索要当前思路的正确写法时才给出。
    - 记录错误习惯：`node ".agents/skills/lc-practice/scripts/update_state.js" habit add --text "..." --problem <slug> --category <分类>`。
    - 仅算法/逻辑类问题记录习惯；Compile Error 属于环境或代码格式问题，不记录。

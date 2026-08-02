@@ -1,0 +1,25 @@
+{
+  "id": "49",
+  "slug": "group-anagrams",
+  "title": "Group Anagrams",
+  "titleCn": "字母异位词分组",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/group-anagrams/",
+  "tags": [
+    "Array",
+    "Hash Table",
+    "String",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表",
+    "字符串",
+    "排序"
+  ],
+  "category": "哈希表",
+  "examples": [],
+  "exampleTestcases": "[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]\n[\"\"]\n[\"a\"]",
+  "javaSnippet": "class Solution {\n    public List<List<String>> groupAnagrams(String[] strs) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-02T21:26:41.025Z"
+}

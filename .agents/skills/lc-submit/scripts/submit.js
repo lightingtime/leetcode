@@ -55,23 +55,15 @@ function printVerdict(ck) {
   if (ck.runtime != null) console.log(`运行时间：${ck.runtime}`);
   if (ck.memory != null) console.log(`内存占用：${ck.memory}`);
   if (ck.total_testcases != null) console.log(`通过用例：${ck.total_correct}/${ck.total_testcases}`);
-  if (ck.status_code === 11) {
-    console.log('编译错误：');
-    console.log((ck.full_compile_error || '无详情').trim());
+  if (ck.status_code === 10) return; // Accepted
+  // 非 Accepted（WA/MLE/OLE/TLE/RE/CE）：一律尽量打印失败用例与期望输出，供补充到本地测试
+  if (ck.last_testcase != null) {
+    console.log('失败用例输入：');
+    console.log((String(ck.last_testcase) || '').trim());
   }
-  if (ck.status_code === 12) {
-    console.log('错误用例输入：');
-    console.log((ck.last_testcase || '无').trim());
-    if (ck.expected_output != null) console.log(`期望输出：${ck.expected_output}`);
-  }
-  if (ck.status_code === 13) {
-    console.log('运行时错误：');
-    console.log((ck.full_runtime_error || '无详情').trim());
-    if (ck.last_testcase != null) console.log(`出错用例：${ck.last_testcase}`);
-  }
-  if (ck.status_code === 14 || ck.status_code === 15) {
-    if (ck.last_testcase != null) console.log(`超限用例：${ck.last_testcase}`);
-  }
+  if (ck.expected_output != null) console.log(`期望输出：${ck.expected_output}`);
+  if (ck.full_runtime_error) { console.log('运行时错误：'); console.log(String(ck.full_runtime_error).trim()); }
+  if (ck.full_compile_error) { console.log('编译错误：'); console.log(String(ck.full_compile_error).trim()); }
 }
 
 async function main() {
