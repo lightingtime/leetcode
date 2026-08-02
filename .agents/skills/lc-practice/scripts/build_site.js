@@ -1,4 +1,4 @@
-// 生成训练主页 reviews/index.html（进度 + 打卡表 + 题目复盘列表）
+// 生成训练主页 reviews/index.html（进度 + 打卡表 + 题目复盘列表，复盘按分类分组）
 // 用法: node build_site.js
 // 数据源: .lc/progress.json（done 列表）、.lc/problems/*/analysis.json（每题判题明细）
 // 约定: 主页由脚本自动生成，不要手改；每题 Accepted 后由 update_state.js checkin 触发重新生成。
@@ -64,12 +64,15 @@ const rows = done.map(d => {
       </tr>`;
 }).join('\n');
 
-const reviewCards = done.map(d => {
+// 题目复盘卡片按分类分组（保持题目完成顺序）
+const reviewGroups = [];
+const groupIndexOf = new Map();
+done.forEach(d => {
   const a = analyses[d.slug] || {};
   const verdict = a.verdict || '';
   const approach = a.approach || '';
   const link = reviewLink(d.id);
-  return `    <div class="card">
+  const card = `    <div class="card">
       <div class="rv-head">
         <b>${esc(padId(d.id).replace(/_$/, ''))} · ${esc(d.title)}</b>
         <span class="badge ${verdict === 'Accepted' ? 'ok' : 'plain'}">${verdict || '已记录'}</span>
@@ -78,7 +81,15 @@ const reviewCards = done.map(d => {
       ${approach ? `<p>解法：${esc(approach)}</p>` : ''}
       ${link ? `<p><a href="${link}">打开完整复盘页 →</a></p>` : ''}
     </div>`;
-}).join('\n');
+  if (!groupIndexOf.has(d.category)) {
+    groupIndexOf.set(d.category, reviewGroups.length);
+    reviewGroups.push({ category: d.category, cards: [] });
+  }
+  reviewGroups[groupIndexOf.get(d.category)].cards.push(card);
+});
+const reviewSections = reviewGroups.map(g =>
+  `    <div class="cat-head">${esc(g.category)}</div>\n${g.cards.join('\n')}`
+).join('\n');
 
 const html = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -111,6 +122,7 @@ const html = `<!DOCTYPE html>
   .bar i { display:block; height:100%; background:linear-gradient(90deg,#2563eb,#22c55e); width:${pct}%; }
   .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-top:14px; box-shadow:0 1px 3px rgba(15,23,42,.05); }
   .rv-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .cat-head { font-size:17px; font-weight:700; margin:28px 0 2px; padding-left:10px; border-left:3px solid var(--accent); }
   .muted { color:var(--muted); font-size:13.5px; }
   a { color:var(--accent); text-decoration:none; }
   a:hover { text-decoration:underline; }
@@ -165,7 +177,8 @@ ${rows}
     <h2>题目复盘</h2>
     ${done.length === 0
       ? '<div class="card muted">暂无复盘。</div>'
-      : reviewCards}
+      : `<p class="muted">按分类分组展示，点击「打开完整复盘页」查看每题报告。</p>
+${reviewSections}`}
   </section>
 
   <section>

@@ -29,6 +29,7 @@
   .bar i { display:block; height:100%; background:linear-gradient(90deg,#2563eb,#22c55e); width:10%; }
   .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-top:14px; box-shadow:0 1px 3px rgba(15,23,42,.05); }
   .rv-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .cat-head { font-size:17px; font-weight:700; margin:28px 0 2px; padding-left:10px; border-left:3px solid var(--accent); }
   .muted { color:var(--muted); font-size:13.5px; }
   a { color:var(--accent); text-decoration:none; }
   a:hover { text-decoration:underline; }
@@ -105,7 +106,9 @@
 
   <section>
     <h2>题目复盘</h2>
-        <div class="card">
+    <p class="muted">按分类分组展示，点击「打开完整复盘页」查看每题报告。</p>
+    <div class="cat-head">哈希表</div>
+    <div class="card">
       <div class="rv-head">
         <b>LC0001 · 两数之和</b>
         <span class="badge ok">Accepted</span>
