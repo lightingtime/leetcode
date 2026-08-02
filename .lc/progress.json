@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-03",
-  "current_seq": 2,
+  "current_seq": 3,
   "done": [
     {
       "seq": 1,
@@ -23,6 +23,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "多数元素：Boyer-Moore 投票，一次 Accepted（54/54），已是最优 O(n)/O(1)"
+    },
+    {
+      "seq": 3,
+      "id": "49",
+      "title": "字母异位词分组",
+      "slug": "group-anagrams",
+      "category": "哈希表",
+      "date": "2026-08-03",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "字母异位词分组：计数编码键分组，修复键遗漏次数后第二次提交 Accepted（129/129）"
     }
   ],
   "error_habits": [

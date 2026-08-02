@@ -5,21 +5,23 @@
   "title": "字母异位词分组",
   "category": "哈希表",
   "date": "2026-08-03",
-  "verdict": "",
-  "testcases": "",
+  "verdict": "Accepted",
+  "testcases": "129/129",
   "runtime_ms": null,
-  "memory_bytes": null,
+  "memory_bytes": 50664000,
   "firstPass": false,
-  "optimal": false,
-  "approach": "",
-  "time_complexity": "",
-  "space_complexity": "",
-  "notes": "",
+  "optimal": true,
+  "approach": "计数编码键 + 哈希表",
+  "time_complexity": "O(n*L)",
+  "space_complexity": "O(n*L)",
+  "notes": "字母异位词分组：计数编码键分组，修复键遗漏次数后第二次提交 Accepted（129/129）",
   "mistakes": [
     {
       "habit": "键编码遗漏次数：分组键只编码出现的字母集合，漏掉每个字母的出现次数，导致 'a' 与 'aa'、'ab' 与 'aab' 被错误分到同一组",
       "count": 1
     }
   ],
-  "hints": []
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
 }
