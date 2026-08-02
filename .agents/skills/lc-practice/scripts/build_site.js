@@ -1,4 +1,5 @@
 // 生成训练主页 reviews/index.html（进度 + 打卡表 + 题目复盘列表，复盘按分类分组）
+// 复盘报告按分类存放：reviews/{分类}/LC{题号}_{题名}_Review.html（分类名中的 / 等非法字符替换为 -）
 // 用法: node build_site.js
 // 数据源: .lc/progress.json（done 列表）、.lc/problems/*/analysis.json（每题判题明细）
 // 约定: 主页由脚本自动生成，不要手改；每题 Accepted 后由 update_state.js checkin 触发重新生成。
@@ -29,13 +30,21 @@ if (fs.existsSync(problemsDir)) {
   }
 }
 
-const reviewFiles = fs.existsSync(REVIEWS)
-  ? fs.readdirSync(REVIEWS).filter(f => f.endsWith('.html') && f !== 'index.html')
-  : [];
+function collectReviewFiles(dir, base) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'index.html') continue;
+    const rel = base ? base + '/' + entry.name : entry.name;
+    if (entry.isDirectory()) out.push(...collectReviewFiles(path.join(dir, entry.name), rel));
+    else if (entry.isFile() && entry.name.endsWith('.html')) out.push(rel);
+  }
+  return out;
+}
+const reviewFiles = fs.existsSync(REVIEWS) ? collectReviewFiles(REVIEWS, '') : [];
 
 function padId(id) { return 'LC' + String(id).padStart(4, '0') + '_'; }
 function reviewLink(id) {
-  const hit = reviewFiles.find(f => f.startsWith(padId(id)));
+  const hit = reviewFiles.find(f => path.basename(f).startsWith(padId(id)));
   return hit || '';
 }
 function reviewDate(d) {

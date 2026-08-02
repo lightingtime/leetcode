@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LC0049 字母异位词分组 · 刷题复盘</title>
+<title>LC0169 多数元素 · 刷题复盘</title>
 <style>
   :root {
     --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
@@ -35,7 +35,7 @@
     background: rgba(255,255,255,.14); color: #e2e8f0;
   }
   .badge.ok { background: #dcfce7; color: #166534; }
-  .badge.mid { background: #fef3c7; color: #92400e; }
+  .badge.easy { background: #dcfce7; color: #166534; }
   .badge.tag { background: #e0e7ff; color: #3730a3; }
   .badge.plain { background: #e5e7eb; color: #374151; }
 
@@ -150,14 +150,14 @@
 
 <div class="hero">
   <div class="wrap">
-    <div class="kicker">LEETCODE 刷题复盘 · SEQ 03</div>
-    <h1>LC0049 · 字母异位词分组 <span style="color:#93c5fd">Group Anagrams</span></h1>
-    <div class="sub">从独立实现、首次 WA 复盘、修复键编码到第二次 Accepted 的完整记录</div>
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 02</div>
+    <h1>LC0169 · 多数元素 <span style="color:#93c5fd">Majority Element</span></h1>
+    <div class="sub">从建题、独立实现 Boyer-Moore 投票到一次 Accepted 的完整记录</div>
     <div class="badges">
-      <span class="badge ok">✓ Accepted 129/129</span>
-      <span class="badge mid">难度 Medium</span>
+      <span class="badge ok">✓ Accepted 54/54</span>
+      <span class="badge easy">难度 Easy</span>
       <span class="badge tag">分类 哈希表</span>
-      <span class="badge plain">非一次通过 · 已达最优</span>
+      <span class="badge plain">一次通过 · 最优解</span>
       <span class="badge">2026-08-03</span>
     </div>
   </div>
@@ -168,47 +168,35 @@
   <section>
     <h2>我的解法</h2>
     <div class="card">
-      <p><b>思路：计数编码键。</b>统计每个字符串 26 个字母的出现次数，把「字母 + 次数」编码成一个字符串作为分组键；
-      两个字符串互为字母异位词 ⟺ 它们的计数完全相同 ⟺ 键相同，于是放进同一个 <code>HashMap</code> 桶里。</p>
+      <p><b>思路：Boyer-Moore 投票算法。</b>维护一个候选值 <code>cur</code> 和一个计数器 <code>cnt</code>；
+      遍历数组时，遇到与候选相同的元素就 <code>cnt++</code>，不同就 <code>cnt--</code>；计数器归零时换当前元素为新候选。
+      由于多数元素出现次数超过 ⌊n/2⌋，经过两两抵消后它一定会留在候选位。</p>
       <p>
-        <span class="chip">时间 O(n·L)</span>
-        <span class="chip">空间 O(n·L)</span>
-        <span class="chip">L = 字符串平均长度</span>
-        <span class="chip">键包含完整计数</span>
+        <span class="chip">时间 O(n)</span>
+        <span class="chip">空间 O(1)</span>
+        <span class="chip">单遍扫描</span>
+        <span class="chip">命中进阶要求</span>
       </p>
       <div class="code-wrap">
-        <div class="code-head"><span>src/LC0049_GroupAnagrams.java</span><span>提交区（修复后）</span></div>
-        <pre class="code">public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
-    Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
-    for (String str : strs) {
-        String pre = cal(str);
-        if (map.containsKey(pre)) {
-            map.get(pre).add(str);
+        <div class="code-head"><span>src/LC0169_MajorityElement.java</span><span>提交区</span></div>
+        <pre class="code">public int majorityElement(int[] nums) {
+    int cnt = 1;
+    int cur = nums[0];
+    for (int i = 1; i &lt; nums.length; i++) {
+        if (cur != nums[i]) {
+            cnt--;
+            if (cnt &lt;= 0) {
+                cur = nums[i];
+                cnt = 1;
+            }
         } else {
-            List&lt;String&gt; list = new ArrayList&lt;&gt;();
-            list.add(str);
-            map.put(pre, list);
+            cnt++;
         }
     }
-    return map.values().stream().toList();
-}
-
-private String cal(String str) {
-    int[] counts = new int[26];
-    for (Character c : str.toCharArray()) {
-        counts[c - 'a']++;
-    }
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i &lt; 26; i++) {
-        if (counts[i] &gt; 0) {
-            sb.append(i + 'a');
-            sb.append(counts[i]);
-        }
-    }
-    return sb.toString();
+    return cur;
 }</pre>
       </div>
-      <p class="muted">键形如「ASCII码+次数」拼接，如 <code>a×1</code> → <code>971</code>、<code>aa</code> → <code>972</code>，能区分不同次数组合。</p>
+      <p class="muted">题目保证数组非空且一定存在多数元素，因此从 <code>nums[0]</code> 起步的写法安全；提交区即为上面这一段。</p>
     </div>
   </section>
 
@@ -224,11 +212,12 @@ private String cal(String str) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">01 · 独立实现计数编码键<span class="tl-badge info">首次实现</span></span>
+          <span class="tl-title">01 · 独立实现 Boyer-Moore 投票<span class="tl-badge ok">一次通过</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>用「字母 + 出现次数」的思路设计分组键，本地方向正确；但第一版键里漏掉了次数，只编码了字母集合。</p>
+          <p>没有经过 lc-analyze，直接写出了「候选值 + 计数抵消」的写法：单遍扫描、常数空间，正好满足题目进阶
+          （O(n) 时间、O(1) 空间）的要求，代码也足够简洁。</p>
         </div>
         </details>
       </div>
@@ -237,13 +226,11 @@ private String cal(String str) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">02 · 首次提交 WA（109/129）<span class="tl-badge bug">失败</span></span>
+          <span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>判题返回 Wrong Answer，109/129 通过。分析发现 <code>cal()</code> 只 append 了字母与字母下标、漏掉 <code>counts[i]</code>，
-          导致「a」「aa」「aaa」这类字母集合相同、次数不同的字符串被错误归到同一组。本地用
-          <code>["a","aa","aaa"]</code>、<code>["ab","aab"]</code> 复现成功，并把失败模式沉淀为回归用例。</p>
+          <p>运行 <code>run_tests.js</code>：示例 1（<code>[3,2,3] → 3</code>）与示例 2（<code>[2,2,1,1,1,2,2] → 2</code>）全部通过，<code>RESULT: PASS</code>。</p>
         </div>
         </details>
       </div>
@@ -252,26 +239,12 @@ private String cal(String str) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">03 · 修复键编码并回归验证<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-title">03 · 提交力扣：一次 Accepted<span class="tl-badge ok">完成</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>把 <code>sb.append(i)</code> 改成 <code>sb.append(counts[i])</code>，键补齐次数信息。
-          本地重跑 3 个示例 + 失败用例（含次数超过 9 的 <code>"aaaaaaaaaa"</code>）全部通过。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">04 · 第二次提交 Accepted<span class="tl-badge ok">完成</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>重新提交判题结果 <b style="color:#16a34a">Accepted</b>，129/129 用例通过，内存约 48.3 MB。
-          随后记录进度与明细、打卡并重新生成训练主页，同时生成本期复盘报告。</p>
+          <p>本地通过后提交，判题结果 <b style="color:#16a34a">Accepted</b>，54/54 用例通过，内存约 53.6 MB，一次提交成功。
+          随后记录进度与明细（<code>progress.json</code> / <code>analysis.json</code>）、打卡并重新生成训练主页，同时生成本期复盘报告。</p>
         </div>
         </details>
       </div>
@@ -284,48 +257,47 @@ private String cal(String str) {
 
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
-      <div class="metric ok"><div class="v">129 / 129</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 48.3 MB</div><div class="l">内存占用</div></div>
-      <div class="metric ok"><div class="v">O(n·L) / O(n·L)</div><div class="l">时间 / 空间</div></div>
-      <div class="metric"><div class="v">两次</div><div class="l">提交次数</div></div>
+      <div class="metric ok"><div class="v">54 / 54</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 53.6 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) / O(1)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
     </div>
 
     <div class="card">
-      <h3>算法判定：计数编码键，已是最优</h3>
+      <h3>算法判定：Boyer-Moore 投票，已是最优</h3>
       <ul class="ok-list">
-        <li><b>时间复杂度 O(n·L)</b>：每个字符至少要读一次，O(n·L) 是本题下限；计数是 O(L)，键拼接是常数 26，都在下界内。</li>
-        <li><b>空间复杂度 O(n·L)</b>：分组结果本身就要存下全部字符串，这是必须的开销。</li>
-        <li><b>键的正确性</b>：键编码了「每个字母 + 出现次数」，不同次数组合（如 <code>a</code> 与 <code>aa</code>）必然得到不同键，不再误分组。</li>
-        <li><b>结论</b>：与题目标准解法一致，无需再优化。</li>
+        <li><b>时间复杂度 O(n)</b>：至少要遍历每个元素一次才能判断多数，O(n) 是本题下限。</li>
+        <li><b>空间复杂度 O(1)</b>：只用候选值 + 计数器，不依赖哈希表或排序，正是进阶要求。</li>
+        <li><b>正确性</b>：多数元素数量 &gt; ⌊n/2⌋，任意两两抵消后剩余的一定是它；本题保证存在，所以无需再做验证阶段。</li>
+        <li><b>结论</b>：与题目标准最优解一致，无需再优化。</li>
       </ul>
     </div>
 
     <div class="card">
       <h3>分类提醒 · 哈希表</h3>
       <div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
-      <p>本题的关键是「为异位词设计共享键」：<b>键必须编码完整信息</b>——只编码字母集合不够，还要带上每个字母的出现次数；
-      这类「分组 / 去重 / 计数」题，设计键时先问自己：信息够不够区分两个本应不同的对象。</p>
+      <p>本题的计数法（哈希表统计频率）能拿到 O(n)/O(n)，但进阶还提醒了一件事：<b>「出现次数过半」这类题可以先想计数，
+      再想能不能用抵消/投票把空间也压到 O(1)</b>。以后遇到众数、过半元素、候选抵消类问题，值得先往这个方向想。</p>
     </div>
 
     <div class="card">
       <h3>错误习惯复盘</h3>
-      <p>本轮记录 1 条错误习惯（已写入 <code>progress.json</code>，后续选题会提醒）：</p>
-      <div class="quote">键编码遗漏次数：分组键只编码出现的字母集合，漏掉每个字母的出现次数，导致 'a' 与 'aa'、'ab' 与 'aab' 被错误分到同一组。</div>
+      <p>本轮从建题到提交没有任何算法/逻辑级错误，一次通过，不新增错误习惯。</p>
       <h3>完成记录</h3>
       <p>
-        <span class="chip">seq 03 · group-anagrams</span>
-        <span class="chip">firstPass: false</span>
+        <span class="chip">seq 02 · majority-element</span>
+        <span class="chip">firstPass: true</span>
         <span class="chip">optimal: true</span>
       </p>
-      <div class="quote">一句话复盘：字母异位词分组：计数编码键分组，修复键遗漏次数后第二次提交 Accepted（129/129）。</div>
+      <div class="quote">一句话复盘：多数元素：Boyer-Moore 投票，一次 Accepted（54/54），已是最优 O(n)/O(1)。</div>
     </div>
   </section>
 
   <div class="foot">
-    数据来源：力扣判题接口 · <code>.lc/problems/49_group-anagrams/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
-    相关文件：<a href="../src/LC0049_GroupAnagrams.java">src/LC0049_GroupAnagrams.java</a> ·
-    <a href="../src/TestUtil.java">src/TestUtil.java</a> ·
-    <a href="../index.html">训练主页</a><br>
+    数据来源：力扣判题接口 · <code>.lc/problems/169_majority-element/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0169_MajorityElement.java">src/LC0169_MajorityElement.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
     生成于 2026-08-03
   </div>
 
