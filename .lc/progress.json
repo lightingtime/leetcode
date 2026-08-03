@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 5,
+  "current_seq": 6,
   "done": [
     {
       "seq": 1,
@@ -56,6 +56,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "环形链表：Floyd 快慢指针判圈，O(n)/O(1)，一次 Accepted（29/29）"
+    },
+    {
+      "seq": 6,
+      "id": "160",
+      "title": "相交链表",
+      "slug": "intersection-of-two-linked-lists",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "相交链表：双指针各走完一条链后切到另一条链消除长度差，O(m+n)/O(1)，一次 Accepted（41/41）"
     }
   ],
   "error_habits": [
@@ -80,6 +91,39 @@
         "哈希表"
       ],
       "last_seen": "2026-08-03"
+    },
+    {
+      "habit": "守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null",
+      "count": 1,
+      "examples": [
+        "intersection-of-two-linked-lists"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
+    },
+    {
+      "habit": "双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位",
+      "count": 1,
+      "examples": [
+        "intersection-of-two-linked-lists"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
+    },
+    {
+      "habit": "双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null",
+      "count": 1,
+      "examples": [
+        "intersection-of-two-linked-lists"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
     }
   ],
   "category_hints": {

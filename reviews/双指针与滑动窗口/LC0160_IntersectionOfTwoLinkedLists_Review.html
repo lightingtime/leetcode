@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0160 相交链表 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.mid { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 06</div>
+    <h1>LC0160 · 相交链表 <span style="color:#93c5fd">Intersection of Two Linked Lists</span></h1>
+    <div class="sub">从守卫条件写反到双指针换链修通的完整记录</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 41/41</span>
+      <span class="badge">难度 Easy</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge plain">一次判题通过 · 已达最优</span>
+      <span class="badge">2026-08-04</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：双指针换链消除长度差。</b><code>p1</code> 从 <code>headA</code> 出发、<code>p2</code> 从 <code>headB</code> 出发，
+      各自每次走 1 步，走到 <code>null</code> 时切到另一条链的头部继续走。有交点时，两指针走完相同总步数后在交点相遇；
+      无交点时，两指针各走完 m+n 步，最终同时停在 <code>null</code>，循环以 <code>p1 == p2</code> 结束。</p>
+      <p>
+        <span class="chip">时间 O(m+n)</span>
+        <span class="chip">空间 O(1)</span>
+        <span class="chip">指针为 null 时才换链</span>
+        <span class="chip">相遇或同为 null 结束</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0160_IntersectionOfTwoLinkedLists.java</span><span>提交区（格式化后）</span></div>
+        <pre class="code">public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    if (headA == null || headB == null) {
+        return null;
+    }
+    ListNode p1 = headA, p2 = headB;
+    while (p1 != p2) {
+        if (p1 != null) {
+            p1 = p1.next;
+        } else {
+            p1 = headB;
+        }
+        if (p2 != null) {
+            p2 = p2.next;
+        } else {
+            p2 = headA;
+        }
+    }
+    return p1;
+}</pre>
+      </div>
+      <p class="muted">关键点：换链发生在「指针本身为 null」的那一步，循环条件用 <code>p1 != p2</code> 而不是 <code>p1 != null</code>。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 独立实现（首版守卫条件写反）<span class="tl-badge bug">踩坑</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>方向正确（双指针换链），但空值守卫后又写了一段 <code>if (headA != null || headB != null) return null;</code>：
+          走到这里两个头必然都非空，条件恒真，任何非空输入都会直接返回 null。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 本地失败 + 修复守卫条件<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>删掉恒真守卫后仍失败：换链时机写错（在 <code>next == null</code> 时切链，而非指针走到 <code>null</code> 时切换），
+          无交点时指针永远到不了 null 会死循环，有交点时对齐错位。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 二轮修复循环结构<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>第一次改写把 null 判断放在恒真位置（while 刚保证非空），换链分支成了死代码。改为循环条件 <code>p1 != p2</code>、
+          null 检查放在指针可能为 null 的位置后，本地 5 个用例（3 示例 + 2 边界）全部通过。错误习惯入库：守卫条件写反、
+          换链时机、换链死代码。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 提交 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>判题结果 <b style="color:#16a34a">Accepted</b>，41/41 用例通过，内存约 50.6 MB，一次判题通过。
+          随后记录进度与明细、打卡并重新生成训练主页，同时生成本期复盘报告。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">41 / 41</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 50.6 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(m+n) / O(1)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">成功判题次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：标准双指针换链，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(m+n)</b>：每个指针最多走 m+n 步；有交点时在交点相遇，无交点时同时走到 null。这是下限，因为至少要看清两条链的节点。</li>
+        <li><b>空间复杂度 O(1)</b>：只使用两个指针，优于哈希表记节点的 O(m+n) 空间方案。</li>
+        <li><b>正确性</b>：任一链表为空直接返回 null；换链时机、循环终止条件（p1 == p2，含同为 null）配套一致。</li>
+        <li><b>结论</b>：与题目标准解法一致，无需再优化。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p>链表场景下的双指针有三个经典变体：快慢指针（判环/找中点）、首尾相向（回文）、以及本题的「换链对齐」——
+      通过让两个指针走相同总步数来消除长度差。以后遇到两条链表找交点、找倒数第 k 个节点，先想双指针，别急着用哈希表。</p>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <p>本轮记录 3 条错误习惯（已写入 <code>progress.json</code>，后续选题会提醒）：</p>
+      <div class="quote">守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null。</div>
+      <div class="quote">双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位。</div>
+      <div class="quote">双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null。</div>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 06 · intersection-of-two-linked-lists</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：相交链表：双指针各走完一条链后切到另一条链消除长度差，O(m+n)/O(1)，一次 Accepted（41/41）。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/160_intersection-of-two-linked-lists/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0160_IntersectionOfTwoLinkedLists.java">src/LC0160_IntersectionOfTwoLinkedLists.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-04
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

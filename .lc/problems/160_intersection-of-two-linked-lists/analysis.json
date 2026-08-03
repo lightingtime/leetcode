@@ -1,0 +1,35 @@
+{
+  "seq": 6,
+  "id": "160",
+  "slug": "intersection-of-two-linked-lists",
+  "title": "相交链表",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "41/41",
+  "runtime_ms": null,
+  "memory_bytes": 53080000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双指针",
+  "time_complexity": "O(m+n)",
+  "space_complexity": "O(1)",
+  "notes": "相交链表：双指针各走完一条链后切到另一条链消除长度差，O(m+n)/O(1)，一次 Accepted（41/41）",
+  "mistakes": [
+    {
+      "habit": "守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null",
+      "count": 1
+    },
+    {
+      "habit": "双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位",
+      "count": 1
+    },
+    {
+      "habit": "双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null",
+      "count": 1
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

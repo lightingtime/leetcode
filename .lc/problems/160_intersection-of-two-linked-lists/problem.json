@@ -1,0 +1,102 @@
+{
+  "id": "160",
+  "slug": "intersection-of-two-linked-lists",
+  "title": "Intersection of Two Linked Lists",
+  "titleCn": "相交链表",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/intersection-of-two-linked-lists/",
+  "tags": [
+    "Hash Table",
+    "Linked List",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "链表",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "intersectVal",
+          "value": "8"
+        },
+        {
+          "name": "listA",
+          "value": "[4,1,8,4,5]"
+        },
+        {
+          "name": "listB",
+          "value": "[5,6,1,8,4,5]"
+        },
+        {
+          "name": "skipA",
+          "value": "2"
+        },
+        {
+          "name": "skipB",
+          "value": "3"
+        }
+      ],
+      "output": "Intersected at '8'",
+      "explain": "相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "intersectVal",
+          "value": "2"
+        },
+        {
+          "name": "listA",
+          "value": "[1,9,1,2,4]"
+        },
+        {
+          "name": "listB",
+          "value": "[3,2,4]"
+        },
+        {
+          "name": "skipA",
+          "value": "3"
+        },
+        {
+          "name": "skipB",
+          "value": "1"
+        }
+      ],
+      "output": "Intersected at '2'",
+      "explain": "相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "intersectVal",
+          "value": "0"
+        },
+        {
+          "name": "listA",
+          "value": "[2,6,4]"
+        },
+        {
+          "name": "listB",
+          "value": "[1,5]"
+        },
+        {
+          "name": "skipA",
+          "value": "3"
+        },
+        {
+          "name": "skipB",
+          "value": "2"
+        }
+      ],
+      "output": "No intersection",
+      "explain": "从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。"
+    }
+  ],
+  "exampleTestcases": "8\n[4,1,8,4,5]\n[5,6,1,8,4,5]\n2\n3\n2\n[1,9,1,2,4]\n[3,2,4]\n3\n1\n0\n[2,6,4]\n[1,5]\n3\n2",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode(int x) {\n *         val = x;\n *         next = null;\n *     }\n * }\n */\npublic class Solution {\n    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-03T16:39:56.009Z"
+}

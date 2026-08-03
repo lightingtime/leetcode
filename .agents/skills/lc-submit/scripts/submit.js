@@ -112,8 +112,11 @@ async function main() {
   } else if (/^\s*(public\s+)?class\s+\w+/.test(fragment)) {
     submission = fragment;
   } else {
-    // 保留 snippet 里的类声明（含 public 修饰），避免判题按类名/修饰符映射文件失败
-    const snippetClass = snippet.match(/^\s*(public\s+)?class\s+(\w+)/);
+    // 取 snippet 中最后一个真实类声明（跳过注释里的类说明），保留 public 修饰，
+    // 避免判题按类名/修饰符映射文件失败（链表/树题 snippet 以注释开头，不能只看行首）
+    const decls = snippet.match(/(?:^|\n)\s*(public\s+)?class\s+(\w+)/g) || [];
+    const lastDecl = decls.length ? decls[decls.length - 1] : '';
+    const snippetClass = lastDecl.match(/\s*(public\s+)?class\s+(\w+)/);
     const clsName = snippetClass ? snippetClass[2] : 'Solution';
     const clsModifier = snippetClass && snippetClass[1] ? snippetClass[1] : '';
     submission = `${clsModifier}class ${clsName} {\n${fragment}\n}\n${helperClasses(fragment, providedHelpers)}`;
