@@ -9,6 +9,7 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 
 - 项目：`D:\Projects\leetCode`；状态目录：`D:\Projects\leetCode\.lc`
 - 本 skill 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js` 与 `update_state.js`
+- 套路沉淀库：`.agents/skills/lc-analyze/references/patterns.md`（分析时先查套路是否已收录；新增套路时按同样格式追加）
 
 ## 流程
 
@@ -23,7 +24,11 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
    - 给宽泛提示（例如「想想数组为空或只有一个元素时会发生什么」「这个循环条件会不会漏掉最后一个位置」「双指针该在什么条件下移动左端」），但**不写正确代码、不直接给出修复**。
 5. 记录错误习惯：`node ".agents/skills/lc-practice/scripts/update_state.js" habit add --text "<习惯描述，例如：边界为空时未处理>" --problem <slug> --category <分类>`。明细会同步写入该题 `.lc/problems/{题号}_{slug}/analysis.json`（按题存储），`progress.json` 只保留聚合索引。
    - **不记录**：环境/工程配置问题（IDE、Sources Root、SDK 等）、编译类错误（语法、缺 return 等）、占位未实现（return null 等）这类非算法问题；错误习惯只记录算法思路、边界、逻辑类问题。
-6. 结束时告诉用户：改好后重新运行 main；若想直接看当前思路的正确写法，需要明确说「给我当前思路的正确答案」。
+6. 套路沉淀（本轮用到或暴露可复用套路时必做）：
+   - 查 `references/patterns.md` 判断该写法/取舍是否已收录；已收录直接引用，未收录则新增。
+   - 新增套路：`node ".agents/skills/lc-practice/scripts/update_state.js" pattern add --slug <slug> --title "<套路名>" --text "<对照/取舍总结>"` 写入该题 `analysis.json` 的 `patterns` 字段；同时按本文件相同格式追加到 `references/patterns.md`（含对照表、要点、出处题）。
+   - 复盘报告用「套路沉淀」小节呈现该套路，供后续选题/分析复用。
+7. 结束时告诉用户：改好后重新运行 main；若想直接看当前思路的正确写法，需要明确说「给我当前思路的正确答案」。
 
 ## 红线
 

@@ -70,6 +70,9 @@
     background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
     margin: 2px 4px 2px 0;
   }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; }
+  th { background: #f1f5f9; font-weight: 600; }
 
   .tl { display: flex; flex-direction: column; }
   .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
@@ -297,6 +300,22 @@
       <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
       <p>链表场景下的双指针有三个经典变体：快慢指针（判环/找中点）、首尾相向（回文）、以及本题的「换链对齐」——
       通过让两个指针走相同总步数来消除长度差。以后遇到两条链表找交点、找倒数第 k 个节点，先想双指针，别急着用哈希表。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀 · 链表指针判空取舍</h3>
+      <p>本轮踩坑凝练出的可复用套路（已收录进 <code>lc-analyze/references/patterns.md</code>）：</p>
+      <table>
+        <tr><th>目的</th><th>判断</th></tr>
+        <tr><td>完整遍历所有节点 / 让指针走出链表</td><td><code>while (p != null)</code></td></tr>
+        <tr><td>找链表尾（追加节点、接另一条链）</td><td><code>while (p.next != null) p = p.next;</code></td></tr>
+        <tr><td>双指针换链对齐（走完一条链再切）</td><td>指针本身走到 null 时切换</td></tr>
+        <tr><td>快慢指针跳 2 步（判环/找中点）防越界</td><td><code>while (fast.next != null && fast.next.next != null)</code></td></tr>
+        <tr><td>删除节点（需要前驱）</td><td>停在目标前一个：<code>while (cur.next != null &amp;&amp; cur.next.val != target)</code></td></tr>
+        <tr><td>判断当前是否为最后一个节点</td><td><code>p.next == null</code></td></tr>
+      </table>
+      <div class="quote">取舍标准：这一步之后指针要不要越界。<code>p != null</code> 允许指针走出链表（遍历/换链对齐）；
+      <code>p.next != null</code> 让指针停在链内或提前看一步（找尾、快慢指针防踏空、删除节点找前驱）。</div>
     </div>
 
     <div class="card">

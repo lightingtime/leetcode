@@ -4,12 +4,15 @@
 //   node update_state.js done --seq 5 --firstPass true --optimal false --notes "..." [--verdict Accepted --testcases 65/65 --memory 47308000 --approach "单遍哈希表" --time O(n) --space O(n)]
 //   node update_state.js habit add --text "..." [--problem slug] [--category cat]
 //   node update_state.js habit list
+//   node update_state.js pattern add --slug S --title "套路名" --text "套路总结" [--category cat]
+//   node update_state.js pattern list [--slug S]
 //   node update_state.js analysis --slug two-sum | --seq 1
 //   node update_state.js checkin --seq 1
 //   node update_state.js hint --category "哈希表"
 //   node update_state.js stats
 // 约定: progress.json 只存精简索引；每题详细分析存 .lc/problems/{id}_{slug}/analysis.json
 //       打卡表并入训练主页 reviews/index.html，由 checkin 命令自动重新生成，无需用户提醒
+//       可复用套路（如指针判空取舍）用 pattern add 记录到 analysis.json 的 patterns 字段，并同步沉淀到 lc-analyze skill 的 references/patterns.md
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -100,6 +103,7 @@ if (cmd === 'next') {
     space_complexity: arg('--space', '') || prev.space_complexity || '',
     notes: rec.notes || prev.notes || '',
     mistakes: Array.isArray(prev.mistakes) ? prev.mistakes : [],
+    patterns: Array.isArray(prev.patterns) ? prev.patterns : [],
     hints: (progress.category_hints && progress.category_hints[q.category]) ? [progress.category_hints[q.category]] : []
   };
   writeJson(ap, analysis);
@@ -147,6 +151,45 @@ if (cmd === 'next') {
 } else if (cmd === 'habit' && has('list')) {
   (progress.error_habits || []).slice().sort((a, b) => b.count - a.count)
     .forEach(h => console.log(`[x${h.count}] ${h.habit} | ${(h.categories || []).join(',')} | 最近 ${h.last_seen}`));
+} else if (cmd === 'pattern' && has('add')) {
+  const slug = arg('--slug', '');
+  const title = arg('--title', '');
+  const text = arg('--text', '');
+  const category = arg('--category', '');
+  const q = order.find(o => o.slug === slug);
+  if (!q || !title || !text) { console.error('--slug/--title/--text 必填'); process.exit(1); }
+  const ap = path.join(LC_DIR, 'problems', `${q.id}_${q.slug}`, 'analysis.json');
+  let a = {};
+  if (fs.existsSync(ap)) { try { a = readJson(ap); } catch {} }
+  if (!Array.isArray(a.patterns)) a.patterns = [];
+  if (a.patterns.some(p => p.title === title && p.text === text)) {
+    console.log(`套路已存在（${q.id}. ${q.title}）：${title}`);
+    process.exit(0);
+  }
+  a.patterns.push({ title, text, category: category || q.category, problem: slug, date });
+  writeJson(ap, a);
+  console.log(`已记录套路：${q.id}. ${q.title} → ${title}`);
+} else if (cmd === 'pattern' && has('list')) {
+  const slug = arg('--slug', '');
+  const problemsDir = path.join(LC_DIR, 'problems');
+  const dirs = fs.existsSync(problemsDir) ? fs.readdirSync(problemsDir) : [];
+  const seen = new Map();
+  for (const d of dirs) {
+    const ap = path.join(problemsDir, d, 'analysis.json');
+    if (!fs.existsSync(ap)) continue;
+    let a = {};
+    try { a = readJson(ap); } catch { continue; }
+    if (!Array.isArray(a.patterns)) continue;
+    for (const p of a.patterns) {
+      if (slug && p.problem !== slug) continue;
+      if (!seen.has(p.title)) seen.set(p.title, { ...p, count: 0 });
+      seen.get(p.title).count++;
+    }
+  }
+  if (!seen.size) { console.log('暂无套路记录'); process.exit(0); }
+  for (const [title, p] of seen) {
+    console.log(`[x${p.count}] ${title}（${p.category || ''}）: ${p.text}`);
+  }
 } else if (cmd === 'analysis') {
   const slug = arg('--slug', '');
   const seqRaw = arg('--seq', '');
@@ -182,5 +225,5 @@ if (cmd === 'next') {
   console.log(`错误习惯：${(progress.error_habits || []).length} 条`);
   console.log(`最近完成：${(done[done.length - 1] || {}).title || '无'}`);
 } else {
-  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | analysis --slug <slug> | checkin --seq N | hint --category <分类> | stats');
+  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | hint --category <分类> | stats');
 }
