@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 7,
+  "current_seq": 8,
   "done": [
     {
       "seq": 1,
@@ -78,6 +78,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优"
+    },
+    {
+      "seq": 8,
+      "id": "283",
+      "title": "移动零",
+      "slug": "move-zeroes",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）"
     }
   ],
   "error_habits": [

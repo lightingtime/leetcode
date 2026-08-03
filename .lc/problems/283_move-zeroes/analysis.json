@@ -1,0 +1,45 @@
+{
+  "seq": 8,
+  "id": "283",
+  "slug": "move-zeroes",
+  "title": "移动零",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "75/75",
+  "runtime_ms": null,
+  "memory_bytes": 47892000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双指针",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）",
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "数组双指针原地分区：快指针扫描 + 慢指针记写入位置",
+      "text": "原地筛选/分区通用套路（移动零、删除有序数组重复项、颜色分类）：快指针扫描全数组，遇到满足条件的元素就放到慢指针位置并慢指针前移；一趟 O(n)、空间 O(1)，保持相对顺序。",
+      "category": "双指针与滑动窗口",
+      "problem": "move-zeroes",
+      "date": "2026-08-04"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "75/75",
+      "runtime_ms": null,
+      "memory_bytes": 47892000,
+      "approach": "双指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

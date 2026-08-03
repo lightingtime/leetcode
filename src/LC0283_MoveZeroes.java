@@ -15,7 +15,18 @@ public class LC0283_MoveZeroes {
     // ==== 提交代码开始 ====
     public void moveZeroes(int[] nums) {
         // TODO: 在这里实现你的解法
-        
+        int unCheck = 0, check = 0;
+        while (check < nums.length) {
+            if (nums[unCheck] == 0) {
+                int temp = nums[check];
+                nums[check] = nums[unCheck];
+                nums[unCheck] = temp;
+                check++;
+            } else {
+                unCheck++;
+                check = unCheck;
+            }
+        }
     }
     // ==== 提交代码结束 ====
 
