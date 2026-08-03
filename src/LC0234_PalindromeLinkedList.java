@@ -8,6 +8,7 @@
 // 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
+import java.lang.annotation.Target;
 import java.util.*;
 
 public class LC0234_PalindromeLinkedList {
@@ -15,13 +16,35 @@ public class LC0234_PalindromeLinkedList {
     // ==== 提交代码开始 ====
     public boolean isPalindrome(ListNode head) {
         // TODO: 在这里实现你的解法
+        if (head == null) {
+            return false;
+        }
         ListNode fast = head, slow = head;
         while (fast != null && fast.next != null) {
+            // 偶数情况slow 在第二部分的开头
+            // 奇数情况slow 在正中间
             fast = fast.next.next;
             slow = slow.next;
         }
-
-        return false;
+        ListNode p1 = slow;
+        Stack<Integer> stack = new Stack<>();
+        // 奇数情况 fast不会为空
+        if (fast != null) {
+            slow = slow.next;
+        }
+        while (slow != null) {
+            stack.push(slow.val);
+            slow = slow.next;
+        }
+        fast = head;
+        while (fast != p1 && !stack.isEmpty()) {
+            if (fast.val != stack.peek()) {
+                return false;
+            }
+            stack.pop();
+            fast = fast.next;
+        }
+        return stack.isEmpty();
     }
     // ==== 提交代码结束 ====
 

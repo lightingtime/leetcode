@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 6,
+  "current_seq": 7,
   "done": [
     {
       "seq": 1,
@@ -67,6 +67,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "相交链表：双指针各走完一条链后切到另一条链消除长度差，O(m+n)/O(1)，一次 Accepted（41/41）"
+    },
+    {
+      "seq": 7,
+      "id": "234",
+      "title": "回文链表",
+      "slug": "palindrome-linked-list",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优"
     }
   ],
   "error_habits": [

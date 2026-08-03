@@ -1,0 +1,31 @@
+{
+  "seq": 7,
+  "id": "234",
+  "slug": "palindrome-linked-list",
+  "title": "回文链表",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "93/93",
+  "runtime_ms": null,
+  "memory_bytes": 92292000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "快慢指针+栈",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优",
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "快慢指针找中点后的奇偶判定",
+      "text": "快慢指针走完后：fast 为 null → 偶数长度（slow 正好是后半段开头，无需跳过）；fast 停在最后一个节点 → 奇数长度（slow 停在中点，需先跳过中点再比较后半段）",
+      "category": "双指针与滑动窗口",
+      "problem": "palindrome-linked-list",
+      "date": "2026-08-04"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
