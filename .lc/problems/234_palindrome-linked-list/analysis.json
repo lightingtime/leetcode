@@ -30,6 +30,13 @@
       "category": "双指针与滑动窗口",
       "problem": "palindrome-linked-list",
       "date": "2026-08-04"
+    },
+    {
+      "title": "反转链表三步的顺序与自环陷阱",
+      "text": "标准三步：先保存后继 next=cur.next，再用旧 pre 改指向 cur.next=pre，最后才前移 pre=cur、cur=next。若先 pre=cur 再 cur.next=pre，pre 与 cur 同节点，cur.next 指向自己形成自环，链表被破坏。",
+      "category": "双指针与滑动窗口",
+      "problem": "palindrome-linked-list",
+      "date": "2026-08-04"
     }
   ],
   "hints": [

@@ -17,35 +17,47 @@ public class LC0234_PalindromeLinkedList {
     public boolean isPalindrome(ListNode head) {
         // TODO: 在这里实现你的解法
         if (head == null) {
-            return false;
+            return true;
         }
-        ListNode fast = head, slow = head;
-        while (fast != null && fast.next != null) {
-            // 偶数情况slow 在第二部分的开头
-            // 奇数情况slow 在正中间
+
+        ListNode firstEnd = fastSlow(head);
+        ListNode secondStart = reverseLinkList(firstEnd.next);
+
+        ListNode p1 = head;
+        ListNode p2 = secondStart;
+        while (p2 != null) {
+            if (p1.val != p2.val) {
+                return false;
+            }
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return true;
+    }
+
+	private ListNode reverseLinkList(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+		return pre;
+	}
+
+    private ListNode fastSlow(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
             fast = fast.next.next;
             slow = slow.next;
         }
-        ListNode p1 = slow;
-        Stack<Integer> stack = new Stack<>();
-        // 奇数情况 fast不会为空
-        if (fast != null) {
-            slow = slow.next;
-        }
-        while (slow != null) {
-            stack.push(slow.val);
-            slow = slow.next;
-        }
-        fast = head;
-        while (fast != p1 && !stack.isEmpty()) {
-            if (fast.val != stack.peek()) {
-                return false;
-            }
-            stack.pop();
-            fast = fast.next;
-        }
-        return stack.isEmpty();
+        return slow;
     }
+
+
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
