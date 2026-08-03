@@ -8,13 +8,13 @@
   "verdict": "Accepted",
   "testcases": "93/93",
   "runtime_ms": null,
-  "memory_bytes": 92292000,
+  "memory_bytes": 94584000,
   "firstPass": true,
-  "optimal": false,
-  "approach": "快慢指针+栈",
+  "optimal": true,
+  "approach": "快慢指针+原地反转",
   "time_complexity": "O(n)",
-  "space_complexity": "O(n)",
-  "notes": "回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优",
+  "space_complexity": "O(1)",
+  "notes": "回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优",
   "mistakes": [],
   "patterns": [
     {

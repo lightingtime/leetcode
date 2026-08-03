@@ -156,12 +156,12 @@
   <div class="wrap">
     <div class="kicker">LEETCODE 刷题复盘 · SEQ 07</div>
     <h1>LC0234 · 回文链表 <span style="color:#93c5fd">Palindrome Linked List</span></h1>
-    <div class="sub">快慢指针找中点 + 栈比较：一次 Accepted，但空间未达进阶最优</div>
+    <div class="sub">从栈比较到原地反转：两次 Accepted，最终达成 O(1) 进阶最优</div>
     <div class="badges">
       <span class="badge ok">✓ Accepted 93/93</span>
       <span class="badge">难度 Easy</span>
       <span class="badge tag">分类 双指针与滑动窗口</span>
-      <span class="badge mid">进阶 O(1) 空间未达成</span>
+      <span class="badge ok">✓ 进阶 O(1) 空间达成</span>
       <span class="badge">2026-08-04</span>
     </div>
   </div>
@@ -172,47 +172,58 @@
   <section>
     <h2>我的解法</h2>
     <div class="card">
-      <p><b>思路：快慢指针找中点 + 栈比较后半段。</b>快指针每次走 2 步、慢指针走 1 步，
-      走完后 <code>slow</code> 停在链表中点附近；后半段节点值依次入栈，再从头节点开始与栈顶逐一对齐比较。
-      用 <code>fast</code> 是否停在最后一个节点区分链表长度奇偶，奇数时先跳过中点再入栈。</p>
+      <p><b>思路：快慢指针找中点 + 原地反转后半段。</b>快指针每次走 2 步、慢指针走 1 步，
+      走完后 <code>slow</code> 停在链表中点附近；把 <code>slow.next</code> 起点的后半段原地反转，
+      再从头节点与反转后的后半段逐节点比较。全程只用了常数个指针变量，空间 O(1)。</p>
       <p>
         <span class="chip">时间 O(n)</span>
-        <span class="chip">空间 O(n)（栈存后半段）</span>
+        <span class="chip">空间 O(1)（原地反转）</span>
         <span class="chip">快慢指针防越界</span>
-        <span class="chip">fast 位置判奇偶</span>
+        <span class="chip">反转三步保序</span>
       </p>
       <div class="code-wrap">
         <div class="code-head"><span>src/LC0234_PalindromeLinkedList.java</span><span>提交区</span></div>
         <pre class="code">public boolean isPalindrome(ListNode head) {
     if (head == null) {
-        return false;
+        return true;
     }
-    ListNode fast = head, slow = head;
-    while (fast != null && fast.next != null) {
+    ListNode firstEnd = fastSlow(head);
+    ListNode secondStart = reverseLinkList(firstEnd.next);
+    ListNode p1 = head;
+    ListNode p2 = secondStart;
+    while (p2 != null) {
+        if (p1.val != p2.val) {
+            return false;
+        }
+        p1 = p1.next;
+        p2 = p2.next;
+    }
+    return true;
+}
+
+private ListNode reverseLinkList(ListNode head) {
+    ListNode pre = null;
+    ListNode cur = head;
+    while (cur != null) {
+        ListNode next = cur.next;
+        cur.next = pre;
+        pre = cur;
+        cur = next;
+    }
+    return pre;
+}
+
+private ListNode fastSlow(ListNode head) {
+    ListNode fast = head;
+    ListNode slow = head;
+    while (fast.next != null && fast.next.next != null) {
         fast = fast.next.next;
         slow = slow.next;
     }
-    ListNode p1 = slow;
-    Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
-    if (fast != null) {
-        slow = slow.next;
-    }
-    while (slow != null) {
-        stack.push(slow.val);
-        slow = slow.next;
-    }
-    fast = head;
-    while (fast != p1 && !stack.isEmpty()) {
-        if (fast.val != stack.peek()) {
-            return false;
-        }
-        stack.pop();
-        fast = fast.next;
-    }
-    return stack.isEmpty();
+    return slow;
 }</pre>
       </div>
-      <p class="muted">关键点：快慢指针走完后，<code>fast == null</code> 是偶数长度、<code>fast</code> 停在最后节点是奇数长度（要先跳过中点）。</p>
+      <p class="muted">关键点：快慢指针找中点；反转后半段时「先保存后继 → 用旧 pre 改指向 → 再前移」，顺序不能换。</p>
     </div>
   </section>
 
@@ -256,12 +267,27 @@
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">03 · 提交 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-title">03 · 提交 Accepted（栈版）<span class="tl-badge ok">通过</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>判题结果 <b style="color:#16a34a">Accepted</b>，93/93 用例通过，内存约 88 MB，一次判题通过。
-          空间 O(n) 未达进阶 O(1)，记录最优性为否。随后打卡、更新主页并生成本期复盘。</p>
+          <p>判题结果 <b style="color:#16a34a">Accepted</b>，93/93 用例通过，一次判题通过；
+          空间 O(n) 未达进阶 O(1)，随后提示了宽泛最优思路（原地反转后半段）。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 重写 O(1) 版并再次提交 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>快慢指针找中点 + 原地反转后半段，6/6 本地用例通过后再次提交，
+          <b style="color:#16a34a">Accepted</b> 93/93，达成进阶 O(1) 空间。更新最优性为是，
+          打卡、更新主页并生成最终复盘。</p>
         </div>
         </details>
       </div>
@@ -275,33 +301,35 @@
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">93 / 93</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 88.0 MB</div><div class="l">内存占用</div></div>
+      <div class="metric"><div class="v">≈ 90.2 MB</div><div class="l">内存占用</div></div>
       <div class="metric ok"><div class="v">O(n)</div><div class="l">时间</div></div>
-      <div class="metric mid"><div class="v">O(n)</div><div class="l">空间（未达最优）</div></div>
+      <div class="metric ok"><div class="v">O(1)</div><div class="l">空间（已达最优）</div></div>
     </div>
 
     <div class="card">
-      <h3>算法判定：思路正确，时间最优，空间未达进阶要求</h3>
+      <h3>算法判定：快慢指针 + 原地反转，已是最优</h3>
       <ul class="ok-list">
-        <li><b>时间复杂度 O(n)</b>：每个节点至多访问常数次，O(n) 是下限，已最优。</li>
-        <li><b>空间复杂度 O(n)</b>：栈最多存后半段（约 n/2）个节点值；进阶要求 O(1)。</li>
-        <li><b>正确性</b>：奇偶长度分别处理；奇数时跳过中点，比较范围正确。</li>
-        <li><b>宽泛最优思路</b>：快慢指针找中点后，把后半段「原地反转」再与前半段比较，可以省掉栈、把空间降到 O(1)。想挑战的话可以自己重写后再次提交。</li>
+        <li><b>时间复杂度 O(n)</b>：找中点、反转后半段、逐节点比较各一遍，每个节点至多访问常数次，O(n) 是下限。</li>
+        <li><b>空间复杂度 O(1)</b>：只用了常数个指针变量，后半段原地反转不占额外容器，满足进阶要求。</li>
+        <li><b>正确性</b>：快慢指针找中点，反转后半段后逐节点比较；奇数长度时中间节点天然不用比较。</li>
+        <li><b>结论</b>：与题目标准解法一致，无需再优化。</li>
       </ul>
     </div>
 
     <div class="card">
       <h3>分类提醒 · 双指针与滑动窗口</h3>
       <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
-      <p>链表双指针的经典组合是「快慢指针 + 反转/栈」：快慢指针负责找中点/判环，反转或栈负责「从尾部往回看」。
-      这题用栈是 O(n) 空间的简单版，进阶版把「往回看」交给原地反转，空间就省下来了。</p>
+      <p>链表双指针的经典组合是「快慢指针 + 反转」：快慢指针负责找中点/判环，反转负责「从尾部往回看」。
+      这题先用栈拿到正确解，再改用原地反转把空间从 O(n) 降到 O(1)，符合「先正确、再优化」的节奏。</p>
     </div>
 
     <div class="card">
       <h3>套路沉淀</h3>
-      <p>本轮涉及两条已入库套路（<code>lc-analyze/references/patterns.md</code>）：</p>
+      <p>本轮涉及 4 条已入库套路（<code>lc-analyze/references/patterns.md</code>）：</p>
       <div class="quote">链表指针判空取舍：p != null 允许指针走出链表；p.next != null 停在链内/提前看一步。快慢指针跳 2 步用 <code>fast.next != null &amp;&amp; fast.next.next != null</code> 防越界。</div>
       <div class="quote">快慢指针找中点后的奇偶判定：fast 为 null → 偶数，slow 即后半段开头；fast 停在最后节点 → 奇数，先跳过中点再比较。</div>
+      <div class="quote">递归不算 O(1) 空间：调用栈深度随输入规模增长，辅助空间 O(递归深度)；O(1) 只能靠迭代 + 常数变量。</div>
+      <div class="quote">反转链表三步的顺序与自环陷阱：先保存后继 → 用旧 pre 改指向 → 再前移；先 pre=cur 会形成 cur.next=cur 自环。</div>
     </div>
 
     <div class="card">
@@ -311,9 +339,9 @@
       <p>
         <span class="chip">seq 07 · palindrome-linked-list</span>
         <span class="chip">firstPass: true</span>
-        <span class="chip">optimal: false</span>
+        <span class="chip">optimal: true</span>
       </p>
-      <div class="quote">一句话复盘：回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优。</div>
+      <div class="quote">一句话复盘：回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优。</div>
     </div>
   </section>
 
