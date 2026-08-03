@@ -1,0 +1,46 @@
+{
+  "id": "234",
+  "slug": "palindrome-linked-list",
+  "title": "Palindrome Linked List",
+  "titleCn": "回文链表",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/palindrome-linked-list/",
+  "tags": [
+    "Stack",
+    "Recursion",
+    "Linked List",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "栈",
+    "递归",
+    "链表",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,2,1]"
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2]"
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,2,1]\n[1,2]",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public boolean isPalindrome(ListNode head) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-03T19:24:56.865Z"
+}
