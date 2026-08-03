@@ -23,6 +23,13 @@
       "category": "双指针与滑动窗口",
       "problem": "palindrome-linked-list",
       "date": "2026-08-04"
+    },
+    {
+      "title": "递归不算 O(1) 空间：调用栈计入空间复杂度",
+      "text": "递归的调用栈深度随输入规模增长（如链表递归深度 n），辅助空间 O(递归深度)，不算 O(1)；O(1) 空间要求用迭代 + 常数个变量（如快慢指针 + 原地反转）。另注意递归深度大时有栈溢出风险。",
+      "category": "双指针与滑动窗口",
+      "problem": "palindrome-linked-list",
+      "date": "2026-08-04"
     }
   ],
   "hints": [
