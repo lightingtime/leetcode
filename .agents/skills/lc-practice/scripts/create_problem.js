@@ -197,6 +197,7 @@ function buildTemplate(problem, method, snippetClsName) {
     (problem.examples || []).forEach((e, i) => {
       const argsList = [];
       let ok = true;
+      if (!e.inputs || e.inputs.length === 0) ok = false;
       for (const inp of e.inputs) {
         const t = paramByName[inp.name];
         if (!t) { ok = false; break; }

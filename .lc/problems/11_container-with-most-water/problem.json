@@ -1,0 +1,39 @@
+{
+  "id": "11",
+  "slug": "container-with-most-water",
+  "title": "Container With Most Water",
+  "titleCn": "盛最多水的容器",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/container-with-most-water/",
+  "tags": [
+    "Greedy",
+    "Array",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [],
+      "output": "49",
+      "explain": "图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "height",
+          "value": "[1,1]"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,8,6,2,5,4,8,3,7]\n[1,1]",
+  "javaSnippet": "class Solution {\n    public int maxArea(int[] height) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-03T23:48:34.231Z"
+}
