@@ -159,7 +159,7 @@
   <div class="wrap">
     <div class="kicker">LEETCODE 刷题复盘 · SEQ 01</div>
     <h1>LC0001 · 两数之和 <span style="color:#93c5fd">Two Sum</span></h1>
-    <div class="sub">从建题、踩坑、框架优化到一次 Accepted 的完整记录</div>
+    <div class="sub">从独立实现、踩坑到一次 Accepted 的完整记录</div>
     <div class="badges">
       <span class="badge ok">✓ Accepted 65/65</span>
       <span class="badge easy">难度 Easy</span>
@@ -239,43 +239,11 @@ if (j != null) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">01 · 选题建题<span class="tl-badge info">lc-practice</span></span>
+          <span class="tl-title">01 · 踩坑①：方法缺少 return<span class="tl-badge bug">编译错误</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>按推荐顺序拉取第 1 题（two-sum），生成 <code>LC0001_TwoSum.java</code>：
-          模板自带 <code>// ==== 提交代码开始/结束 ====</code> 标记区、示例测试 <code>main</code> 与辅助比较函数。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">02 · 环境：IDEA 不识别为可执行文件<span class="tl-badge fix">已解决</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>文件在 IDEA 里没有运行按钮，排查发现两个原因叠加：</p>
-          <ul>
-            <li><code>.idea/leetCode.iml</code> 没有把 <code>src</code> 声明为 Sources Root，文件不属于模块源码；</li>
-            <li>模板方法体缺 <code>return</code>，编译失败，自然也无法运行。</li>
-          </ul>
-          <p>解决：右键 <code>src</code> → <b>Mark Directory as → Sources Root</b>，运行入口即恢复。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">03 · 踩坑①：方法缺少 return<span class="tl-badge bug">编译错误</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>模板占位只写了打印语句，没有返回值：</p>
+          <p>占位只写了打印语句，没有返回值：</p>
           <div class="code-wrap">
             <div class="code-head"><span>两数之和 · 提交区</span><span>错误示范</span></div>
             <pre class="code">public int[] twoSum(int[] nums, int target) {
@@ -284,7 +252,7 @@ if (j != null) {
 // javac: 缺少返回语句</pre>
           </div>
           <p>Java 规定非 <code>void</code> 方法必须在所有路径上返回值，否则直接编译失败。
-          这个错误习惯被记入 <code>progress.json</code>，后续选题会提醒。</p>
+          这类编译错误按约定不记入错误习惯。</p>
         </div>
         </details>
       </div>
@@ -293,7 +261,7 @@ if (j != null) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">04 · 踩坑②：return null 占位<span class="tl-badge bug">结果全错</span></span>
+          <span class="tl-title">02 · 踩坑②：return null 占位<span class="tl-badge bug">结果全错</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
@@ -315,17 +283,11 @@ if (j != null) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">05 · 测试框架：顺序敏感问题<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-title">03 · 修正为单遍哈希表，本地通过<span class="tl-badge fix">已解决</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>生成的测试用字符串精确比较，暴露出两个问题：</p>
-          <ul>
-            <li><b>Map / Set 迭代顺序不稳定</b>：内容相同、插入顺序不同的两个 <code>HashMap</code> 会被误判不相等；</li>
-            <li><b>两数之和的下标对顺序无所谓</b>：返回 <code>[1, 0]</code> 和 <code>[0, 1]</code> 都合法，但严格比较会误报失败。</li>
-          </ul>
-          <p>解决：<code>norm()</code> 对 Map 按键、Set 按元素排序后输出（迭代顺序不再影响比较）；
-          新增 <code>checkEqUnordered()</code> 用于「任意顺序」答案，生成器用 <code>UNORDERED_SLUGS</code> 白名单命中本题。</p>
+          <p>实现单遍哈希表：边查边存，三个示例（含重复值场景）本地全部通过。</p>
         </div>
         </details>
       </div>
@@ -334,41 +296,10 @@ if (j != null) {
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">06 · 结构优化：测试工具共享化<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-title">04 · 提交：一次 Accepted<span class="tl-badge ok">完成</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>比较函数不再复制进每道题，抽到共享类 <code>src/TestUtil.java</code>：</p>
-          <div class="code-wrap">
-            <div class="code-head"><span>src/TestUtil.java</span><span>共享工具（不参与提交）</span></div>
-            <pre class="code">public static boolean checkEq(Object expected, Object actual, String label) {
-    return eq(label, norm(expected), norm(actual));
-}
-
-// 顺序无关比较：数组/List 元素顺序不同也算相等
-public static boolean checkEqUnordered(Object expected, Object actual, String label) {
-    return eq(label, normUnordered(expected), normUnordered(actual));
-}</pre>
-          </div>
-          <p>配套改进：<code>run_tests.js</code> 编译时自动带上 <code>TestUtil</code>；
-          <code>create_problem.js</code> 增加覆盖保护（文件里有你的代码就拒绝重写，需 <code>--force</code>）；
-          TODO 注释从 <code>return</code> 行尾挪到方法体第一行，不干扰编辑。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">07 · 提交：本地通过 → 一次 Accepted<span class="tl-badge ok">完成</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>本地三个示例全部通过后准备提交。cookie 自动化上踩了边界：
-          沙箱账号（<code>codexsandboxoffline</code>）无法解密真实账号（<code>Daoxian</code>）浏览器里
-          由 app-bound 加密保护的会话 cookie，因此准备了双击即用的 <code>setup_cookie.cmd</code>，
-          最终由你提供 cookie 值写入 <code>.lc/config.json</code>（已 gitignore，不会入库）。</p>
           <p>提交结果：<b style="color:#16a34a">Accepted</b>，65/65 用例通过，一次提交成功。</p>
         </div>
         </details>
@@ -424,8 +355,7 @@ public static boolean checkEqUnordered(Object expected, Object actual, String la
     数据来源：力扣判题接口 · <code>.lc/problems/1_two-sum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/LC0001_TwoSum.java">src/LC0001_TwoSum.java</a> ·
     <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
-    <a href="../../.agents/skills/lc-practice/scripts/create_problem.js">create_problem.js</a> ·
-    <a href="../../tools/setup_cookie.cmd">tools/setup_cookie.cmd</a><br>
+    <a href="../../index.html">训练主页</a><br>
     生成于 2026-08-01
   </div>
 
