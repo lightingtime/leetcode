@@ -13,7 +13,8 @@
 // 约定: progress.json 只存精简索引；每题详细分析存 .lc/problems/{id}_{slug}/analysis.json
 //       打卡表并入训练主页 reviews/index.html，由 checkin 命令自动重新生成，无需用户提醒
 //       可复用套路（如指针判空取舍）用 pattern add 记录到 analysis.json 的 patterns 字段，并同步沉淀到 lc-analyze skill 的 references/patterns.md
-//       done 标记 Accepted 时会自动把每次提交追加到 analysis.json 的 submissions 历史（按 日期+方法+内存+用例 去重）
+//       done 标记 Accepted 时自动维护 analysis.json 的 submissions 历史：解法不同则追加；相似解法（仅代码微调）只保留最优解
+//       每次打卡（checkin）自动核对 30 天计划刷题量：目标 30 次打卡，训练方案节奏每天 4-5 道新题
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -37,6 +38,42 @@ const cmd = args[0];
 const order = readJson(ORDER);
 const progress = readJson(PROGRESS);
 const date = todayStr();
+const TARGET_CHECKINS = 30; // 30 天计划：30 次打卡
+
+function daysBetween(a, b) {
+  const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+  const da = new Date(pa[0], pa[1] - 1, pa[2]);
+  const db = new Date(pb[0], pb[1] - 1, pb[2]);
+  return Math.round((db - da) / 86400000);
+}
+
+function planReport(p) {
+  const done = p.done || [];
+  const count = done.length;
+  const lines = [`30 天计划刷题量：${count}/${TARGET_CHECKINS}（目标 ${TARGET_CHECKINS} 次打卡）`];
+  if (count >= TARGET_CHECKINS) {
+    lines.push('已达成 30 题目标，进入复习 / 二刷阶段');
+    return lines;
+  }
+  const dates = done.map(d => d.date).sort();
+  const first = dates[0];
+  const elapsed = first ? daysBetween(first, date) + 1 : 1;
+  const remaining = TARGET_CHECKINS - count;
+  lines.push(`训练已进行 ${elapsed} 天（自 ${first}），日均 ${(count / elapsed).toFixed(1)} 题，还差 ${remaining} 题`);
+  const rate = count / elapsed;
+  if (rate > 0) {
+    const needDays = Math.ceil(remaining / rate);
+    const d = new Date();
+    d.setDate(d.getDate() + needDays);
+    const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    lines.push(`按当前日均 ${rate.toFixed(1)} 题，预计 ${ymd} 前后达成目标`);
+  }
+  const expLow = 4 * elapsed, expHigh = 5 * elapsed;
+  if (count < expLow) lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，落后约 ${expLow - count} 题`);
+  else if (count > expHigh) lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，已超前`);
+  else lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，进度正常`);
+  return lines;
+}
 
 if (cmd === 'next') {
   const doneSeqs = new Set((progress.done || []).map(d => d.seq));
@@ -108,7 +145,7 @@ if (cmd === 'next') {
     submissions: Array.isArray(prev.submissions) ? prev.submissions : [],
     hints: (progress.category_hints && progress.category_hints[q.category]) ? [progress.category_hints[q.category]] : []
   };
-  // 多次 Accepted 全部记录：每次 done 追加一条提交历史，避免被最后一次覆盖
+  // 提交历史：解法不同则追加；相似解法（仅代码微调）只保留最优解
   if (analysis.verdict === 'Accepted') {
     const sub = {
       date,
@@ -122,10 +159,15 @@ if (cmd === 'next') {
       optimal: analysis.optimal,
       notes: analysis.notes
     };
-    const dup = analysis.submissions.find(s =>
-      s.date === sub.date && s.approach === sub.approach &&
-      s.memory_bytes === sub.memory_bytes && s.testcases === sub.testcases);
-    if (!dup) analysis.submissions.push(sub);
+    const sameApproach = analysis.submissions.find(s => s.approach === sub.approach);
+    if (sameApproach) {
+      const better = (sub.optimal && !sameApproach.optimal) ||
+        (sub.optimal === sameApproach.optimal && sub.memory_bytes != null &&
+          (sameApproach.memory_bytes == null || sub.memory_bytes < sameApproach.memory_bytes));
+      if (better) Object.assign(sameApproach, sub);
+    } else {
+      analysis.submissions.push(sub);
+    }
   }
   writeJson(ap, analysis);
   console.log(`已记录完成：${q.id}. ${q.title}`);
@@ -234,6 +276,7 @@ if (cmd === 'next') {
     process.exit(1);
   }
   console.log(`已打卡并更新主页：${q.id}. ${q.title}（一次AC=${doneRec.firstPass ? '是' : '否'}，最优=${doneRec.optimal ? '是' : '否'}）`);
+  planReport(progress).forEach(l => console.log(l));
 } else if (cmd === 'hint') {
   const cat = arg('--category', '');
   console.log((progress.category_hints || {})[cat] || '暂无该分类提示');
@@ -245,6 +288,8 @@ if (cmd === 'next') {
   Object.entries(byCat).sort((a, b) => b[1] - a[1]).forEach(([c, n]) => console.log(`  ${c}: ${n}`));
   console.log(`错误习惯：${(progress.error_habits || []).length} 条`);
   console.log(`最近完成：${(done[done.length - 1] || {}).title || '无'}`);
+} else if (cmd === 'plan') {
+  planReport(progress).forEach(l => console.log(l));
 } else {
-  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | hint --category <分类> | stats');
+  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | stats');
 }
