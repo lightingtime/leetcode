@@ -15,7 +15,21 @@ public class LC0003_LongestSubstringWithoutRepeatingCharacters {
     // ==== 提交代码开始 ====
     public int lengthOfLongestSubstring(String s) {
         // TODO: 在这里实现你的解法
-        return 0;
+        Map<Character, Integer> map = new HashMap<>();
+        int max = 0;
+        int start = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!map.containsKey(c) || map.get(c) < start) {
+                map.put(c, i);
+            } else {
+                max = Math.max(max, i - start);
+                start = map.get(c) + 1;
+                map.put(c, i);
+            }
+        }
+        max = Math.max(max, s.length() - start);
+        return max;
     }
     // ==== 提交代码结束 ====
 

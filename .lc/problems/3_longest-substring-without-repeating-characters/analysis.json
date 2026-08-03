@@ -1,0 +1,61 @@
+{
+  "seq": 9,
+  "id": "3",
+  "slug": "longest-substring-without-repeating-characters",
+  "title": "无重复字符的最长子串",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "1036/1036",
+  "runtime_ms": null,
+  "memory_bytes": 48300000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "滑动窗口+哈希表",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）",
+  "mistakes": [
+    {
+      "habit": "滑动窗口长度更新时机与公式：max 只在遇到重复时更新，漏掉延伸到末尾的无重复窗口（如单字符串）；长度公式取决于窗口是否合法——窗口 [start,i] 无重复时为 i-start+1，else 里 i 是重复字符时应按 [start,i-1] 算 i-start",
+      "count": 1
+    },
+    {
+      "habit": "窗口长度公式先确认窗口合法性：else 分支里 i 是刚发现的重复字符，此刻 [start,i] 含重复、不是合法窗口，长度应为 i-start；只有把 start 跳到重复位置+1 之后，才能用 i-start+1",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "闭区间计数：元素个数 = 间隔数 + 1",
+      "text": "闭区间 [l, r] 的元素个数 = r - l + 1（两端下标都算）；用「间隔数 + 1」理解可防 off-by-one。滑动窗口/子数组/遍历题的长度计算都适用，最常错在多减 1 或少加 1。",
+      "category": "双指针与滑动窗口",
+      "problem": "longest-substring-without-repeating-characters",
+      "date": "2026-08-04"
+    },
+    {
+      "title": "滑动窗口结算时机与公式绑定",
+      "text": "两种合法写法：每步结算（先跳 start 再算 i-start+1）；或延迟结算（if 只扩展不结算，else 里窗口到 i-1 算 i-start，循环后补 n-start）。公式必须匹配结算时窗口的合法性：含 i 且无重复才用 i-start+1。",
+      "category": "双指针与滑动窗口",
+      "problem": "longest-substring-without-repeating-characters",
+      "date": "2026-08-04"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "1036/1036",
+      "runtime_ms": null,
+      "memory_bytes": 48300000,
+      "approach": "滑动窗口+哈希表",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

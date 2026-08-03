@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0003 无重复字符的最长子串 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.mid { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 09</div>
+    <h1>LC0003 · 无重复字符的最长子串 <span style="color:#93c5fd">Longest Substring Without Repeating Characters</span></h1>
+    <div class="sub">滑动窗口 + 延迟结算，一次 Accepted</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 1036/1036</span>
+      <span class="badge mid">难度 Medium</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge plain">一次判题通过 · 已达最优</span>
+      <span class="badge">2026-08-04</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：滑动窗口 + 哈希表记位置，延迟结算。</b>按实际代码结构：
+      <code>map</code> 记录每个字符最后出现的位置，<code>start</code> 是窗口左边界。
+      你的设计里 <code>max</code> 只在两个点结算，<code>if</code> 分支不结算：</p>
+      <ul class="ok-list">
+        <li><b>if 分支</b>（字符不在当前窗口内）：只把位置写进 map，窗口继续扩展，不更新 max。</li>
+        <li><b>else 分支</b>（遇到窗口内重复）：此时 i 是重复字符，结算被截断的窗口 <code>[start, i-1]</code>，长度 <code>i - start</code>；随后 <code>start</code> 跳到上次出现位置 +1，并更新 map。</li>
+        <li><b>循环结束后</b>：补结算最后一个窗口 <code>[start, 串尾]</code>，长度 <code>s.length() - start</code>。</li>
+      </ul>
+      <p>
+        <span class="chip">时间 O(n)</span>
+        <span class="chip">空间 O(1)（字符集有限）</span>
+        <span class="chip">延迟结算结构</span>
+        <span class="chip">start 跳到重复位置+1</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0003_LongestSubstringWithoutRepeatingCharacters.java</span><span>提交区</span></div>
+        <pre class="code">public int lengthOfLongestSubstring(String s) {
+    Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+    int max = 0;
+    int start = 0;
+    for (int i = 0; i &lt; s.length(); i++) {
+        char c = s.charAt(i);
+        if (!map.containsKey(c) || map.get(c) &lt; start) {
+            map.put(c, i);
+        } else {
+            max = Math.max(max, i - start);
+            start = map.get(c) + 1;
+            map.put(c, i);
+        }
+    }
+    max = Math.max(max, s.length() - start);
+    return max;
+}</pre>
+      </div>
+      <p class="muted">关键点：else 结算的是不含 i 的窗口 <code>[start, i-1]</code>（长度 <code>i - start</code>）；结尾补 <code>[start, 串尾]</code>。两个结算点覆盖所有窗口。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 独立实现（首版结算公式错误）<span class="tl-badge bug">踩坑</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>滑动窗口 + 哈希表方向正确，但两处 off-by-one：else 里长度写成 <code>i - start - 1</code>；
+          且 max 只在遇到重复时更新，漏掉了延伸到串尾的无重复窗口（单字符 <code>"a"</code> 返回 0 即证据）。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 分析修复：结算时机与公式<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>明确两个结算点：else 处 i 是重复字符，窗口只能算到 <code>[start, i-1]</code>（<code>i - start</code>）；
+          循环后补最后窗口 <code>s.length() - start</code>。修复后 8/8 本地用例全部通过。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 提交 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>判题结果 <b style="color:#16a34a">Accepted</b>，1036/1036 用例通过，内存约 46 MB，一次判题通过。
+          随后记录进度与明细、打卡（自动核对 30 天计划）并生成复盘。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">1036 / 1036</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 46 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) / O(1)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">成功判题次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：标准滑动窗口，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(n)</b>：每个字符至多进出窗口一次，右指针只前进；O(n) 是下限（每个字符都要看）。</li>
+        <li><b>空间复杂度 O(1)</b>：HashMap 存字符最后位置，字符集有限（字母/数字/符号/空格），不随 n 增长。</li>
+        <li><b>正确性</b>：延迟结算的两个结算点覆盖所有窗口；start 跳到重复位置 +1，窗口始终合法。</li>
+        <li><b>结论</b>：与题目标准解法一致，无需再优化。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p>子串/子数组「无重复/满足条件」类问题首选滑动窗口：右指针扩展、左指针在条件被破坏时收缩。
+      哈希表在这里的作用是把「判断字符在不在窗口内」从 O(窗口长度) 降到 O(1)。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀</h3>
+      <p>本轮涉及 2 条套路（<code>lc-analyze/references/patterns.md</code>）：</p>
+      <div class="quote">闭区间计数：元素个数 = 间隔数 + 1——窗口/子数组长度计算通用，防 off-by-one。</div>
+      <div class="quote">滑动窗口结算时机与公式绑定：每步结算（先跳 start 再 i-start+1）或延迟结算（else 算 i-start，结尾补 n-start）；公式必须匹配结算时窗口的合法性。</div>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <p>本轮记录 2 条错误习惯（已写入 <code>progress.json</code>，后续选题会提醒）：</p>
+      <div class="quote">滑动窗口长度更新时机与公式：max 只在遇到重复时更新，漏掉延伸到末尾的无重复窗口；长度公式取决于窗口是否合法——窗口 [start,i] 无重复时为 i-start+1，else 里 i 是重复字符时应按 [start,i-1] 算 i-start。</div>
+      <div class="quote">窗口长度公式先确认窗口合法性：else 分支里 i 是刚发现的重复字符，此刻 [start,i] 含重复、不是合法窗口，长度应为 i-start；只有把 start 跳到重复位置+1 之后，才能用 i-start+1。</div>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 09 · longest-substring-without-repeating-characters</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/3_longest-substring-without-repeating-characters/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0003_LongestSubstringWithoutRepeatingCharacters.java">src/LC0003_LongestSubstringWithoutRepeatingCharacters.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-04
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

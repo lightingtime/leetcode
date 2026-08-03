@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 8,
+  "current_seq": 9,
   "done": [
     {
       "seq": 1,
@@ -89,6 +89,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）"
+    },
+    {
+      "seq": 9,
+      "id": "3",
+      "title": "无重复字符的最长子串",
+      "slug": "longest-substring-without-repeating-characters",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）"
     }
   ],
   "error_habits": [
@@ -141,6 +152,28 @@
       "count": 1,
       "examples": [
         "intersection-of-two-linked-lists"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
+    },
+    {
+      "habit": "滑动窗口长度更新时机与公式：max 只在遇到重复时更新，漏掉延伸到末尾的无重复窗口（如单字符串）；长度公式取决于窗口是否合法——窗口 [start,i] 无重复时为 i-start+1，else 里 i 是重复字符时应按 [start,i-1] 算 i-start",
+      "count": 1,
+      "examples": [
+        "longest-substring-without-repeating-characters"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
+    },
+    {
+      "habit": "窗口长度公式先确认窗口合法性：else 分支里 i 是刚发现的重复字符，此刻 [start,i] 含重复、不是合法窗口，长度应为 i-start；只有把 start 跳到重复位置+1 之后，才能用 i-start+1",
+      "count": 1,
+      "examples": [
+        "longest-substring-without-repeating-characters"
       ],
       "categories": [
         "双指针与滑动窗口"
