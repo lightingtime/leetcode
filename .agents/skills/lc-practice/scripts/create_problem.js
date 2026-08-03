@@ -200,7 +200,15 @@ function buildTemplate(problem, method, snippetClsName) {
       }
       let expLit = null;
       if (ok && e.output != null) {
-        try { expLit = javaLiteral(e.output, method.ret); } catch (err) { ok = false; }
+        try {
+          if (method.ret === 'void') {
+            // void 原地修改：期望输出按被修改的数组参数类型解析
+            const arrParam = method.params.find(p => p.type.endsWith('[]'));
+            if (arrParam && e.inputs.length === 1) expLit = javaLiteral(e.output, arrParam.type);
+          } else {
+            expLit = javaLiteral(e.output, method.ret);
+          }
+        } catch (err) { ok = false; }
       }
       if (!ok) {
         L.push(`        // TODO 示例${i + 1} 无法自动生成：输入 ${e.inputs.map(x => x.value).join(', ')}${e.output != null ? '，输出 ' + e.output : ''}`);
@@ -208,7 +216,15 @@ function buildTemplate(problem, method, snippetClsName) {
       }
       L.push('        try {');
       if (method.ret === 'void') {
-        L.push(`            s.${method.name}(${argsList.join(', ')});`);
+        const arrParam = method.params.find(p => p.type.endsWith('[]'));
+        if (arrParam && expLit && argsList.length === 1 && e.inputs.length === 1) {
+          L.push(`            ${arrParam.type} nums = ${argsList[0]};`);
+          L.push(`            s.${method.name}(nums);`);
+          L.push(`            if (!${checkEqCall}(${expLit}, nums, "示例${i + 1}")) failures++;`);
+        } else {
+          L.push(`            s.${method.name}(${argsList.join(', ')});`);
+          L.push(`            // TODO 示例${i + 1} 为 void 原地修改，请调用后手写断言`);
+        }
       } else {
         const checkFn = UNORDERED_SLUGS.has(problem.slug) ? checkEqUnorderedCall : checkEqCall;
         L.push(`            if (!${checkFn}(${expLit}, s.${method.name}(${argsList.join(', ')}), "示例${i + 1}")) failures++;`);
