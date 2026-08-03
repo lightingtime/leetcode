@@ -1,0 +1,54 @@
+{
+  "id": "3",
+  "slug": "longest-substring-without-repeating-characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "titleCn": "无重复字符的最长子串",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/longest-substring-without-repeating-characters/",
+  "tags": [
+    "Hash Table",
+    "String",
+    "Sliding Window"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串",
+    "滑动窗口"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"abcabcbb\""
+        }
+      ],
+      "output": "3",
+      "explain": "因为无重复字符的最长子串是 \"abc\"，所以其长度为 3。注意 \"bca\" 和 \"cab\" 也是正确答案。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"bbbbb\""
+        }
+      ],
+      "output": "1",
+      "explain": "因为无重复字符的最长子串是 \"b\"，所以其长度为 1。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"pwwkew\""
+        }
+      ],
+      "output": "3",
+      "explain": "因为无重复字符的最长子串是 \"wke\"，所以其长度为 3。"
+    }
+  ],
+  "exampleTestcases": "\"abcabcbb\"\n\"bbbbb\"\n\"pwwkew\"",
+  "javaSnippet": "class Solution {\n    public int lengthOfLongestSubstring(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-03T21:05:18.932Z"
+}
