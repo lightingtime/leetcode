@@ -1,0 +1,66 @@
+{
+  "id": "141",
+  "slug": "linked-list-cycle",
+  "title": "Linked List Cycle",
+  "titleCn": "环形链表",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/linked-list-cycle/",
+  "tags": [
+    "Hash Table",
+    "Linked List",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "链表",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[3,2,0,-4]"
+        },
+        {
+          "name": "pos",
+          "value": "1"
+        }
+      ],
+      "output": "true",
+      "explain": "链表中有一个环，其尾部连接到第二个节点。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2]"
+        },
+        {
+          "name": "pos",
+          "value": "0"
+        }
+      ],
+      "output": "true",
+      "explain": "链表中有一个环，其尾部连接到第一个节点。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1]"
+        },
+        {
+          "name": "pos",
+          "value": "-1"
+        }
+      ],
+      "output": "false",
+      "explain": "链表中没有环。"
+    }
+  ],
+  "exampleTestcases": "[3,2,0,-4]\n1\n[1,2]\n0\n[1]\n-1",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode(int x) {\n *         val = x;\n *         next = null;\n *     }\n * }\n */\npublic class Solution {\n    public boolean hasCycle(ListNode head) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-03T00:50:50.162Z"
+}

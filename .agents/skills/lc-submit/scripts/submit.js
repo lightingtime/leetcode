@@ -17,9 +17,9 @@ function readConfig() {
   } catch { return {}; }
 }
 
-function helperClasses(fragment) {
+function helperClasses(fragment, provided) {
   const parts = [];
-  if (/\bListNode\b/.test(fragment)) {
+  if (/\bListNode\b/.test(fragment) && !(provided && provided.ListNode)) {
     parts.push(`class ListNode {
     int val;
     ListNode next;
@@ -28,7 +28,7 @@ function helperClasses(fragment) {
     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 }`);
   }
-  if (/\bTreeNode\b/.test(fragment)) {
+  if (/\bTreeNode\b/.test(fragment) && !(provided && provided.TreeNode)) {
     parts.push(`class TreeNode {
     int val;
     TreeNode left;
@@ -89,24 +89,34 @@ async function main() {
   // 去掉提交区开头的纯注释行（模板提示语），避免影响设计题类解包判断
   fragment = fragment.replace(/^(?:[ \t]*\/\/[^\n]*\n?)+/, '');
 
+  // 读取题目数据：判断判题环境是否已自带 ListNode/TreeNode，避免重复附带辅助类
+  const probDirs = fs.readdirSync(path.join(LC_DIR, 'problems'));
+  const dir = probDirs.find(d => d.endsWith('_' + slug));
+  let snippet = '';
+  if (dir) {
+    try {
+      const prob = JSON.parse(fs.readFileSync(path.join(LC_DIR, 'problems', dir, 'problem.json'), 'utf8'));
+      snippet = prob.javaSnippet || '';
+    } catch {}
+  }
+  const providedHelpers = {
+    ListNode: /\bclass\s+ListNode\b/.test(snippet),
+    TreeNode: /\bclass\s+TreeNode\b/.test(snippet)
+  };
+
   let submission;
   const staticClass = fragment.match(/^static\s+class\s+(\w+)\s*\{([\s\S]*)\}$/);
   if (staticClass) {
     // 设计题：解包嵌套类，恢复为顶层类
-    submission = `class ${staticClass[1]} {\n${staticClass[2].trim()}\n}\n${helperClasses(fragment)}`;
+    submission = `class ${staticClass[1]} {\n${staticClass[2].trim()}\n}\n${helperClasses(fragment, providedHelpers)}`;
   } else if (/^\s*(public\s+)?class\s+\w+/.test(fragment)) {
     submission = fragment;
   } else {
-    const probDirs = fs.readdirSync(path.join(LC_DIR, 'problems'));
-    const dir = probDirs.find(d => d.endsWith('_' + slug));
-    let clsName = 'Solution';
-    if (dir) {
-      try {
-        const prob = JSON.parse(fs.readFileSync(path.join(LC_DIR, 'problems', dir, 'problem.json'), 'utf8'));
-        clsName = (prob.javaSnippet.match(/class\s+(\w+)/) || [])[1] || 'Solution';
-      } catch {}
-    }
-    submission = `class ${clsName} {\n${fragment}\n}\n${helperClasses(fragment)}`;
+    // 保留 snippet 里的类声明（含 public 修饰），避免判题按类名/修饰符映射文件失败
+    const snippetClass = snippet.match(/^\s*(public\s+)?class\s+(\w+)/);
+    const clsName = snippetClass ? snippetClass[2] : 'Solution';
+    const clsModifier = snippetClass && snippetClass[1] ? snippetClass[1] : '';
+    submission = `${clsModifier}class ${clsName} {\n${fragment}\n}\n${helperClasses(fragment, providedHelpers)}`;
   }
 
   // 获取 question_id（数据库 ID）

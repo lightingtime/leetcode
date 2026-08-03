@@ -1,0 +1,22 @@
+{
+  "seq": 5,
+  "id": "141",
+  "slug": "linked-list-cycle",
+  "title": "环形链表",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "29/29",
+  "runtime_ms": null,
+  "memory_bytes": 47008000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "快慢指针",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "环形链表：Floyd 快慢指针判圈，O(n)/O(1)，一次 Accepted（29/29）",
+  "mistakes": [],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

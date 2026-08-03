@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-03",
-  "current_seq": 4,
+  "updated": "2026-08-04",
+  "current_seq": 5,
   "done": [
     {
       "seq": 1,
@@ -45,6 +45,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）"
+    },
+    {
+      "seq": 5,
+      "id": "141",
+      "title": "环形链表",
+      "slug": "linked-list-cycle",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "环形链表：Floyd 快慢指针判圈，O(n)/O(1)，一次 Accepted（29/29）"
     }
   ],
   "error_habits": [
