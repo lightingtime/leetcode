@@ -14,7 +14,7 @@
   "approach": "Trie（数组子节点 + 结束标记）",
   "time_complexity": "O(L)",
   "space_complexity": "O(N*26)",
-  "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）；修复了设计题提交解包的工具问题",
+  "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）",
   "mistakes": [
     {
       "habit": "游标起点与移动：insert 的游标从 new 出来的孤儿节点开始（应为根 this），且新建子节点后没有把游标移到新节点，导致插入的路径和树根断开",

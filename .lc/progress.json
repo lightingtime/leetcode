@@ -44,7 +44,7 @@
       "date": "2026-08-03",
       "firstPass": true,
       "optimal": true,
-      "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）；修复了设计题提交解包的工具问题"
+      "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）"
     }
   ],
   "error_habits": [
