@@ -119,6 +119,10 @@ function buildTemplate(problem, method, snippetClsName) {
   const date = todayStr();
   const needListNode = (method ? method.params.some(p => p.type.includes('ListNode')) || (method.ret || '').includes('ListNode') : false);
   const needTreeNode = (method ? method.params.some(p => p.type.includes('TreeNode')) || (method.ret || '').includes('TreeNode') : false);
+  const snippet = problem.javaSnippet || '';
+  // 标准结构（val+next / val+left+right）用公共节点类 src/ListNode.java、src/TreeNode.java；结构不同才在题文件内生成本地类
+  const standardListNode = /\bListNode\s+next\b/.test(snippet);
+  const standardTreeNode = /\bTreeNode\s+left\b/.test(snippet) && /\bTreeNode\s+right\b/.test(snippet);
   // 节点类的格式化依赖本题的 ListNode/TreeNode，需要本地包装；其余题目直接用共享的 TestUtil
   const useLocalHelpers = needListNode || needTreeNode;
   const checkEqCall = useLocalHelpers ? 'checkEq' : 'TestUtil.checkEq';
@@ -334,7 +338,7 @@ function buildTemplate(problem, method, snippetClsName) {
     L.push('    }');
     L.push('');
   }
-  if (needListNode) {
+  if (needListNode && !standardListNode) {
     L.push('    static class ListNode {');
     L.push('        int val;');
     L.push('        ListNode next;');
@@ -344,7 +348,7 @@ function buildTemplate(problem, method, snippetClsName) {
     L.push('    }');
     L.push('');
   }
-  if (needTreeNode) {
+  if (needTreeNode && !standardTreeNode) {
     L.push('    static class TreeNode {');
     L.push('        int val;');
     L.push('        TreeNode left;');

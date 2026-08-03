@@ -19,8 +19,16 @@ const className = path.basename(file, '.java');
 
 // 共享测试工具（生成的题目文件依赖它；不在 LC 前缀内，不会被自动选文件逻辑选中）
 const SHARED_HELPER = 'D:/Projects/leetCode/src/TestUtil.java';
+// 公共节点类（ListNode/TreeNode 标准结构），题目文件依赖它们
+const SHARED_NODES = [
+  'D:/Projects/leetCode/src/ListNode.java',
+  'D:/Projects/leetCode/src/TreeNode.java'
+];
 const javacArgs = ['-encoding', 'UTF-8', '-d', tmp];
 if (fs.existsSync(SHARED_HELPER) && path.resolve(SHARED_HELPER) !== path.resolve(file)) javacArgs.push(SHARED_HELPER);
+for (const shared of SHARED_NODES) {
+  if (fs.existsSync(shared) && path.resolve(shared) !== path.resolve(file)) javacArgs.push(shared);
+}
 javacArgs.push(file);
 
 const jc = spawnSync('javac', javacArgs, { encoding: 'utf8' });

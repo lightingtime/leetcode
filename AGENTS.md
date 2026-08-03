@@ -6,6 +6,7 @@
 
 - `src/`：每道题一个 Java 文件，命名 `LC{题号}_{题名}.java`，如 `LC0001_TwoSum.java`。文件内用 `// ==== 提交代码开始 ====` / `// ==== 提交代码结束 ====` 标记要提交的方法体，并自带 `main` 示例测试。
   - `src/TestUtil.java`：本地测试共用的比较工具（`checkEq` / `checkEqUnordered` 等），只服务 `main` 自测，不参与力扣提交。
+  - `src/ListNode.java` / `src/TreeNode.java`：公共节点类（标准 val+next / val+left+right 结构），链表/树题本地测试共用；节点结构不同的题目才在题文件内定义本地节点类。
 - `reviews/`：训练主页 `reviews/index.html`（由 `build_site.js` 自动生成：进度、打卡表、题目复盘）+ 每道题的复盘网页/报告，按分类存到子目录，如 `reviews/哈希表/LC0001_TwoSum_Review.html`（分类目录名中的 `/` 等非法字符替换为 `-`）。
 - `tools/`：用户侧辅助脚本，如 `tools/setup_cookie.cmd`（一键读取浏览器 cookie）。
 - `.lc/`：刷题状态目录，不要手工改动
