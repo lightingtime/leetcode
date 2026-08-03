@@ -39,6 +39,32 @@
       "date": "2026-08-04"
     }
   ],
+  "submissions": [
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "93/93",
+      "runtime_ms": null,
+      "memory_bytes": 92292000,
+      "approach": "快慢指针+栈",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优"
+    },
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "93/93",
+      "runtime_ms": null,
+      "memory_bytes": 94584000,
+      "approach": "快慢指针+原地反转",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优"
+    }
+  ],
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ]

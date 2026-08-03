@@ -27,6 +27,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 若已最优：点评优点，简要说明为什么这个复杂度已是下限。
    - 记录完成：`node ".agents/skills/lc-practice/scripts/update_state.js" done --seq <seq> --firstPass <是否一次通过> --optimal <是否最优> --notes "<一句话复盘>" --verdict Accepted --testcases 65/65 --memory <内存字节> --approach "解法名" --time O(n) --space O(n)`。
    - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，`update_state.js analysis --slug <slug>` 可查看）。
+   - 多次 Accepted 全部记录：每次 `done` 会把本次提交自动追加到 analysis.json 的 `submissions` 历史（按 日期+方法+内存+用例 去重），不覆盖成最后一次；复盘报告要体现每次提交。
    - 自动打卡（无需用户提醒）：`node ".agents/skills/lc-practice/scripts/update_state.js" checkin --seq <seq>`，重新生成训练主页「reviews/index.html」（打卡表 + 进度 + 复盘列表，数据源 progress.json）。
    - 生成复盘报告（每次 Accepted 必做，无需用户提醒）：按 `reviews/{分类}/LC{题号}_{题名}_Review.html` 的既有格式（参考 `reviews/哈希表/LC0001_TwoSum_Review.html` 等），基于 `analysis.json` 与 `progress.json` 生成本期复盘页，内容包含「我的解法 / 解题过程 / 分析结果（判题指标、最优性、分类提醒、完成记录）」；报告存入当前题分类对应的 `reviews/{分类}/` 子目录（分类名中的 `/` 等非法字符替换为 `-`），页内相对链接按子目录层级写（`../../src/...`、`../../index.html`）。
      解题过程时间线只记录真实环节（如 独立实现 → 本地测试 → 提交 Accepted），**不包含「选题建题」**。

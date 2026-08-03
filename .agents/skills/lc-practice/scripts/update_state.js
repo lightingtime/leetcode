@@ -13,6 +13,7 @@
 // 约定: progress.json 只存精简索引；每题详细分析存 .lc/problems/{id}_{slug}/analysis.json
 //       打卡表并入训练主页 reviews/index.html，由 checkin 命令自动重新生成，无需用户提醒
 //       可复用套路（如指针判空取舍）用 pattern add 记录到 analysis.json 的 patterns 字段，并同步沉淀到 lc-analyze skill 的 references/patterns.md
+//       done 标记 Accepted 时会自动把每次提交追加到 analysis.json 的 submissions 历史（按 日期+方法+内存+用例 去重）
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -104,8 +105,28 @@ if (cmd === 'next') {
     notes: rec.notes || prev.notes || '',
     mistakes: Array.isArray(prev.mistakes) ? prev.mistakes : [],
     patterns: Array.isArray(prev.patterns) ? prev.patterns : [],
+    submissions: Array.isArray(prev.submissions) ? prev.submissions : [],
     hints: (progress.category_hints && progress.category_hints[q.category]) ? [progress.category_hints[q.category]] : []
   };
+  // 多次 Accepted 全部记录：每次 done 追加一条提交历史，避免被最后一次覆盖
+  if (analysis.verdict === 'Accepted') {
+    const sub = {
+      date,
+      verdict: analysis.verdict,
+      testcases: analysis.testcases,
+      runtime_ms: analysis.runtime_ms,
+      memory_bytes: analysis.memory_bytes,
+      approach: analysis.approach,
+      time_complexity: analysis.time_complexity,
+      space_complexity: analysis.space_complexity,
+      optimal: analysis.optimal,
+      notes: analysis.notes
+    };
+    const dup = analysis.submissions.find(s =>
+      s.date === sub.date && s.approach === sub.approach &&
+      s.memory_bytes === sub.memory_bytes && s.testcases === sub.testcases);
+    if (!dup) analysis.submissions.push(sub);
+  }
   writeJson(ap, analysis);
   console.log(`已记录完成：${q.id}. ${q.title}`);
   console.log(`详细分析：${ap}`);
