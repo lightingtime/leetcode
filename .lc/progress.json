@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-03",
-  "current_seq": 3,
+  "current_seq": 4,
   "done": [
     {
       "seq": 1,
@@ -34,6 +34,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "字母异位词分组：计数编码键分组，修复键遗漏次数后第二次提交 Accepted（129/129）"
+    },
+    {
+      "seq": 4,
+      "id": "208",
+      "title": "实现 Trie (前缀树)",
+      "slug": "implement-trie-prefix-tree",
+      "category": "哈希表",
+      "date": "2026-08-03",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）；修复了设计题提交解包的工具问题"
     }
   ],
   "error_habits": [
@@ -42,6 +53,17 @@
       "count": 1,
       "examples": [
         "group-anagrams"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-03"
+    },
+    {
+      "habit": "游标起点与移动：insert 的游标从 new 出来的孤儿节点开始（应为根 this），且新建子节点后没有把游标移到新节点，导致插入的路径和树根断开",
+      "count": 1,
+      "examples": [
+        "implement-trie-prefix-tree"
       ],
       "categories": [
         "哈希表"

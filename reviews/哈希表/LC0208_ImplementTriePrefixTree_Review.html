@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0208 实现 Trie（前缀树） · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.mid { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 04</div>
+    <h1>LC0208 · 实现 Trie（前缀树） <span style="color:#93c5fd">Implement Trie (Prefix Tree)</span></h1>
+    <div class="sub">从独立实现、游标踩坑、工具 CE 修复到一次 Accepted 的完整记录</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 16/16</span>
+      <span class="badge mid">难度 Medium</span>
+      <span class="badge tag">分类 哈希表</span>
+      <span class="badge plain">一次判题通过 · 已达最优</span>
+      <span class="badge">2026-08-03</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：数组子节点 + 结束标记。</b>每个节点用 26 格的 <code>Trie[]</code> 存下一层字符的子节点，外加一个 <code>end</code> 标记；
+      <code>insert</code> 用游标从根逐字符走，缺哪层建哪层，最后点亮终点标记；<code>search</code> / <code>startsWith</code> 共用
+      <code>getCur</code> 沿前缀走，区别只在走完后要不要看 <code>end</code>。</p>
+      <p>
+        <span class="chip">时间 O(L)</span>
+        <span class="chip">空间 O(总字符 × 26)</span>
+        <span class="chip">L = 单词长度</span>
+        <span class="chip">游标从根 this 出发</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0208_ImplementTriePrefixTree.java</span><span>提交区（修复后）</span></div>
+        <pre class="code">static class Trie {
+    Trie[] sub;
+    boolean end = false;
+    public Trie() {
+        sub = new Trie[26];
+    }
+    public void insert(String word) {
+        Trie cur = this;
+        for (Character c : word.toCharArray()) {
+            if (cur.sub[c - 'a'] != null) {
+                cur = cur.sub[c - 'a'];
+            } else {
+                cur.sub[c - 'a'] = new Trie();
+                cur = cur.sub[c - 'a'];
+            }
+        }
+        cur.end = true;
+    }
+    public boolean search(String word) {
+        Trie cur = getCur(word);
+        if (cur == null) return false;
+        return cur.end;
+    }
+    private Trie getCur(String word) {
+        Trie cur = this;
+        for (Character c : word.toCharArray()) {
+            if (cur.sub[c - 'a'] == null) {
+                return null;
+            } else {
+                cur = cur.sub[c - 'a'];
+            }
+        }
+        return cur;
+    }
+    public boolean startsWith(String prefix) {
+        Trie cur = getCur(prefix);
+        return cur != null;
+    }
+}</pre>
+      </div>
+      <p class="muted">关键点：游标起点是根（<code>this</code>）；「建新节点」和「走过去」两步都做了。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 独立实现（首版游标错误）<span class="tl-badge bug">踩坑</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>结构方向正确（数组子节点 + 结束标记），但 insert 的游标从 <code>new Trie()</code> 孤儿节点开始（应为根 <code>this</code>），
+          且新建子节点后没有移动游标，插入的路径和树根完全断开。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 本地失败 + 分析修复游标<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>本地 3 个示例失败（search(apple)、startsWith(app)、insert 后 search(app)）。lc-analyze 定位两处游标问题后，
+          游标起点改为根、新建子节点后同步移动游标，4 项本地测试全部通过。错误习惯「游标起点与移动」记录入库。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 提交遇工具 Compile Error<span class="tl-badge info">工具修复</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>首次提交报 <code>class Trie is already defined</code>：模板的提示注释位于提交标记区内，导致 submit 脚本解包
+          <code>static class Trie</code> 失败、多包了一层。修复 <code>create_problem.js</code>（注释移出提交区）与
+          <code>submit.js</code>（解包前忽略开头注释行）后重新提交。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 第二次提交 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>判题结果 <b style="color:#16a34a">Accepted</b>，16/16 用例通过，内存约 59.4 MB，一次判题通过。
+          随后记录进度与明细、打卡并重新生成训练主页，同时生成本期复盘报告。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">16 / 16</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 59.4 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(L) / O(N·26)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">成功判题次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：标准 Trie，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(L)</b>：每次操作必须读完整个单词，O(L) 是下限；数组定位子节点是 O(1)。</li>
+        <li><b>空间复杂度 O(总字符 × 26)</b>：每个插入的字符对应一个节点，节点固定带 26 格数组，是数组实现的标准开销。</li>
+        <li><b>正确性</b>：<code>search</code> 要求「走通 + end」，<code>startsWith</code> 只要求「走通」，区分正确。</li>
+        <li><b>结论</b>：与题目标准解法一致，无需再优化。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 哈希表</h3>
+      <div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <p>设计题先明确 API 与复杂度要求；前缀树的核心价值是把「字符串前缀」变成逐层结构，
+      让前缀/单词查找从「枚举全部字符串」降到「按字符走一遍」。以后遇到自动补全、词典、最长公共前缀类题目，先想 Trie。</p>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <p>本轮记录 1 条错误习惯（已写入 <code>progress.json</code>，后续选题会提醒）：</p>
+      <div class="quote">游标起点与移动：insert 的游标从 new 出来的孤儿节点开始（应为根 this），且新建子节点后没有把游标移到新节点，导致插入的路径和树根断开。</div>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 04 · implement-trie-prefix-tree</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）；修复了设计题提交解包的工具问题。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/208_implement-trie-prefix-tree/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0208_ImplementTriePrefixTree.java">src/LC0208_ImplementTriePrefixTree.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-03
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

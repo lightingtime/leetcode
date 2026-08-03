@@ -141,6 +141,10 @@ function buildTemplate(problem, method, snippetClsName) {
   L.push('');
   L.push(`public class ${className} {`);
   L.push('');
+  if (!method) {
+    const innerCls = snippetClsName || 'Solution';
+    L.push(`    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 ${innerCls} 在提交时自动处理。`);
+  }
   L.push('    // ==== 提交代码开始 ====');
 
   if (!method) {
@@ -148,7 +152,6 @@ function buildTemplate(problem, method, snippetClsName) {
     const body = (problem.javaSnippet.match(/class\s+\w+\s*\{([\s\S]*)\}/) || [])[1] || '';
     const sigs = [...body.matchAll(/public\s+(?:[\w<>,.\[\]\s]+\s+)?\w+\s*\([^)]*\)\s*\{/g)];
     const innerCls = snippetClsName || 'Solution';
-    L.push(`    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 ${innerCls} 在提交时自动处理。`);
     L.push(`    static class ${innerCls} {`);
     if (sigs.length === 0) {
       L.push('        // TODO: 按题目模板补全（构造器与方法签名见 problem.json 的 javaSnippet）');

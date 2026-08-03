@@ -1,0 +1,27 @@
+{
+  "seq": 4,
+  "id": "208",
+  "slug": "implement-trie-prefix-tree",
+  "title": "实现 Trie (前缀树)",
+  "category": "哈希表",
+  "date": "2026-08-03",
+  "verdict": "Accepted",
+  "testcases": "16/16",
+  "runtime_ms": null,
+  "memory_bytes": 62320000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Trie（数组子节点 + 结束标记）",
+  "time_complexity": "O(L)",
+  "space_complexity": "O(N*26)",
+  "notes": "实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）；修复了设计题提交解包的工具问题",
+  "mistakes": [
+    {
+      "habit": "游标起点与移动：insert 的游标从 new 出来的孤儿节点开始（应为根 this），且新建子节点后没有把游标移到新节点，导致插入的路径和树根断开",
+      "count": 1
+    }
+  ],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}

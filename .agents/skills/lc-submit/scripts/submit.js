@@ -86,6 +86,8 @@ async function main() {
   const code = fs.readFileSync(file, 'utf8');
   const marker = code.match(/\/\/ ==== 提交代码开始 ====\s*([\s\S]*?)\/\/ ==== 提交代码结束 ====/);
   let fragment = marker ? marker[1].trim() : code.trim();
+  // 去掉提交区开头的纯注释行（模板提示语），避免影响设计题类解包判断
+  fragment = fragment.replace(/^(?:[ \t]*\/\/[^\n]*\n?)+/, '');
 
   let submission;
   const staticClass = fragment.match(/^static\s+class\s+(\w+)\s*\{([\s\S]*)\}$/);

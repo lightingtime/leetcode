@@ -1,0 +1,25 @@
+{
+  "id": "208",
+  "slug": "implement-trie-prefix-tree",
+  "title": "Implement Trie (Prefix Tree)",
+  "titleCn": "实现 Trie (前缀树)",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/implement-trie-prefix-tree/",
+  "tags": [
+    "Design",
+    "Trie",
+    "Hash Table",
+    "String"
+  ],
+  "tagsCn": [
+    "设计",
+    "字典树",
+    "哈希表",
+    "字符串"
+  ],
+  "category": "哈希表",
+  "examples": [],
+  "exampleTestcases": "[\"Trie\",\"insert\",\"search\",\"search\",\"startsWith\",\"insert\",\"search\"]\n[[],[\"apple\"],[\"apple\"],[\"app\"],[\"app\"],[\"app\"],[\"app\"]]",
+  "javaSnippet": "class Trie {\n\n    public Trie() {\n        \n    }\n    \n    public void insert(String word) {\n        \n    }\n    \n    public boolean search(String word) {\n        \n    }\n    \n    public boolean startsWith(String prefix) {\n        \n    }\n}\n\n/**\n * Your Trie object will be instantiated and called as such:\n * Trie obj = new Trie();\n * obj.insert(word);\n * boolean param_2 = obj.search(word);\n * boolean param_3 = obj.startsWith(prefix);\n */",
+  "fetchedAt": "2026-08-02T23:13:03.667Z"
+}
