@@ -4,7 +4,7 @@
   "slug": "remove-nth-node-from-end-of-list",
   "title": "删除链表的倒数第 N 个结点",
   "category": "双指针与滑动窗口",
-  "date": "2026-08-04",
+  "date": "2026-08-05",
   "verdict": "Accepted",
   "testcases": "208/208",
   "runtime_ms": null,
@@ -15,6 +15,9 @@
   "time_complexity": "O(n)",
   "space_complexity": "O(1)",
   "notes": "哨兵节点统一删头边界，快慢指针拉开 N 步一趟删除，O(n)/O(1)，一次 Accepted（208/208）",
+  "code_notes": [
+    "写法未达最精简：① slow 指针冗余（pre.next 恒等于待删节点，可直接 pre.next = pre.next.next）；② 快指针走 N 步的 while+i++ 可换成 for 循环"
+  ],
   "mistakes": [],
   "patterns": [
     {

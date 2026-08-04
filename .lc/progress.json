@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-04",
+  "updated": "2026-08-05",
   "current_seq": 12,
   "done": [
     {
@@ -129,10 +129,10 @@
       "title": "删除链表的倒数第 N 个结点",
       "slug": "remove-nth-node-from-end-of-list",
       "category": "双指针与滑动窗口",
-      "date": "2026-08-04",
+      "date": "2026-08-05",
       "firstPass": true,
       "optimal": true,
-      "notes": "哨兵节点统一删头边界，快慢指针拉开 N 步一趟删除，O(n)/O(1)，一次 Accepted（208/208）"
+      "notes": ""
     }
   ],
   "error_habits": [

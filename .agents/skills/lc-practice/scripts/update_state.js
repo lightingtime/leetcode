@@ -142,6 +142,9 @@ if (cmd === 'next') {
     time_complexity: arg('--time', '') || prev.time_complexity || '',
     space_complexity: arg('--space', '') || prev.space_complexity || '',
     notes: rec.notes || prev.notes || '',
+    code_notes: arg('--codeNote', '')
+      ? Array.from(new Set([...(Array.isArray(prev.code_notes) ? prev.code_notes : []), arg('--codeNote', '')]))
+      : (Array.isArray(prev.code_notes) ? prev.code_notes : []),
     mistakes: Array.isArray(prev.mistakes) ? prev.mistakes : [],
     patterns: Array.isArray(prev.patterns) ? prev.patterns : [],
     submissions: Array.isArray(prev.submissions) ? prev.submissions : [],
@@ -282,6 +285,21 @@ if (cmd === 'next') {
 } else if (cmd === 'hint') {
   const cat = arg('--category', '');
   console.log((progress.category_hints || {})[cat] || '暂无该分类提示');
+} else if (cmd === 'code-notes') {
+  const problemsDir = path.join(LC_DIR, 'problems');
+  const dirs = fs.existsSync(problemsDir) ? fs.readdirSync(problemsDir) : [];
+  const out = [];
+  for (const d of dirs) {
+    const ap = path.join(problemsDir, d, 'analysis.json');
+    if (!fs.existsSync(ap)) continue;
+    let a = {};
+    try { a = readJson(ap); } catch { continue; }
+    if (!Array.isArray(a.code_notes) || a.code_notes.length === 0) continue;
+    out.push(`${a.id}. ${a.title}（${a.category || ''}）:`);
+    a.code_notes.forEach(n => out.push(`  - ${n}`));
+  }
+  if (!out.length) console.log('暂无「写法未达最精简」的记录');
+  else console.log(out.join('\n'));
 } else if (cmd === 'stats') {
   const done = progress.done || [];
   console.log(`已完成：${done.length}/${order.length}`);
@@ -293,5 +311,5 @@ if (cmd === 'next') {
 } else if (cmd === 'plan') {
   planReport(progress).forEach(l => console.log(l));
 } else {
-  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | stats');
+  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | stats');
 }
