@@ -18,20 +18,20 @@ public class LC0075_SortColors {
         int start = 0, end = nums.length - 1;
         int mid = start;
         while (mid <= end) {
-            if (nums[mid] == 0) {
-                int temp = nums[start];
-                nums[start] = nums[mid];
-                nums[mid] = temp;
-                start++;
-                mid = start;
-            } else if (nums[mid] == 2) {
-                int temp = nums[end];
-                nums[end] = nums[mid];
-                nums[mid] = temp;
-                end--;
-            } else {
-                mid++;
-            }
+                if (nums[mid] == 0) {
+                    int temp = nums[start];
+                    nums[start] = nums[mid];
+                    nums[mid] = temp;
+                    start++;
+                    mid++;
+                } else if (nums[mid] == 2) {
+                    int temp = nums[end];
+                    nums[end] = nums[mid];
+                    nums[mid] = temp;
+                    end--;
+                } else {
+                    mid++;
+                }
         }
     }
     // ==== 提交代码结束 ====

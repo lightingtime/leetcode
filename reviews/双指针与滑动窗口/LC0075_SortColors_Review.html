@@ -163,12 +163,12 @@
   <div class="wrap">
     <div class="kicker">LEETCODE 刷题复盘 · SEQ 13</div>
     <h1>LC0075 · 颜色分类 <span style="color:#93c5fd">Sort Colors</span></h1>
-    <div class="sub">从死循环、WA 到三指针分区 Accepted，写法还有优化空间</div>
+    <div class="sub">从死循环、WA 到标准荷兰国旗，最终达成一趟最优</div>
     <div class="badges">
       <span class="badge ok">✓ Accepted 89/89</span>
       <span class="badge medium">难度 Medium</span>
       <span class="badge tag">分类 双指针与滑动窗口</span>
-      <span class="badge warn">第二次提交通过 · 未达一趟最优</span>
+      <span class="badge ok">第三次提交通过 · 已达一趟最优</span>
       <span class="badge">2026-08-05</span>
     </div>
   </div>
@@ -179,11 +179,12 @@
   <section>
     <h2>我的解法</h2>
     <div class="card">
-      <p><b>思路：三指针分区。</b><code>start</code> 是 0 的边界（左边全是 0），<code>end</code> 是 2 的边界（右边全是 2），
-      <code>mid</code> 是扫描指针。遇到 0 与 <code>start</code> 交换并右移 <code>start</code>；
-      遇到 2 与 <code>end</code> 交换并左移 <code>end</code>；遇到 1 直接前进。</p>
+      <p><b>思路：标准荷兰国旗三指针。</b><code>start</code> 是 0 的边界（左边全是 0），<code>end</code> 是 2 的边界（右边全是 2），
+      <code>mid</code> 是扫描指针。遇到 0 与 <code>start</code> 交换后 <code>start++</code>、<code>mid++</code>；
+      遇到 2 与 <code>end</code> 交换后 <code>end--</code>、<code>mid</code> 停住回看；遇到 1 直接 <code>mid++</code>。
+      扫描指针从不重置，严格一趟。</p>
       <p>
-        <span class="chip">时间 O(n)~O(n²)（0 分支重置会重扫）</span>
+        <span class="chip">时间 O(n) 一趟</span>
         <span class="chip">空间 O(1)</span>
         <span class="chip">原地修改</span>
       </p>
@@ -198,7 +199,7 @@
             nums[start] = nums[mid];
             nums[mid] = temp;
             start++;
-            mid = start;
+            mid++;
         } else if (nums[mid] == 2) {
             int temp = nums[end];
             nums[end] = nums[mid];
@@ -211,7 +212,8 @@
 }</pre>
       </div>
       <p class="muted">边界语义：<code>mid</code> 指向的元素未处理、正在检查；<code>end</code> 指向的元素未处理（闭区间
-      <code>[mid, end]</code>，所以用 <code>mid &lt;= end</code>）；<code>start</code> 指向的元素未处理。</p>
+      <code>[mid, end]</code>，所以用 <code>mid &lt;= end</code>）；<code>start</code> 指向的元素未处理。
+      0 交换后 <code>mid</code> 前进是安全的（从 0 边界换进来的是 1）；2 交换后 <code>mid</code> 必须停住回看（换进来的可能是 0）。</p>
     </div>
   </section>
 
@@ -263,8 +265,8 @@
         </summary>
         <div class="tl-body">
           <p>2 分支交换后不再无条件推进（由外层循环回看换入值），1 分支显式前进；
-          0 分支保留 <code>mid = start</code> 重置保证不漏。回归用例 <code>[0,2,1]</code> 已补进本地测试，
-          2 示例 + 8 边界全部通过。</p>
+          0 分支仍保留 <code>mid = start</code> 重置。回归用例 <code>[0,2,1]</code> 已补进本地测试，
+          本地全过并第二次提交 Accepted（89/89）；但 <code>mid = start</code> 的重置使最坏时间仍是 O(n²)。</p>
         </div>
         </details>
       </div>
@@ -273,11 +275,27 @@
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">04 · 提交：第二次 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-title">04 · 第二次提交 Accepted，但最坏 O(n²)<span class="tl-badge bug">未达最优</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>提交结果：<b style="color:#16a34a">Accepted</b>，89/89 用例通过（第一次 WA，第二次成功）。</p>
+          <p>第二次提交 <b style="color:#16a34a">Accepted</b>（89/89），但 0 分支 <code>mid = start</code> 会把扫描指针
+          拉回边界重扫，最坏 O(n²)，不满足进阶「一趟扫描」。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">05 · 重写为标准荷兰国旗，第三次提交 Accepted<span class="tl-badge ok">达成最优</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>去掉外层边界检查和 <code>mid = start</code> 重置：0 交换后 <code>mid++</code>、2 交换后 <code>mid</code> 停住回看、
+          1 直接前进。扫描指针从不后退，本地全过（含回归用例），第三次提交 <b style="color:#16a34a">Accepted</b>（89/89），
+          严格 O(n)/O(1)，达成进阶最优。</p>
         </div>
         </details>
       </div>
@@ -292,28 +310,19 @@
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">89 / 89</div><div class="l">通过用例</div></div>
       <div class="metric"><div class="v">≈ 41.7 MB</div><div class="l">内存占用</div></div>
-      <div class="metric warn"><div class="v">O(n²)</div><div class="l">最坏时间</div></div>
-      <div class="metric warn"><div class="v">两次</div><div class="l">提交次数</div></div>
+      <div class="metric ok"><div class="v">O(n)</div><div class="l">一趟时间</div></div>
+      <div class="metric ok"><div class="v">三次</div><div class="l">提交次数</div></div>
     </div>
 
     <div class="card">
-      <h3>算法判定：正确性已达标，但未严格满足「一趟扫描」进阶</h3>
+      <h3>算法判定：标准荷兰国旗，已达最优</h3>
       <ul class="ok-list">
-        <li><b>正确性</b>：0/2 边界 + 扫描指针的分区正确，空数组、单元素、全相同、逆序、两种颜色等边界全部覆盖。</li>
-        <li><b>空间 O(1)</b>：只用 start、end、mid 三个常量指针，满足常数空间。</li>
+        <li><b>时间复杂度 O(n)</b>：扫描指针 <code>mid</code> 从不重置，每轮要么前进、要么交换后回看，严格一趟扫描。</li>
+        <li><b>空间复杂度 O(1)</b>：只用 start、end、mid 三个常量指针，满足常数空间。</li>
+        <li><b>推进规则正确</b>：0 交换后 <code>mid++</code>（从 0 边界换进来的是 1，安全前进）；2 交换后 <code>mid</code> 停住回看（换进来的可能是 0）；1 直接前进。</li>
+        <li><b>边界覆盖</b>：空、单元素、全相同、逆序、两种颜色、WA 回归用例 <code>[0,2,1]</code> 全部通过。</li>
+        <li><b>结论</b>：与标准解法一致，满足进阶「一趟扫描 + 常数空间」。</li>
       </ul>
-      <ul class="bad-list">
-        <li><b>最坏时间 O(n²)</b>：0 分支的 <code>mid = start</code> 会把扫描指针重置回 0 边界，
-        当 0 散布在 1 之间时会反复重扫中间段；n ≤ 300 能过判题，但不是严格的一趟。</li>
-      </ul>
-
-      <div class="opt-note">
-        <div class="opt-head">宽泛最优思路（可自行重写后再次提交）</div>
-        <p>标准荷兰国旗三指针可以让最坏时间严格 O(n)：<strong>遇到 0 交换后扫描指针直接前进</strong>
-        （从 0 边界换进来的一定是 1，无需回看）；<strong>遇到 2 交换后扫描指针停住回看</strong>
-        （从 2 边界换进来的可能是 0）；<strong>遇到 1 直接前进</strong>。
-        去掉 <code>mid = start</code> 的重置，就再也不会重扫。</p>
-      </div>
     </div>
 
     <div class="card">
@@ -339,9 +348,9 @@
       <p>
         <span class="chip">seq 13 · sort-colors</span>
         <span class="chip">firstPass: false</span>
-        <span class="chip">optimal: false</span>
+        <span class="chip">optimal: true</span>
       </p>
-      <div class="quote">一句话复盘：三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，可改标准荷兰国旗严格 O(n)。</div>
+      <div class="quote">一句话复盘：从死循环、WA 到标准荷兰国旗——0 交换后前进、2 交换后回看、1 前进，严格一趟 O(n)/O(1)，89/89 Accepted。</div>
     </div>
   </section>
 

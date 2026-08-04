@@ -8,13 +8,13 @@
   "verdict": "Accepted",
   "testcases": "89/89",
   "runtime_ms": null,
-  "memory_bytes": 43772000,
+  "memory_bytes": 43904000,
   "firstPass": false,
-  "optimal": false,
-  "approach": "三指针分区",
-  "time_complexity": "O(n)~O(n²)",
+  "optimal": true,
+  "approach": "三指针分区（荷兰国旗）",
+  "time_complexity": "O(n)",
   "space_complexity": "O(1)",
-  "notes": "三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)",
+  "notes": "重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）",
   "code_notes": [],
   "mistakes": [
     {
@@ -51,6 +51,18 @@
       "space_complexity": "O(1)",
       "optimal": false,
       "notes": "三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)"
+    },
+    {
+      "date": "2026-08-05",
+      "verdict": "Accepted",
+      "testcases": "89/89",
+      "runtime_ms": null,
+      "memory_bytes": 43904000,
+      "approach": "三指针分区（荷兰国旗）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）"
     }
   ],
   "hints": [
