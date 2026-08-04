@@ -188,10 +188,12 @@
     int start = 0;
     int i = 0;
     while (i &lt; nums.length) {
+        // 入队前弹掉队尾比新元素小的：新元素更大且更晚，被弹者永远当不了最大值
         while (!queue.isEmpty() &amp;&amp; nums[queue.peekLast()] &lt; nums[i]) {
             queue.pollLast();
         }
         queue.offerLast(i);
+        // 弹出过期队头：窗口是闭区间 [i-k+1, i]，队头下标 <= i-k 说明已滑出窗口
         while (!queue.isEmpty() &amp;&amp; queue.peekFirst() &lt;= i - k) {
             queue.pollFirst();
         }
