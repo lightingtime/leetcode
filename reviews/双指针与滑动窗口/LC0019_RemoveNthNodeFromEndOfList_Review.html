@@ -121,6 +121,14 @@
     padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
     font-size: 14.5px;
   }
+  .opt-note {
+    margin-top: 18px; border: 1px solid #fde68a; background: #fffbeb;
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .opt-head { font-weight: 700; color: #92400e; margin-bottom: 6px; }
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .cmp-label { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; }
+  @media (max-width: 700px) { .cmp { grid-template-columns: 1fr; } }
   .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
   .expand-bar button {
     font: inherit; font-size: 13px; cursor: pointer;
@@ -272,6 +280,47 @@
         <li><b>边界正确</b>：dummy 哨兵让删头结点（n == 长度）和删尾结点共用同一段删除逻辑，无特判、无空指针。</li>
         <li><b>结论</b>：与本题标准解法一致，无需再优化。</li>
       </ul>
+
+      <div class="opt-note">
+        <div class="opt-head">思路已最优 · 代码写法可再精简两处</div>
+        <p><strong>① 去掉 slow 指针：</strong>循环中始终满足 <code>pre.next == slow</code>（pre 就是待删节点的前驱），
+        删除时直接用 <code>pre.next = pre.next.next</code>，不需要 slow 变量。</p>
+        <p><strong>② 计数器换成 for 循环：</strong>快指针先走 N 步的 <code>while + i++</code> 可以写成
+        <code>for (int i = 0; i &lt; n; i++) fast = fast.next;</code>，少一个外部变量。</p>
+        <div class="cmp">
+          <div>
+            <div class="cmp-label">当前写法（三指针）</div>
+            <div class="code-wrap">
+              <div class="code-head"><span>removeNthFromEnd 内</span><span>fast + slow + pre</span></div>
+              <pre class="code">ListNode fast = head;
+int i = 0;
+while (i &lt; n) { fast = fast.next; i++; }
+ListNode slow = head;
+ListNode pre = dummy;
+while (fast != null) {
+    fast = fast.next;
+    slow = slow.next;
+    pre = pre.next;
+}
+pre.next = slow.next;</pre>
+            </div>
+          </div>
+          <div>
+            <div class="cmp-label">更精简（两指针）</div>
+            <div class="code-wrap">
+              <div class="code-head"><span>removeNthFromEnd 内</span><span>fast + pre</span></div>
+              <pre class="code">ListNode fast = head;
+for (int i = 0; i &lt; n; i++) fast = fast.next;
+ListNode pre = dummy;
+while (fast != null) {
+    fast = fast.next;
+    pre = pre.next;
+}
+pre.next = pre.next.next;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card">

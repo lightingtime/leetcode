@@ -25,6 +25,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 分析写法是否最优：时间复杂度/空间复杂度是否达最优、边界是否覆盖、代码是否清晰、有无明显冗余。
    - 若不够最优：只提示宽泛的最优思路（如「这题可以用双指针把 O(n²) 降到 O(n)」「应该想到单调栈」），让用户自己重写后再次提交；不替用户写。
    - 若已最优：点评优点，简要说明为什么这个复杂度已是下限。
+   - 思路已最优但代码写法可微调时（如冗余变量、可合并/简化的循环、重复表达式），在复盘与汇报中具体指出可优化点（只提示，不替用户重写）。
    - 记录完成：`node ".agents/skills/lc-practice/scripts/update_state.js" done --seq <seq> --firstPass <是否一次通过> --optimal <是否最优> --notes "<一句话复盘>" --verdict Accepted --testcases 65/65 --memory <内存字节> --approach "解法名" --time O(n) --space O(n)`。
    - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，`update_state.js analysis --slug <slug>` 可查看）。
   - 提交历史规则：解法不同才追加到 analysis.json 的 `submissions`；相似解法（仅代码微调）只保留最优解（按 optimal 与内存比较，`done` 自动处理）；复盘报告体现不同解法的提交。
