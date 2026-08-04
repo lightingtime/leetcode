@@ -1,0 +1,63 @@
+{
+  "seq": 19,
+  "id": "33",
+  "slug": "search-in-rotated-sorted-array",
+  "title": "搜索旋转排序数组",
+  "category": "数组与矩阵",
+  "date": "2026-08-05",
+  "verdict": "Accepted",
+  "testcases": "196/196",
+  "runtime_ms": null,
+  "memory_bytes": 44340000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "旋转数组二分",
+  "time_complexity": "O(log n)",
+  "space_complexity": "O(1)",
+  "notes": "旋转数组二分：有序半段判定用 >=、值域归属 target、mid 命中即返回，O(log n)/O(1) 一次 Accepted（196/196）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "二分中点公式错：mid = (right-left)/2 是区间长度的一半，left>0 时落在区间外；应为 mid = left + (right-left)/2，保证 mid 在 [left, right] 闭区间内",
+      "count": 1
+    },
+    {
+      "habit": "旋转数组二分只比 nums[mid] 大小、未用有序半段值域判断 target 归属：左半段有序时只有 nums[left] <= target < nums[mid] 才搜左，否则搜右；右半段同理需 nums[mid] < target <= nums[right]，缺值域判断会把 target 错误丢出区间",
+      "count": 1
+    },
+    {
+      "habit": "二分丢等号：target 恰好等于 nums[mid] 时，两侧严格不等式（target < nums[mid] / nums[mid] < target）都不成立，mid 被丢出区间；需在循环内显式判断 nums[mid] == target 返回，或把分支条件改为含等号",
+      "count": 1
+    },
+    {
+      "habit": "有序半段判定用 > 而非 >=：区间只剩两个元素时 mid == left，nums[mid] > nums[left] 恒为 false，错误进入右半段分支（此时右半段未必有序），target 被丢出；左半段有序判定应为 nums[left] <= nums[mid]",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "旋转有序数组二分：先判有序半段，再用值域归属 target",
+      "text": "每次用 nums[left] <= nums[mid] 判断左半段是否有序；左半段有序时仅当 nums[left] <= target < nums[mid] 搜左否则搜右，右半段有序时仅当 nums[mid] < target <= nums[right] 搜右否则搜左；中点用 left + (right-left)/2，循环 left <= right",
+      "category": "数组与矩阵",
+      "problem": "search-in-rotated-sorted-array",
+      "date": "2026-08-05"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-05",
+      "verdict": "Accepted",
+      "testcases": "196/196",
+      "runtime_ms": null,
+      "memory_bytes": 44340000,
+      "approach": "旋转数组二分",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "旋转数组二分：有序半段判定用 >=、值域归属 target、mid 命中即返回，O(log n)/O(1) 一次 Accepted（196/196）"
+    }
+  ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ]
+}

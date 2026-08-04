@@ -1,0 +1,64 @@
+{
+  "id": "33",
+  "slug": "search-in-rotated-sorted-array",
+  "title": "Search in Rotated Sorted Array",
+  "titleCn": "搜索旋转排序数组",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/search-in-rotated-sorted-array/",
+  "tags": [
+    "Array",
+    "Binary Search"
+  ],
+  "tagsCn": [
+    "数组",
+    "二分查找"
+  ],
+  "category": "数组与矩阵",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[4,5,6,7,0,1,2]"
+        },
+        {
+          "name": "target",
+          "value": "0"
+        }
+      ],
+      "output": "4",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[4,5,6,7,0,1,2]"
+        },
+        {
+          "name": "target",
+          "value": "3"
+        }
+      ],
+      "output": "-1",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1]"
+        },
+        {
+          "name": "target",
+          "value": "0"
+        }
+      ],
+      "output": "-1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[4,5,6,7,0,1,2]\n0\n[4,5,6,7,0,1,2]\n3\n[1]\n0",
+  "javaSnippet": "class Solution {\n    public int search(int[] nums, int target) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-04T22:09:01.452Z"
+}
