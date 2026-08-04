@@ -9,7 +9,8 @@ const path = require('path');
 const ROOT = 'D:/Projects/leetCode';
 const LC_DIR = path.join(ROOT, '.lc');
 const REVIEWS = path.join(ROOT, 'reviews');
-const TARGET = 30; // 一个月 = 30 天打卡
+const FIRST_PASS_DEADLINE = '2026-08-30';  // 硬性目标：第一遍刷完所有题
+const SECOND_PASS_DEADLINE = '2026-09-15'; // 硬性目标：第二遍完成时间
 const todayStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
 
 const progress = JSON.parse(fs.readFileSync(path.join(LC_DIR, 'progress.json'), 'utf8'));
@@ -17,6 +18,15 @@ const order = JSON.parse(fs.readFileSync(path.join(LC_DIR, 'order.json'), 'utf8'
 const done = (progress.done || []).slice().sort((a, b) => a.seq - b.seq);
 const checkinDates = [...new Set(done.map(d => d.date))].sort((a, b) => b.localeCompare(a)); // 打卡按天去重，最新在前
 const checkinDays = checkinDates.length;
+const total = order.length;
+function daysBetween(a, b) {
+  const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+  const da = new Date(pa[0], pa[1] - 1, pa[2]);
+  const db = new Date(pb[0], pb[1] - 1, pb[2]);
+  return Math.round((db - da) / 86400000);
+}
+const daysLeft = Math.max(0, daysBetween(todayStr, FIRST_PASS_DEADLINE));
+const needDaily = daysLeft > 0 ? (total - done.length) / daysLeft : (total - done.length);
 
 // 加载每题分析明细
 const analyses = {};
@@ -61,7 +71,7 @@ function esc(s) {
 
 const firstPassCnt = done.filter(d => d.firstPass).length;
 const optimalCnt = done.filter(d => d.optimal).length;
-const pct = Math.min(100, Math.round((checkinDays / TARGET) * 100));
+const pct = Math.min(100, Math.round((done.length / total) * 100));
 
 const rows = checkinDates.map(date => {
   const items = done.filter(d => d.date === date).sort((a, b) => a.seq - b.seq);
@@ -158,10 +168,11 @@ const html = `<!DOCTYPE html>
   <div class="wrap">
     <div class="kicker">LEETCODE 训练主页</div>
     <h1>力扣刷题 · 打卡与复盘</h1>
-    <div class="sub">一个月 = 30 天实际练习打卡</div>
+    <div class="sub">第一遍 ${total} 题 ${FIRST_PASS_DEADLINE} 前刷完 · 第二遍 ${SECOND_PASS_DEADLINE} 前完成</div>
     <div class="badges">
-      <span class="badge ok">已打卡 ${checkinDays}/${TARGET} 天</span>
-      <span class="badge">完成 ${done.length}/${order.length} 题</span>
+      <span class="badge ok">已打卡 ${checkinDays} 天</span>
+      <span class="badge">完成 ${done.length}/${total} 题</span>
+      <span class="badge">距 ${FIRST_PASS_DEADLINE} 还有 ${daysLeft} 天</span>
       <span class="badge">开始：${checkinDates.length ? checkinDates[checkinDates.length - 1] : '—'}</span>
     </div>
   </div>
@@ -172,11 +183,11 @@ const html = `<!DOCTYPE html>
   <section>
     <h2>训练进度</h2>
     <div class="metrics">
-      <div class="metric ok"><div class="v">${checkinDays}/${TARGET}</div><div class="l">打卡天数（目标 30）</div></div>
-      <div class="metric"><div class="v">${done.length}</div><div class="l">完成题数</div></div>
+      <div class="metric ok"><div class="v">${done.length}/${total}</div><div class="l">完成题数（第一遍 ${FIRST_PASS_DEADLINE} 前）</div></div>
+      <div class="metric"><div class="v">${checkinDays}</div><div class="l">打卡天数</div></div>
       <div class="metric ok"><div class="v">${firstPassCnt}</div><div class="l">一次 AC</div></div>
       <div class="metric"><div class="v">${optimalCnt}</div><div class="l">最优解</div></div>
-      <div class="metric"><div class="v">${pct}%</div><div class="l">打卡进度</div></div>
+      <div class="metric"><div class="v">${needDaily.toFixed(1)}</div><div class="l">需日均（剩余 ${daysLeft} 天）</div></div>
     </div>
     <div class="bar"><i></i></div>
   </section>
@@ -218,4 +229,4 @@ ${reviewSections}`}
 
 fs.mkdirSync(REVIEWS, { recursive: true });
 fs.writeFileSync(path.join(REVIEWS, 'index.html'), html, 'utf8');
-console.log(`已生成 reviews/index.html（打卡 ${checkinDays}/${TARGET} 天，完成 ${done.length} 题）`);
+console.log(`已生成 reviews/index.html（打卡 ${checkinDays} 天，完成 ${done.length}/${total} 题）`);
