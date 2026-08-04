@@ -316,6 +316,17 @@
     </div>
 
     <div class="card">
+      <h3>旋转数组二分 · 本质梳理</h3>
+      <ul class="ok-list">
+        <li><b>为什么先判有序半段</b>：旋转数组整体只有一个「山谷」（旋转点处大→小掉落）。从任意位置切一刀，最多只有一个半边含山谷，所以<b>必有一半有序</b>；只有有序段才能用值域判断 target 归属，从而确定性丢掉另一半。</li>
+        <li><b>端点比较 = 没跨山谷的指纹</b>：左半段 <code>[left, mid]</code> 没跨山谷 ⇔ 严格递增 ⇔ <code>nums[left] &lt; nums[mid]</code>；<code>nums[left] &gt; nums[mid]</code> 说明山谷在左半段内（此时右半段才有序）；<code>==</code> 只在 <code>mid == left</code>（两元素区间、单元素左半段）时发生，天然有序——所以判定用 <code>&lt;=</code>。</li>
+        <li><b>为什么 <code>=</code> 不能进 else</b>：else 的前提是「右半段有序」；<code>mid == left</code> 时右半段是整个两元素段（如 <code>[5,1]</code>），可能恰恰无序，前提不成立。</li>
+        <li><b>右半段分支</b>：右半段有序时，仅当 <code>nums[mid] &lt; target &lt;= nums[right]</code> 才 <code>left = mid + 1</code>；否则（target ≤ nums[mid] 或 &gt; nums[right]）<code>right = mid - 1</code>。</li>
+        <li><b>中点</b>：<code>mid = left + (right - left) / 2</code>，永远是<b>当前区间</b> <code>[left, right]</code> 的中点；判断有序用的端点是当前区间自己的 left 和 mid，不能混用别的区间的端点。</li>
+      </ul>
+    </div>
+
+    <div class="card">
       <h3>错误习惯复盘</h3>
       <ul class="bad-list">
         <li>二分中点公式错：<code>(right-left)/2</code> 在 left &gt; 0 时落在区间外。</li>

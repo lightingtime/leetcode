@@ -218,3 +218,8 @@ else 里 i 是重复字符，窗口只能算到 `i-1`，用 `i - start`。
 注意：① target 恰好等于 nums[mid] 时必须能命中，循环内要显式判断 `nums[mid] == target` 返回
 （或分支条件含等号、边界收到 mid）；② 有序半段判定用 `nums[left] <= nums[mid]` 而不是 `>`——
 区间只剩两个元素时 mid == left，`>` 恒 false 会进错分支。
+
+为什么：旋转数组只有一个「山谷」（旋转点处大→小掉落），从任意位置切两半，最多一个半边含山谷，
+所以必有一半有序；只有有序段能用值域判断 target 归属。左半段 `[left, mid]` 有序 ⇔ 没跨山谷 ⇔
+`nums[left] <= nums[mid]`（`==` 只在 mid == left 的单元素段发生，天然有序）；若 `nums[left] > nums[mid]`，
+山谷在左半段内，右半段 `[mid, right]` 才有序，此时仅当 `nums[mid] < target <= nums[right]` 搜右。
