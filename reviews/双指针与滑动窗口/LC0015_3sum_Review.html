@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0015 三数之和 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.medium { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 11</div>
+    <h1>LC0015 · 三数之和 <span style="color:#93c5fd">3Sum</span></h1>
+    <div class="sub">从固定两端扫描踩坑，到排序 + 双指针夹逼一次 Accepted</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 316/316</span>
+      <span class="badge medium">难度 Medium</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge plain">提交一次通过 · 最优解</span>
+      <span class="badge">2026-08-04</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：排序 + 固定第一个数 + 双指针夹逼。</b>先排序，固定 <code>nums[i]</code> 为三元组最小值，
+      用 <code>k</code>（左）和 <code>j</code>（右）两个指针在剩余区间夹逼：三数和等于 0 就记录并前进 <code>k</code>；
+      小于 0 说明需要更大的数，<code>k++</code>；大于 0 说明需要更小的数，<code>j--</code>。
+      重复值用「保留第一次出现、跳过后续重复」的方式去重。</p>
+      <p>
+        <span class="chip">时间 O(n²)</span>
+        <span class="chip">空间 O(1)</span>
+        <span class="chip">排序后夹逼，去重不重不漏</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0015_3sum.java</span><span>提交区</span></div>
+        <pre class="code">public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) {
+    List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
+    int i = 0, j = nums.length - 1;
+    Arrays.sort(nums);
+    while (i &lt; j) {
+        if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) {
+            i++;
+            continue;
+        }
+        int k = i + 1;
+        j = nums.length - 1;
+        while (k &lt; j) {
+            if (k &gt; i + 1 &amp;&amp; nums[k] == nums[k - 1]) {
+                k++;
+                continue;
+            }
+            if (nums[i] + nums[k] + nums[j] == 0) {
+                List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+                list.add(nums[i]);
+                list.add(nums[k]);
+                list.add(nums[j]);
+                ans.add(list);
+                k++;
+            } else if (nums[i] + nums[k] + nums[j] &lt; 0) {
+                k++;
+            } else {
+                j--;
+            }
+        }
+        i++;
+    }
+    return ans;
+}</pre>
+      </div>
+      <p class="muted">去重时机：固定点 <code>i</code> 在进入内层前跳过后续重复；夹逼点 <code>k</code> 在前进时跳过后续重复——
+      都保留第一次出现的值，因此 <code>[-1,-1,2]</code> 这类需要两个相同值的组合不会被误杀，同一组合也不会重复输出。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 初版：固定两端 + 中间逐个扫<span class="tl-badge bug">本地失败</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>排序后固定两端 <code>i</code>、<code>j</code>，中间用 <code>k</code> 逐个扫描找零和；
+          扫完一轮再用 <code>nums[i]+nums[k]+nums[j]</code> 的符号决定移动 <code>i</code> 还是 <code>j</code>。</p>
+          <p>本地测试 2 个失败：</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>run_tests.js 输出</span><span>失败用例</span></div>
+            <pre class="code">示例1 失败 ✗ 期望=[[-1, -1, 2], [-1, 0, 1]] 实际=[[-1, 0, 1]]
+边界6 失败 ✗ 期望=[[-2, 0, 2]] 实际=[[-2, 0, 2], [-2, 0, 2], [-2, 0, 2]]</pre>
+          </div>
+          <p>一个丢解，一个重复输出——两个症状，同一类根因。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 根因①：去重方向写反<span class="tl-badge bug">逻辑错误</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>初版用 <code>nums[i] == nums[i + 1]</code> 跳过去重，跳掉的是<strong>重复组里靠前的那个值</strong>；
+          而正确去重应该跳过<strong>已经用过一遍的后续重复</strong>。方向反了的后果：</p>
+          <ul>
+            <li>示例 1 里 <code>[-1,-1,2]</code> 需要两个 -1 分别作固定点和夹逼点，第一个 -1 被跳过后就再也凑不出来；</li>
+            <li>边界 6 里同一组合在不同 <code>j</code> 位置被重复加入三次。</li>
+          </ul>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 根因②：移动决策引用了已失效的 k<span class="tl-badge bug">逻辑错误</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>内层 <code>while (k &lt; j)</code> 结束后 <code>k</code> 一定等于 <code>j</code>，
+          此时 <code>nums[i] + nums[k] + nums[j]</code> 等于把 <code>nums[j]</code> 算了两次，
+          这个符号和任何三元组的和都无关——<code>i</code>/<code>j</code> 的移动完全脱离了三元组的和。</p>
+          <p>教训：双指针的移动依据必须来自两个指针<strong>当前指向的值</strong>；中间逐个扫完之后，偏大/偏小的信息已经丢失。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 修正为排序 + 双指针夹逼，本地全过<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>改为固定 <code>nums[i]</code>，剩下两个数用 <code>k</code>、<code>j</code> 从两端夹逼，
+          每步按三数和与 0 的大小只移动一侧；去重改为保留第一次出现（<code>nums[i]==nums[i-1]</code>、
+          <code>nums[k]==nums[k-1]</code> 时跳过）。3 个示例 + 7 个边界（空、不足三个、全相同、无解、大数、重复去重、多零）全部通过。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">05 · 提交：一次 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>提交结果：<b style="color:#16a34a">Accepted</b>，316/316 用例通过，第一次提交即成功。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">316 / 316</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 57.8 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n²) / O(1)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：排序 + 双指针夹逼，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(n²)</b>：排序 O(n log n)，固定 <code>i</code> 后双指针一趟 O(n)，合计 O(n²)；
+        本题可能输出的三元组数量本身可达 O(n²)，所以 O(n²) 已是下限。</li>
+        <li><b>空间复杂度 O(1)</b>：排序原地，双指针只占常数空间（不含答案本身）。</li>
+        <li><b>去重正确</b>：固定点与夹逼点都「保留第一次出现、跳过后续重复」，
+        既不丢 <code>[-1,-1,2]</code> 这类含相同值的合法组合，也不重复输出。</li>
+        <li><b>边界覆盖</b>：空数组、不足三个元素、全相同、无解、大数、多零等边界本地均已覆盖。</li>
+        <li><b>结论</b>：与本题标准解法一致，无需再优化。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p class="muted">以后遇到同类题（三数之和变体、区间问题、回文验证等），第一步先想「排序后能否用双指针夹逼」，移动依据必须是两个指针当前的值。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀</h3>
+      <p>本轮沉淀 1 条套路（<code>lc-analyze/references/patterns.md</code>）：</p>
+      <div class="quote">排序后去重：保留重复值第一次出现，跳过后续重复——去重方向是跳过已经用过的值（<code>nums[i]==nums[i-1]</code> 时跳过），
+      而不是跳过重复组里靠前的第一个；三数之和允许两个位置取相同值，所以第一次出现必须保留，双指针夹逼找到答案后还需跳过两端重复值。</div>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <ul class="ok-list">
+        <li>去重方向写反：跳过重复值中靠前的第一个，而不是跳过后续重复，导致需要两个相同值的合法组合被丢弃，或同一组合重复输出。</li>
+        <li>指针移动决策引用了已跑到边界的变量：内层扫描结束后 <code>k==j</code>，仍用 <code>nums[i]+nums[k]+nums[j]</code> 判断移动，同一元素被用了两次。</li>
+      </ul>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 11 · 3sum</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：去重方向修正后排序 + 双指针一次过：重复值保留第一次出现，跳过后续重复。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/15_3sum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0015_3sum.java">src/LC0015_3sum.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-04
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

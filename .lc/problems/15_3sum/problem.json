@@ -1,0 +1,54 @@
+{
+  "id": "15",
+  "slug": "3sum",
+  "title": "3Sum",
+  "titleCn": "三数之和",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/3sum/",
+  "tags": [
+    "Array",
+    "Two Pointers",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "数组",
+    "双指针",
+    "排序"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[-1,0,1,2,-1,-4]"
+        }
+      ],
+      "output": "[[-1,-1,2],[-1,0,1]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[0,1,1]"
+        }
+      ],
+      "output": "[]",
+      "explain": "唯一可能的三元组和不为 0 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[0,0,0]"
+        }
+      ],
+      "output": "[[0,0,0]]",
+      "explain": "唯一可能的三元组和为 0 。"
+    }
+  ],
+  "exampleTestcases": "[-1,0,1,2,-1,-4]\n[0,1,1]\n[0,0,0]",
+  "javaSnippet": "class Solution {\n    public List<List<Integer>> threeSum(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-04T14:39:27.062Z"
+}

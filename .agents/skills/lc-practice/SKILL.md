@@ -18,7 +18,7 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 
 1. 运行 `node ".agents/skills/lc-practice/scripts/update_state.js" next` 查看进度与下一题，记录其 seq、slug、分类。
    - 若全部完成：进入复习模式，随机抽已完成题让用户重写。
-   - 若有历史错误习惯，原样读给用户听，提醒避免重犯。
+   - 若有历史错误习惯，只挑与当前题目分类/主题相关的读给用户听，提醒避免重犯；与本题无关的分类（如哈希表、树）跳过。
 2. 拉取题目：`node ".agents/skills/lc-practice/scripts/fetch_problem.js" --slug <slug>`。网络请求需要用户批准，向用户说明这是正常流程。
 3. 生成 Java 文件：`node ".agents/skills/lc-practice/scripts/create_problem.js" --slug <slug>`，写入 `src/LC题号_类名.java`（含方法签名、TODO 主体、示例测试 main、必要的 ListNode/TreeNode 辅助类）。
    - 节点类约定：标准 ListNode（val+next）/ TreeNode（val+left+right）用公共类 `src/ListNode.java`、`src/TreeNode.java`，不每题复制；仅当题目节点结构不同（如带 random/prev）才在题文件内生成本地节点类。

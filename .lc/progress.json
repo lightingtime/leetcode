@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 10,
+  "current_seq": 11,
   "done": [
     {
       "seq": 1,
@@ -111,6 +111,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "盛最多水的容器：相向双指针，移动较矮一侧，O(n)/O(1)，一次 Accepted（65/65）"
+    },
+    {
+      "seq": 11,
+      "id": "15",
+      "title": "三数之和",
+      "slug": "3sum",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复"
     }
   ],
   "error_habits": [
@@ -185,6 +196,28 @@
       "count": 1,
       "examples": [
         "longest-substring-without-repeating-characters"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
+    },
+    {
+      "habit": "去重方向写反：跳过重复值中靠前的第一个，而不是跳过后续重复，导致需要两个相同值的合法组合（如 -1,-1,2）被丢弃，或同一组合重复输出",
+      "count": 1,
+      "examples": [
+        "3sum"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-04"
+    },
+    {
+      "habit": "指针移动决策引用了已跑到边界的变量：内层扫描结束后 k==j，仍用 nums[i]+nums[k]+nums[j] 判断移动 i 或 j，等于同一元素被用了两次，移动依据失真",
+      "count": 1,
+      "examples": [
+        "3sum"
       ],
       "categories": [
         "双指针与滑动窗口"

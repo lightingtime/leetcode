@@ -1,0 +1,54 @@
+{
+  "seq": 11,
+  "id": "15",
+  "slug": "3sum",
+  "title": "三数之和",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "316/316",
+  "runtime_ms": null,
+  "memory_bytes": 60640000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "排序+双指针夹逼",
+  "time_complexity": "O(n²)",
+  "space_complexity": "O(1)",
+  "notes": "去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复",
+  "mistakes": [
+    {
+      "habit": "去重方向写反：跳过重复值中靠前的第一个，而不是跳过后续重复，导致需要两个相同值的合法组合（如 -1,-1,2）被丢弃，或同一组合重复输出",
+      "count": 1
+    },
+    {
+      "habit": "指针移动决策引用了已跑到边界的变量：内层扫描结束后 k==j，仍用 nums[i]+nums[k]+nums[j] 判断移动 i 或 j，等于同一元素被用了两次，移动依据失真",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "排序后去重：保留重复值第一次出现，跳过后续重复",
+      "text": "去重方向是跳过已经用过的值（nums[i]==nums[i-1] 时跳过 i），而不是跳过重复组里靠前的第一个（nums[i]==nums[i+1]）；三数之和允许两个位置取相同值，所以第一次出现必须保留；双指针夹逼找到答案后还需跳过两端重复值",
+      "category": "双指针与滑动窗口",
+      "problem": "3sum",
+      "date": "2026-08-04"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "316/316",
+      "runtime_ms": null,
+      "memory_bytes": 60640000,
+      "approach": "排序+双指针夹逼",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
