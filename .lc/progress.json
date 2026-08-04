@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-05",
-  "current_seq": 17,
+  "current_seq": 18,
   "done": [
     {
       "seq": 1,
@@ -177,6 +177,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）"
+    },
+    {
+      "seq": 18,
+      "id": "239",
+      "title": "滑动窗口最大值",
+      "slug": "sliding-window-maximum",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-05",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（<= i-k），O(n)/O(k) 一次 Accepted（53/53）"
     }
   ],
   "error_habits": [
@@ -361,6 +372,28 @@
       "count": 1,
       "examples": [
         "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "单调队列缺少过期队头淘汰：只弹队尾小值，未弹出已滑出窗口的队头下标，递减数组/全负数用例中旧最大值一直占着队头导致答案不变；读取答案前需先弹出 peekFirst() 小于窗口左边界的下标",
+      "count": 1,
+      "examples": [
+        "sliding-window-maximum"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "过期淘汰边界差一：窗口左边界是 i-k+1（闭区间 [i-k+1, i]），队头下标 < i-k+1（等价 ≤ i-k）才算过期；写成 < i-k 会漏掉恰好滑出窗口的那一格，递减/全负数用例仍错",
+      "count": 1,
+      "examples": [
+        "sliding-window-maximum"
       ],
       "categories": [
         "双指针与滑动窗口"

@@ -1,0 +1,55 @@
+{
+  "seq": 18,
+  "id": "239",
+  "slug": "sliding-window-maximum",
+  "title": "滑动窗口最大值",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-05",
+  "verdict": "Accepted",
+  "testcases": "53/53",
+  "runtime_ms": null,
+  "memory_bytes": 156056000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "单调队列",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(k)",
+  "notes": "单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（<= i-k），O(n)/O(k) 一次 Accepted（53/53）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "单调队列缺少过期队头淘汰：只弹队尾小值，未弹出已滑出窗口的队头下标，递减数组/全负数用例中旧最大值一直占着队头导致答案不变；读取答案前需先弹出 peekFirst() 小于窗口左边界的下标",
+      "count": 1
+    },
+    {
+      "habit": "过期淘汰边界差一：窗口左边界是 i-k+1（闭区间 [i-k+1, i]），队头下标 < i-k+1（等价 ≤ i-k）才算过期；写成 < i-k 会漏掉恰好滑出窗口的那一格，递减/全负数用例仍错",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "滑动窗口最值：单调队列（双端队列存下标）",
+      "text": "队列值从队头到队尾单调递减、队头即最大；入队前弹掉队尾比新元素小的（更大且更晚，永无出头之日），读取答案前必须弹出 peekFirst() 小于窗口左边界的过期下标——弹队尾是比大小淘汰，弹队头是下标过期淘汰，两者缺一不可，一趟 O(n)",
+      "category": "双指针与滑动窗口",
+      "problem": "sliding-window-maximum",
+      "date": "2026-08-05"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-05",
+      "verdict": "Accepted",
+      "testcases": "53/53",
+      "runtime_ms": null,
+      "memory_bytes": 156056000,
+      "approach": "单调队列",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(k)",
+      "optimal": true,
+      "notes": "单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（<= i-k），O(n)/O(k) 一次 Accepted（53/53）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
