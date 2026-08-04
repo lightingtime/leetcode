@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-05",
-  "current_seq": 14,
+  "current_seq": 16,
   "done": [
     {
       "seq": 1,
@@ -155,6 +155,17 @@
       "firstPass": true,
       "optimal": false,
       "notes": "自顶向下归并排序：快慢指针找中点 + 递归合并，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并"
+    },
+    {
+      "seq": 16,
+      "id": "287",
+      "title": "寻找重复数",
+      "slug": "find-the-duplicate-number",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-05",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "数组当下标链，Floyd 判圈找环入口：相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1) 一次 Accepted（59/59）"
     }
   ],
   "error_habits": [
@@ -295,6 +306,17 @@
       "count": 1,
       "examples": [
         "sort-list"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "相遇检测用 while 导致先判后走：两个指针从同一起点出发时 fast != slow 初始即为 false，循环体一次不执行，指针从未移动，直接返回初始值；相遇阶段必须先移动再比较（do-while 或初始错开）",
+      "count": 1,
+      "examples": [
+        "find-the-duplicate-number"
       ],
       "categories": [
         "双指针与滑动窗口"

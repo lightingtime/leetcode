@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0287 寻找重复数 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.medium { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .bad-list { margin: 10px 0; padding: 0; list-style: none; }
+  .bad-list li { padding: 6px 0 6px 26px; position: relative; }
+  .bad-list li::before {
+    content: "✗"; position: absolute; left: 4px; color: var(--bad); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 16</div>
+    <h1>LC0287 · 寻找重复数 <span style="color:#93c5fd">Find the Duplicate Number</span></h1>
+    <div class="sub">数组当下标链，Floyd 判圈找环入口，一次 Accepted</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 59/59</span>
+      <span class="badge medium">难度 Medium</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge plain">提交一次通过 · 最优解</span>
+      <span class="badge">2026-08-05</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：Floyd 判圈。</b>把数组当跳跳链：站在下标 <code>i</code> 下一步跳 <code>nums[i]</code>，
+      因为值都在 <code>[1, n]</code> 且有两个位置指向同一个值，这条链必然成环，<strong>重复数 = 环的入口</strong>。
+      第一阶段快慢指针相遇（slow 一步、fast 两步）；第二阶段 slow 回起点、两者同速，再次相遇即答案。</p>
+      <p>
+        <span class="chip">时间 O(n)</span>
+        <span class="chip">空间 O(1)</span>
+        <span class="chip">不修改数组</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0287_FindTheDuplicateNumber.java</span><span>提交区</span></div>
+        <pre class="code">public int findDuplicate(int[] nums) {
+    int fast = 0, slow = 0;
+    do {
+        fast = nums[nums[fast]];
+        slow = nums[slow];
+    } while (fast != slow);
+    slow = 0;
+    while (fast != slow) {
+        fast = nums[fast];
+        slow = nums[slow];
+    }
+    return fast;
+}</pre>
+      </div>
+      <p class="muted">边界语义：第一阶段两指针从同一起点出发，必须先移动再比较（<code>do-while</code>），
+      否则 <code>fast != slow</code> 初始为 false、循环体一次不执行；第二阶段 slow 回起点、fast 留在相遇点，
+      两者每次走一步，相遇点即环入口（重复数）。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 独立实现：数组当下标链 + Floyd 判圈<span class="tl-badge info">思路正确</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>按「跳跳链」视角：<code>i → nums[i]</code>，重复数有两个位置指向它，所以它是环入口。
+          Floyd 两阶段：先相遇，再找回起点，思路一次到位。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 踩坑：相遇检测先判后走<span class="tl-badge bug">全错</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>第一阶段用了 <code>while (fast != slow)</code>，而两指针都从 0 出发，
+          初始即相等，循环体一次不执行，fast/slow 从未移动，最后直接返回初始值 0——全部用例输出 0。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 修正：do-while 先移动后比较，本地全过<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>换成 <code>do { ... } while (fast != slow)</code>，保证至少先移动一次再比较。
+          3 示例 + 4 边界（最小规模、重复最小值、重复值在中间、n=10⁵ 大数组）全部通过。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 提交：一次 Accepted，官方最优<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>提交结果：<b style="color:#16a34a">Accepted</b>，59/59 用例通过，第一次提交即成功。
+          O(n)/O(1)、不修改数组，满足全部约束与进阶要求，即官方最优解。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">59 / 59</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 79.4 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) / O(1)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：Floyd 判圈，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(n)</b>：快慢指针各走一遍，线性完成。</li>
+        <li><b>空间复杂度 O(1)</b>：只用两个指针，不修改数组，满足题目全部约束。</li>
+        <li><b>进阶达标</b>：O(n) 线性方案正是进阶要求；相比二分值域（O(n log n)）更优。</li>
+        <li><b>边界覆盖</b>：最小规模 n=1、重复最小值、重复值在中间、n=10⁵ 大数组全部通过。</li>
+        <li><b>结论</b>：与官方最优解一致，无需再优化。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p class="muted">当题目限制「不修改数组 + O(1) 空间」时，快慢指针判圈（Floyd）是绕开哈希表/排序的经典手段。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀</h3>
+      <p>本轮沉淀 1 条套路（<code>lc-analyze/references/patterns.md</code>）：</p>
+      <div class="quote">Floyd 判圈找环入口：相遇阶段两指针从同一起点出发，必须先用 do-while（或初始错开）保证先移动再比较；第二阶段 slow 回起点、两者同速一步一移，再次相遇即环入口，O(n)/O(1)。</div>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <ul class="bad-list">
+        <li>相遇检测用 while 先判后走：两指针同起点时 <code>fast != slow</code> 初始为 false，循环体一次不执行，指针从未移动。</li>
+      </ul>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 16 · find-the-duplicate-number</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：数组当下标链，Floyd 判圈找环入口——相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1)，一次 Accepted（59/59）。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/287_find-the-duplicate-number/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0287_FindTheDuplicateNumber.java">src/LC0287_FindTheDuplicateNumber.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-05
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

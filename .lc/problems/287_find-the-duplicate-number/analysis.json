@@ -1,0 +1,51 @@
+{
+  "seq": 16,
+  "id": "287",
+  "slug": "find-the-duplicate-number",
+  "title": "寻找重复数",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-05",
+  "verdict": "Accepted",
+  "testcases": "59/59",
+  "runtime_ms": null,
+  "memory_bytes": 83216000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Floyd 判圈",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "数组当下标链，Floyd 判圈找环入口：相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1) 一次 Accepted（59/59）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "相遇检测用 while 导致先判后走：两个指针从同一起点出发时 fast != slow 初始即为 false，循环体一次不执行，指针从未移动，直接返回初始值；相遇阶段必须先移动再比较（do-while 或初始错开）",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "Floyd 判圈找环入口：先移动后比较 + 第二阶段同速",
+      "text": "数组当链（i→nums[i]）后重复数就是环入口；相遇阶段两个指针从同一起点出发，必须先用 do-while 或初始错开保证先移动再比较；第二阶段一个指针回起点、两者同速一步一移，再次相遇即环入口，O(n)/O(1)",
+      "category": "双指针与滑动窗口",
+      "problem": "find-the-duplicate-number",
+      "date": "2026-08-05"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-05",
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "runtime_ms": null,
+      "memory_bytes": 83216000,
+      "approach": "Floyd 判圈",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "数组当下标链，Floyd 判圈找环入口：相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1) 一次 Accepted（59/59）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "253",
+  "slug": "meeting-rooms-ii",
+  "title": "Meeting Rooms II",
+  "titleCn": "会议室 II",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/meeting-rooms-ii/",
+  "tags": [
+    "Greedy",
+    "Array",
+    "Two Pointers",
+    "Prefix Sum",
+    "Sorting",
+    "Heap (Priority Queue)"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组",
+    "双指针",
+    "前缀和",
+    "排序",
+    "堆（优先队列）"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [],
+  "exampleTestcases": "[[0,30],[5,10],[15,20]]\n[[7,10],[2,4]]",
+  "javaSnippet": "",
+  "fetchedAt": "2026-08-04T17:29:57.019Z"
+}
