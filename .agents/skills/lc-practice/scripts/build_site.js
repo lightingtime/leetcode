@@ -9,11 +9,14 @@ const path = require('path');
 const ROOT = 'D:/Projects/leetCode';
 const LC_DIR = path.join(ROOT, '.lc');
 const REVIEWS = path.join(ROOT, 'reviews');
-const TARGET = 30; // 一个月 = 30 次打卡
+const TARGET = 30; // 一个月 = 30 天打卡
+const todayStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
 
 const progress = JSON.parse(fs.readFileSync(path.join(LC_DIR, 'progress.json'), 'utf8'));
 const order = JSON.parse(fs.readFileSync(path.join(LC_DIR, 'order.json'), 'utf8'));
 const done = (progress.done || []).slice().sort((a, b) => a.seq - b.seq);
+const checkinDates = [...new Set(done.map(d => d.date))].sort((a, b) => b.localeCompare(a)); // 打卡按天去重，最新在前
+const checkinDays = checkinDates.length;
 
 // 加载每题分析明细
 const analyses = {};
@@ -58,18 +61,24 @@ function esc(s) {
 
 const firstPassCnt = done.filter(d => d.firstPass).length;
 const optimalCnt = done.filter(d => d.optimal).length;
-const pct = Math.min(100, Math.round((done.length / TARGET) * 100));
+const pct = Math.min(100, Math.round((checkinDays / TARGET) * 100));
 
-const rows = done.map(d => {
-  const link = reviewLink(d.id);
+const rows = checkinDates.map(date => {
+  const items = done.filter(d => d.date === date).sort((a, b) => a.seq - b.seq);
+  const idLinks = items.map(d => {
+    const link = reviewLink(d.id);
+    const label = `LC${String(d.id).padStart(4, '0')} · ${d.title}`;
+    return link ? `<a href="${link}">${esc(label)}</a>` : esc(label);
+  }).join('<br>');
+  const fp = items.filter(d => d.firstPass).length;
+  const op = items.filter(d => d.optimal).length;
   return `      <tr>
-        <td>${esc(d.date)}</td>
-        <td>${esc(d.id)}</td>
-        <td>${esc(d.category)}</td>
-        <td>${d.firstPass ? '是' : '否'}</td>
-        <td>${d.optimal ? '是' : '否'}</td>
-        <td>${esc(reviewDate(d.date))}</td>
-        <td>${link ? `<a href="${link}">查看</a>` : '—'}</td>
+        <td>${esc(date)}</td>
+        <td>${items.length}</td>
+        <td>${idLinks}</td>
+        <td>${fp}/${items.length}</td>
+        <td>${op}/${items.length}</td>
+        <td>${esc(reviewDate(date))}</td>
       </tr>`;
 }).join('\n');
 
@@ -149,11 +158,11 @@ const html = `<!DOCTYPE html>
   <div class="wrap">
     <div class="kicker">LEETCODE 训练主页</div>
     <h1>力扣刷题 · 打卡与复盘</h1>
-    <div class="sub">一个月 = 30 次实际练习打卡；出去玩/休息日历顺延，强度不变</div>
+    <div class="sub">一个月 = 30 天实际练习打卡；出去玩/休息日历顺延，强度不变</div>
     <div class="badges">
-      <span class="badge ok">已完成 ${done.length}/${TARGET} 次打卡</span>
-      <span class="badge">总题量 ${order.length}</span>
-      <span class="badge">开始：${done.length ? done[0].date : '—'}</span>
+      <span class="badge ok">已打卡 ${checkinDays}/${TARGET} 天</span>
+      <span class="badge">完成 ${done.length}/${order.length} 题</span>
+      <span class="badge">开始：${checkinDates.length ? checkinDates[checkinDates.length - 1] : '—'}</span>
     </div>
   </div>
 </div>
@@ -163,7 +172,8 @@ const html = `<!DOCTYPE html>
   <section>
     <h2>训练进度</h2>
     <div class="metrics">
-      <div class="metric ok"><div class="v">${done.length}/${TARGET}</div><div class="l">打卡次数（目标 30）</div></div>
+      <div class="metric ok"><div class="v">${checkinDays}/${TARGET}</div><div class="l">打卡天数（目标 30）</div></div>
+      <div class="metric"><div class="v">${done.length}</div><div class="l">完成题数</div></div>
       <div class="metric ok"><div class="v">${firstPassCnt}</div><div class="l">一次 AC</div></div>
       <div class="metric"><div class="v">${optimalCnt}</div><div class="l">最优解</div></div>
       <div class="metric"><div class="v">${pct}%</div><div class="l">打卡进度</div></div>
@@ -176,7 +186,7 @@ const html = `<!DOCTYPE html>
     ${done.length === 0
       ? '<div class="card muted">还没有打卡记录，完成第一题后会显示在这里。</div>'
       : `<table>
-      <tr><th>日期</th><th>题号</th><th>分类</th><th>是否一次 AC</th><th>是否最优</th><th>复习日期</th><th>复盘</th></tr>
+      <tr><th>日期</th><th>题数</th><th>完成题目（点击看复盘）</th><th>一次 AC</th><th>最优</th><th>复习日期</th></tr>
 ${rows}
     </table>`}
     <p class="muted">复习节奏：1 / 3 / 7 / 14 天；「是否最优」由 lc-submit 在 Accepted 后分析得出。</p>
@@ -199,7 +209,7 @@ ${reviewSections}`}
     </div>
   </section>
 
-  <div class="foot">生成于 2026-08-01 ｜ 数据源：.lc/progress.json · .lc/problems/*/analysis.json</div>
+  <div class="foot">生成于 ${todayStr} ｜ 数据源：.lc/progress.json · .lc/problems/*/analysis.json</div>
 </div>
 
 </body>
@@ -208,4 +218,4 @@ ${reviewSections}`}
 
 fs.mkdirSync(REVIEWS, { recursive: true });
 fs.writeFileSync(path.join(REVIEWS, 'index.html'), html, 'utf8');
-console.log(`已生成 reviews/index.html（打卡 ${done.length}/${TARGET}，复盘 ${done.length} 题）`);
+console.log(`已生成 reviews/index.html（打卡 ${checkinDays}/${TARGET} 天，完成 ${done.length} 题）`);

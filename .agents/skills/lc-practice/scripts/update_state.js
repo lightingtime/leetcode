@@ -14,7 +14,7 @@
 //       打卡表并入训练主页 reviews/index.html，由 checkin 命令自动重新生成，无需用户提醒
 //       可复用套路（如指针判空取舍）用 pattern add 记录到 analysis.json 的 patterns 字段，并同步沉淀到 lc-analyze skill 的 references/patterns.md
 //       done 标记 Accepted 时自动维护 analysis.json 的 submissions 历史：解法不同则追加；相似解法（仅代码微调）只保留最优解
-//       每次打卡（checkin）自动核对 30 天计划刷题量：目标 30 次打卡，训练方案节奏每天 4-5 道新题
+//       每次打卡（checkin）自动核对 30 天计划：目标 30 天打卡，训练方案节奏每天 4-5 道新题
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -38,7 +38,7 @@ const cmd = args[0];
 const order = readJson(ORDER);
 const progress = readJson(PROGRESS);
 const date = todayStr();
-const TARGET_CHECKINS = 30; // 30 天计划：30 次打卡
+const TARGET_CHECKINS = 30; // 30 天计划：30 天打卡
 
 function daysBetween(a, b) {
   const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
@@ -49,28 +49,30 @@ function daysBetween(a, b) {
 
 function planReport(p) {
   const done = p.done || [];
-  const count = done.length;
-  const lines = [`30 天计划刷题量：${count}/${TARGET_CHECKINS}（目标 ${TARGET_CHECKINS} 次打卡）`];
-  if (count >= TARGET_CHECKINS) {
-    lines.push('已达成 30 题目标，进入复习 / 二刷阶段');
+  const dates = [...new Set(done.map(d => d.date))].sort();
+  const checkins = dates.length; // 打卡按天去重
+  const problems = done.length;
+  const lines = [`30 天计划打卡天数：${checkins}/${TARGET_CHECKINS}（目标 ${TARGET_CHECKINS} 天打卡，已完成 ${problems} 题）`];
+  if (checkins >= TARGET_CHECKINS) {
+    lines.push(`已达成 ${TARGET_CHECKINS} 天打卡目标（完成 ${problems} 题），进入复习 / 二刷阶段`);
     return lines;
   }
-  const dates = done.map(d => d.date).sort();
   const first = dates[0];
   const elapsed = first ? daysBetween(first, date) + 1 : 1;
-  const remaining = TARGET_CHECKINS - count;
-  lines.push(`训练已进行 ${elapsed} 天（自 ${first}），日均 ${(count / elapsed).toFixed(1)} 题，还差 ${remaining} 题`);
-  const rate = count / elapsed;
+  const remaining = TARGET_CHECKINS - checkins;
+  const daily = problems / elapsed;
+  lines.push(`训练已进行 ${elapsed} 天（自 ${first}），打卡 ${checkins} 天，完成 ${problems} 题（日均 ${daily.toFixed(1)} 题），还差 ${remaining} 天打卡`);
+  const rate = checkins / elapsed; // 打卡节奏：多少天里实际打卡
   if (rate > 0) {
     const needDays = Math.ceil(remaining / rate);
     const d = new Date();
     d.setDate(d.getDate() + needDays);
     const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    lines.push(`按当前日均 ${rate.toFixed(1)} 题，预计 ${ymd} 前后达成目标`);
+    lines.push(`按当前打卡节奏（${elapsed} 天里打卡 ${checkins} 天），预计 ${ymd} 前后达成目标`);
   }
   const expLow = 4 * elapsed, expHigh = 5 * elapsed;
-  if (count < expLow) lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，落后约 ${expLow - count} 题`);
-  else if (count > expHigh) lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，已超前`);
+  if (problems < expLow) lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，落后约 ${expLow - problems} 题`);
+  else if (problems > expHigh) lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，已超前`);
   else lines.push(`训练方案节奏为每天 4-5 道新题：当前期望 ${expLow}-${expHigh} 题，进度正常`);
   return lines;
 }
