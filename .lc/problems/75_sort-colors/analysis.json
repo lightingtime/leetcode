@@ -1,0 +1,38 @@
+{
+  "seq": 13,
+  "id": "75",
+  "slug": "sort-colors",
+  "title": "颜色分类",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-05",
+  "verdict": "",
+  "testcases": "",
+  "runtime_ms": null,
+  "memory_bytes": null,
+  "firstPass": false,
+  "optimal": false,
+  "approach": "",
+  "time_complexity": "",
+  "space_complexity": "",
+  "notes": "",
+  "mistakes": [
+    {
+      "habit": "分区双指针死循环：没有覆盖无可交换的终态，当 start/end 都指向 1 且中间全为 1 时无任何指针移动，外层 while 永不退出（表现为测试超时）",
+      "count": 1
+    },
+    {
+      "habit": "分区交换后未回看换入值：扫描指针交换后直接前进，换进来的 0/2 可能被困在中间；且每轮都重扫整段中间，不是一趟 O(n)",
+      "count": 1
+    }
+  ],
+  "hints": [],
+  "patterns": [
+    {
+      "title": "三路原地分区：两个边界指针 + 一个扫描指针",
+      "text": "0 与 2 各用一个边界指针，扫描指针负责遍历：遇到 0 与左边界交换并左移左界、扫描指针前进；遇到 2 与右边界交换并右移右界、扫描指针停住回看换入值；遇到 1 直接前进。关键是扫描指针每轮必进或回看，保证一趟 O(n) 且不死循环",
+      "category": "双指针与滑动窗口",
+      "problem": "sort-colors",
+      "date": "2026-08-05"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "75",
+  "slug": "sort-colors",
+  "title": "Sort Colors",
+  "titleCn": "颜色分类",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/sort-colors/",
+  "tags": [
+    "Array",
+    "Two Pointers",
+    "冒泡排序",
+    "Sorting",
+    "快速排序"
+  ],
+  "tagsCn": [
+    "数组",
+    "双指针",
+    "冒泡排序",
+    "排序",
+    "快速排序"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[2,0,2,1,1,0]"
+        }
+      ],
+      "output": "[0,0,1,1,2,2]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[2,0,1]"
+        }
+      ],
+      "output": "[0,1,2]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[2,0,2,1,1,0]\n[2,0,1]",
+  "javaSnippet": "class Solution {\n    public void sortColors(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-04T16:03:57.430Z"
+}
