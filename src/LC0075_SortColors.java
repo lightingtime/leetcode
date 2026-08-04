@@ -17,8 +17,21 @@ public class LC0075_SortColors {
         // TODO: 在这里实现你的解法
         int start = 0, end = nums.length - 1;
         int mid = start;
-        while (mid < ) {
-
+        while (mid <= end) {
+            if (nums[mid] == 0) {
+                int temp = nums[start];
+                nums[start] = nums[mid];
+                nums[mid] = temp;
+                start++;
+                mid = start;
+            } else if (nums[mid] == 2) {
+                int temp = nums[end];
+                nums[end] = nums[mid];
+                nums[mid] = temp;
+                end--;
+            } else {
+                mid++;
+            }
         }
     }
     // ==== 提交代码结束 ====
@@ -75,6 +88,11 @@ public class LC0075_SortColors {
             s.sortColors(nums);
             if (!TestUtil.checkEq(new int[]{1, 1, 2, 2}, nums, "边界7-只有两种颜色")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界7-只有两种颜色 异常: " + t); }
+        try {
+            int[] nums = new int[]{0, 2, 1};
+            s.sortColors(nums);
+            if (!TestUtil.checkEq(new int[]{0, 1, 2}, nums, "回归-WA用例")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("回归-WA用例 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

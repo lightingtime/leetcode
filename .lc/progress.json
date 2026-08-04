@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-05",
-  "current_seq": 12,
+  "current_seq": 13,
   "done": [
     {
       "seq": 1,
@@ -133,6 +133,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 13,
+      "id": "75",
+      "title": "颜色分类",
+      "slug": "sort-colors",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-05",
+      "firstPass": false,
+      "optimal": false,
+      "notes": "三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)"
     }
   ],
   "error_habits": [
@@ -248,6 +259,17 @@
     },
     {
       "habit": "分区交换后未回看换入值：扫描指针交换后直接前进，换进来的 0/2 可能被困在中间；且每轮都重扫整段中间，不是一趟 O(n)",
+      "count": 1,
+      "examples": [
+        "sort-colors"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "扫描指针推进逻辑有跳跃：0 分支将 mid 重置为 start 后循环底部又无条件 mid++，跳过未处理位置；2 分支交换后也没有停住回看换入值，导致 [0,2,1] 中下标 1 的 2 从未被检查",
       "count": 1,
       "examples": [
         "sort-colors"

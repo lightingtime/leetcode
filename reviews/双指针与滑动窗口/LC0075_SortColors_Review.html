@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0075 颜色分类 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.medium { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+  .badge.warn { background: #fee2e2; color: #991b1b; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+  .metric.warn .v { color: var(--warn); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .bad-list { margin: 10px 0; padding: 0; list-style: none; }
+  .bad-list li { padding: 6px 0 6px 26px; position: relative; }
+  .bad-list li::before {
+    content: "✗"; position: absolute; left: 4px; color: var(--bad); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .opt-note {
+    margin-top: 18px; border: 1px solid #fde68a; background: #fffbeb;
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .opt-head { font-weight: 700; color: #92400e; margin-bottom: 6px; }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 13</div>
+    <h1>LC0075 · 颜色分类 <span style="color:#93c5fd">Sort Colors</span></h1>
+    <div class="sub">从死循环、WA 到三指针分区 Accepted，写法还有优化空间</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 89/89</span>
+      <span class="badge medium">难度 Medium</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge warn">第二次提交通过 · 未达一趟最优</span>
+      <span class="badge">2026-08-05</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：三指针分区。</b><code>start</code> 是 0 的边界（左边全是 0），<code>end</code> 是 2 的边界（右边全是 2），
+      <code>mid</code> 是扫描指针。遇到 0 与 <code>start</code> 交换并右移 <code>start</code>；
+      遇到 2 与 <code>end</code> 交换并左移 <code>end</code>；遇到 1 直接前进。</p>
+      <p>
+        <span class="chip">时间 O(n)~O(n²)（0 分支重置会重扫）</span>
+        <span class="chip">空间 O(1)</span>
+        <span class="chip">原地修改</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0075_SortColors.java</span><span>提交区</span></div>
+        <pre class="code">public void sortColors(int[] nums) {
+    int start = 0, end = nums.length - 1;
+    int mid = start;
+    while (mid &lt;= end) {
+        if (nums[mid] == 0) {
+            int temp = nums[start];
+            nums[start] = nums[mid];
+            nums[mid] = temp;
+            start++;
+            mid = start;
+        } else if (nums[mid] == 2) {
+            int temp = nums[end];
+            nums[end] = nums[mid];
+            nums[mid] = temp;
+            end--;
+        } else {
+            mid++;
+        }
+    }
+}</pre>
+      </div>
+      <p class="muted">边界语义：<code>mid</code> 指向的元素未处理、正在检查；<code>end</code> 指向的元素未处理（闭区间
+      <code>[mid, end]</code>，所以用 <code>mid &lt;= end</code>）；<code>start</code> 指向的元素未处理。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 初版：左右双指针 + 中间扫描<span class="tl-badge bug">死循环超时</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>两端各用 start/end 比较，中间用 mid 扫描。当 <code>nums[start]</code> 和 <code>nums[end]</code> 都是 1、
+          中间也没有 0/2 可换时，没有任何指针移动，外层 <code>while (start &lt; end)</code> 永不退出，
+          本地测试 20 秒超时。</p>
+          <p>教训：终止条件怎么写都行，但每一轮迭代必须保证有指针在推进。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 改三指针，但推进逻辑有跳跃<span class="tl-badge bug">WA [0,2,1]</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>改成 0/2 边界 + 扫描指针，但 0 分支 <code>mid = start</code> 重置 + 循环底部无条件 <code>mid++</code>，
+          叠加后 mid 直接跳过了未处理位置；2 分支交换后也没有停住回看换入值。
+          判题 WA：<code>[0,2,1]</code> 中下标 1 的 2 从未被检查，输出仍是 <code>[0,2,1]</code>。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 修复推进逻辑，本地全过<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>2 分支交换后不再无条件推进（由外层循环回看换入值），1 分支显式前进；
+          0 分支保留 <code>mid = start</code> 重置保证不漏。回归用例 <code>[0,2,1]</code> 已补进本地测试，
+          2 示例 + 8 边界全部通过。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 提交：第二次 Accepted<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>提交结果：<b style="color:#16a34a">Accepted</b>，89/89 用例通过（第一次 WA，第二次成功）。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">89 / 89</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.7 MB</div><div class="l">内存占用</div></div>
+      <div class="metric warn"><div class="v">O(n²)</div><div class="l">最坏时间</div></div>
+      <div class="metric warn"><div class="v">两次</div><div class="l">提交次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：正确性已达标，但未严格满足「一趟扫描」进阶</h3>
+      <ul class="ok-list">
+        <li><b>正确性</b>：0/2 边界 + 扫描指针的分区正确，空数组、单元素、全相同、逆序、两种颜色等边界全部覆盖。</li>
+        <li><b>空间 O(1)</b>：只用 start、end、mid 三个常量指针，满足常数空间。</li>
+      </ul>
+      <ul class="bad-list">
+        <li><b>最坏时间 O(n²)</b>：0 分支的 <code>mid = start</code> 会把扫描指针重置回 0 边界，
+        当 0 散布在 1 之间时会反复重扫中间段；n ≤ 300 能过判题，但不是严格的一趟。</li>
+      </ul>
+
+      <div class="opt-note">
+        <div class="opt-head">宽泛最优思路（可自行重写后再次提交）</div>
+        <p>标准荷兰国旗三指针可以让最坏时间严格 O(n)：<strong>遇到 0 交换后扫描指针直接前进</strong>
+        （从 0 边界换进来的一定是 1，无需回看）；<strong>遇到 2 交换后扫描指针停住回看</strong>
+        （从 2 边界换进来的可能是 0）；<strong>遇到 1 直接前进</strong>。
+        去掉 <code>mid = start</code> 的重置，就再也不会重扫。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p class="muted">三值原地分区这类题，双指针的职责要分清：边界指针只负责「放值」，扫描指针负责「遍历」，遍历的推进规则决定复杂度。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀</h3>
+      <p>本轮沉淀 1 条套路（<code>lc-analyze/references/patterns.md</code>）：</p>
+      <div class="quote">三路原地分区：0 与 2 各用一个边界指针，扫描指针负责遍历——遇到 0 交换后前进、遇到 2 交换后停住回看、遇到 1 前进；扫描指针每轮必进或回看，保证一趟 O(n) 且不死循环。</div>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <ul class="bad-list">
+        <li>分区双指针死循环：没有覆盖无可交换的终态（两端都是 1 且中间全 1 时无进展）。</li>
+        <li>分区交换后未回看换入值：扫描指针交换后直接前进，换入的 0/2 可能被困在中间。</li>
+        <li>扫描指针推进逻辑有跳跃：<code>mid = start</code> 重置 + 底部无条件 <code>mid++</code> 跳过未处理位置。</li>
+      </ul>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 13 · sort-colors</span>
+        <span class="chip">firstPass: false</span>
+        <span class="chip">optimal: false</span>
+      </p>
+      <div class="quote">一句话复盘：三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，可改标准荷兰国旗严格 O(n)。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/75_sort-colors/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0075_SortColors.java">src/LC0075_SortColors.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-05
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>
