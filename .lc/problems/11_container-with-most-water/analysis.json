@@ -1,0 +1,45 @@
+{
+  "seq": 10,
+  "id": "11",
+  "slug": "container-with-most-water",
+  "title": "盛最多水的容器",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "65/65",
+  "runtime_ms": null,
+  "memory_bytes": 77552000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "相向双指针",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "盛最多水的容器：相向双指针，移动较矮一侧，O(n)/O(1)，一次 Accepted（65/65）",
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "相向双指针：两端向中间收，移动条件更差的一侧",
+      "text": "左右指针从数组两端出发，每次计算当前答案后移动「条件更差」的一侧（如容器题移动较矮的边），把 O(n²) 降到 O(n)。适用：盛水容器、接雨水、回文验证等两端夹逼题。",
+      "category": "双指针与滑动窗口",
+      "problem": "container-with-most-water",
+      "date": "2026-08-04"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "65/65",
+      "runtime_ms": null,
+      "memory_bytes": 77552000,
+      "approach": "相向双指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "盛最多水的容器：相向双指针，移动较矮一侧，O(n)/O(1)，一次 Accepted（65/65）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

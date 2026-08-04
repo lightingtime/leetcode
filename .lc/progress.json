@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 9,
+  "current_seq": 10,
   "done": [
     {
       "seq": 1,
@@ -100,6 +100,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）"
+    },
+    {
+      "seq": 10,
+      "id": "11",
+      "title": "盛最多水的容器",
+      "slug": "container-with-most-water",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "盛最多水的容器：相向双指针，移动较矮一侧，O(n)/O(1)，一次 Accepted（65/65）"
     }
   ],
   "error_habits": [

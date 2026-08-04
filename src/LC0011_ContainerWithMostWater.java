@@ -15,7 +15,17 @@ public class LC0011_ContainerWithMostWater {
     // ==== 提交代码开始 ====
     public int maxArea(int[] height) {
         // TODO: 在这里实现你的解法
-        return 0;
+        int left = 0, right = height.length - 1;
+        int max = 0;
+        while (left < right) {
+            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return max;
     }
     // ==== 提交代码结束 ====
 
