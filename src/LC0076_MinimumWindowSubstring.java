@@ -26,19 +26,23 @@ public class LC0076_MinimumWindowSubstring {
         String ans = "";
         while (i < s.length()) {
             char c = s.charAt(i);
+            // 该字符进入窗口前若仍缺，则未满足数 -1（先判后减）
             if (need[c] > 0) {
                 count--;
             }
             need[c]--;
             if (count == 0) {
+                // 先收缩：删掉左边多余字符，记录以 i 结尾的最短覆盖窗口
                 while (need[s.charAt(start)] < 0) {
                     need[s.charAt(start)]++;
                     start++;
                 }
+                // 记录答案
                 if (i - start + 1 < min) {
                     min = i - start + 1;
                     ans = s.substring(start, i + 1);
                 }
+                // 还回左边界关键字符（need+1、count+1、start+1），覆盖被破坏，窗口继续右扩
                 need[s.charAt(start)]++;
                 count++;
                 start++;
