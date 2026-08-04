@@ -28,6 +28,7 @@
 | 找链表尾（追加节点、接另一条链） | `while (p.next != null) p = p.next;` |
 | 双指针换链对齐（走完一条链再切） | 指针本身走到 null 时切换 |
 | 快慢指针跳 2 步（判环/找中点）防越界 | `while (fast.next != null && fast.next.next != null)` |
+| 按哨兵 tail 截断找中点（链表归并排序） | `while (fast != tail && fast.next != tail)` |
 | 删除节点（需要前驱） | 停在目标前一个：`while (cur.next != null && cur.next.val != target)` |
 | 判断当前是否为最后一个节点 | `p.next == null` |
 

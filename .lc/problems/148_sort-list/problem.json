@@ -1,0 +1,58 @@
+{
+  "id": "148",
+  "slug": "sort-list",
+  "title": "Sort List",
+  "titleCn": "排序链表",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/sort-list/",
+  "tags": [
+    "Linked List",
+    "Two Pointers",
+    "Divide and Conquer",
+    "Sorting",
+    "Merge Sort"
+  ],
+  "tagsCn": [
+    "链表",
+    "双指针",
+    "分治",
+    "排序",
+    "归并排序"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[4,2,1,3]"
+        }
+      ],
+      "output": "[1,2,3,4]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[-1,5,3,4,0]"
+        }
+      ],
+      "output": "[-1,0,3,4,5]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[4,2,1,3]\n[-1,5,3,4,0]\n[]",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode sortList(ListNode head) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-04T16:57:28.681Z"
+}

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0148 排序链表 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.medium { background: #fef3c7; color: #92400e; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+  .badge.warn { background: #fee2e2; color: #991b1b; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+  .metric.warn .v { color: var(--warn); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .bad-list { margin: 10px 0; padding: 0; list-style: none; }
+  .bad-list li { padding: 6px 0 6px 26px; position: relative; }
+  .bad-list li::before {
+    content: "✗"; position: absolute; left: 4px; color: var(--bad); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .opt-note {
+    margin-top: 18px; border: 1px solid #fde68a; background: #fffbeb;
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .opt-head { font-weight: 700; color: #92400e; margin-bottom: 6px; }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 14</div>
+    <h1>LC0148 · 排序链表 <span style="color:#93c5fd">Sort List</span></h1>
+    <div class="sub">自顶向下归并排序，时间最优，空间未达常数级</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 30/30</span>
+      <span class="badge medium">难度 Medium</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge warn">一次通过 · 时间最优 / 空间未达进阶</span>
+      <span class="badge">2026-08-05</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：自顶向下归并排序。</b>用快慢指针找到链表中点，把链表切成两半；递归排序两半后，
+      用 <code>merge</code> 把两个有序链表合并。区间用哨兵 <code>tail</code> 表示开区间
+      <code>[head, tail)</code>，<code>head.next == tail</code> 说明只剩一个节点，直接断开返回。</p>
+      <p>
+        <span class="chip">时间 O(n log n)</span>
+        <span class="chip">空间 O(log n)（递归栈）</span>
+        <span class="chip">比较排序下限即 O(n log n)</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0148_SortList.java</span><span>提交区</span></div>
+        <pre class="code">public ListNode sortList(ListNode head) {
+    return sortList(head, null);
+}
+
+private ListNode sortList(ListNode head, ListNode tail) {
+    if (head == null) {
+        return head;
+    }
+    if (head.next == tail) {
+        head.next = null;
+        return head;
+    }
+    ListNode fast = head, slow = head;
+    while (fast != tail) {
+        slow = slow.next;
+        fast = fast.next;
+        if (fast != tail) {
+            fast = fast.next;
+        }
+    }
+    ListNode mid = slow;
+    ListNode p1 = sortList(head, mid);
+    ListNode p2 = sortList(mid, tail);
+    return merge(p1, p2);
+}
+
+private ListNode merge(ListNode p1, ListNode p2) {
+    ListNode head = new ListNode(0);
+    ListNode dummy = head;
+    while (p1 != null &amp;&amp; p2 != null) {
+        if (p1.val &lt;= p2.val) {
+            dummy.next = p1;
+            p1 = p1.next;
+        } else {
+            dummy.next = p2;
+            p2 = p2.next;
+        }
+        dummy = dummy.next;
+    }
+    if (p1 == null) {
+        dummy.next = p2;
+    } else if (p2 == null) {
+        dummy.next = p1;
+    }
+    return head.next;
+}</pre>
+      </div>
+      <p class="muted">边界语义：<code>tail</code> 是哨兵边界，排序区间为开区间 <code>[head, tail)</code>，
+      tail 指向的元素不属于本段；<code>fast</code> 探路到 tail（null 或边界节点）即停，<code>slow</code> 停在中间。
+      探路必须「先检查再前进」，避免 <code>fast</code> 变 null 后被解引用。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 独立实现：快慢指针找中点 + 递归归并<span class="tl-badge info">分治</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p><code>sortList(head, tail)</code> 按哨兵区间切分：空段直接返回，单节点断开返回，否则快慢指针找中点、
+          递归两半、合并。链表 O(n log n) 排序的标准方向。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 踩坑：探路先前进后判空<span class="tl-badge bug">NPE</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>初版探路循环写成 <code>fast = fast.next</code> 后立刻访问 <code>fast.next</code>。
+          当 fast 原本在最后一个节点时，前进一步后 fast 变成 null，再访问 <code>fast.next</code> 就空指针崩溃：
+          本地测试全部用例报 <code>Cannot read field "next" because "&lt;local3&gt;" is null</code>。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 修正：探路先检查再前进，本地全过<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>把第二步前进的判空条件改成 <code>if (fast != tail)</code>：fast 前进后先确认不是 null 再走第二步，
+          循环条件在下一轮再检查是否结束。3 示例 + 6 边界（单元素、两元素、已排序、全相同、奇数长度、大数）全部通过。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 提交：一次 Accepted，时间最优<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>提交结果：<b style="color:#16a34a">Accepted</b>，30/30 用例通过，第一次提交即成功。
+          时间 O(n log n) 达到比较排序下限；但递归归并的空间是 O(log n)，未达到进阶要求的常数空间。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">30 / 30</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 57.0 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n log n)</div><div class="l">时间（下限）</div></div>
+      <div class="metric warn"><div class="v">O(log n)</div><div class="l">递归空间</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：时间已最优，空间未达进阶</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(n log n)</b>：比较排序的下限就是 O(n log n)，链表归并排序达到该下限。</li>
+        <li><b>正确性</b>：哨兵开区间 <code>[head, tail)</code> 切分无重叠无遗漏；merge 用 dummy 统一头结点处理。</li>
+        <li><b>边界覆盖</b>：空链表、单节点、两元素、已排序、全相同、奇数长度、大数混合全部通过。</li>
+      </ul>
+      <ul class="bad-list">
+        <li><b>空间 O(log n)</b>：自顶向下递归的调用栈深度随链表长度增长，进阶要求常数空间，未完全达标。</li>
+      </ul>
+
+      <div class="opt-note">
+        <div class="opt-head">宽泛最优思路（可自行重写后再次提交）</div>
+        <p>要达到常数空间，换成<strong>迭代式自底向上归并</strong>：不递归，而是从长度为 1 的子链表开始，
+        每轮把相邻的两段已排序子链表两两合并，子链表长度倍增（1 → 2 → 4 → …），直到整条链表有序。
+        空间只用于几个指针和 dummy，严格 O(1)。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p class="muted">链表里的双指针是快慢指针：找中点、判环、删倒数第 N 个都靠它；探路的共同铁律是「先检查再前进」。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀</h3>
+      <p>本轮复用已收录套路（<code>lc-analyze/references/patterns.md</code> 第 1 条），并补了哨兵 tail 变体：</p>
+      <div class="quote">链表指针判空取舍：快慢指针跳 2 步防越界用 <code>while (fast.next != null &amp;&amp; fast.next.next != null)</code>；
+      按哨兵 tail 截断找中点用 <code>while (fast != tail &amp;&amp; fast.next != tail)</code>——探路必须先检查再前进，fast 变 null 后不可解引用。</div>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <ul class="bad-list">
+        <li>快慢指针探路先前进后判空：<code>fast = fast.next</code> 后立刻访问 <code>fast.next</code>，fast 变 null 时 NPE。</li>
+      </ul>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 14 · sort-list</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: false（空间 O(log n)）</span>
+      </p>
+      <div class="quote">一句话复盘：自顶向下归并排序，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/148_sort-list/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0148_SortList.java">src/LC0148_SortList.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-05
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

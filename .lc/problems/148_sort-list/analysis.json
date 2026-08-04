@@ -1,0 +1,51 @@
+{
+  "seq": 14,
+  "id": "148",
+  "slug": "sort-list",
+  "title": "排序链表",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-05",
+  "verdict": "Accepted",
+  "testcases": "30/30",
+  "runtime_ms": null,
+  "memory_bytes": 59752000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "自顶向下归并排序",
+  "time_complexity": "O(n log n)",
+  "space_complexity": "O(log n)",
+  "notes": "自顶向下归并排序：快慢指针找中点 + 递归合并，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "快慢指针探路先前进后判空：fast = fast.next 之后立刻访问 fast.next，fast 走到链表尾变成 null 时解引用空指针（NPE）；应先确认 fast 与 fast.next 都未到边界再前进",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "链表指针判空取舍：探路先检查再前进",
+      "text": "快慢指针找中点/探路必须先确认 fast 与 fast.next 未到边界再前进；带哨兵 tail 的归并排序用 while (fast != tail && fast.next != tail)，先前进后判空会在 fast 变 null 时 NPE",
+      "category": "双指针与滑动窗口",
+      "problem": "sort-list",
+      "date": "2026-08-05"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-05",
+      "verdict": "Accepted",
+      "testcases": "30/30",
+      "runtime_ms": null,
+      "memory_bytes": 59752000,
+      "approach": "自顶向下归并排序",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(log n)",
+      "optimal": false,
+      "notes": "自顶向下归并排序：快慢指针找中点 + 递归合并，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

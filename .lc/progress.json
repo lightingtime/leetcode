@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-05",
-  "current_seq": 13,
+  "current_seq": 14,
   "done": [
     {
       "seq": 1,
@@ -144,6 +144,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）"
+    },
+    {
+      "seq": 14,
+      "id": "148",
+      "title": "排序链表",
+      "slug": "sort-list",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-05",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "自顶向下归并排序：快慢指针找中点 + 递归合并，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并"
     }
   ],
   "error_habits": [
@@ -273,6 +284,17 @@
       "count": 1,
       "examples": [
         "sort-colors"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "快慢指针探路先前进后判空：fast = fast.next 之后立刻访问 fast.next，fast 走到链表尾变成 null 时解引用空指针（NPE）；应先确认 fast 与 fast.next 都未到边界再前进",
+      "count": 1,
+      "examples": [
+        "sort-list"
       ],
       "categories": [
         "双指针与滑动窗口"
