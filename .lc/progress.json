@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-05",
-  "current_seq": 16,
+  "current_seq": 17,
   "done": [
     {
       "seq": 1,
@@ -166,6 +166,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "数组当下标链，Floyd 判圈找环入口：相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1) 一次 Accepted（59/59）"
+    },
+    {
+      "seq": 17,
+      "id": "76",
+      "title": "最小覆盖子串",
+      "slug": "minimum-window-substring",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-05",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）"
     }
   ],
   "error_habits": [
@@ -322,6 +333,39 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）",
+      "count": 1,
+      "examples": [
+        "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "窗口收缩状态失真：用 need<=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录",
+      "count": 1,
+      "examples": [
+        "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "先减后判导致计数失效：need[c]-- 之后才判断 need[c] > 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 >= 0）",
+      "count": 1,
+      "examples": [
+        "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-05"
     }
   ],
   "category_hints": {
@@ -339,5 +383,8 @@
     "数学与位运算": "位运算先想 XOR、掩码、移位；计数先想数学公式能否代替循环。",
     "数组与矩阵": "矩阵题先想如何用行列信息/排序/原地操作降维。",
     "其他": "设计题先明确 API 与复杂度要求；分治想能否拆成左右两个子问题。"
-  }
+  },
+  "skipped": [
+    15
+  ]
 }

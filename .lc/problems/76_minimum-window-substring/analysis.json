@@ -1,0 +1,61 @@
+{
+  "seq": 17,
+  "id": "76",
+  "slug": "minimum-window-substring",
+  "title": "最小覆盖子串",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-05",
+  "verdict": "Accepted",
+  "testcases": "268/268",
+  "runtime_ms": null,
+  "memory_bytes": 47124000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "滑动窗口+计数",
+  "time_complexity": "O(m+n)",
+  "space_complexity": "O(1)",
+  "notes": "滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）",
+  "code_notes": [
+    "写法微优化：for (Character c : t.toCharArray()) 逐个装箱，可用 for (char c : ...) 或按 charAt 下标访问避免装箱，复杂度不变"
+  ],
+  "mistakes": [
+    {
+      "habit": "字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）",
+      "count": 1
+    },
+    {
+      "habit": "窗口收缩状态失真：用 need<=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录",
+      "count": 1
+    },
+    {
+      "habit": "先减后判导致计数失效：need[c]-- 之后才判断 need[c] > 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 >= 0）",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "滑动窗口覆盖子串：收缩只删多余、记录后整体前移",
+      "text": "覆盖判定用计数 + 未满足数 count；收缩时只能删多余字符（need<0），need==0 表示恰好满足不能再删；记录答案后要把左边界关键字符还回（need[left]++、count++、left++）让窗口整体前进，否则覆盖状态与 count 脱节",
+      "category": "双指针与滑动窗口",
+      "problem": "minimum-window-substring",
+      "date": "2026-08-05"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-05",
+      "verdict": "Accepted",
+      "testcases": "268/268",
+      "runtime_ms": null,
+      "memory_bytes": 47124000,
+      "approach": "滑动窗口+计数",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

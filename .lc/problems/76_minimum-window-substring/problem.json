@@ -1,0 +1,66 @@
+{
+  "id": "76",
+  "slug": "minimum-window-substring",
+  "title": "Minimum Window Substring",
+  "titleCn": "最小覆盖子串",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/minimum-window-substring/",
+  "tags": [
+    "Hash Table",
+    "String",
+    "Sliding Window"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串",
+    "滑动窗口"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"ADOBECODEBANC\""
+        },
+        {
+          "name": "t",
+          "value": "\"ABC\""
+        }
+      ],
+      "output": "\"BANC\"",
+      "explain": "最小覆盖子串 \"BANC\" 包含来自字符串 t 的 'A'、'B' 和 'C'。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"a\""
+        },
+        {
+          "name": "t",
+          "value": "\"a\""
+        }
+      ],
+      "output": "\"a\"",
+      "explain": "整个字符串 s 是最小覆盖子串。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"a\""
+        },
+        {
+          "name": "t",
+          "value": "\"aa\""
+        }
+      ],
+      "output": "\"\"",
+      "explain": "t 中两个字符 'a' 均应包含在 s 的子串中，"
+    }
+  ],
+  "exampleTestcases": "\"ADOBECODEBANC\"\n\"ABC\"\n\"a\"\n\"a\"\n\"a\"\n\"aa\"",
+  "javaSnippet": "class Solution {\n    public String minWindow(String s, String t) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-04T19:15:19.622Z"
+}

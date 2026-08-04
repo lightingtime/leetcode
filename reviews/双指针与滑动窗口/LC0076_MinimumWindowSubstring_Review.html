@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC0076 最小覆盖子串 · 刷题复盘</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
+  }
+  .hero .wrap { padding: 0; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
+  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
+  .hero .sub { color: #cbd5e1; font-size: 15px; }
+  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #e2e8f0;
+  }
+  .badge.ok { background: #dcfce7; color: #166534; }
+  .badge.hard { background: #fee2e2; color: #991b1b; }
+  .badge.tag { background: #e0e7ff; color: #3730a3; }
+  .badge.plain { background: #e5e7eb; color: #374151; }
+
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 8px 0; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .metric {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
+  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .metric.ok .v { color: var(--good); }
+
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tl { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
+  .tl-marker { position: relative; }
+  .tl-marker::before {
+    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px #dbeafe;
+  }
+  .tl-marker::after {
+    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
+    width: 2px; transform: translateX(-50%); background: var(--line);
+  }
+  .tl-item:last-child .tl-marker::after { display: none; }
+  .tl-body { padding-bottom: 30px; }
+  .tl-title { font-weight: 700; font-size: 15.5px; }
+  .tl-badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
+  }
+  .tl-badge.fix { background: #dcfce7; color: #166534; }
+  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
+  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
+
+  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
+  .code-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
+    font-family: Consolas, "Cascadia Code", monospace;
+  }
+  .code-wrap pre {
+    margin: 0; padding: 16px 18px; overflow-x: auto;
+    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
+    tab-size: 4;
+  }
+  .tk-kw { color: #93c5fd; font-weight: 600; }
+  .tk-str { color: #86efac; }
+  .tk-num { color: #fbbf24; }
+  .tk-com { color: #64748b; font-style: italic; }
+  .tk-anno { color: #c4b5fd; }
+
+  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
+  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
+  .ok-list li::before {
+    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
+  }
+  .bad-list { margin: 10px 0; padding: 0; list-style: none; }
+  .bad-list li { padding: 6px 0 6px 26px; position: relative; }
+  .bad-list li::before {
+    content: "✗"; position: absolute; left: 4px; color: var(--bad); font-weight: 800;
+  }
+  .quote {
+    border-left: 3px solid var(--accent); background: #f8fafc;
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14.5px;
+  }
+  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
+  .expand-bar button {
+    font: inherit; font-size: 13px; cursor: pointer;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
+  }
+  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
+  .tl-details > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 10px; padding: 2px 0;
+  }
+  .tl-details > summary::-webkit-details-marker { display: none; }
+  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
+  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
+  .foot {
+    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; text-align: center;
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 26px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">LEETCODE 刷题复盘 · SEQ 17</div>
+    <h1>LC0076 · 最小覆盖子串 <span style="color:#93c5fd">Minimum Window Substring</span></h1>
+    <div class="sub">三次踩坑到滑动窗口 + 计数，一次 Accepted</div>
+    <div class="badges">
+      <span class="badge ok">✓ Accepted 268/268</span>
+      <span class="badge hard">难度 Hard</span>
+      <span class="badge tag">分类 双指针与滑动窗口</span>
+      <span class="badge plain">提交一次通过 · 最优解</span>
+      <span class="badge">2026-08-05</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <h2>我的解法</h2>
+    <div class="card">
+      <p><b>思路：滑动窗口 + 计数。</b><code>need[c]</code> 记录窗口还缺字符 c 多少个（&gt;0 缺、==0 恰好、&lt;0 多余），
+      <code>count</code> 记录总共还缺几个字符。右指针扩展、先判后减；count 归零后先收缩多余字符、
+      记录最短窗口，再还回关键字符让窗口整体前进。128 长度数组直接按字符下标存，大小写都安全。</p>
+      <p>
+        <span class="chip">时间 O(m+n)</span>
+        <span class="chip">空间 O(1)（固定 128 数组）</span>
+        <span class="chip">满足进阶要求</span>
+      </p>
+      <div class="code-wrap">
+        <div class="code-head"><span>src/LC0076_MinimumWindowSubstring.java</span><span>提交区</span></div>
+        <pre class="code">public String minWindow(String s, String t) {
+    int[] need = new int[128];
+    for (Character c : t.toCharArray()) {
+        need[c]++;
+    }
+    int count = t.length();
+    int start = 0;
+    int i = 0;
+    int min = Integer.MAX_VALUE;
+    String ans = "";
+    while (i &lt; s.length()) {
+        char c = s.charAt(i);
+        if (need[c] &gt; 0) {
+            count--;
+        }
+        need[c]--;
+        if (count == 0) {
+            while (need[s.charAt(start)] &lt; 0) {
+                need[s.charAt(start)]++;
+                start++;
+            }
+            if (i - start + 1 &lt; min) {
+                min = i - start + 1;
+                ans = s.substring(start, i + 1);
+            }
+            need[s.charAt(start)]++;
+            count++;
+            start++;
+        }
+        i++;
+    }
+    return ans;
+}</pre>
+      </div>
+      <p class="muted">边界语义：<code>need[c] == 0</code> 表示恰好满足、不可删；<code>need[c] &lt; 0</code> 表示多余、收缩时可删；
+      记录答案后必须把左边界关键字符还回（<code>need++</code>、<code>count++</code>、<code>start++</code>），窗口才能继续前进。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>解题过程</h2>
+    <div class="expand-bar">
+      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
+      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">01 · 独立实现：need 计数 + count 未满足数<span class="tl-badge info">思路正确</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>滑动窗口 + 计数 + 覆盖判定的整体框架一次搭对：右扩、收缩、记录、前进四步齐全。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">02 · 踩坑①：`c - 'a'` 大写越界<span class="tl-badge bug">AIOOBE</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p><code>c - 'a'</code> 只对小写字母得到非负下标，大写 'A' 得到 -32，数组 int[52] 直接越界：
+          所有含大写字母的用例报 <code>ArrayIndexOutOfBoundsException: Index -32</code>。
+          改为 128 长度数组、直接 <code>need[c]</code> 按 ASCII 下标存取。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">03 · 踩坑②：收缩误删恰好满足的字符<span class="tl-badge bug">状态失真</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>收缩条件写成 <code>need &lt;= 0</code>，把恰好满足（<code>need == 0</code>）的必需字符也还回去，
+          却不移动 start、不更新 count——覆盖状态与 count 脱节，count 后续可能变负数，窗口全部失真。
+          收缩应只用 <code>need &lt; 0</code> 删多余。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 踩坑③：先减后判，count 永不更新<span class="tl-badge bug">全空答案</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>扩展写成 <code>need[c]--</code> 后再判断 <code>need[c] &gt; 0</code>：首次遇到的必需字符减完已是 0，
+          count 一次都没减，恒等于 t 的长度，<code>count == 0</code> 永不成立，答案一直是空串。
+          判断必须用减之前的值（先判后减，或减后判断 <code>&gt;= 0</code>）。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">05 · 修正三处，本地全过<span class="tl-badge fix">已解决</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>128 数组直接下标 + 扩展先判后减 + 收缩只删多余 + 记录后三连前进。
+          3 示例 + 5 边界（s 比 t 短、窗口在开头/结尾、t 含重复字符、大小写敏感）全部通过。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">06 · 提交：一次 Accepted，达成进阶最优<span class="tl-badge ok">完成</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>提交结果：<b style="color:#16a34a">Accepted</b>，268/268 用例通过，第一次提交即成功。
+          O(m+n)/O(1)，满足进阶要求。</p>
+        </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>分析结果</h2>
+
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">268 / 268</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 44.9 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(m+n) / O(1)</div><div class="l">时间 / 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+
+    <div class="card">
+      <h3>算法判定：滑动窗口 + 计数，已是最优</h3>
+      <ul class="ok-list">
+        <li><b>时间复杂度 O(m+n)</b>：左右指针各走一遍，恰好满足进阶要求。</li>
+        <li><b>空间复杂度 O(1)</b>：固定 128 长度数组，与输入规模无关。</li>
+        <li><b>正确性</b>：扩展先判后减、收缩只删多余、记录后整体前进，count 与覆盖状态始终一致。</li>
+        <li><b>边界覆盖</b>：s 比 t 短、窗口在开头/结尾、t 含重复字符、大小写敏感全部通过。</li>
+        <li><b>结论</b>：与标准解法一致，无需再优化。</li>
+      </ul>
+      <h3>代码层面微优化（复杂度已达最优，仅风格）</h3>
+      <p><code>for (Character c : t.toCharArray())</code> 会对每个字符做一次装箱；改成
+      <code>for (char c : t.toCharArray())</code> 或按 <code>charAt</code> 下标访问可以避免装箱，复杂度不变。</p>
+    </div>
+
+    <div class="card">
+      <h3>分类提醒 · 双指针与滑动窗口</h3>
+      <div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <p class="muted">覆盖类子串问题：右扩到「够」、左缩到「最小」、记录后整体前进，计数状态（count）与窗口内容必须严格同步。</p>
+    </div>
+
+    <div class="card">
+      <h3>套路沉淀</h3>
+      <p>本轮沉淀 1 条套路（<code>lc-analyze/references/patterns.md</code>）：</p>
+      <div class="quote">滑动窗口覆盖子串：收缩只删多余（need &lt; 0）、记录后整体前移（还回关键字符 need++/count++/left++）；
+      扩展时判断 count 必须用 need[c]-- 之前的值（先判后减，或减后判断 &gt;= 0），否则 count 永不更新。</div>
+    </div>
+
+    <div class="card">
+      <h3>错误习惯复盘</h3>
+      <ul class="bad-list">
+        <li>字符到数组下标映射错误：<code>c - 'a'</code> 只对小写有效，大写负下标越界。</li>
+        <li>窗口收缩状态失真：<code>need &lt;= 0</code> 误删恰好满足的字符，count 与覆盖脱节。</li>
+        <li>先减后判导致计数失效：<code>need[c]--</code> 后再判 <code>&gt; 0</code>，count 永不更新。</li>
+      </ul>
+      <h3>完成记录</h3>
+      <p>
+        <span class="chip">seq 17 · minimum-window-substring</span>
+        <span class="chip">firstPass: true</span>
+        <span class="chip">optimal: true</span>
+      </p>
+      <div class="quote">一句话复盘：滑动窗口 + 128 计数，扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1)，一次 Accepted（268/268）。</div>
+    </div>
+  </section>
+
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/76_minimum-window-substring/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/LC0076_MinimumWindowSubstring.java">src/LC0076_MinimumWindowSubstring.java</a> ·
+    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-05
+  </div>
+
+</div>
+
+<script>
+  const TOKEN_RULES = [
+    { cls: 'com', re: /\/\/[^\n]*/y },
+    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
+    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
+    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
+    { cls: 'anno', re: /@\w+/y },
+  ];
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function setAllTimeline(open) {
+    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
+  }
+  function highlight(code) {
+    let out = '', pos = 0;
+    while (pos < code.length) {
+      let hit = null;
+      for (const rule of TOKEN_RULES) {
+        rule.re.lastIndex = pos;
+        const m = rule.re.exec(code);
+        if (m) { hit = { m, rule }; break; }
+      }
+      if (hit) {
+        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
+        pos = hit.m.index + hit.m[0].length;
+      } else {
+        out += esc(code.charAt(pos));
+        pos++;
+      }
+    }
+    return out;
+  }
+  document.querySelectorAll('pre.code').forEach(function (pre) {
+    pre.innerHTML = highlight(pre.textContent);
+  });
+</script>
+
+</body>
+</html>

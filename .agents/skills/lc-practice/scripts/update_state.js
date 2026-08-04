@@ -79,10 +79,14 @@ function planReport(p) {
 
 if (cmd === 'next') {
   const doneSeqs = new Set((progress.done || []).map(d => d.seq));
-  const next = order.find(o => !doneSeqs.has(o.seq));
+  const skippedSeqs = new Set(progress.skipped || []);
+  const next = order.find(o => !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq));
   console.log(`进度：已完成 ${doneSeqs.size}/${order.length}`);
   if (!next) {
-    console.log('全部完成，进入复习模式（随机抽已完成题重写）。');
+    const allSkipped = order.every(o => doneSeqs.has(o.seq) || skippedSeqs.has(o.seq));
+    console.log(allSkipped
+      ? '未完成题目均为已跳过（会员题等），进入复习模式（随机抽已完成题重写）。'
+      : '全部完成，进入复习模式（随机抽已完成题重写）。');
     process.exit(0);
   }
   console.log(`下一题：seq=${next.seq} | ${next.id}. ${next.title}（${next.difficulty}）分类=${next.category}`);
@@ -96,6 +100,20 @@ if (cmd === 'next') {
     habits.slice().sort((a, b) => b.count - a.count).slice(0, 5).forEach(h =>
       console.log(`  [x${h.count}] ${h.habit} | 最近 ${h.last_seen} | 示例题: ${(h.examples || []).slice(-3).join(', ')}`));
   }
+} else if (cmd === 'skip') {
+  const seq = parseInt(arg('--seq', '0'), 10);
+  const q = order.find(o => o.seq === seq);
+  if (!q) { console.error(`找不到 seq=${seq}`); process.exit(1); }
+  progress.skipped = progress.skipped || [];
+  if (arg('--undo', '') === 'true') {
+    progress.skipped = progress.skipped.filter(s => s !== seq);
+    console.log(`已取消跳过：${q.id}. ${q.title}`);
+  } else {
+    if (!progress.skipped.includes(seq)) progress.skipped.push(seq);
+    console.log(`已标记跳过（不记完成）：${q.id}. ${q.title}`);
+  }
+  progress.updated = date;
+  writeJson(PROGRESS, progress);
 } else if (cmd === 'done') {
   const seq = parseInt(arg('--seq', '0'), 10);
   const q = order.find(o => o.seq === seq);
@@ -311,5 +329,5 @@ if (cmd === 'next') {
 } else if (cmd === 'plan') {
   planReport(progress).forEach(l => console.log(l));
 } else {
-  console.log('用法: next | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | stats');
+  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | stats');
 }
