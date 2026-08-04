@@ -1,0 +1,64 @@
+{
+  "id": "19",
+  "slug": "remove-nth-node-from-end-of-list",
+  "title": "Remove Nth Node From End of List",
+  "titleCn": "删除链表的倒数第 N 个结点",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/remove-nth-node-from-end-of-list/",
+  "tags": [
+    "Linked List",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "链表",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,3,4,5]"
+        },
+        {
+          "name": "n",
+          "value": "2"
+        }
+      ],
+      "output": "[1,2,3,5]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1]"
+        },
+        {
+          "name": "n",
+          "value": "1"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2]"
+        },
+        {
+          "name": "n",
+          "value": "1"
+        }
+      ],
+      "output": "[1]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4,5]\n2\n[1]\n1\n[1,2]\n1",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode removeNthFromEnd(ListNode head, int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-04T15:49:19.267Z"
+}

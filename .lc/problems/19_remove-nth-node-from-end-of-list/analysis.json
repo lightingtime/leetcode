@@ -1,0 +1,45 @@
+{
+  "seq": 12,
+  "id": "19",
+  "slug": "remove-nth-node-from-end-of-list",
+  "title": "删除链表的倒数第 N 个结点",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-04",
+  "verdict": "Accepted",
+  "testcases": "208/208",
+  "runtime_ms": null,
+  "memory_bytes": 43852000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "哨兵+快慢指针",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "哨兵节点统一删头边界，快慢指针拉开 N 步一趟删除，O(n)/O(1)，一次 Accepted（208/208）",
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "链表删除倒数第 N 个：哨兵 + 快慢指针拉开 N 步",
+      "text": "快指针先走 N 步，慢指针（和 pre）同步前进，快指针走到 null 时慢指针正好指向待删节点；dummy 哨兵统一处理删头结点，一趟 O(n)/O(1)",
+      "category": "双指针与滑动窗口",
+      "problem": "remove-nth-node-from-end-of-list",
+      "date": "2026-08-04"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-04",
+      "verdict": "Accepted",
+      "testcases": "208/208",
+      "runtime_ms": null,
+      "memory_bytes": 43852000,
+      "approach": "哨兵+快慢指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "哨兵节点统一删头边界，快慢指针拉开 N 步一趟删除，O(n)/O(1)，一次 Accepted（208/208）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-04",
-  "current_seq": 11,
+  "current_seq": 12,
   "done": [
     {
       "seq": 1,
@@ -122,6 +122,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复"
+    },
+    {
+      "seq": 12,
+      "id": "19",
+      "title": "删除链表的倒数第 N 个结点",
+      "slug": "remove-nth-node-from-end-of-list",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-04",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "哨兵节点统一删头边界，快慢指针拉开 N 步一趟删除，O(n)/O(1)，一次 Accepted（208/208）"
     }
   ],
   "error_habits": [
