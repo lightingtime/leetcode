@@ -158,7 +158,7 @@ const html = `<!DOCTYPE html>
   <div class="wrap">
     <div class="kicker">LEETCODE 训练主页</div>
     <h1>力扣刷题 · 打卡与复盘</h1>
-    <div class="sub">一个月 = 30 天实际练习打卡；出去玩/休息日历顺延，强度不变</div>
+    <div class="sub">一个月 = 30 天实际练习打卡</div>
     <div class="badges">
       <span class="badge ok">已打卡 ${checkinDays}/${TARGET} 天</span>
       <span class="badge">完成 ${done.length}/${order.length} 题</span>
