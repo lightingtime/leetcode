@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 21,
+  "current_seq": 22,
   "done": [
     {
       "seq": 1,
@@ -221,6 +221,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "排序后单遍合并，边界覆盖完整（空/单元素/首尾相接/包含/大数）"
+    },
+    {
+      "seq": 22,
+      "id": "238",
+      "title": "除了自身以外数组的乘积",
+      "slug": "product-of-array-except-self",
+      "category": "数组与矩阵",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化"
     }
   ],
   "error_habits": [

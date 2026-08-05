@@ -1,0 +1,38 @@
+{
+  "seq": 22,
+  "id": "238",
+  "slug": "product-of-array-except-self",
+  "title": "除了自身以外数组的乘积",
+  "category": "数组与矩阵",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "24/24",
+  "runtime_ms": null,
+  "memory_bytes": 63864000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "前缀积×后缀积",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "24/24",
+      "runtime_ms": null,
+      "memory_bytes": 63864000,
+      "approach": "前缀积×后缀积",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化"
+    }
+  ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ]
+}

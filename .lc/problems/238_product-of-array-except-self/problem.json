@@ -1,0 +1,42 @@
+{
+  "id": "238",
+  "slug": "product-of-array-except-self",
+  "title": "Product of Array Except Self",
+  "titleCn": "除了自身以外数组的乘积",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/product-of-array-except-self/",
+  "tags": [
+    "Array",
+    "Prefix Sum"
+  ],
+  "tagsCn": [
+    "数组",
+    "前缀和"
+  ],
+  "category": "数组与矩阵",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,3,4]"
+        }
+      ],
+      "output": "[24,12,8,6]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[-1,1,0,-3,3]"
+        }
+      ],
+      "output": "[0,0,9,0,0]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4]\n[-1,1,0,-3,3]",
+  "javaSnippet": "class Solution {\n    public int[] productExceptSelf(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-05T20:41:50.065Z"
+}
