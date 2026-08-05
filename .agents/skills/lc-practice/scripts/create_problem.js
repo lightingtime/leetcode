@@ -1,11 +1,11 @@
 // 根据 problem.json 生成 IDEA 可运行的 Java 刷题文件（方法签名 + 示例测试 main + 辅助类）
 // 用法: node create_problem.js --slug <slug>   或   --id <题号>   或   --json <problem.json路径>
-// 可选: --out <目录> 默认 D:/Projects/leetCode/src；--force 允许覆盖与模板不一致的已有文件
+// 可选: --out <目录> 默认 仓库根目录/src；--force 允许覆盖与模板不一致的已有文件
 const fs = require('fs');
 const path = require('path');
 
-const LC_DIR = 'D:/Projects/leetCode/.lc';
-const DEFAULT_OUT = 'D:/Projects/leetCode/src';
+const LC_DIR = path.join(__dirname, '..', '..', '..', '..', '.lc');
+const DEFAULT_OUT = path.join(__dirname, '..', '..', '..', '..', 'src');
 // 这些题目的返回答案顺序无关紧要（如下标对、无序集合），示例测试用 checkEqUnordered
 const UNORDERED_SLUGS = new Set(['two-sum']);
 

@@ -21,6 +21,7 @@
 - [13. 滑动窗口覆盖子串：收缩只删多余、记录后整体前移](#13-滑动窗口覆盖子串收缩只删多余记录后整体前移)
 - [14. 滑动窗口最值：单调队列（双端队列存下标）](#14-滑动窗口最值单调队列双端队列存下标)
 - [15. 旋转有序数组二分：先判有序半段，再用值域归属 target](#15-旋转有序数组二分先判有序半段再用值域归属-target)
+- [16. 二分下界（lower bound）的区间端点：right 取 n 还是 n-1](#16-二分下界lower-bound的区间端点right-取-n-还是-n-1)
 
 ## 1. 链表指针判空取舍：p != null vs p.next != null
 
@@ -223,3 +224,21 @@ else 里 i 是重复字符，窗口只能算到 `i-1`，用 `i - start`。
 所以必有一半有序；只有有序段能用值域判断 target 归属。左半段 `[left, mid]` 有序 ⇔ 没跨山谷 ⇔
 `nums[left] <= nums[mid]`（`==` 只在 mid == left 的单元素段发生，天然有序）；若 `nums[left] > nums[mid]`，
 山谷在左半段内，右半段 `[mid, right]` 才有序，此时仅当 `nums[mid] < target <= nums[right]` 搜右。
+
+## 16. 二分下界（lower bound）的区间端点：right 取 n 还是 n-1
+
+出处：LC0034 在排序数组中查找元素的第一个和最后一个位置（找 `>= target` 的第一个位置）
+
+| 写法 | 循环条件 | 可返回的范围 | 空数组行为 |
+| --- | --- | --- | --- |
+| `right = nums.length`（右端点开区间） | `while (left < right)` | `[0, n]`，含插入点 n | 循环不执行，返回 0，语义正确 |
+| `right = nums.length - 1`（右端点闭区间） | `while (left < right)` | `[0, n-1]`，表达不了 n | `right = -1`，循环不执行返回 0，解引用越界 |
+
+要点：
+
+- 「第一个 >= target 的位置」是 lower bound，target 可能大于数组中所有元素，此时答案是插入点 `n`，**答案在初始区间之外**；只有右端点取开区间 `n` 才能表达它。
+- 闭区间 `[0, n-1]` 配 `while (left < right)` 在区间缩到只剩一个元素（`left == right`）时直接退出，**从不验证那个元素是否满足条件**：target 大于所有元素时停在 `n-1`，返回 `n-1` 而非 `n`。
+- 该差一在「last = lower_bound(target+1) - 1」的组合里会传导成整体右边界差一：目标值在数组末尾（含单元素、全相同）时，结束位置报成 `n-2`。
+- 空数组时 `right = nums.length - 1 = -1`，循环一次不执行直接 `return left`（0），上层再 `nums[left]` 就抛 `ArrayIndexOutOfBoundsException`。
+
+要点口诀：二分前先问「答案会不会在区间之外」——lower bound / upper bound / 插入点这类问题答案可以是 n，右端点就必须是开区间；只有答案保证在数组内的查找（如查 target 是否存在）才允许闭区间端点。

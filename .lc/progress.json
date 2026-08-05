@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05",
+  "updated": "2026-08-06",
   "current_seq": 19,
   "done": [
     {
@@ -454,6 +454,72 @@
         "数组与矩阵"
       ],
       "last_seen": "2026-08-05"
+    },
+    {
+      "habit": "二分下界区间端点选错：right 初始化为 nums.length-1 且 while(left<right) 在区间只剩一个元素时退出而不验证该元素是否满足条件，target 大于所有元素时返回 n-1 而非插入点 n，导致「target+1 的 first index - 1」整体差一；空数组时 right=-1 循环不执行直接返回 0，后续解引用越界",
+      "count": 1,
+      "examples": [
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "二分 left=mid 配下取整死循环：区间只剩两个元素时 mid==left，else 分支 left=mid 原地踏步，循环永不退出（本地测试整体卡死超时）；用 left=mid 收拢时必须让 mid 上取整，或改排除式 left=mid+1",
+      "count": 1,
+      "examples": [
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "lower bound 分支方向写反：找第一个 >= target 的位置时，nums[mid] < target 才排除 mid（left=mid+1），nums[mid] >= target 时 mid 仍是候选（right=mid）；写成 nums[mid] > target 收 right、else left=mid 实际在找最后一个 <= target，searchRange 两次调用组合出的区间错位",
+      "count": 1,
+      "examples": [
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "lower bound 保留/排除条件写反：nums[mid] <= target 时收缩右边界，把小于 target 的值也当候选保留；nums[mid] > target 时反而排除 mid。应为 nums[mid] < target 排除 mid（left=mid+1）、nums[mid] >= target 保留 mid（right=mid），等于 target 时 mid 恰是候选",
+      "count": 1,
+      "examples": [
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "为凑末尾差一去掉了 right-1 补偿：target 在末尾时 lower_bound(target+1) 因右端点取 n-1 停在 n-1，减 1 后差一，于是改成不减 1，导致非末尾用例（target 不在末尾）右边界整体多 1；根因是右端点应取 n（开区间），不是去掉 -1",
+      "count": 1,
+      "examples": [
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "全开区间（红蓝染色）模板返回错哨兵：循环结束返回 left，但 left 是最后一个「不满足」（蓝）的位置、right 才是第一个「满足」（红）的位置；lower bound 的答案应返回 right。返回 left 会得到 -1（target 小于所有元素或首元素即满足）或前一位，导致 nums[-1] 越界或整体结果错位",
+      "count": 1,
+      "examples": [
+        "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
     }
   ],
   "category_hints": {

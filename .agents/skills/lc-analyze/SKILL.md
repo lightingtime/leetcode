@@ -7,7 +7,7 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 
 ## 前置状态
 
-- 项目：`D:\Projects\leetCode`；状态目录：`D:\Projects\leetCode\.lc`
+- 项目：仓库根目录；状态目录：`仓库根目录\.lc`
 - 本 skill 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js` 与 `update_state.js`
 - 套路沉淀库：`.agents/skills/lc-analyze/references/patterns.md`（分析时先查套路是否已收录；新增套路时按同样格式追加）
 

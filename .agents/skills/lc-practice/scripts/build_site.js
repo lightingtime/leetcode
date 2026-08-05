@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = 'D:/Projects/leetCode';
+const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const LC_DIR = path.join(ROOT, '.lc');
 const REVIEWS = path.join(ROOT, 'reviews');
 const FIRST_PASS_DEADLINE = '2026-08-30';  // 硬性目标：第一遍刷完所有题

@@ -11,7 +11,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 
-const LC_DIR = 'D:/Projects/leetCode/.lc';
+const LC_DIR = path.join(__dirname, '..', '..', '..', '..', '.lc');
 const CONFIG_PATH = path.join(LC_DIR, 'config.json');
 const PW = 'C:/Program Files/PowerShell/7/pwsh.exe';
 

@@ -1,0 +1,82 @@
+{
+  "seq": 20,
+  "id": "34",
+  "slug": "find-first-and-last-position-of-element-in-sorted-array",
+  "title": "在排序数组中查找元素的第一个和最后一个位置",
+  "category": "数组与矩阵",
+  "date": "2026-08-06",
+  "verdict": "",
+  "testcases": "",
+  "runtime_ms": null,
+  "memory_bytes": null,
+  "firstPass": false,
+  "optimal": false,
+  "approach": "",
+  "time_complexity": "",
+  "space_complexity": "",
+  "notes": "",
+  "mistakes": [
+    {
+      "habit": "二分下界区间端点选错：right 初始化为 nums.length-1 且 while(left<right) 在区间只剩一个元素时退出而不验证该元素是否满足条件，target 大于所有元素时返回 n-1 而非插入点 n，导致「target+1 的 first index - 1」整体差一；空数组时 right=-1 循环不执行直接返回 0，后续解引用越界",
+      "count": 1
+    },
+    {
+      "habit": "二分 left=mid 配下取整死循环：区间只剩两个元素时 mid==left，else 分支 left=mid 原地踏步，循环永不退出（本地测试整体卡死超时）；用 left=mid 收拢时必须让 mid 上取整，或改排除式 left=mid+1",
+      "count": 1
+    },
+    {
+      "habit": "lower bound 分支方向写反：找第一个 >= target 的位置时，nums[mid] < target 才排除 mid（left=mid+1），nums[mid] >= target 时 mid 仍是候选（right=mid）；写成 nums[mid] > target 收 right、else left=mid 实际在找最后一个 <= target，searchRange 两次调用组合出的区间错位",
+      "count": 1
+    },
+    {
+      "habit": "lower bound 保留/排除条件写反：nums[mid] <= target 时收缩右边界，把小于 target 的值也当候选保留；nums[mid] > target 时反而排除 mid。应为 nums[mid] < target 排除 mid（left=mid+1）、nums[mid] >= target 保留 mid（right=mid），等于 target 时 mid 恰是候选",
+      "count": 1
+    },
+    {
+      "habit": "为凑末尾差一去掉了 right-1 补偿：target 在末尾时 lower_bound(target+1) 因右端点取 n-1 停在 n-1，减 1 后差一，于是改成不减 1，导致非末尾用例（target 不在末尾）右边界整体多 1；根因是右端点应取 n（开区间），不是去掉 -1",
+      "count": 1
+    },
+    {
+      "habit": "全开区间（红蓝染色）模板返回错哨兵：循环结束返回 left，但 left 是最后一个「不满足」（蓝）的位置、right 才是第一个「满足」（红）的位置；lower bound 的答案应返回 right。返回 left 会得到 -1（target 小于所有元素或首元素即满足）或前一位，导致 nums[-1] 越界或整体结果错位",
+      "count": 1
+    }
+  ],
+  "hints": [],
+  "patterns": [
+    {
+      "title": "二分下界（lower bound）的区间端点：right 取 n 还是 n-1",
+      "text": "找「第一个 >= target 的位置」时答案可能是 n（插入点，target 大于所有元素），右端点必须用开区间 n；right=nums.length-1 的闭区间配 while(left<right) 在 target 大于所有元素时停在 n-1 且不验证该元素，返回 n-1 而非 n；空数组时 right=-1 循环不执行返回 0 造成越界",
+      "category": "数组与矩阵",
+      "problem": "find-first-and-last-position-of-element-in-sorted-array",
+      "date": "2026-08-06"
+    },
+    {
+      "title": "二分 left=mid 收拢必须配 mid 上取整",
+      "text": "left=mid 会把区间向右侧收拢，下取整 mid=left+(right-left)/2 在 right==left+1 时等于 left，走 else 分支 left=mid 原地踏步死循环；用 left=mid 时 mid 必须上取整 left+(right-left+1)/2（此时 right=mid-1 仍安全），或改用排除式写法 left=mid+1 配下取整。找第一个 >= target（lower bound）的分支应为 nums[mid] < target 时 left=mid+1 排除 mid，否则 right=mid 保留候选；写成 nums[mid] > target 收 right、else left=mid 实际收敛到最后一个 <= target，两次调用组合结果错位",
+      "category": "数组与矩阵",
+      "problem": "find-first-and-last-position-of-element-in-sorted-array",
+      "date": "2026-08-06"
+    },
+    {
+      "title": "二分比较符先问等号归属：相等时 mid 是候选还是被排除",
+      "text": "写比较符前先问「相等时 mid 是候选还是被排除」，等号必须与保留侧同侧。lower bound（第一个 >= target）：nums[mid]==target 是候选 → nums[mid] < target 排除（left=mid+1）、nums[mid] >= target 保留（right=mid）；若写成 nums[mid] <= target 保留，会把「小于」也当候选，而 > 分支又排除掉真正的候选。等价地 nums[mid] >= target 时 right=mid、else left=mid+1 同样正确——比较符不是关键，等号放哪边才是",
+      "category": "数组与矩阵",
+      "problem": "find-first-and-last-position-of-element-in-sorted-array",
+      "date": "2026-08-06"
+    },
+    {
+      "title": "二分统一模板：区间定义决定 while 条件，推荐左闭右开",
+      "text": "while 条件不是自由选择，它由「区间何时为空」决定：闭区间 [L,R] 里 L==R 还剩一个元素，空区间是 L>R，所以配 while(L<=R)，且 mid 已被检查必须排除（L=mid+1 / R=mid-1），想保留 mid 就得配 mid 上取整；左闭右开 [L,R) 里 L==R 已空（R 不含），配 while(L<R)，排除用 L=mid+1、保留用 R=mid，下取整永远安全。推荐统一用左闭右开 [0,n)：初始 L=0、R=n，循环结束 L==R 即答案（插入点），lower bound 的不变式是 L 左边全 < target、R 右边全 >= target。混用开闭与 while 条件（闭区间写 <、或开区间写 <=）是差一错误的主源",
+      "category": "数组与矩阵",
+      "problem": "find-first-and-last-position-of-element-in-sorted-array",
+      "date": "2026-08-06"
+    },
+    {
+      "title": "二分全开区间 (L,R) / 红蓝染色模板：while(L+1<R)，答案在边界",
+      "text": "全开区间 (L,R) 两端都不含：区间为空当 R<=L+1，循环条件 while(L+1<R)，mid 严格落在内部，排除/保留都收端点（L=mid 或 R=mid），结束时 L 与 R 相邻，答案在边界（lower bound 的答案是 R，L 是最后一个不满足的哨兵）。等价的红蓝染色法：L 标「确定不满足」、R 标「确定满足」，初始可取 L=-1、R=n 当哨兵，mid 染色后收对应端点，最终 R 即第一个满足位置。优点：两种移动对称（都收 mid），没有 +1/-1 纠结；缺点：答案夹在两个哨兵之间，理解门槛略高。日常建议与左闭右开模板二选一，不要混用",
+      "category": "数组与矩阵",
+      "problem": "find-first-and-last-position-of-element-in-sorted-array",
+      "date": "2026-08-06"
+    }
+  ]
+}

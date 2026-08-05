@@ -7,7 +7,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 
 ## 前置状态
 
-- 项目：`D:\Projects\leetCode`；状态目录：`D:\Projects\leetCode\.lc`
+- 项目：仓库根目录；状态目录：`仓库根目录\.lc`
 - 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js`、`update_state.js`
 
 ## 流程

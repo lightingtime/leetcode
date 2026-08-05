@@ -8,7 +8,7 @@ const path = require('path');
 const args = process.argv.slice(2);
 let file = args.includes('--file') ? args[args.indexOf('--file') + 1] : (args[0] && !args[0].startsWith('--') ? args[0] : null);
 if (!file) {
-  const src = 'D:/Projects/leetCode/src';
+  const src = path.join(__dirname, '..', '..', '..', '..', 'src');
   file = fs.readdirSync(src).filter(f => f.endsWith('.java') && f.startsWith('LC')).sort().reverse()[0] || null;
 }
 if (!file) { console.error('未找到 Java 文件'); process.exit(1); }
@@ -18,11 +18,12 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'lc-test-'));
 const className = path.basename(file, '.java');
 
 // 共享测试工具（生成的题目文件依赖它；不在 LC 前缀内，不会被自动选文件逻辑选中）
-const SHARED_HELPER = 'D:/Projects/leetCode/src/TestUtil.java';
+const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
+const SHARED_HELPER = path.join(ROOT, 'src', 'TestUtil.java');
 // 公共节点类（ListNode/TreeNode 标准结构），题目文件依赖它们
 const SHARED_NODES = [
-  'D:/Projects/leetCode/src/ListNode.java',
-  'D:/Projects/leetCode/src/TreeNode.java'
+  path.join(ROOT, 'src', 'ListNode.java'),
+  path.join(ROOT, 'src', 'TreeNode.java')
 ];
 const javacArgs = ['-encoding', 'UTF-8', '-d', tmp];
 if (fs.existsSync(SHARED_HELPER) && path.resolve(SHARED_HELPER) !== path.resolve(file)) javacArgs.push(SHARED_HELPER);

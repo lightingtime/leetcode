@@ -20,7 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const LC_DIR = 'D:/Projects/leetCode/.lc';
+const LC_DIR = path.join(__dirname, '..', '..', '..', '..', '.lc');
 const ORDER = path.join(LC_DIR, 'order.json');
 const PROGRESS = path.join(LC_DIR, 'progress.json');
 function todayStr() {

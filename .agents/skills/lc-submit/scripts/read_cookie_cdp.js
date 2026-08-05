@@ -13,7 +13,7 @@ const http = require('http');
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const SRC_PROFILE = path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'User Data', 'Default');
-const LC_DIR = 'D:/Projects/leetCode/.lc';
+const LC_DIR = path.join(__dirname, '..', '..', '..', '..', '.lc');
 const CONFIG_PATH = path.join(LC_DIR, 'config.json');
 
 function getJson(url) {

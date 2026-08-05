@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const LC_DIR = 'D:/Projects/leetCode/.lc';
+const LC_DIR = path.join(__dirname, '..', '..', '..', '..', '.lc');
 const GRAPHQL = 'https://leetcode.cn/graphql/';
 
 const CATS = [
