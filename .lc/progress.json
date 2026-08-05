@@ -286,7 +286,7 @@
       "date": "2026-08-06",
       "firstPass": true,
       "optimal": true,
-      "notes": "两数相加：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位；一次 Accepted（1569/1569），后精简为单循环写法再次提交 Accepted。"
+      "notes": "两数相加：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位；一次 Accepted（1569/1569），后精简为单循环并清理占位注释后再次 Accepted。"
     }
   ],
   "error_habits": [

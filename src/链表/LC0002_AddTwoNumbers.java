@@ -4,8 +4,8 @@
 // 链接：https://leetcode.cn/problems/add-two-numbers/
 // 刷题日期：2026-08-06
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 思路：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位
+// 复杂度：时间 O(m+n)，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +14,6 @@ public class LC0002_AddTwoNumbers {
 
     // ==== 提交代码开始 ====
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        // TODO: 在这里实现你的解法
         ListNode dummy = new ListNode();
         ListNode p1 = l1, p2 = l2, p = dummy;
         int next = 0;
