@@ -1,0 +1,51 @@
+{
+  "seq": 26,
+  "id": "206",
+  "slug": "reverse-linked-list",
+  "title": "反转链表",
+  "category": "链表",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "28/28",
+  "runtime_ms": null,
+  "memory_bytes": 44700000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "递归反转（head.next.next = head）",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)递归栈",
+  "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "递归反转链表接回错误：把递归返回的「新头」当作 head 的原后继去接（next.next = head），实际新头后面接的是原链表尾，head 被接到新头后面导致中间节点全部丢失；正确是让原后继（现在位于反转后子链表尾部）指回 head，即 head.next.next = head",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "递归反转链表：新头 vs 原后继（head.next.next = head）",
+      "text": "递归版 reverseList(head.next) 返回的是「反转后子链表的新头」（即原链表尾）；把它接到 head 后面是错的。要让「head 原来的后继」指回 head——该节点在反转后的子链表里位于尾部，即 head.next.next = head，然后 head.next = null。区分两个角色：返回值（新头，最终返回它）与 head.next（原后继，负责接回头部）。",
+      "category": "链表",
+      "problem": "reverse-linked-list",
+      "date": "2026-08-06"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "28/28",
+      "runtime_ms": null,
+      "memory_bytes": 44700000,
+      "approach": "递归反转（head.next.next = head）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)递归栈",
+      "optimal": false,
+      "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}

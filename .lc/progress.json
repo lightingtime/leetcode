@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 25,
+  "current_seq": 26,
   "done": [
     {
       "seq": 1,
@@ -265,6 +265,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。"
+    },
+    {
+      "seq": 26,
+      "id": "206",
+      "title": "反转链表",
+      "slug": "reverse-linked-list",
+      "category": "链表",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。"
     }
   ],
   "error_habits": [
@@ -595,6 +606,17 @@
       ],
       "categories": [
         "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "递归反转链表接回错误：把递归返回的「新头」当作 head 的原后继去接（next.next = head），实际新头后面接的是原链表尾，head 被接到新头后面导致中间节点全部丢失；正确是让原后继（现在位于反转后子链表尾部）指回 head，即 head.next.next = head",
+      "count": 1,
+      "examples": [
+        "reverse-linked-list"
+      ],
+      "categories": [
+        "链表"
       ],
       "last_seen": "2026-08-06"
     }

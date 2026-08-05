@@ -14,14 +14,13 @@ public class LC0206_ReverseLinkedList {
 
     // ==== 提交代码开始 ====
     public ListNode reverseList(ListNode head) {
-        if (head == null) {
-            return null;
+        if (head == null || head.next == null) {
+            return head;
         }
-        ListNode next = head.next;
-        if (head != null) {
-            ListNode
-        }
-        return next;
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
     }
     // ==== 提交代码结束 ====
 
