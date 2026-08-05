@@ -62,33 +62,16 @@
         ListNode dummy = new ListNode();
         ListNode p1 = l1, p2 = l2, p = dummy;
         int next = 0;
-        while (p1 != null &amp;&amp; p2 != null) {
-            int sum = p1.val + p2.val + next;
+        while (p1 != null || p2 != null || next != 0) {
+            int a = p1 == null ? 0 : p1.val;
+            int b = p2 == null ? 0 : p2.val;
+            int sum = a + b + next;
             ListNode node = new ListNode(sum % 10);
             next = sum / 10;
             p.next = node;
             p = p.next;
-            p1 = p1.next;
-            p2 = p2.next;
-        }
-        while (p1 != null) {
-            int sum = p1.val + next;
-            ListNode node = new ListNode(sum % 10);
-            next = sum / 10;
-            p.next = node;
-            p = p.next;
-            p1 = p1.next;
-        }
-        while (p2 != null) {
-            int sum = p2.val + next;
-            ListNode node = new ListNode(sum % 10);
-            next = sum / 10;
-            p.next = node;
-            p = p.next;
-            p2 = p2.next;
-        }
-        if (next != 0) {
-            p.next = new ListNode(next);
+            p1 = p1 == null ? p1 : p1.next;
+            p2 = p2 == null ? p2 : p2.next;
         }
         return dummy.next;
     }</pre></div>
@@ -98,7 +81,7 @@
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">1569/1569</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 44.6 MB</div><div class="l">内存占用</div></div>
+      <div class="metric"><div class="v">≈ 44.5 MB</div><div class="l">内存占用</div></div>
       <div class="metric ok"><div class="v">O(m+n) · O(1)</div><div class="l">时间 · 空间</div></div>
       <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
     </div>
@@ -110,7 +93,7 @@
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 27 · add-two-numbers</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
-      <div class="quote">两数相加：dummy 哨兵 + 双指针逐位相加维护进位，一边走完后剩余链继续加进位，末位进位补节点；一次 Accepted（1569/1569）。输入链表本就是低位在前，无需反转。</div>
+      <div class="quote">两数相加：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位；一次 Accepted（1569/1569），后精简为单循环写法再次提交 Accepted。</div>
     </div>
   </section>
   <div class="foot">

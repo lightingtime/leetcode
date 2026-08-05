@@ -18,33 +18,16 @@ public class LC0002_AddTwoNumbers {
         ListNode dummy = new ListNode();
         ListNode p1 = l1, p2 = l2, p = dummy;
         int next = 0;
-        while (p1 != null && p2 != null) {
-            int sum = p1.val + p2.val + next;
+        while (p1 != null || p2 != null || next != 0) {
+            int a = p1 == null ? 0 : p1.val;
+            int b = p2 == null ? 0 : p2.val;
+            int sum = a + b + next;
             ListNode node = new ListNode(sum % 10);
             next = sum / 10;
             p.next = node;
             p = p.next;
-            p1 = p1.next;
-            p2 = p2.next;
-        }
-        while (p1 != null) {
-            int sum = p1.val + next;
-            ListNode node = new ListNode(sum % 10);
-            next = sum / 10;
-            p.next = node;
-            p = p.next;
-            p1 = p1.next;
-        }
-        while (p2 != null) {
-            int sum = p2.val + next;
-            ListNode node = new ListNode(sum % 10);
-            next = sum / 10;
-            p.next = node;
-            p = p.next;
-            p2 = p2.next;
-        }
-        if (next != 0) {
-            p.next = new ListNode(next);
+            p1 = p1 == null ? p1 : p1.next;
+            p2 = p2 == null ? p2 : p2.next;
         }
         return dummy.next;
     }
