@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 24,
+  "current_seq": 25,
   "done": [
     {
       "seq": 1,
@@ -254,6 +254,17 @@
       "firstPass": true,
       "optimal": false,
       "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。"
+    },
+    {
+      "seq": 25,
+      "id": "21",
+      "title": "合并两个有序链表",
+      "slug": "merge-two-sorted-lists",
+      "category": "链表",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。"
     }
   ],
   "error_habits": [

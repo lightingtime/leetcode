@@ -1,0 +1,38 @@
+{
+  "seq": 25,
+  "id": "21",
+  "slug": "merge-two-sorted-lists",
+  "title": "合并两个有序链表",
+  "category": "链表",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "208/208",
+  "runtime_ms": null,
+  "memory_bytes": 44784000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "迭代合并：dummy哨兵+双指针",
+  "time_complexity": "O(m+n)",
+  "space_complexity": "O(1)",
+  "notes": "合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "208/208",
+      "runtime_ms": null,
+      "memory_bytes": 44784000,
+      "approach": "迭代合并：dummy哨兵+双指针",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}
