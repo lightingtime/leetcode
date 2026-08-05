@@ -5,16 +5,17 @@
   "title": "在排序数组中查找元素的第一个和最后一个位置",
   "category": "数组与矩阵",
   "date": "2026-08-06",
-  "verdict": "",
-  "testcases": "",
+  "verdict": "Accepted",
+  "testcases": "88/88",
   "runtime_ms": null,
-  "memory_bytes": null,
-  "firstPass": false,
-  "optimal": false,
-  "approach": "",
-  "time_complexity": "",
-  "space_complexity": "",
-  "notes": "",
+  "memory_bytes": 48788000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "二分查找",
+  "time_complexity": "O(log n)",
+  "space_complexity": "O(1)",
+  "notes": "排序数组找首尾：两次二分分别找 target 与 target+1 的插入位置，O(log n)/O(1)，一次 Accepted（88/88）",
+  "code_notes": [],
   "mistakes": [
     {
       "habit": "二分下界区间端点选错：right 初始化为 nums.length-1 且 while(left<right) 在区间只剩一个元素时退出而不验证该元素是否满足条件，target 大于所有元素时返回 n-1 而非插入点 n，导致「target+1 的 first index - 1」整体差一；空数组时 right=-1 循环不执行直接返回 0，后续解引用越界",
@@ -41,7 +42,6 @@
       "count": 1
     }
   ],
-  "hints": [],
   "patterns": [
     {
       "title": "二分下界（lower bound）的区间端点：right 取 n 还是 n-1",
@@ -78,5 +78,22 @@
       "problem": "find-first-and-last-position-of-element-in-sorted-array",
       "date": "2026-08-06"
     }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "88/88",
+      "runtime_ms": null,
+      "memory_bytes": 48788000,
+      "approach": "二分查找",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "排序数组找首尾：两次二分分别找 target 与 target+1 的插入位置，O(log n)/O(1)，一次 Accepted（88/88）"
+    }
+  ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
   ]
 }

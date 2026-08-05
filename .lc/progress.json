@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 19,
+  "current_seq": 20,
   "done": [
     {
       "seq": 1,
@@ -199,6 +199,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "旋转数组二分：有序半段判定用 >=、值域归属 target、mid 命中即返回，O(log n)/O(1) 一次 Accepted（196/196）"
+    },
+    {
+      "seq": 20,
+      "id": "34",
+      "title": "在排序数组中查找元素的第一个和最后一个位置",
+      "slug": "find-first-and-last-position-of-element-in-sorted-array",
+      "category": "数组与矩阵",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "排序数组找首尾：两次二分分别找 target 与 target+1 的插入位置，O(log n)/O(1)，一次 Accepted（88/88）"
     }
   ],
   "error_habits": [

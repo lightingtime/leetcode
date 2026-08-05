@@ -17,6 +17,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 若未全部通过：回到 lc-analyze 流程，不提交。
 3. 提交：`node ".agents/skills/lc-submit/scripts/submit.js" --file <文件路径> --slug <slug>`。
    - 若 `config.json` 未配置 cookie：明确告诉用户需要手动到 leetcode.cn 提交并把结果贴回来，或按提示把浏览器 cookie 填入 `config.json`（`leetcode_session` 与 `csrf_token`）。
+     - macOS 可一键读取：先退出 Chrome/Edge，再运行 `bash tools/setup_macos_cookie.sh`（首次弹钥匙串授权提示选「始终允许」），脚本会把登录态写入 `config.json`。
    - 提交内容 = 两个 marker 之间的方法体，自动包装为 `class Solution`（设计题按原类名，脚本自动处理；必要时附带 ListNode/TreeNode 辅助类）。
 4. 按判题结果分支：
 

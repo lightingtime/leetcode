@@ -37,7 +37,7 @@ done
 
 if [ ! -f "$REPO_ROOT/.lc/config.json" ]; then
   printf '{\n  "leetcode_session": "",\n  "csrf_token": ""\n}\n' > "$REPO_ROOT/.lc/config.json"
-  echo "已生成 .lc/config.json 占位文件（请手动填入力扣 cookie）"
+  echo "已生成 .lc/config.json 占位文件（可运行 bash tools/setup_macos_cookie.sh 从浏览器读取力扣 cookie）"
 fi
 
 echo "完成。验证：ssh -T git@github.com"
