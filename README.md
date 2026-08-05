@@ -27,6 +27,13 @@
 ## macOS / Linux 使用
 
 - 本仓库脚本已改为相对仓库根目录的写法，跨平台直接可用（`clone` 到任何目录都能跑）。
+- 首次使用建议运行一次一键配置，把仓库内的 lc skill 安装到全局 `~/.codex/skills/`，
+  并生成 cookie 占位文件：
+
+  ```bash
+  bash tools/setup_macos.sh
+  ```
+
 - 若从早期快照恢复、或脚本重新出现硬编码 Windows 路径，可运行迁移脚本修正（幂等，重复执行无副作用）：
 
   ```bash
