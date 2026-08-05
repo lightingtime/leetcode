@@ -1,0 +1,52 @@
+{
+  "id": "206",
+  "slug": "reverse-linked-list",
+  "title": "Reverse Linked List",
+  "titleCn": "反转链表",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/reverse-linked-list/",
+  "tags": [
+    "Recursion",
+    "Linked List"
+  ],
+  "tagsCn": [
+    "递归",
+    "链表"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,3,4,5]"
+        }
+      ],
+      "output": "[5,4,3,2,1]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2]"
+        }
+      ],
+      "output": "[2,1]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4,5]\n[1,2]\n[]",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode reverseList(ListNode head) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-05T23:05:34.971Z"
+}

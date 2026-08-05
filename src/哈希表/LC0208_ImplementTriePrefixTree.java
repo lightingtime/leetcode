@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/implement-trie-prefix-tree/
 // 刷题日期：2026-08-03
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -18,12 +16,10 @@ public class LC0208_ImplementTriePrefixTree {
         Trie[] sub;
         boolean end = false;
         public Trie() {
-            // TODO: 补全方法体
             sub = new Trie[26];
         }
         public void insert(String word) {
             Trie cur = this;
-            // TODO: 补全方法体
             for (Character c : word.toCharArray()) {
                 if (cur.sub[c - 'a'] != null) {
                     cur = cur.sub[c - 'a'];
@@ -35,7 +31,6 @@ public class LC0208_ImplementTriePrefixTree {
             cur.end = true;
         }
         public boolean search(String word) {
-            // TODO: 补全方法体
             Trie cur = getCur(word);
             if (cur == null) return false;
             return cur.end;
@@ -54,7 +49,6 @@ public class LC0208_ImplementTriePrefixTree {
         }
 
         public boolean startsWith(String prefix) {
-            // TODO: 补全方法体
             Trie cur = getCur(prefix);
             return cur != null;
         }
@@ -82,7 +76,6 @@ public class LC0208_ImplementTriePrefixTree {
         } catch (Throwable t) { failures++; System.out.println("示例 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        // TODO: 补充单字符、相同前缀、未插入前缀等边界
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

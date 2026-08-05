@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/merge-intervals/
 // 刷题日期：2026-08-06
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0056_MergeIntervals {
 
     // ==== 提交代码开始 ====
     public int[][] merge(int[][] intervals) {
-        // TODO: 在这里实现你的解法
         Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
         List<int[]> list = new ArrayList<>();
         for (int[] interval : intervals) {

@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/intersection-of-two-linked-lists/
 // 刷题日期：2026-08-04
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;

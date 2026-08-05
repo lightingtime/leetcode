@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/search-a-2d-matrix-ii/
 // 刷题日期：2026-08-06
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0240_SearchA2dMatrixIi {
 
     // ==== 提交代码开始 ====
     public boolean searchMatrix(int[][] matrix, int target) {
-        // TODO: 在这里实现你的解法
         if (matrix.length == 0 || matrix[0].length == 0) {
             return false;
         }

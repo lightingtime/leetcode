@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/longest-substring-without-repeating-characters/
 // 刷题日期：2026-08-04
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0003_LongestSubstringWithoutRepeatingCharacters {
 
     // ==== 提交代码开始 ====
     public int lengthOfLongestSubstring(String s) {
-        // TODO: 在这里实现你的解法
         Map<Character, Integer> map = new HashMap<>();
         int max = 0;
         int start = 0;

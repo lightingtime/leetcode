@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/
 // 刷题日期：2026-08-05
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0034_FindFirstAndLastPositionOfElementInSortedArray {
 
     // ==== 提交代码开始 ====
     public int[] searchRange(int[] nums, int target) {
-        // TODO: 在这里实现你的解法
         if (nums.length == 0) {
             return new int[]{-1, -1};
         }

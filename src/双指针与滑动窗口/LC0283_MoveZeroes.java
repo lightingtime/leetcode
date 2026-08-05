@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/move-zeroes/
 // 刷题日期：2026-08-04
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0283_MoveZeroes {
 
     // ==== 提交代码开始 ====
     public void moveZeroes(int[] nums) {
-        // TODO: 在这里实现你的解法
         int unCheck = 0, check = 0;
         while (check < nums.length) {
             if (nums[unCheck] == 0) {

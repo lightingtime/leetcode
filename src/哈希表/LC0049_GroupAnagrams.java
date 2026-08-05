@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/group-anagrams/
 // 刷题日期：2026-08-03
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0049_GroupAnagrams {
 
     // ==== 提交代码开始 ====
     public List<List<String>> groupAnagrams(String[] strs) {
-        // TODO: 在这里实现你的解法
         Map<String, List<String>> map = new HashMap<>();
         for (String str : strs) {
             String pre = cal(str);
@@ -70,7 +67,6 @@ public class LC0049_GroupAnagrams {
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
         // 例如： try { if (!TestUtil.checkEq(期望, s.groupAnagrams(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
         // 若题目允许任意顺序返回（下标对 / 集合），用 TestUtil.checkEqUnordered 代替 TestUtil.checkEq
 

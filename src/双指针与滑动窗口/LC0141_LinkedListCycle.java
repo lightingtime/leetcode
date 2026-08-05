@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/linked-list-cycle/
 // 刷题日期：2026-08-03
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.time.chrono.HijrahEra;
@@ -18,7 +16,6 @@ public class LC0141_LinkedListCycle {
         if (head == null || head.next == null) {
             return false;
         }
-        // TODO: 在这里实现你的解法
         ListNode fast = head;
         ListNode slow = head;
         while (fast.next != null && fast.next.next != null) {
@@ -48,7 +45,6 @@ public class LC0141_LinkedListCycle {
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
         // 例如： try { if (!checkEq(期望, s.hasCycle(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
         // 若题目允许任意顺序返回（下标对 / 集合），用 checkEqUnordered 代替 checkEq
 

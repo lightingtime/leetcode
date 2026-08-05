@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/remove-nth-node-from-end-of-list/
 // 刷题日期：2026-08-04
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +12,6 @@ public class LC0019_RemoveNthNodeFromEndOfList {
 
     // ==== 提交代码开始 ====
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        // TODO: 在这里实现你的解法
         ListNode dummy = new ListNode(0, head);
         ListNode fast = head;
         int i = 0;
