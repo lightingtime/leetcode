@@ -158,13 +158,13 @@
   <div class="wrap">
     <div class="kicker">LEETCODE 刷题复盘 · SEQ 22</div>
     <h1>LC0238 · 除自身以外数组的乘积 <span style="color:#93c5fd">Product of Array Except Self</span></h1>
-    <div class="sub">前缀积 × 后缀积：不用除法的两趟遍历</div>
+    <div class="sub">前缀积 × 后缀积：从双数组演进到 O(1) 额外空间</div>
     <div class="badges">
       <span class="badge ok">✓ Accepted 24/24</span>
       <span class="badge medium">难度 Medium</span>
       <span class="badge tag">分类 数组与矩阵</span>
       <span class="badge plain">提交一次通过</span>
-      <span class="badge warn">进阶 O(1) 空间待优化</span>
+      <span class="badge ok">✓ 进阶 O(1) 空间达成</span>
       <span class="badge">2026-08-06</span>
     </div>
   </div>
@@ -175,34 +175,33 @@
   <section>
     <h2>我的解法</h2>
     <div class="card">
-      <p><b>思路：前缀积数组 × 后缀积数组。</b>每个位置的答案 = 左边所有数的乘积 × 右边所有数的乘积。
-      第一趟正向填 <code>leftMul[i]</code>（<code>nums[0..i-1]</code> 的累积积），第二趟反向填
-      <code>rightMul[i]</code>（<code>nums[i+1..n-1]</code> 的累积积），第三趟按位相乘写回结果。</p>
+      <p><b>思路：答案数组存左前缀积 + 滚动变量累乘右侧。</b>每个位置的答案 = 左边所有数的乘积 × 右边所有数的乘积。
+      第一趟正向把 <code>nums[0..i-1]</code> 的累积积直接写进答案数组（题目约定输出数组不计额外空间）；
+      第二趟反向用一个 <code>right</code> 滚动变量累乘 <code>nums[i+1..n-1]</code> 的积，边乘边写进答案。
+      相比初版的双数组写法，省掉了第二个数组和第三趟循环。</p>
       <p>
         <span class="chip">时间 O(n)</span>
-        <span class="chip">空间 O(n)</span>
-        <span class="chip">满足 O(n) 时间要求，进阶 O(1) 额外空间未达</span>
+        <span class="chip">额外空间 O(1)</span>
+        <span class="chip">满足 O(n) 时间与进阶 O(1) 额外空间要求</span>
       </p>
       <div class="code-wrap">
         <div class="code-head"><span>src/LC0238_ProductOfArrayExceptSelf.java</span><span>提交区</span></div>
         <pre class="code">public int[] productExceptSelf(int[] nums) {
-    int[] leftMul = new int[nums.length];
-    leftMul[0] = 1;
-    for (int i = 1; i &lt; leftMul.length; i++) {
-        leftMul[i] = leftMul[i - 1] * nums[i - 1];
+    int[] answer = new int[nums.length];
+    answer[0] = 1;
+    for (int i = 1; i &lt; answer.length; i++) {
+        answer[i] = answer[i - 1] * nums[i - 1];
     }
-    int[] rightMul = new int[nums.length];
-    rightMul[nums.length - 1] = 1;
-    for (int i = nums.length - 2; i &gt;= 0; i--) {
-        rightMul[i] = rightMul[i + 1] * nums[i + 1];
+    int right = 1;
+    for (int i = nums.length - 1; i &gt;= 0; i--) {
+        answer[i] = answer[i] * right;
+        right *= nums[i];
     }
-    for (int i = 0; i &lt; nums.length; i++) {
-        nums[i] = leftMul[i] * rightMul[i];
-    }
-    return nums;
+    return answer;
 }</pre>
       </div>
-      <p class="muted">边界语义：左/右两端用 1 作为「空乘积」的起点；含 0、多个 0、负数都能被纯乘法正确覆盖，
+      <p class="muted">边界语义：左/右两端用 1 作为「空乘积」的起点；反向循环里 <code>right</code> 先乘进答案再累乘当前元素，
+      保证第 i 步的 <code>right</code> 正好是 <code>nums[i+1..n-1]</code> 的积；含 0、多个 0、负数都能被纯乘法正确覆盖，
       不依赖除法所以没有除零问题。</p>
     </div>
   </section>
@@ -248,12 +247,27 @@
         <div class="tl-marker"></div>
         <details class="tl-details">
         <summary class="tl-head">
-          <span class="tl-title">03 · 提交：一次 Accepted，空间待优化<span class="tl-badge ok">完成</span></span>
+          <span class="tl-title">03 · 首次提交：一次 Accepted，空间 O(n)<span class="tl-badge ok">完成</span></span>
           <span class="tl-chev">▸</span>
         </summary>
         <div class="tl-body">
-          <p>提交结果：<b style="color:#16a34a">Accepted</b>，24/24 用例通过，第一次提交即成功。
+          <p>双数组版本提交：<b style="color:#16a34a">Accepted</b>，24/24 用例通过，第一次提交即成功。
           O(n) 时间达标；空间 O(n)，进阶的 O(1) 额外空间要求尚未满足。</p>
+        </div>
+        </details>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"></div>
+        <details class="tl-details">
+        <summary class="tl-head">
+          <span class="tl-title">04 · 空间优化重写：O(1) 额外空间，二次提交 Accepted<span class="tl-badge fix">已优化</span></span>
+          <span class="tl-chev">▸</span>
+        </summary>
+        <div class="tl-body">
+          <p>利用「输出数组不计额外空间」的约定，把左前缀积直接写进答案数组，右侧改用单个滚动变量
+          <code>right</code> 反向累乘，省掉第二个数组与第三趟循环。10 组本地用例全部通过后二次提交：
+          <b style="color:#16a34a">Accepted</b>，24/24 用例通过，额外空间 O(1) 达成。</p>
         </div>
         </details>
       </div>
@@ -267,24 +281,27 @@
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">24 / 24</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 60.9 MB</div><div class="l">内存占用</div></div>
-      <div class="metric warn"><div class="v">O(n) / O(n)</div><div class="l">时间 / 空间</div></div>
-      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+      <div class="metric"><div class="v">≈ 69.2 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) / O(1)</div><div class="l">时间 / 额外空间</div></div>
+      <div class="metric ok"><div class="v">2 次</div><div class="l">提交次数（均 AC）</div></div>
     </div>
 
     <div class="card">
-      <h3>算法判定：时间达标，空间未达进阶要求</h3>
+      <h3>算法判定：两版演进，最终版已是最优</h3>
       <ul class="ok-list">
-        <li><b>时间复杂度 O(n)</b>：三趟线性扫描，符合题目 O(n) 要求。</li>
-        <li><b>空间复杂度 O(n)</b>：两个辅助数组，暂未满足进阶的 O(1) 额外空间。</li>
+        <li><b>时间复杂度 O(n)</b>：两趟线性扫描，符合题目 O(n) 要求。</li>
+        <li><b>额外空间 O(1)</b>：答案数组不计额外空间，唯一额外变量是 <code>right</code>。</li>
         <li><b>正确性</b>：左右两段积互不包含自身，相乘即答案；纯乘法天然兼容 0 与负数。</li>
         <li><b>边界覆盖</b>：空输入、单元素、最短长度 2、全相同、单个/多个 0、负数、大数全部通过。</li>
-        <li><b>结论</b>：思路正确、可 AC；进阶空间优化留待重写。</li>
+        <li><b>结论</b>：与标准最优解一致（O(n) 时间 + O(1) 额外空间），无需再优化。</li>
       </ul>
-      <h3>优化方向（宽泛提示，不替写）</h3>
-      <div class="quote">题目已说明「输出数组不计入额外空间」——想想 leftMul 能不能直接借用答案数组来存；
-      右边那段积其实不需要第二个数组，反向遍历时用一个滚动变量边走边累乘即可。
-      省掉第二个数组和第三趟循环后，额外空间就是 O(1)。</div>
+      <h3>优化落地：双数组 → 答案数组 + 滚动变量</h3>
+      <ul class="ok-list">
+        <li><b>初版</b>：leftMul + rightMul 两个辅助数组，三趟遍历，额外空间 O(n)。</li>
+        <li><b>优化点 1</b>：左前缀积的累积过程落在最终答案数组上（题目允许），<code>leftMul</code> 数组消失。</li>
+        <li><b>优化点 2</b>：右侧积只需要「当前位置右边的累积值」，一个 <code>right</code> 变量反向滚动即可，<code>rightMul</code> 数组消失。</li>
+        <li><b>结果</b>：第三趟循环也随之省掉，额外空间降到 O(1)，时间仍是 O(n)。</li>
+      </ul>
     </div>
 
     <div class="card">
@@ -312,9 +329,9 @@
       <p>
         <span class="chip">seq 22 · product-of-array-except-self</span>
         <span class="chip">firstPass: true</span>
-        <span class="chip">optimal: false（空间）</span>
+        <span class="chip">optimal: true</span>
       </p>
-      <div class="quote">一句话复盘：左前缀积×右后缀积两趟遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化。</div>
+      <div class="quote">一句话复盘：答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC，达到时间与空间双最优。</div>
     </div>
   </section>
 

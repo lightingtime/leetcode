@@ -8,13 +8,13 @@
   "verdict": "Accepted",
   "testcases": "24/24",
   "runtime_ms": null,
-  "memory_bytes": 63864000,
+  "memory_bytes": 72596000,
   "firstPass": true,
-  "optimal": false,
-  "approach": "前缀积×后缀积",
+  "optimal": true,
+  "approach": "答案数组前缀积+滚动后缀",
   "time_complexity": "O(n)",
-  "space_complexity": "O(n)",
-  "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化",
+  "space_complexity": "O(1)",
+  "notes": "答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC",
   "code_notes": [],
   "mistakes": [],
   "patterns": [],
@@ -30,6 +30,18 @@
       "space_complexity": "O(n)",
       "optimal": false,
       "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化"
+    },
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "24/24",
+      "runtime_ms": null,
+      "memory_bytes": 72596000,
+      "approach": "答案数组前缀积+滚动后缀",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC"
     }
   ],
   "hints": [

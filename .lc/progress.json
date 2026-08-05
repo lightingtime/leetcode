@@ -230,8 +230,8 @@
       "category": "数组与矩阵",
       "date": "2026-08-06",
       "firstPass": true,
-      "optimal": false,
-      "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化"
+      "optimal": true,
+      "notes": "答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC"
     }
   ],
   "error_habits": [
