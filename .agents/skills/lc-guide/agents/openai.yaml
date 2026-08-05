@@ -1,0 +1,4 @@
+interface:
+  display_name: "LC 思路引导"
+  short_description: "一步步引导解题思路：先讲清名词、再规划变量、一次推进一块，不直接给答案"
+  default_prompt: "Use $lc-guide to guide me through a LeetCode problem step by step: explain terms clearly, tell me which variables to define first and what they are for, and check my code snippets one piece at a time."

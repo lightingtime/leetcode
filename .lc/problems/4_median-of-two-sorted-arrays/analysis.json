@@ -1,0 +1,53 @@
+{
+  "seq": 24,
+  "id": "4",
+  "slug": "median-of-two-sorted-arrays",
+  "title": "寻找两个正序数组的中位数",
+  "category": "数组与矩阵",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "2099/2099",
+  "runtime_ms": null,
+  "memory_bytes": 48984000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "两数组第k小（每轮排除较小侧k/2）",
+  "time_complexity": "O(log(m+n))",
+  "space_complexity": "O(1)",
+  "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。",
+  "code_notes": [
+    "重点复习：LC0004 第k小/中位数（Hard，概念与写法都卡过）——重写时①明确 k 是 1 基排名（下标 i 对应第 i+1 小）；②候选下标 p + k/2 - 1 封顶到 len-1，排除数量=候选下标-旧起点+1；③尝试进阶写法划分数组 O(log(min(m,n)))"
+  ],
+  "mistakes": [
+    {
+      "habit": "第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "第k小/中位数的排名换算：1基第k小 vs 0基下标",
+      "text": "辅助函数若以「第k小」(1基)为语义，出口特征为 nums[p + k - 1]、k==1 返回头部；调用方按0基下标算中间位置（totLen/2）直接传入会整体偏小1：奇数中位数应为 k = totLen/2 + 1，偶数应为 k = totLen/2 与 totLen/2 + 1；totLen=1 时 k=0 会越界。换算关系：0基下标 i 对应第 i+1 小。",
+      "category": "数组与矩阵",
+      "problem": "median-of-two-sorted-arrays",
+      "date": "2026-08-06"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "2099/2099",
+      "runtime_ms": null,
+      "memory_bytes": 48984000,
+      "approach": "两数组第k小（每轮排除较小侧k/2）",
+      "time_complexity": "O(log(m+n))",
+      "space_complexity": "O(1)",
+      "optimal": false,
+      "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。"
+    }
+  ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ]
+}

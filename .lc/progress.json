@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 23,
+  "current_seq": 24,
   "done": [
     {
       "seq": 1,
@@ -243,6 +243,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）"
+    },
+    {
+      "seq": 24,
+      "id": "4",
+      "title": "寻找两个正序数组的中位数",
+      "slug": "median-of-two-sorted-arrays",
+      "category": "数组与矩阵",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。"
     }
   ],
   "error_habits": [
@@ -559,6 +570,17 @@
       "count": 1,
       "examples": [
         "find-first-and-last-position-of-element-in-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）",
+      "count": 1,
+      "examples": [
+        "median-of-two-sorted-arrays"
       ],
       "categories": [
         "数组与矩阵"
