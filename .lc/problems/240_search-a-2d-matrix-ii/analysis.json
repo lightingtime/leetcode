@@ -1,0 +1,38 @@
+{
+  "seq": 23,
+  "id": "240",
+  "slug": "search-a-2d-matrix-ii",
+  "title": "搜索二维矩阵 II",
+  "category": "数组与矩阵",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "130/130",
+  "runtime_ms": null,
+  "memory_bytes": 48644000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "右上角消行消列",
+  "time_complexity": "O(m+n)",
+  "space_complexity": "O(1)",
+  "notes": "搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "runtime_ms": null,
+      "memory_bytes": 48644000,
+      "approach": "右上角消行消列",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）"
+    }
+  ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ]
+}

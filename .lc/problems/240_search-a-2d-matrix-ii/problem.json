@@ -1,0 +1,54 @@
+{
+  "id": "240",
+  "slug": "search-a-2d-matrix-ii",
+  "title": "Search a 2D Matrix II",
+  "titleCn": "搜索二维矩阵 II",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/search-a-2d-matrix-ii/",
+  "tags": [
+    "Array",
+    "Binary Search",
+    "Divide and Conquer",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "数组",
+    "二分查找",
+    "分治",
+    "矩阵"
+  ],
+  "category": "数组与矩阵",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]]"
+        },
+        {
+          "name": "target",
+          "value": "5"
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]]"
+        },
+        {
+          "name": "target",
+          "value": "20"
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]]\n5\n[[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]]\n20",
+  "javaSnippet": "class Solution {\n    public boolean searchMatrix(int[][] matrix, int target) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-05T21:05:50.101Z"
+}

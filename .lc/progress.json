@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 22,
+  "current_seq": 23,
   "done": [
     {
       "seq": 1,
@@ -232,6 +232,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC"
+    },
+    {
+      "seq": 23,
+      "id": "240",
+      "title": "搜索二维矩阵 II",
+      "slug": "search-a-2d-matrix-ii",
+      "category": "数组与矩阵",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）"
     }
   ],
   "error_habits": [
