@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 20,
+  "current_seq": 21,
   "done": [
     {
       "seq": 1,
@@ -210,6 +210,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "排序数组找首尾：两次二分分别找 target 与 target+1 的插入位置，O(log n)/O(1)，一次 Accepted（88/88）"
+    },
+    {
+      "seq": 21,
+      "id": "56",
+      "title": "合并区间",
+      "slug": "merge-intervals",
+      "category": "数组与矩阵",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "排序后单遍合并，边界覆盖完整（空/单元素/首尾相接/包含/大数）"
     }
   ],
   "error_habits": [

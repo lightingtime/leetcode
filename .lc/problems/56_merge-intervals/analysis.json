@@ -1,0 +1,38 @@
+{
+  "seq": 21,
+  "id": "56",
+  "slug": "merge-intervals",
+  "title": "合并区间",
+  "category": "数组与矩阵",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "172/172",
+  "runtime_ms": null,
+  "memory_bytes": 49832000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "排序+单遍合并",
+  "time_complexity": "O(n log n)",
+  "space_complexity": "O(n)",
+  "notes": "排序后单遍合并，边界覆盖完整（空/单元素/首尾相接/包含/大数）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "172/172",
+      "runtime_ms": null,
+      "memory_bytes": 49832000,
+      "approach": "排序+单遍合并",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "排序后单遍合并，边界覆盖完整（空/单元素/首尾相接/包含/大数）"
+    }
+  ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ]
+}

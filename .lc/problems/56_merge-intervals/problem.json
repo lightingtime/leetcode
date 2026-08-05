@@ -1,0 +1,54 @@
+{
+  "id": "56",
+  "slug": "merge-intervals",
+  "title": "Merge Intervals",
+  "titleCn": "合并区间",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/merge-intervals/",
+  "tags": [
+    "Array",
+    "Sorting",
+    "快速排序"
+  ],
+  "tagsCn": [
+    "数组",
+    "排序",
+    "快速排序"
+  ],
+  "category": "数组与矩阵",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "intervals",
+          "value": "[[1,3],[2,6],[8,10],[15,18]]"
+        }
+      ],
+      "output": "[[1,6],[8,10],[15,18]]",
+      "explain": "区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6]."
+    },
+    {
+      "inputs": [
+        {
+          "name": "intervals",
+          "value": "[[1,4],[4,5]]"
+        }
+      ],
+      "output": "[[1,5]]",
+      "explain": "区间 [1,4] 和 [4,5] 可被视为重叠区间。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "intervals",
+          "value": "[[4,7],[1,4]]"
+        }
+      ],
+      "output": "[[1,7]]",
+      "explain": "区间 [1,4] 和 [4,7] 可被视为重叠区间。"
+    }
+  ],
+  "exampleTestcases": "[[1,3],[2,6],[8,10],[15,18]]\n[[1,4],[4,5]]\n[[4,7],[1,4]]",
+  "javaSnippet": "class Solution {\n    public int[][] merge(int[][] intervals) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-05T20:11:55.795Z"
+}
