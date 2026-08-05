@@ -1,0 +1,25 @@
+{
+  "id": "146",
+  "slug": "lru-cache",
+  "title": "LRU Cache",
+  "titleCn": "LRU 缓存",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/lru-cache/",
+  "tags": [
+    "Design",
+    "Hash Table",
+    "Linked List",
+    "Doubly-Linked List"
+  ],
+  "tagsCn": [
+    "设计",
+    "哈希表",
+    "链表",
+    "双向链表"
+  ],
+  "category": "链表",
+  "examples": [],
+  "exampleTestcases": "[\"LRUCache\",\"put\",\"put\",\"get\",\"put\",\"get\",\"put\",\"get\",\"get\",\"get\"]\n[[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]",
+  "javaSnippet": "class LRUCache {\n\n    public LRUCache(int capacity) {\n        \n    }\n    \n    public int get(int key) {\n        \n    }\n    \n    public void put(int key, int value) {\n        \n    }\n}\n\n/**\n * Your LRUCache object will be instantiated and called as such:\n * LRUCache obj = new LRUCache(capacity);\n * int param_1 = obj.get(key);\n * obj.put(key,value);\n */",
+  "fetchedAt": "2026-08-05T23:55:01.672Z"
+}
