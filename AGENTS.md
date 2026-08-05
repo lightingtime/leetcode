@@ -28,7 +28,8 @@
 
 1. 选题建题走 `lc-practice`：先跑 `node ".agents/skills/lc-practice/scripts/update_state.js" next` 看进度和下一题，再拉题、生成 Java 文件；拉题需要联网时先向用户说明。
 2. 只给宽泛解题方向（从 `progress.json` 的 `category_hints` 取当前分类提示），不要替用户写题解或直接给出正确代码。
-3. 用户补全 `// ==== 提交代码开始 ====` 与 `// ==== 提交代码结束 ====` 之间的方法体。
+3. 拉题展示后先让用户口述思路（lc-practice 第 5 步）：Codex 评估可行性并提示边界，不先给方向、不写代码。
+4. 用户补全 `// ==== 提交代码开始 ====` 与 `// ==== 提交代码结束 ====` 之间的方法体。
 4. 本地测试：`node ".agents/skills/lc-practice/scripts/run_tests.js" src/<文件>.java`，或让用户在 IDEA 里直接跑 `main`。
 5. 测试失败 → 用 `lc-analyze` 分析；测试通过 → 用 `lc-submit` 提交（提交前先确认本地通过）。
 6. 每题「已完成」状态只在 `lc-submit` 确认 Accepted 后写入 `progress.json`；`lc-practice` 不写 done。

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-06",
-  "current_seq": 26,
+  "current_seq": 27,
   "done": [
     {
       "seq": 1,
@@ -276,6 +276,17 @@
       "firstPass": true,
       "optimal": false,
       "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。"
+    },
+    {
+      "seq": 27,
+      "id": "2",
+      "title": "两数相加",
+      "slug": "add-two-numbers",
+      "category": "链表",
+      "date": "2026-08-06",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "两数相加：dummy 哨兵 + 双指针逐位相加维护进位，一边走完后剩余链继续加进位，末位进位补节点；一次 Accepted（1569/1569）。输入链表本就是低位在前，无需反转。"
     }
   ],
   "error_habits": [

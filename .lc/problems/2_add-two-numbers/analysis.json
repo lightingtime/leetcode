@@ -1,0 +1,38 @@
+{
+  "seq": 27,
+  "id": "2",
+  "slug": "add-two-numbers",
+  "title": "两数相加",
+  "category": "链表",
+  "date": "2026-08-06",
+  "verdict": "Accepted",
+  "testcases": "1569/1569",
+  "runtime_ms": null,
+  "memory_bytes": 46744000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "dummy+双指针逐位相加维护进位",
+  "time_complexity": "O(m+n)",
+  "space_complexity": "O(1)",
+  "notes": "两数相加：dummy 哨兵 + 双指针逐位相加维护进位，一边走完后剩余链继续加进位，末位进位补节点；一次 Accepted（1569/1569）。输入链表本就是低位在前，无需反转。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-06",
+      "verdict": "Accepted",
+      "testcases": "1569/1569",
+      "runtime_ms": null,
+      "memory_bytes": 46744000,
+      "approach": "dummy+双指针逐位相加维护进位",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "两数相加：dummy 哨兵 + 双指针逐位相加维护进位，一边走完后剩余链继续加进位，末位进位补节点；一次 Accepted（1569/1569）。输入链表本就是低位在前，无需反转。"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}

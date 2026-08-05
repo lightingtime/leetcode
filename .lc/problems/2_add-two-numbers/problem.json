@@ -1,0 +1,66 @@
+{
+  "id": "2",
+  "slug": "add-two-numbers",
+  "title": "Add Two Numbers",
+  "titleCn": "两数相加",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/add-two-numbers/",
+  "tags": [
+    "Recursion",
+    "Linked List",
+    "Math"
+  ],
+  "tagsCn": [
+    "递归",
+    "链表",
+    "数学"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "l1",
+          "value": "[2,4,3]"
+        },
+        {
+          "name": "l2",
+          "value": "[5,6,4]"
+        }
+      ],
+      "output": "[7,0,8]",
+      "explain": "342 + 465 = 807."
+    },
+    {
+      "inputs": [
+        {
+          "name": "l1",
+          "value": "[0]"
+        },
+        {
+          "name": "l2",
+          "value": "[0]"
+        }
+      ],
+      "output": "[0]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "l1",
+          "value": "[9,9,9,9,9,9,9]"
+        },
+        {
+          "name": "l2",
+          "value": "[9,9,9,9]"
+        }
+      ],
+      "output": "[8,9,9,9,0,0,0,1]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[2,4,3]\n[5,6,4]\n[0]\n[0]\n[9,9,9,9,9,9,9]\n[9,9,9,9]",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-05T23:36:09.353Z"
+}
