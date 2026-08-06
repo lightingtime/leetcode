@@ -1,0 +1,38 @@
+{
+  "seq": 33,
+  "id": "215",
+  "slug": "kth-largest-element-in-an-array",
+  "title": "数组中的第K个最大元素",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "46/46",
+  "runtime_ms": null,
+  "memory_bytes": 76524000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "快速选择（Hoare 分区）",
+  "time_complexity": "O(n) 平均",
+  "space_complexity": "O(log n)",
+  "notes": "快选（Hoare 双指针分区）：目标下标 n-k，每次分区后只递归目标所在半边，平均 O(n)。第一版死循环（i/j 未每轮重置、无左右边界、比较基准 nums[position] 被交换覆盖）分析后重写；本地 9 组全绿，力扣 46/46 一次 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "46/46",
+      "runtime_ms": null,
+      "memory_bytes": 76524000,
+      "approach": "快速选择（Hoare 分区）",
+      "time_complexity": "O(n) 平均",
+      "space_complexity": "O(log n)",
+      "optimal": true,
+      "notes": "快选（Hoare 双指针分区）：目标下标 n-k，每次分区后只递归目标所在半边，平均 O(n)。第一版死循环（i/j 未每轮重置、无左右边界、比较基准 nums[position] 被交换覆盖）分析后重写；本地 9 组全绿，力扣 46/46 一次 Accepted"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}

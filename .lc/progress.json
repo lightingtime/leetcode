@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 32,
+  "current_seq": 33,
   "done": [
     {
       "seq": 1,
@@ -342,6 +342,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted"
+    },
+    {
+      "seq": 33,
+      "id": "215",
+      "title": "数组中的第K个最大元素",
+      "slug": "kth-largest-element-in-an-array",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-07",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "快选（Hoare 双指针分区）：目标下标 n-k，每次分区后只递归目标所在半边，平均 O(n)。第一版死循环（i/j 未每轮重置、无左右边界、比较基准 nums[position] 被交换覆盖）分析后重写；本地 9 组全绿，力扣 46/46 一次 Accepted"
     }
   ],
   "error_habits": [
