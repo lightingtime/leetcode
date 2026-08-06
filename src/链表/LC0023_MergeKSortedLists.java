@@ -5,11 +5,7 @@
 // 刷题日期：2026-08-07
 // ============================================================
 
-import java.awt.*;
-import java.io.FileFilter;
 import java.util.*;
-import java.util.List;
-import java.util.logging.Level;
 
 public class LC0023_MergeKSortedLists {
 
@@ -41,15 +37,13 @@ public class LC0023_MergeKSortedLists {
         ListNode dummy = new ListNode();
         ListNode p1 = first, p2 = second, p = dummy;
         while (p1 != null && p2 != null) {
-            ListNode node = new ListNode();
             if (p1.val > p2.val) {
-                node.val = p2.val;
+                p.next = p2;
                 p2 = p2.next;
             } else {
-                node.val = p1.val;
+                p.next = p1;
                 p1 = p1.next;
             }
-            p.next = node;
             p = p.next;
         }
         if (p1 == null) {

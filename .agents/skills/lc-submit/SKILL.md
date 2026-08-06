@@ -28,6 +28,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 若不够最优：只提示宽泛的最优思路（如「这题可以用双指针把 O(n²) 降到 O(n)」「应该想到单调栈」），让用户自己重写后再次提交；不替用户写。
    - 若已最优：点评优点，简要说明为什么这个复杂度已是下限。
    - 思路已最优但代码写法可微调时（如冗余变量、可合并/简化的循环、重复表达式、残留 TODO 注释），在复盘与汇报中具体指出可优化点（只提示，不替用户重写）。**每次 Accepted 汇报前必做「精简检查」**：合并循环/三元简化、去冗余变量、清残留 TODO 注释，发现任何一项都要在汇报中指出。
+   - 精简检查后的处理约定（用户明确要求）：用户按提示改动后，只需本地 `main` 测试通过即视为完成，**不要求再次提交力扣**；无用 import 等文件卫生问题由 Codex 在提交收尾时直接清理，不写进复盘报告。
    - 记录完成：`node ".agents/skills/lc-practice/scripts/update_state.js" done --seq <seq> --firstPass <是否一次通过> --optimal <是否最优> --notes "<一句话复盘>" --verdict Accepted --testcases 65/65 --memory <内存字节> --approach "解法名" --time O(n) --space O(n)`。
    - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，`update_state.js analysis --slug <slug>` 可查看）。
   - 提交历史规则：解法不同才追加到 analysis.json 的 `submissions`；相似解法（仅代码微调）只保留最优解（按 optimal 与内存比较，`done` 自动处理）；复盘报告体现不同解法的提交。
@@ -36,7 +37,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 生成复盘报告（每次 Accepted 必做，无需用户提醒）：按 `reviews/{分类}/LC{题号}_{题名}_Review.html` 的既有格式（参考 `reviews/哈希表/LC0001_TwoSum_Review.html` 等），基于 `analysis.json` 与 `progress.json` 生成本期复盘页，内容包含「我的解法 / 解题过程 / 分析结果（判题指标、最优性、分类提醒、完成记录）」；报告存入当前题分类对应的 `reviews/{分类}/` 子目录（分类名中的 `/` 等非法字符替换为 `-`），页内相对链接按子目录层级写（`../../src/...`、`../../index.html`）。
      解题过程时间线只记录真实环节（如 独立实现 → 本地测试 → 提交 Accepted），**不包含「选题建题」**。
    - 报告内容只记录与算法学习相关的东西：解题思路、踩坑与修复、判题结果、错误习惯、复杂度分析。工具/环境问题（提交脚本 bug、cookie、IDE 配置、判题包装、编译包装等）**一律不写进报告**，也不出现在 analysis.json / progress.json 的笔记文字里。
-   - 收尾（每次 Accepted 必做）：先把本题源码归档到分类目录 `git mv src/LC{题号}_{题名}.java src/{分类}/LC{题号}_{题名}.java`（与 `reviews/{分类}/` 一致），确认 `main` 测试在归档路径仍通过；再重新运行 `node ".agents/skills/lc-practice/scripts/build_site.js"` 让主页复盘列表指向新报告；随后用 git add + commit 提交当前分支的全部改动，至少包含：归档后的本题源码 `src/{分类}/LC{题号}_{题名}.java`、`.lc/progress.json`、`.lc/problems/{题号}_{slug}/analysis.json`、`reviews/index.html` 与本期复盘报告，其余相关状态文件一并提交，不留未提交的工作区改动；汇报时把复盘报告链接主动发给用户。
+   - 收尾（每次 Accepted 必做）：先把本题源码归档到分类目录 `git mv src/LC{题号}_{题名}.java src/{分类}/LC{题号}_{题名}.java`（与 `reviews/{分类}/` 一致），确认 `main` 测试在归档路径仍通过；提交前清理文件内无用 import（只删 import 行，不动逻辑）；再重新运行 `node ".agents/skills/lc-practice/scripts/build_site.js"` 让主页复盘列表指向新报告；随后用 git add + commit 提交当前分支的全部改动，至少包含：归档后的本题源码 `src/{分类}/LC{题号}_{题名}.java`、`.lc/progress.json`、`.lc/problems/{题号}_{slug}/analysis.json`、`reviews/index.html` 与本期复盘报告，其余相关状态文件一并提交，不留未提交的工作区改动；汇报时把复盘报告链接主动发给用户。
    - 类似题型提醒：读取 `progress.json` 的 `category_hints`，把当前分类的宽泛思路再强调一遍，例如「以后遇到同类题，应该先想到双指针/单调栈/DP 状态定义」。
 
    **Wrong Answer / Time Limit Exceeded / Runtime Error / Compile Error**
