@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 37,
+  "current_seq": 38,
   "done": [
     {
       "seq": 1,
@@ -397,6 +397,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）"
+    },
+    {
+      "seq": 38,
+      "id": "98",
+      "title": "验证二叉搜索树",
+      "slug": "validate-binary-search-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-07",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "递归上下界校验：左子树收紧 upper 并继承 lower，右子树收紧 lower 并继承 upper（曾把未收紧侧重置为 ±∞ 丢失祖先约束，修正）；long 防 int 边界。10 组本地全绿，力扣 86/86 Accepted"
     }
   ],
   "error_habits": [
@@ -804,6 +815,17 @@
       ],
       "categories": [
         "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "BST 校验递归：只收紧靠近根的一侧边界，另一侧重置为 ±∞，导致祖先约束丢失（如右子树的左子树没再和根比较），误判为合法",
+      "count": 1,
+      "examples": [
+        "validate-binary-search-tree"
+      ],
+      "categories": [
+        "树与二叉树"
       ],
       "last_seen": "2026-08-07"
     }

@@ -1,0 +1,51 @@
+{
+  "seq": 38,
+  "id": "98",
+  "slug": "validate-binary-search-tree",
+  "title": "验证二叉搜索树",
+  "category": "树与二叉树",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "86/86",
+  "runtime_ms": null,
+  "memory_bytes": 45420000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "递归上下界",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(树高)",
+  "notes": "递归上下界校验：左子树收紧 upper 并继承 lower，右子树收紧 lower 并继承 upper（曾把未收紧侧重置为 ±∞ 丢失祖先约束，修正）；long 防 int 边界。10 组本地全绿，力扣 86/86 Accepted",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "BST 校验递归：只收紧靠近根的一侧边界，另一侧重置为 ±∞，导致祖先约束丢失（如右子树的左子树没再和根比较），误判为合法",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "BST 校验：上下界递归时，未收紧的一侧要继承而非重置为 ±∞",
+      "text": "验证 BST 的递归 helper 带 (node, upper, lower)：左子树传 (left, node.val, lower)，右子树传 (right, upper, node.val)。常见错误是把没变化的一侧重置成 Long.MIN_VALUE/MAX_VALUE，祖先约束丢失。出处：LC0098 validate-binary-search-tree。",
+      "category": "树与二叉树",
+      "problem": "validate-binary-search-tree",
+      "date": "2026-08-07"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "86/86",
+      "runtime_ms": null,
+      "memory_bytes": 45420000,
+      "approach": "递归上下界",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(树高)",
+      "optimal": true,
+      "notes": "递归上下界校验：左子树收紧 upper 并继承 lower，右子树收紧 lower 并继承 upper（曾把未收紧侧重置为 ±∞ 丢失祖先约束，修正）；long 防 int 边界。10 组本地全绿，力扣 86/86 Accepted"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
