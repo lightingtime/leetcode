@@ -20,11 +20,11 @@ public class LC0347_TopKFrequentElements {
             list.add(new Node(value, freq));
         });
         quickSelect(list, 0, list.size() - 1, list.size() - k);
-        List<Integer> ans = new ArrayList<>();
-        for (int i = list.size() - k; i < list.size(); i++) {
-            ans.add(list.get(i).value);
+        int[] ans = new int[k];
+        for (int i = 0; i < k; i++) {
+            ans[i] = list.get(list.size() - k + i).value;
         }
-        return ans.stream().mapToInt(Integer::intValue).toArray();
+        return ans;
     }
 
     private void quickSelect(List<Node> list, int l, int r, int k) {
