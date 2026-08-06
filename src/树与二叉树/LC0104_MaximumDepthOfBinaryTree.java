@@ -14,9 +14,6 @@ public class LC0104_MaximumDepthOfBinaryTree {
         if (root == null) {
             return 0;
         }
-        if (root.left == null && root.right == null) {
-            return 1;
-        }
         return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
     }
     // ==== 提交代码结束 ====
