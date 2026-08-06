@@ -1,0 +1,58 @@
+{
+  "id": "23",
+  "slug": "merge-k-sorted-lists",
+  "title": "Merge k Sorted Lists",
+  "titleCn": "合并 K 个升序链表",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/merge-k-sorted-lists/",
+  "tags": [
+    "Linked List",
+    "Divide and Conquer",
+    "Heap (Priority Queue)",
+    "Merge Sort",
+    "锦标赛排序"
+  ],
+  "tagsCn": [
+    "链表",
+    "分治",
+    "堆（优先队列）",
+    "归并排序",
+    "锦标赛排序"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "lists",
+          "value": "[[1,4,5],[1,3,4],[2,6]]"
+        }
+      ],
+      "output": "[1,1,2,3,4,4,5,6]",
+      "explain": "链表数组如下："
+    },
+    {
+      "inputs": [
+        {
+          "name": "lists",
+          "value": "[]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "lists",
+          "value": "[[]]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[1,4,5],[1,3,4],[2,6]]\n[]\n[[]]",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode mergeKLists(ListNode[] lists) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-06T18:34:40.774Z"
+}
