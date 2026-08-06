@@ -3,9 +3,6 @@
 // 难度：Hard | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/largest-rectangle-in-histogram/
 // 刷题日期：2026-08-07
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,8 +11,20 @@ public class LC0084_LargestRectangleInHistogram {
 
     // ==== 提交代码开始 ====
     public int largestRectangleArea(int[] heights) {
-        // TODO: 在这里实现你的解法
-        return 0;
+        int[] newHeights = new int[heights.length + 2];
+        System.arraycopy(heights, 0, newHeights, 1, heights.length);
+        heights = newHeights;
+        int max = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {
+                int height = heights[stack.pollLast()];
+                int width = i - stack.peekLast() - 1;
+                max = Math.max(max, height * width);
+            }
+            stack.offerLast(i);
+        }
+        return max;
     }
     // ==== 提交代码结束 ====
 

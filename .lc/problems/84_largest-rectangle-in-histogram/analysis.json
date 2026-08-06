@@ -1,0 +1,38 @@
+{
+  "seq": 35,
+  "id": "84",
+  "slug": "largest-rectangle-in-histogram",
+  "title": "柱状图中最大的矩形",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "99/99",
+  "runtime_ms": null,
+  "memory_bytes": 89592000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "单调递增栈+哨兵",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "单调递增栈 + 左右高度0哨兵：弹栈结算（左边界=新栈顶，右边界=i），O(n)。思路从朴素 O(n²)（每根柱子左右扫更矮）引导到单调栈；10 组本地用例一次全过，力扣 99/99 一次 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "99/99",
+      "runtime_ms": null,
+      "memory_bytes": 89592000,
+      "approach": "单调递增栈+哨兵",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "单调递增栈 + 左右高度0哨兵：弹栈结算（左边界=新栈顶，右边界=i），O(n)。思路从朴素 O(n²)（每根柱子左右扫更矮）引导到单调栈；10 组本地用例一次全过，力扣 99/99 一次 Accepted"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}
