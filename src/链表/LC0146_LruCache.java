@@ -59,17 +59,17 @@ public class LC0146_LruCache {
                 cutNode(cur);
                 moveToHead(cur);
             } else {
-                if (this.size == this.capacity) {
-                    map.remove(tail.pre.key);
-                    cutNode(tail.pre);
-                    size--;
-                }
                 DoubleLinkNode cur = new DoubleLinkNode();
                 moveToHead(cur);
                 cur.key = key;
                 cur.value = value;
                 map.put(key, cur);
                 size++;
+                if (this.size > this.capacity) {
+                    map.remove(tail.pre.key);
+                    cutNode(tail.pre);
+                    size--;
+                }
             }
         }
 
