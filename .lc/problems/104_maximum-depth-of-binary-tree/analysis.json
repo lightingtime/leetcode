@@ -1,0 +1,38 @@
+{
+  "seq": 37,
+  "id": "104",
+  "slug": "maximum-depth-of-binary-tree",
+  "title": "二叉树的最大深度",
+  "category": "树与二叉树",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "40/40",
+  "runtime_ms": null,
+  "memory_bytes": 47820000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "递归 DFS",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(树高)",
+  "notes": "递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "40/40",
+      "runtime_ms": null,
+      "memory_bytes": 47820000,
+      "approach": "递归 DFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(树高)",
+      "optimal": true,
+      "notes": "递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}

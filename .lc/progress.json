@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 36,
+  "current_seq": 37,
   "done": [
     {
       "seq": 1,
@@ -386,6 +386,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted"
+    },
+    {
+      "seq": 37,
+      "id": "104",
+      "title": "二叉树的最大深度",
+      "slug": "maximum-depth-of-binary-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-07",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）"
     }
   ],
   "error_habits": [
