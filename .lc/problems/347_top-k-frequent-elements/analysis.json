@@ -15,7 +15,9 @@
   "time_complexity": "O(n) 平均",
   "space_complexity": "O(m)",
   "notes": "HashMap 统计频次 + 快选按 freq 找第 m-k 个：目标下标 m-k，结果取 [m-k, m-1]；曾把取结果下标写反成 [0,k-1] 已修；测试用例曾有平局违反唯一性约束已改。本地 9 组全绿，力扣 25/25 一次 Accepted，满足进阶优于 O(n log n)",
-  "code_notes": [],
+  "code_notes": [
+    "复习提醒：LC347 除已实现的哈希表+快选外，可试桶排序/计数线性做法（O(n)，题解链接 https://leetcode.cn/problems/top-k-frequent-elements/solutions/3655287/tong-pai-xu-on-xian-xing-zuo-fa-pythonja-oqq2/），复习时重写一次"
+  ],
   "mistakes": [],
   "patterns": [],
   "submissions": [
