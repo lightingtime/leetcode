@@ -11,9 +11,6 @@ public class LC0098_ValidateBinarySearchTree {
 
     // ==== 提交代码开始 ====
     public boolean isValidBST(TreeNode root) {
-        if (root == null) {
-            return false;
-        }
         return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);
     }
 
