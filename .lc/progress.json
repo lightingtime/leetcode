@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 30,
+  "current_seq": 31,
   "done": [
     {
       "seq": 1,
@@ -320,6 +320,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "栈匹配：遇到左括号把对应右括号压栈，遇右括号弹栈比对，最后栈空即有效；O(n)/O(n)。12 组本地用例一次全过，力扣 103/103 一次 Accepted"
+    },
+    {
+      "seq": 31,
+      "id": "94",
+      "title": "二叉树的中序遍历",
+      "slug": "binary-tree-inorder-traversal",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-07",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现"
     }
   ],
   "error_habits": [
@@ -683,6 +694,17 @@
       ],
       "categories": [
         "链表"
+      ],
+      "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败",
+      "count": 1,
+      "examples": [
+        "binary-tree-inorder-traversal"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
       ],
       "last_seen": "2026-08-07"
     }

@@ -1,0 +1,51 @@
+{
+  "seq": 31,
+  "id": "94",
+  "slug": "binary-tree-inorder-traversal",
+  "title": "二叉树的中序遍历",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "71/71",
+  "runtime_ms": null,
+  "memory_bytes": 43428000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "递归 DFS（中序）",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "递归收集结果：用局部列表+helper 参数，避免实例字段跨调用累积",
+      "text": "递归/回溯收集结果的列表如果是实例字段，多次调用（本地多组测试）会串台；正确做法是入口方法内 new 列表并传给递归 helper 收集，或入口先 clear。声明必须放在提交区内。出处：LC0094 binary-tree-inorder-traversal。",
+      "category": "栈、队列与优先队列",
+      "problem": "binary-tree-inorder-traversal",
+      "date": "2026-08-07"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "71/71",
+      "runtime_ms": null,
+      "memory_bytes": 43428000,
+      "approach": "递归 DFS（中序）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}
