@@ -1,7 +1,7 @@
 // LC 刷题状态管理：进度查询 / 标记完成 / 记录错误习惯 / 分类提示
 // 用法:
 //   node update_state.js next
-//   node update_state.js done --seq 5 --firstPass true --optimal false --notes "..." [--verdict Accepted --testcases 65/65 --memory 47308000 --approach "单遍哈希表" --time O(n) --space O(n)]
+//   node update_state.js done --seq 5 --firstPass true --optimal false --notes "..." [--verdict Accepted --testcases 65/65 --memory 47308000 --approach "单遍哈希表" --time O(n) --space O(n) --code "解法提交区代码（多写法时保存每个解法的代码）"]
 //   node update_state.js habit add --text "..." [--problem slug] [--category cat]
 //   node update_state.js habit list
 //   node update_state.js pattern add --slug S --title "套路名" --text "套路总结" [--category cat]
@@ -170,6 +170,7 @@ if (cmd === 'next') {
   };
   // 提交历史：解法不同则追加；相似解法（仅代码微调）只保留最优解
   if (analysis.verdict === 'Accepted') {
+    const codeArg = arg('--code', '');
     const sub = {
       date,
       verdict: analysis.verdict,
@@ -182,12 +183,13 @@ if (cmd === 'next') {
       optimal: analysis.optimal,
       notes: analysis.notes
     };
+    if (codeArg) sub.code = codeArg;
     const sameApproach = analysis.submissions.find(s => s.approach === sub.approach);
     if (sameApproach) {
       const better = (sub.optimal && !sameApproach.optimal) ||
         (sub.optimal === sameApproach.optimal && sub.memory_bytes != null &&
           (sameApproach.memory_bytes == null || sub.memory_bytes < sameApproach.memory_bytes));
-      if (better) Object.assign(sameApproach, sub);
+      if (better || codeArg) Object.assign(sameApproach, sub);
     } else {
       analysis.submissions.push(sub);
     }

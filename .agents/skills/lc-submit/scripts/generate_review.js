@@ -53,6 +53,29 @@ tlItems.push(
   `<div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">0${mistakes.length + 1} · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div>`,
   `<div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">0${mistakes.length + 2} · 提交<span class="tl-badge ok">${a.verdict || 'Accepted'}</span></span><p>${esc(testcases)} 用例${a.firstPass ? '一次通过' : ''}。</p></div></div>`);
 
+const fmtMem = b => b != null ? `≈ ${(b / 1048576).toFixed(1)} MB` : '—';
+const codeBlock = (title, c) => c ? `<div class="code-wrap"><div class="code-head"><span>${esc(title)}</span><span>提交区</span></div><pre>${esc(c)}</pre></div>` : '';
+function renderSolutions() {
+  const subs = Array.isArray(a.submissions) && a.submissions.length ? a.submissions : null;
+  if (!subs) {
+    return `<div class="card">
+    <p><b>思路：</b>${esc(a.approach || '')}</p>
+    <p><span class="chip">时间 ${esc(a.time_complexity || '—')}</span><span class="chip">空间 ${esc(a.space_complexity || '—')}</span></p>
+    ${codeBlock(a.approach || fileBase, code)}
+  </div>`;
+  }
+  return subs.map((s, i) => {
+    const sCode = s.code || (i === subs.length - 1 ? code : '');
+    const sLabel = s.code ? `${fileBase}.java · ${s.approach}` : path.relative(ROOT, srcFile).replace(/\\/g, '/');
+    return `<div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 ${i + 1} · ${esc(s.approach || '')}</h3>
+    <p><span class="chip">时间 ${esc(s.time_complexity || '—')}</span><span class="chip">空间 ${esc(s.space_complexity || '—')}</span><span class="chip">内存 ${fmtMem(s.memory_bytes)}</span><span class="chip">用例 ${esc(s.testcases || '—')}</span></p>
+    ${codeBlock(sLabel, sCode)}
+    ${s.notes ? `<p class="muted">${esc(s.notes)}</p>` : ''}
+  </div>`;
+  }).join('');
+}
+
 const html = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -109,11 +132,7 @@ const html = `<!DOCTYPE html>
   </div>
 </div></div>
 <div class="wrap">
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>${esc(a.approach || '')}</p>
-    <p><span class="chip">时间 ${esc(a.time_complexity || '—')}</span><span class="chip">空间 ${esc(a.space_complexity || '—')}</span></p>
-    ${code ? `<div class="code-wrap"><div class="code-head"><span>${esc(path.relative(ROOT, srcFile).replace(/\\/g, '/'))}</span><span>提交区</span></div><pre>${esc(code)}</pre></div>` : ''}
-  </div></section>
+  <section><h2>我的解法</h2>${renderSolutions()}</section>
   <section><h2>解题过程</h2><div class="tl">${tlItems.join('')}</div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
