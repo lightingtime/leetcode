@@ -46,12 +46,7 @@ public class LC0023_MergeKSortedLists {
             }
             p = p.next;
         }
-        if (p1 == null) {
-            p.next = p2;
-        }
-        if (p2 == null) {
-            p.next = p1;
-        }
+        p.next = p1 == null ? p2 : p1;
         return dummy.next;
     }
 
