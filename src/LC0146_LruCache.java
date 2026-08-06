@@ -3,9 +3,6 @@
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/lru-cache/
 // 刷题日期：2026-08-06
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -15,17 +12,81 @@ public class LC0146_LruCache {
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 LRUCache 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class LRUCache {
+        Map<Integer, DoubleLinkNode> map;
+        DoubleLinkNode head;
+        DoubleLinkNode tail;
+        int size;
+        int capacity;
         public LRUCache(int capacity) {
-            // TODO: 补全方法体
-            
+            this.capacity = capacity;
+            size = 0;
+            map = new HashMap<>();
+            head = new DoubleLinkNode();
+            tail = new DoubleLinkNode();
+            head.next = tail;
+            tail.pre = head;
         }
         public int get(int key) {
-            // TODO: 补全方法体
-            return 0;
+            if (!map.containsKey(key)) {
+                return -1;
+            }
+            DoubleLinkNode cur = map.get(key);
+            cutNode(cur);
+            moveToHead(cur);
+            return cur.value;
         }
+
+        private void cutNode(DoubleLinkNode cur) {
+            if (cur.value == null) {
+                return;
+            }
+            cur.pre.next = cur.next;
+            cur.next.pre = cur.pre;
+        }
+
+        private void moveToHead(DoubleLinkNode cur) {
+            cur.pre = head;
+            cur.next = head.next;
+            head.next.pre = cur;
+            head.next = cur;
+        }
+
         public void put(int key, int value) {
-            // TODO: 补全方法体
-            
+            if (map.containsKey(key)) {
+                DoubleLinkNode cur = map.get(key);
+                cur.key = key;
+                cur.value = value;
+                cutNode(cur);
+                moveToHead(cur);
+            } else {
+                if (this.size == this.capacity) {
+                    map.remove(tail.pre.key);
+                    cutNode(tail.pre);
+                    size--;
+                }
+                DoubleLinkNode cur = new DoubleLinkNode();
+                moveToHead(cur);
+                cur.key = key;
+                cur.value = value;
+                map.put(key, cur);
+                size++;
+            }
+        }
+
+        class DoubleLinkNode {
+            DoubleLinkNode next;
+            DoubleLinkNode pre;
+            Integer key;
+            Integer value;
+
+            public DoubleLinkNode() {
+            }
+
+            public DoubleLinkNode(DoubleLinkNode next, DoubleLinkNode pre, int value) {
+                this.next = next;
+                this.pre = pre;
+                this.value = value;
+            }
         }
     }
     // ==== 提交代码结束 ====
@@ -63,8 +124,8 @@ public class LC0146_LruCache {
             LRUCache c = new LRUCache(2);
             if (c.get(9) != -1) failures++; // 空缓存 get
             c.put(1, 1);
-            c.get(1); // get 刷新：1 变成最近使用
             c.put(2, 2);
+            c.get(1); // get 刷新：1 变成最近使用
             c.put(3, 3); // 应逐出 2（1 刚被刷新）
             if (c.get(2) != -1) failures++;
             if (c.get(1) != 1) failures++;
@@ -73,9 +134,9 @@ public class LC0146_LruCache {
         try {
             LRUCache c = new LRUCache(2);
             c.put(1, 1);
-            c.put(1, 2); // 更新已存在 key，视为使用
-            if (c.get(1) != 2) failures++;
             c.put(2, 2);
+            c.put(1, 2); // 更新已存在 key，视为使用（1 变最近）
+            if (c.get(1) != 2) failures++;
             c.put(3, 3); // 应逐出 2（1 刚被更新）
             if (c.get(1) != 2) failures++;
             if (c.get(2) != -1) failures++;

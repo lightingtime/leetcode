@@ -1,0 +1,55 @@
+{
+  "seq": 28,
+  "id": "146",
+  "slug": "lru-cache",
+  "title": "LRU 缓存",
+  "category": "链表",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "25/25",
+  "runtime_ms": null,
+  "memory_bytes": 135280000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "哈希表+双向链表",
+  "time_complexity": "O(1)",
+  "space_complexity": "O(n)",
+  "notes": "哈希表+双向链表标准设计：插入要 map.put+挂链+size++，淘汰要 map.remove+断链+size--，三者同步；本地三轮修复（map.put 遗漏、普通插入分支为空、size 未维护）后全绿，力扣 25/25 Accepted（O(1) 时间/O(capacity) 空间，已最优）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "设计题双结构同步遗漏：put 新 key 只操作链表、漏掉 map.put（get 查不到新 key），且 size 从未自增/自减导致 size==capacity 永不成立、淘汰永不触发；淘汰时也未 map.remove 被逐出 key（节点未存 key 无从删除）",
+      "count": 1
+    },
+    {
+      "habit": "条件分支覆盖不全：容量未满的普通插入 else 路径完全为空（没建节点/没挂链/没 map.put），只写了容量已满时的淘汰分支，导致所有 put 新 key 都无效",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "LRU 哈希表+双向链表：两结构必须同步增删，哨兵判身份不判值",
+      "text": "map 负责 O(1) 定位节点、链表维护使用顺序，两者必须同步：插入新 key 要 map.put(key,node) 并 size++；淘汰时 cut 掉尾节点后，必须用该节点存的 key 做 map.remove 并 size--；get/更新命中时先 cut 再 moveToHead 刷新顺序。哨兵节点用 cur==head || cur==tail 判身份，不要用 value==null 猜。出处：LC0146 lru-cache。",
+      "category": "链表",
+      "problem": "lru-cache",
+      "date": "2026-08-07"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "25/25",
+      "runtime_ms": null,
+      "memory_bytes": 135280000,
+      "approach": "哈希表+双向链表",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "哈希表+双向链表标准设计：插入要 map.put+挂链+size++，淘汰要 map.remove+断链+size--，三者同步；本地三轮修复（map.put 遗漏、普通插入分支为空、size 未维护）后全绿，力扣 25/25 Accepted（O(1) 时间/O(capacity) 空间，已最优）"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}

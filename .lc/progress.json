@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-06",
-  "current_seq": 27,
+  "updated": "2026-08-07",
+  "current_seq": 28,
   "done": [
     {
       "seq": 1,
@@ -287,6 +287,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "两数相加：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位；一次 Accepted（1569/1569），后精简为单循环并清理占位注释后再次 Accepted。"
+    },
+    {
+      "seq": 28,
+      "id": "146",
+      "title": "LRU 缓存",
+      "slug": "lru-cache",
+      "category": "链表",
+      "date": "2026-08-07",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "哈希表+双向链表标准设计：插入要 map.put+挂链+size++，淘汰要 map.remove+断链+size--，三者同步；本地三轮修复（map.put 遗漏、普通插入分支为空、size 未维护）后全绿，力扣 25/25 Accepted（O(1) 时间/O(capacity) 空间，已最优）"
     }
   ],
   "error_habits": [
@@ -630,6 +641,28 @@
         "链表"
       ],
       "last_seen": "2026-08-06"
+    },
+    {
+      "habit": "设计题双结构同步遗漏：put 新 key 只操作链表、漏掉 map.put（get 查不到新 key），且 size 从未自增/自减导致 size==capacity 永不成立、淘汰永不触发；淘汰时也未 map.remove 被逐出 key（节点未存 key 无从删除）",
+      "count": 1,
+      "examples": [
+        "lru-cache"
+      ],
+      "categories": [
+        "链表"
+      ],
+      "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "条件分支覆盖不全：容量未满的普通插入 else 路径完全为空（没建节点/没挂链/没 map.put），只写了容量已满时的淘汰分支，导致所有 put 新 key 都无效",
+      "count": 1,
+      "examples": [
+        "lru-cache"
+      ],
+      "categories": [
+        "链表"
+      ],
+      "last_seen": "2026-08-07"
     }
   ],
   "category_hints": {
