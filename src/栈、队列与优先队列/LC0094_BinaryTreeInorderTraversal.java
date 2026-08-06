@@ -10,20 +10,23 @@ import java.util.*;
 public class LC0094_BinaryTreeInorderTraversal {
 
     // ==== 提交代码开始 ====
-    List<Integer> ans;
     public List<Integer> inorderTraversal(TreeNode root) {
-        ans = new ArrayList<>();
-        dfs(root);
-        return ans;
-    }
-
-    private void dfs(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
         if (root == null) {
-            return;
+            return ans;
         }
-        dfs(root.left);
-        ans.add(root.val);
-        dfs(root.right);
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode cur = root;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.poll();
+            ans.add(cur.val);
+                cur = cur.right;
+        }
+        return ans;
     }
     // ==== 提交代码结束 ====
 

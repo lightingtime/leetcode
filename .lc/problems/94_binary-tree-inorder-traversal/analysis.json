@@ -8,17 +8,29 @@
   "verdict": "Accepted",
   "testcases": "71/71",
   "runtime_ms": null,
-  "memory_bytes": 43428000,
+  "memory_bytes": 43420000,
   "firstPass": false,
   "optimal": true,
-  "approach": "递归 DFS（中序）",
+  "approach": "迭代栈（cur指针）",
   "time_complexity": "O(n)",
   "space_complexity": "O(n)",
-  "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现",
+  "notes": "两种写法均 AC：递归 DFS 中序（71/71）+ 迭代栈 cur 指针版（71/71，内存≈41.4MB）。迭代版历经 4 轮修正（重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）后通过；analysis.json submissions 含两条不同解法",
   "code_notes": [],
   "mistakes": [
     {
       "habit": "共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败",
+      "count": 1
+    },
+    {
+      "habit": "迭代中序遍历重复压栈死循环：弹栈访问后只处理右孩子，下一轮从栈顶重新把该节点左链再压一遍（left 指针未变），无限循环 OOM；且空 root 直接 push(null) 导致 NPE",
+      "count": 1
+    },
+    {
+      "habit": "迭代中序：内层只压左孩子、当前节点 cur 自己未入栈，首次弹栈取到 null 直接 NPE；访问后未把 cur 移到右孩子（只 push 右孩子），会再次重复压栈",
+      "count": 1
+    },
+    {
+      "habit": "迭代中序：内层 while (cur.left) 未把 cur==null 当正常状态（栈非空时访问完右空节点后 cur 为 null），直接解引用 NPE；内层应以 cur!=null 为条件",
       "count": 1
     }
   ],
@@ -26,6 +38,13 @@
     {
       "title": "递归收集结果：用局部列表+helper 参数，避免实例字段跨调用累积",
       "text": "递归/回溯收集结果的列表如果是实例字段，多次调用（本地多组测试）会串台；正确做法是入口方法内 new 列表并传给递归 helper 收集，或入口先 clear。声明必须放在提交区内。出处：LC0094 binary-tree-inorder-traversal。",
+      "category": "栈、队列与优先队列",
+      "problem": "binary-tree-inorder-traversal",
+      "date": "2026-08-07"
+    },
+    {
+      "title": "迭代中序：cur 指针驱动 + 左链一次压栈，访问后 cur=cur.right",
+      "text": "迭代中序遍历用 cur 指针驱动外层 while(cur!=null || !stack.isEmpty())；内层一路压 cur 并 cur=cur.left 到最左，弹栈访问后 cur=cur.right 继续，保证每个节点只压一次。错误写法是每次看栈顶重新走左链（left 不变会重复压栈死循环），且空 root 不能入栈。",
       "category": "栈、队列与优先队列",
       "problem": "binary-tree-inorder-traversal",
       "date": "2026-08-07"
@@ -43,6 +62,18 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现"
+    },
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "71/71",
+      "runtime_ms": null,
+      "memory_bytes": 43420000,
+      "approach": "迭代栈（cur指针）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "两种写法均 AC：递归 DFS 中序（71/71）+ 迭代栈 cur 指针版（71/71，内存≈41.4MB）。迭代版历经 4 轮修正（重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）后通过；analysis.json submissions 含两条不同解法"
     }
   ],
   "hints": [

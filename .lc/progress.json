@@ -330,7 +330,7 @@
       "date": "2026-08-07",
       "firstPass": false,
       "optimal": true,
-      "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现"
+      "notes": "两种写法均 AC：递归 DFS 中序（71/71）+ 迭代栈 cur 指针版（71/71，内存≈41.4MB）。迭代版历经 4 轮修正（重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）后通过；analysis.json submissions 含两条不同解法"
     }
   ],
   "error_habits": [
@@ -699,6 +699,39 @@
     },
     {
       "habit": "共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败",
+      "count": 1,
+      "examples": [
+        "binary-tree-inorder-traversal"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "迭代中序遍历重复压栈死循环：弹栈访问后只处理右孩子，下一轮从栈顶重新把该节点左链再压一遍（left 指针未变），无限循环 OOM；且空 root 直接 push(null) 导致 NPE",
+      "count": 1,
+      "examples": [
+        "binary-tree-inorder-traversal"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "迭代中序：内层只压左孩子、当前节点 cur 自己未入栈，首次弹栈取到 null 直接 NPE；访问后未把 cur 移到右孩子（只 push 右孩子），会再次重复压栈",
+      "count": 1,
+      "examples": [
+        "binary-tree-inorder-traversal"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "迭代中序：内层 while (cur.left) 未把 cur==null 当正常状态（栈非空时访问完右空节点后 cur 为 null），直接解引用 NPE；内层应以 cur!=null 为条件",
       "count": 1,
       "examples": [
         "binary-tree-inorder-traversal"
