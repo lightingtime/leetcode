@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 35,
+  "current_seq": 36,
   "done": [
     {
       "seq": 1,
@@ -375,6 +375,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "单调递增栈 + 左右高度0哨兵：弹栈结算（左边界=新栈顶，右边界=i），O(n)。思路从朴素 O(n²)（每根柱子左右扫更矮）引导到单调栈；10 组本地用例一次全过，力扣 99/99 一次 Accepted"
+    },
+    {
+      "seq": 36,
+      "id": "101",
+      "title": "对称二叉树",
+      "slug": "symmetric-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-07",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted"
     }
   ],
   "error_habits": [

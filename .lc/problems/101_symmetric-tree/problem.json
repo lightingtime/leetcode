@@ -1,0 +1,46 @@
+{
+  "id": "101",
+  "slug": "symmetric-tree",
+  "title": "Symmetric Tree",
+  "titleCn": "对称二叉树",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/symmetric-tree/",
+  "tags": [
+    "Tree",
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Binary Tree"
+  ],
+  "tagsCn": [
+    "树",
+    "深度优先搜索",
+    "广度优先搜索",
+    "二叉树"
+  ],
+  "category": "树与二叉树",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[1,2,2,3,4,4,3]"
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[1,2,2,null,3,null,3]"
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,2,3,4,4,3]\n[1,2,2,null,3,null,3]",
+  "javaSnippet": "/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode() {}\n *     TreeNode(int val) { this.val = val; }\n *     TreeNode(int val, TreeNode left, TreeNode right) {\n *         this.val = val;\n *         this.left = left;\n *         this.right = right;\n *     }\n * }\n */\nclass Solution {\n    public boolean isSymmetric(TreeNode root) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-06T22:48:58.563Z"
+}

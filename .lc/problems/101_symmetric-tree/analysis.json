@@ -1,0 +1,52 @@
+{
+  "seq": 36,
+  "id": "101",
+  "slug": "symmetric-tree",
+  "title": "对称二叉树",
+  "category": "树与二叉树",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "201/201",
+  "runtime_ms": null,
+  "memory_bytes": 43852000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "迭代栈成对比较",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(树宽)",
+  "notes": "迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "201/201",
+      "runtime_ms": null,
+      "memory_bytes": 43936000,
+      "approach": "递归镜像比较",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(树高)",
+      "optimal": true,
+      "notes": "递归镜像比较：helper(root,root) 出口先判双 null/单 null/值不同，再镜像递归 left.left vs right.right 且 left.right vs right.left；8 组本地一次全过，力扣 201/201 一次 Accepted",
+      "code": "public boolean isSymmetric(TreeNode root) {\n    return isSymmetricHelper(root, root);\n}\n\nprivate boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n    if (left == null && right == null) {\n        return true;\n    }\n    if (left == null || right == null) {\n        return false;\n    }\n    if (left.val != right.val) {\n        return false;\n    }\n    return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n}"
+    },
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "201/201",
+      "runtime_ms": null,
+      "memory_bytes": 43852000,
+      "approach": "迭代栈成对比较",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(树宽)",
+      "optimal": true,
+      "notes": "迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted",
+      "code": "    public boolean isSymmetric(TreeNode root) {\n        Deque<TreeNode> stack = new LinkedList<>();\n        stack.push(root);\n        stack.push(root);\n        while (!stack.isEmpty()) {\n            TreeNode left = stack.pop(), right = stack.pop();\n            if (left == null && right == null) {\n                continue;\n            }\n            if (left == null || right == null) {\n                return false;\n            }\n            if (left.val != right.val) {\n                return false;\n            }\n            stack.push(left.left);\n            stack.push(right.right);\n            stack.push(left.right);\n            stack.push(right.left);\n        }\n        return stack.isEmpty();\n    }\n\n    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n        if (left == null && right == null) {\n            return true;\n        }\n        if (left == null || right == null) {\n            return false;\n        }\n        if (left.val != right.val) {\n            return false;\n        }\n        return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n    }"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
