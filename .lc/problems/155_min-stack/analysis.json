@@ -1,0 +1,38 @@
+{
+  "seq": 32,
+  "id": "155",
+  "slug": "min-stack",
+  "title": "最小栈",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "45/45",
+  "runtime_ms": null,
+  "memory_bytes": 101416000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "单栈+Node（值+当前最小）",
+  "time_complexity": "O(1)",
+  "space_complexity": "O(n)",
+  "notes": "单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "45/45",
+      "runtime_ms": null,
+      "memory_bytes": 101416000,
+      "approach": "单栈+Node（值+当前最小）",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}

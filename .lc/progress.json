@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 31,
+  "current_seq": 32,
   "done": [
     {
       "seq": 1,
@@ -331,6 +331,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "两种写法均 AC：递归 DFS 中序（71/71）+ 迭代栈 cur 指针版（71/71，内存≈41.4MB）。迭代版历经 4 轮修正（重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）后通过；analysis.json submissions 含两条不同解法"
+    },
+    {
+      "seq": 32,
+      "id": "155",
+      "title": "最小栈",
+      "slug": "min-stack",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-07",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted"
     }
   ],
   "error_habits": [
