@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-07",
-  "current_seq": 28,
+  "current_seq": 29,
   "done": [
     {
       "seq": 1,
@@ -298,6 +298,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "哈希表+双向链表标准设计：插入要 map.put+挂链+size++，淘汰要 map.remove+断链+size--，三者同步；本地三轮修复（map.put 遗漏、普通插入分支为空、size 未维护）后全绿，力扣 25/25 Accepted（O(1) 时间/O(capacity) 空间，已最优）"
+    },
+    {
+      "seq": 29,
+      "id": "23",
+      "title": "合并 K 个升序链表",
+      "slug": "merge-k-sorted-lists",
+      "category": "链表",
+      "date": "2026-08-07",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "分治两两合并（O(N log k)）：每轮相邻两条合并、递归层数 log k；空数组由 start>=length 守卫、单链/空链混入由 start==end 与 null 分支覆盖；本地 9 组一次全过，力扣 134/134 一次 Accepted。微调点：mergeTowList 每次 new 节点复制值，可改为复用原节点改 next 省分配"
     }
   ],
   "error_habits": [

@@ -3,21 +3,64 @@
 // 难度：Hard | 分类：链表
 // 链接：https://leetcode.cn/problems/merge-k-sorted-lists/
 // 刷题日期：2026-08-07
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
+import java.awt.*;
+import java.io.FileFilter;
 import java.util.*;
+import java.util.List;
+import java.util.logging.Level;
 
 public class LC0023_MergeKSortedLists {
 
     // ==== 提交代码开始 ====
     public ListNode mergeKLists(ListNode[] lists) {
-        // TODO: 在这里实现你的解法
-        ListNode
-        return null;
+        return mergeKLists(lists, 0, lists.length - 1);
     }
+
+    private ListNode mergeKLists(ListNode[] lists, int start, int end) {
+        if (start >= lists.length) {
+           return null;
+        }
+        if (start == end) {
+            return lists[start];
+        }
+        int mid = start + (end - start) / 2;
+        ListNode first = mergeKLists(lists, start, mid);
+        ListNode second = mergeKLists(lists, mid + 1, end);
+        return mergeTowList(first, second);
+    }
+
+    private ListNode mergeTowList(ListNode first, ListNode second) {
+        if (first == null) {
+            return second;
+        }
+        if (second == null) {
+            return first;
+        }
+        ListNode dummy = new ListNode();
+        ListNode p1 = first, p2 = second, p = dummy;
+        while (p1 != null && p2 != null) {
+            ListNode node = new ListNode();
+            if (p1.val > p2.val) {
+                node.val = p2.val;
+                p2 = p2.next;
+            } else {
+                node.val = p1.val;
+                p1 = p1.next;
+            }
+            p.next = node;
+            p = p.next;
+        }
+        if (p1 == null) {
+            p.next = p2;
+        }
+        if (p2 == null) {
+            p.next = p1;
+        }
+        return dummy.next;
+    }
+
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

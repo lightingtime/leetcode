@@ -1,0 +1,38 @@
+{
+  "seq": 29,
+  "id": "23",
+  "slug": "merge-k-sorted-lists",
+  "title": "合并 K 个升序链表",
+  "category": "链表",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "134/134",
+  "runtime_ms": null,
+  "memory_bytes": 47908000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "分治两两合并",
+  "time_complexity": "O(N log k)",
+  "space_complexity": "O(N)",
+  "notes": "分治两两合并（O(N log k)）：每轮相邻两条合并、递归层数 log k；空数组由 start>=length 守卫、单链/空链混入由 start==end 与 null 分支覆盖；本地 9 组一次全过，力扣 134/134 一次 Accepted。微调点：mergeTowList 每次 new 节点复制值，可改为复用原节点改 next 省分配",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "134/134",
+      "runtime_ms": null,
+      "memory_bytes": 47908000,
+      "approach": "分治两两合并",
+      "time_complexity": "O(N log k)",
+      "space_complexity": "O(N)",
+      "optimal": true,
+      "notes": "分治两两合并（O(N log k)）：每轮相邻两条合并、递归层数 log k；空数组由 start>=length 守卫、单链/空链混入由 start==end 与 null 分支覆盖；本地 9 组一次全过，力扣 134/134 一次 Accepted。微调点：mergeTowList 每次 new 节点复制值，可改为复用原节点改 next 省分配"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}
