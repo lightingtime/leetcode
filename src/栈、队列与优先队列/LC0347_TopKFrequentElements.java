@@ -13,7 +13,7 @@ public class LC0347_TopKFrequentElements {
     public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
+            map.merge(num, 1, Integer::sum);
         }
         List<Node> list = new ArrayList<>();
         map.forEach((value, freq) -> {

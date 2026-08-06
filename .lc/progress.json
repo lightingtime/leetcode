@@ -344,17 +344,6 @@
       "notes": "单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted"
     },
     {
-      "seq": 33,
-      "id": "215",
-      "title": "数组中的第K个最大元素",
-      "slug": "kth-largest-element-in-an-array",
-      "category": "栈、队列与优先队列",
-      "date": "2026-08-07",
-      "firstPass": false,
-      "optimal": true,
-      "notes": "快选（Hoare 双指针分区）：目标下标 n-k，每次分区后只递归目标所在半边，平均 O(n)。第一版死循环（i/j 未每轮重置、无左右边界、比较基准 nums[position] 被交换覆盖）分析后重写；本地 9 组全绿，力扣 46/46 一次 Accepted"
-    },
-    {
       "seq": 34,
       "id": "347",
       "title": "前 K 个高频元素",
@@ -364,6 +353,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "HashMap 统计频次 + 快选按 freq 找第 m-k 个：目标下标 m-k，结果取 [m-k, m-1]；曾把取结果下标写反成 [0,k-1] 已修；测试用例曾有平局违反唯一性约束已改。本地 9 组全绿，力扣 25/25 一次 Accepted，满足进阶优于 O(n log n)"
+    },
+    {
+      "seq": 33,
+      "id": "215",
+      "title": "数组中的第K个最大元素",
+      "slug": "kth-largest-element-in-an-array",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-07",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
