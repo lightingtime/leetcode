@@ -1,0 +1,38 @@
+{
+  "seq": 30,
+  "id": "20",
+  "slug": "valid-parentheses",
+  "title": "有效的括号",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "103/103",
+  "runtime_ms": null,
+  "memory_bytes": 43916000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "栈（Deque）",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "栈匹配：遇到左括号把对应右括号压栈，遇右括号弹栈比对，最后栈空即有效；O(n)/O(n)。12 组本地用例一次全过，力扣 103/103 一次 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "103/103",
+      "runtime_ms": null,
+      "memory_bytes": 43916000,
+      "approach": "栈（Deque）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "栈匹配：遇到左括号把对应右括号压栈，遇右括号弹栈比对，最后栈空即有效；O(n)/O(n)。12 组本地用例一次全过，力扣 103/103 一次 Accepted"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}

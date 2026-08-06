@@ -1,0 +1,23 @@
+{
+  "id": "20",
+  "slug": "valid-parentheses",
+  "title": "Valid Parentheses",
+  "titleCn": "有效的括号",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/valid-parentheses/",
+  "tags": [
+    "Stack",
+    "String",
+    "括号序列"
+  ],
+  "tagsCn": [
+    "栈",
+    "字符串",
+    "括号序列"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [],
+  "exampleTestcases": "\"()\"\n\"()[]{}\"\n\"(]\"\n\"([])\"\n\"([)]\"",
+  "javaSnippet": "class Solution {\n    public boolean isValid(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-06T18:57:25.148Z"
+}
