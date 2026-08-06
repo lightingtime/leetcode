@@ -1,0 +1,38 @@
+{
+  "seq": 34,
+  "id": "347",
+  "slug": "top-k-frequent-elements",
+  "title": "前 K 个高频元素",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-07",
+  "verdict": "Accepted",
+  "testcases": "25/25",
+  "runtime_ms": null,
+  "memory_bytes": 47988000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "哈希表+快速选择",
+  "time_complexity": "O(n) 平均",
+  "space_complexity": "O(m)",
+  "notes": "HashMap 统计频次 + 快选按 freq 找第 m-k 个：目标下标 m-k，结果取 [m-k, m-1]；曾把取结果下标写反成 [0,k-1] 已修；测试用例曾有平局违反唯一性约束已改。本地 9 组全绿，力扣 25/25 一次 Accepted，满足进阶优于 O(n log n)",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-07",
+      "verdict": "Accepted",
+      "testcases": "25/25",
+      "runtime_ms": null,
+      "memory_bytes": 47988000,
+      "approach": "哈希表+快速选择",
+      "time_complexity": "O(n) 平均",
+      "space_complexity": "O(m)",
+      "optimal": true,
+      "notes": "HashMap 统计频次 + 快选按 freq 找第 m-k 个：目标下标 m-k，结果取 [m-k, m-1]；曾把取结果下标写反成 [0,k-1] 已修；测试用例曾有平局违反唯一性约束已改。本地 9 组全绿，力扣 25/25 一次 Accepted，满足进阶优于 O(n log n)"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}
