@@ -45,13 +45,15 @@ public class LC0297_SerializeAndDeserializeBinaryTree {
             while (!queue.isEmpty()) {
                 TreeNode cur = queue.pollFirst();
                 if (!vals[i].equals("#")) {
-                    cur.left = new TreeNode(Integer.parseInt(vals[i]));
-                    queue.offerLast(cur.left);
+                    TreeNode node = new TreeNode(Integer.parseInt(vals[i]));
+                    cur.left = node;
+                    queue.offerLast(node);
                 }
                 i++;
                 if (!vals[i].equals("#")) {
-                    cur.right = new TreeNode(Integer.parseInt(vals[i]));
-                    queue.offerLast(cur.right);
+                    TreeNode node = new TreeNode(Integer.parseInt(vals[i]));
+                    cur.right = node;
+                    queue.offerLast(node);
                 }
                 i++;
             }
