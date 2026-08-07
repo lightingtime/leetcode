@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-07",
-  "current_seq": 38,
+  "updated": "2026-08-08",
+  "current_seq": 39,
   "done": [
     {
       "seq": 1,
@@ -408,6 +408,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "递归上下界校验：左子树收紧 upper 并继承 lower，右子树收紧 lower 并继承 upper（曾把未收紧侧重置为 ±∞ 丢失祖先约束，修正）；long 防 int 边界。10 组本地全绿，力扣 86/86 Accepted"
+    },
+    {
+      "seq": 39,
+      "id": "102",
+      "title": "二叉树的层序遍历",
+      "slug": "binary-tree-level-order-traversal",
+      "category": "树与二叉树",
+      "date": "2026-08-08",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "二叉树的层序遍历：BFS 队列按层弹出当前层再扩展下一层，一次 Accepted（35/35）"
     }
   ],
   "error_habits": [

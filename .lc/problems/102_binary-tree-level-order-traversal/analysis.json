@@ -1,0 +1,38 @@
+{
+  "seq": 39,
+  "id": "102",
+  "slug": "binary-tree-level-order-traversal",
+  "title": "二叉树的层序遍历",
+  "category": "树与二叉树",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "35/35",
+  "runtime_ms": null,
+  "memory_bytes": 47280000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "层序 BFS",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "二叉树的层序遍历：BFS 队列按层弹出当前层再扩展下一层，一次 Accepted（35/35）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "35/35",
+      "runtime_ms": null,
+      "memory_bytes": 47280000,
+      "approach": "层序 BFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "二叉树的层序遍历：BFS 队列按层弹出当前层再扩展下一层，一次 Accepted（35/35）"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
