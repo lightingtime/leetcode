@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-08",
-  "current_seq": 41,
+  "current_seq": 42,
   "done": [
     {
       "seq": 1,
@@ -441,6 +441,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "二叉树的最近公共祖先：递归两侧搜索，两边都有命中则当前节点为答案，单边命中向上传递，一次 Accepted（33/33）"
+    },
+    {
+      "seq": 42,
+      "id": "297",
+      "title": "二叉树的序列化与反序列化",
+      "slug": "serialize-and-deserialize-binary-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-08",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "二叉树的序列化与反序列化：层序 BFS + # 占位，修复队列进出配对（offerLast 配 pollLast 变成栈序导致顺序错位）后往返一致，Accepted（53/53）"
     }
   ],
   "error_habits": [
@@ -861,6 +872,17 @@
         "树与二叉树"
       ],
       "last_seen": "2026-08-07"
+    },
+    {
+      "habit": "Deque 当队列用但 offerLast 配 pollLast 实际是栈（LIFO）：遍历顺序变成后进先出（右子树先访问），与反序列化从左到右读的顺序约定不一致；序列化与反序列化必须使用同一种顺序",
+      "count": 1,
+      "examples": [
+        "serialize-and-deserialize-binary-tree"
+      ],
+      "categories": [
+        "树与二叉树"
+      ],
+      "last_seen": "2026-08-08"
     }
   ],
   "category_hints": {

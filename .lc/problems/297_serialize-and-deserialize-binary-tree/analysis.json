@@ -1,0 +1,51 @@
+{
+  "seq": 42,
+  "id": "297",
+  "slug": "serialize-and-deserialize-binary-tree",
+  "title": "二叉树的序列化与反序列化",
+  "category": "树与二叉树",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "53/53",
+  "runtime_ms": null,
+  "memory_bytes": 47652000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "层序 BFS + 占位符",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "二叉树的序列化与反序列化：层序 BFS + # 占位，修复队列进出配对（offerLast 配 pollLast 变成栈序导致顺序错位）后往返一致，Accepted（53/53）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "Deque 当队列用但 offerLast 配 pollLast 实际是栈（LIFO）：遍历顺序变成后进先出（右子树先访问），与反序列化从左到右读的顺序约定不一致；序列化与反序列化必须使用同一种顺序",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "序列化/反序列化顺序一致性 + 队列栈进出配对",
+      "text": "Deque 入队 offerLast 配出队 pollFirst 才是队列（FIFO）；offerLast 配 pollLast 实际是栈（LIFO）。序列化用哪种顺序生成字符串，反序列化就必须按同一种顺序消费：层序（先左后右）序列化就要层序重建，否则结构错位。",
+      "category": "树与二叉树",
+      "problem": "serialize-and-deserialize-binary-tree",
+      "date": "2026-08-08"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "53/53",
+      "runtime_ms": null,
+      "memory_bytes": 47652000,
+      "approach": "层序 BFS + 占位符",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "二叉树的序列化与反序列化：层序 BFS + # 占位，修复队列进出配对（offerLast 配 pollLast 变成栈序导致顺序错位）后往返一致，Accepted（53/53）"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
