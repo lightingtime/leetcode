@@ -1,0 +1,82 @@
+{
+  "id": "236",
+  "slug": "lowest-common-ancestor-of-a-binary-tree",
+  "title": "Lowest Common Ancestor of a Binary Tree",
+  "titleCn": "二叉树的最近公共祖先",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/",
+  "tags": [
+    "Tree",
+    "Depth-First Search",
+    "Binary Tree",
+    "最近公共祖先",
+    "Binary Lifting"
+  ],
+  "tagsCn": [
+    "树",
+    "深度优先搜索",
+    "二叉树",
+    "最近公共祖先",
+    "Binary Lifting"
+  ],
+  "category": "树与二叉树",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[3,5,1,6,2,0,8,null,null,7,4]"
+        },
+        {
+          "name": "p",
+          "value": "5"
+        },
+        {
+          "name": "q",
+          "value": "1"
+        }
+      ],
+      "output": "3",
+      "explain": "节点 5 和节点 1 的最近公共祖先是节点 3 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[3,5,1,6,2,0,8,null,null,7,4]"
+        },
+        {
+          "name": "p",
+          "value": "5"
+        },
+        {
+          "name": "q",
+          "value": "4"
+        }
+      ],
+      "output": "5",
+      "explain": "节点 5 和节点 4 的最近公共祖先是节点 5 。因为根据定义最近公共祖先节点可以为节点本身。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[1,2]"
+        },
+        {
+          "name": "p",
+          "value": "1"
+        },
+        {
+          "name": "q",
+          "value": "2"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[3,5,1,6,2,0,8,null,null,7,4]\n5\n1\n[3,5,1,6,2,0,8,null,null,7,4]\n5\n4\n[1,2]\n1\n2",
+  "javaSnippet": "/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode(int x) { val = x; }\n * }\n */\nclass Solution {\n    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-07T22:13:14.772Z"
+}

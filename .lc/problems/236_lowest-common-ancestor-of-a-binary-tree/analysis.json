@@ -1,0 +1,38 @@
+{
+  "seq": 41,
+  "id": "236",
+  "slug": "lowest-common-ancestor-of-a-binary-tree",
+  "title": "二叉树的最近公共祖先",
+  "category": "树与二叉树",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "33/33",
+  "runtime_ms": null,
+  "memory_bytes": 70128000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "递归分治：两侧搜索合并",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "二叉树的最近公共祖先：递归两侧搜索，两边都有命中则当前节点为答案，单边命中向上传递，一次 Accepted（33/33）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "33/33",
+      "runtime_ms": null,
+      "memory_bytes": 70128000,
+      "approach": "递归分治：两侧搜索合并",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "二叉树的最近公共祖先：递归两侧搜索，两边都有命中则当前节点为答案，单边命中向上传递，一次 Accepted（33/33）"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
