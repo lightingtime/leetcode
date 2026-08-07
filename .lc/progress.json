@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-08",
-  "current_seq": 42,
+  "current_seq": 43,
   "done": [
     {
       "seq": 1,
@@ -452,6 +452,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "二叉树的序列化与反序列化：层序 BFS + # 占位，修复队列进出配对（offerLast 配 pollLast 变成栈序导致顺序错位）后往返一致，Accepted（53/53）"
+    },
+    {
+      "seq": 43,
+      "id": "128",
+      "title": "最长连续序列",
+      "slug": "longest-consecutive-sequence",
+      "category": "图与并查集",
+      "date": "2026-08-08",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）"
     }
   ],
   "error_habits": [
@@ -881,6 +892,39 @@
       ],
       "categories": [
         "树与二叉树"
+      ],
+      "last_seen": "2026-08-08"
+    },
+    {
+      "habit": "map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环",
+      "count": 1,
+      "examples": [
+        "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-08"
+    },
+    {
+      "habit": "map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）",
+      "count": 1,
+      "examples": [
+        "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-08"
+    },
+    {
+      "habit": "存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合",
+      "count": 1,
+      "examples": [
+        "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
       ],
       "last_seen": "2026-08-08"
     }

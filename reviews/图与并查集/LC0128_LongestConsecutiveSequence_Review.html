@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC128 最长连续序列 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 43</div>
+  <h1>LC128 · 最长连续序列</h1>
+  <div class="sub">HashSet + 从段起点向上延展 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 85/85</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 图与并查集</span>
+    <span class="badge plain">多次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-08</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · HashSet + 从段起点向上延展</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.7 MB</span><span class="chip">用例 85/85</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0128_LongestConsecutiveSequence.java</span><span>提交区</span></div><pre>public int longestConsecutive(int[] nums) {
+        int max = 0;
+        Set&lt;Integer&gt; set = Arrays.stream(nums).boxed().collect(Collectors.toSet());
+        for (Integer num : set) {
+            int x = num;
+            if (set.contains(x - 1)) {
+                continue;
+            }
+            while (set.contains(x + 1)) {
+                x++;
+            }
+            max = Math.max(max, x - num + 1);
+        }
+        return max;
+    }</pre></div>
+    <p class="muted">最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）</p>
+  </div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>85/85 用例。</p></div></div></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">85/85</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 91.7 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 图与并查集</h3><div class="quote">连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。</div>
+      <h3>错误习惯复盘</h3><p><b>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</b>（累计 1 次）</p><p><b>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</b>（累计 1 次）</p><p><b>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 43 · longest-consecutive-sequence</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
+      <div class="quote">最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/128_longest-consecutive-sequence/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%9B%BE%E4%B8%8E%E5%B9%B6%E6%9F%A5%E9%9B%86/LC0128_LongestConsecutiveSequence.java">src/图与并查集/LC0128_LongestConsecutiveSequence.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-08
+  </div>
+</div>
+</body>
+</html>

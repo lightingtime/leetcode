@@ -1,0 +1,54 @@
+{
+  "id": "128",
+  "slug": "longest-consecutive-sequence",
+  "title": "Longest Consecutive Sequence",
+  "titleCn": "最长连续序列",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/longest-consecutive-sequence/",
+  "tags": [
+    "Union Find",
+    "Array",
+    "Hash Table"
+  ],
+  "tagsCn": [
+    "并查集",
+    "数组",
+    "哈希表"
+  ],
+  "category": "图与并查集",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[100,4,200,1,3,2]"
+        }
+      ],
+      "output": "4",
+      "explain": "最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[0,3,7,2,5,8,4,6,0,1]"
+        }
+      ],
+      "output": "9",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,0,1,2]"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[100,4,200,1,3,2]\n[0,3,7,2,5,8,4,6,0,1]\n[1,0,1,2]",
+  "javaSnippet": "class Solution {\n    public int longestConsecutive(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-07T22:51:42.273Z"
+}
