@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-08",
-  "current_seq": 39,
+  "current_seq": 40,
   "done": [
     {
       "seq": 1,
@@ -419,6 +419,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "二叉树的层序遍历：BFS 队列按层弹出当前层再扩展下一层，一次 Accepted（35/35）"
+    },
+    {
+      "seq": 40,
+      "id": "105",
+      "title": "从前序与中序遍历序列构造二叉树",
+      "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
+      "category": "树与二叉树",
+      "date": "2026-08-08",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "从前序与中序遍历构造二叉树：前序定根、中序哈希定位划分左右子树，递归分治，一次 Accepted（203/203）"
     }
   ],
   "error_habits": [

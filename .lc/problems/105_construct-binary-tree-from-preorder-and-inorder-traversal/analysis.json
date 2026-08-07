@@ -1,0 +1,38 @@
+{
+  "seq": 40,
+  "id": "105",
+  "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
+  "title": "从前序与中序遍历序列构造二叉树",
+  "category": "树与二叉树",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "203/203",
+  "runtime_ms": null,
+  "memory_bytes": 47048000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "前序定根+哈希定位+递归分治",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "从前序与中序遍历构造二叉树：前序定根、中序哈希定位划分左右子树，递归分治，一次 Accepted（203/203）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "203/203",
+      "runtime_ms": null,
+      "memory_bytes": 47048000,
+      "approach": "前序定根+哈希定位+递归分治",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "从前序与中序遍历构造二叉树：前序定根、中序哈希定位划分左右子树，递归分治，一次 Accepted（203/203）"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
