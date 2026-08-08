@@ -1,0 +1,44 @@
+{
+  "id": "70",
+  "slug": "climbing-stairs",
+  "title": "Climbing Stairs",
+  "titleCn": "爬楼梯",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/climbing-stairs/",
+  "tags": [
+    "Memoization",
+    "Math",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "记忆化",
+    "数学",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "2"
+        }
+      ],
+      "output": "2",
+      "explain": "有两种方法可以爬到楼顶。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "3",
+      "explain": "有三种方法可以爬到楼顶。"
+    }
+  ],
+  "exampleTestcases": "2\n3",
+  "javaSnippet": "class Solution {\n    public int climbStairs(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T20:27:35.287Z"
+}

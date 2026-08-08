@@ -1,0 +1,39 @@
+{
+  "seq": 50,
+  "id": "70",
+  "slug": "climbing-stairs",
+  "title": "爬楼梯",
+  "category": "动态规划",
+  "date": "2026-08-09",
+  "verdict": "Accepted",
+  "testcases": "45/45",
+  "runtime_ms": null,
+  "memory_bytes": 42552000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "滚动变量斐波那契",
+  "approach_detail": "问题本质：到第 n 阶的方法数 = 最后一步从第 n-1 阶跨 1 阶 + 从第 n-2 阶跨 2 阶，所以 f(n) = f(n-1) + f(n-2)，就是斐波那契数列（f(1)=1, f(2)=2）。\n\n为什么用 DP/滚动变量：\n- 状态定义：f(i) = 爬到第 i 阶的方法数；\n- 转移方程：f(i) = f(i-1) + f(i-2)，只依赖前两个状态；\n- 因此不需要存整个数组，两个滚动变量即可，空间 O(1)。\n\n具体 case 推演（n=4）：\n- f(1)=1：只能走 1 阶，方法 [1]；\n- f(2)=2：方法 [1,1]、[2]；\n- f(3)=f(1)+f(2)=3：方法 [1,1,1]、[1,2]、[2,1]；\n- f(4)=f(2)+f(3)=5：方法 [1,1,1,1]、[1,1,2]、[1,2,1]、[2,1,1]、[2,2]。\n\n关键设计：\n1. 循环从 i=2 到 n-1 共 n-2 轮，每轮 fn=f1+f2 后滚动 f1=f2、f2=fn；\n2. n<=2 提前返回，避免 f1/f2 的初值问题。\n\n边界与细节：\n- n=1 → 1、n=2 → 2 直接返回；\n- 题目约束 1 <= n <= 45，f(45)=1836311903 不溢出 int（再大一位 F47 就会溢出，约束恰好卡在安全范围内），本地边界测试已覆盖 n=45。\n\n复杂度分析：\n- 时间 O(n)：n-2 轮转移；\n- 空间 O(1)：只保留前两个状态。\n\n为什么是最优：状态转移只依赖前两项，常规做法 O(n)/O(1) 已到 DP 最优；进阶可用矩阵快速幂做到 O(log n)，但对 n<=45 没有实际收益，面试/刷题场景滚动变量就是标准答案。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "滚动变量斐波那契，O(1) 空间",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-09",
+      "verdict": "Accepted",
+      "testcases": "45/45",
+      "runtime_ms": null,
+      "memory_bytes": 42552000,
+      "approach": "滚动变量斐波那契",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "滚动变量斐波那契，O(1) 空间"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}
