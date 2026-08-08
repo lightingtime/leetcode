@@ -54,10 +54,10 @@
   </div>
 </div></div>
 <div class="wrap">
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>分治两两合并</p>
-    <p><span class="chip">时间 O(N log k)</span><span class="chip">空间 O(N)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0023_MergeKSortedLists.java</span><span>提交区</span></div><pre>public ListNode mergeKLists(ListNode[] lists) {
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 分治两两合并</h3>
+    <p><span class="chip">时间 O(N log k)</span><span class="chip">空间 O(N)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 134/134</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0023_MergeKSortedLists.java</span><span>提交区</span></div><pre>public ListNode mergeKLists(ListNode[] lists) {
         return mergeKLists(lists, 0, lists.length - 1);
     }
 
@@ -84,26 +84,21 @@
         ListNode dummy = new ListNode();
         ListNode p1 = first, p2 = second, p = dummy;
         while (p1 != null &amp;&amp; p2 != null) {
-            ListNode node = new ListNode();
             if (p1.val &gt; p2.val) {
-                node.val = p2.val;
+                p.next = p2;
                 p2 = p2.next;
             } else {
-                node.val = p1.val;
+                p.next = p1;
                 p1 = p1.next;
             }
-            p.next = node;
             p = p.next;
         }
-        if (p1 == null) {
-            p.next = p2;
-        }
-        if (p2 == null) {
-            p.next = p1;
-        }
+        p.next = p1 == null ? p2 : p1;
         return dummy.next;
     }</pre></div>
+    <p class="muted">分治两两合并（O(N log k)）：每轮相邻两条合并、递归层数 log k；空数组由 start&gt;=length 守卫、单链/空链混入由 start==end 与 null 分支覆盖；本地 9 组一次全过，力扣 134/134 一次 Accepted。微调点：mergeTowList 每次 new 节点复制值，可改为复用原节点改 next 省分配</p>
   </div></section>
+  <section><h2>思路拆解</h2><div class="card"><p>问题本质：K 个有序链表合成一个。逐个两两合并是 O(k·n)；用分治把复杂度降到 O(n log k)。</p><p>关键设计：递归对半切分 lists[start..end]，两半各自合并成有序链，再 merge 两个有序链表（复用归并：dummy + 双指针 + 剩余链续接）。每轮把所有链表合并一轮，共 log k 轮。</p><p>边界：lists 为空或长度 0 返回 null；单链表直接返回；链表中含 null 元素时 merge 要处理；链表长度参差不齐不影响分治正确性。</p><p>复杂度：O(n log k) 时间（n 为总节点数）、O(log k) 递归栈；与优先队列解法同为时间最优，空间更省。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>134/134 用例一次通过。</p></div></div></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">

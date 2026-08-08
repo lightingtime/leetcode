@@ -3,385 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LC0238 除自身以外数组的乘积 · 刷题复盘</title>
+<title>LC238 除了自身以外数组的乘积 · 刷题复盘</title>
 <style>
-  :root {
-    --bg: #f6f7f9; --card: #ffffff; --ink: #1f2329; --muted: #6b7280;
-    --line: #e5e7eb; --accent: #2563eb; --good: #16a34a; --bad: #dc2626; --warn: #d97706;
-    --code-bg: #0f172a; --code-ink: #e2e8f0;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
-    line-height: 1.7;
-  }
-  .wrap { max-width: 920px; margin: 0 auto; padding: 0 22px 64px; }
-
-  .hero {
-    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-    color: #fff; padding: 52px 22px 46px; margin-bottom: 34px;
-  }
-  .hero .wrap { padding: 0; }
-  .hero .kicker { font-size: 13px; letter-spacing: 2px; color: #93c5fd; font-weight: 600; }
-  .hero h1 { margin: 8px 0 6px; font-size: 34px; line-height: 1.25; }
-  .hero .sub { color: #cbd5e1; font-size: 15px; }
-  .hero .badges { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
-
-  .badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
-    background: rgba(255,255,255,.14); color: #e2e8f0;
-  }
-  .badge.ok { background: #dcfce7; color: #166534; }
-  .badge.warn { background: #fef3c7; color: #92400e; }
-  .badge.medium { background: #fef3c7; color: #92400e; }
-  .badge.tag { background: #e0e7ff; color: #3730a3; }
-  .badge.plain { background: #e5e7eb; color: #374151; }
-
-  section { margin-top: 40px; }
-  h2 {
-    font-size: 21px; margin: 0 0 14px; padding-left: 12px;
-    border-left: 4px solid var(--accent);
-  }
-  h3 { font-size: 16px; margin: 22px 0 8px; }
-  p { margin: 8px 0; }
-  .muted { color: var(--muted); font-size: 13.5px; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  .card {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 14px; padding: 20px 22px; margin-top: 14px;
-    box-shadow: 0 1px 3px rgba(15,23,42,.05);
-  }
-
-  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
-  .metric {
-    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-    padding: 16px 12px; text-align: center;
-  }
-  .metric .v { font-size: 25px; font-weight: 800; color: var(--ink); }
-  .metric .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
-  .metric.ok .v { color: var(--good); }
-  .metric.warn .v { color: var(--warn); }
-
-  .chip {
-    display: inline-block; padding: 2px 10px; border-radius: 6px;
-    background: #eef2ff; color: #3730a3; font-size: 12.5px; font-weight: 600;
-    margin: 2px 4px 2px 0;
-  }
-
-  .tl { display: flex; flex-direction: column; }
-  .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
-  .tl-marker { position: relative; }
-  .tl-marker::before {
-    content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-    width: 13px; height: 13px; border-radius: 50%; background: var(--accent);
-    box-shadow: 0 0 0 3px #dbeafe;
-  }
-  .tl-marker::after {
-    content: ""; position: absolute; top: 25px; bottom: -12px; left: 50%;
-    width: 2px; transform: translateX(-50%); background: var(--line);
-  }
-  .tl-item:last-child .tl-marker::after { display: none; }
-  .tl-body { padding-bottom: 30px; }
-  .tl-title { font-weight: 700; font-size: 15.5px; }
-  .tl-badge {
-    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 5px;
-    padding: 1px 8px; margin-left: 8px; vertical-align: 2px;
-  }
-  .tl-badge.fix { background: #dcfce7; color: #166534; }
-  .tl-badge.bug { background: #fee2e2; color: #991b1b; }
-  .tl-badge.info { background: #e0e7ff; color: #3730a3; }
-
-  .code-wrap { background: var(--code-bg); border-radius: 12px; overflow: hidden; margin: 12px 0; }
-  .code-head {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 16px; background: rgba(255,255,255,.06); color: #94a3b8; font-size: 12px;
-    font-family: Consolas, "Cascadia Code", monospace;
-  }
-  .code-wrap pre {
-    margin: 0; padding: 16px 18px; overflow-x: auto;
-    color: var(--code-ink); font: 13px/1.75 Consolas, "Cascadia Code", monospace;
-    tab-size: 4;
-  }
-  .tk-kw { color: #93c5fd; font-weight: 600; }
-  .tk-str { color: #86efac; }
-  .tk-num { color: #fbbf24; }
-  .tk-com { color: #64748b; font-style: italic; }
-  .tk-anno { color: #c4b5fd; }
-
-  .ok-list { margin: 10px 0; padding: 0; list-style: none; }
-  .ok-list li { padding: 6px 0 6px 26px; position: relative; }
-  .ok-list li::before {
-    content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 800;
-  }
-  .bad-list { margin: 10px 0; padding: 0; list-style: none; }
-  .bad-list li { padding: 6px 0 6px 26px; position: relative; }
-  .bad-list li::before {
-    content: "✗"; position: absolute; left: 4px; color: var(--bad); font-weight: 800;
-  }
-  .quote {
-    border-left: 3px solid var(--accent); background: #f8fafc;
-    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0;
-    font-size: 14.5px;
-  }
-  .expand-bar { display: flex; gap: 8px; margin: 4px 0 14px; }
-  .expand-bar button {
-    font: inherit; font-size: 13px; cursor: pointer;
-    background: var(--card); color: var(--accent);
-    border: 1px solid var(--line); border-radius: 8px; padding: 5px 14px;
-  }
-  .expand-bar button:hover { border-color: var(--accent); background: #eff6ff; }
-  .tl-details > summary {
-    list-style: none; cursor: pointer; user-select: none;
-    display: flex; align-items: center; gap: 10px; padding: 2px 0;
-  }
-  .tl-details > summary::-webkit-details-marker { display: none; }
-  .tl-chev { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .18s ease; }
-  .tl-details[open] > summary .tl-chev { transform: rotate(90deg); }
-  .foot {
-    margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
-    color: var(--muted); font-size: 12.5px; text-align: center;
-  }
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 26px; }
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-  }
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-
-<div class="hero">
-  <div class="wrap">
-    <div class="kicker">LEETCODE 刷题复盘 · SEQ 22</div>
-    <h1>LC0238 · 除自身以外数组的乘积 <span style="color:#93c5fd">Product of Array Except Self</span></h1>
-    <div class="sub">前缀积 × 后缀积：从双数组演进到 O(1) 额外空间</div>
-    <div class="badges">
-      <span class="badge ok">✓ Accepted 24/24</span>
-      <span class="badge medium">难度 Medium</span>
-      <span class="badge tag">分类 数组与矩阵</span>
-      <span class="badge plain">提交一次通过</span>
-      <span class="badge ok">✓ 进阶 O(1) 空间达成</span>
-      <span class="badge">2026-08-06</span>
-    </div>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 22</div>
+  <h1>LC238 · 除了自身以外数组的乘积</h1>
+  <div class="sub">答案数组前缀积+滚动后缀 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 24/24</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 数组与矩阵</span>
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-06</span>
   </div>
-</div>
-
+</div></div>
 <div class="wrap">
-
-  <section>
-    <h2>我的解法</h2>
-    <div class="card">
-      <p><b>思路：答案数组存左前缀积 + 滚动变量累乘右侧。</b>每个位置的答案 = 左边所有数的乘积 × 右边所有数的乘积。
-      第一趟正向把 <code>nums[0..i-1]</code> 的累积积直接写进答案数组（题目约定输出数组不计额外空间）；
-      第二趟反向用一个 <code>right</code> 滚动变量累乘 <code>nums[i+1..n-1]</code> 的积，边乘边写进答案。
-      相比初版的双数组写法，省掉了第二个数组和第三趟循环。</p>
-      <p>
-        <span class="chip">时间 O(n)</span>
-        <span class="chip">额外空间 O(1)</span>
-        <span class="chip">满足 O(n) 时间与进阶 O(1) 额外空间要求</span>
-      </p>
-      <div class="code-wrap">
-        <div class="code-head"><span>src/LC0238_ProductOfArrayExceptSelf.java</span><span>提交区</span></div>
-        <pre class="code">public int[] productExceptSelf(int[] nums) {
-    int[] answer = new int[nums.length];
-    answer[0] = 1;
-    for (int i = 1; i &lt; answer.length; i++) {
-        answer[i] = answer[i - 1] * nums[i - 1];
-    }
-    int right = 1;
-    for (int i = nums.length - 1; i &gt;= 0; i--) {
-        answer[i] = answer[i] * right;
-        right *= nums[i];
-    }
-    return answer;
-}</pre>
-      </div>
-      <p class="muted">边界语义：左/右两端用 1 作为「空乘积」的起点；反向循环里 <code>right</code> 先乘进答案再累乘当前元素，
-      保证第 i 步的 <code>right</code> 正好是 <code>nums[i+1..n-1]</code> 的积；含 0、多个 0、负数都能被纯乘法正确覆盖，
-      不依赖除法所以没有除零问题。</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>解题过程</h2>
-    <div class="expand-bar">
-      <button type="button" onclick="setAllTimeline(true)">全部展开</button>
-      <button type="button" onclick="setAllTimeline(false)">全部收起</button>
-    </div>
-    <div class="tl">
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">01 · 独立实现：双数组前缀积 × 后缀积<span class="tl-badge info">思路成型</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>「不能除法」把总积÷自身的直球堵死，改从定义出发：<code>answer[i]</code> 就是
-          <code>nums[0..i-1]</code> 与 <code>nums[i+1..n-1]</code> 两段积的乘积，
-          于是用两个累积数组分别存左段积和右段积，第三趟相乘。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">02 · 本地测试：2 示例 + 8 边界全部通过<span class="tl-badge fix">已通过</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>示例之外补空输入、单元素、最短长度 2、全相同、单个 0、多个 0、负数、大数 8 组边界，
-          10 组用例全部通过；0 与负数场景验证了纯乘法方案不需要特殊分支。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">03 · 首次提交：一次 Accepted，空间 O(n)<span class="tl-badge ok">完成</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>双数组版本提交：<b style="color:#16a34a">Accepted</b>，24/24 用例通过，第一次提交即成功。
-          O(n) 时间达标；空间 O(n)，进阶的 O(1) 额外空间要求尚未满足。</p>
-        </div>
-        </details>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-marker"></div>
-        <details class="tl-details">
-        <summary class="tl-head">
-          <span class="tl-title">04 · 空间优化重写：O(1) 额外空间，二次提交 Accepted<span class="tl-badge fix">已优化</span></span>
-          <span class="tl-chev">▸</span>
-        </summary>
-        <div class="tl-body">
-          <p>利用「输出数组不计额外空间」的约定，把左前缀积直接写进答案数组，右侧改用单个滚动变量
-          <code>right</code> 反向累乘，省掉第二个数组与第三趟循环。10 组本地用例全部通过后二次提交：
-          <b style="color:#16a34a">Accepted</b>，24/24 用例通过，额外空间 O(1) 达成。</p>
-        </div>
-        </details>
-      </div>
-
-    </div>
-  </section>
-
-  <section>
-    <h2>分析结果</h2>
-
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 前缀积×后缀积</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 60.9 MB</span><span class="chip">用例 24/24</span></p>
+    
+    <p class="muted">左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化</p>
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 答案数组前缀积+滚动后缀</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 69.2 MB</span><span class="chip">用例 24/24</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0238_ProductOfArrayExceptSelf.java</span><span>提交区</span></div><pre>public int[] productExceptSelf(int[] nums) {
+        if (nums.length &lt; 1) {
+            return nums;
+        }
+        int[] leftMul = new int[nums.length];
+        leftMul[0] = 1;
+        for (int i = 1; i &lt; leftMul.length; i++) {
+            leftMul[i] = leftMul[i - 1] * nums[i - 1];
+        }
+        int right = 1;
+        for (int i = nums.length - 1; i &gt;= 0; i--) {
+            leftMul[i] = leftMul[i] * right;
+            right *= nums[i];
+        }
+        return leftMul;
+    }</pre></div>
+    <p class="muted">答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card"><p>问题本质：每个位置输出左边所有数乘积 × 右边所有数乘积。题目禁止用除法（0 会破坏除法），所以用两趟累乘。</p><p>关键设计：第一趟从左到右：leftMul[i] = nums[0..i-1] 的累积乘积（leftMul[0]=1）；第二趟从右到左：滚动变量 right 累积 nums[i+1..n-1] 的乘积，leftMul[i] *= right，再 right *= nums[i]。两趟合起来每个位置恰好乘上左右两侧全部元素，且全程不用除法。</p><p>边界：数组长度 1 时输出 [1]；含 0 或多个 0 时乘法天然正确处理，这正是不用除法的优势；空数组直接原样返回。</p><p>复杂度：O(n) 时间、O(1) 额外空间（复用输出数组，不计入额外空间），最优。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>24/24 用例一次通过。</p></div></div></div></section>
+  <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
-      <div class="metric ok"><div class="v">24 / 24</div><div class="l">通过用例</div></div>
+      <div class="metric ok"><div class="v">24/24</div><div class="l">通过用例</div></div>
       <div class="metric"><div class="v">≈ 69.2 MB</div><div class="l">内存占用</div></div>
-      <div class="metric ok"><div class="v">O(n) / O(1)</div><div class="l">时间 / 额外空间</div></div>
-      <div class="metric ok"><div class="v">2 次</div><div class="l">提交次数（均 AC）</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
     </div>
-
     <div class="card">
-      <h3>算法判定：两版演进，最终版已是最优</h3>
-      <ul class="ok-list">
-        <li><b>时间复杂度 O(n)</b>：两趟线性扫描，符合题目 O(n) 要求。</li>
-        <li><b>额外空间 O(1)</b>：答案数组不计额外空间，唯一额外变量是 <code>right</code>。</li>
-        <li><b>正确性</b>：左右两段积互不包含自身，相乘即答案；纯乘法天然兼容 0 与负数。</li>
-        <li><b>边界覆盖</b>：空输入、单元素、最短长度 2、全相同、单个/多个 0、负数、大数全部通过。</li>
-        <li><b>结论</b>：与标准最优解一致（O(n) 时间 + O(1) 额外空间），无需再优化。</li>
-      </ul>
-      <h3>优化落地：双数组 → 答案数组 + 滚动变量</h3>
-      <ul class="ok-list">
-        <li><b>初版</b>：leftMul + rightMul 两个辅助数组，三趟遍历，额外空间 O(n)。</li>
-        <li><b>优化点 1</b>：左前缀积的累积过程落在最终答案数组上（题目允许），<code>leftMul</code> 数组消失。</li>
-        <li><b>优化点 2</b>：右侧积只需要「当前位置右边的累积值」，一个 <code>right</code> 变量反向滚动即可，<code>rightMul</code> 数组消失。</li>
-        <li><b>结果</b>：第三趟循环也随之省掉，额外空间降到 O(1)，时间仍是 O(n)。</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>分类提醒 · 数组与矩阵</h3>
-      <div class="quote">矩阵题先想如何用行列信息/排序/原地操作降维。</div>
-      <p class="muted">数组题的常见套路：遇到「每个位置要整段信息、又不能 O(n²)」时，先想前缀/后缀累积；
-      留意题面里「输出数组不算额外空间」这类进阶设定，它往往是空间优化的钥匙。</p>
-    </div>
-
-    <div class="card">
-      <h3>前缀积 · 本质梳理</h3>
-      <ul class="ok-list">
-        <li><b>为什么不能用除法</b>：题目明确禁止；且数组中若有 0，总积为 0，除零直接崩。</li>
-        <li><b>为什么拆成两段积</b>：<code>answer[i]</code> 不含 <code>nums[i]</code>，等价于
-        「左边全部 × 右边全部」，两段各自是连续区间积，正好用一次线性扫描的累积来算。</li>
-        <li><b>为什么边界用 1 起步</b>：空区间的乘积约定为 1（乘法单位元），
-        所以 <code>leftMul[0] = 1</code>、<code>rightMul[n-1] = 1</code>。</li>
-        <li><b>为什么空间还能省</b>：leftMul 每个位置只需要「上一个累积 × 当前左边一个元素」，
-        累积过程可以落在最终答案数组上（它本来就要输出）；右侧同理只需一个向后滚动的变量。</li>
-      </ul>
-    </div>
-
-    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 数组与矩阵</h3><div class="quote">矩阵题先想如何用行列信息/排序/原地操作降维。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
       <h3>完成记录</h3>
-      <p>
-        <span class="chip">seq 22 · product-of-array-except-self</span>
-        <span class="chip">firstPass: true</span>
-        <span class="chip">optimal: true</span>
-      </p>
-      <div class="quote">一句话复盘：答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC，达到时间与空间双最优。</div>
+      <p><span class="chip">seq 22 · product-of-array-except-self</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC</div>
     </div>
   </section>
-
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/238_product-of-array-except-self/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
-    相关文件：<a href="../../src/数组与矩阵/LC0238_ProductOfArrayExceptSelf.java">src/LC0238_ProductOfArrayExceptSelf.java</a> ·
-    <a href="../../src/TestUtil.java">src/TestUtil.java</a> ·
+    相关文件：<a href="../../src/%E6%95%B0%E7%BB%84%E4%B8%8E%E7%9F%A9%E9%98%B5/LC0238_ProductOfArrayExceptSelf.java">src/数组与矩阵/LC0238_ProductOfArrayExceptSelf.java</a> ·
     <a href="../../index.html">训练主页</a><br>
     生成于 2026-08-06
   </div>
-
 </div>
-
-<script>
-  const TOKEN_RULES = [
-    { cls: 'com', re: /\/\/[^\n]*/y },
-    { cls: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/y },
-    { cls: 'kw', re: /\b(?:public|private|protected|static|final|class|new|return|if|else|for|while|int|void|long|double|char|boolean|Integer|String|Map|HashMap|List|ArrayList|Set|HashSet|null|true|false|import|package|try|catch|finally|throw|throws|interface|extends|implements|this|super|instanceof|var)\b/y },
-    { cls: 'num', re: /\b\d+(?:\.\d+)?\b/y },
-    { cls: 'anno', re: /@\w+/y },
-  ];
-  function esc(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-  function setAllTimeline(open) {
-    document.querySelectorAll('.tl-item details').forEach(function (d) { d.open = open; });
-  }
-  function highlight(code) {
-    let out = '', pos = 0;
-    while (pos < code.length) {
-      let hit = null;
-      for (const rule of TOKEN_RULES) {
-        rule.re.lastIndex = pos;
-        const m = rule.re.exec(code);
-        if (m) { hit = { m, rule }; break; }
-      }
-      if (hit) {
-        out += '<span class="tk-' + hit.rule.cls + '">' + esc(hit.m[0]) + '</span>';
-        pos = hit.m.index + hit.m[0].length;
-      } else {
-        out += esc(code.charAt(pos));
-        pos++;
-      }
-    }
-    return out;
-  }
-  document.querySelectorAll('pre.code').forEach(function (pre) {
-    pre.innerHTML = highlight(pre.textContent);
-  });
-</script>
-
 </body>
 </html>

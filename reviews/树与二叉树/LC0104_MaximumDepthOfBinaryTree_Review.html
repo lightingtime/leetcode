@@ -57,17 +57,15 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归 DFS</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树高)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 40/40</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0104_MaximumDepthOfBinaryTree.java</span><span>提交区</span></div><pre>public int maxDepth(TreeNode root) {
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0104_MaximumDepthOfBinaryTree.java</span><span>提交区</span></div><pre>public int maxDepth(TreeNode root) {
         if (root == null) {
             return 0;
-        }
-        if (root.left == null &amp;&amp; root.right == null) {
-            return 1;
         }
         return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
     }</pre></div>
     <p class="muted">递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）</p>
   </div></section>
+  <section><h2>思路拆解</h2><div class="card"><p>问题本质：二叉树最大深度 = 1 + max(左子树深度, 右子树深度)。树的分治结构让递归成为最自然的表达。</p><p>关键设计：递归终止条件为空节点返回 0；每深入一层加 1；取左右子树的较大者。也可以层序遍历计数，但递归最简洁。</p><p>边界：空树深度 0；单节点 1；斜树（退化成链）深度为 n，递归栈深度 O(n)，注意不要爆栈。</p><p>复杂度：O(n) 时间、O(h) 空间（h 为树高，最坏 O(n)），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>40/40 用例一次通过。</p></div></div></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">

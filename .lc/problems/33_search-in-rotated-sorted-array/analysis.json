@@ -59,5 +59,6 @@
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
-  ]
+  ],
+  "approach_detail": "问题本质：旋转后的有序数组是「两段各自递增」。二分时不能直接比较 nums[mid] 与 target，必须先判断 mid 落在哪一段，再按段内有序性收窄区间。\n关键设计：nums[mid] >= nums[left] 说明左段递增：target 落在 [left, mid) 内则 right=mid-1，否则去右段；否则 mid 在右段：target 落在 (mid, right] 内则 left=mid+1，否则去左段。段内有序保证每步排除一半。\n边界：数组长度为 1 时循环不进入，最后统一检查 nums[left]；旋转点恰在 0 处（等价未旋转）走 nums[mid]>=nums[left] 分支仍正确；题目无重复元素，比较不受重复干扰。\n复杂度：O(log n) 时间、O(1) 空间，最优。"
 }

@@ -34,5 +34,6 @@
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
-  ]
+  ],
+  "approach_detail": "问题本质：前序第一个元素是根，中序中根的位置把左右子树区间一分为二 → 递归分治重建整棵树。\n关键设计：先用 HashMap 存中序值→下标，实现 O(1) 查根位置；递归参数是前序区间 [preStart, preEnd] 与中序区间 [inStart, inEnd)：根 = preorder[preStart]，rootIndex = map.get(根)，左子树长度 leftLength = rootIndex - inStart；左子树前序区间 [preStart+1, preStart+leftLength]，右子树 [preStart+leftLength+1, preEnd]。\n边界：区间为空（preStart>preEnd）返回 null；单节点；只有左子树或只有右子树的斜树；题目保证节点值互异，map 不会冲突。\n复杂度：O(n) 时间（每个节点一次、map 查询 O(1)）、O(n) 空间（map + 递归栈），最优。"
 }

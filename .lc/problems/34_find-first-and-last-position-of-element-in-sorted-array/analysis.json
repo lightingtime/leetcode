@@ -95,5 +95,6 @@
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
-  ]
+  ],
+  "approach_detail": "问题本质：有序数组中找 target 的左右边界 = 两个二分：第一个 ≥ target 的位置，与第一个 > target 的位置，右边界 = lowerBound(target+1)-1。\n关键设计：只写一个 lowerBound（返回第一个 ≥ x 的下标）：左开右开区间 (left=-1, right=len)，mid 小于 x 时 left=mid（排除左侧），否则 right=mid，循环 left+1<right 结束后 right 即答案。对 target 和 target+1 各调一次，逻辑完全复用，避免两份边界二分不一致。\n边界：空数组直接返回 [-1,-1]；target 不存在时 left>=len 或 nums[left]!=target，返回 [-1,-1]；target 是最大元素时 target+1 让 lowerBound 返回 len，right-1 仍正确；全数组等于 target。\n复杂度：O(log n) 时间、O(1) 空间，最优。"
 }

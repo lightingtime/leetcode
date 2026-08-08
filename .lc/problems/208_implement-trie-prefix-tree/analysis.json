@@ -23,5 +23,6 @@
   ],
   "hints": [
     "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
-  ]
+  ],
+  "approach_detail": "问题本质：实现支持 insert / search / startsWith 的字典树。Trie 的价值是把字符串的公共前缀合并存储，查询时按字符逐层走。\n关键设计：每个节点是 Trie[26] 子指针数组 + end 结束标记。insert 从根沿字符路径走，缺子节点就 new；search 和 startsWith 共用一个 getCur 沿前缀走到终点，区别是 search 还要检查 end 标记——否则搜 app 会误命中已插入的 apple。\n边界：空字符串应作为合法词支持（根节点 end 标记即可）；公共前缀是另一个完整词时必须靠 end 区分；题目限定小写字母，数组固定 26。\n复杂度：insert / search / startsWith 均为 O(L)（L 为单词/前缀长度），空间 O(总字符数×26)；比哈希表多支持前缀查询，且共享公共前缀。"
 }

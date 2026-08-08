@@ -48,5 +48,6 @@
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
-  ]
+  ],
+  "approach_detail": "问题本质：树关于根镜像对称 ⟺ 左子树与右子树互为镜像。比较两棵子树时要交叉：p 的左对 q 的右、p 的右对 q 的左。\n关键设计：递归 helper(left, right)：都空返回 true、一空返回 false、值不等返回 false，否则递归 (left.left, right.right) && (left.right, right.left)；入口调用 isSymmetricHelper(root, root)。代码里同时有迭代栈版本（成对压入再成对弹出比较）和递归版本，思路一致。\n边界：空树 true；单节点 true；结构对称但值不对称；值对称但结构不对称（null 位置不同）——必须同时检查空与值。\n复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（h 为树高），最优。"
 }
