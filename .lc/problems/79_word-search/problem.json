@@ -1,0 +1,70 @@
+{
+  "id": "79",
+  "slug": "word-search",
+  "title": "Word Search",
+  "titleCn": "单词搜索",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/word-search/",
+  "tags": [
+    "Depth-First Search",
+    "Array",
+    "String",
+    "Backtracking",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "数组",
+    "字符串",
+    "回溯",
+    "矩阵"
+  ],
+  "category": "回溯",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "board",
+          "value": "[['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]"
+        },
+        {
+          "name": "word",
+          "value": "\"ABCCED\""
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "board",
+          "value": "[['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]"
+        },
+        {
+          "name": "word",
+          "value": "\"SEE\""
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "board",
+          "value": "[['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]"
+        },
+        {
+          "name": "word",
+          "value": "\"ABCB\""
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"ABCCED\"\n[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"SEE\"\n[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"ABCB\"",
+  "javaSnippet": "class Solution {\n    public boolean exist(char[][] board, String word) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T20:12:28.416Z"
+}

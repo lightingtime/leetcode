@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-09",
-  "current_seq": 48,
+  "current_seq": 49,
   "done": [
     {
       "seq": 1,
@@ -518,6 +518,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "回溯起点推进框架，每个节点都是唯一子集"
+    },
+    {
+      "seq": 49,
+      "id": "79",
+      "title": "单词搜索",
+      "slug": "word-search",
+      "category": "回溯",
+      "date": "2026-08-09",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "网格 DFS + visited 剪枝，选择/撤销对称"
     }
   ],
   "error_habits": [
