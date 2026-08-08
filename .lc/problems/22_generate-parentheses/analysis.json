@@ -1,0 +1,39 @@
+{
+  "seq": 53,
+  "id": "22",
+  "slug": "generate-parentheses",
+  "title": "括号生成",
+  "category": "动态规划",
+  "date": "2026-08-09",
+  "verdict": "Accepted",
+  "testcases": "8/8",
+  "runtime_ms": null,
+  "memory_bytes": 44368000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "回溯（剩余计数剪枝）",
+  "approach_detail": "问题本质：生成 n 对括号的所有合法组合，数量是卡特兰数 C_n = (2n)!/((n+1)!·n!)。枚举每个位置放 ( 还是 )，用「已用右括号 ≤ 已用左括号」保证每一步前缀都合法。\n\n为什么用回溯：\n- 每个位置只有两种选择，但 () 的合法组合不能靠排列硬凑，必须边生成边校验；\n- 回溯天然支持「生成一条路径 → 到底 → 撤销 → 换分支」的完整枚举。\n\n关键设计：\n1. 状态：剩余左括号数 left、剩余右括号数 right、当前串 sb；\n2. 终止条件：left==0 && right==0 时当前串完整，加入答案；\n3. 剪枝：right < left 时说明已用右括号超过已用左括号，前缀已非法，直接返回；负数守卫防止 left 为 0 时仍递归减成 -1；\n4. 两条分支对称：加 ( → dfs(left-1, right)，加 ) → dfs(left, right-1)，各自递归后删除末尾字符撤销。\n\n具体 case 推演（n=2，dfs(2,2)）：\n- 加 ( → (1,2)：加 ( → (0,2)：只能加 ) → (0,1) → 加 ) → (0,0) → 得到 (())；\n- 回溯回 (1,2)：改加 ) → (1,1)：加 ( → (0,1) → 加 ) → (0,0) → 得到 ()()；\n- 从 (2,2) 直接加 ) 的分支变成 (2,1)，right<left 剪枝，非法分支不产生。\n\n边界与细节：\n- n=1 只有 ()；n=2 两个；n=4 14 个；n=8 1430 个（本地测试逐个校验合法性并检查去重）；\n- StringBuilder 加入答案时必须 toString 复制，否则后续撤销会改坏已存结果；\n- 题目约束 n >= 1，无需处理空输入。\n\n复杂度分析：\n- 时间 O(C_n · n)：C_n 个合法串，每个长 2n；剪枝后的递归树只含合法前缀；\n- 空间 O(n)：递归深度 2n + 当前串（不含输出）。\n\n为什么是最优：答案数量本身就是卡特兰数，任何算法至少要输出 C_n 个长度为 2n 的串；回溯让每个合法串恰好生成一次、无重复枚举，已达下限。",
+  "time_complexity": "O(C_n*n)",
+  "space_complexity": "O(n)",
+  "notes": "回溯：剩余左右括号计数 + right<left 剪枝",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-09",
+      "verdict": "Accepted",
+      "testcases": "8/8",
+      "runtime_ms": null,
+      "memory_bytes": 44368000,
+      "approach": "回溯（剩余计数剪枝）",
+      "time_complexity": "O(C_n*n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "回溯：剩余左右括号计数 + right<left 剪枝"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-09",
-  "current_seq": 52,
+  "current_seq": 53,
   "done": [
     {
       "seq": 1,
@@ -562,6 +562,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "中心扩散：2n-1 个中心向两边扩展，O(1) 空间"
+    },
+    {
+      "seq": 53,
+      "id": "22",
+      "title": "括号生成",
+      "slug": "generate-parentheses",
+      "category": "动态规划",
+      "date": "2026-08-09",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "回溯：剩余左右括号计数 + right<left 剪枝"
     }
   ],
   "error_habits": [

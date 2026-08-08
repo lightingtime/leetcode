@@ -1,0 +1,46 @@
+{
+  "id": "22",
+  "slug": "generate-parentheses",
+  "title": "Generate Parentheses",
+  "titleCn": "括号生成",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/generate-parentheses/",
+  "tags": [
+    "String",
+    "Dynamic Programming",
+    "Backtracking",
+    "括号序列"
+  ],
+  "tagsCn": [
+    "字符串",
+    "动态规划",
+    "回溯",
+    "括号序列"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "1"
+        }
+      ],
+      "output": "[\"()\"]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "3\n1",
+  "javaSnippet": "class Solution {\n    public List<String> generateParenthesis(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T21:59:21.534Z"
+}
