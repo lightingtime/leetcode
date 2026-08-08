@@ -1,0 +1,80 @@
+{
+  "id": "62",
+  "slug": "unique-paths",
+  "title": "Unique Paths",
+  "titleCn": "不同路径",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/unique-paths/",
+  "tags": [
+    "Math",
+    "Dynamic Programming",
+    "Combinatorics"
+  ],
+  "tagsCn": [
+    "数学",
+    "动态规划",
+    "组合数学"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "m",
+          "value": "3"
+        },
+        {
+          "name": "n",
+          "value": "7"
+        }
+      ],
+      "output": "28",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "m",
+          "value": "3"
+        },
+        {
+          "name": "n",
+          "value": "2"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "m",
+          "value": "7"
+        },
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "28",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "m",
+          "value": "3"
+        },
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "6",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "3\n7\n3\n2",
+  "javaSnippet": "class Solution {\n    public int uniquePaths(int m, int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T23:14:36.734Z"
+}

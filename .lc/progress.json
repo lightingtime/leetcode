@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-09",
-  "current_seq": 55,
+  "current_seq": 56,
   "done": [
     {
       "seq": 1,
@@ -595,6 +595,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "贪心最远可达，先判可达再更新"
+    },
+    {
+      "seq": 56,
+      "id": "62",
+      "title": "不同路径",
+      "slug": "unique-paths",
+      "category": "动态规划",
+      "date": "2026-08-09",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "一维滚动 DP；初始化与循环统一为 dp[0]=1 + 双层循环"
     }
   ],
   "error_habits": [
@@ -1153,6 +1164,17 @@
       "count": 1,
       "examples": [
         "jump-game"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-09"
+    },
+    {
+      "habit": "滚动数组初始化与循环起点偏移：一维 DP 用 Arrays.fill(dp,1) 初始化已代表第一行，外层循环却从 i=0 开始，把第一行也更新了一遍，等于多算一行（如 m=1,n=10 应得 1 却得 10；3x2 应得 3 却得 4）；初始化完成后循环只应跑 m-1 次",
+      "count": 1,
+      "examples": [
+        "unique-paths"
       ],
       "categories": [
         "动态规划"
