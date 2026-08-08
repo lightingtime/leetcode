@@ -1,0 +1,56 @@
+{
+  "seq": 52,
+  "id": "5",
+  "slug": "longest-palindromic-substring",
+  "title": "最长回文子串",
+  "category": "动态规划",
+  "date": "2026-08-09",
+  "verdict": "Accepted",
+  "testcases": "144/144",
+  "runtime_ms": null,
+  "memory_bytes": 49212000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "区间 DP（boolean 表）",
+  "approach_detail": "问题本质：找最长回文子串。回文的判定可以按「内部是回文 + 两端字符相等」递推，适合区间 DP。\n\n状态与转移：\n- dp[i][j] = s[i..j] 是否为回文；\n- 转移：dp[i][j] = (s[i]==s[j]) && dp[i+1][j-1]，只对 j-i >= 2 有效（内部子串非空）；\n- base case：长度 1 恒为回文；长度 2 直接判两端相等。\n\n关键设计（本轮踩过的三个坑）：\n1. 长度 2 的 base 不能走转移：相邻格 j==i+1 时 dp[i+1][j-1] 指向无效下三角（恒 false），会把初始化好的 true 覆盖掉，所有偶数长度回文断链——转移前先排除 j-i < 2；\n2. 填表顺序必须满足依赖：dp[i][j] 依赖 dp[i+1][j-1]（左下方），用 i 倒序（或按子串长度从小到大）填，保证依赖格子已计算；\n3. 记录答案必须校验 dp[i][j]==true：只看两端相等就更新会把非回文（abca）当成答案。\n\n具体 case 推演：\n- s=babad：单字符 dp[i][i]=true；dp[0][2]：b==b 且 dp[1][1]=true → bab 成立；dp[1][3]：a==a 且 dp[2][2]=true → aba 成立，两者同长任取一个；\n- s=cbbd：dp[1][2] 长度 2 base（b==b）→ bb；dp[0][3]：c!=d 不成立，最长 bb；\n- 反例 abca：dp[0][3]=dp[1][2]=false（b!=c），若答案更新不看 dp 会错误返回 abca——所以校验必须加；\n- 反例 aa：dp[0][1] 初始化 true，若被转移 dp[1][0]=false 覆盖，返回会退化成单字符。\n\n边界与细节：\n- 单字符返回自身；双字符相同/不同；全相同字符串应返回整串（长度 1000 测试覆盖）；\n- 两端相等但内部非回文（abca）必须返回单字符；\n- 奇数/偶数长度中心都要能扩张（cbbd 偶数、babad 奇数）。\n\n复杂度分析：\n- 时间 O(n^2)：n^2 个状态各算一次；\n- 空间 O(n^2)：boolean 表（可滚动优化到 O(n)，本题不必须）。\n\n为什么是可接受/最优：O(n^2) 区间 DP 是本题标准解法，每个子串恰好判定一次；进阶可用 Manacher 达到 O(n)，但对刷题/面试而言 DP 已是常规最优。",
+  "time_complexity": "O(n^2)",
+  "space_complexity": "O(n^2)",
+  "notes": "区间 DP，长度 2 base 与填表顺序是两处关键坑",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填",
+      "count": 1
+    },
+    {
+      "habit": "DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "DP 填表顺序满足依赖方向 + 答案更新必须校验状态",
+      "text": "出处：LC0005 最长回文子串\\n\\n- dp[i][j] 依赖 dp[i+1][j-1]（左下方），按 i 正序、j 内层正序填会读到未计算的格子，必须按子串长度从小到大填（或 i 倒序）；\\n- 记录答案/最优解前必须确认 dp[i][j] 为 true：只看两端字符相等就更新会把非回文（如 abca）当成答案；\\n- 具体 case：abca 的 dp[0][3]=dp[1][2]=false，但若 ans 更新不看 dp，会错误返回 abca。\\n\\n要点：写 DP 先画依赖图确定填表顺序；从 dp 取值更新答案时，先校验状态本身成立。\n- 长度 2 的 base 不能走转移：dp[i][i+1] 已在初始化置位，主循环再执行 dp[i][j]=dp[i+1][j-1] 会读到无效下三角把 true 覆盖，偶数长度回文全断；长度 2 直接判两端相等或排除 j==i+1。",
+      "category": "动态规划",
+      "problem": "longest-palindromic-substring",
+      "date": "2026-08-09"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-09",
+      "verdict": "Accepted",
+      "testcases": "144/144",
+      "runtime_ms": null,
+      "memory_bytes": 49212000,
+      "approach": "区间 DP（boolean 表）",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n^2)",
+      "optimal": true,
+      "notes": "区间 DP，长度 2 base 与填表顺序是两处关键坑"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "5",
+  "slug": "longest-palindromic-substring",
+  "title": "Longest Palindromic Substring",
+  "titleCn": "最长回文子串",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/longest-palindromic-substring/",
+  "tags": [
+    "Two Pointers",
+    "String",
+    "Dynamic Programming",
+    "Manacher 算法"
+  ],
+  "tagsCn": [
+    "双指针",
+    "字符串",
+    "动态规划",
+    "Manacher 算法"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"babad\""
+        }
+      ],
+      "output": "\"bab\"",
+      "explain": "\"aba\" 同样是符合题意的答案。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"cbbd\""
+        }
+      ],
+      "output": "\"bb\"",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"babad\"\n\"cbbd\"",
+  "javaSnippet": "class Solution {\n    public String longestPalindrome(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T20:42:35.861Z"
+}
