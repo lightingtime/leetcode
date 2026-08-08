@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-09",
-  "current_seq": 50,
+  "current_seq": 51,
   "done": [
     {
       "seq": 1,
@@ -540,6 +540,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "滚动变量斐波那契，O(1) 空间"
+    },
+    {
+      "seq": 51,
+      "id": "121",
+      "title": "买卖股票的最佳时机",
+      "slug": "best-time-to-buy-and-sell-stock",
+      "category": "动态规划",
+      "date": "2026-08-09",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "单趟扫描维护历史最低买入价"
     }
   ],
   "error_habits": [

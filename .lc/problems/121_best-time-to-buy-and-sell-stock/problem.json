@@ -1,0 +1,37 @@
+{
+  "id": "121",
+  "slug": "best-time-to-buy-and-sell-stock",
+  "title": "Best Time to Buy and Sell Stock",
+  "titleCn": "买卖股票的最佳时机",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/",
+  "tags": [
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [],
+      "output": "5",
+      "explain": "在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "prices",
+          "value": "[7,6,4,3,1]"
+        }
+      ],
+      "output": "0",
+      "explain": "在这种情况下, 没有交易完成, 所以最大利润为 0。"
+    }
+  ],
+  "exampleTestcases": "[7,1,5,3,6,4]\n[7,6,4,3,1]",
+  "javaSnippet": "class Solution {\n    public int maxProfit(int[] prices) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T20:34:51.856Z"
+}
