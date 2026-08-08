@@ -517,7 +517,7 @@
       "date": "2026-08-09",
       "firstPass": false,
       "optimal": true,
-      "notes": "回溯选/不选框架，答案只在叶子收集"
+      "notes": "回溯起点推进框架，每个节点都是唯一子集"
     }
   ],
   "error_habits": [

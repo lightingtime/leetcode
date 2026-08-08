@@ -18,17 +18,13 @@ public class LC0078_Subsets {
         return ans;
     }
 
-    private void dfs(int[] nums, int index, List<Integer> list) {
-        if (index >= nums.length) {
-            ans.add(new ArrayList<>(list));
-            return;
-        }
-
-            list.add(nums[index]);
-            dfs(nums, index + 1, list);
-
+    private void dfs(int[] nums, int start, List<Integer> list) {
+        ans.add(new ArrayList<>(list));
+        for (int i = start; i < nums.length; i++) {
+            list.add(nums[i]);
+            dfs(nums, i + 1, list);
             list.remove(list.size() - 1);
-            dfs(nums, index + 1, list);
+        }
     }
     // ==== 提交代码结束 ====
 

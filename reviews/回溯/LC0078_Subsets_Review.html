@@ -42,7 +42,7 @@
 <div class="hero"><div class="wrap">
   <div class="kicker">LEETCODE 刷题复盘 · SEQ 48</div>
   <h1>LC78 · 子集</h1>
-  <div class="sub">回溯（选/不选） · Accepted</div>
+  <div class="sub">回溯（起点推进） · Accepted</div>
   <div class="badges">
     <span class="badge ok">✓ Accepted 10/10</span>
     <span class="badge medium">难度 MEDIUM</span>
@@ -57,7 +57,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯（选/不选）</h3>
     <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 10/10</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0078_Subsets.java</span><span>提交区</span></div><pre>List&lt;List&lt;Integer&gt;&gt; ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（选/不选）</span><span>提交区</span></div><pre>List&lt;List&lt;Integer&gt;&gt; ans;
     public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
         ans = new ArrayList&lt;&gt;();
         dfs(nums, 0, new ArrayList&lt;&gt;());
@@ -77,15 +77,34 @@
             dfs(nums, index + 1, list);
     }</pre></div>
     <p class="muted">回溯选/不选框架，答案只在叶子收集</p>
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 回溯（起点推进）</h3>
+    <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 10/10</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（起点推进）</span><span>提交区</span></div><pre>List&lt;List&lt;Integer&gt;&gt; ans;
+    public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
+        ans = new ArrayList&lt;&gt;();
+        dfs(nums, 0, new ArrayList&lt;&gt;());
+        return ans;
+    }
+
+    private void dfs(int[] nums, int start, List&lt;Integer&gt; list) {
+        ans.add(new ArrayList&lt;&gt;(list));
+        for (int i = start; i &lt; nums.length; i++) {
+            list.add(nums[i]);
+            dfs(nums, i + 1, list);
+            list.remove(list.size() - 1);
+        }
+    }</pre></div>
+    <p class="muted">回溯起点推进框架，每个节点都是唯一子集</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。</p><p>为什么用选/不选框架：</p><p>- 子集与排列不同，没有顺序概念，不需要 used 去重；每个元素只有「加入」与「不加入」两个分支；</p><p>- 递归参数 index 表示「下一个待决策的元素」，从 0 走到 n，决策完所有元素时当前列表就是一个完整子集。</p><p>关键设计：</p><p>1. 递归状态：当前已决定的列表 list + 下一个待决策下标 index；</p><p>2. 终止条件：index == nums.length 时所有元素决策完毕，把 list 的副本加入答案（必须 new 副本，否则后续撤销会改坏已存结果）；</p><p>3. 两个分支对称：加入 nums[index] → 递归 index+1 → 撤销移除；不加入 → 直接递归 index+1；</p><p>4. 空集自动产生：根节点一路「不选」走到叶子即 []。</p><p>边界与细节：</p><p>- n=1 只有 [[], [0]]；n=10 共 1024 个子集，测试已覆盖；</p><p>- 元素互异，不需要排序或去重；含重复元素（子集 II）才需要排序 + 跳过相邻相同值；</p><p>- 框架一致性是本题的最大坑：选/不选框架里答案只能在叶子加，在入口加会把同一子集重复记录；递归必须显式终止，否则越界访问。</p><p>复杂度分析：</p><p>- 时间 O(n·2^n)：2^n 个子集，每个复制 O(n)；</p><p>- 空间 O(n)：递归栈 + 当前列表（不含输出；计入输出为 O(n·2^n)）。</p><p>为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；回溯每个子集恰好生成一次、无重复枚举，O(n·2^n) / O(n) 已达下限。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card"><p>问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。本题有两种等价写法，一次只选一种框架。</p><p>写法 1 · 选/不选（已提交）：</p><p>- 递归参数 index 表示下一个待决策的元素；每层两个分支：加入 nums[index] 递归 index+1，或不加入直接递归 index+1；</p><p>- 答案只在叶子收集：index == nums.length 时所有元素决策完毕，把 list 副本加入答案；</p><p>- 必须显式终止，否则 index 越界访问；空集由根节点一路「不选」产生。</p><p>写法 2 · 起点推进（已提交）：</p><p>- 递归参数 start 表示下一个可选的起点；for 循环枚举「下一个加入子集的元素」，选 nums[i] 后递归 i+1 并撤销；</p><p>- 「不选」由循环 i++ 隐含表达，不需要第二个递归分支；</p><p>- 答案在每个节点入口收集：该框架下每个节点形成的列表互不相同，不会重复；循环自然结束，无需显式终止。</p><p>两种写法对比：</p><p>- 复杂度相同：时间 O(n·2^n)（2^n 个子集，每个复制 O(n)），空间 O(n)（递归栈 + 当前列表，不含输出）；</p><p>- 差别只在「答案收集时机」：选/不选框架内部节点会与叶子重复，只能叶子加；起点推进框架每个节点唯一，入口加即可；</p><p>- 都无需排序（元素互异）；含重复元素时两种框架都要排序 + 跳过相邻相同值。</p><p>为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；两种写法每个子集恰好生成一次、无重复枚举，已达下限。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>回溯递归起点传错/框架混用：下一层起点必须从当前选中下标的下一个位置继续（传 i+1），传旧 index 会让同一元素重复入选（如 [1,3,3]）、子集重复、递归树爆炸 OOM；「选/不选」与「起点推进」两种回溯框架不要叠用</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>选/不选递归缺少终止条件：删掉 for 循环后没有处理 index 越界，仍访问 nums[index] 导致 AIOOBE；换框架后要同步补上新的边界出口（没有元素可决策时直接返回）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>答案收集时机与框架不匹配：选/不选框架里当前列表要等所有元素决策完才是完整子集，只能在叶子（index==n）加答案；在入口加会把同一子集重复记录（n=10 得到 2047=2^11-1 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>10/10 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card"><h3>回溯枚举子集：两种框架不可混用，递归起点必须前进</h3><p>子集/组合类枚举有两种等价回溯框架，只能选一种：<br>- 框架 A（每个下标选/不选）：递归参数传下一个下标，分支是「加入」与「不加入」，不需要 for 循环；<br>- 框架 B（起点推进）：for i 从 start 起，只走「加入」分支并递归 (i+1)，「不加入」由循环自然推进，循环体内只有一个递归调用；<br>- 共性：下一层起点必须基于当前选择前进（i+1），传旧 index 会让同一元素重复入选、子集重复、递归树超过 2^n 爆炸；<br>- 每次进入递归就把当前列表副本加入答案，空集由根节点自然产生。</p></div><div class="card"><h3>递归枚举必须显式终止：决策下标越界即返回，不能访问越界元素</h3><p>出处：LC0078 子集<br>选/不选框架没有 for 循环，终止条件必须显式：<br>- 递归参数是下一个待决策下标，当 index == 数组长度时，没有元素可决策，先返回；<br>- 子集题每个节点都是答案，越界前那层加入即可，但访问 nums[index] 前必须保证在界内；<br>- 从「起点推进」改成「选/不选」时，for 循环隐式的越界保护会消失，必须补上显式 base case，否则 AIOOBE。<br>要点：换框架时检查边界出口是否仍然存在；递归访问数组下标前，先保证下标在界内。</p></div><div class="card"><h3>答案收集时机绑定框架：选/不选只在叶子加答案，起点推进每节点加</h3><p>出处：LC0078 子集<br>答案收集时机绑定回溯框架：<br>- 起点推进框架：每个节点形成的列表互不相同，进入 dfs 即可加答案；<br>- 选/不选框架：每个子集唯一对应一棵「叶子」，内部节点的列表与某个叶子重复，只能在叶子（所有元素决策完）加答案；<br>- 判断标准：同一个列表是否会被多条路径重复到达。<br>要点：换框架后，除了递归参数和终止条件，答案收集时机也要一起检查。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">10/10</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 42.7 MB</div><div class="l">内存占用</div></div>
+      <div class="metric"><div class="v">≈ 42.6 MB</div><div class="l">内存占用</div></div>
       <div class="metric ok"><div class="v">O(n*2^n) · O(n)</div><div class="l">时间 · 空间</div></div>
       <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
     </div>
@@ -97,7 +116,7 @@
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 48 · subsets</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
-      <div class="quote">回溯选/不选框架，答案只在叶子收集</div>
+      <div class="quote">回溯起点推进框架，每个节点都是唯一子集</div>
     </div>
   </section>
   <div class="foot">

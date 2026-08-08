@@ -8,14 +8,14 @@
   "verdict": "Accepted",
   "testcases": "10/10",
   "runtime_ms": null,
-  "memory_bytes": 44816000,
+  "memory_bytes": 44644000,
   "firstPass": false,
   "optimal": true,
-  "approach": "回溯（选/不选）",
-  "approach_detail": "问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。\n\n为什么用选/不选框架：\n- 子集与排列不同，没有顺序概念，不需要 used 去重；每个元素只有「加入」与「不加入」两个分支；\n- 递归参数 index 表示「下一个待决策的元素」，从 0 走到 n，决策完所有元素时当前列表就是一个完整子集。\n\n关键设计：\n1. 递归状态：当前已决定的列表 list + 下一个待决策下标 index；\n2. 终止条件：index == nums.length 时所有元素决策完毕，把 list 的副本加入答案（必须 new 副本，否则后续撤销会改坏已存结果）；\n3. 两个分支对称：加入 nums[index] → 递归 index+1 → 撤销移除；不加入 → 直接递归 index+1；\n4. 空集自动产生：根节点一路「不选」走到叶子即 []。\n\n边界与细节：\n- n=1 只有 [[], [0]]；n=10 共 1024 个子集，测试已覆盖；\n- 元素互异，不需要排序或去重；含重复元素（子集 II）才需要排序 + 跳过相邻相同值；\n- 框架一致性是本题的最大坑：选/不选框架里答案只能在叶子加，在入口加会把同一子集重复记录；递归必须显式终止，否则越界访问。\n\n复杂度分析：\n- 时间 O(n·2^n)：2^n 个子集，每个复制 O(n)；\n- 空间 O(n)：递归栈 + 当前列表（不含输出；计入输出为 O(n·2^n)）。\n\n为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；回溯每个子集恰好生成一次、无重复枚举，O(n·2^n) / O(n) 已达下限。",
+  "approach": "回溯（起点推进）",
+  "approach_detail": "问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。本题有两种等价写法，一次只选一种框架。\n\n写法 1 · 选/不选（已提交）：\n- 递归参数 index 表示下一个待决策的元素；每层两个分支：加入 nums[index] 递归 index+1，或不加入直接递归 index+1；\n- 答案只在叶子收集：index == nums.length 时所有元素决策完毕，把 list 副本加入答案；\n- 必须显式终止，否则 index 越界访问；空集由根节点一路「不选」产生。\n\n写法 2 · 起点推进（已提交）：\n- 递归参数 start 表示下一个可选的起点；for 循环枚举「下一个加入子集的元素」，选 nums[i] 后递归 i+1 并撤销；\n- 「不选」由循环 i++ 隐含表达，不需要第二个递归分支；\n- 答案在每个节点入口收集：该框架下每个节点形成的列表互不相同，不会重复；循环自然结束，无需显式终止。\n\n两种写法对比：\n- 复杂度相同：时间 O(n·2^n)（2^n 个子集，每个复制 O(n)），空间 O(n)（递归栈 + 当前列表，不含输出）；\n- 差别只在「答案收集时机」：选/不选框架内部节点会与叶子重复，只能叶子加；起点推进框架每个节点唯一，入口加即可；\n- 都无需排序（元素互异）；含重复元素时两种框架都要排序 + 跳过相邻相同值。\n\n为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；两种写法每个子集恰好生成一次、无重复枚举，已达下限。",
   "time_complexity": "O(n*2^n)",
   "space_complexity": "O(n)",
-  "notes": "回溯选/不选框架，答案只在叶子收集",
+  "notes": "回溯起点推进框架，每个节点都是唯一子集",
   "code_notes": [],
   "mistakes": [
     {
@@ -65,7 +65,21 @@
       "time_complexity": "O(n*2^n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "回溯选/不选框架，答案只在叶子收集"
+      "notes": "回溯选/不选框架，答案只在叶子收集",
+      "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        if (index >= nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n\n            list.add(nums[index]);\n            dfs(nums, index + 1, list);\n\n            list.remove(list.size() - 1);\n            dfs(nums, index + 1, list);\n    }"
+    },
+    {
+      "date": "2026-08-09",
+      "verdict": "Accepted",
+      "testcases": "10/10",
+      "runtime_ms": null,
+      "memory_bytes": 44644000,
+      "approach": "回溯（起点推进）",
+      "time_complexity": "O(n*2^n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "回溯起点推进框架，每个节点都是唯一子集",
+      "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int start, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n        for (int i = start; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }"
     }
   ],
   "hints": [
