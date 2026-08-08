@@ -13,25 +13,27 @@ public class LC0005_LongestPalindromicSubstring {
     // ==== 提交代码开始 ====
     public String longestPalindrome(String s) {
         int n = s.length();
-        boolean[][] dp = new boolean[n][n];
+        if (n < 2) return s;
+        int maxLen = 0;
+        int start = -1;
         for (int i = 0; i < n; i++) {
-            dp[i][i] = true;
-            if (i < n - 1 && s.charAt(i) == s.charAt(i + 1)) {
-                dp[i][i + 1] = true;
+            int len1 = getLen(s, i, i);
+            int len2 = getLen(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > maxLen) {
+                maxLen = len;
+                start = i - (maxLen - 1) / 2;
             }
         }
-        String ans = "";
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = 0; j < n; j++) {
-                if (j - i >= 2 && s.charAt(i) == s.charAt(j)) {
-                    dp[i][j] = dp[i + 1][j - 1];
-                }
-                if (dp[i][j] && j - i >= ans.length()) {
-                    ans = s.substring(i, j + 1);
-                }
-            }
+        return s.substring(start, start + maxLen);
+    }
+
+    private int getLen(String s, int l, int r) {
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
         }
-        return ans;
+        return r - l - 1;
     }
     // ==== 提交代码结束 ====
 
