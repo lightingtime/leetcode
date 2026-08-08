@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-08",
-  "current_seq": 43,
+  "current_seq": 44,
   "done": [
     {
       "seq": 1,
@@ -463,6 +463,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）"
+    },
+    {
+      "seq": 44,
+      "id": "200",
+      "title": "岛屿数量",
+      "slug": "number-of-islands",
+      "category": "图与并查集",
+      "date": "2026-08-08",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）"
     }
   ],
   "error_habits": [
@@ -922,6 +933,39 @@
       "count": 1,
       "examples": [
         "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-08"
+    },
+    {
+      "habit": "网格 DFS 越界守卫写反：i>=0 && i<len && j>=0 && j<len 为真表示在界内却 return 0，导致所有在界调用直接返回（示例全得 0）；同类问题第 2 次（先例：链表守卫写反恒真）",
+      "count": 1,
+      "examples": [
+        "number-of-islands"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-08"
+    },
+    {
+      "habit": "空网格边界顺序：先取 grid[0].length 再判 m==0，空输入直接 AIOOBE；判空必须在取下标之前",
+      "count": 1,
+      "examples": [
+        "number-of-islands"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-08"
+    },
+    {
+      "habit": "统计口径混淆：用 max=Math.max(max, dfs面积) 求最大岛屿面积，而题目要岛屿个数；计数应在发现未访问陆地时 +1，且 dfs 返回值不参与计数",
+      "count": 1,
+      "examples": [
+        "number-of-islands"
       ],
       "categories": [
         "图与并查集"

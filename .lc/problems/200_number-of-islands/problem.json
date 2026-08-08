@@ -1,0 +1,48 @@
+{
+  "id": "200",
+  "slug": "number-of-islands",
+  "title": "Number of Islands",
+  "titleCn": "岛屿数量",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/number-of-islands/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Union Find",
+    "Array",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "并查集",
+    "数组",
+    "矩阵"
+  ],
+  "category": "图与并查集",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "grid",
+          "value": "["
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "grid",
+          "value": "["
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]\n[[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]",
+  "javaSnippet": "class Solution {\n    public int numIslands(char[][] grid) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-07T23:43:08.906Z"
+}

@@ -1,0 +1,59 @@
+{
+  "seq": 44,
+  "id": "200",
+  "slug": "number-of-islands",
+  "title": "岛屿数量",
+  "category": "图与并查集",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "49/49",
+  "runtime_ms": null,
+  "memory_bytes": 52848000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "DFS 洪水填充",
+  "time_complexity": "O(m*n)",
+  "space_complexity": "O(m*n)",
+  "notes": "岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "网格 DFS 越界守卫写反：i>=0 && i<len && j>=0 && j<len 为真表示在界内却 return 0，导致所有在界调用直接返回（示例全得 0）；同类问题第 2 次（先例：链表守卫写反恒真）",
+      "count": 1
+    },
+    {
+      "habit": "空网格边界顺序：先取 grid[0].length 再判 m==0，空输入直接 AIOOBE；判空必须在取下标之前",
+      "count": 1
+    },
+    {
+      "habit": "统计口径混淆：用 max=Math.max(max, dfs面积) 求最大岛屿面积，而题目要岛屿个数；计数应在发现未访问陆地时 +1，且 dfs 返回值不参与计数",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "网格连通分量 DFS：四方向偏移 + 越界守卫 + 发现即计数",
+      "text": "网格连通题（岛屿/被围绕区域等）：方向偏移只放上下左右四组；dfs 开头先判越界（出界才返回）；主循环遇到未访问的陆地就计数+1 并整块标记，dfs 不需要返回值参与计数。常见坑：守卫条件写反（在界内却 return）、8 方向误连斜对角、用最大面积代替个数。",
+      "category": "图与并查集",
+      "problem": "number-of-islands",
+      "date": "2026-08-08"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "49/49",
+      "runtime_ms": null,
+      "memory_bytes": 52848000,
+      "approach": "DFS 洪水填充",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(m*n)",
+      "optimal": true,
+      "notes": "岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）"
+    }
+  ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ]
+}
