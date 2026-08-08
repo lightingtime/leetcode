@@ -1,0 +1,44 @@
+{
+  "id": "78",
+  "slug": "subsets",
+  "title": "Subsets",
+  "titleCn": "子集",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/subsets/",
+  "tags": [
+    "Bit Manipulation",
+    "Array",
+    "Backtracking"
+  ],
+  "tagsCn": [
+    "位运算",
+    "数组",
+    "回溯"
+  ],
+  "category": "回溯",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,3]"
+        }
+      ],
+      "output": "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[0]"
+        }
+      ],
+      "output": "[[],[0]]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3]\n[0]",
+  "javaSnippet": "class Solution {\n    public List<List<Integer>> subsets(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T19:41:10.247Z"
+}
