@@ -1,0 +1,56 @@
+{
+  "id": "207",
+  "slug": "course-schedule",
+  "title": "Course Schedule",
+  "titleCn": "课程表",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/course-schedule/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Graph",
+    "Topological Sort",
+    "有向无环图"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "图",
+    "拓扑排序",
+    "有向无环图"
+  ],
+  "category": "图与并查集",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "numCourses",
+          "value": "2"
+        },
+        {
+          "name": "prerequisites",
+          "value": "[[1,0]]"
+        }
+      ],
+      "output": "true",
+      "explain": "总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "numCourses",
+          "value": "2"
+        },
+        {
+          "name": "prerequisites",
+          "value": "[[1,0],[0,1]]"
+        }
+      ],
+      "output": "false",
+      "explain": "总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。"
+    }
+  ],
+  "exampleTestcases": "2\n[[1,0]]\n2\n[[1,0],[0,1]]",
+  "javaSnippet": "class Solution {\n    public boolean canFinish(int numCourses, int[][] prerequisites) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T00:14:43.105Z"
+}

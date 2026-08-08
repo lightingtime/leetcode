@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-08",
-  "current_seq": 44,
+  "current_seq": 45,
   "done": [
     {
       "seq": 1,
@@ -474,6 +474,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）"
+    },
+    {
+      "seq": 45,
+      "id": "207",
+      "title": "课程表",
+      "slug": "course-schedule",
+      "category": "图与并查集",
+      "date": "2026-08-08",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）"
     }
   ],
   "error_habits": [

@@ -1,0 +1,38 @@
+{
+  "seq": 45,
+  "id": "207",
+  "slug": "course-schedule",
+  "title": "课程表",
+  "category": "图与并查集",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "54/54",
+  "runtime_ms": null,
+  "memory_bytes": 47800000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Kahn 拓扑排序",
+  "time_complexity": "O(V+E)",
+  "space_complexity": "O(V+E)",
+  "notes": "课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "54/54",
+      "runtime_ms": null,
+      "memory_bytes": 47800000,
+      "approach": "Kahn 拓扑排序",
+      "time_complexity": "O(V+E)",
+      "space_complexity": "O(V+E)",
+      "optimal": true,
+      "notes": "课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）"
+    }
+  ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ]
+}

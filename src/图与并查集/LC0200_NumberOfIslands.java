@@ -17,10 +17,11 @@ public class LC0200_NumberOfIslands {
             return count;
         }
         int n = grid[0].length;
-        visited = new boolean[m][n];
-        if (m == 0 || n == 0) {
+        if (n == 0) {
             return count;
         }
+        visited = new boolean[m][n];
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (!visited[i][j] && dfs(grid, i, j)) {
@@ -44,11 +45,10 @@ public class LC0200_NumberOfIslands {
         if (grid[i][j] == '0') {
             return false;
         }
-        boolean cur = true;
         for (int k = 0; k < xd.length; k++) {
             dfs(grid, i + xd[k], j + yd[k]);
         }
-        return cur;
+        return true;
     }
     // ==== 提交代码结束 ====
 
