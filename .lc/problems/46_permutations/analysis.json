@@ -1,0 +1,38 @@
+{
+  "seq": 47,
+  "id": "46",
+  "slug": "permutations",
+  "title": "全排列",
+  "category": "回溯",
+  "date": "2026-08-09",
+  "verdict": "Accepted",
+  "testcases": "26/26",
+  "runtime_ms": null,
+  "memory_bytes": 45920000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "回溯（used 标记）",
+  "time_complexity": "O(n*n!)",
+  "space_complexity": "O(n)",
+  "notes": "回溯 + used 数组标记，选择/撤销对称",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-09",
+      "verdict": "Accepted",
+      "testcases": "26/26",
+      "runtime_ms": null,
+      "memory_bytes": 45920000,
+      "approach": "回溯（used 标记）",
+      "time_complexity": "O(n*n!)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "回溯 + used 数组标记，选择/撤销对称"
+    }
+  ],
+  "hints": [
+    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ]
+}
