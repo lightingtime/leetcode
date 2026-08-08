@@ -1,0 +1,44 @@
+{
+  "id": "17",
+  "slug": "letter-combinations-of-a-phone-number",
+  "title": "Letter Combinations of a Phone Number",
+  "titleCn": "电话号码的字母组合",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/letter-combinations-of-a-phone-number/",
+  "tags": [
+    "Hash Table",
+    "String",
+    "Backtracking"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串",
+    "回溯"
+  ],
+  "category": "回溯",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "digits",
+          "value": "\"23\""
+        }
+      ],
+      "output": "[\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "digits",
+          "value": "\"2\""
+        }
+      ],
+      "output": "[\"a\",\"b\",\"c\"]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"23\"\n\"2\"",
+  "javaSnippet": "class Solution {\n    public List<String> letterCombinations(String digits) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T00:28:49.306Z"
+}

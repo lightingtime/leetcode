@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-08",
-  "current_seq": 45,
+  "current_seq": 46,
   "done": [
     {
       "seq": 1,
@@ -485,6 +485,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）"
+    },
+    {
+      "seq": 46,
+      "id": "17",
+      "title": "电话号码的字母组合",
+      "slug": "letter-combinations-of-a-phone-number",
+      "category": "回溯",
+      "date": "2026-08-08",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "电话号码字母组合：回溯逐位选字母 + StringBuilder 撤销，修复空输入边界（应返回 [] 而非 [\"\"]）后 Accepted（24/24）"
     }
   ],
   "error_habits": [

@@ -1,0 +1,46 @@
+{
+  "seq": 46,
+  "id": "17",
+  "slug": "letter-combinations-of-a-phone-number",
+  "title": "电话号码的字母组合",
+  "category": "回溯",
+  "date": "2026-08-08",
+  "verdict": "Accepted",
+  "testcases": "24/24",
+  "runtime_ms": null,
+  "memory_bytes": 43708000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "回溯 DFS",
+  "time_complexity": "O(4^n·n)",
+  "space_complexity": "O(n)",
+  "notes": "电话号码字母组合：回溯逐位选字母 + StringBuilder 撤销，修复空输入边界（应返回 [] 而非 [\"\"]）后 Accepted（24/24）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "回溯枚举组合：空输入要提前返回，终止条件对空串直接成立",
+      "text": "回溯枚举（字母组合/子集/排列）里，终止条件 len==目标长度 对空输入一开始就成立，会把空串当成一个合法组合加入答案；题目要求空输入返回空列表时，需在进入递归前单独返回。另外测试工具若把空串规范化成空内容，[] 与 [\"\"] 会无法区分，需用 size 断言兜底。",
+      "category": "回溯",
+      "problem": "letter-combinations-of-a-phone-number",
+      "date": "2026-08-08"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-08",
+      "verdict": "Accepted",
+      "testcases": "24/24",
+      "runtime_ms": null,
+      "memory_bytes": 43708000,
+      "approach": "回溯 DFS",
+      "time_complexity": "O(4^n·n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "电话号码字母组合：回溯逐位选字母 + StringBuilder 撤销，修复空输入边界（应返回 [] 而非 [\"\"]）后 Accepted（24/24）"
+    }
+  ],
+  "hints": [
+    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ]
+}
