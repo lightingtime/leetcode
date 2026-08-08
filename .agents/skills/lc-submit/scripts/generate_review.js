@@ -45,6 +45,7 @@ const memory = a.memory_bytes != null ? `≈ ${(a.memory_bytes / 1048576).toFixe
 const timeSpace = [a.time_complexity, a.space_complexity].filter(Boolean).join(' · ');
 const mistakes = Array.isArray(a.mistakes) ? a.mistakes : [];
 const codeNotes = Array.isArray(a.code_notes) ? a.code_notes : [];
+const approachDetail = a.approach_detail || '';
 
 const tlItems = [];
 mistakes.forEach((m, i) => tlItems.push(
@@ -133,6 +134,7 @@ const html = `<!DOCTYPE html>
 </div></div>
 <div class="wrap">
   <section><h2>我的解法</h2>${renderSolutions()}</section>
+  ${approachDetail ? `<section><h2>思路拆解</h2><div class="card">${esc(approachDetail).split('\n').filter(l => l.trim()).map(l => `<p>${l}</p>`).join('')}</div></section>` : ''}
   <section><h2>解题过程</h2><div class="tl">${tlItems.join('')}</div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">

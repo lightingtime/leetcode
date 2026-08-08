@@ -1,7 +1,7 @@
 // LC 刷题状态管理：进度查询 / 标记完成 / 记录错误习惯 / 分类提示
 // 用法:
 //   node update_state.js next
-//   node update_state.js done --seq 5 --firstPass true --optimal false --notes "..." [--verdict Accepted --testcases 65/65 --memory 47308000 --approach "单遍哈希表" --time O(n) --space O(n) --code "解法提交区代码（多写法时保存每个解法的代码）"]
+//   node update_state.js done --seq 5 --firstPass true --optimal false --notes "..." [--approachDetail "完整思路拆解（每题必写，含一次 AC）" --verdict Accepted --testcases 65/65 --memory 47308000 --approach "单遍哈希表" --time O(n) --space O(n) --code "解法提交区代码（多写法时保存每个解法的代码）"]
 //   node update_state.js habit add --text "..." [--problem slug] [--category cat]
 //   node update_state.js habit list
 //   node update_state.js pattern add --slug S --title "套路名" --text "套路总结" [--category cat]
@@ -157,6 +157,7 @@ if (cmd === 'next') {
     firstPass: rec.firstPass,
     optimal: rec.optimal,
     approach: arg('--approach', '') || prev.approach || '',
+    approach_detail: arg('--approachDetail', '') || prev.approach_detail || '',
     time_complexity: arg('--time', '') || prev.time_complexity || '',
     space_complexity: arg('--space', '') || prev.space_complexity || '',
     notes: rec.notes || prev.notes || '',
@@ -331,5 +332,5 @@ if (cmd === 'next') {
 } else if (cmd === 'plan') {
   planReport(progress).forEach(l => console.log(l));
 } else {
-  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | stats');
+  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--approachDetail "完整思路拆解"] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | stats');
 }
