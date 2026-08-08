@@ -14,28 +14,24 @@ public class LC0022_GenerateParentheses {
     List<String> ans;
     public List<String> generateParenthesis(int n) {
         ans = new ArrayList<>();
-        dfs(n, n, new StringBuilder());
+        dfs(n, n, "");
         return ans;
     }
 
-    private void dfs(int left, int right, StringBuilder sb) {
+    private void dfs(int left, int right, String sb) {
         if (left < 0 || right < 0) {
             return;
         }
         if (left == right && left == 0) {
-            ans.add(sb.toString());
+            ans.add(sb);
             return;
         }
         if (right < left) {
             return;
         }
-        sb.append("(");
-        dfs(left - 1, right, sb);
-        sb.deleteCharAt(sb.length() - 1);
+        dfs(left - 1, right, sb + "(");
 
-        sb.append(")");
-        dfs(left, right - 1, sb);
-        sb.deleteCharAt(sb.length() - 1);
+        dfs(left, right - 1, sb + ")");
     }
     // ==== 提交代码结束 ====
 
