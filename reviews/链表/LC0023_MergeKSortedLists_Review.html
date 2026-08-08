@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -98,8 +100,9 @@
     }</pre></div>
     <p class="muted">分治两两合并（O(N log k)）：每轮相邻两条合并、递归层数 log k；空数组由 start&gt;=length 守卫、单链/空链混入由 start==end 与 null 分支覆盖；本地 9 组一次全过，力扣 134/134 一次 Accepted。微调点：mergeTowList 每次 new 节点复制值，可改为复用原节点改 next 省分配</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：K 个有序链表合成一个。逐个两两合并是 O(k·n)；用分治把复杂度降到 O(n log k)。</p><p>关键设计：递归对半切分 lists[start..end]，两半各自合并成有序链，再 merge 两个有序链表（复用归并：dummy + 双指针 + 剩余链续接）。每轮把所有链表合并一轮，共 log k 轮。</p><p>边界：lists 为空或长度 0 返回 null；单链表直接返回；链表中含 null 元素时 merge 要处理；链表长度参差不齐不影响分治正确性。</p><p>复杂度：O(n log k) 时间（n 为总节点数）、O(log k) 递归栈；与优先队列解法同为时间最优，空间更省。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：K 个有序链表合成一个。逐个两两合并是 O(k·n)；用分治把复杂度降到 O(n log k)。</p><p>关键设计：递归对半切分 lists[start..end]，两半各自合并成有序链，再 merge 两个有序链表（复用归并：dummy + 双指针 + 剩余链续接）。每轮把所有链表合并一轮，共 log k 轮。</p><p>边界：lists 为空或长度 0 返回 null；单链表直接返回；链表中含 null 元素时 merge 要处理；链表长度参差不齐不影响分治正确性。</p><p>复杂度：O(n log k) 时间（n 为总节点数）、O(log k) 递归栈；与优先队列解法同为时间最优，空间更省。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>134/134 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -65,8 +67,9 @@
     }</pre></div>
     <p class="muted">递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：二叉树最大深度 = 1 + max(左子树深度, 右子树深度)。树的分治结构让递归成为最自然的表达。</p><p>关键设计：递归终止条件为空节点返回 0；每深入一层加 1；取左右子树的较大者。也可以层序遍历计数，但递归最简洁。</p><p>边界：空树深度 0；单节点 1；斜树（退化成链）深度为 n，递归栈深度 O(n)，注意不要爆栈。</p><p>复杂度：O(n) 时间、O(h) 空间（h 为树高，最坏 O(n)），最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：二叉树最大深度 = 1 + max(左子树深度, 右子树深度)。树的分治结构让递归成为最自然的表达。</p><p>关键设计：递归终止条件为空节点返回 0；每深入一层加 1；取左右子树的较大者。也可以层序遍历计数，但递归最简洁。</p><p>边界：空树深度 0；单节点 1；斜树（退化成链）深度为 n，递归栈深度 O(n)，注意不要爆栈。</p><p>复杂度：O(n) 时间、O(h) 空间（h 为树高，最坏 O(n)），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>40/40 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

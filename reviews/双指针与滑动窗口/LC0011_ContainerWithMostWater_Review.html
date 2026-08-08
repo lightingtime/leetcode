@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -72,8 +74,9 @@
     }</pre></div>
     <p class="muted">盛最多水的容器：相向双指针，移动较矮一侧，O(n)/O(1)，一次 Accepted（65/65）</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：选两条竖线使面积 min(h[l],h[r])×(r-l) 最大。暴力枚举 O(n²)；双指针从两端向中间收拢 O(n)。</p><p>关键设计：每步计算当前左右两线的面积并更新最大值，然后移动较矮的那条。理由：移动较矮的一侧可能遇到更高边从而增大面积；移动较高的一侧，宽度一定变小、高度又被较矮的钳制，面积不可能变大，所以可以安全排除以矮边为界的全部候选。</p><p>边界：只有两根线时即唯一候选；高度相等时移动任一侧都不漏最优（代码里 &lt;= 时动右指针）；数组长度至少为 2。</p><p>复杂度：O(n) 时间、O(1) 空间；正确性来自每步排除的候选不可能超过当前最优，最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：选两条竖线使面积 min(h[l],h[r])×(r-l) 最大。暴力枚举 O(n²)；双指针从两端向中间收拢 O(n)。</p><p>关键设计：每步计算当前左右两线的面积并更新最大值，然后移动较矮的那条。理由：移动较矮的一侧可能遇到更高边从而增大面积；移动较高的一侧，宽度一定变小、高度又被较矮的钳制，面积不可能变大，所以可以安全排除以矮边为界的全部候选。</p><p>边界：只有两根线时即唯一候选；高度相等时移动任一侧都不漏最优（代码里 &lt;= 时动右指针）；数组长度至少为 2。</p><p>复杂度：O(n) 时间、O(1) 空间；正确性来自每步排除的候选不可能超过当前最优，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>65/65 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>相向双指针：两端向中间收，移动条件更差的一侧</h3><p>左右指针从数组两端出发，每次计算当前答案后移动「条件更差」的一侧（如容器题移动较矮的边），把 O(n²) 降到 O(n)。适用：盛水容器、接雨水、回文验证等两端夹逼题。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -78,8 +80,9 @@
     }</pre></div>
     <p class="muted">排序后单遍合并，边界覆盖完整（空/单元素/首尾相接/包含/大数）</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：把重叠区间合并。区间按 start 排序后，问题变成顺序扫描：当前区间与上一个合并段重叠就扩展，否则开新段。</p><p>关键设计：排序后遍历，用 list 存合并结果；新区间与最后一个重叠（last[1] &gt;= interval[0]，含端点相接）时，end 更新为 max(last[1], interval[1])——必须取 max 而不能直接赋值，因为排序只保证 start 有序，后一个区间可能完全被包含（end 更小）。不重叠则直接追加新区间。</p><p>边界：空数组；单个区间；完全包含（如 [1,10] 与 [2,3]）；端点相接 [1,2]+[2,3] 要合并；多个区间同 start 时按 end 正确合并。</p><p>复杂度：O(n log n) 时间（排序主导）、O(log n) 排序栈空间（不计输出），最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：把重叠区间合并。区间按 start 排序后，问题变成顺序扫描：当前区间与上一个合并段重叠就扩展，否则开新段。</p><p>关键设计：排序后遍历，用 list 存合并结果；新区间与最后一个重叠（last[1] &gt;= interval[0]，含端点相接）时，end 更新为 max(last[1], interval[1])——必须取 max 而不能直接赋值，因为排序只保证 start 有序，后一个区间可能完全被包含（end 更小）。不重叠则直接追加新区间。</p><p>边界：空数组；单个区间；完全包含（如 [1,10] 与 [2,3]）；端点相接 [1,2]+[2,3] 要合并；多个区间同 start 时按 end 正确合并。</p><p>复杂度：O(n log n) 时间（排序主导）、O(log n) 排序栈空间（不计输出），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>172/172 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

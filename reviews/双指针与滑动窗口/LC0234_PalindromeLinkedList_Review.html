@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -105,8 +107,9 @@
     }</pre></div>
     <p class="muted">回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：判断链表是否回文。复制到数组比较是 O(n) 空间；O(1) 空间做法：快慢指针找中点 → 反转后半段 → 逐节点对称比较。</p><p>关键设计：fastSlow 让 fast 走 2 步、slow 走 1 步，结束时 slow 停在（前半段的）末尾 firstEnd；反转 firstEnd.next 得到后半段头 secondStart；然后 p1 从头、p2 从 secondStart 同步比较。比较循环以 p2!=null 为条件，奇数长度时中间节点自然被跳过。</p><p>边界：空链表返回 true；偶数长度 slow 恰在中点前、奇数长度 slow 在前半段末尾，反转后半段长度 ≤ 前半段，比较不会越界；比较完不要求恢复链表结构。</p><p>复杂度：O(n) 时间、O(1) 额外空间（反转用迭代），最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断链表是否回文。复制到数组比较是 O(n) 空间；O(1) 空间做法：快慢指针找中点 → 反转后半段 → 逐节点对称比较。</p><p>关键设计：fastSlow 让 fast 走 2 步、slow 走 1 步，结束时 slow 停在（前半段的）末尾 firstEnd；反转 firstEnd.next 得到后半段头 secondStart；然后 p1 从头、p2 从 secondStart 同步比较。比较循环以 p2!=null 为条件，奇数长度时中间节点自然被跳过。</p><p>边界：空链表返回 true；偶数长度 slow 恰在中点前、奇数长度 slow 在前半段末尾，反转后半段长度 ≤ 前半段，比较不会越界；比较完不要求恢复链表结构。</p><p>复杂度：O(n) 时间、O(1) 额外空间（反转用迭代），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>93/93 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>快慢指针找中点后的奇偶判定</h3><p>快慢指针走完后：fast 为 null → 偶数长度（slow 正好是后半段开头，无需跳过）；fast 停在最后一个节点 → 奇数长度（slow 停在中点，需先跳过中点再比较后半段）</p></div><div class="card md"><h3>递归不算 O(1) 空间：调用栈计入空间复杂度</h3><p>递归的调用栈深度随输入规模增长（如链表递归深度 n），辅助空间 O(递归深度)，不算 O(1)；O(1) 空间要求用迭代 + 常数个变量（如快慢指针 + 原地反转）。另注意递归深度大时有栈溢出风险。</p></div><div class="card md"><h3>反转链表三步的顺序与自环陷阱</h3><p>标准三步：先保存后继 next=cur.next，再用旧 pre 改指向 cur.next=pre，最后才前移 pre=cur、cur=next。若先 pre=cur 再 cur.next=pre，pre 与 cur 同节点，cur.next 指向自己形成自环，链表被破坏。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

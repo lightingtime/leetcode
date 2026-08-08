@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -95,8 +97,9 @@
     }</pre></div>
     <p class="muted">单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：O(1) 取最小值。普通栈做不到，做法是让每个元素入栈时记录「当时的栈内最小值」，空间换时间。</p><p>关键设计：栈内元素是 (cur, min) 二元组：push 时 min=Math.min(value, 当前栈顶 min)，栈空时 min=value；getMin 直接读栈顶的 min。因为 min 是入栈时刻的快照，元素弹出后历史最小值自然保留，不需要额外结构。</p><p>边界：题目约定不会对空栈调用 top/pop/getMin；连续 push 递减序列后逐次 pop，min 要能正确回退到上一状态；重复最小值不影响。</p><p>复杂度：push/pop/top/getMin 全部 O(1) 时间、O(n) 空间，满足题目全部要求。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：O(1) 取最小值。普通栈做不到，做法是让每个元素入栈时记录「当时的栈内最小值」，空间换时间。</p><p>关键设计：栈内元素是 (cur, min) 二元组：push 时 min=Math.min(value, 当前栈顶 min)，栈空时 min=value；getMin 直接读栈顶的 min。因为 min 是入栈时刻的快照，元素弹出后历史最小值自然保留，不需要额外结构。</p><p>边界：题目约定不会对空栈调用 top/pop/getMin；连续 push 递减序列后逐次 pop，min 要能正确回退到上一状态；重复最小值不影响。</p><p>复杂度：push/pop/top/getMin 全部 O(1) 时间、O(n) 空间，满足题目全部要求。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>45/45 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

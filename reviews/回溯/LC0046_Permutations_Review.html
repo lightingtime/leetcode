@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -87,8 +89,9 @@
     }</pre></div>
     <p class="muted">回溯 + used 数组标记，选择/撤销对称</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：n 个互不相同元素的排列共有 n! 个，题目要求全部枚举出来。这类「枚举所有解」的问题首选回溯（DFS + 状态还原）。</p><p>为什么用回溯：</p><p>- 把生成过程看成递归树：根是空排列，第 1 层选第 1 个数，第 2 层选第 2 个数……每条从根到第 n 层的路径就是一个排列。</p><p>- 回溯 = 深度优先走完整棵树：沿一条路走到叶子（得到一个答案），回到父节点换下一个选择再走，直到所有分支都试完。</p><p>关键设计点：</p><p>1. 如何保证每个数只用一次：维护 boolean[] used，used[i]=true 表示下标 i 已被当前路径占用；每层只从「未使用」的下标里选，天然避免 [1,1,1] 这类重复。</p><p>2. 终止条件：当前列表长度 == n 时，把列表副本加入答案。必须 new 一份再存，直接存引用会在后续撤销时被改坏。</p><p>3. 选择/撤销严格对称：选 nums[i] → used[i]=true → 递归；返回后 list 移除末尾、used[i]=false。两步缺一不可，否则兄弟分支会看到脏状态或结果丢失。</p><p>4. 为什么按下标管理：本题元素互异，按值或下标均可；按下标写更通用，将来遇到含重复元素的全排列 II，只需排序 + 跳过相邻重复即可扩展。</p><p>边界与细节：</p><p>- n=1 时只有 [nums[0]] 一个答案；n=6 时共 720 个答案，本地测试已覆盖。</p><p>- 空数组不在题目约束内（1 &lt;= n &lt;= 6），无需特判；当前代码里的空数组特判是冗余的，删掉后空输入自然返回 [[]]。</p><p>- 元素互不相同，不需要任何去重/剪枝，所有分支都合法。</p><p>复杂度分析：</p><p>- 时间 O(n·n!)：答案数量 n!，每个答案复制开销 O(n)，加上每层尝试 n 个分支，总量为 O(n·n!)。</p><p>- 空间 O(n)：used 数组 + 递归栈 + 当前列表，均与 n 成线性（不含输出本身；若计入输出是 O(n·n!)）。</p><p>为什么是最优：输出规模本身就是 n! 个长度为 n 的排列，任何算法都至少要生成 O(n·n!) 的数据；每个排列只被访问一次、无重复枚举，因此 O(n·n!) / O(n) 已达到下限。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n 个互不相同元素的排列共有 n! 个，题目要求全部枚举出来。这类「枚举所有解」的问题首选回溯（DFS + 状态还原）。</p><p>为什么用回溯：</p><ul><li>把生成过程看成递归树：根是空排列，第 1 层选第 1 个数，第 2 层选第 2 个数……每条从根到第 n 层的路径就是一个排列。</li><li>回溯 = 深度优先走完整棵树：沿一条路走到叶子（得到一个答案），回到父节点换下一个选择再走，直到所有分支都试完。</li></ul><p>关键设计点：</p><ol><li>如何保证每个数只用一次：维护 boolean[] used，used[i]=true 表示下标 i 已被当前路径占用；每层只从「未使用」的下标里选，天然避免 [1,1,1] 这类重复。</li><li>终止条件：当前列表长度 == n 时，把列表副本加入答案。必须 new 一份再存，直接存引用会在后续撤销时被改坏。</li><li>选择/撤销严格对称：选 nums[i] → used[i]=true → 递归；返回后 list 移除末尾、used[i]=false。两步缺一不可，否则兄弟分支会看到脏状态或结果丢失。</li><li>为什么按下标管理：本题元素互异，按值或下标均可；按下标写更通用，将来遇到含重复元素的全排列 II，只需排序 + 跳过相邻重复即可扩展。</li></ol><p>边界与细节：</p><ul><li>n=1 时只有 [nums[0]] 一个答案；n=6 时共 720 个答案，本地测试已覆盖。</li><li>空数组不在题目约束内（1 &lt;= n &lt;= 6），无需特判；当前代码里的空数组特判是冗余的，删掉后空输入自然返回 [[]]。</li><li>元素互不相同，不需要任何去重/剪枝，所有分支都合法。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n·n!)：答案数量 n!，每个答案复制开销 O(n)，加上每层尝试 n 个分支，总量为 O(n·n!)。</li><li>空间 O(n)：used 数组 + 递归栈 + 当前列表，均与 n 成线性（不含输出本身；若计入输出是 O(n·n!)）。</li></ul><p>为什么是最优：输出规模本身就是 n! 个长度为 n 的排列，任何算法都至少要生成 O(n·n!) 的数据；每个排列只被访问一次、无重复枚举，因此 O(n·n!) / O(n) 已达到下限。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>26/26 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

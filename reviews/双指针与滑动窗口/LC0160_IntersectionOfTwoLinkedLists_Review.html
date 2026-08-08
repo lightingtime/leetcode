@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -77,8 +79,9 @@
         return p1;
     }</pre></div>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：找两个链表的第一个相交节点。朴素做法先求长度差再对齐；更简洁的是双指针换链：p1 走完 A 后从 B 头继续，p2 走完 B 后从 A 头继续，两指针总路程相等（A+B 与 B+A），必然同时到达交点或同时走到 null。</p><p>关键设计：换链时机是「指针本身走到 null」时，而不是 next 为 null 时——只有指针为 null 才说明把整条链走完了。这样两指针在第二段路径上从相同剩余长度出发，交点处必然对齐。</p><p>边界：无交点时两指针同时为 null，返回 null（A+B 与 B+A 等长）；任一链表为空直接返回 null；有交点时第一次相遇处就是交点，直接返回。</p><p>复杂度：O(m+n) 时间、O(1) 空间，最优。本题历史踩坑就在换链时机上：在 next==null 时切换会导致无交点时死循环、有交点时错位。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找两个链表的第一个相交节点。朴素做法先求长度差再对齐；更简洁的是双指针换链：p1 走完 A 后从 B 头继续，p2 走完 B 后从 A 头继续，两指针总路程相等（A+B 与 B+A），必然同时到达交点或同时走到 null。</p><p>关键设计：换链时机是「指针本身走到 null」时，而不是 next 为 null 时——只有指针为 null 才说明把整条链走完了。这样两指针在第二段路径上从相同剩余长度出发，交点处必然对齐。</p><p>边界：无交点时两指针同时为 null，返回 null（A+B 与 B+A 等长）；任一链表为空直接返回 null；有交点时第一次相遇处就是交点，直接返回。</p><p>复杂度：O(m+n) 时间、O(1) 空间，最优。本题历史踩坑就在换链时机上：在 next==null 时切换会导致无交点时死循环、有交点时错位。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>41/41 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>链表指针判空取舍：p != null vs p.next != null</h3><p>p != null 允许指针走出链表（完整遍历/换链对齐，如 160 相交链表换链必须在指针为 null 时）；p.next != null 让指针停在最后一个节点或提前看一步（找尾追加、快慢指针跳两步防越界、删除节点找前驱）。取舍标准：这一步之后指针是否应该越界。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -69,8 +71,9 @@
         return null;
     }</pre></div>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：在数组中找两个下标使元素之和等于 target。暴力枚举两两组合是 O(n²)；把「查补数」优化为哈希表 O(1) 查询，本质是空间换时间。</p><p>关键设计：边遍历边把 nums[i] → i 存入 HashMap；对每个元素先查 target-nums[i] 是否已存在，存在即返回 [已存下标, 当前下标]。顺序很重要：先查再存，保证同一个元素不会和自己配对（例如 target=6、数组只有一个 3，先查时 map 还没有 3，不会误返回 [i,i]）。</p><p>边界：题目保证恰好一个解，但实现仍返回 null 兜底；元素值重复时后存的下标覆盖先存的下标，先查后存确保返回的是靠前的那一对。</p><p>复杂度：O(n) 时间、O(n) 空间。相比 O(n²) 暴力是时间最优；空间是 O(1) 查询的必要代价，题目没有限制额外空间。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在数组中找两个下标使元素之和等于 target。暴力枚举两两组合是 O(n²)；把「查补数」优化为哈希表 O(1) 查询，本质是空间换时间。</p><p>关键设计：边遍历边把 nums[i] → i 存入 HashMap；对每个元素先查 target-nums[i] 是否已存在，存在即返回 [已存下标, 当前下标]。顺序很重要：先查再存，保证同一个元素不会和自己配对（例如 target=6、数组只有一个 3，先查时 map 还没有 3，不会误返回 [i,i]）。</p><p>边界：题目保证恰好一个解，但实现仍返回 null 兜底；元素值重复时后存的下标覆盖先存的下标，先查后存确保返回的是靠前的那一对。</p><p>复杂度：O(n) 时间、O(n) 空间。相比 O(n²) 暴力是时间最优；空间是 O(1) 查询的必要代价，题目没有限制额外空间。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>65/65 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

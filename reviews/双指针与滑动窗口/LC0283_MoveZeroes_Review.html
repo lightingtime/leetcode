@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -73,8 +75,9 @@
     }</pre></div>
     <p class="muted">移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：原地把 0 全部移到末尾，同时保持非零元素相对顺序。双指针一趟完成，不额外开数组。</p><p>关键设计：一个扫描位负责找 0，一个交换位指向当前要放置非零元素的位置：扫描位是 0 时与交换位交换并把交换位前移；扫描位非 0 时扫描位继续前移。这样每个非零元素都会被逐步换到前面、0 被推到后面，相对顺序不变。</p><p>边界：全 0（交换后无变化但必须保证不越界）；全非 0（扫描位一路前移）；0 在开头或结尾；交换用临时变量避免覆盖。</p><p>复杂度：O(n) 时间、O(1) 空间，原地最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：原地把 0 全部移到末尾，同时保持非零元素相对顺序。双指针一趟完成，不额外开数组。</p><p>关键设计：一个扫描位负责找 0，一个交换位指向当前要放置非零元素的位置：扫描位是 0 时与交换位交换并把交换位前移；扫描位非 0 时扫描位继续前移。这样每个非零元素都会被逐步换到前面、0 被推到后面，相对顺序不变。</p><p>边界：全 0（交换后无变化但必须保证不越界）；全非 0（扫描位一路前移）；0 在开头或结尾；交换用临时变量避免覆盖。</p><p>复杂度：O(n) 时间、O(1) 空间，原地最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>75/75 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>数组双指针原地分区：快指针扫描 + 慢指针记写入位置</h3><p>原地筛选/分区通用套路（移动零、删除有序数组重复项、颜色分类）：快指针扫描全数组，遇到满足条件的元素就放到慢指针位置并慢指针前移；一趟 O(n)、空间 O(1)，保持相对顺序。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

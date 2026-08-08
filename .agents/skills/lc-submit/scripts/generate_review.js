@@ -37,6 +37,32 @@ if (srcFile) {
 }
 const fileBase = srcFile ? path.basename(srcFile, '.java') : `LC${String(q.id).padStart(4, '0')}`;
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// 轻量 Markdown 渲染（逐行状态机）：连续 - 列表成 <ul>、连续 1. 编号成 <ol>、其余为 <p>；支持 `行内代码`、**加粗**
+const md = raw => {
+  const lines = esc(String(raw)).replace(/\\n/g, '\n').split('\n').map(l => l.replace(/\s+$/, ''));
+  const fmt = s => s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  const out = [];
+  let listTag = null;
+  const close = () => { if (listTag) { out.push('</' + listTag + '>'); listTag = null; } };
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) { close(); continue; }
+    const bm = line.match(/^[-*]\s+(.*)$/);
+    const nm = line.match(/^\d+[.、]\s+(.*)$/);
+    if (bm) {
+      if (listTag !== 'ul') { close(); out.push('<ul>'); listTag = 'ul'; }
+      out.push('<li>' + fmt(bm[1]) + '</li>');
+    } else if (nm) {
+      if (listTag !== 'ol') { close(); out.push('<ol>'); listTag = 'ol'; }
+      out.push('<li>' + fmt(nm[1]) + '</li>');
+    } else {
+      close();
+      out.push('<p>' + fmt(line) + '</p>');
+    }
+  }
+  close();
+  return out.join('');
+};
 const diff = String(a.difficulty || q.difficulty || 'MEDIUM').toUpperCase();
 const diffCls = diff === 'EASY' ? 'easy' : diff === 'HARD' ? 'hard' : 'medium';
 const date = a.date || done.date || '';
@@ -111,6 +137,8 @@ const html = `<!DOCTYPE html>
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -135,9 +163,9 @@ const html = `<!DOCTYPE html>
 </div></div>
 <div class="wrap">
   <section><h2>我的解法</h2>${renderSolutions()}</section>
-  ${approachDetail ? `<section><h2>思路拆解</h2><div class="card">${esc(approachDetail).split('\n').filter(l => l.trim()).map(l => `<p>${l}</p>`).join('')}</div></section>` : ''}
+  ${approachDetail ? `<section><h2>思路拆解</h2><div class="card md">${md(approachDetail)}</div></section>` : ''}
   <section><h2>解题过程</h2><div class="tl">${tlItems.join('')}</div></section>
-  ${patterns.length ? `<section><h2>套路沉淀</h2>${patterns.map(p => `<div class="card"><h3>${esc(p.title)}</h3><p>${esc(p.text).replace(/\\n/g, '\n').split('\n').filter(l => l.trim()).map(esc).join('<br>')}</p></div>`).join('')}</section>` : ''}
+  ${patterns.length ? `<section><h2>套路沉淀</h2>${patterns.map(p => `<div class="card md"><h3>${esc(p.title)}</h3>${md(p.text)}</div>`).join('')}</section>` : ''}
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">${a.verdict || 'Accepted'}</div><div class="l">判题状态</div></div>

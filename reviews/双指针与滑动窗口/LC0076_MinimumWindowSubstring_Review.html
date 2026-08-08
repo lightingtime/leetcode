@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -96,8 +98,9 @@
     }</pre></div>
     <p class="muted">滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。</p><p>关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]&gt;0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]&lt;0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。</p><p>边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。</p><p>复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。</p><p>关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]&gt;0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]&lt;0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。</p><p>边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。</p><p>复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>窗口收缩状态失真：用 need&lt;=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>先减后判导致计数失效：need[c]-- 之后才判断 need[c] &gt; 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 &gt;= 0）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>268/268 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>滑动窗口覆盖子串：收缩只删多余、记录后整体前移</h3><p>覆盖判定用计数 + 未满足数 count；收缩时只能删多余字符（need&lt;0），need==0 表示恰好满足不能再删；记录答案后要把左边界关键字符还回（need[left]++、count++、left++）让窗口整体前进，否则覆盖状态与 count 脱节</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

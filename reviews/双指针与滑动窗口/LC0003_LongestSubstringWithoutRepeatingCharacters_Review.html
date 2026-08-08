@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -76,8 +78,9 @@
     }</pre></div>
     <p class="muted">无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：找不含重复字符的最长连续子串长度。滑动窗口：窗口 [start, i] 内保持无重复，右端逐个扩张，遇重复就把左端跳到重复位置之后。</p><p>关键设计：HashMap 记录每个字符最近一次出现的下标。遇到 c 时若 c 出现过且位置 ≥ start（即在当前窗口内），窗口左端 start 跳到上次出现位置 +1；若旧位置 &lt; start，说明在窗口外，不构成重复。每次更新 max = max(max, i-start+1)。</p><p>边界：空串返回 0；整个串无重复时最后一次比较 s.length()-start 不能漏；重复字符恰在窗口左边界（如 abca）时 start 正确右移；「出现过」和「位置在窗口内」两个条件缺一不可。</p><p>复杂度：O(n) 时间（每个字符至多进出窗口一次）、O(字符集大小) 空间，最优。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找不含重复字符的最长连续子串长度。滑动窗口：窗口 [start, i] 内保持无重复，右端逐个扩张，遇重复就把左端跳到重复位置之后。</p><p>关键设计：HashMap 记录每个字符最近一次出现的下标。遇到 c 时若 c 出现过且位置 ≥ start（即在当前窗口内），窗口左端 start 跳到上次出现位置 +1；若旧位置 &lt; start，说明在窗口外，不构成重复。每次更新 max = max(max, i-start+1)。</p><p>边界：空串返回 0；整个串无重复时最后一次比较 s.length()-start 不能漏；重复字符恰在窗口左边界（如 abca）时 start 正确右移；「出现过」和「位置在窗口内」两个条件缺一不可。</p><p>复杂度：O(n) 时间（每个字符至多进出窗口一次）、O(字符集大小) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>滑动窗口长度更新时机与公式：max 只在遇到重复时更新，漏掉延伸到末尾的无重复窗口（如单字符串）；长度公式取决于窗口是否合法——窗口 [start,i] 无重复时为 i-start+1，else 里 i 是重复字符时应按 [start,i-1] 算 i-start</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>窗口长度公式先确认窗口合法性：else 分支里 i 是刚发现的重复字符，此刻 [start,i] 含重复、不是合法窗口，长度应为 i-start；只有把 start 跳到重复位置+1 之后，才能用 i-start+1</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>1036/1036 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>闭区间计数：元素个数 = 间隔数 + 1</h3><p>闭区间 [l, r] 的元素个数 = r - l + 1（两端下标都算）；用「间隔数 + 1」理解可防 off-by-one。滑动窗口/子数组/遍历题的长度计算都适用，最常错在多减 1 或少加 1。</p></div><div class="card md"><h3>滑动窗口结算时机与公式绑定</h3><p>两种合法写法：每步结算（先跳 start 再算 i-start+1）；或延迟结算（if 只扩展不结算，else 里窗口到 i-1 算 i-start，循环后补 n-start）。公式必须匹配结算时窗口的合法性：含 i 且无重复才用 i-start+1。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

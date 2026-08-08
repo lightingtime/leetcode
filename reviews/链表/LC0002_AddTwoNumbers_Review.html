@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -76,8 +78,9 @@
     }</pre></div>
     <p class="muted">两数相加：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位；一次 Accepted（1569/1569），后精简为单循环写法再次提交 Accepted。</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：链表按逆序存数字（头节点是个位），相加就是模拟竖式：逐位求和 + 进位。</p><p>关键设计：循环条件 p1!=null || p2!=null || carry!=0 三个都要判断——最高位产生进位时还要再生成一个节点；短链补 0（p1==null ? 0 : p1.val）；每位存 sum%10、进位 sum/10。</p><p>边界：两链长度不等；最高位连续进位（如 999+1 结果多一位）；一条链为空；9+9 的进位要带进下一位。</p><p>复杂度：O(max(m,n)) 时间、O(1) 额外空间（输出链不算），最优；逆序存储让加法天然从左到右。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：链表按逆序存数字（头节点是个位），相加就是模拟竖式：逐位求和 + 进位。</p><p>关键设计：循环条件 p1!=null || p2!=null || carry!=0 三个都要判断——最高位产生进位时还要再生成一个节点；短链补 0（p1==null ? 0 : p1.val）；每位存 sum%10、进位 sum/10。</p><p>边界：两链长度不等；最高位连续进位（如 999+1 结果多一位）；一条链为空；9+9 的进位要带进下一位。</p><p>复杂度：O(max(m,n)) 时间、O(1) 额外空间（输出链不算），最优；逆序存储让加法天然从左到右。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>1569/1569 用例一次通过。</p></div></div></div></section>
+  
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

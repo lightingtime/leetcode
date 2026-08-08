@@ -31,6 +31,8 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
@@ -57,7 +59,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DFS 回溯 + visited 剪枝</h3>
     <p><span class="chip">时间 O(m*n*3^L)</span><span class="chip">空间 O(L+m*n)</span><span class="chip">内存 ≈ 45.0 MB</span><span class="chip">用例 88/88</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0079_WordSearch.java</span><span>提交区</span></div><pre>boolean[][] visited;
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0079_WordSearch.java</span><span>提交区</span></div><pre>boolean[][] visited;
 
     public boolean exist(char[][] board, String word) {
         int m = board.length;
@@ -99,7 +101,7 @@
     }</pre></div>
     <p class="muted">网格 DFS + visited 剪枝，选择/撤销对称</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card"><p>问题本质：在 m×n 网格中判断单词是否存在——按字母顺序走水平/垂直相邻格，同一格不能重复使用。这是网格上的路径搜索，DFS（回溯）天然适配：沿一条路径深入匹配，走不通就撤销回退换方向。</p><p>关键设计：</p><p>1. 状态：dfs(i, j, index) 表示当前站在 (i,j)、要匹配 word 的第 index 个字母；visited[i][j] 记录当前路径是否占用过该格；</p><p>2. 终止条件：index == word.length() 时所有字母已匹配，返回 true——这个判断必须在访问 board 之前做，否则匹配完还会越界访问；</p><p>3. 剪枝顺序：越界 → visited → 字母不相等，任一不满足直接返回 false；只有字母相等才继续深入；</p><p>4. 主循环：word 第一个字母可能出现在任意格，遍历全部格子作为起点；</p><p>5. 选择/撤销对称：匹配当前格后 visited[i][j]=true，向四个方向递归 index+1，全部方向结束后 visited[i][j]=false。</p><p>具体 case 推演：</p><p>- 命中：board=[[A,B],[C,D]]，word=「AC」：从 (0,0) 的 A 匹配 index=0 → 标记 visited → 向下到 (1,0) 的 C 匹配 index=1 → 进入下一层时 index==2 返回 true；\n- 撤销的必要性：board=[[A,A]]，word=「AAA」：从 (0,0) 匹配后向右到 (0,1)，index=2 时已无路可走返回 false；若返回时未把 (0,1) 还原，其他起点的搜索会误以为该格被占用；\n- 成功路径依赖逐层还原：2×2 全 A 网格找「AAA」，(0,0)→(0,1)→(1,1) 能走通，前提是每层返回时都把上一格释放；\n- 同一格不可重复用（示例 3）：word=「ABCB」走 A(0,0)→B(0,1)→C(0,2) 后想再找 B 只能回到 (0,1)，但 visited 已标记 → false。\n\n边界与细节：\n- 单词长度为 1：任意格字母相等即 true；\n- 词比格子总数还长时必然 false（路径长度上限 = 格子数）；\n- 斜对角不算相邻，只能上下左右；单行/单列网格由越界判断自然处理。\n\n复杂度分析：\n- 时间 O(m·n·3^L)：m·n 个起点，每个起点最多探索 3^L 条路径（除回头方向外每步 3 个选择），L 为单词长度；\n- 空间 O(L + m·n)：递归栈深度 L + visited 数组。\n\n为什么是可接受/最优：单词搜索没有多项式优化的一般算法（网格字符可任意重复），标准做法就是 DFS + 剪枝；O(m·n·3^L) 是本题标准复杂度，visited 与字母不匹配两层剪枝把实际搜索量压得很低。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在 m×n 网格中判断单词是否存在——按字母顺序走水平/垂直相邻格，同一格不能重复使用。这是网格上的路径搜索，DFS（回溯）天然适配：沿一条路径深入匹配，走不通就撤销回退换方向。</p><p>关键设计：</p><ol><li>状态：dfs(i, j, index) 表示当前站在 (i,j)、要匹配 word 的第 index 个字母；visited[i][j] 记录当前路径是否占用过该格；</li><li>终止条件：index == word.length() 时所有字母已匹配，返回 true——这个判断必须在访问 board 之前做，否则匹配完还会越界访问；</li><li>剪枝顺序：越界 → visited → 字母不相等，任一不满足直接返回 false；只有字母相等才继续深入；</li><li>主循环：word 第一个字母可能出现在任意格，遍历全部格子作为起点；</li><li>选择/撤销对称：匹配当前格后 visited[i][j]=true，向四个方向递归 index+1，全部方向结束后 visited[i][j]=false。</li></ol><p>具体 case 推演：</p><ul><li>命中：board=[[A,B],[C,D]]，word=「AC」：从 (0,0) 的 A 匹配 index=0 → 标记 visited → 向下到 (1,0) 的 C 匹配 index=1 → 进入下一层时 index==2 返回 true；</li><li>撤销的必要性：board=[[A,A]]，word=「AAA」：从 (0,0) 匹配后向右到 (0,1)，index=2 时已无路可走返回 false；若返回时未把 (0,1) 还原，其他起点的搜索会误以为该格被占用；</li><li>成功路径依赖逐层还原：2×2 全 A 网格找「AAA」，(0,0)→(0,1)→(1,1) 能走通，前提是每层返回时都把上一格释放；</li><li>同一格不可重复用（示例 3）：word=「ABCB」走 A(0,0)→B(0,1)→C(0,2) 后想再找 B 只能回到 (0,1)，但 visited 已标记 → false。</li></ul><p>边界与细节：</p><ul><li>单词长度为 1：任意格字母相等即 true；</li><li>词比格子总数还长时必然 false（路径长度上限 = 格子数）；</li><li>斜对角不算相邻，只能上下左右；单行/单列网格由越界判断自然处理。</li></ul><p>复杂度分析：</p><ul><li>时间 O(m·n·3^L)：m·n 个起点，每个起点最多探索 3^L 条路径（除回头方向外每步 3 个选择），L 为单词长度；</li><li>空间 O(L + m·n)：递归栈深度 L + visited 数组。</li></ul><p>为什么是可接受/最优：单词搜索没有多项式优化的一般算法（网格字符可任意重复），标准做法就是 DFS + 剪枝；O(m·n·3^L) 是本题标准复杂度，visited 与字母不匹配两层剪枝把实际搜索量压得很低。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>88/88 用例一次通过。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
