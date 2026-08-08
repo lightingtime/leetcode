@@ -1,0 +1,44 @@
+{
+  "id": "55",
+  "slug": "jump-game",
+  "title": "Jump Game",
+  "titleCn": "跳跃游戏",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/jump-game/",
+  "tags": [
+    "Greedy",
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[2,3,1,1,4]"
+        }
+      ],
+      "output": "true",
+      "explain": "可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,2,1,0,4]"
+        }
+      ],
+      "output": "false",
+      "explain": "无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。"
+    }
+  ],
+  "exampleTestcases": "[2,3,1,1,4]\n[3,2,1,0,4]",
+  "javaSnippet": "class Solution {\n    public boolean canJump(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T23:07:40.578Z"
+}

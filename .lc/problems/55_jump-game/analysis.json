@@ -1,0 +1,52 @@
+{
+  "seq": 55,
+  "id": "55",
+  "slug": "jump-game",
+  "title": "跳跃游戏",
+  "category": "动态规划",
+  "date": "2026-08-09",
+  "verdict": "Accepted",
+  "testcases": "178/178",
+  "runtime_ms": null,
+  "memory_bytes": 48412000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "贪心（最远可达）",
+  "approach_detail": "问题本质：判断能否从下标 0 到达最后一个下标。每个位置能跳的最大长度是 nums[i]，只需要关心「当前已经能覆盖到的最远位置」，不需要具体路径——贪心天然适配。\n\n为什么用贪心：\n- farthest 表示已扫描区间内能到达的最远下标，单调不减；\n- 只要位置 i 被覆盖（i <= farthest），它的跳跃就能把 farthest 继续往右推；若 i > farthest，说明前面所有跳跃都够不着这里，后面更够不着，直接判负；\n- 一旦 farthest >= n-1 即成功，不需要回溯或枚举路径。\n\n关键设计（顺序决定正确性）：\n1. 遍历每个位置 i：先检查 farthest >= n-1 提前返回 true；\n2. 再检查 i > farthest 直接返回 false（可达性守卫，防止不可达位置的大跳跃污染 farthest）；\n3. 最后更新 farthest = max(farthest, i + nums[i])。\n\n具体 case 推演：\n- [2,3,1,1,4]：i=0 → f=2；i=1 → f=4 >= 4 → true；\n- [3,2,1,0,4]：i=0 → f=3；i=1、2、3 都保持 f=3；i=4 时 4 > 3 → false；\n- [1,1,1,0,5,0]（本轮的坑）：真实可达只到下标 3；若缺少 i > farthest 守卫，i=4 会把 f 更新成 9，下一轮误判 true——正确结果是 false。\n\n边界与细节：\n- 单元素数组：farthest=0 >= 0，直接 true（已经站在终点）；\n- 开头为 0 且 n>1：[0,1] 在 i=1 被守卫拦下；\n- 大跳跃（[10,0,0,0]）一步到终点；10000 长度数组一趟通过（O(n) 而非 O(n²)）。\n\n复杂度分析：\n- 时间 O(n)：一趟扫描；\n- 空间 O(1)：一个变量。\n\n为什么是最优：每个位置至少要读一次，O(n) 是下限；只维护一个最远下标，O(1) 空间也是下限。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "贪心最远可达，先判可达再更新",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "贪心跳跃缺少可达性守卫：遍历时没有先判 i > farthest 就 return false，而是无条件用 i+nums[i] 更新 farthest，导致不可达位置的大跳跃把 farthest 推过终点，下一轮提前返回 true（如 [1,1,1,0,5,0] 应为 false 却返回 true）",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "贪心最远可达：先判当前位置可达再更新，不可达立即返回",
+      "text": "出处：LC0055 跳跃游戏\\n\\n- 维护 farthest = 当前能到的最远下标，遍历每个位置 i：\\n  - 先判 i > farthest：当前位置都够不着，后面更够不着，直接返回 false；\\n  - 再更新 farthest = max(farthest, i + nums[i])；\\n  - 一旦 farthest >= n-1 返回 true。\\n- 顺序不能反：先可达性检查再更新；只检查不判可达，会让不可达位置的大跳跃把 farthest 推过终点，下一轮误判为 true。\\n- 具体 case：[1,1,1,0,5,0] 实际最远只到下标 3，位置 4 的 5 不可达，答案应为 false。\\n\\n要点：贪心维护「最远可达」时，每个位置在更新前必须先确认自己可达；边界顺序（检查→更新→提前返回）决定正确性。",
+      "category": "动态规划",
+      "problem": "jump-game",
+      "date": "2026-08-09"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-09",
+      "verdict": "Accepted",
+      "testcases": "178/178",
+      "runtime_ms": null,
+      "memory_bytes": 48412000,
+      "approach": "贪心（最远可达）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "贪心最远可达，先判可达再更新"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}
