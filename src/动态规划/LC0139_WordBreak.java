@@ -16,10 +16,9 @@ public class LC0139_WordBreak {
         dp[0] = true;
         for (int i = 1; i < dp.length; i++) {
             for (String word : set) {
-                if (i - word.length() >= 0) {
-                    if (s.substring(i - word.length(), i).equals(word)) {
-                        dp[i] = dp[i] || dp[i - word.length()];
-                    }
+                if (i >= word.length() && dp[i - word.length()] && s.startsWith(word, i - word.length())) {
+                    dp[i] = true;
+                    break;
                 }
             }
         }
