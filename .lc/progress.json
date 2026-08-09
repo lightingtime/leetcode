@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 58,
+  "current_seq": 59,
   "done": [
     {
       "seq": 1,
@@ -628,6 +628,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "双状态DP维护最大/最小乘积，一次通过"
+    },
+    {
+      "seq": 59,
+      "id": "198",
+      "title": "打家劫舍",
+      "slug": "house-robber",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "二维交替链DP（两列互相推进），穷举核对后一次通过"
     }
   ],
   "error_habits": [

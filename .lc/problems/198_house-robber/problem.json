@@ -1,0 +1,32 @@
+{
+  "id": "198",
+  "slug": "house-robber",
+  "title": "House Robber",
+  "titleCn": "打家劫舍",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/house-robber/",
+  "tags": [
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [],
+      "output": "4",
+      "explain": "偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。"
+    },
+    {
+      "inputs": [],
+      "output": "12",
+      "explain": "偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。"
+    }
+  ],
+  "exampleTestcases": "[1,2,3,1]\n[2,7,9,3,1]",
+  "javaSnippet": "class Solution {\n    public int rob(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-09T21:47:16.494Z"
+}
