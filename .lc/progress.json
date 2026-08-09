@@ -1235,6 +1235,17 @@
         "动态规划"
       ],
       "last_seen": "2026-08-10"
+    },
+    {
+      "habit": "DP 初始化遗漏候选：dp[1] 只存 nums[1]，丢掉了「只偷第 0 间」的 max(nums[0], nums[1])，起点状态未覆盖该下标所有合法决策",
+      "count": 1,
+      "examples": [
+        "house-robber"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-10"
     }
   ],
   "category_hints": {
