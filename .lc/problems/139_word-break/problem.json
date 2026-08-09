@@ -1,0 +1,74 @@
+{
+  "id": "139",
+  "slug": "word-break",
+  "title": "Word Break",
+  "titleCn": "单词拆分",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/word-break/",
+  "tags": [
+    "Trie",
+    "Memoization",
+    "Array",
+    "Hash Table",
+    "String",
+    "Dynamic Programming",
+    "Brute-Force Search"
+  ],
+  "tagsCn": [
+    "字典树",
+    "记忆化",
+    "数组",
+    "哈希表",
+    "字符串",
+    "动态规划",
+    "Brute-Force Search"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"leetcode\""
+        },
+        {
+          "name": "wordDict",
+          "value": "[\"leet\", \"code\"]"
+        }
+      ],
+      "output": "true",
+      "explain": "返回 true 因为 \"leetcode\" 可以由 \"leet\" 和 \"code\" 拼接成。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"applepenapple\""
+        },
+        {
+          "name": "wordDict",
+          "value": "[\"apple\", \"pen\"]"
+        }
+      ],
+      "output": "true",
+      "explain": "返回 true 因为 \"applepenapple\" 可以由 \"apple\" \"pen\" \"apple\" 拼接成。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"catsandog\""
+        },
+        {
+          "name": "wordDict",
+          "value": "[\"cats\", \"dog\", \"sand\", \"and\", \"cat\"]"
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"leetcode\"\n[\"leet\",\"code\"]\n\"applepenapple\"\n[\"apple\",\"pen\"]\n\"catsandog\"\n[\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]",
+  "javaSnippet": "class Solution {\n    public boolean wordBreak(String s, List<String> wordDict) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-08T23:28:01.484Z"
+}

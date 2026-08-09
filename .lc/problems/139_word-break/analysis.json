@@ -1,0 +1,39 @@
+{
+  "seq": 57,
+  "id": "139",
+  "slug": "word-break",
+  "title": "单词拆分",
+  "category": "动态规划",
+  "date": "2026-08-10",
+  "verdict": "Accepted",
+  "testcases": "48/48",
+  "runtime_ms": null,
+  "memory_bytes": 45008000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "前缀DP",
+  "approach_detail": "**问题本质与解法选择**\n\n题目等价于：能否把 s 切成若干段，每段都出现在词典中，且词典单词可无限重复使用。这是典型的前缀可拆分性判定：前 i 个字符能否拆分，只取决于某个更短前缀 j 是否可拆分、以及 s[j,i) 是否在词典中，满足最优子结构，所以用一维 DP 而不是回溯（回溯在 n=300 时是指数级）。\n\n**关键设计决策**\n\n1. 状态定义：dp[i] 表示 s 的前 i 个字符 s[0,i) 能否由词典单词拼接；dp[0]=true（空前缀可拆），答案取 dp[n]。\n2. 转移：枚举词典中每个单词 word，若 s 从 i-word.length() 开始、长度等于 word.length() 的子串恰好等于 word，且 dp[i-word.length()] 为 true，则 dp[i] 为 true。关键点：这个成立条件要**累积**（一旦 true 就保持 true），不能赋值覆盖，否则后匹配的单词可能用 dp 为 false 的起点把已成立的 dp[i] 冲掉。\n3. 词典转 HashSet：单词匹配查重 O(1)；单词可重复使用，遍历集合即可，不用记录使用次数。\n4. 枚举顺序：外层按位置 i 递增，内层遍历词典单词；与「外层位置、内层枚举起点 j」等价，本题规模下都足够。\n\n**边界与细节**\n\n- 空串起点：dp[0]=true 是递推基础，不代表词典含空串。\n- 防负下标：word.length() > i 时跳过（i - word.length() >= 0 守卫）。\n- 必须整串覆盖：例如 s=\"abc\"、词典 [\"ab\",\"b\"]，dp[2]=true 但 \"c\" 不在词典，dp[3] 仍为 false，不能因为中间某段可拆就提前返回 true。\n- 回归用例推演：s=\"ab\"、词典 [\"ab\",\"b\"]。\n  1. i=1：只可能匹配 \"b\"（起点 0 的子串 \"a\" 不匹配），dp[1]=false。\n  2. i=2：\"ab\" 匹配 s[0,2) 且 dp[0]=true → dp[2] 置 true；随后 \"b\" 匹配 s[1,2) 但 dp[1]=false，若用赋值覆盖，dp[2] 会被写成 false，最终错误返回 false；用累积后 dp[2] 保持 true，正确。\n- 性能边界：s 为 300 个 \"a\"、词典 [\"a\"] 时仍快速通过，验证 O(n·m·L) 在该规模下无压力。\n\n**复杂度与下限论证**\n\n- 时间 O(n·m·L)：外层 n 个位置 × 内层 m 个不同单词 × 每次子串比较最长 L 个字符；n≤300、m≤1000、L≤20 时约数百万字符操作，这也是力扣官方 DP 解法的标准形式之一。任何解法至少要读一遍 s（Ω(n)），本解没有指数级搜索，处于该问题可接受的复杂度档位。\n- 空间 O(n + m·L)：dp 数组 O(n)，HashSet 存词典 O(m·L)。",
+  "time_complexity": "O(n·m·L)",
+  "space_complexity": "O(n + m·L)",
+  "notes": "前缀DP（枚举词典单词），修复 dp 覆盖 bug 后一次通过",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-10",
+      "verdict": "Accepted",
+      "testcases": "48/48",
+      "runtime_ms": null,
+      "memory_bytes": 45008000,
+      "approach": "前缀DP",
+      "time_complexity": "O(n·m·L)",
+      "space_complexity": "O(n + m·L)",
+      "optimal": true,
+      "notes": "前缀DP（枚举词典单词），修复 dp 覆盖 bug 后一次通过"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}
