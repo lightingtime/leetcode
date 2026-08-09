@@ -1,0 +1,48 @@
+{
+  "id": "279",
+  "slug": "perfect-squares",
+  "title": "Perfect Squares",
+  "titleCn": "完全平方数",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/perfect-squares/",
+  "tags": [
+    "Breadth-First Search",
+    "Math",
+    "Dynamic Programming",
+    "背包问题",
+    "完全背包"
+  ],
+  "tagsCn": [
+    "广度优先搜索",
+    "数学",
+    "动态规划",
+    "背包问题",
+    "完全背包"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "12"
+        }
+      ],
+      "output": "3",
+      "explain": "12 = 4 + 4 + 4"
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "13"
+        }
+      ],
+      "output": "2",
+      "explain": "13 = 4 + 9"
+    }
+  ],
+  "exampleTestcases": "12\n13",
+  "javaSnippet": "class Solution {\n    public int numSquares(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-09T22:10:08.554Z"
+}

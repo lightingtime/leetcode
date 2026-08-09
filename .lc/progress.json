@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 59,
+  "current_seq": 60,
   "done": [
     {
       "seq": 1,
@@ -639,6 +639,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "二维交替链DP（两列互相推进），穷举核对后一次通过"
+    },
+    {
+      "seq": 60,
+      "id": "279",
+      "title": "完全平方数",
+      "slug": "perfect-squares",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一维DP枚举最后一块平方数，一次通过"
     }
   ],
   "error_habits": [
