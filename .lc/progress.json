@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 61,
+  "current_seq": 62,
   "done": [
     {
       "seq": 1,
@@ -661,6 +661,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "贪心+二分（tails 数组），O(n log n) 达成进阶要求"
+    },
+    {
+      "seq": 62,
+      "id": "322",
+      "title": "零钱兑换",
+      "slug": "coin-change",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "完全背包一维DP（外层金额内层硬币），一次通过"
     }
   ],
   "error_habits": [
