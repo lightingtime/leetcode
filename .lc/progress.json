@@ -1202,6 +1202,28 @@
         "动态规划"
       ],
       "last_seen": "2026-08-09"
+    },
+    {
+      "habit": "滚动 DP 原地更新：先更新 max 再算 min，后算的状态读到了本轮新值（未保存上一轮快照），状态被污染",
+      "count": 1,
+      "examples": [
+        "maximum-product-subarray"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-10"
+    },
+    {
+      "habit": "答案跟踪对象错误：滚动后 ans 与 min 比较而不是与 max 比较，丢失已出现的最大值",
+      "count": 1,
+      "examples": [
+        "maximum-product-subarray"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-10"
     }
   ],
   "category_hints": {

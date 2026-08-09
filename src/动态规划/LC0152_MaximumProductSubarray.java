@@ -9,15 +9,15 @@ public class LC0152_MaximumProductSubarray {
 
     // ==== 提交代码开始 ====
     public int maxProduct(int[] nums) {
-        int[][] dp = new int[nums.length][2];
-        dp[0][0] = dp[0][1] = nums[0];
-        int max = nums[0];
+        int max = nums[0], min = nums[0];
+        int ans = nums[0];
         for (int i = 1; i < nums.length; i++) {
-            dp[i][0] = Math.max(nums[i], Math.max(dp[i - 1][0] * nums[i], dp[i - 1][1] * nums[i]));
-            dp[i][1] = Math.min(nums[i], Math.min(dp[i - 1][0] * nums[i], dp[i - 1][1] * nums[i]));
-            max = Math.max(dp[i][0], max);
+            int temp = max;
+            max = Math.max(nums[i], Math.max(max * nums[i], min * nums[i]));
+            min = Math.min(nums[i], Math.min(temp * nums[i], min * nums[i]));
+            ans = Math.max(max, ans);
         }
-        return max;
+        return ans;
     }
     // ==== 提交代码结束 ====
 
