@@ -1,0 +1,39 @@
+{
+  "seq": 61,
+  "id": "300",
+  "slug": "longest-increasing-subsequence",
+  "title": "最长递增子序列",
+  "category": "动态规划",
+  "date": "2026-08-10",
+  "verdict": "Accepted",
+  "testcases": "56/56",
+  "runtime_ms": null,
+  "memory_bytes": 46328000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "贪心+二分（tails数组）",
+  "approach_detail": "**问题本质与解法选择**\n\n求最长严格递增子序列长度。朴素 O(n²) DP（dp[i]=以 i 结尾的最长长度，枚举 j<i 且 nums[j]<nums[i]）可行，但题目进阶要求 O(n log n)。核心观察：长度相同的递增子序列，尾值越小越有延展潜力，所以只需保留「每个长度下的最小尾值」——即 patience sorting 的 tails 数组，配合二分把单个元素处理降到 O(log n)。\n\n**关键设计决策（按用户实际写法）**\n\n1. tails[k] = 长度为 k+1 的递增子序列的最小尾值，严格递增；tail 变量记录有效长度，只读写 tails[0..tail-1]。\n2. 对每个 nums[i]，二分找第一个 ≥ nums[i] 的下标 index（lower_bound）：index < tail 则替换 tails[index]（长度不变、尾值改小）；否则追加 tails[tail]=nums[i]、tail++（长度 +1）。\n3. 双开区间二分：l=-1、r=end+1，循环 l+1<r；tails[mid] < num → l=mid（mid 及左边都 < num，成为左排除边界），否则 r=mid（mid 及右边都 ≥ num）。返回 r 即 lower_bound。\n4. 哨兵细节：r 初始 end+1 可能让 mid 读到 tails[end]（从未写入、恒为 0 的位置）；只有「全部真实尾巴 < num」时才会访问它——num>0 得 r=end+1、num≤0 得 r=end，主调用都走 append 分支，等价于追加。\n5. 答案：tail。\n\n**边界与细节**\n\n- 单元素：直接追加，tail=1。\n- 严格递减/全相等：每元素都替换到前部（lower_bound 很小），tail 保持 1；相等元素因替换条件是 ≥ 而不能续长，[7,7,7] → 1。\n- 负数：二分只比大小，与符号无关；穷举（长度 1-9、值 -2..2）与 O(n²) 参考实现全部一致。\n- 推演 case：nums=[1,3,4,2,5,6,7]。\n  1. 1 → tails[0]=1，tail=1。\n  2. 3 → 追加 [1,3]，tail=2。\n  3. 4 → 追加 [1,3,4]，tail=3。\n  4. 2 → lower_bound=1（tails[1]=3≥2）→ 替换 [1,2,4]，tail 仍 3——长度信息不丢，这是与「弹光更大元素」写法的关键区别。\n  5. 5 → 追加 [1,2,4,5]，tail=4；6 → 5；7 → 6。\n  6. 答案 6 ✓（真实 LIS 为 1,3,4,5,6,7）。\n\n**复杂度与下限论证**\n\n- 时间 O(n log n)：外层 n 次 × 每次二分 O(log n)，满足进阶要求。\n- 空间 O(n)：tails 数组。\n- 下限：LIS 在比较模型下需要 Ω(n log n)，本解已达最优；O(n²) DP 是正确但非最优的对照。",
+  "time_complexity": "O(n log n)",
+  "space_complexity": "O(n)",
+  "notes": "贪心+二分（tails 数组），O(n log n) 达成进阶要求",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-10",
+      "verdict": "Accepted",
+      "testcases": "56/56",
+      "runtime_ms": null,
+      "memory_bytes": 46328000,
+      "approach": "贪心+二分（tails数组）",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "贪心+二分（tails 数组），O(n log n) 达成进阶要求"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 60,
+  "current_seq": 61,
   "done": [
     {
       "seq": 1,
@@ -650,6 +650,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一维DP枚举最后一块平方数，一次通过"
+    },
+    {
+      "seq": 61,
+      "id": "300",
+      "title": "最长递增子序列",
+      "slug": "longest-increasing-subsequence",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "贪心+二分（tails 数组），O(n log n) 达成进阶要求"
     }
   ],
   "error_habits": [
