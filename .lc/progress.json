@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 57,
+  "current_seq": 58,
   "done": [
     {
       "seq": 1,
@@ -617,6 +617,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "前缀DP（枚举词典单词），修复 dp 覆盖 bug 后一次通过"
+    },
+    {
+      "seq": 58,
+      "id": "152",
+      "title": "乘积最大子数组",
+      "slug": "maximum-product-subarray",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "双状态DP维护最大/最小乘积，一次通过"
     }
   ],
   "error_habits": [
