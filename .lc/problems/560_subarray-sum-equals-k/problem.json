@@ -1,0 +1,52 @@
+{
+  "id": "560",
+  "slug": "subarray-sum-equals-k",
+  "title": "Subarray Sum Equals K",
+  "titleCn": "和为 K 的子数组",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/subarray-sum-equals-k/",
+  "tags": [
+    "Array",
+    "Hash Table",
+    "Prefix Sum"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表",
+    "前缀和"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,1,1]"
+        },
+        {
+          "name": "k",
+          "value": "2"
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,3]"
+        },
+        {
+          "name": "k",
+          "value": "3"
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,1,1]\n2\n[1,2,3]\n3",
+  "javaSnippet": "class Solution {\n    public int subarraySum(int[] nums, int k) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-10T21:27:00.045Z"
+}

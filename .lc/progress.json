@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-11",
-  "current_seq": 68,
+  "current_seq": 69,
   "done": [
     {
       "seq": 1,
@@ -738,6 +738,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "消失的数字：负数标记法与原地归位两种写法均 Accepted（35/35），O(n)/O(1)"
+    },
+    {
+      "seq": 69,
+      "id": "560",
+      "title": "和为 K 的子数组",
+      "slug": "subarray-sum-equals-k",
+      "category": "哈希表",
+      "date": "2026-08-11",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "和为K的子数组：前缀和之差 + 哈希计已见前缀，先查后登记，O(n)/O(n)，一次 Accepted（93/93）"
     }
   ],
   "error_habits": [
@@ -1395,6 +1406,17 @@
       "count": 1,
       "examples": [
         "find-all-numbers-disappeared-in-an-array"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-11"
+    },
+    {
+      "habit": "前缀和哈希用法颠倒：map 登记了查询目标 prefix[j]-k 而不是当前前缀 prefix[j]，且双层循环重复配对同一批前缀导致重复计数；应单层循环、先查 prefix[j]-k 累加答案、再登记当前前缀 prefix[j]",
+      "count": 2,
+      "examples": [
+        "subarray-sum-equals-k"
       ],
       "categories": [
         "哈希表"
