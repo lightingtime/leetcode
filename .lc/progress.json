@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-11",
-  "current_seq": 69,
+  "current_seq": 70,
   "done": [
     {
       "seq": 1,
@@ -749,6 +749,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "和为K的子数组：前缀和之差 + 哈希计已见前缀，先查后登记，O(n)/O(n)，两次 Accepted（93/93），merge 简化版"
+    },
+    {
+      "seq": 70,
+      "id": "31",
+      "title": "下一个排列",
+      "slug": "next-permutation",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-11",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "下一个排列：从右向左找升序转折点，后缀取最小较大值交换并反转，无转折点整体反转，O(n)/O(1)，一次 Accepted（268/268）"
     }
   ],
   "error_habits": [

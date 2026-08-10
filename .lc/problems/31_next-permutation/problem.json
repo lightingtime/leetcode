@@ -1,0 +1,52 @@
+{
+  "id": "31",
+  "slug": "next-permutation",
+  "title": "Next Permutation",
+  "titleCn": "下一个排列",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/next-permutation/",
+  "tags": [
+    "Array",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "数组",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,3]"
+        }
+      ],
+      "output": "[1,3,2]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,2,1]"
+        }
+      ],
+      "output": "[1,2,3]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,1,5]"
+        }
+      ],
+      "output": "[1,5,1]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3]\n[3,2,1]\n[1,1,5]",
+  "javaSnippet": "class Solution {\n    public void nextPermutation(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-10T21:54:20.282Z"
+}
