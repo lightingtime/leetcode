@@ -737,7 +737,7 @@
       "date": "2026-08-11",
       "firstPass": true,
       "optimal": true,
-      "notes": "消失的数字：原地归位，值 x 放回下标 x-1，重复跳过、就位推进，二次扫描出答案，O(n)/O(1)，一次 Accepted（35/35）"
+      "notes": "消失的数字：负数标记法与原地归位两种写法均 Accepted（35/35），O(n)/O(1)"
     }
   ],
   "error_habits": [

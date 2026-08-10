@@ -12,22 +12,14 @@ public class LC0448_FindAllNumbersDisappearedInAnArray {
     // ==== 提交代码开始 ====
     public List<Integer> findDisappearedNumbers(int[] nums) {
         int index = 0;
-        while (index < nums.length) {
-            if (nums[index] != index + 1) {
-                if (nums[index] == nums[nums[index] - 1]) {
-                    index++;
-                    continue;
-                }
-                int temp = nums[nums[index] - 1];
-                nums[nums[index] - 1] = nums[index];
-                nums[index] = temp;
-            } else {
-                index++;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[Math.abs(nums[i]) - 1] > 0) {
+                nums[Math.abs(nums[i]) - 1] *= -1;
             }
         }
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != i + 1) {
+            if (nums[i] > 0) {
                 list.add(i + 1);
             }
         }
