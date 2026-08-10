@@ -11,22 +11,14 @@ public class LC0560_SubarraySumEqualsK {
 
     // ==== 提交代码开始 ====
     public int subarraySum(int[] nums, int k) {
-        int[] prefix = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            if (i == 0) {
-                prefix[i] = nums[i];
-            } else {
-                prefix[i] = nums[i] + prefix[i - 1];
-            }
-        }
         int ans = 0;
+        int sum = 0;
         Map<Integer, Integer> map = new HashMap<>();
         map.put(0, 1);
-        for (int i = 0; i < nums.length; i++) {
-            if (map.containsKey(prefix[i] - k)) {
-                ans += map.get(prefix[i] - k);
-            }
-            map.put(prefix[i], map.getOrDefault(prefix[i], 0) + 1);
+        for (int num : nums) {
+            sum += num;
+            ans += map.getOrDefault(sum - k, 0);
+            map.merge(sum, 1, Integer::sum);
         }
         return ans;
     }

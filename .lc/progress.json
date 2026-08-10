@@ -748,7 +748,7 @@
       "date": "2026-08-11",
       "firstPass": true,
       "optimal": true,
-      "notes": "和为K的子数组：前缀和之差 + 哈希计已见前缀，先查后登记，O(n)/O(n)，一次 Accepted（93/93）"
+      "notes": "和为K的子数组：前缀和之差 + 哈希计已见前缀，先查后登记，O(n)/O(n)，两次 Accepted（93/93），merge 简化版"
     }
   ],
   "error_habits": [
