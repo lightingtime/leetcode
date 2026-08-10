@@ -1,0 +1,44 @@
+{
+  "seq": 65,
+  "id": "124",
+  "slug": "binary-tree-maximum-path-sum",
+  "title": "二叉树中的最大路径和",
+  "category": "动态规划",
+  "date": "2026-08-11",
+  "verdict": "Accepted",
+  "testcases": "96/96",
+  "runtime_ms": null,
+  "memory_bytes": 47148000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "树形 DP（后序 DFS）",
+  "approach_detail": "### 问题本质与解法选择\n\n- 路径是一条链：树上任意两点间唯一路径，或退化为单个节点；同一节点至多出现一次、不一定经过根。\n- 对任意一条路径，存在唯一一个「最高点」（离根最近，路径在该处从左右两个方向汇合，或只从一侧下来）。按每个节点作为最高点枚举所有候选路径即可覆盖全部路径——这是树形 DP / 后序 DFS 的天然选择。\n- 每个节点需要区分两类值：\n  1. 向上提供的单链贡献：以该节点为端点、只朝一个方向向下延伸的最大和，供父节点拼接；\n  2. 以该节点为最高点的完整路径：左单链 + 节点 + 右单链，直接更新全局答案。\n- 负数子树贡献直接丢弃（与 0 取 max），因为路径可以选择不接那一侧。\n\n### 关键设计决策\n\n- 状态定义：`dfs(node)` 返回从 node 出发向下只走一条链能得到的最大贡献；全局 `max` 记录所有「以某节点为最高点的完整路径」的最大值。\n- 转移：\n  - `maxLeft = max(0, dfs(node.left))`，`maxRight = max(0, dfs(node.right))`：负贡献截断为 0；\n  - 更新 `max = max(max, node.val + maxLeft + maxRight)`；\n  - 返回 `node.val + max(maxLeft, maxRight)`——只能带一侧，不能两侧都往上带。\n- 终止条件：`node == null` 返回 0，空子树贡献为 0，由上层决定是否采纳。\n- 状态重置：`max` 作为实例字段时，每次 `maxPathSum` 入口必须重置为 `Integer.MIN_VALUE`，否则同实例多次调用会残留上一次答案。\n\n### 具体 case 推演\n\n示例 `[1, 2, 3]`（root=1，左=2，右=3）：\n\n1. `dfs(2)`：叶子，两侧贡献都为 0；更新 `max = max(MIN_VALUE, 2) = 2`；返回 `2 + 0 = 2`。\n2. `dfs(3)`：同样逻辑；`max` 仍为 2；返回 3。\n3. `dfs(1)`：`maxLeft = max(0, 2) = 2`，`maxRight = max(0, 3) = 3`；更新 `max = max(2, 1 + 2 + 3) = 6`；返回 `1 + max(2, 3) = 4`（向上只能带 3 这一侧）。\n4. 结果 `max = 6`，对应路径 `2 -> 1 -> 3`。\n\n全负例 `[-2, -1, -3]`（root=-2，左=-1，右=-3）：\n\n1. `dfs(-1)`：两侧 0；更新 `max = max(MIN_VALUE, -1) = -1`；返回 -1。\n2. `dfs(-3)`：更新 `max = max(-1, -3) = -1`；返回 -3。\n3. `dfs(-2)`：`maxLeft = max(0, -1) = 0`，`maxRight = max(0, -3) = 0`；更新 `max = max(-1, -2) = -1`。\n4. 结果 -1：全负时最优就是最大的单点，负贡献被 0 截断，避免把路径拉得更低。\n\n### 边界与细节\n\n- `max` 初值必须是 `Integer.MIN_VALUE` 而非 0：节点值可全为负，0 起步会把答案错算成 0。\n- 入口重置 `max`：本次曾踩坑——实例字段跨多次调用残留，后续用例返回上一次的最大值（如把 42 串到单元素用例）。\n- 返回值语义：给父节点的必须是单侧链，不能在父节点处「既分叉又向上」。\n- 空输入不在约束内（节点数 ≥ 1），但 `dfs(null) = 0` 让递归统一覆盖空子树。\n\n### 复杂度分析与最优性论证\n\n- 时间 O(n)：每个节点恰好后序遍历一次，每次常数次比较与加法；下界同为 Ω(n)，必须看过每个节点才能确定全局最大路径，因此 O(n) 是最优。\n- 空间 O(height)，最坏退化为链时为 O(n)：递归栈深度等于树高；本题需要在子树聚合完成后才能更新答案，沿树高保留调用栈是最小必要开销，与时间下界一样属于可接受最优。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "二叉树最大路径和：后序 DFS，子树贡献与 0 取 max，全局拼两侧、向上返单链，入口重置 max 后一次 Accepted（96/96）",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "实例字段跨调用未重置：max 用实例字段累计答案，main 同一实例多次调用时上一次的答案残留（返回 max(上次,本次)），导致后续用例输出前序答案",
+      "count": 1
+    }
+  ],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-11",
+      "verdict": "Accepted",
+      "testcases": "96/96",
+      "runtime_ms": null,
+      "memory_bytes": 47148000,
+      "approach": "树形 DP（后序 DFS）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "二叉树最大路径和：后序 DFS，子树贡献与 0 取 max，全局拼两侧、向上返单链，入口重置 max 后一次 Accepted（96/96）"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}

@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-10",
-  "current_seq": 64,
+  "updated": "2026-08-11",
+  "current_seq": 65,
   "done": [
     {
       "seq": 1,
@@ -694,6 +694,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "left数组+滚动右最大值，O(n) 一次通过"
+    },
+    {
+      "seq": 65,
+      "id": "124",
+      "title": "二叉树中的最大路径和",
+      "slug": "binary-tree-maximum-path-sum",
+      "category": "动态规划",
+      "date": "2026-08-11",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "二叉树最大路径和：后序 DFS，子树贡献与 0 取 max，全局拼两侧、向上返单链，入口重置 max 后一次 Accepted（96/96）"
     }
   ],
   "error_habits": [
@@ -1323,6 +1334,17 @@
         "动态规划"
       ],
       "last_seen": "2026-08-10"
+    },
+    {
+      "habit": "实例字段跨调用未重置：max 用实例字段累计答案，main 同一实例多次调用时上一次的答案残留（返回 max(上次,本次)），导致后续用例输出前序答案",
+      "count": 1,
+      "examples": [
+        "binary-tree-maximum-path-sum"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-11"
     }
   ],
   "category_hints": {
