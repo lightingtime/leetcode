@@ -1,0 +1,21 @@
+{
+  "id": "136",
+  "slug": "single-number",
+  "title": "Single Number",
+  "titleCn": "只出现一次的数字",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/single-number/",
+  "tags": [
+    "Bit Manipulation",
+    "Array"
+  ],
+  "tagsCn": [
+    "位运算",
+    "数组"
+  ],
+  "category": "数学与位运算",
+  "examples": [],
+  "exampleTestcases": "[2,2,1]\n[4,1,2,1,2]\n[1]",
+  "javaSnippet": "class Solution {\n    public int singleNumber(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-10T20:41:15.082Z"
+}
