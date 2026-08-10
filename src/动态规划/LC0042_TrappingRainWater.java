@@ -9,17 +9,21 @@ public class LC0042_TrappingRainWater {
 
     // ==== 提交代码开始 ====
     public int trap(int[] height) {
-        int[] left = new int[height.length];
-        for (int i = 1; i < height.length; i++) {
-            left[i] = Math.max(left[i - 1], height[i - 1]);
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0;
+        int water = 0;
+        while (left < right) {
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+            if (leftMax < rightMax) {
+                water += leftMax - height[left];
+                left++;
+            } else {
+                water += rightMax - height[right];
+                right--;
+            }
         }
-        int pre = 0;
-        int ans = 0;
-        for (int i = height.length - 1; i >= 0; i--) {
-            ans += Math.max(0, Math.min(left[i], pre) - height[i]);
-            pre = Math.max(pre, height[i]);
-        }
-        return ans;
+        return water;
     }
     // ==== 提交代码结束 ====
 
