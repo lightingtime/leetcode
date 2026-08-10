@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-11",
-  "current_seq": 70,
+  "current_seq": 71,
   "done": [
     {
       "seq": 1,
@@ -760,6 +760,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "下一个排列：从右向左找升序转折点，后缀取最小较大值交换并反转，无转折点整体反转，O(n)/O(1)，一次 Accepted（268/268）"
+    },
+    {
+      "seq": 71,
+      "id": "142",
+      "title": "环形链表 II",
+      "slug": "linked-list-cycle-ii",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-11",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "环形链表 II：Floyd 判圈，相遇后一指针回 head、另一指针留相遇点，同速再走到环入口，O(n)/O(1)，一次 Accepted（18/18）"
     }
   ],
   "error_habits": [

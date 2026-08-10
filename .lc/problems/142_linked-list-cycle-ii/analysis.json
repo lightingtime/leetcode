@@ -1,0 +1,39 @@
+{
+  "seq": 71,
+  "id": "142",
+  "slug": "linked-list-cycle-ii",
+  "title": "环形链表 II",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-11",
+  "verdict": "Accepted",
+  "testcases": "18/18",
+  "runtime_ms": null,
+  "memory_bytes": 47124000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Floyd 快慢指针",
+  "approach_detail": "### 问题本质与解法选择\n\n- 判断链表是否有环并返回环入口，进阶要求 O(1) 空间、不允许修改链表。\n- Floyd 快慢指针：快指针每次 2 步、慢指针每次 1 步。有环必相遇（慢指针进环后，快指针每轮相对逼近 1 步）；无环则快指针先走到 null。\n- 找入口需要再走一段：设 head 到环入口距离 a、入口到第一次相遇点距离 b、环长 L。慢指针共走 a+b，快指针走 2(a+b)，多出的 a+b 正好是整数圈 kL，所以 a+b=kL。从相遇点继续走 a 步，位置 = b+a = kL ≡ 0 (mod L)，正好回到环入口。因此相遇后一个指针回 head、一个留在相遇点，两指针同速各走 1 步，再次相遇处就是入口。\n\n### 关键设计决策\n\n- 判环循环：fast 每轮先走 1 步、再走 1 步（第二步前判 fast 非空），slow 走 1 步；fast 或 fast.next 为 null 即无环。\n- 相遇判定：fast == slow 时 break，进入找入口阶段。\n- 入口定位：slow = head，fast 留在相遇点，两者每次各走 1 步直到相等，返回该节点。\n- 空链表/单节点无环：fast 迅速走到 null，返回 null。\n\n### 具体 case 推演\n\n示例 1 `[3,2,0,-4]`，pos=1（环入口=2，head→入口 a=1，环长 L=3）：\n\n判环阶段（fast 每轮 1 步+1 步，slow 1 步）：\n\n1. 第 1 轮：fast 3→2→0，slow 3→2，0≠2。\n2. 第 2 轮：fast 0→-4→2，slow 2→0，2≠0。\n3. 第 3 轮：fast 2→0→-4，slow 0→-4，-4==-4 相遇。相遇点在 -4（入口后第 b=2 步：2→0→-4），a+b=1+2=3=L，k=1 成立。\n\n入口阶段（slow=head=3，fast 停在 -4，同速 1 步）：\n\n1. slow=2，fast=2 → 相遇，返回节点 2 = 环入口 ✓（正好走 a=1 步）。\n\n边界用例：单节点自环 `[1]` pos=0——第 1 轮 fast 1→1、slow 1→1 即相遇，入口阶段 slow=head、fast 同点直接返回 head；无环多节点 fast 先到 null 返回 null。\n\n### 边界与细节\n\n- head 为 null 或链表无环：fast 走到 null，返回 null。\n- 单节点/尾节点自环：第一次相遇点就是入口（或经入口阶段一步确认）。\n- 两节点环入口在尾部 `[1,2]` pos=1：判环相遇后，入口阶段 1 步内回到尾部节点。\n- 实现注意：fast 走第二步前必须判 fast.next 非空，否则无环链表会空指针异常。\n\n### 复杂度分析与最优性论证\n\n- 时间 O(n)：判环阶段 slow 至多走 a+b ≤ n 步（相遇前不会超过一圈多），入口阶段 slow 再走 a ≤ n 步，总 O(n)；下界 Ω(n)，无环时要遍历到链表尾，故最优。\n- 空间 O(1)：仅两个指针，满足进阶 O(1) 空间硬性要求；哈希表方案 O(n) 空间不达标。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "环形链表 II：Floyd 判圈，相遇后一指针回 head、另一指针留相遇点，同速再走到环入口，O(n)/O(1)，一次 Accepted（18/18）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-11",
+      "verdict": "Accepted",
+      "testcases": "18/18",
+      "runtime_ms": null,
+      "memory_bytes": 47124000,
+      "approach": "Floyd 快慢指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "环形链表 II：Floyd 判圈，相遇后一指针回 head、另一指针留相遇点，同速再走到环入口，O(n)/O(1)，一次 Accepted（18/18）"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
