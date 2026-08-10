@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-11",
-  "current_seq": 67,
+  "current_seq": 68,
   "done": [
     {
       "seq": 1,
@@ -727,6 +727,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "旋转图像：上下翻转 + 主对角线转置两步原地变换，O(n^2)/O(1)，一次 Accepted（21/21）"
+    },
+    {
+      "seq": 68,
+      "id": "448",
+      "title": "找到所有数组中消失的数字",
+      "slug": "find-all-numbers-disappeared-in-an-array",
+      "category": "哈希表",
+      "date": "2026-08-11",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "消失的数字：原地归位，值 x 放回下标 x-1，重复跳过、就位推进，二次扫描出答案，O(n)/O(1)，一次 Accepted（35/35）"
     }
   ],
   "error_habits": [
@@ -1365,6 +1376,28 @@
       ],
       "categories": [
         "动态规划"
+      ],
+      "last_seen": "2026-08-11"
+    },
+    {
+      "habit": "原地置换归位判断与重复守卫缺失：值 x 应在下标 x-1（就位判断误写为 nums[i]==i-1），且目标位置已有同值时应跳过而不是继续交换，否则交换无变化、index 不前进导致死循环",
+      "count": 1,
+      "examples": [
+        "find-all-numbers-disappeared-in-an-array"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-11"
+    },
+    {
+      "habit": "原地归位目标下标与指针推进结构错误：目标下标写成 x+1（应为 x-1，x=n 时直接越界）；已就位时无分支推进、交换后错误 index++、重复守卫用 continue 不推进，导致指针不前进死循环；只有就位或目标位已有同值两种情形才前进",
+      "count": 1,
+      "examples": [
+        "find-all-numbers-disappeared-in-an-array"
+      ],
+      "categories": [
+        "哈希表"
       ],
       "last_seen": "2026-08-11"
     }

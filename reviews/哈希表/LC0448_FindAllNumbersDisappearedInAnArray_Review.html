@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC448 找到所有数组中消失的数字 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 68</div>
+  <h1>LC448 · 找到所有数组中消失的数字</h1>
+  <div class="sub">原地归位（cyclic sort） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 35/35</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 哈希表</span>
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-11</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 原地归位（cyclic sort）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 64.2 MB</span><span class="chip">用例 35/35</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0448_FindAllNumbersDisappearedInAnArray.java</span><span>提交区</span></div><pre>public List&lt;Integer&gt; findDisappearedNumbers(int[] nums) {
+        int index = 0;
+        while (index &lt; nums.length) {
+            if (nums[index] != index + 1) {
+                if (nums[index] == nums[nums[index] - 1]) {
+                    index++;
+                    continue;
+                }
+                int temp = nums[nums[index] - 1];
+                nums[nums[index] - 1] = nums[index];
+                nums[index] = temp;
+            } else {
+                index++;
+            }
+        }
+        List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; nums.length; i++) {
+            if (nums[i] != i + 1) {
+                list.add(i + 1);
+            }
+        }
+        return list;
+    }</pre></div>
+    <p class="muted">消失的数字：原地归位，值 x 放回下标 x-1，重复跳过、就位推进，二次扫描出答案，O(n)/O(1)，一次 Accepted（35/35）</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>### 问题本质与解法选择</p><ul><li>值域 [1,n] 与下标 [0,n-1] 一一对应：下标 i 的正确住户是 i+1，值 x 的家在下标 x-1。</li><li>原地归位（cyclic sort）把每个值送回自己的家；重复值换不进去就留在原位；全部归位后，下标 i 处不是 i+1 的位置，i+1 就是缺失数字。</li><li>该方案 O(n) 时间、O(1) 空间，满足进阶要求；哈希集合标记空间 O(n)，不满足进阶。</li></ul><p>### 关键设计决策</p><ul><li>映射关系：值 → 下标用 <code>x - 1</code>；下标 → 值用 <code>i + 1</code>，两个方向不能混。</li><li>就位判断：<code>nums[i] == i + 1</code>。</li><li>归位动作：把 <code>nums[i]</code> 与 <code>nums[nums[i] - 1]</code> 交换。</li><li>重复守卫：若 <code>nums[nums[i] - 1] == nums[i]</code>，说明目标位已住同值，本位置处理完毕，i 前进。</li><li>指针推进规则：只有两种情形前进——已就位、或目标位已有同值；交换后停留原地继续判断，保证每轮必有进展。</li></ul><p>### 具体 case 推演</p><p><code>[2,2,1]</code>（n=3）：</p><ol><li>i=0：nums[0]=2 != 1；目标位 nums[1]=2 已有同值 → 重复，i=1。</li><li>i=1：nums[1]=2 == i+1 → 就位，i=2。</li><li>i=2：nums[2]=1 != 3；目标位 nums[0]=2 != 1 → 交换 nums[2] 与 nums[0]，数组变 [1,2,2]，i 停在 2。</li><li>i=2 再判断：nums[2]=2 != 3；目标位 nums[1]=2 已有同值 → 重复，i=3，循环结束。</li><li>二次扫描：下标 0、1 就位，下标 2 处是 2 != 3 → 缺失 3。答案 [3]。</li></ol><p><code>[1,1]</code>（n=2）：</p><ol><li>i=0：nums[0]=1 == i+1 → 就位，i=1。</li><li>i=1：nums[1]=1 != 2；目标位 nums[0]=1 已有同值 → 重复，i=2，循环结束。</li><li>二次扫描：下标 1 处是 1 != 2 → 缺失 2。答案 [2]。</li></ol><p>### 边界与细节</p><ul><li>n=1：[1] 直接就位，返回空列表。</li><li>全部相同 [5,5,5,5,5]：第一个 5 归位后其余都是重复，扫描得 [1,2,3,4]。</li><li>已有序 [1,2,3]：全程就位推进，零交换。</li><li>目标下标恒为 <code>nums[i]-1</code>，落在 [0,n-1]，不会越界（本次曾因写成 x+1 越界并死循环）。</li></ul><p>### 复杂度分析与最优性论证</p><ul><li>时间 O(n)：每个元素至多被交换常数次（每次交换至少让一个值归位，交换总数 ≤ n），两次遍历各 O(n)；下界 Ω(n)，必须读每个元素，故最优。</li><li>空间 O(1)：仅一个临时变量；结果列表由题目约定不算额外空间，满足「不使用额外空间」进阶要求。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>原地置换归位判断与重复守卫缺失：值 x 应在下标 x-1（就位判断误写为 nums[i]==i-1），且目标位置已有同值时应跳过而不是继续交换，否则交换无变化、index 不前进导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>原地归位目标下标与指针推进结构错误：目标下标写成 x+1（应为 x-1，x=n 时直接越界）；已就位时无分支推进、交换后错误 index++、重复守卫用 continue 不推进，导致指针不前进死循环；只有就位或目标位已有同值两种情形才前进</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>35/35 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>值域 [1,n] 数组原地归位（cyclic sort）</h3><p>值 x 应放下标 x-1，就位判断用 nums[i]==i+1 而非 i-1；目标位置已有同值时说明该值重复，应跳过当前下标；扫描指针每轮要么就位、要么前进，保证有进展不死循环</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">35/35</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 64.2 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p><b>原地置换归位判断与重复守卫缺失：值 x 应在下标 x-1（就位判断误写为 nums[i]==i-1），且目标位置已有同值时应跳过而不是继续交换，否则交换无变化、index 不前进导致死循环</b>（累计 1 次）</p><p><b>原地归位目标下标与指针推进结构错误：目标下标写成 x+1（应为 x-1，x=n 时直接越界）；已就位时无分支推进、交换后错误 index++、重复守卫用 continue 不推进，导致指针不前进死循环；只有就位或目标位已有同值两种情形才前进</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 68 · find-all-numbers-disappeared-in-an-array</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">消失的数字：原地归位，值 x 放回下标 x-1，重复跳过、就位推进，二次扫描出答案，O(n)/O(1)，一次 Accepted（35/35）</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/448_find-all-numbers-disappeared-in-an-array/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0448_FindAllNumbersDisappearedInAnArray.java">src/哈希表/LC0448_FindAllNumbersDisappearedInAnArray.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-11
+  </div>
+</div>
+</body>
+</html>
