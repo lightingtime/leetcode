@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 62,
+  "current_seq": 63,
   "done": [
     {
       "seq": 1,
@@ -672,6 +672,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "完全背包一维DP（外层金额内层硬币），一次通过"
+    },
+    {
+      "seq": 63,
+      "id": "10",
+      "title": "正则表达式匹配",
+      "slug": "regular-expression-matching",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "前缀长度二维DP（星号零次/多次分支），修复循环端点后一次通过"
     }
   ],
   "error_habits": [
@@ -1274,6 +1285,28 @@
       "count": 1,
       "examples": [
         "house-robber"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-10"
+    },
+    {
+      "habit": "DP 循环边界与数组维度不一致：dp 为 len+1 但循环用 i<len / j<len，漏算最后一行/列，答案格永不填充",
+      "count": 1,
+      "examples": [
+        "regular-expression-matching"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-10"
+    },
+    {
+      "habit": "正则星号分支：取 s.charAt(i-1) 前缺 i>0 守卫（i=0 越界），且 x 为 '.' 时漏掉任意匹配",
+      "count": 1,
+      "examples": [
+        "regular-expression-matching"
       ],
       "categories": [
         "动态规划"

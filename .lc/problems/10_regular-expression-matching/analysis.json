@@ -1,0 +1,56 @@
+{
+  "seq": 63,
+  "id": "10",
+  "slug": "regular-expression-matching",
+  "title": "正则表达式匹配",
+  "category": "动态规划",
+  "date": "2026-08-10",
+  "verdict": "Accepted",
+  "testcases": "354/354",
+  "runtime_ms": null,
+  "memory_bytes": 43772000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "二维DP（前缀长度语义）",
+  "approach_detail": "**问题本质与解法选择**\n\n判断 s 能否被模式 p 完全匹配：'.' 通配任意单字符，'x*' 通配零个或多个 x。这是字符串匹配的经典 DP：把「s 前缀 vs p 前缀」的匹配结果存表，子问题同构且可复用；直接递归/回溯会指数级重复。难点在 * 的「零次 vs 多次」两种语义，DP 用 j−2（跳过 x*）和 i−1（消费字符后 x* 保留）两个方向分别覆盖。\n\n**关键设计决策（按用户实际写法）**\n\n1. 状态：dp[i][j] = s 的前 i 个字符与 p 的前 j 个字符能否匹配（前缀长度语义，i=0..|s|、j=0..|p|）；dp[0][0]=true，其余默认 false（第一列语义正确：空模式只匹配空串）。\n2. 普通字符/.'：i>0 且 s[i−1] 与 p[j−1] 匹配（'.' 恒匹配）时，dp[i][j] = dp[i−1][j−1]。\n3. '*'（与 p[j−2] 绑定成 x*）：dp[i][j] = dp[i][j−2]（零次，直接跳过 x*）或 (i>0 && dp[i−1][j] && (s[i−1]==x || x=='.'))（一次及以上：消费一个 s 字符，x* 保留继续匹配）。\n4. 循环：i 从 0..|s|（含，第一行参与转移），j 从 1..|p|（含，最后一列参与转移）；答案 dp[|s|][|p|]。\n\n**边界与细节**\n\n- i=0 行：普通字符分支靠 i>0 短路为 false；只有 * 的零次分支能置 true（如 dp[0][2] for 'a*'）。\n- 越界防护：所有取 s.charAt(i−1) 的分支先判 i>0；遇到 * 时 j≥2（题目保证 * 前有字符），charAt(j−2) 安全。\n- '.' 通配：普通分支用 c=='.'；星号分支用 x=='.' 或 x==s[i−1]。\n- 推演 case：s='aa'、p='a*'。\n  1. dp[0][0]=true；i=0 行：dp[0][1]=false（普通 a，i>0 短路）；dp[0][2]=dp[0][0]（* 零次）→ true。\n  2. i=1：dp[1][1]=dp[0][0] 且 'a'=='a' → true；dp[1][2]=dp[1][0](false) 或 (i>0 && dp[0][2]=true && 'a'=='a') → true。\n  3. i=2：dp[2][1]=dp[1][0](false) → false；dp[2][2]=dp[2][0](false) 或 (dp[1][2]=true && 'a'=='a') → true ✓。\n- 推演 case：s='ab'、p='.*'：i=1 时 dp[1][1]=dp[0][0] 且 '.' 通配 → true；dp[1][2]=dp[1][0](false) 或 (dp[0][2]=true && x=='.') → true；i=2 同理 → true ✓。\n- 经典不匹配：s='mississippi'、p='mis*is*p*.' → false，末段 p* 无法消化剩余字符。\n\n**复杂度与下限论证**\n\n- 时间 O(|s|·|p|)：两重循环各格常数次运算；|s|≤20、|p|≤30，规模极小。任何正确解法至少要覆盖全部 (i,j) 状态（或等价搜索空间），O(mn) 是该问题 DP 的标准最优档。\n- 空间 O(|s|·|p|)：二维 boolean 表；转移只依赖 i−1 行，可滚动为一维 O(|p|)，但本题规模下无必要。",
+  "time_complexity": "O(|s|·|p|)",
+  "space_complexity": "O(|s|·|p|)",
+  "notes": "前缀长度二维DP（星号零次/多次分支），修复循环端点后一次通过",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "DP 循环边界与数组维度不一致：dp 为 len+1 但循环用 i<len / j<len，漏算最后一行/列，答案格永不填充",
+      "count": 1
+    },
+    {
+      "habit": "正则星号分支：取 s.charAt(i-1) 前缺 i>0 守卫（i=0 越界），且 x 为 '.' 时漏掉任意匹配",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "字符串匹配 DP：前缀长度语义 + 循环含端点 + 星号分支三要素",
+      "text": "dp[i][j] 用前缀长度语义（0..len 共 len+1 个状态），循环必须遍历到 s.length() 与 p.length()（含），否则最后一行/列和答案格永不填；取字符一律 charAt(i-1)/charAt(j-1)。星号分支三要素：零次走 dp[i][j-2]；一次及以上走 dp[i-1][j] 且要求 i>0、s.charAt(i-1) 匹配 x（x 为 . 或等于该字符）；两条取或。case：aa 对 a* 若 j 只到 p.length()-1，dp[2][2] 未填返回 false；ab 对 .* 若漏 . 通配则 false。要点：dp 的每个边界格都要被循环覆盖，分支访问字符串前先确认下标存在。",
+      "category": "动态规划",
+      "problem": "regular-expression-matching",
+      "date": "2026-08-10"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-10",
+      "verdict": "Accepted",
+      "testcases": "354/354",
+      "runtime_ms": null,
+      "memory_bytes": 43772000,
+      "approach": "二维DP（前缀长度语义）",
+      "time_complexity": "O(|s|·|p|)",
+      "space_complexity": "O(|s|·|p|)",
+      "optimal": true,
+      "notes": "前缀长度二维DP（星号零次/多次分支），修复循环端点后一次通过"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}
