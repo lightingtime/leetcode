@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-10",
-  "current_seq": 63,
+  "current_seq": 64,
   "done": [
     {
       "seq": 1,
@@ -683,6 +683,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "前缀长度二维DP（星号零次/多次分支），修复循环端点后一次通过"
+    },
+    {
+      "seq": 64,
+      "id": "42",
+      "title": "接雨水",
+      "slug": "trapping-rain-water",
+      "category": "动态规划",
+      "date": "2026-08-10",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "left数组+滚动右最大值，O(n) 一次通过"
     }
   ],
   "error_habits": [
