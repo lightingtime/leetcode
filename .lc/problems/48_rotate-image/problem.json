@@ -1,0 +1,44 @@
+{
+  "id": "48",
+  "slug": "rotate-image",
+  "title": "Rotate Image",
+  "titleCn": "旋转图像",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/rotate-image/",
+  "tags": [
+    "Array",
+    "Math",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "数组",
+    "数学",
+    "矩阵"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[1,2,3],[4,5,6],[7,8,9]]"
+        }
+      ],
+      "output": "[[7,4,1],[8,5,2],[9,6,3]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]"
+        }
+      ],
+      "output": "[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[1,2,3],[4,5,6],[7,8,9]]\n[[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]",
+  "javaSnippet": "class Solution {\n    public void rotate(int[][] matrix) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-10T20:43:52.985Z"
+}
