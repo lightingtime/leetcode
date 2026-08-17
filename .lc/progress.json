@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "current_seq": 78,
+  "current_seq": 79,
   "done": [
     {
       "seq": 1,
@@ -848,6 +848,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "翻转二叉树：后序递归，左右子树各自翻转后交换当前节点左右指针；空节点返回null，每个节点访问一次，O(n)/O(h)，一次Accepted（77/77）"
+    },
+    {
+      "seq": 79,
+      "id": "543",
+      "title": "二叉树的直径",
+      "slug": "diameter-of-binary-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "二叉树的直径：后序递归返回子树高度max(左,右)+1，每层用左高+右高更新全局max；注意成员变量多次调用要重置，O(n)/O(h)，一次Accepted（106/106）"
     }
   ],
   "error_habits": [
