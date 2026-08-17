@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "current_seq": 79,
+  "current_seq": 80,
   "done": [
     {
       "seq": 1,
@@ -859,6 +859,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "二叉树的直径：后序递归返回子树高度max(左,右)+1，每层用左高+右高更新全局max；注意成员变量多次调用要重置，O(n)/O(h)，一次Accepted（106/106）"
+    },
+    {
+      "seq": 80,
+      "id": "617",
+      "title": "合并二叉树",
+      "slug": "merge-two-binary-trees",
+      "category": "树与二叉树",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "合并二叉树：递归，都空返回null、单空返回非空、都非空则值相加并递归合并左右子树（原地改root1）；复杂度O(min(m,n))/O(min(m,n))，一次Accepted（182/182）"
     }
   ],
   "error_habits": [

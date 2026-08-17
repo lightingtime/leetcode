@@ -1,0 +1,39 @@
+{
+  "seq": 80,
+  "id": "617",
+  "slug": "merge-two-binary-trees",
+  "title": "合并二叉树",
+  "category": "树与二叉树",
+  "date": "2026-08-17",
+  "verdict": "Accepted",
+  "testcases": "182/182",
+  "runtime_ms": null,
+  "memory_bytes": 47300000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "递归合并（原地改 root1）",
+  "approach_detail": "**问题本质与解法选择**\\n- 题目：两棵二叉树对应位置节点重叠则值相加，不重叠则保留非空节点，返回合并后的根。\\n- 合并是逐节点同构操作：对每一对 (root1, root2) 决定当前节点的值和左右子树，天然适合递归。\\n- 解法选择：递归。每个节点只处理一次，且只在两棵树都非空的位置继续递归（单空时整棵子树直接复用，无需下钻）。\\n\\n**关键设计决策**\\n- 递归出口三态：都空→null；root1 空→返回 root2；root2 空→返回 root1（子树原样保留）。\\n- 都不为空：root1.val += root2.val，递归合并左右子树分别接到 root1 上，返回 root1（原地复用 root1，省空间）。\\n- 复杂度只与两棵树重叠部分（较小的树）有关：min(m,n)。\\n\\n**具体 case 推演**\\n- 示例2：[1] 与 [1,2] → 根都非空：val=1+1=2；root1 左空、root2 左=2 → 返回节点 2；root1 右空、root2 右空 → null。结果 [2,2] ✓\\n- 示例1：[1,3,2,5] 与 [2,1,3,null,4,null,7] → 根 1+2=3；左：3+1=4，再往下 5 与 null → 返回 5，null 与 4 → 返回 4；右：2+3=5，null 与 7 → 7。结果 [3,4,5,5,4,null,7] ✓\\n- 单空树：root1=[] → 直接返回 root2（整棵原样）。\\n\\n**边界与细节**\\n- 两棵都为空树：返回 null。\\n- 一边为空树时返回另一边，不产生新节点、不再递归。\\n- 原地修改 root1：若题目要求不改原树则需新建节点；本题允许，返回合并后新树的根即可。\\n\\n**复杂度与下限论证**\\n- 时间 O(min(m,n))：只在两棵树都非空的节点递归，重叠节点数 ≤ min(m,n)。\\n- 空间 O(min(m,n))：递归栈深度最坏为重叠部分高度（链状时 = min(m,n)）。\\n- 下界论证：合并结果至少需要处理所有重叠节点，O(min(m,n)) 达到下界。",
+  "time_complexity": "O(min(m,n))",
+  "space_complexity": "O(min(m,n))",
+  "notes": "合并二叉树：递归，都空返回null、单空返回非空、都非空则值相加并递归合并左右子树（原地改root1）；复杂度O(min(m,n))/O(min(m,n))，一次Accepted（182/182）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-17",
+      "verdict": "Accepted",
+      "testcases": "182/182",
+      "runtime_ms": null,
+      "memory_bytes": 47300000,
+      "approach": "递归合并（原地改 root1）",
+      "time_complexity": "O(min(m,n))",
+      "space_complexity": "O(min(m,n))",
+      "optimal": true,
+      "notes": "合并二叉树：递归，都空返回null、单空返回非空、都非空则值相加并递归合并左右子树（原地改root1）；复杂度O(min(m,n))/O(min(m,n))，一次Accepted（182/182）"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
