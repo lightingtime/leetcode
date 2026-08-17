@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "current_seq": 77,
+  "current_seq": 78,
   "done": [
     {
       "seq": 1,
@@ -837,6 +837,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "每日温度：单调减栈存下标，遇到更高温度循环出栈填 i-topIndex；每个元素入栈出栈各一次，O(n)/O(n)，一次Accepted（48/48）"
+    },
+    {
+      "seq": 78,
+      "id": "226",
+      "title": "翻转二叉树",
+      "slug": "invert-binary-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "翻转二叉树：后序递归，左右子树各自翻转后交换当前节点左右指针；空节点返回null，每个节点访问一次，O(n)/O(h)，一次Accepted（77/77）"
     }
   ],
   "error_habits": [
