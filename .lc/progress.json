@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "current_seq": 76,
+  "current_seq": 77,
   "done": [
     {
       "seq": 1,
@@ -826,6 +826,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "任务调度器：公式法（最大频率骨架），max(maxFreq-1)*(n+1)+并列最多频任务数 与 tasks.length，O(n)/O(1)，一次Accepted（72/72）"
+    },
+    {
+      "seq": 77,
+      "id": "739",
+      "title": "每日温度",
+      "slug": "daily-temperatures",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "每日温度：单调减栈存下标，遇到更高温度循环出栈填 i-topIndex；每个元素入栈出栈各一次，O(n)/O(n)，一次Accepted（48/48）"
     }
   ],
   "error_habits": [

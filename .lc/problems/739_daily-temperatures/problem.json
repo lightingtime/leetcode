@@ -1,0 +1,54 @@
+{
+  "id": "739",
+  "slug": "daily-temperatures",
+  "title": "Daily Temperatures",
+  "titleCn": "每日温度",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/daily-temperatures/",
+  "tags": [
+    "Stack",
+    "Array",
+    "Monotonic Stack"
+  ],
+  "tagsCn": [
+    "栈",
+    "数组",
+    "单调栈"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "temperatures",
+          "value": "[73,74,75,71,69,72,76,73]"
+        }
+      ],
+      "output": "[1,1,4,2,1,1,0,0]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "temperatures",
+          "value": "[30,40,50,60]"
+        }
+      ],
+      "output": "[1,1,1,0]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "temperatures",
+          "value": "[30,60,90]"
+        }
+      ],
+      "output": "[1,1,0]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[73,74,75,71,69,72,76,73]\n[30,40,50,60]\n[30,60,90]",
+  "javaSnippet": "class Solution {\n    public int[] dailyTemperatures(int[] temperatures) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-17T08:34:59.060Z"
+}
