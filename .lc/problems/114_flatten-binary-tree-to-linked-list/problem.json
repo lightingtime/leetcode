@@ -1,0 +1,58 @@
+{
+  "id": "114",
+  "slug": "flatten-binary-tree-to-linked-list",
+  "title": "Flatten Binary Tree to Linked List",
+  "titleCn": "二叉树展开为链表",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/",
+  "tags": [
+    "Stack",
+    "Tree",
+    "Depth-First Search",
+    "Linked List",
+    "Binary Tree"
+  ],
+  "tagsCn": [
+    "栈",
+    "树",
+    "深度优先搜索",
+    "链表",
+    "二叉树"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[1,2,5,3,4,null,6]"
+        }
+      ],
+      "output": "[1,null,2,null,3,null,4,null,5,null,6]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[0]"
+        }
+      ],
+      "output": "[0]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,5,3,4,null,6]\n[]\n[0]",
+  "javaSnippet": "/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode() {}\n *     TreeNode(int val) { this.val = val; }\n *     TreeNode(int val, TreeNode left, TreeNode right) {\n *         this.val = val;\n *         this.left = left;\n *         this.right = right;\n *     }\n * }\n */\nclass Solution {\n    public void flatten(TreeNode root) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-17T06:44:34.408Z"
+}

@@ -36,6 +36,11 @@
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
   .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
   @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -59,22 +64,22 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双状态DP（最大/最小乘积）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.2 MB</span><span class="chip">用例 191/191</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0152_MaximumProductSubarray.java</span><span>提交区</span></div><pre>public int maxProduct(int[] nums) {
-        int[][] dp = new int[nums.length][2];
-        dp[0][0] = dp[0][1] = nums[0];
-        int max = nums[0];
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0152_MaximumProductSubarray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxProduct(int[] nums) {
+        int max = nums[0], min = nums[0];
+        int ans = nums[0];
         for (int i = 1; i &lt; nums.length; i++) {
-            dp[i][0] = Math.max(nums[i], Math.max(dp[i - 1][0] * nums[i], dp[i - 1][1] * nums[i]));
-            dp[i][1] = Math.min(nums[i], Math.min(dp[i - 1][0] * nums[i], dp[i - 1][1] * nums[i]));
-            max = Math.max(dp[i][0], max);
+            int temp = max;
+            max = Math.max(nums[i], Math.max(max * nums[i], min * nums[i]));
+            min = Math.min(nums[i], Math.min(temp * nums[i], min * nums[i]));
+            ans = Math.max(max, ans);
         }
-        return max;
+        return ans;
     }</pre></div>
     <p class="muted">双状态DP维护最大/最小乘积，一次通过</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>在连续子数组中找乘积最大值。乘积与加法最大的区别是符号会反转：负数×负数得正数，且遇到 0 会归零重来，所以「以 i 结尾的最大乘积」不能只由一个状态决定——最大值可能来自上一轮的最小值（负负得正）。这正好构成最优子结构：以 i 结尾的连续子数组要么只有 nums[i]，要么由「以 i-1 结尾的某个子数组」接上 nums[i]，因此双状态一维 DP 能覆盖全部情况，无需回溯或枚举所有子数组。</p><p><strong>关键设计决策</strong></p><ol><li>状态定义：dpMax[i] = 以 i 结尾的连续子数组的最大乘积；dpMin[i] = 以 i 结尾的最小乘积。初始 dpMax[0]=dpMin[0]=nums[0]。</li><li>转移：每个位置有三种候选——nums[i]（重新开始）、nums[i]×dpMax[i-1]、nums[i]×dpMin[i-1]；dpMax 取三者最大、dpMin 取三者最小。必须同时维护两个状态，因为当前 nums[i] 为负时，乘以更负的上一轮值反而得到最大。</li><li>答案：所有 dpMax[i] 的最大值，初始化取 nums[0]，不能从 0 开始，否则全负数组会错。</li><li>实现用 int[n][2] 存两列；每轮只依赖 i-1，实际可以滚动成两个变量把空间降到 O(1)。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：直接返回 nums[0]，正负都适用。</li><li>全负：如 [-2,-3,-1] 答案是 6（子数组 [-2,-3]），靠负负得正；若答案初始化为 0 会错。</li><li>含 0：0 会切断子数组，「重新开始」的候选 nums[i] 保证 0 之后能重来，单个 0 也是合法答案。</li><li>32 位保证：乘积不溢出 int，直接用 int 即可。</li><li>推演 case：nums=[2,-5,-2,-4,3]。</li></ul><ol><li>i=0：max=min=2，ans=2。</li><li>i=1(-5)：候选 -5、-10、-10 → max=-5，min=-10，ans=2。</li><li>i=2(-2)：候选 -2、10、20 → max=20，min=-2，ans=20。</li><li>i=3(-4)：候选 -4、-80、8 → max=8，min=-80，ans=20（此处必须用 i=2 的 min=-2，若错用更早的 -10 会拼出非连续子数组）。</li><li>i=4(3)：候选 3、24、-240 → max=24，min=-240，ans=24 ✓。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个位置常数次运算，一次扫描完成；任何解法都至少要读一遍数组（Ω(n)），已达下限。</li><li>空间：本实现 O(n)（dp 数组）；转移只依赖 i-1，可滚动为两个变量达到 O(1)，是该问题的最优空间。</li><li>无法更优的论证：答案依赖每个元素，且负号传播要求同时知道最大与最小，单状态（只记 max）无法处理负负得正，双状态是最小的必要信息集。</li></ul></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>191/191 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>滚动 DP 原地更新：先更新 max 再算 min，后算的状态读到了本轮新值（未保存上一轮快照），状态被污染</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>答案跟踪对象错误：滚动后 ans 与 min 比较而不是与 max 比较，丢失已出现的最大值</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>191/191 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>滚动变量原地更新：先存旧快照再整体替换，答案跟踪对象与状态语义一致</h3><p>把二维 dp 压成滚动变量时，转移输入必须是「上一轮」的两个旧值：先更新 max 再算 min，min 的候选就混进本轮新 max（状态污染）；应先保存旧快照或用临时变量，新旧值整体替换。答案变量也要跟对对象：dpMax 的滚动结果才对应最大，ans 与 min 比较会丢掉已出现的最大值。case：[-2,-3,-1] 正确过程 i=1 得 max=6、min=-3、ans=6；原地更新+跟 min 比较会算出 min=-18，最终返回 -2 而非 6。要点：滚动只改存储、不改转移语义。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -87,7 +92,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>滚动 DP 原地更新：先更新 max 再算 min，后算的状态读到了本轮新值（未保存上一轮快照），状态被污染</b>（累计 1 次）</p><p><b>答案跟踪对象错误：滚动后 ans 与 min 比较而不是与 max 比较，丢失已出现的最大值</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 58 · maximum-product-subarray</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
@@ -101,5 +106,33 @@
     生成于 2026-08-10
   </div>
 </div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
 </body>
 </html>

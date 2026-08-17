@@ -36,6 +36,11 @@
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
   .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
   @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -59,22 +64,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二维交替链DP</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 70/70</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0198_HouseRobber.java</span><span>提交区</span></div><pre>public int rob(int[] nums) {
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0198_HouseRobber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int rob(int[] nums) {
         if (nums.length &lt; 2) return nums[0];
-        int[][] dp = new int[nums.length][2];
-        dp[0][0] = dp[1][1] = nums[0];
-        dp[1][0] = nums[1];
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
         for (int i = 2; i &lt; nums.length; i++) {
-            dp[i][0] = Math.max(dp[i - 2][1] + nums[i], dp[i - 1][1]);
-            dp[i][1] = Math.max(dp[i - 2][0] + nums[i], dp[i - 1][0]);
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
         }
-        return Math.max(dp[nums.length - 1][0], dp[nums.length - 1][1]);
+        return dp[nums.length - 1];
     }</pre></div>
     <p class="muted">二维交替链DP（两列互相推进），穷举核对后一次通过</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>在「相邻房屋不能同时偷」的约束下选择若干下标，使金额和最大。每间房子只有偷/不偷两种决策，且合法方案存在明显的重叠子结构（前缀最优可复用到更长前缀），适合 DP；贪心不可行，因为局部金额大不代表全局最优，例如 [2,1,1,2] 先偷金额 2 会丢掉「偷 0 号和 3 号得 4」的全局最优。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>状态：dp[i][0] 与 dp[i][1] 是两条交替推进的链——列 0 只能由列 1 的旧值推进，列 1 只能由列 0 的旧值推进，把「相邻不可同偷」编码进交替结构。</li><li>转移：dp[i][0] = max(dp[i-2][1] + nums[i], dp[i-1][1])：偷第 i 间从两行前的另一列跳接（直接跳过 i-1，天然保证不触发警报），不偷则从上一行另一列继承；dp[i][1] 对称地由列 0 推进。</li><li>初始化：dp[0][0]=nums[0]（只偷 0 号）、dp[0][1]=0（默认，不偷）、dp[1][0]=nums[1]、dp[1][1]=nums[0]；n&lt;2 直接返回 nums[0] 避免越界。</li><li>答案：最后一行的两列取大，覆盖「最后偷在奇/偶相位」两种模式。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：n&lt;2 提前返回，dp[1] 不存在。</li><li>两元素：初始化即答案 max(nums[0], nums[1])。</li><li>含 0：金额非负，继承不偷的候选不会变差。</li><li>全相同：如 [3,3,3,3]，交替结构只能隔间取，得 3+3=6。</li><li>推演 case：nums=[2,1,1,2]。</li></ul><ol><li>初始化：dp[0][0]=2，dp[0][1]=0，dp[1][0]=1，dp[1][1]=2。</li><li>i=2：dp[2][0]=max(dp[0][1]+1=1, dp[1][1]=2)=2（不偷 2 号，继承偷 0 号的 2）；dp[2][1]=max(dp[0][0]+1=3, dp[1][0]=1)=3（偷 2 号：2+1，跳过 1 号）。</li><li>i=3：dp[3][0]=max(dp[1][1]+2=4, dp[2][1]=3)=4（偷 3 号：偷 0 号的 2 再 +2）；dp[3][1]=max(dp[1][0]+2=3, dp[2][0]=2)=3。</li><li>答案 = max(4,3) = 4 ✓（偷 0 号和 3 号）。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个下标常数次比较与加法，单遍扫描；任何解法都必须读一遍所有房屋（Ω(n)），已达下限。</li><li>空间 O(n)：dp 数组两列；转移只依赖前两行的两列，可滚动为 4 个变量降到 O(1)。</li><li>信息量下限：相邻约束下每间房子只需知道「前两间的最优」，本结构与标准一维 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 等价，没有引入多余维度。</li></ul></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>70/70 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 初始化遗漏候选：dp[1] 只存 nums[1]，丢掉了「只偷第 0 间」的 max(nums[0], nums[1])，起点状态未覆盖该下标所有合法决策</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>70/70 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>DP 初始化必须覆盖该下标全部合法决策，不能只取一种</h3><p>递推起点状态要完整：dp[1] 表示前两间的最优，应同时包含「偷第 1 间」与「只偷第 0 间」两种候选（max(nums[0], nums[1])），只存 nums[1] 等于强制第 1 间必偷。case：[2,1,1,2] 正确起点 dp[1]=2 才能让 i=3 得到 2+2=4；起点只存 1 时最终只算到 3。修复后一维 dp 单调不减，答案直接取 dp[n-1] 即可，末尾再 max(dp[n-1], dp[n-2]) 是冗余。要点：写 DP 时把「下标 x 的状态语义」写出来，初始化时逐项核对它该包含哪些候选。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -87,7 +91,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>DP 初始化遗漏候选：dp[1] 只存 nums[1]，丢掉了「只偷第 0 间」的 max(nums[0], nums[1])，起点状态未覆盖该下标所有合法决策</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 59 · house-robber</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
@@ -101,5 +105,33 @@
     生成于 2026-08-10
   </div>
 </div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
 </body>
 </html>

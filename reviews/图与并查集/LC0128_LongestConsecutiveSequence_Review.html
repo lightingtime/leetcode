@@ -31,9 +31,16 @@
   .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
   .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
   @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -57,7 +64,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashSet + 从段起点向上延展</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.7 MB</span><span class="chip">用例 85/85</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0128_LongestConsecutiveSequence.java</span><span>提交区</span></div><pre>public int longestConsecutive(int[] nums) {
+    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0128_LongestConsecutiveSequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int longestConsecutive(int[] nums) {
         int max = 0;
         Set&lt;Integer&gt; set = Arrays.stream(nums).boxed().collect(Collectors.toSet());
         for (Integer num : set) {
@@ -74,7 +81,9 @@
     }</pre></div>
     <p class="muted">最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）</p>
   </div></section>
+  
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>85/85 用例。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>记忆化/哈希表：先定死 map 的 value 语义，value 必须是最终要比较的量</h3><p>用 map 做记忆化或统计前，先明确 key→value 存什么：最终要比较的（长度/最大值）就必须直接存长度本身。把中间定位值（前驱位置、起点偏移）当长度存进 map 再参与 max 比较，结果是无意义数值；跳链时用存储值当步长还可能振荡死循环。</p></div><div class="card md"><h3>链式记忆化：存在性判断基于全集，不能基于已处理集合</h3><p>算 f(x)=1+f(x-1) 时，x-1『在不在』必须问全集（所有输入先去重放入），不能问『处理到当前为止见过没有』——否则输入乱序时前驱后到，x 被过早判定为孤立点，缓存值过期。做法：先全部放入（标记未算），再按需递归/循环算；或 HashSet 存全集 + map 只做记忆化。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -101,5 +110,33 @@
     生成于 2026-08-08
   </div>
 </div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
 </body>
 </html>

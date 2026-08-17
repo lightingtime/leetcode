@@ -82,7 +82,7 @@ tlItems.push(
   `<div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">0${mistakes.length + 2} · 提交<span class="tl-badge ok">${a.verdict || 'Accepted'}</span></span><p>${esc(testcases)} 用例${a.firstPass ? '一次通过' : ''}。</p></div></div>`);
 
 const fmtMem = b => b != null ? `≈ ${(b / 1048576).toFixed(1)} MB` : '—';
-const codeBlock = (title, c) => c ? `<div class="code-wrap"><div class="code-head"><span>${esc(title)}</span><span>提交区</span></div><pre>${esc(c)}</pre></div>` : '';
+const codeBlock = (title, c) => c ? `<div class="code-wrap"><div class="code-head"><span>${esc(title)}</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>${esc(c)}</pre></div>` : '';
 function renderSolutions() {
   const subs = Array.isArray(a.submissions) && a.submissions.length ? a.submissions : null;
   if (!subs) {
@@ -142,6 +142,11 @@ const html = `<!DOCTYPE html>
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
   .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
   @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
 </style>
@@ -192,6 +197,34 @@ const html = `<!DOCTYPE html>
     生成于 ${date}
   </div>
 </div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
 </body>
 </html>`;
 
