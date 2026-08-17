@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "current_seq": 75,
+  "current_seq": 76,
   "done": [
     {
       "seq": 1,
@@ -815,6 +815,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "字符串解码：双栈法（数字栈+字符串栈），]时弹k与前缀拼回当前串，O(n+L)/O(n+L)，一次Accepted（34/34）"
+    },
+    {
+      "seq": 76,
+      "id": "621",
+      "title": "任务调度器",
+      "slug": "task-scheduler",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "任务调度器：公式法（最大频率骨架），max(maxFreq-1)*(n+1)+并列最多频任务数 与 tasks.length，O(n)/O(1)，一次Accepted（72/72）"
     }
   ],
   "error_habits": [

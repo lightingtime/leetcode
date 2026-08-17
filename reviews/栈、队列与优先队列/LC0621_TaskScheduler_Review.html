@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC621 任务调度器 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 76</div>
+  <h1>LC621 · 任务调度器</h1>
+  <div class="sub">公式法（最大频率骨架） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 72/72</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 栈、队列与优先队列</span>
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-17</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 公式法（最大频率骨架）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.6 MB</span><span class="chip">用例 72/72</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0621_TaskScheduler.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int leastInterval(char[] tasks, int n) {
+        int[] count = new int[26];
+        for (char task : tasks) {
+            count[task - 'A']++;
+        }
+        int maxFreq = 0, maxFreqTasks = 0;
+        for (int i = 0; i &lt; 26; i++) {
+            maxFreq = Math.max(maxFreq, count[i]);
+        }
+        for (int i = 0; i &lt; 26; i++) {
+            maxFreqTasks += count[i] == maxFreq ? 1 : 0;
+        }
+        return Math.max(tasks.length, (maxFreq - 1) * (n + 1) + maxFreqTasks);
+    }</pre></div>
+    <p class="muted">任务调度器：公式法（最大频率骨架），max(maxFreq-1)*(n+1)+并列最多频任务数 与 tasks.length，O(n)/O(1)，一次Accepted（72/72）</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>题目：同类任务之间必须隔 n 个间隔，求完成所有任务的最短时间间隔（空闲 idle 也占间隔）。</li><li>朴素模拟（优先队列每轮取剩余最多的任务 + 冷却队列）正确但轮数可达约 10^6；观察发现答案只由「出现次数最多的任务」决定，可用数学公式 O(n) 直接算出。</li><li>解法选择：统计频率 → 求最大频率 maxFreq 与「并列达到最大频率的任务个数」maxFreqTasks → 代入公式。</li></ul><p><strong>关键设计决策</strong></p><ul><li>把最频繁任务排成骨架：maxFreq 个 A，之间各隔 n 个空位。</li><li>前 maxFreq-1 轮每轮占 n+1 格（放上所有最多频任务 + 空位由其他任务或 idle 填充）；最后一轮 maxFreqTasks 个最多频任务一起收尾——它们后面没有同类任务，冷却只约束「两个相同任务之间」，所以可以紧凑排列、无需再隔。</li><li>公式：<code>(maxFreq - 1) * (n + 1) + maxFreqTasks</code>。</li><li>但若任务种类足够多，空位能被填满甚至不够用，此时最短就是 tasks.length，所以答案取 <code>max(tasks.length, 公式)</code>。</li><li>关键细节：maxFreqTasks 是「出现次数恰好等于 maxFreq 的任务个数」，不是「出现过的任务种类数」（曾统计错导致 22 vs 16）。</li></ul><p><strong>具体 case 推演</strong></p><ul><li>示例1：A×3、B×3、n=2 → maxFreq=3，maxFreqTasks=2 → <code>2×3+2=8</code>，max(6,8)=8。排布 <code>[A B _][A B _][A B]</code>。</li><li>最多频+多样：A×6、B~G 各 1、n=2 → maxFreq=6，maxFreqTasks=1（只有 A 并列最多）→ <code>5×3+1=16</code> &gt; 12 → 16。若误用种类数 7 会得到 22（错）。</li><li>无需 idle：A~G 各 1、n=2 → maxFreq=1，maxFreqTasks=7 → <code>0×3+7=7</code> = tasks.length → 7。</li></ul><p><strong>边界与细节</strong></p><ul><li>n=0：公式 <code>(maxFreq-1)×1+maxFreqTasks</code>，取 max 后结果 = tasks.length（无冷却，可连续执行）✓</li><li>单任务：maxFreq=1 → 结果 1 ✓</li><li>全相同 A×3、n=2：maxFreq=3，maxFreqTasks=1 → <code>2×3+1=7</code> ✓</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：一遍统计频率 + 两遍固定 26 循环，总 O(n)。</li><li>空间 O(1)：count[26]。</li><li>下界论证：任何方案都 ≥ tasks.length（每个任务至少要执行一次），且 ≥ <code>(maxFreq-1)×(n+1)+maxFreqTasks</code>（最多频任务之间的冷却约束）；这两个下界可以同时构造达到，故取 max 即最短。O(n) 时间已是下限（至少得读一遍全部输入）。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>72/72 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">72/72</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 46.6 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 76 · task-scheduler</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">任务调度器：公式法（最大频率骨架），max(maxFreq-1)*(n+1)+并列最多频任务数 与 tasks.length，O(n)/O(1)，一次Accepted（72/72）</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/621_task-scheduler/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E6%A0%88%E3%80%81%E9%98%9F%E5%88%97%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/LC0621_TaskScheduler.java">src/栈、队列与优先队列/LC0621_TaskScheduler.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-17
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

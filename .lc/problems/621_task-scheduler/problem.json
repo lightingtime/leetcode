@@ -1,0 +1,29 @@
+{
+  "id": "621",
+  "slug": "task-scheduler",
+  "title": "Task Scheduler",
+  "titleCn": "任务调度器",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/task-scheduler/",
+  "tags": [
+    "Greedy",
+    "Array",
+    "Hash Table",
+    "Counting",
+    "Sorting",
+    "Heap (Priority Queue)"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组",
+    "哈希表",
+    "计数",
+    "排序",
+    "堆（优先队列）"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [],
+  "exampleTestcases": "[\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"]\n2\n[\"A\",\"C\",\"A\",\"B\",\"D\",\"B\"]\n1\n[\"A\",\"A\",\"A\", \"B\",\"B\",\"B\"]\n3",
+  "javaSnippet": "class Solution {\n    public int leastInterval(char[] tasks, int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-17T07:56:02.441Z"
+}

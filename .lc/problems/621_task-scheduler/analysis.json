@@ -1,0 +1,39 @@
+{
+  "seq": 76,
+  "id": "621",
+  "slug": "task-scheduler",
+  "title": "任务调度器",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-17",
+  "verdict": "Accepted",
+  "testcases": "72/72",
+  "runtime_ms": null,
+  "memory_bytes": 48884000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "公式法（最大频率骨架）",
+  "approach_detail": "**问题本质与解法选择**\n- 题目：同类任务之间必须隔 n 个间隔，求完成所有任务的最短时间间隔（空闲 idle 也占间隔）。\n- 朴素模拟（优先队列每轮取剩余最多的任务 + 冷却队列）正确但轮数可达约 10^6；观察发现答案只由「出现次数最多的任务」决定，可用数学公式 O(n) 直接算出。\n- 解法选择：统计频率 → 求最大频率 maxFreq 与「并列达到最大频率的任务个数」maxFreqTasks → 代入公式。\n\n**关键设计决策**\n- 把最频繁任务排成骨架：maxFreq 个 A，之间各隔 n 个空位。\n- 前 maxFreq-1 轮每轮占 n+1 格（放上所有最多频任务 + 空位由其他任务或 idle 填充）；最后一轮 maxFreqTasks 个最多频任务一起收尾——它们后面没有同类任务，冷却只约束「两个相同任务之间」，所以可以紧凑排列、无需再隔。\n- 公式：`(maxFreq - 1) * (n + 1) + maxFreqTasks`。\n- 但若任务种类足够多，空位能被填满甚至不够用，此时最短就是 tasks.length，所以答案取 `max(tasks.length, 公式)`。\n- 关键细节：maxFreqTasks 是「出现次数恰好等于 maxFreq 的任务个数」，不是「出现过的任务种类数」（曾统计错导致 22 vs 16）。\n\n**具体 case 推演**\n- 示例1：A×3、B×3、n=2 → maxFreq=3，maxFreqTasks=2 → `2×3+2=8`，max(6,8)=8。排布 `[A B _][A B _][A B]`。\n- 最多频+多样：A×6、B~G 各 1、n=2 → maxFreq=6，maxFreqTasks=1（只有 A 并列最多）→ `5×3+1=16` > 12 → 16。若误用种类数 7 会得到 22（错）。\n- 无需 idle：A~G 各 1、n=2 → maxFreq=1，maxFreqTasks=7 → `0×3+7=7` = tasks.length → 7。\n\n**边界与细节**\n- n=0：公式 `(maxFreq-1)×1+maxFreqTasks`，取 max 后结果 = tasks.length（无冷却，可连续执行）✓\n- 单任务：maxFreq=1 → 结果 1 ✓\n- 全相同 A×3、n=2：maxFreq=3，maxFreqTasks=1 → `2×3+1=7` ✓\n\n**复杂度与下限论证**\n- 时间 O(n)：一遍统计频率 + 两遍固定 26 循环，总 O(n)。\n- 空间 O(1)：count[26]。\n- 下界论证：任何方案都 ≥ tasks.length（每个任务至少要执行一次），且 ≥ `(maxFreq-1)×(n+1)+maxFreqTasks`（最多频任务之间的冷却约束）；这两个下界可以同时构造达到，故取 max 即最短。O(n) 时间已是下限（至少得读一遍全部输入）。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "任务调度器：公式法（最大频率骨架），max(maxFreq-1)*(n+1)+并列最多频任务数 与 tasks.length，O(n)/O(1)，一次Accepted（72/72）",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-17",
+      "verdict": "Accepted",
+      "testcases": "72/72",
+      "runtime_ms": null,
+      "memory_bytes": 48884000,
+      "approach": "公式法（最大频率骨架）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "任务调度器：公式法（最大频率骨架），max(maxFreq-1)*(n+1)+并列最多频任务数 与 tasks.length，O(n)/O(1)，一次Accepted（72/72）"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}
