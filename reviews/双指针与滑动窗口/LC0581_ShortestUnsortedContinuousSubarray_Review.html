@@ -57,9 +57,37 @@
 </div></div>
 <div class="wrap">
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
-    <h3 style="margin:0 0 8px">写法 1 · 两趟扫描找左右边界</h3>
+    <h3 style="margin:0 0 8px">写法 1 · 排序对比找错位区间（朴素）</h3>
+    <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 —</span><span class="chip">用例 307/307</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0581_ShortestUnsortedContinuousSubarray.java · 排序对比找错位区间（朴素）</span><span>提交区</span></div><pre>    public int findUnsortedSubarray(int[] nums) {
+        int[] copy = Arrays.copyOf(nums, nums.length);
+        Arrays.sort(copy);
+        int l = 0;
+        while (l &lt; nums.length) {
+            if (copy[l] == nums[l]) {
+                l++;
+            } else {
+                break;
+            }
+        }
+        int r = nums.length - 1;
+        while (r &gt;= 0) {
+            if (copy[r] == nums[r]) {
+                r--;
+            } else {
+                break;
+            }
+        }
+        if (r &lt;= l) {
+            return 0;
+        }
+        return r - l + 1;
+    }</pre></div>
+    <p class="muted">朴素写法（先实现）：复制排序 + 双端对比定位第一个/最后一个错位；本地测试全过，正确但 O(n log n)/O(n)。</p>
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 两趟扫描找左右边界</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 307/307</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0581_ShortestUnsortedContinuousSubarray.java</span><span>提交区</span></div><pre>public int findUnsortedSubarray(int[] nums) {
+    <div class="code-wrap"><div class="code-head"><span>LC0581_ShortestUnsortedContinuousSubarray.java · 两趟扫描找左右边界</span><span>提交区</span></div><pre>    public int findUnsortedSubarray(int[] nums) {
         int r = 0;
         int max = Integer.MIN_VALUE;
         for (int i = 0; i &lt; nums.length; i++) {
@@ -81,9 +109,9 @@
         }
         return r - l + 1;
     }</pre></div>
-    <p class="muted">最短无序连续子数组：两趟扫描维护左右 max/min 找边界，O(n)/O(1)，一次 Accepted（307/307）</p>
+    <p class="muted">最优写法：两趟扫描维护左右 max/min 找边界，O(n)/O(1)，一次 Accepted（307/307）。</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>1. 问题本质与解法选择理由</strong></p><p>本质：找最短连续子数组，排序它之后整个数组变升序。等价于「找出所有不在最终位置的元素，取最左到最右的区间」。</p><ul><li>朴素做法：复制一份排序后双端对比，O(n log n)/O(n)，正确但没利用「只需找边界」的性质。</li><li>最优做法：不排序直接扫描定位边界。一个元素不需要重排 ⇔ 左边全 ≤ 它且右边全 ≥ 它；因此「左边界 = 最靠左的存在右侧更小元素的逆序位」，「右边界 = 最靠右的存在左侧更大元素的逆序位」。两趟 O(n) 扫描即可。</li></ul><p><strong>2. 关键设计决策</strong></p><ul><li>右边界：从左到右维护 <code>max</code>（左侧已扫最大值）；<code>nums[i] &lt; max</code> 说明左侧有比它大的，它必须重排，更新 <code>r = i</code>。max 只增不减，代表左侧集合的最大值。</li><li>左边界：从右到左维护 <code>min</code>（右侧已扫最小值）；<code>nums[i] &gt; min</code> 说明右侧有比它小的，它必须重排，更新 <code>l = i</code>。</li><li>哨兵：<code>r</code> 初始 0，若从未触发逆序则 <code>r == 0</code> 返回 0（位置 0 不可能成为右边界，因为第一个元素必然 ≥ 左侧最大值 MIN_VALUE）。</li><li>长度 = <code>r - l + 1</code>。</li></ul><p><strong>3. 边界与细节</strong></p><ul><li>已升序 / 单元素 / 全相同：两趟都不触发逆序，r 保持 0 → 返回 0。</li><li>严格降序：r 更新到最后、l 更新到 0，长度 = n（整个数组）。</li><li>中间连续相等 [1,3,2,2,2]：右边界扫到最后一个 2（因为 2&lt;3 持续触发），左边界在 3 处，长度 4，中间的相等值不会被漏。</li><li>哨兵安全性：<code>nums[i] &lt; max</code> 中 max 初始 MIN_VALUE，位置 0 永远不会触发更新，r==0 等价于「无逆序」。</li></ul><p><strong>4. 具体 case 推演</strong>（nums=[2,6,4,8,10,9,15]）</p><p>第一趟（找 r，从左到右，max 初始 MIN_VALUE）：</p><ul><li>i=0: 2 不小于 max，max=2</li><li>i=1: 6 ≥ 2，max=6</li><li>i=2: 4&lt;6 → r=2，max 保持 6</li><li>i=3: 8 ≥ 6，max=8</li><li>i=4: 10 ≥ 8，max=10</li><li>i=5: 9&lt;10 → r=5</li><li>i=6: 15 ≥ 10，max=15</li><li>结果 r=5</li></ul><p>第二趟（找 l，从右到左，min 初始 MAX_VALUE）：</p><ul><li>i=6: 15 不大于 min，min=15</li><li>i=5: 9&lt;15，min=9</li><li>i=4: 10&gt;9 → l=4</li><li>i=3: 8&lt;9，min=8</li><li>i=2: 4&lt;8，min=4</li><li>i=1: 6&gt;4 → l=1</li><li>i=0: 2&lt;4，min=2</li><li>结果 l=1</li></ul><p>长度 = 5-1+1 = 5，与示例一致。</p><p><strong>5. 复杂度与最优性</strong></p><ul><li>时间 O(n)：两趟线性扫描，每趟每元素 O(1)。下限论证：必须至少看每个元素一次才能判断它是否错位，否则可能漏掉边界，因此 O(n) 是时间下界，本解已达。</li><li>空间 O(1)：只用了几个标量变量。判断边界只需 O(1) 的 max/min 信息，空间下界已达。</li></ul><p><strong>6. 写法微调提示（已最优，仅风格/稳健性）</strong></p><ul><li><code>r = 0</code> 哨兵依赖「位置 0 不可能成为右边界」这一隐含事实；改为 <code>r = -1</code>、结束时 <code>if (r == -1) return 0;</code> 更直观稳健（与左边界哨兵对称）。</li><li><code>max = Math.max(...)</code> / <code>min = Math.min(...)</code> 可改为条件更新，性能无实质差别，属风格选择。</li></ul></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>写法 1：排序对比（朴素）——思路与复杂度</strong></p><ul><li>复制一份数组排序得到目标有序序列 <code>copy</code>。</li><li>从左到右找第一个 <code>copy[i] != nums[i]</code> 的位置 l（第一个错位）。</li><li>从右到左找最后一个 <code>copy[j] != nums[j]</code> 的位置 r（最后一个错位）。</li><li>若 r &lt;= l（没有任何错位，数组已有序）返回 0；否则返回 <code>r - l + 1</code>。</li><li>为什么对：排序后的数组就是最终目标状态；所有「不在最终位置」的元素必须被包含进重排区间，最短区间 = 第一个错位到最后一个错位（两端已就位的元素不动）。</li><li>复杂度：时间 O(n log n)（排序主导），空间 O(n)（复制数组）。正确但没利用「只需找边界」的性质。</li></ul><p><strong>写法 2：两趟扫描（最优）——思路与复杂度</strong></p><ul><li>核心判定：一个元素不需要重排 ⇔ 左边全 ≤ 它且右边全 ≥ 它；否则它不在最终位置，必须重排。</li><li>右边界：从左到右维护 <code>max</code>（左侧已扫最大值），<code>nums[i] &lt; max</code> 说明左侧有比它大的，更新 <code>r = i</code>；最终 r = 最靠右的逆序位置。</li><li>左边界：从右到左维护 <code>min</code>（右侧已扫最小值），<code>nums[i] &gt; min</code> 说明右侧有比它小的，更新 <code>l = i</code>；最终 l = 最靠左的逆序位置。</li><li>哨兵：r 初始 0，若从未触发逆序则 r == 0，返回 0；长度 = <code>r - l + 1</code>。</li><li>复杂度：时间 O(n)（两趟线性扫描，每趟每元素 O(1)），空间 O(1)（仅标量变量）。O(n) 是时间下界（必须至少看每个元素一次判断错位，否则可能漏边界），本写法已达最优。</li></ul><p><strong>具体 case 推演</strong>（两种写法都用 nums=[2,6,4,8,10,9,15]，期望 5）</p><p>写法 1（排序对比）：</p><ul><li>copy = [2,4,6,8,9,10,15]</li><li>左扫：i=0: 2==2 ✓；i=1: 6!=4 → l=1（第一个错位）</li><li>右扫：i=6: 15==15 ✓；i=5: 9!=10 → r=5（最后一个错位）</li><li>长度 = 5-1+1 = 5 ✓</li></ul><p>写法 2（两趟扫描）：</p><ul><li>左→右（max 初始 MIN_VALUE）：2→max=2；6→max=6；4&lt;6 → r=2；8→max=8；10→max=10；9&lt;10 → r=5；15→max=15。结果 r=5</li><li>右→左（min 初始 MAX_VALUE）：15→min=15；9&lt;15→min=9；10&gt;9 → l=4；8&lt;9→min=8；4&lt;8→min=4；6&gt;4 → l=1；2&lt;4→min=2。结果 l=1</li><li>长度 = 5-1+1 = 5 ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>已升序 / 单元素 / 全相同：两写法都返回 0（写法 1 无错位 r&lt;=l；写法 2 无逆序 r 保持 0）。</li><li>严格降序：两写法都返回 n（整段重排）。</li><li>中间连续相等 [1,3,2,2,2]：写法 2 右边界扫到最后一个 2（2&lt;3 持续触发）得 r=4，左边界在 3 处得 l=1，长度 4，中间相等值不遗漏；写法 1 直接由错位端点给出 4。</li></ul><p><strong>最优性结论</strong></p><p>时间 O(n)、空间 O(1) 均为该题下界：任何解法必须至少扫描每个元素一次判断错位；判断边界只需 O(1) 的 max/min 标量。写法 2 已达最优，写法 1 作为朴素基线用于理解「错位区间」的本质。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>307/307 用例一次通过。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
