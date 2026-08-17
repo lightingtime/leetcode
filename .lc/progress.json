@@ -802,8 +802,8 @@
       "category": "链表",
       "date": "2026-08-17",
       "firstPass": true,
-      "optimal": false,
-      "notes": "二叉树展开为链表：先序递归+链尾prev尾插建链，无条件断开left、递归前暂存左右子树，O(n)/O(h)，一次Accepted（225/225）；进阶可Morris O(1)空间"
+      "optimal": true,
+      "notes": "二叉树展开为链表：写法1先序递归+链尾prev（O(n)/O(h)），写法2 Morris前驱原地（O(n)/O(1)），均一次Accepted（225/225）"
     }
   ],
   "error_habits": [

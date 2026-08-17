@@ -8,14 +8,14 @@
   "verdict": "Accepted",
   "testcases": "225/225",
   "runtime_ms": null,
-  "memory_bytes": 44528000,
+  "memory_bytes": 44576000,
   "firstPass": true,
-  "optimal": false,
-  "approach": "先序递归+链尾prev",
-  "approach_detail": "**问题本质与解法选择**\n- 题目要求把二叉树按先序遍历顺序展平成一条只用 right 指针串联的链表，所有 left 指针置空。\n- 关键观察：展平结果的顺序恰好就是先序遍历的顺序（根 → 左 → 右），因此可以边先序遍历边「尾插建链」。\n- 解法：递归先序遍历 + 一个成员变量 prev 记录链尾，每访问一个节点就把它接到 prev 后面。\n\n**关键设计决策**\n- prev 为什么是成员变量：`void flatten(TreeNode root)` 递归无法把「链尾」通过返回值传回上层；成员变量让所有递归调用共享同一份链尾状态（Java 参数是值传递，局部变量改完带不回去）。\n- prev 的语义：始终指向「已经展平好的链的最后一个节点」，初始为 null。\n- 每访问一个节点 root 做三步：\n  1. 若 prev 非空，`prev.right = root`（把当前节点接到链尾；根节点没有前驱，跳过这一步）；\n  2. `root.left = null`（无条件断开左指针，最终链上所有 left 都必须是 null）；\n  3. `prev = root`（当前节点成为新链尾）。\n- 递归前必须先把 left / right 暂存到局部变量：第 2 步已经置空了 root.left；而展平左子树时 `prev.right = 节点` 会覆盖 root 原有的 right 指向，不暂存 right 会丢右子树。\n\n**具体 case 推演（双孩子树 1/2/3）**\n- 树：`1` 左孩子 `2`、右孩子 `3`，期望链 `1 → 2 → 3`，left 全为 null。\n- 初始 `prev = null`。\n- 访问 1：prev 为 null，跳过「接」；`1.left = null`；`prev = 1`。链：`1`。\n- 递归处理左子树，访问 2：prev=1，`1.right = 2`；`2.left = null`；`prev = 2`。链：`1 → 2`。\n- 递归处理右子树，访问 3：prev=2，`2.right = 3`；`3.left = null`；`prev = 3`。链：`1 → 2 → 3`。\n- 最终先序顺序与链顺序完全一致。\n\n**边界与细节**\n- 空树：flatten(null) 直接返回，prev 不变，合法。\n- 单节点：根即链头，没有「接」动作，只断开 left（本就为 null）。\n- 根节点的 left 必须无条件断开：第一次访问根时 prev==null 会跳过 if，若把 `root.left = null` 也放进 if，根会残留左指针（曾导致示例 1 层序输出里 1 后面出现两个 2）。\n- 成员变量 prev 在多次调用之间会残留：力扣判题每用例新建实例所以安全；若本地复用同一实例需在入口重置。\n\n**复杂度与下限论证**\n- 时间 O(n)：每个节点恰好被访问一次、做常数次指针操作；重排指针至少要看一遍所有节点，故 O(n) 是下限。\n- 空间 O(h)：递归栈深度等于树高 h，最坏退化成单链时 O(n)。\n- 进阶方向：存在 Morris 前驱法（把左子树最右节点接到当前节点右侧、整体右移）可将空间降到 O(1)。",
+  "optimal": true,
+  "approach": "Morris前驱法",
+  "approach_detail": "**问题本质与解法选择**\n- 题目要求把二叉树按先序遍历顺序展平成一条只用 right 指针串联的链表，所有 left 指针置空。\n- 关键观察：展平结果的顺序恰好就是先序遍历的顺序（根 → 左 → 右），因此可以边遍历边「尾插建链」。\n- 本仓库记录两种 Accepted 写法：写法 1 递归 + 链尾指针 prev（O(n)/O(h)）；写法 2 Morris 前驱原地法（O(n)/O(1)），空间更优。\n\n**写法 1：先序递归 + 链尾 prev（O(n)/O(h)）**\n- prev 为什么是成员变量：`void flatten(TreeNode root)` 递归无法把「链尾」通过返回值传回上层；成员变量让所有递归调用共享同一份链尾状态（Java 参数是值传递，局部变量改完带不回去）。\n- prev 的语义：始终指向「已经展平好的链的最后一个节点」，初始为 null。\n- 每访问一个节点 root 做三步：\n  1. 若 prev 非空，`prev.right = root`（把当前节点接到链尾；根节点没有前驱，跳过这一步）；\n  2. `root.left = null`（无条件断开左指针，最终链上所有 left 都必须是 null）；\n  3. `prev = root`（当前节点成为新链尾）。\n- 递归前必须先把 left / right 暂存到局部变量：第 2 步已经置空了 root.left；而展平左子树时 `prev.right = 节点` 会覆盖 root 原有的 right 指向，不暂存 right 会丢右子树。\n\n**写法 1 具体 case 推演（双孩子树 1/2/3）**\n- 树：`1` 左孩子 `2`、右孩子 `3`，期望链 `1 → 2 → 3`，left 全为 null。\n- 初始 `prev = null`。\n- 访问 1：prev 为 null，跳过「接」；`1.left = null`；`prev = 1`。链：`1`。\n- 递归处理左子树，访问 2：prev=1，`1.right = 2`；`2.left = null`；`prev = 2`。链：`1 → 2`。\n- 递归处理右子树，访问 3：prev=2，`2.right = 3`；`3.left = null`；`prev = 3`。链：`1 → 2 → 3`。\n\n**写法 2：Morris 前驱原地法（O(n)/O(1)）**\n- 核心：不额外用栈/递归，只靠改指针。维护 `cur` 从左到右扫描；只要 `cur.left` 非空，就把它搬到右边：\n  1. `next = cur.left`，沿 next 的 right 一路走到「左子树最右节点」pre；\n  2. `pre.right = cur.right`（原右子树整串接到左子树最右节点后面，保证先序顺序）；\n  3. `cur.left = null`、`cur.right = next`（左子树整体搬到右侧，断开左指针）；\n  4. `cur = cur.right` 继续。\n- 关键设计：把「左子树最右节点」当作桥，把右子树挂过去后左子树整体右移，这样不丢右子树也不需要栈保存。\n\n**写法 2 具体 case 推演（双孩子树 1/2/3）**\n- 树：`1` 左孩子 `2`、右孩子 `3`。\n- `cur = 1`，`1.left = 2` 非空：`next = 2`，pre 沿 2 的 right 走（2.right 为 null）停在 2；`2.right = 3`；`1.left = null`；`1.right = 2`。结构变为 `1 → 2 → 3`。\n- `cur = 2`，`2.left` 为 null，直接 `cur = 3`；`3.left` 为 null，`cur = null` 结束。\n- 最终链 `1 → 2 → 3`，left 全为 null。\n\n**边界与细节**\n- 空树：两个写法都直接结束（递归版 return，Morris 版 while 不进），合法。\n- 单节点：递归版根即链头无「接」动作；Morris 版 cur.left 为 null 直接结束。\n- 根节点 left 必须断开（写法 1 曾踩坑）：若把 `root.left = null` 放进 `if (pre != null)`，根会残留左指针，层序输出里 1 后面出现两个 2。\n- 写法 2 的 while 找最右节点：`pre.right` 必须走到 null 才停，且要先接右子树再断开/搬运，顺序反了会丢子树。\n\n**复杂度与下限论证**\n- 时间 O(n)：每个节点被访问常数次。写法 1 每个节点递归一次；写法 2 里「找左子树最右节点」的总代价摊还 O(n)（每条边最多被跨过一次）。\n- 空间：写法 1 O(h)（递归栈，最坏单链 O(n)）；写法 2 O(1)（仅几个指针变量），达到空间下限。\n- 时间 O(n) 是下限：重排指针至少要看一遍所有节点。写法 2 同时达到时间与空间下限，为最优解。",
   "time_complexity": "O(n)",
-  "space_complexity": "O(h)",
-  "notes": "二叉树展开为链表：先序递归+链尾prev尾插建链，无条件断开left、递归前暂存左右子树，O(n)/O(h)，一次Accepted（225/225）；进阶可Morris O(1)空间",
+  "space_complexity": "O(1)",
+  "notes": "二叉树展开为链表：写法1先序递归+链尾prev（O(n)/O(h)），写法2 Morris前驱原地（O(n)/O(1)），均一次Accepted（225/225）",
   "code_notes": [],
   "mistakes": [],
   "patterns": [],
@@ -30,7 +30,21 @@
       "time_complexity": "O(n)",
       "space_complexity": "O(h)",
       "optimal": false,
-      "notes": "二叉树展开为链表：先序递归+链尾prev尾插建链，无条件断开left、递归前暂存左右子树，O(n)/O(h)，一次Accepted（225/225）；进阶可Morris O(1)空间"
+      "notes": "二叉树展开为链表：先序递归+链尾prev尾插建链，无条件断开left、递归前暂存左右子树，O(n)/O(h)，一次Accepted（225/225）；进阶可Morris O(1)空间",
+      "code": "====\n    TreeNode pre;\n    public void flatten(TreeNode root) {\n        if (root == null) {\n            return;\n        }\n        TreeNode left = root.left;\n        TreeNode right = root.right;\n        if (pre != null) {\n            pre.right = root;\n        }\n        root.left = null;\n        pre = root;\n        flatten(left);\n        flatten(right);\n    }\n    // ===="
+    },
+    {
+      "date": "2026-08-17",
+      "verdict": "Accepted",
+      "testcases": "225/225",
+      "runtime_ms": null,
+      "memory_bytes": 44576000,
+      "approach": "Morris前驱法",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "二叉树展开为链表：写法1先序递归+链尾prev（O(n)/O(h)），写法2 Morris前驱原地（O(n)/O(1)），均一次Accepted（225/225）",
+      "code": "    // ==== 提交代码开始 ====\n    public void flatten(TreeNode root) {\n        TreeNode cur = root;\n        while (cur != null) {\n            if (cur.left != null) {\n                TreeNode next = cur.left;\n                TreeNode pre = next;\n                while (pre.right != null) {\n                    pre = pre.right;\n                }\n                pre.right = cur.right;\n                cur.left = null;\n                cur.right = next;\n            }\n\n            cur = cur.right;\n        }\n    }\n    // ==== 提交代码结束 ===="
     }
   ],
   "hints": [

@@ -11,20 +11,22 @@ import java.util.*;
 public class LC0114_FlattenBinaryTreeToLinkedList {
 
     // ==== 提交代码开始 ====
-    TreeNode pre;
     public void flatten(TreeNode root) {
-        if (root == null) {
-            return;
+        TreeNode cur = root;
+        while (cur != null) {
+            if (cur.left != null) {
+                TreeNode next = cur.left;
+                TreeNode pre = next;
+                while (pre.right != null) {
+                    pre = pre.right;
+                }
+                pre.right = cur.right;
+                cur.left = null;
+                cur.right = next;
+            }
+
+            cur = cur.right;
         }
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-        if (pre != null) {
-            pre.right = root;
-        }
-        root.left = null;
-        pre = root;
-        flatten(left);
-        flatten(right);
     }
     // ==== 提交代码结束 ====
 
