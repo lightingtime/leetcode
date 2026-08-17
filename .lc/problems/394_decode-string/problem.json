@@ -1,0 +1,64 @@
+{
+  "id": "394",
+  "slug": "decode-string",
+  "title": "Decode String",
+  "titleCn": "字符串解码",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/decode-string/",
+  "tags": [
+    "Stack",
+    "Recursion",
+    "String"
+  ],
+  "tagsCn": [
+    "栈",
+    "递归",
+    "字符串"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"3[a]2[bc]\""
+        }
+      ],
+      "output": "\"aaabcbc\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"3[a2[c]]\""
+        }
+      ],
+      "output": "\"accaccacc\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"2[abc]3[cd]ef\""
+        }
+      ],
+      "output": "\"abcabccdcdcdef\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"abc3[cd]xyz\""
+        }
+      ],
+      "output": "\"abccdcdcdxyz\"",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"3[a]2[bc]\"\n\"3[a2[c]]\"\n\"2[abc]3[cd]ef\"",
+  "javaSnippet": "class Solution {\n    public String decodeString(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-17T07:25:48.758Z"
+}
