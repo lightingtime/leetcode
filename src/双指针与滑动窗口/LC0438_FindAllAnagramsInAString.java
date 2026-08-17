@@ -32,7 +32,7 @@ public class LC0438_FindAllAnagramsInAString {
                 r++;
                 l++;
             }
-            if (arrayEquals(array, target)) {
+            if (Arrays.equals(array, target)) {
                 ans.add(l);
             }
         }

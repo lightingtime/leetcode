@@ -1,0 +1,60 @@
+{
+  "id": "581",
+  "slug": "shortest-unsorted-continuous-subarray",
+  "title": "Shortest Unsorted Continuous Subarray",
+  "titleCn": "最短无序连续子数组",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/",
+  "tags": [
+    "Stack",
+    "Greedy",
+    "Array",
+    "Two Pointers",
+    "Sorting",
+    "Monotonic Stack"
+  ],
+  "tagsCn": [
+    "栈",
+    "贪心",
+    "数组",
+    "双指针",
+    "排序",
+    "单调栈"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[2,6,4,8,10,9,15]"
+        }
+      ],
+      "output": "5",
+      "explain": "你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,3,4]"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1]"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[2,6,4,8,10,9,15]\n[1,2,3,4]\n[1]",
+  "javaSnippet": "class Solution {\n    public int findUnsortedSubarray(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-17T06:17:17.433Z"
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "current_seq": 72,
+  "current_seq": 73,
   "done": [
     {
       "seq": 1,
@@ -782,6 +782,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "找到字符串中所有字母异位词：定长滑动窗口+双计数数组，O(n)/O(1)，一次 Accepted（65/65）"
+    },
+    {
+      "seq": 73,
+      "id": "581",
+      "title": "最短无序连续子数组",
+      "slug": "shortest-unsorted-continuous-subarray",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "最短无序连续子数组：两趟扫描维护左右 max/min 找边界，O(n)/O(1)，一次 Accepted（307/307）"
     }
   ],
   "error_habits": [
