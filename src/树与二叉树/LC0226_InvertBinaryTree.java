@@ -42,9 +42,10 @@ public class LC0226_InvertBinaryTree {
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
-        // 例如： try { if (!checkEq(期望, s.invertTree(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
-        // 若题目允许任意顺序返回（下标对 / 集合），用 checkEqUnordered 代替 checkEq
+        try { if (!checkEq(treeNode(1), s.invertTree(treeNode(1)), "单节点")) failures++; } catch (Throwable t) { failures++; System.out.println("单节点 异常: " + t); }
+        try { if (!checkEq(treeNode(1, null, 2), s.invertTree(treeNode(1, 2)), "只有左子")) failures++; } catch (Throwable t) { failures++; System.out.println("只有左子 异常: " + t); }
+        try { if (!checkEq(treeNode(1, 2), s.invertTree(treeNode(1, null, 2)), "只有右子")) failures++; } catch (Throwable t) { failures++; System.out.println("只有右子 异常: " + t); }
+        try { if (!checkEq(treeNode(1, 3, 2, null, null, null, 4), s.invertTree(treeNode(1, 2, 3, 4)), "不对称三层")) failures++; } catch (Throwable t) { failures++; System.out.println("不对称三层 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

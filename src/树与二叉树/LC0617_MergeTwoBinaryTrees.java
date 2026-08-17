@@ -46,9 +46,10 @@ public class LC0617_MergeTwoBinaryTrees {
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
-        // 例如： try { if (!checkEq(期望, s.mergeTrees(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
-        // 若题目允许任意顺序返回（下标对 / 集合），用 checkEqUnordered 代替 checkEq
+        try { if (!checkEq(treeNode(), s.mergeTrees(treeNode(), treeNode()), "两棵都空")) failures++; } catch (Throwable t) { failures++; System.out.println("两棵都空 异常: " + t); }
+        try { if (!checkEq(treeNode(1, 2), s.mergeTrees(treeNode(1, 2), treeNode()), "一棵为空")) failures++; } catch (Throwable t) { failures++; System.out.println("一棵为空 异常: " + t); }
+        try { if (!checkEq(treeNode(2, 2, 3), s.mergeTrees(treeNode(1, 2), treeNode(1, null, 3)), "结构不同")) failures++; } catch (Throwable t) { failures++; System.out.println("结构不同 异常: " + t); }
+        try { if (!checkEq(treeNode(2, 4, 6), s.mergeTrees(treeNode(1, 2, 3), treeNode(1, 2, 3)), "完全重叠相加")) failures++; } catch (Throwable t) { failures++; System.out.println("完全重叠相加 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

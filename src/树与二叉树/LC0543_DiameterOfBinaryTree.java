@@ -44,9 +44,9 @@ public class LC0543_DiameterOfBinaryTree {
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
-        // 例如： try { if (!checkEq(期望, s.diameterOfBinaryTree(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
-        // 若题目允许任意顺序返回（下标对 / 集合），用 checkEqUnordered 代替 checkEq
+        try { if (!checkEq(0, s.diameterOfBinaryTree(treeNode(1)), "单节点")) failures++; } catch (Throwable t) { failures++; System.out.println("单节点 异常: " + t); }
+        try { if (!checkEq(3, s.diameterOfBinaryTree(treeNode(1, 2, null, 3, null, 4)), "链状4节点")) failures++; } catch (Throwable t) { failures++; System.out.println("链状4节点 异常: " + t); }
+        try { if (!checkEq(2, s.diameterOfBinaryTree(treeNode(1, 2, 3)), "根左右各一")) failures++; } catch (Throwable t) { failures++; System.out.println("根左右各一 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
