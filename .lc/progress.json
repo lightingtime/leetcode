@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-11",
-  "current_seq": 71,
+  "updated": "2026-08-17",
+  "current_seq": 72,
   "done": [
     {
       "seq": 1,
@@ -771,6 +771,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "环形链表 II：Floyd 判圈，相遇后一指针回 head、另一指针留相遇点，同速再走到环入口，O(n)/O(1)，一次 Accepted（18/18）"
+    },
+    {
+      "seq": 72,
+      "id": "438",
+      "title": "找到字符串中所有字母异位词",
+      "slug": "find-all-anagrams-in-a-string",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-17",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "找到字符串中所有字母异位词：定长滑动窗口+双计数数组，O(n)/O(1)，一次 Accepted（65/65）"
     }
   ],
   "error_habits": [
