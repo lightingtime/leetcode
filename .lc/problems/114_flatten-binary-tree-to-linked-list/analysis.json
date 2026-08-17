@@ -1,0 +1,39 @@
+{
+  "seq": 74,
+  "id": "114",
+  "slug": "flatten-binary-tree-to-linked-list",
+  "title": "二叉树展开为链表",
+  "category": "链表",
+  "date": "2026-08-17",
+  "verdict": "Accepted",
+  "testcases": "225/225",
+  "runtime_ms": null,
+  "memory_bytes": 44528000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "先序递归+链尾prev",
+  "approach_detail": "**问题本质与解法选择**\n- 题目要求把二叉树按先序遍历顺序展平成一条只用 right 指针串联的链表，所有 left 指针置空。\n- 关键观察：展平结果的顺序恰好就是先序遍历的顺序（根 → 左 → 右），因此可以边先序遍历边「尾插建链」。\n- 解法：递归先序遍历 + 一个成员变量 prev 记录链尾，每访问一个节点就把它接到 prev 后面。\n\n**关键设计决策**\n- prev 为什么是成员变量：`void flatten(TreeNode root)` 递归无法把「链尾」通过返回值传回上层；成员变量让所有递归调用共享同一份链尾状态（Java 参数是值传递，局部变量改完带不回去）。\n- prev 的语义：始终指向「已经展平好的链的最后一个节点」，初始为 null。\n- 每访问一个节点 root 做三步：\n  1. 若 prev 非空，`prev.right = root`（把当前节点接到链尾；根节点没有前驱，跳过这一步）；\n  2. `root.left = null`（无条件断开左指针，最终链上所有 left 都必须是 null）；\n  3. `prev = root`（当前节点成为新链尾）。\n- 递归前必须先把 left / right 暂存到局部变量：第 2 步已经置空了 root.left；而展平左子树时 `prev.right = 节点` 会覆盖 root 原有的 right 指向，不暂存 right 会丢右子树。\n\n**具体 case 推演（双孩子树 1/2/3）**\n- 树：`1` 左孩子 `2`、右孩子 `3`，期望链 `1 → 2 → 3`，left 全为 null。\n- 初始 `prev = null`。\n- 访问 1：prev 为 null，跳过「接」；`1.left = null`；`prev = 1`。链：`1`。\n- 递归处理左子树，访问 2：prev=1，`1.right = 2`；`2.left = null`；`prev = 2`。链：`1 → 2`。\n- 递归处理右子树，访问 3：prev=2，`2.right = 3`；`3.left = null`；`prev = 3`。链：`1 → 2 → 3`。\n- 最终先序顺序与链顺序完全一致。\n\n**边界与细节**\n- 空树：flatten(null) 直接返回，prev 不变，合法。\n- 单节点：根即链头，没有「接」动作，只断开 left（本就为 null）。\n- 根节点的 left 必须无条件断开：第一次访问根时 prev==null 会跳过 if，若把 `root.left = null` 也放进 if，根会残留左指针（曾导致示例 1 层序输出里 1 后面出现两个 2）。\n- 成员变量 prev 在多次调用之间会残留：力扣判题每用例新建实例所以安全；若本地复用同一实例需在入口重置。\n\n**复杂度与下限论证**\n- 时间 O(n)：每个节点恰好被访问一次、做常数次指针操作；重排指针至少要看一遍所有节点，故 O(n) 是下限。\n- 空间 O(h)：递归栈深度等于树高 h，最坏退化成单链时 O(n)。\n- 进阶方向：存在 Morris 前驱法（把左子树最右节点接到当前节点右侧、整体右移）可将空间降到 O(1)。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(h)",
+  "notes": "二叉树展开为链表：先序递归+链尾prev尾插建链，无条件断开left、递归前暂存左右子树，O(n)/O(h)，一次Accepted（225/225）；进阶可Morris O(1)空间",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-17",
+      "verdict": "Accepted",
+      "testcases": "225/225",
+      "runtime_ms": null,
+      "memory_bytes": 44528000,
+      "approach": "先序递归+链尾prev",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": false,
+      "notes": "二叉树展开为链表：先序递归+链尾prev尾插建链，无条件断开left、递归前暂存左右子树，O(n)/O(h)，一次Accepted（225/225）；进阶可Morris O(1)空间"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}

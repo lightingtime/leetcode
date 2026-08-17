@@ -4,8 +4,6 @@
 // 链接：https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/
 // 刷题日期：2026-08-17
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -13,9 +11,20 @@ import java.util.*;
 public class LC0114_FlattenBinaryTreeToLinkedList {
 
     // ==== 提交代码开始 ====
+    TreeNode pre;
     public void flatten(TreeNode root) {
-        // TODO: 在这里实现你的解法
-        
+        if (root == null) {
+            return;
+        }
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        if (pre != null) {
+            pre.right = root;
+        }
+        root.left = null;
+        pre = root;
+        flatten(left);
+        flatten(right);
     }
     // ==== 提交代码结束 ====
 
@@ -27,7 +36,7 @@ public class LC0114_FlattenBinaryTreeToLinkedList {
         try {
             TreeNode t1 = treeNode(1, 2, 5, 3, 4, null, 6);
             s.flatten(t1);
-            if (!checkEq("1,2,3,4,5,6", norm(t1), "示例1")) failures++;
+            if (!checkEq("1,null,2,null,3,null,4,null,5,null,6", norm(t1), "示例1")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
         try {
             TreeNode t2 = treeNode();
@@ -41,10 +50,10 @@ public class LC0114_FlattenBinaryTreeToLinkedList {
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        try { TreeNode t = treeNode(1, 2); s.flatten(t); if (!checkEq("1,2", norm(t), "单左链")) failures++; } catch (Throwable t) { failures++; System.out.println("单左链 异常: " + t); }
-        try { TreeNode t = treeNode(1, null, 2); s.flatten(t); if (!checkEq("1,2", norm(t), "单右链")) failures++; } catch (Throwable t) { failures++; System.out.println("单右链 异常: " + t); }
-        try { TreeNode t = treeNode(1, 2, 3); s.flatten(t); if (!checkEq("1,2,3", norm(t), "双孩子")) failures++; } catch (Throwable t) { failures++; System.out.println("双孩子 异常: " + t); }
-        try { TreeNode t = treeNode(1, 2, null, 3); s.flatten(t); if (!checkEq("1,2,3", norm(t), "左子树带右子")) failures++; } catch (Throwable t) { failures++; System.out.println("左子树带右子 异常: " + t); }
+        try { TreeNode t = treeNode(1, 2); s.flatten(t); if (!checkEq("1,null,2", norm(t), "单左链")) failures++; } catch (Throwable t) { failures++; System.out.println("单左链 异常: " + t); }
+        try { TreeNode t = treeNode(1, null, 2); s.flatten(t); if (!checkEq("1,null,2", norm(t), "单右链")) failures++; } catch (Throwable t) { failures++; System.out.println("单右链 异常: " + t); }
+        try { TreeNode t = treeNode(1, 2, 3); s.flatten(t); if (!checkEq("1,null,2,null,3", norm(t), "双孩子")) failures++; } catch (Throwable t) { failures++; System.out.println("双孩子 异常: " + t); }
+        try { TreeNode t = treeNode(1, 2, null, 3); s.flatten(t); if (!checkEq("1,null,2,null,3", norm(t), "左子树带右子")) failures++; } catch (Throwable t) { failures++; System.out.println("左子树带右子 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
