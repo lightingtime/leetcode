@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-17",
-  "current_seq": 80,
+  "updated": "2026-08-18",
+  "current_seq": 81,
   "done": [
     {
       "seq": 1,
@@ -870,6 +870,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "合并二叉树：递归，都空返回null、单空返回非空、都非空则值相加并递归合并左右子树（原地改root1）；复杂度O(min(m,n))/O(min(m,n))，一次Accepted（182/182）"
+    },
+    {
+      "seq": 81,
+      "id": "406",
+      "title": "根据身高重建队列",
+      "slug": "queue-reconstruction-by-height",
+      "category": "树与二叉树",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "排序（高降序+同高k升序）后按下标k插入，贪心重建队列"
     }
   ],
   "error_habits": [
