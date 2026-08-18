@@ -16,7 +16,9 @@
   "time_complexity": "O(Q·(V+E))",
   "space_complexity": "O(V+E)",
   "notes": "等式建模为带权图（A→B=value，B→A=1/value），每个查询从起点 DFS 连乘边权找终点，visited 防环，-1.0 哨兵（值恒正不会误判）；29/29 一次 Accepted",
-  "code_notes": [],
+  "code_notes": [
+    "二刷必学：带权并查集（加权 union-find）。本题可用带权并查集把每次查询降到 O(α(n))，掌握：路径压缩时 weight 累乘、合并公式 weight[rb] = wa / (v × wb)，查询时 a/b = weight[a]/weight[b]"
+  ],
   "mistakes": [],
   "patterns": [],
   "submissions": [
