@@ -1609,6 +1609,39 @@
         "树与二叉树"
       ],
       "last_seen": "2026-08-18"
+    },
+    {
+      "habit": "条件用 || 导致恒真：c != '(' || c != ')' 对所有字符恒为 true，删除分支永远不执行；'非A或非B'不等于'非(A且B)'，应写 &&",
+      "count": 1,
+      "examples": [
+        "remove-invalid-parentheses"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-08-18"
+    },
+    {
+      "habit": "回溯共享 StringBuilder 未撤销：append 后递归返回没 deleteCharAt，兄弟分支继承已追加字符导致结果串污染",
+      "count": 1,
+      "examples": [
+        "remove-invalid-parentheses"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-08-18"
+    },
+    {
+      "habit": "删除类回溯未限定最小删除数：DFS 会输出删多了的合法串，需先一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；连续相同括号只删第一个去重",
+      "count": 1,
+      "examples": [
+        "remove-invalid-parentheses"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-08-18"
     }
   ],
   "category_hints": {

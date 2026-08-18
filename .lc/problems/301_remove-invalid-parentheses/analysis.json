@@ -1,0 +1,42 @@
+{
+  "seq": 86,
+  "id": "301",
+  "slug": "remove-invalid-parentheses",
+  "title": "删除无效的括号",
+  "category": "回溯",
+  "date": "2026-08-18",
+  "verdict": "",
+  "testcases": "",
+  "runtime_ms": null,
+  "memory_bytes": null,
+  "firstPass": false,
+  "optimal": false,
+  "approach": "",
+  "time_complexity": "",
+  "space_complexity": "",
+  "notes": "",
+  "mistakes": [
+    {
+      "habit": "条件用 || 导致恒真：c != '(' || c != ')' 对所有字符恒为 true，删除分支永远不执行；'非A或非B'不等于'非(A且B)'，应写 &&",
+      "count": 1
+    },
+    {
+      "habit": "回溯共享 StringBuilder 未撤销：append 后递归返回没 deleteCharAt，兄弟分支继承已追加字符导致结果串污染",
+      "count": 1
+    },
+    {
+      "habit": "删除类回溯未限定最小删除数：DFS 会输出删多了的合法串，需先一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；连续相同括号只删第一个去重",
+      "count": 1
+    }
+  ],
+  "hints": [],
+  "patterns": [
+    {
+      "title": "回溯删除最小化：先算最小删除预算，连续相同只删第一个",
+      "text": "删除类回溯三件套：① 一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；② 共享容器（StringBuilder/List）递归后必须撤销，否则兄弟分支现场被污染；③ 连续相同括号只在第一个上触发删除分支去重；注意 c!='(' || c!=')' 恒真陷阱，应写 &&。",
+      "category": "回溯",
+      "problem": "remove-invalid-parentheses",
+      "date": "2026-08-18"
+    }
+  ]
+}

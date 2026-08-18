@@ -1,0 +1,54 @@
+{
+  "id": "301",
+  "slug": "remove-invalid-parentheses",
+  "title": "Remove Invalid Parentheses",
+  "titleCn": "删除无效的括号",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/remove-invalid-parentheses/",
+  "tags": [
+    "Breadth-First Search",
+    "String",
+    "Backtracking"
+  ],
+  "tagsCn": [
+    "广度优先搜索",
+    "字符串",
+    "回溯"
+  ],
+  "category": "回溯",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"()())()\""
+        }
+      ],
+      "output": "[\"(())()\",\"()()()\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"(a)())()\""
+        }
+      ],
+      "output": "[\"(a())()\",\"(a)()()\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\")(\""
+        }
+      ],
+      "output": "[\"\"]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"()())()\"\n\"(a)())()\"\n\")(\"",
+  "javaSnippet": "class Solution {\n    public List<String> removeInvalidParentheses(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-18T12:38:17.153Z"
+}
