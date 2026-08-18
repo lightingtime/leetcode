@@ -1,64 +1,64 @@
 {
-  "seq": 86,
-  "id": "301",
-  "slug": "remove-invalid-parentheses",
-  "title": "删除无效的括号",
-  "category": "回溯",
-  "date": "2026-08-18",
-  "verdict": "Accepted",
-  "testcases": "129/129",
-  "runtime_ms": null,
-  "memory_bytes": 47340000,
-  "firstPass": true,
-  "optimal": true,
-  "approach": "预扫描预算 + 每层删一个位置的回溯（连续相同去重）",
-  "approach_detail": "**问题本质**\n\n最少删除使括号串合法，返回所有结果 = 在「多余括号」的候选位置里选择删哪些；合法性 = 一遍扫描 balance 不为负且结尾为 0。\n\n**为什么用 预扫描预算 + 每层删一个位置的回溯**\n\n- 预扫描一遍算出必须删的 `needL`（多余左）/`needR`（多余右），保证「最小删除」；`\")(\"` 计数相等但必须删 2 个，预算不是 max-min。\n- 框架选「每层只删一个位置」而非「逐字符保留/删除」：参数更少（cur/start/l/r）、无 StringBuilder 撤销问题、去重一行搞定。\n- 去重规则 `i > start && cur[i] == cur[i-1]` 跳过：本层只删一个，删 s[i] 与删 s[i-1]（同字符）得到同一串，后者已在上一轮循环试过；连删同字符靠「删完从同一位置继续递归」实现，不漏解。\n\n**关键设计决策**\n\n- 预算扫描：遇 `(` balance+1；遇 `)` 若 balance>0 则 -1，否则 needR+1；扫完 needL=balance。\n- `dfs(cur, start, needL, needR)`：删除候选从 start 开始；`cur.charAt(i)=='(' && needL>0` 或 `==')' && needR>0` 才删，删后新串从同一 i 继续。\n- 叶子：`needL==0 && needR==0` 时 isValid 过滤（删够数量 ≠ 删对位置），合法才加入答案。\n\n**小 case 推演**\n\n`)(\"` → 预算 needL=1, needR=1：\n\n1. start=0，i=0 是 `)`：删 → `\"(\"`，递归 needR=0\n   - 继续删 `(` → `\"\"`，needL=0,needR=0，isValid=true → 加入 `\"\"`\n2. i=1 是 `(`：删 → `\")\"`，递归 needL=0 → 预算耗尽 isValid(`\")\"`)=false，不加入\n3. 结果 `[\"\"]` ✅\n\n**边界与细节**\n\n- 无括号字母串：预算 0，isValid 直接过 → 原串。\n- 已合法串：预算 0 → 只返回原串，不会输出删多了的串。\n- 全左/全右括号：预算 = 全部，必须删光 → `[\"\"]`。\n- 连续相同去重：`\"(((\"` 连删三个靠「删完从同 i 继续」不漏 `\"\"`；`\"()(()\"` 相邻两个 `(` 只保留第一个删法，`\"()()\"` 只出现一次。\n\n**复杂度与下限论证**\n\n- 时间：最坏指数级，节点数上界 O(2^n) 量级（从预算中选删除位置的组合），每节点 O(n) 造串、叶子 O(n) 校验。这是**固有下界**：输出本身最坏指数多个，任何解法必须枚举全部结果；题目约束（括号 ≤ 20、结果 <150）下实际远小于上界。\n- 空间：递归深度 O(n)，每层持一份 O(n) 字符串 → 栈上最坏 O(n²)；用 StringBuilder+回溯框架可降为 O(n)，但时间同为指数下界。\n- 结论：预扫描预算 + 去重 DFS 是本题标准最优解，复杂度已达问题下界。",
-  "time_complexity": "O(2^n)",
-  "space_complexity": "O(n²)",
-  "notes": "一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i>start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted",
-  "code_notes": [],
-  "mistakes": [
-    {
-      "habit": "条件用 || 导致恒真：c != '(' || c != ')' 对所有字符恒为 true，删除分支永远不执行；'非A或非B'不等于'非(A且B)'，应写 &&",
-      "count": 1
-    },
-    {
-      "habit": "回溯共享 StringBuilder 未撤销：append 后递归返回没 deleteCharAt，兄弟分支继承已追加字符导致结果串污染",
-      "count": 1
-    },
-    {
-      "habit": "删除类回溯未限定最小删除数：DFS 会输出删多了的合法串，需先一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；连续相同括号只删第一个去重",
-      "count": 1
-    },
-    {
-      "habit": "撤销位置错误：deleteCharAt 加在没 append 的删除分支后面，把祖先层追加的字符删掉，sb 被清空导致 deleteCharAt(-1) 越界；撤销必须只跟在 append 的保留分支之后，删除分支不加",
-      "count": 1
-    }
-  ],
-  "patterns": [
-    {
-      "title": "回溯删除最小化：先算最小删除预算，连续相同只删第一个",
-      "text": "删除类回溯三件套：① 一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；② 共享容器（StringBuilder/List）递归后必须撤销，否则兄弟分支现场被污染；③ 连续相同括号只在第一个上触发删除分支去重；注意 c!='(' || c!=')' 恒真陷阱，应写 &&。",
-      "category": "回溯",
-      "problem": "remove-invalid-parentheses",
-      "date": "2026-08-18"
-    }
-  ],
-  "submissions": [
-    {
-      "date": "2026-08-18",
-      "verdict": "Accepted",
-      "testcases": "129/129",
-      "runtime_ms": null,
-      "memory_bytes": 47340000,
-      "approach": "预扫描预算 + 每层删一个位置的回溯（连续相同去重）",
-      "time_complexity": "O(2^n)",
-      "space_complexity": "O(n²)",
-      "optimal": true,
-      "notes": "一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i>start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted"
-    }
-  ],
-  "hints": [
-    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
-  ]
+ "seq": 86,
+ "id": "301",
+ "slug": "remove-invalid-parentheses",
+ "title": "删除无效的括号",
+ "category": "回溯",
+ "date": "2026-08-18",
+ "verdict": "Accepted",
+ "testcases": "129/129",
+ "runtime_ms": null,
+ "memory_bytes": 47340000,
+ "firstPass": true,
+ "optimal": true,
+ "approach": "预扫描预算 + 每层删一个位置的回溯（连续相同去重）",
+ "approach_detail": "**问题本质**\n\n最少删除使括号串合法，返回所有结果 = 在「多余括号」的候选位置里选择删哪些；合法性 = 一遍扫描 balance 不为负且结尾为 0。\n\n**为什么用 预扫描预算 + 每层删一个位置的回溯**\n\n- 预扫描一遍算出必须删的 `needL`（多余左）/`needR`（多余右），保证「最小删除」；`\")(\"` 计数相等但必须删 2 个，预算不是 max-min。\n- 框架选「每层只删一个位置」而非「逐字符保留/删除」：参数更少（cur/start/l/r）、无 StringBuilder 撤销问题、去重一行搞定。\n- 去重规则 `i > start && cur[i] == cur[i-1]` 跳过：本层只删一个，删 s[i] 与删 s[i-1]（同字符）得到同一串，后者已在上一轮循环试过；连删同字符靠「删完从同一位置继续递归」实现，不漏解。\n\n**关键设计决策**\n\n- 预算扫描：遇 `(` balance+1；遇 `)` 若 balance>0 则 -1，否则 needR+1；扫完 needL=balance。\n- `dfs(cur, start, needL, needR)`：删除候选从 start 开始；`cur.charAt(i)=='(' && needL>0` 或 `==')' && needR>0` 才删，删后新串从同一 i 继续。\n- 叶子：`needL==0 && needR==0` 时 isValid 过滤（删够数量 ≠ 删对位置），合法才加入答案。\n\n**小 case 推演**\n\n`)(\"` → 预算 needL=1, needR=1：\n\n1. start=0，i=0 是 `)`：删 → `\"(\"`，递归 needR=0\n   - 继续删 `(` → `\"\"`，needL=0,needR=0，isValid=true → 加入 `\"\"`\n2. i=1 是 `(`：删 → `\")\"`，递归 needL=0 → 预算耗尽 isValid(`\")\"`)=false，不加入\n3. 结果 `[\"\"]` ✅\n\n**边界与细节**\n\n- 无括号字母串：预算 0，isValid 直接过 → 原串。\n- 已合法串：预算 0 → 只返回原串，不会输出删多了的串。\n- 全左/全右括号：预算 = 全部，必须删光 → `[\"\"]`。\n- 连续相同去重：`\"(((\"` 连删三个靠「删完从同 i 继续」不漏 `\"\"`；`\"()(()\"` 相邻两个 `(` 只保留第一个删法，`\"()()\"` 只出现一次。\n\n**复杂度与下限论证**\n\n- 时间：最坏指数级，节点数上界 O(2^n) 量级（从预算中选删除位置的组合），每节点 O(n) 造串、叶子 O(n) 校验。这是**固有下界**：输出本身最坏指数多个，任何解法必须枚举全部结果；题目约束（括号 ≤ 20、结果 <150）下实际远小于上界。\n- 空间：递归深度 O(n)，每层持一份 O(n) 字符串 → 栈上最坏 O(n²)；用 StringBuilder+回溯框架可降为 O(n)，但时间同为指数下界。\n- 结论：预扫描预算 + 去重 DFS 是本题标准最优解，复杂度已达问题下界。\n\n**复盘优化（Accepted 后精简）**\n\n- 剪枝 A（必做）：`needL==0 && needR==0` 时无论 `isValid` 结果如何都直接 `return`——预算已耗尽，for 循环里的删除条件全不成立，继续跑等于空转扫描整个串。改动：把 `return;` 从 `if (isValid)` 内移到外面。\n- 剪枝 B（可选）：`newStr` 的 substring 构造从「每个字符都先拼」改为「满足删除条件才拼」，避免为字母、或预算不足的字符做 O(n) 白拼。\n- 剪枝 C（可选）：进入循环前统计 `cur` 从 `index` 起剩余的 `(`/`)` 数量，若 `needL` > 剩余左括号数或 `needR` > 剩余右括号数则直接 return——预算凑不满，该分支必无解。\n- 通用原则：循环体里的重操作（O(n) 拼串）要放在所有能拦截它的轻判断（字符类型、预算 > 0）之后——先判断、后付出（延迟求值）。\n",
+ "time_complexity": "O(2^n)",
+ "space_complexity": "O(n²)",
+ "notes": "一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i>start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted",
+ "code_notes": [],
+ "mistakes": [
+  {
+   "habit": "条件用 || 导致恒真：c != '(' || c != ')' 对所有字符恒为 true，删除分支永远不执行；'非A或非B'不等于'非(A且B)'，应写 &&",
+   "count": 1
+  },
+  {
+   "habit": "回溯共享 StringBuilder 未撤销：append 后递归返回没 deleteCharAt，兄弟分支继承已追加字符导致结果串污染",
+   "count": 1
+  },
+  {
+   "habit": "删除类回溯未限定最小删除数：DFS 会输出删多了的合法串，需先一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；连续相同括号只删第一个去重",
+   "count": 1
+  },
+  {
+   "habit": "撤销位置错误：deleteCharAt 加在没 append 的删除分支后面，把祖先层追加的字符删掉，sb 被清空导致 deleteCharAt(-1) 越界；撤销必须只跟在 append 的保留分支之后，删除分支不加",
+   "count": 1
+  }
+ ],
+ "patterns": [
+  {
+   "title": "回溯删除最小化：先算最小删除预算，连续相同只删第一个",
+   "text": "删除类回溯三件套：① 一遍扫描算最小删除预算（多余右括号数+多余左括号数），超预算剪枝；② 共享容器（StringBuilder/List）递归后必须撤销，否则兄弟分支现场被污染；③ 连续相同括号只在第一个上触发删除分支去重；注意 c!='(' || c!=')' 恒真陷阱，应写 &&。",
+   "category": "回溯",
+   "problem": "remove-invalid-parentheses",
+   "date": "2026-08-18"
+  }
+ ],
+ "submissions": [
+  {
+   "date": "2026-08-18",
+   "verdict": "Accepted",
+   "testcases": "129/129",
+   "runtime_ms": null,
+   "memory_bytes": 47340000,
+   "approach": "预扫描预算 + 每层删一个位置的回溯（连续相同去重）",
+   "time_complexity": "O(2^n)",
+   "space_complexity": "O(n²)",
+   "optimal": true,
+   "notes": "一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i>start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted"
+  }
+ ],
+ "hints": [
+  "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+ ]
 }
