@@ -1,0 +1,66 @@
+{
+  "seq": 82,
+  "id": "437",
+  "slug": "path-sum-iii",
+  "title": "路径总和 III",
+  "category": "树与二叉树",
+  "date": "2026-08-18",
+  "verdict": "Accepted",
+  "testcases": "130/130",
+  "runtime_ms": null,
+  "memory_bytes": 46920000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "前缀和+回溯哈希",
+  "approach_detail": "**问题本质**：统计树中所有「父→子」方向的连续路径，节点和等于 `targetSum`。起点、终点都不固定，暴力枚举每个起点的做法是 O(n²)；换「以终点为核心」的视角：对每个节点当终点，只关心「前面是否存在某个起点使该段和为 target」。\n\n**解法选择**：DFS 时维护「根到当前节点」的前缀和 `sum`，「以当前节点为终点的路径和为 target」⇔「此前出现过的某个前缀 = `sum - target`」。用哈希表登记「已见前缀 → 出现次数」，每个节点 O(1) 查询 + O(1) 登记，整体 O(n)。这是 560 和为 K 的子数组 的树上前缀和版；与数组版的关键差别是树上必须「回溯」——离开子树时撤销当前前缀，否则兄弟分支会共享前缀、把不存在的跨分支路径算进去。\n\n**关键设计决策**：\n1. `map.put(0L, 1)`：空前缀代表「从根开始」，否则所有从根出发且和为 target 的路径漏计（单节点 `[5]`、target=5 靠查 `map[0]` 命中）。\n2. 先查后登记：先 `ans += map.getOrDefault(sum - targetSum, 0)`，再登记当前 `sum`；顺序反了在 target=0 时会把「零长度路径」误算、且同一批前缀被重复配对。\n3. 回溯撤销：子树返回后 `map.merge(sum, -1, Integer::sum)` 把当前前缀频次减一，保证「已见前缀」只包含当前路径上的祖先。\n4. `long sum`：节点值 ±1e9、最多 1000 层，前缀和可达 ±1e12，int 会溢出。\n\n**具体 case 推演（右链 1→2→3，target=3，期望 2）**：\n1. 初始 `map={0:1}`，`ans=0`\n2. 节点 1：`sum=1`，查 `map[1-3=-2]` → 0；登记 `map[1]=1`；返回后撤销\n3. 节点 2：`sum=3`，查 `map[3-3=0]` → 1，`ans=1`（路径 `[1,2]`：空前缀 → 前缀 3 的段）；登记后撤销\n4. 节点 3：`sum=6`，查 `map[6-3=3]` → 1，`ans=2`（路径 `[3]`：前缀 3 → 前缀 6 的段）；登记后撤销\n5. 总 `ans=2` ✓\n\n**撤销必要性 case（树 [3,1,2]，target=1，期望 1）**：\n1. 节点 3：`sum=3`，查 `map[2]` → 0；登记 `map[3]`\n2. 左子 1：`sum=4`，查 `map[4-1=3]` → 1，`ans=1`（路径 `[1]`）；登记 `map[4]`；**返回后撤销 `map[4]`**\n3. 右子 2：`sum=5`，查 `map[5-1=4]` → 0（若没撤销，残留的 `map[4]` 会被查中，把跨分支的假路径「左子 1 → 右子 2」误算成第 2 条）\n4. 总 `ans=1` ✓\n\n**边界与细节**：\n- 空树：`dfs` 的 `root==null` 直接返回，`ans` 保持 0\n- 全零树 target=0：相同前缀多次出现，map 频次累加，每条以不同起点为终点的路径单独计数\n- 命中后无需停止：哈希查询天然把「继续向下后再次命中」的路径也计入\n\n**复杂度下限论证**：必须访问每个节点才能统计以其为终点的路径，时间下界 O(n)；前缀和哈希让每个节点 O(1) 查询/登记，达到下界。空间 O(n)（哈希表最多 n 个前缀 + 递归栈 O(height)）。对比写法 1 双重 DFS（每起点向下累加，最坏 O(n²)）：正确但把大量重复的路径和重新算了一遍；前缀和版用「终点视角 + 哈希」消除重复计算，n≤1000 时两者都能过，但前缀和版才是本题最优复杂度。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "路径终点计数挂在子递归入口：把「cur+val==target」放到进入左右孩子时各判断一次，每条路径被重复计数（示例 3→6）；且入口处 cur=0 在 target=0 时把空路径误算为命中（空树 target=0 得 1）。计数应绑定在「当前节点值已计入路径」这一时刻、每条路径只数一次",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "计数/收集时机绑定终点：别把判断下放到子递归入口",
+      "text": "树/序列枚举计数时，'以 X 为终点的路径'只应被检查一次：判断应绑定在把当前节点值计入路径的那一刻（先加值再判断）。若把判断放到进入左右孩子的入口，每条路径被两个分支各数一次（示例 3→6）；入口处的初始状态 cur=0 在 target=0 时会把空路径误算为命中（空树得 1、多层叠加成 17/21）。推演：[1],target=1 在 left=null 与 right=null 两处各计一次得 2。",
+      "category": "树与二叉树",
+      "problem": "path-sum-iii",
+      "date": "2026-08-18"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-18",
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "runtime_ms": null,
+      "memory_bytes": 45392000,
+      "approach": "双重DFS",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "双重DFS：每个节点作路径起点向下累加计数。初版把判断放在子递归入口，每条路径被左右两分支各数一次且 target=0 时空路径误判；改为在 countFrom 内先累计当前节点再判断后通过。",
+      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        dfs(root, targetSum);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        countFrom(root, 0, targetSum);\n        dfs(root.left, targetSum);\n        dfs(root.right, targetSum);\n\n    }\n\n    private void countFrom(TreeNode root, long cur, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        cur += root.val;\n        if (cur == targetSum) {\n            ans++;\n        }\n        countFrom(root.left, cur, targetSum);\n        countFrom(root.right, cur, targetSum);\n    }"
+    },
+    {
+      "date": "2026-08-18",
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "runtime_ms": null,
+      "memory_bytes": 46920000,
+      "approach": "前缀和+回溯哈希",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。",
+      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, targetSum, 0, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 81,
+  "current_seq": 82,
   "done": [
     {
       "seq": 1,
@@ -881,6 +881,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "排序（高降序+同高k升序）后按下标k插入，贪心重建队列"
+    },
+    {
+      "seq": 82,
+      "id": "437",
+      "title": "路径总和 III",
+      "slug": "path-sum-iii",
+      "category": "树与二叉树",
+      "date": "2026-08-18",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。"
     }
   ],
   "error_habits": [
@@ -1554,6 +1565,17 @@
         "哈希表"
       ],
       "last_seen": "2026-08-11"
+    },
+    {
+      "habit": "路径终点计数挂在子递归入口：把「cur+val==target」放到进入左右孩子时各判断一次，每条路径被重复计数（示例 3→6）；且入口处 cur=0 在 target=0 时把空路径误算为命中（空树 target=0 得 1）。计数应绑定在「当前节点值已计入路径」这一时刻、每条路径只数一次",
+      "count": 1,
+      "examples": [
+        "path-sum-iii"
+      ],
+      "categories": [
+        "树与二叉树"
+      ],
+      "last_seen": "2026-08-18"
     }
   ],
   "category_hints": {

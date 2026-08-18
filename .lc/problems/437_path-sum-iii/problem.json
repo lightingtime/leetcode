@@ -1,0 +1,52 @@
+{
+  "id": "437",
+  "slug": "path-sum-iii",
+  "title": "Path Sum III",
+  "titleCn": "路径总和 III",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/path-sum-iii/",
+  "tags": [
+    "Tree",
+    "Depth-First Search",
+    "Binary Tree"
+  ],
+  "tagsCn": [
+    "树",
+    "深度优先搜索",
+    "二叉树"
+  ],
+  "category": "树与二叉树",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[10,5,-3,3,2,null,11,3,-2,null,1]"
+        },
+        {
+          "name": "targetSum",
+          "value": "8"
+        }
+      ],
+      "output": "3",
+      "explain": "和等于 8 的路径有 3 条，如图所示。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[5,4,8,11,null,13,4,7,2,null,null,5,1]"
+        },
+        {
+          "name": "targetSum",
+          "value": "22"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[10,5,-3,3,2,null,11,3,-2,null,1]\n8\n[5,4,8,11,null,13,4,7,2,null,null,5,1]\n22",
+  "javaSnippet": "/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode() {}\n *     TreeNode(int val) { this.val = val; }\n *     TreeNode(int val, TreeNode left, TreeNode right) {\n *         this.val = val;\n *         this.left = left;\n *         this.right = right;\n *     }\n * }\n */\nclass Solution {\n    public int pathSum(TreeNode root, int targetSum) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-18T09:05:33.626Z"
+}
