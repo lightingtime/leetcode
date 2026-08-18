@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 87,
+  "current_seq": 88,
   "done": [
     {
       "seq": 1,
@@ -947,6 +947,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "最低位+右移递推：偶数 dp[i]=dp[i>>1]，奇数再加 1，合并为 dp[i]=dp[i>>1]+(i&1)，一趟 O(n) 填表；15/15 一次 Accepted"
+    },
+    {
+      "seq": 88,
+      "id": "64",
+      "title": "最小路径和",
+      "slug": "minimum-path-sum",
+      "category": "动态规划",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "dp[i][j]=grid[i][j]+min(上,左)，一维 dp[j] 滚动：先铺第一行，主循环从 i=1 起，j 必须用列变量；66/66 一次 Accepted"
     }
   ],
   "error_habits": [
@@ -1673,6 +1684,17 @@
       ],
       "categories": [
         "回溯"
+      ],
+      "last_seen": "2026-08-18"
+    },
+    {
+      "habit": "一维滚动数组下标混用行列变量：dp 长度=列数，主循环里却用行变量 i 当下标（dp[i]/dp[i-1]），i 超列数越界、i=0 时 dp[-1] 越界；且第一行已初始化后主循环应从 i=1 开始，否则第一行被重复累加",
+      "count": 1,
+      "examples": [
+        "minimum-path-sum"
+      ],
+      "categories": [
+        "动态规划"
       ],
       "last_seen": "2026-08-18"
     }
