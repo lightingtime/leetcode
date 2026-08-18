@@ -1642,6 +1642,17 @@
         "回溯"
       ],
       "last_seen": "2026-08-18"
+    },
+    {
+      "habit": "撤销位置错误：deleteCharAt 加在没 append 的删除分支后面，把祖先层追加的字符删掉，sb 被清空导致 deleteCharAt(-1) 越界；撤销必须只跟在 append 的保留分支之后，删除分支不加",
+      "count": 1,
+      "examples": [
+        "remove-invalid-parentheses"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-08-18"
     }
   ],
   "category_hints": {
