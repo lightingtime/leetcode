@@ -1,0 +1,39 @@
+{
+  "seq": 85,
+  "id": "39",
+  "slug": "combination-sum",
+  "title": "组合总和",
+  "category": "回溯",
+  "date": "2026-08-18",
+  "verdict": "Accepted",
+  "testcases": "160/160",
+  "runtime_ms": null,
+  "memory_bytes": 46280000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "排序 + 回溯（start 下标去重 + 大于剩余剪枝）",
+  "approach_detail": "**问题本质**\n\n无重复候选、每数可无限取，找所有和为 target 的组合 = 枚举「每个候选取多少个」的非负整数解；组合无序（[2,2,3] 与 [2,3,2] 相同），必须避免排列重复。\n\n**为什么用 回溯（排序 + start 去重 + 剪枝）**\n\n- 本质是组合枚举：递归树每层决定「取哪个候选」；因为可无限取，选择空间没有明确上限，只能靠剩余值约束剪枝。\n- 去重靠「start 下标」：下一层只能从当前下标（含）开始取，保证组合内元素按下标非降，从根上杜绝 [2,3,2] 这类排列重复。\n- 排序的价值：遍历时一旦 `candidates[i] > remain`，后面只会更大全部无效，直接 `break` 剪枝；顺带让输出天然有序。\n\n**关键设计决策**\n\n- 状态：`index`（当前可取的起始下标，同时管去重与重复取）、`remain`（还差多少）、`path`（已选组合）。\n- 终止：`remain == 0` → 把 `path` **拷贝**加入结果（必须 new 一份，否则引用会被后续撤销污染）；取数前已保证 `candidates[i] <= remain`，所以不会出现 remain < 0。\n- 选择/撤销：`path.add(candidates[i])` → 递归（传同一个 i，允许再取同一个数）→ `path.remove(last)` 撤销，回到上一层继续试别的选择。\n- 剪枝：`if (candidates[i] > remain) break;`——排序保证其后所有候选都大于 remain，整段不必再试。\n\n**小 case 推演**\n\n`candidates=[2,3,6,7]`（已排序），`target=7`：\n\n1. 第一层取 2（i=0）：remain=5 → 再取 2：remain=3 → 再取 2：remain=1，2>1 break 回溯；改取 3（i=1）：remain=0 → 记录 [2,2,3]\n2. 回到第一层取 3（i=1）：remain=4 → 取 3：remain=1，3>1 break；取 6：6>4 break\n3. 第一层取 6（i=2）：remain=1，6>1 break\n4. 第一层取 7（i=3）：remain=0 → 记录 [7]\n\n结果 [[2,2,3],[7]] ✅，且全程不会出现 [2,3,2] 这类排列重复。\n\n**边界与细节**\n\n- 全 1：[1] 凑 3 → [1,1,1]，验证同一数无限重复取。\n- 无解：全偶数凑奇数 → 空列表，循环里全部 break/超限。\n- 候选恰等于 target：[3] 直接命中 remain=0，无需继续递归。\n- 单元素整除：[5] 凑 10 → [5,5]，两个 5。\n- 小 target / 无候选可用：for 循环可能一次都不进，直接返回空。\n\n**复杂度与下限论证**\n\n- 时间：指数级，上界 O(n^(target/min))（每层最多 n 个选择、深度 ≤ target/min）；但题目保证组合总数 < 150，输出规模本身受控，排序剪枝后实际遍历远小于上界。\n- 空间：递归深度 ≤ target/min（最坏全取最小值），path 与调用栈 O(target/min)；答案空间不计入。\n- 下限论证：任何解法都必须把全部有效组合输出出来，输出规模就是下界；回溯 + 剪枝在本题约束下已是标准最优取舍。",
+  "time_complexity": "O(n^(target/min))",
+  "space_complexity": "O(target/min)",
+  "notes": "组合枚举回溯：排序后 start 下标保证组合内按下标非降去重（杜绝 [2,3,2]），candidates[i]>remain 直接 break 剪枝，remain==0 拷贝加入结果；160/160 一次 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-18",
+      "verdict": "Accepted",
+      "testcases": "160/160",
+      "runtime_ms": null,
+      "memory_bytes": 46280000,
+      "approach": "排序 + 回溯（start 下标去重 + 大于剩余剪枝）",
+      "time_complexity": "O(n^(target/min))",
+      "space_complexity": "O(target/min)",
+      "optimal": true,
+      "notes": "组合枚举回溯：排序后 start 下标保证组合内按下标非降去重（杜绝 [2,3,2]），candidates[i]>remain 直接 break 剪枝，remain==0 拷贝加入结果；160/160 一次 Accepted"
+    }
+  ],
+  "hints": [
+    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ]
+}

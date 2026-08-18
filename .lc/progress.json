@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 84,
+  "current_seq": 85,
   "done": [
     {
       "seq": 1,
@@ -914,6 +914,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "等式建模为带权图（A→B=value，B→A=1/value），每个查询从起点 DFS 连乘边权找终点，visited 防环，-1.0 哨兵（值恒正不会误判）；29/29 一次 Accepted"
+    },
+    {
+      "seq": 85,
+      "id": "39",
+      "title": "组合总和",
+      "slug": "combination-sum",
+      "category": "回溯",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "组合枚举回溯：排序后 start 下标保证组合内按下标非降去重（杜绝 [2,3,2]），candidates[i]>remain 直接 break 剪枝，remain==0 拷贝加入结果；160/160 一次 Accepted"
     }
   ],
   "error_habits": [

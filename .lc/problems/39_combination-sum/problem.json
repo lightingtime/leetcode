@@ -1,0 +1,64 @@
+{
+  "id": "39",
+  "slug": "combination-sum",
+  "title": "Combination Sum",
+  "titleCn": "组合总和",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/combination-sum/",
+  "tags": [
+    "Array",
+    "Backtracking"
+  ],
+  "tagsCn": [
+    "数组",
+    "回溯"
+  ],
+  "category": "回溯",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "candidates",
+          "value": "[2,3,6,7]"
+        },
+        {
+          "name": "target",
+          "value": "7"
+        }
+      ],
+      "output": "[[2,2,3],[7]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "candidates",
+          "value": "[2,3,5]"
+        },
+        {
+          "name": "target",
+          "value": "8"
+        }
+      ],
+      "output": "[[2,2,2,2],[2,3,3],[3,5]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "candidates",
+          "value": "[2]"
+        },
+        {
+          "name": "target",
+          "value": "1"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[2,3,6,7]\n7\n[2,3,5]\n8\n[2]\n1",
+  "javaSnippet": "class Solution {\n    public List<List<Integer>> combinationSum(int[] candidates, int target) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-18T12:23:55.802Z"
+}
