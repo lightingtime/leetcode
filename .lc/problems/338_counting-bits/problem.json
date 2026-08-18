@@ -1,0 +1,42 @@
+{
+  "id": "338",
+  "slug": "counting-bits",
+  "title": "Counting Bits",
+  "titleCn": "比特位计数",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/counting-bits/",
+  "tags": [
+    "Bit Manipulation",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "位运算",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "2"
+        }
+      ],
+      "output": "[0,1,1]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "5"
+        }
+      ],
+      "output": "[0,1,1,2,1,2]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "2\n5",
+  "javaSnippet": "class Solution {\n    public int[] countBits(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-18T13:49:06.670Z"
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 86,
+  "current_seq": 87,
   "done": [
     {
       "seq": 1,
@@ -936,6 +936,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i>start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted"
+    },
+    {
+      "seq": 87,
+      "id": "338",
+      "title": "比特位计数",
+      "slug": "counting-bits",
+      "category": "动态规划",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "最低位+右移递推：偶数 dp[i]=dp[i>>1]，奇数再加 1，合并为 dp[i]=dp[i>>1]+(i&1)，一趟 O(n) 填表；15/15 一次 Accepted"
     }
   ],
   "error_habits": [
