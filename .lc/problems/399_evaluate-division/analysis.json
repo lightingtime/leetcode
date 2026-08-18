@@ -1,0 +1,39 @@
+{
+  "seq": 84,
+  "id": "399",
+  "slug": "evaluate-division",
+  "title": "除法求值",
+  "category": "图与并查集",
+  "date": "2026-08-18",
+  "verdict": "Accepted",
+  "testcases": "29/29",
+  "runtime_ms": null,
+  "memory_bytes": 47524000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "带权图 DFS",
+  "approach_detail": "**问题本质**\n\n已知若干形如 `A / B = value` 的等式，求任意 `C / D` 的比值。每个等式是图上的一条**带权有向边**：变量当节点，`A → B` 边权 `value` 表示 `A = value × B`，反向边 `B → A` 边权 `1/value`。于是 `C / D` 就是从 C 走到 D 的路径上所有边权**连乘**；走不到（不同连通分量或变量未定义）就是 -1.0。\n\n**为什么用 建图 + DFS**\n\n- 关系可链式推导（a/b × b/c = a/c），正是图上的路径乘积，天然用图建模。\n- 每次查询就是在图上找一条可行路径，DFS 遍历邻居连乘即可，代码直观；题目规模（变量 ≤ 40、查询 ≤ 20）下每个查询 O(V+E) 完全够。\n- 也可用 Floyd 预计算所有对（O(V³)）或带权并查集，但本题 DFS 最简且满足复杂度要求。\n\n**关键设计决策**\n\n- 数据结构：邻接表 `Map<String, Map<String, Double>>`；建图时每条等式加双向边：`A→B = value`、`B→A = 1/value`。\n- DFS 签名：`(当前节点, 目标, 累计乘积 cur, 已访问集合)`；`cur` 初始传 `1.0`（乘法单位元），每深入一层乘上边权。\n- 终止条件：当前节点 == 目标 → 返回 `cur`；遍历完所有邻居仍没找到 → 返回 `-1.0`。\n- 防环：`visited` 集合，进节点先标记；边可能成环（如 a→b→a），不标记会死循环。\n- 哨兵安全：所有 value > 0，路径乘积恒正，`-1.0` 永不可能是合法答案，放心当「未找到」信号。\n- 主函数先处理两个特例：变量未定义（不在图里）→ -1.0（即使 C==D，如 x/x）；C==D 且存在 → 1.0。\n\n**小 case 推演**\n\n`equations=[[\"a\",\"b\"],[\"b\",\"c\"]], values=[2,3]`，查询 `a/c`：\n\n1. 建图：a→b=2，b→a=0.5；b→c=3，c→b=1/3\n2. `findAns(a, c, 1.0, visited={})`\n3. 访问 a：标记；邻居 b 未访问 → `findAns(b, c, 1.0×2=2.0)`\n4. 访问 b：标记；邻居 a 已访问跳过，邻居 c 未访问 → `findAns(c, c, 2.0×3=6.0)`\n5. 当前 c == 目标 c → 返回 6.0 ✅\n\n反向 `b/a`：`findAns(b, a, 1.0)` → b→a 边权 0.5 → `findAns(a, a, 0.5)` → 返回 0.5 ✅\n\n**边界与细节**\n\n- 空等式：graph 为空，任何查询都 -1.0（含 a/a）。\n- 已定义但不连通：a/b 与 c/d 两个分量，跨分量 DFS 走不到 → -1.0。\n- 长链：a/e = 2×3×4×5 = 120，验证连乘累计正确。\n- 未定义变量：x/x 也 -1.0（x 不在图里，先判 containsKey）。\n- 变量名含数字：字符串比较，无影响。\n\n**复杂度与下限论证**\n\n- 时间：建图 O(E)；每个查询 DFS 最坏遍历所在连通分量 O(V+E)，总 O(Q·(V+E))。V ≤ 40、E ≤ 20，规模极小，可接受。\n- 空间：邻接表 O(V+E)，每次查询 visited 集合 O(V)，递归栈 O(V)。\n- 下限论证：必须至少读一遍所有等式与查询（Ω(E+Q)）；若要求每次查询 O(1)，可用 Floyd 预计算（O(V³)，本题 V 小）或带权并查集，但 DFS 在本题约束下已是简洁且满足要求的选择。",
+  "time_complexity": "O(Q·(V+E))",
+  "space_complexity": "O(V+E)",
+  "notes": "等式建模为带权图（A→B=value，B→A=1/value），每个查询从起点 DFS 连乘边权找终点，visited 防环，-1.0 哨兵（值恒正不会误判）；29/29 一次 Accepted",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-18",
+      "verdict": "Accepted",
+      "testcases": "29/29",
+      "runtime_ms": null,
+      "memory_bytes": 47524000,
+      "approach": "带权图 DFS",
+      "time_complexity": "O(Q·(V+E))",
+      "space_complexity": "O(V+E)",
+      "optimal": true,
+      "notes": "等式建模为带权图（A→B=value，B→A=1/value），每个查询从起点 DFS 连乘边权找终点，visited 防环，-1.0 哨兵（值恒正不会误判）；29/29 一次 Accepted"
+    }
+  ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ]
+}

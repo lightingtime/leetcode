@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 83,
+  "current_seq": 84,
   "done": [
     {
       "seq": 1,
@@ -903,6 +903,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "反向中序遍历（右→根→左）降序访问，成员变量 sum 累计已访问的更大值，root.val += sum 后并入 sum；关键前提是降序而非先序逆序，用 long 防溢出；215/215 一次 Accepted"
+    },
+    {
+      "seq": 84,
+      "id": "399",
+      "title": "除法求值",
+      "slug": "evaluate-division",
+      "category": "图与并查集",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "等式建模为带权图（A→B=value，B→A=1/value），每个查询从起点 DFS 连乘边权找终点，visited 防环，-1.0 哨兵（值恒正不会误判）；29/29 一次 Accepted"
     }
   ],
   "error_habits": [

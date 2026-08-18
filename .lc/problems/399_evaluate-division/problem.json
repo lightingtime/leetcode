@@ -1,0 +1,90 @@
+{
+  "id": "399",
+  "slug": "evaluate-division",
+  "title": "Evaluate Division",
+  "titleCn": "除法求值",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/evaluate-division/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Union Find",
+    "Graph",
+    "Array",
+    "String",
+    "Shortest Path",
+    "Floyd 算法",
+    "Bellman–Ford 算法"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "并查集",
+    "图",
+    "数组",
+    "字符串",
+    "最短路",
+    "Floyd 算法",
+    "Bellman–Ford 算法"
+  ],
+  "category": "图与并查集",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "equations",
+          "value": "[[\"a\",\"b\"],[\"b\",\"c\"]]"
+        },
+        {
+          "name": "values",
+          "value": "[2.0,3.0]"
+        },
+        {
+          "name": "queries",
+          "value": "[[\"a\",\"c\"],[\"b\",\"a\"],[\"a\",\"e\"],[\"a\",\"a\"],[\"x\",\"x\"]]"
+        }
+      ],
+      "output": "[6.00000,0.50000,-1.00000,1.00000,-1.00000]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "equations",
+          "value": "[[\"a\",\"b\"],[\"b\",\"c\"],[\"bc\",\"cd\"]]"
+        },
+        {
+          "name": "values",
+          "value": "[1.5,2.5,5.0]"
+        },
+        {
+          "name": "queries",
+          "value": "[[\"a\",\"c\"],[\"c\",\"b\"],[\"bc\",\"cd\"],[\"cd\",\"bc\"]]"
+        }
+      ],
+      "output": "[3.75000,0.40000,5.00000,0.20000]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "equations",
+          "value": "[[\"a\",\"b\"]]"
+        },
+        {
+          "name": "values",
+          "value": "[0.5]"
+        },
+        {
+          "name": "queries",
+          "value": "[[\"a\",\"b\"],[\"b\",\"a\"],[\"a\",\"c\"],[\"x\",\"y\"]]"
+        }
+      ],
+      "output": "[0.50000,2.00000,-1.00000,-1.00000]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[\"a\",\"b\"],[\"b\",\"c\"]]\n[2.0,3.0]\n[[\"a\",\"c\"],[\"b\",\"a\"],[\"a\",\"e\"],[\"a\",\"a\"],[\"x\",\"x\"]]\n[[\"a\",\"b\"],[\"b\",\"c\"],[\"bc\",\"cd\"]]\n[1.5,2.5,5.0]\n[[\"a\",\"c\"],[\"c\",\"b\"],[\"bc\",\"cd\"],[\"cd\",\"bc\"]]\n[[\"a\",\"b\"]]\n[0.5]\n[[\"a\",\"b\"],[\"b\",\"a\"],[\"a\",\"c\"],[\"x\",\"y\"]]",
+  "javaSnippet": "class Solution {\n    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-18T11:34:56.051Z"
+}
