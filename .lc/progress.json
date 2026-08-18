@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 85,
+  "current_seq": 86,
   "done": [
     {
       "seq": 1,
@@ -925,6 +925,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "组合枚举回溯：排序后 start 下标保证组合内按下标非降去重（杜绝 [2,3,2]），candidates[i]>remain 直接 break 剪枝，remain==0 拷贝加入结果；160/160 一次 Accepted"
+    },
+    {
+      "seq": 86,
+      "id": "301",
+      "title": "删除无效的括号",
+      "slug": "remove-invalid-parentheses",
+      "category": "回溯",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i>start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted"
     }
   ],
   "error_habits": [
