@@ -1,0 +1,61 @@
+{
+  "id": "538",
+  "slug": "convert-bst-to-greater-tree",
+  "title": "Convert BST to Greater Tree",
+  "titleCn": "把二叉搜索树转换为累加树",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/convert-bst-to-greater-tree/",
+  "tags": [
+    "Tree",
+    "Depth-First Search",
+    "Binary Search Tree",
+    "Binary Tree"
+  ],
+  "tagsCn": [
+    "树",
+    "深度优先搜索",
+    "二叉搜索树",
+    "二叉树"
+  ],
+  "category": "树与二叉树",
+  "examples": [
+    {
+      "inputs": [],
+      "output": "[30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[0,null,1]"
+        }
+      ],
+      "output": "[1,null,1]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[1,0,2]"
+        }
+      ],
+      "output": "[3,3,2]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[3,2,4,1]"
+        }
+      ],
+      "output": "[7,9,4,10]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]\n[0,null,1]",
+  "javaSnippet": "/**\n * Definition for a binary tree node.\n * public class TreeNode {\n *     int val;\n *     TreeNode left;\n *     TreeNode right;\n *     TreeNode() {}\n *     TreeNode(int val) { this.val = val; }\n *     TreeNode(int val, TreeNode left, TreeNode right) {\n *         this.val = val;\n *         this.left = left;\n *         this.right = right;\n *     }\n * }\n */\nclass Solution {\n    public TreeNode convertBST(TreeNode root) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-18T10:25:17.293Z"
+}

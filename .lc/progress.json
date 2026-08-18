@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-18",
-  "current_seq": 82,
+  "current_seq": 83,
   "done": [
     {
       "seq": 1,
@@ -892,6 +892,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。"
+    },
+    {
+      "seq": 83,
+      "id": "538",
+      "title": "把二叉搜索树转换为累加树",
+      "slug": "convert-bst-to-greater-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-18",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "反向中序遍历（右→根→左）降序访问，成员变量 sum 累计已访问的更大值，root.val += sum 后并入 sum；关键前提是降序而非先序逆序，用 long 防溢出；215/215 一次 Accepted"
     }
   ],
   "error_habits": [
