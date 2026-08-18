@@ -36,8 +36,8 @@ public class LC0301_RemoveInvalidParentheses {
         if (needL == 0 && needR == 0) {
             if (isValid(cur)) {
                 ans.add(cur);
-                return;
             }
+            return;
         }
 
         for (int i = index; i < cur.length(); i++) {
