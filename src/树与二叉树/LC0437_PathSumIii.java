@@ -32,7 +32,10 @@ public class LC0437_PathSumIii {
         dfs(root.left, targetSum, sum, map);
         dfs(root.right, targetSum, sum, map);
 
-        map.merge(sum, -1, Integer::sum);
+        Integer cnt = map.merge(sum, -1, Integer::sum);
+        if (cnt == 0) {
+            map.remove(sum);
+        }
     }
 
 

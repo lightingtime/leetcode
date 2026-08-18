@@ -57,7 +57,7 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。",
-      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, targetSum, 0, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }"
+      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, targetSum, 0, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        Integer cnt = map.merge(sum, -1, Integer::sum);\n        if (cnt == 0) {\n            map.remove(sum);\n        }\n    }"
     }
   ],
   "hints": [
