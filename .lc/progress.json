@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-19",
-  "current_seq": 90,
+  "current_seq": 91,
   "done": [
     {
       "seq": 1,
@@ -980,6 +980,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一次 AC；卡塔兰数 DP，O(n^2)/O(n)"
+    },
+    {
+      "seq": 91,
+      "id": "221",
+      "title": "最大正方形",
+      "slug": "maximal-square",
+      "category": "动态规划",
+      "date": "2026-08-19",
+      "firstPass": false,
+      "optimal": false,
+      "notes": "第2次提交AC（首WA：'0'格未清零继承邻居正数）；DP O(mn)/O(mn) 空间可滚动优化"
     }
   ],
   "error_habits": [
@@ -1719,6 +1730,28 @@
         "动态规划"
       ],
       "last_seen": "2026-08-18"
+    },
+    {
+      "habit": "基础情况字符判断写反：'0' 格给了边长 1、'1' 格给了 0，导致单元素/全零用例结果反转；应先明确 '1'→1、'0'→0 再写三元",
+      "count": 1,
+      "examples": [
+        "maximal-square"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-19"
+    },
+    {
+      "habit": "DP 答案只返回右下角格子的值，未取全程最大值且未平方成面积；最优解可能出现在任意位置",
+      "count": 1,
+      "examples": [
+        "maximal-square"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-19"
     }
   ],
   "category_hints": {

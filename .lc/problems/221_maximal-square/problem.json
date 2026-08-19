@@ -1,0 +1,54 @@
+{
+  "id": "221",
+  "slug": "maximal-square",
+  "title": "Maximal Square",
+  "titleCn": "最大正方形",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/maximal-square/",
+  "tags": [
+    "Array",
+    "Dynamic Programming",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划",
+    "矩阵"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]"
+        }
+      ],
+      "output": "4",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[\"0\",\"1\"],[\"1\",\"0\"]]"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[\"0\"]]"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]\n[[\"0\",\"1\"],[\"1\",\"0\"]]\n[[\"0\"]]",
+  "javaSnippet": "class Solution {\n    public int maximalSquare(char[][] matrix) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-19T13:10:07.920Z"
+}
