@@ -1,0 +1,56 @@
+{
+  "id": "494",
+  "slug": "target-sum",
+  "title": "Target Sum",
+  "titleCn": "目标和",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/target-sum/",
+  "tags": [
+    "Array",
+    "Dynamic Programming",
+    "Backtracking",
+    "背包问题",
+    "0-1 背包"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划",
+    "回溯",
+    "背包问题",
+    "0-1 背包"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,1,1,1,1]"
+        },
+        {
+          "name": "target",
+          "value": "3"
+        }
+      ],
+      "output": "5",
+      "explain": "一共有 5 种方法让最终目标和为 3 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1]"
+        },
+        {
+          "name": "target",
+          "value": "1"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,1,1,1,1]\n3\n[1]\n1",
+  "javaSnippet": "class Solution {\n    public int findTargetSumWays(int[] nums, int target) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-19T15:33:08.008Z"
+}

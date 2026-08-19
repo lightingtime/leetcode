@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-19",
-  "current_seq": 94,
+  "updated": "2026-08-20",
+  "current_seq": 95,
   "done": [
     {
       "seq": 1,
@@ -1024,6 +1024,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一次 AC；可达和集合（0-1 背包判定）：sum 奇数剪枝 + 快照遍历防元素复用；O(n·target)/O(target)"
+    },
+    {
+      "seq": 95,
+      "id": "494",
+      "title": "目标和",
+      "slug": "target-sum",
+      "category": "动态规划",
+      "date": "2026-08-20",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次 AC；加减号→选 P 子集和=(sum+target)/2 的 0-1 背包计数 DP，倒序防元素复用，上下界+奇偶剪枝；O(n·total)/O(total)"
     }
   ],
   "error_habits": [

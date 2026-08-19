@@ -1,0 +1,39 @@
+{
+  "seq": 95,
+  "id": "494",
+  "slug": "target-sum",
+  "title": "目标和",
+  "category": "动态规划",
+  "date": "2026-08-20",
+  "verdict": "Accepted",
+  "testcases": "145/145",
+  "runtime_ms": null,
+  "memory_bytes": 43388000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "0-1 背包计数 DP（P/N 转化）",
+  "approach_detail": "**问题本质与解法选择理由**\n- 本质：给每个数分配 + 或 -，求表达式结果等于 target 的个数。二选一分配 + 计数 → 0-1 背包的计数版。\n- 转化：P=加号集合、N=减号集合。sum(P)-sum(N)=target，sum(P)+sum(N)=total，相加得 sum(P)=(total+target)/2——问题变成「选一个子集和等于 sum(P) 有几种方式」，直接复用 416 的子集和思路，只把 boolean 换成计数。\n\n**关键设计决策**\n- 前置剪枝：① total+target 为奇数 → 0；② sum(P) 越界（target>total 或 target<-total）→ 0（第二个防数组长度变负）。\n- 状态：dp[s] = 用已处理元素凑出和 s 的方式数；dp[0]=1（空子集 1 种）。\n- 转移：每处理 num，dp[s] += dp[s-num]，s 从 target 倒序到 num——倒序保证 dp[s-num] 读的是上一轮旧值，每个元素只用一次；正序会让一个元素被重复使用（1 个当 2 个用）。\n- 答案：dp[sum(P)]。\n\n**具体 case 推演：[1,1,1]，target=1（期望 3）**\n- total=3，sum(P)=(3+1)/2=2；dp=[1,0,0]\n- num=1：s=2→1：dp[2]+=dp[1]=0；dp[1]+=dp[0]=1 → [1,1,0]\n- num=1：dp[2]+=dp[1]=1；dp[1]+=dp[0]=2 → [1,2,1]\n- num=1：dp[2]+=dp[1]=3；dp[1]+=dp[0]=3 → [1,3,3]\n- dp[2]=3 ✓（对应 +-+、-++、++- 三种符号组合）\n\n**具体 case 推演：[0,0]，target=0（期望 4）**\n- total=0，sum(P)=0，dp[0]=1\n- 每个 0 处理时 s=0：dp[0] += dp[0] → 每轮翻倍：1→2→4 ✓（每个 0 可 +0 或 -0，共 2² 种）\n\n**边界与细节**\n- 单零/双零：0 的 + 与 - 是不同表达式，dp[0] 累加正确处理。\n- 负 target：target<-total 时 sum(P)<0，必须先返回 0 否则数组越界。\n- 大数组 20×1000 target=0：sum(P)=10000，dp 长度 10001，C(20,10)=184756 验证计数。\n- 倒序是 0-1 背包防元素复用的关键，不可省。\n\n**复杂度与下限论证**\n- 时间 O(n·sum(P)) ≤ O(n·total)：每元素倒序遍历 dp 数组。n≤20、total≤20000，完全可行。这是子集和计数（NP 完全问题的计数版）的标准伪多项式 DP，本约束下即最优。\n- 空间 O(sum(P)) ≤ O(total)。",
+  "time_complexity": "O(n·total)",
+  "space_complexity": "O(total)",
+  "notes": "一次 AC；加减号→选 P 子集和=(sum+target)/2 的 0-1 背包计数 DP，倒序防元素复用，上下界+奇偶剪枝；O(n·total)/O(total)",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-20",
+      "verdict": "Accepted",
+      "testcases": "145/145",
+      "runtime_ms": null,
+      "memory_bytes": 43388000,
+      "approach": "0-1 背包计数 DP（P/N 转化）",
+      "time_complexity": "O(n·total)",
+      "space_complexity": "O(total)",
+      "optimal": true,
+      "notes": "一次 AC；加减号→选 P 子集和=(sum+target)/2 的 0-1 背包计数 DP，倒序防元素复用，上下界+奇偶剪枝；O(n·total)/O(total)"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}
