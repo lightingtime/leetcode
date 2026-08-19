@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-19",
-  "current_seq": 93,
+  "current_seq": 94,
   "done": [
     {
       "seq": 1,
@@ -1013,6 +1013,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一次 AC；树形 DP 自底向上返回 [偷,不偷] 两值，每节点 O(1) 转移；O(n)/O(n) 已达下界"
+    },
+    {
+      "seq": 94,
+      "id": "416",
+      "title": "分割等和子集",
+      "slug": "partition-equal-subset-sum",
+      "category": "动态规划",
+      "date": "2026-08-19",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次 AC；可达和集合（0-1 背包判定）：sum 奇数剪枝 + 快照遍历防元素复用；O(n·target)/O(target)"
     }
   ],
   "error_habits": [

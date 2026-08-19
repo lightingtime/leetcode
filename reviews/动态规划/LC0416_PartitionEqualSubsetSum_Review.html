@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC416 分割等和子集 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 94</div>
+  <h1>LC416 · 分割等和子集</h1>
+  <div class="sub">可达和集合（0-1 背包判定） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 149/149</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 动态规划</span>
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-19</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 可达和集合（0-1 背包判定）</h3>
+    <p><span class="chip">时间 O(n·target)</span><span class="chip">空间 O(target)</span><span class="chip">内存 ≈ 46.4 MB</span><span class="chip">用例 149/149</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0416_PartitionEqualSubsetSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean canPartition(int[] nums) {
+        int sum =0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if ((sum &amp; 1) == 1) {
+            return false;
+        }
+        sum /= 2;
+        HashSet&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        set.add(0);
+        for (int num : nums) {
+            HashSet&lt;Integer&gt; copy = new HashSet&lt;&gt;(set);
+            for (Integer i : copy) {
+                set.add(i + num);
+                if (set.contains(sum)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }</pre></div>
+    <p class="muted">一次 AC；可达和集合（0-1 背包判定）：sum 奇数剪枝 + 快照遍历防元素复用；O(n·target)/O(target)</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><ul><li>本质：正整数数组能否分成两个和相等的子集 ⟺ 能否选出<strong>一个子集和为 sum/2（target）</strong>，另一组自动是补集。这是 0-1 背包的判定版：每个元素只能选一次，能否恰好装满容量 target。</li><li>为什么不用暴力枚举：2^n 子集不可行；「可达和集合」逐元素扩张，每个元素 O(可达和个数)，总 O(n·target) 伪多项式，是本题约束（n≤200、target≤10000）下的标准最优。</li></ul><p><strong>关键设计决策</strong></p><ul><li>奇数剪枝：sum 为奇数直接 false（一半不是整数，必不可能）。</li><li>状态：可达和集合 set，初始 {0}（空子集和，是「单元素可达」的地基：num 本身 = 0+num）。</li><li>扩张规则：处理 num 时，基于<strong>上一轮的快照</strong>遍历，把每个可达和 i 的 i+num 加入原 set——快照保证每个元素只用一次（不会连锁复用，如 5 不能连用两次凑 10），也避免遍历时修改集合的异常。</li><li>提前返回：set 一出现 target 即 true；最终 return set.contains(target)（实现里用循环内提前 return + 末尾 false 等价）。</li></ul><p><strong>具体 case 推演：[1,5,11,5]（target=11，期望 true）</strong></p><ul><li>初始 set={0}</li><li>num=1：快照{0} → 加 1 → {0,1}</li><li>num=5：快照{0,1} → 加 5,6 → {0,1,5,6}</li><li>num=11：快照{0,1,5,6} → 加 11,12,16,17 → <strong>11 出现 → true</strong> ✓</li></ul><p><strong>具体 case 推演：[1,2,5]（sum=8，target=4，期望 false）</strong></p><ul><li>{0} → 1：{0,1}</li><li>2：快照{0,1} 加 2,3 → {0,1,2,3}</li><li>5：快照{0,1,2,3} 加 5,6,7,8 → {0,1,2,3,5,6,7,8}，始终没有 4 → false ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>单元素 [2]：target=1 凑不出 → false；[1] 奇数 → false。</li><li>全 1 偶数个：target=n/2 可凑 → true；奇数个 sum 奇数 → false。</li><li>大数组 200×100：target=10000，set 去重后规模 ≤ target+1，容量足够且不超时。</li><li>可优化点（不影响正确性）：i+num &gt; target 的入集合没有意义，可剪枝省时间；也可换 boolean[] dp 倒序遍历，常数更小。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n·target)：每元素遍历当前可达和（去重后 ≤ target+1）。子集和是 NP 完全问题，不存在多项式时间算法；O(n·target) 是标准伪多项式 DP，对本约束即预期最优。</li><li>空间 O(target)：set 至多存 target+1 个不同和。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>149/149 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">149/149</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 46.4 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n·target) · O(target)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 94 · partition-equal-subset-sum</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">一次 AC；可达和集合（0-1 背包判定）：sum 奇数剪枝 + 快照遍历防元素复用；O(n·target)/O(target)</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/416_partition-equal-subset-sum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0416_PartitionEqualSubsetSum.java">src/动态规划/LC0416_PartitionEqualSubsetSum.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-19
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "id": "416",
+  "slug": "partition-equal-subset-sum",
+  "title": "Partition Equal Subset Sum",
+  "titleCn": "分割等和子集",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/partition-equal-subset-sum/",
+  "tags": [
+    "Array",
+    "Dynamic Programming",
+    "背包问题",
+    "0-1 背包"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划",
+    "背包问题",
+    "0-1 背包"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,5,11,5]"
+        }
+      ],
+      "output": "true",
+      "explain": "数组可以分割成 [1, 5, 5] 和 [11] 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,3,5]"
+        }
+      ],
+      "output": "false",
+      "explain": "数组不能分割成两个元素和相等的子集。"
+    }
+  ],
+  "exampleTestcases": "[1,5,11,5]\n[1,2,3,5]",
+  "javaSnippet": "class Solution {\n    public boolean canPartition(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-19T15:08:27.558Z"
+}
