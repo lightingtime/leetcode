@@ -25,7 +25,9 @@ public class LC0416_PartitionEqualSubsetSum {
         for (int num : nums) {
             HashSet<Integer> copy = new HashSet<>(set);
             for (Integer i : copy) {
-                set.add(i + num);
+                if (i + num <= sum) {
+                    set.add(i + num);
+                }
                 if (set.contains(sum)) {
                     return true;
                 }
