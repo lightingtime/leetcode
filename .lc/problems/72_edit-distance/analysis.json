@@ -16,7 +16,9 @@
   "time_complexity": "O(mn)",
   "space_complexity": "O(mn)",
   "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)",
-  "code_notes": [],
+  "code_notes": [
+    "复习时要求独立写出空间优化版：滚动数组 O(n)，关键是 diag 变量在每列末更新为 prevRowSame 来保持「斜对角」语义"
+  ],
   "mistakes": [],
   "patterns": [],
   "submissions": [

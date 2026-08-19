@@ -1,0 +1,39 @@
+{
+  "seq": 90,
+  "id": "96",
+  "slug": "unique-binary-search-trees",
+  "title": "不同的二叉搜索树",
+  "category": "动态规划",
+  "date": "2026-08-19",
+  "verdict": "Accepted",
+  "testcases": "19/19",
+  "runtime_ms": null,
+  "memory_bytes": 42400000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "DP 卡塔兰数",
+  "approach_detail": "**问题本质与解法选择**\n- 本质：计数问题——1..n 共 n 个有序值能组成多少棵结构不同的 BST。固定根后，左右子树各自独立且只与「节点个数」有关，是最优子结构，适合 DP（这组数就是卡塔兰数）。\n- 为什么不构造所有树：n=19 时种数已达 17 亿，枚举不现实；题目只要数量，不要具体结构。\n\n**关键设计决策**\n- 状态定义：dp[i] = i 个节点能组成的 BST 种数。只与个数有关、与具体值无关（BST 只要求相对顺序，{1,2} 和 {2,3} 的种数相同）。\n- 转移：对 i 个节点，固定根后左子树放 k 个、右子树放 i-1-k 个，左右独立相乘后对所有 k 累加：dp[i] = Σ_{k=0}^{i-1} dp[k] * dp[i-1-k]。\n- 根基：dp[0] = 1（空树算 1 种）；dp[1] 由递推自然得到 1。\n- 返回 dp[n]。\n\n**具体 case 推演：n=3（期望 5）**\n- 初始化 dp[0]=1\n- i=1：k=0 → dp[1] = dp[0]*dp[0] = 1\n- i=2：k=0 → dp[0]*dp[1] = 1；k=1 → dp[1]*dp[0] = 1 → dp[2] = 2\n- i=3：k=0 → dp[0]*dp[2] = 2；k=1 → dp[1]*dp[1] = 1；k=2 → dp[2]*dp[0] = 2 → dp[3] = 5 ✓\n- 按根拆解验证：根=1（左0右2）=1*2=2，根=2（左1右1）=1*1=1，根=3（左2右0）=2*1=2，合计 5。\n\n**边界与细节**\n- dp[0]=1 是递推根基；题目约束 n>=1，但算法依赖它（n=0 本地测试覆盖）。\n- n=19 时 C19=1767263190 仍落在 int 范围内（C20=6564120420 会溢出，但 LeetCode 约束 n<=19），大数测试已验证不溢出。\n- dp 数组长度 n+1，避免越界。\n\n**复杂度与下限论证**\n- 时间 O(n^2)：两层循环，每对 (i,k) 一次乘加；n<=19 完全够快。\n- 空间 O(n)：只存 dp[0..n]，不存具体树结构，已达该思路下限。\n- 计数只需每个前缀长度的结果，O(n) 空间是下限；时间上卡塔兰数有 O(n) 闭式公式（需处理大整数），但 DP O(n^2) 是本题标准解法且足够。",
+  "time_complexity": "O(n^2)",
+  "space_complexity": "O(n)",
+  "notes": "一次 AC；卡塔兰数 DP，O(n^2)/O(n)",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-19",
+      "verdict": "Accepted",
+      "testcases": "19/19",
+      "runtime_ms": null,
+      "memory_bytes": 42400000,
+      "approach": "DP 卡塔兰数",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "一次 AC；卡塔兰数 DP，O(n^2)/O(n)"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}
