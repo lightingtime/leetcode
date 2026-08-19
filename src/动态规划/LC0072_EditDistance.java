@@ -13,23 +13,27 @@ public class LC0072_EditDistance {
     public int minDistance(String word1, String word2) {
         int m = word1.length();
         int n = word2.length();
-        int[][] dp = new int[m + 1][n + 1];
-        for (int i = 0; i <= m; i++) {
-            dp[i][0] = i;
-        }
-        for (int i = 0; i <= n; i++) {
-            dp[0][i] = i;
+        if (m == 0) return n;
+        if (n == 0) return m;
+        // 滚动数组：dp[j] 存当前行 dp[i][j]，覆盖前先取旧值当 dp[i-1][j]；diag 存斜对角 dp[i-1][j-1]
+        int[] dp = new int[n + 1];
+        for (int j = 0; j <= n; j++) {
+            dp[j] = j; // 第 0 行：dp[0][j] = j
         }
         for (int i = 1; i <= m; i++) {
+            int diag = dp[0]; // 进第 1 列前，diag = dp[i-1][0]
+            dp[0] = i;        // 第 0 列：dp[i][0] = i
             for (int j = 1; j <= n; j++) {
+                int prevRowSame = dp[j]; // 覆盖前保存 dp[i-1][j]
                 if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    dp[i][j] = dp[i - 1][j - 1];
+                    dp[j] = diag;
                 } else {
-                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
+                    dp[j] = Math.min(Math.min(prevRowSame, dp[j - 1]), diag) + 1;
                 }
+                diag = prevRowSame; // 下一列的斜对角 = dp[i-1][j]
             }
         }
-        return dp[m][n];
+        return dp[n];
     }
     // ==== 提交代码结束 ====
 
