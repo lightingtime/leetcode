@@ -1,0 +1,50 @@
+{
+  "id": "72",
+  "slug": "edit-distance",
+  "title": "Edit Distance",
+  "titleCn": "编辑距离",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/edit-distance/",
+  "tags": [
+    "String",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "字符串",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "word1",
+          "value": "\"horse\""
+        },
+        {
+          "name": "word2",
+          "value": "\"ros\""
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "word1",
+          "value": "\"intention\""
+        },
+        {
+          "name": "word2",
+          "value": "\"execution\""
+        }
+      ],
+      "output": "5",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"horse\"\n\"ros\"\n\"intention\"\n\"execution\"",
+  "javaSnippet": "class Solution {\n    public int minDistance(String word1, String word2) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-19T04:27:33.322Z"
+}

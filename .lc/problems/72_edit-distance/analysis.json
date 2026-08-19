@@ -1,0 +1,39 @@
+{
+  "seq": 89,
+  "id": "72",
+  "slug": "edit-distance",
+  "title": "编辑距离",
+  "category": "动态规划",
+  "date": "2026-08-19",
+  "verdict": "Accepted",
+  "testcases": "1149/1149",
+  "runtime_ms": null,
+  "memory_bytes": 47708000,
+  "firstPass": true,
+  "optimal": false,
+  "approach": "DP 二维表格",
+  "approach_detail": "**问题本质与解法选择**\n- 本质：求两个字符串的最小编辑距离，是典型的最优化问题；word1 前缀转 word2 前缀的过程有大量重叠子问题（如转 \"abc\" 时反复用到 \"ab\"、\"a\" 等更短前缀的结果），因此用动态规划。\n- 为什么不暴力：每次操作有插入/删除/替换 3 种选择，递归枚举是指数级；DP 把每个 (i,j) 前缀对的结果只算一次，共 O(mn) 个状态。\n\n**关键设计决策**\n- 状态定义：dp[i][j] = word1 前 i 个字符转成 word2 前 j 个字符所需的最小操作数（i、j 是前缀长度，不是下标，所以表是 (m+1)x(n+1)）。\n- 转移（看末尾字符 word1[i-1] 与 word2[j-1]）：\n  - 相等：dp[i][j] = dp[i-1][j-1]（末尾天然匹配，无需操作）\n  - 不等：三种操作取最小再 +1\n    1. 删除 word1 末尾字符：dp[i-1][j] + 1\n    2. word1 末尾插入 word2[j-1]：dp[i][j-1] + 1\n    3. 替换末尾为 word2[j-1]：dp[i-1][j-1] + 1\n- 初始化：dp[0][j]=j（空串转非空只能靠插入），dp[i][0]=i（非空转空只能靠删除）。\n- 返回 dp[m][n]。\n\n**具体 case 推演：word1=\"ab\"，word2=\"abc\"（期望答案 1）**\n- 初始化后：dp[0][0..3] = 0,1,2,3；dp[0..2][0] = 0,1,2\n- i=1, j=1：a==a → dp[1][1]=dp[0][0]=0\n- i=1, j=2：a vs b 不等 → min(dp[0][2]=2, dp[1][1]=0, dp[0][1]=1)+1 = 1（插入 b，\"a\"→\"ab\"）\n- i=1, j=3：a vs c 不等 → min(dp[0][3]=3, dp[1][2]=1, dp[0][2]=2)+1 = 2\n- i=2, j=1：b vs a 不等 → min(dp[1][1]=0, dp[2][0]=2, dp[1][0]=1)+1 = 1（替换 b→a）\n- i=2, j=2：b==b → dp[2][2]=dp[1][1]=0\n- i=2, j=3：b vs c 不等 → min(dp[1][3]=2, dp[2][2]=0, dp[1][2]=1)+1 = 1（插入 c）\n- 答案 dp[2][3]=1 ✓\n\n**边界与细节**\n- 双空：dp[0][0]=0。\n- 一边为空：全插入 / 全删除，直接被初始化行/列覆盖。\n- 单字符相同 / 不同、全相同、等长全替换（结果=长度）、交换两字符（2 步，替换或删+插）均已在本地测试覆盖。\n- 下标对齐：charAt(i-1) / charAt(j-1) 对应前缀长度 i / j，避免越界。\n\n**复杂度与下限论证**\n- 时间 O(mn)：两层循环填表，每格 O(1) 转移；两个串的所有前缀组合都要比较，O(mn) 是问题本身的下限。\n- 空间 O(mn)：完整二维表；每格只依赖上一行同列、当前行左邻、上一行左邻，可滚动压缩到 O(n)。",
+  "time_complexity": "O(mn)",
+  "space_complexity": "O(mn)",
+  "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-19",
+      "verdict": "Accepted",
+      "testcases": "1149/1149",
+      "runtime_ms": null,
+      "memory_bytes": 47708000,
+      "approach": "DP 二维表格",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(mn)",
+      "optimal": false,
+      "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)"
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ]
+}

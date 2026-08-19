@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC72 编辑距离 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 89</div>
+  <h1>LC72 · 编辑距离</h1>
+  <div class="sub">DP 二维表格 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 1149/1149</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 动态规划</span>
+    <span class="badge plain">一次通过</span>
+    <span class="badge plain">已满足题意·可进阶</span>
+    
+    <span class="badge">2026-08-19</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · DP 二维表格</h3>
+    <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(mn)</span><span class="chip">内存 ≈ 45.5 MB</span><span class="chip">用例 1149/1149</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0072_EditDistance.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i &lt;= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i &lt;= n; i++) {
+            dp[0][i] = i;
+        }
+        for (int i = 1; i &lt;= m; i++) {
+            for (int j = 1; j &lt;= n; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
+                }
+            }
+        }
+        return dp[m][n];
+    }</pre></div>
+    <p class="muted">一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>本质：求两个字符串的最小编辑距离，是典型的最优化问题；word1 前缀转 word2 前缀的过程有大量重叠子问题（如转 "abc" 时反复用到 "ab"、"a" 等更短前缀的结果），因此用动态规划。</li><li>为什么不暴力：每次操作有插入/删除/替换 3 种选择，递归枚举是指数级；DP 把每个 (i,j) 前缀对的结果只算一次，共 O(mn) 个状态。</li></ul><p><strong>关键设计决策</strong></p><ul><li>状态定义：dp[i][j] = word1 前 i 个字符转成 word2 前 j 个字符所需的最小操作数（i、j 是前缀长度，不是下标，所以表是 (m+1)x(n+1)）。</li><li>转移（看末尾字符 word1[i-1] 与 word2[j-1]）：</li><li>相等：dp[i][j] = dp[i-1][j-1]（末尾天然匹配，无需操作）</li><li>不等：三种操作取最小再 +1</li></ul><ol><li>删除 word1 末尾字符：dp[i-1][j] + 1</li><li>word1 末尾插入 word2[j-1]：dp[i][j-1] + 1</li><li>替换末尾为 word2[j-1]：dp[i-1][j-1] + 1</li></ol><ul><li>初始化：dp[0][j]=j（空串转非空只能靠插入），dp[i][0]=i（非空转空只能靠删除）。</li><li>返回 dp[m][n]。</li></ul><p><strong>具体 case 推演：word1="ab"，word2="abc"（期望答案 1）</strong></p><ul><li>初始化后：dp[0][0..3] = 0,1,2,3；dp[0..2][0] = 0,1,2</li><li>i=1, j=1：a==a → dp[1][1]=dp[0][0]=0</li><li>i=1, j=2：a vs b 不等 → min(dp[0][2]=2, dp[1][1]=0, dp[0][1]=1)+1 = 1（插入 b，"a"→"ab"）</li><li>i=1, j=3：a vs c 不等 → min(dp[0][3]=3, dp[1][2]=1, dp[0][2]=2)+1 = 2</li><li>i=2, j=1：b vs a 不等 → min(dp[1][1]=0, dp[2][0]=2, dp[1][0]=1)+1 = 1（替换 b→a）</li><li>i=2, j=2：b==b → dp[2][2]=dp[1][1]=0</li><li>i=2, j=3：b vs c 不等 → min(dp[1][3]=2, dp[2][2]=0, dp[1][2]=1)+1 = 1（插入 c）</li><li>答案 dp[2][3]=1 ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>双空：dp[0][0]=0。</li><li>一边为空：全插入 / 全删除，直接被初始化行/列覆盖。</li><li>单字符相同 / 不同、全相同、等长全替换（结果=长度）、交换两字符（2 步，替换或删+插）均已在本地测试覆盖。</li><li>下标对齐：charAt(i-1) / charAt(j-1) 对应前缀长度 i / j，避免越界。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(mn)：两层循环填表，每格 O(1) 转移；两个串的所有前缀组合都要比较，O(mn) 是问题本身的下限。</li><li>空间 O(mn)：完整二维表；每格只依赖上一行同列、当前行左邻、上一行左邻，可滚动压缩到 O(n)。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>1149/1149 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">1149/1149</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 45.5 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(mn) · O(mn)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 89 · edit-distance</span><span class="chip">firstPass: true</span><span class="chip">optimal: false</span></p>
+      <div class="quote">一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/72_edit-distance/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0072_EditDistance.java">src/动态规划/LC0072_EditDistance.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-19
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

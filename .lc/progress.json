@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-18",
-  "current_seq": 88,
+  "updated": "2026-08-19",
+  "current_seq": 89,
   "done": [
     {
       "seq": 1,
@@ -958,6 +958,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "dp[i][j]=grid[i][j]+min(上,左)，一维 dp[j] 滚动：先铺第一行，主循环从 i=1 起，j 必须用列变量；66/66 一次 Accepted"
+    },
+    {
+      "seq": 89,
+      "id": "72",
+      "title": "编辑距离",
+      "slug": "edit-distance",
+      "category": "动态规划",
+      "date": "2026-08-19",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)"
     }
   ],
   "error_habits": [
