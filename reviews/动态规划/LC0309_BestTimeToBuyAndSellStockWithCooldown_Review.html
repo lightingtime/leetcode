@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC309 买卖股票的最佳时机含冷冻期 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 92</div>
+  <h1>LC309 · 买卖股票的最佳时机含冷冻期</h1>
+  <div class="sub">三状态机 DP（含冷冻期） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 210/210</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 动态规划</span>
+    <span class="badge plain">一次通过</span>
+    <span class="badge plain">已满足题意·可进阶</span>
+    
+    <span class="badge">2026-08-19</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 三状态机 DP（含冷冻期）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 210/210</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0309_BestTimeToBuyAndSellStockWithCooldown.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxProfit(int[] prices) {
+        int[][] dp = new int[prices.length][3];
+        dp[0][0] = -prices[0];
+        for (int i = 1; i &lt; prices.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][2] - prices[i]);
+            dp[i][1] = dp[i - 1][0] + prices[i];
+            dp[i][2] = Math.max(dp[i - 1][2], dp[i - 1][1]);
+        }
+        return Math.max(dp[prices.length - 1][1], dp[prices.length - 1][2]);
+    }</pre></div>
+    <p class="muted">一次 AC；三状态机 DP（持有/刚卖/自由空仓），买入只从自由空仓转移即冷冻期约束；时间 O(n) 已达下界，空间 O(n) 可滚动压到 O(1)</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><ul><li>本质：每日价格序列允许多次买卖，但「卖出后下一天不能买入（冷冻期）」，求最大利润。相对无限次交易的 122，多了一条时序约束：昨天刚卖 与 今天可买 不能同时成立，必须显式建模。</li><li>为什么 DP：明天的最优只依赖今天收盘时「是否持有、是否刚卖」，有最优子结构与无后效性，是标准状态机 DP；暴力枚举所有买卖组合是指数级。</li></ul><p><strong>关键设计决策</strong></p><ul><li>状态定义（第 i 天收盘，三种互斥状态）：</li></ul><ol><li>dp[i][0] 持有：手里有股票（今天买入或一直拿着都落这里）</li><li>dp[i][1] 刚卖：今天卖出，明天是冷冻期</li><li>dp[i][2] 自由空仓：没股票且今天没卖，明天可以买</li></ol><ul><li>转移（都从第 i-1 天推来）：</li><li>dp[i][0] = max(dp[i-1][0], dp[i-1][2] - prices[i])：继续持有，或从自由空仓买入。买入只允许从状态 2 来，堵死「昨天刚卖、今天买」——这就是冷冻期约束。</li><li>dp[i][1] = dp[i-1][0] + prices[i]：昨天持有，今天卖出。</li><li>dp[i][2] = max(dp[i-1][2], dp[i-1][1])：继续空仓，或昨天刚卖、今天歇完回归自由。</li><li>初始化：dp[0][0] = -prices[0]；dp[0][1] = 0（逻辑上第 0 天不可能刚卖，占位值，只参与 max 且利润下界为 0，无副作用）；dp[0][2] = 0。</li><li>答案：max(dp[n-1][1], dp[n-1][2])。最后一天持有不参与：最后一天买入必不优于空仓（价格非负），卖出则落入刚卖已被覆盖。</li></ul><p><strong>具体 case 推演：prices = [1,2,3,0,2]（期望 3）</strong></p><ul><li>第 0 天（价 1）：dp[0] = [-1, 0, 0]</li><li>第 1 天（价 2）：dp[1][0]=max(-1, 0-2)=-1；dp[1][1]=-1+2=1（天0买天1卖）；dp[1][2]=max(0,0)=0</li><li>第 2 天（价 3，冷冻期）：dp[2][0]=max(-1, 0-3)=-1；dp[2][1]=-1+3=2；dp[2][2]=max(0,1)=1（天1刚卖→天2回归自由）</li><li>第 3 天（价 0）：dp[3][0]=max(-1, 1-0)=1（天3买 0）；dp[3][1]=-1+0=-1；dp[3][2]=max(1,2)=2</li><li>第 4 天（价 2）：dp[4][0]=max(1, 2-2)=1；dp[4][1]=1+2=3（天3买0天4卖2，累计3）；dp[4][2]=max(2,-1)=2</li><li>答案 max(3,2)=3 ✓。关键：天 2 是冷冻期不能买 3，转移靠「买入只从 rest 来」自动保证。</li></ul><p><strong>边界与细节</strong></p><ul><li>n=1：答案 max(0,0)=0。</li><li>全相同 / 单调递减：无利可图，hold 恒 ≤0、rest 保持 0，答案 0。</li><li>单调递增：一直持有到最后卖最优（中途卖出引入冷冻期反而错过），hold 走 max 正确。</li><li>交替 1,2,1,2,1,2：每笔交易后强制隔一天，最多 2 笔，不会错算成 3 笔。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每天 3 个 O(1) 转移；至少得读一遍全部价格才知道收益，Ω(n) 是下界，已达。</li><li>空间 O(n)（dp[n][3]）：每格只依赖 i-1 的三个值，可滚动成 3 个变量压到 O(1)，当前实现用数组更直观但空间未达最优。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>210/210 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">210/210</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.8 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 92 · best-time-to-buy-and-sell-stock-with-cooldown</span><span class="chip">firstPass: true</span><span class="chip">optimal: false</span></p>
+      <div class="quote">一次 AC；三状态机 DP（持有/刚卖/自由空仓），买入只从自由空仓转移即冷冻期约束；时间 O(n) 已达下界，空间 O(n) 可滚动压到 O(1)</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/309_best-time-to-buy-and-sell-stock-with-cooldown/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0309_BestTimeToBuyAndSellStockWithCooldown.java">src/动态规划/LC0309_BestTimeToBuyAndSellStockWithCooldown.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-19
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

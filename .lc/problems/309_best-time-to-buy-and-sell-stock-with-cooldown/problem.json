@@ -1,0 +1,42 @@
+{
+  "id": "309",
+  "slug": "best-time-to-buy-and-sell-stock-with-cooldown",
+  "title": "Best Time to Buy and Sell Stock with Cooldown",
+  "titleCn": "买卖股票的最佳时机含冷冻期",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+  "tags": [
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "prices",
+          "value": "[1,2,3,0,2]"
+        }
+      ],
+      "output": "3",
+      "explain": "对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]"
+    },
+    {
+      "inputs": [
+        {
+          "name": "prices",
+          "value": "[1]"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,0,2]\n[1]",
+  "javaSnippet": "class Solution {\n    public int maxProfit(int[] prices) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-19T13:33:33.354Z"
+}
