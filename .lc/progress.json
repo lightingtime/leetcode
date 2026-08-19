@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-19",
-  "current_seq": 92,
+  "current_seq": 93,
   "done": [
     {
       "seq": 1,
@@ -1002,6 +1002,17 @@
       "firstPass": true,
       "optimal": false,
       "notes": "一次 AC；三状态机 DP（持有/刚卖/自由空仓），买入只从自由空仓转移即冷冻期约束；时间 O(n) 已达下界，空间 O(n) 可滚动压到 O(1)"
+    },
+    {
+      "seq": 93,
+      "id": "337",
+      "title": "打家劫舍 III",
+      "slug": "house-robber-iii",
+      "category": "动态规划",
+      "date": "2026-08-19",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次 AC；树形 DP 自底向上返回 [偷,不偷] 两值，每节点 O(1) 转移；O(n)/O(n) 已达下界"
     }
   ],
   "error_habits": [
