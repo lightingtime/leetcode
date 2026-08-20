@@ -26,6 +26,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    **Accepted（通过）**
    - 顺序约定：先确认判题结果正确（Accepted），再提醒最优性；不要在提交前因「未达最优」打断用户，保证正确优先。
    - **完整思路拆解（每题必做，一次 AC 也不能省略）**：无论是否一次通过、是否与用户讨论过，Accepted 后都必须写完整思路拆解并写入 `--approachDetail`：① 问题本质与解法选择理由（为什么用这个思路）；② 关键设计决策（状态定义、终止条件、选择/撤销、去重/剪枝逻辑）；③ 边界与细节（典型边界是否覆盖、约束外情况如何）；④ 复杂度分析与「为什么是最优/可接受」的下限论证。复盘页「思路拆解」区块由 `generate_review.js` 自动渲染。
+   - **子类型记录（分类细分必做）**：分类是「动态规划」时，`done` 命令必须加 `--dpSubtype <子类型>`（线性/区间/树形/背包/状态机/数位/状压），存入 analysis.json 并在复盘页展示；approachDetail 的状态定义、转移、填表顺序要与该子类型套路对应（速查表见 lc-practice 的 `references/dp-subtypes.md`）。
    - **`--approachDetail` 写法规范**：使用轻量 Markdown 结构（空行分段；`- ` 开头成无序列表；`1. ` 开头成编号列表；反引号包行内代码；`**加粗**`），复盘页按此渲染。具体 case 推演要单独成段、用列表逐层展开，禁止拍成无层级的整段长文本。
    - **丰富表达**：凡是存在「编号/下标 → 变量 → 语义」或「状态 → 转移结果」的映射，优先使用 Markdown 表格逐行展示，并配一个具体的小输入；公式不能只写结论，必须说明每个变量的含义。适合时补充 ASCII 图示、分步列表和逐轮状态变化，让复盘读者能直接对照代码复现过程。
    - **可复用套路提醒**：Accepted 后若解法包含可迁移的套路（如中心扩散、双指针、单调栈），用 `update_state.js pattern add` 记录到本题分析，使复盘页的「套路沉淀」区块明确提醒后续复习重点。
@@ -44,7 +45,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
      解题过程时间线只记录真实环节（如 独立实现 → 本地测试 → 提交 Accepted），**不包含「选题建题」**。
    - 报告内容只记录与算法学习相关的东西：解题思路、踩坑与修复、判题结果、错误习惯、复杂度分析。工具/环境问题（提交脚本 bug、cookie、IDE 配置、判题包装、编译包装等）**一律不写进报告**，也不出现在 analysis.json / progress.json 的笔记文字里。
    - 收尾（每次 Accepted 必做）：先把本题源码归档到分类目录 `git mv src/LC{题号}_{题名}.java src/{分类}/LC{题号}_{题名}.java`（与 `reviews/{分类}/` 一致），确认 `main` 测试在归档路径仍通过；提交前清理文件内无用 import（只删 import 行，不动逻辑）；再重新运行 `node ".agents/skills/lc-practice/scripts/build_site.js"` 让主页复盘列表指向新报告；随后用 git add + commit 提交当前分支的全部改动，至少包含：归档后的本题源码 `src/{分类}/LC{题号}_{题名}.java`、`.lc/progress.json`、`.lc/problems/{题号}_{slug}/analysis.json`、`reviews/index.html` 与本期复盘报告，其余相关状态文件一并提交，不留未提交的工作区改动；汇报时把复盘报告链接主动发给用户。
-   - 类似题型提醒：读取 `progress.json` 的 `category_hints`，把当前分类的宽泛思路再强调一遍，例如「以后遇到同类题，应该先想到双指针/单调栈/DP 状态定义」。
+   - 类似题型提醒：分类是「动态规划」时，读取本题 `analysis.json` 的 `dp_subtype`，用 `references/dp-subtypes.md` 对应子类型的宽泛提示强调（如「区间 DP 先想最后一步处理谁、按区间长度填表」）；其他分类读 `progress.json` 的 `category_hints`。
 
    **Wrong Answer / Time Limit Exceeded / Runtime Error / Compile Error**
    - 拿到失败用例（必做）：判题结果里的 `last_testcase`（输入）与 `expected_output`（期望输出）就是最可靠的回归用例；若脚本没打印出来，通过判题接口重新查询取回。

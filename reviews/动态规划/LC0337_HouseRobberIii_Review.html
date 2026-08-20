@@ -32,6 +32,7 @@
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
   .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
   .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
@@ -54,6 +55,7 @@
     <span class="badge ok">✓ Accepted 124/124</span>
     <span class="badge medium">难度 MEDIUM</span>
     <span class="badge tag">分类 动态规划</span>
+    <span class="badge tag">子类型 树形DP</span>
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
@@ -64,7 +66,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 树形 DP 自底向上双值</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 124/124</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0337_HouseRobberIii.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int rob(TreeNode root) {
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0337_HouseRobberIii.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int rob(TreeNode root) {
         int[] res = dfs(root);
         return Math.max(res[0], res[1]);
     }
@@ -96,7 +98,7 @@
     <div class="card">
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
-      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
       
       <h3>完成记录</h3>

@@ -181,6 +181,7 @@ const html = `<!DOCTYPE html>
     <span class="badge ok">✓ ${a.verdict || 'Accepted'} ${testcases}</span>
     <span class="badge ${diffCls}">难度 ${diff}</span>
     <span class="badge tag">分类 ${esc(q.category)}</span>
+    ${a.dp_subtype ? `<span class="badge tag">子类型 ${esc(a.dp_subtype)}</span>` : ''}
     <span class="badge plain">${done.firstPass ? '一次通过' : '多次通过'}</span>
     <span class="badge ${done.optimal ? 'ok' : 'plain'}">${done.optimal ? '最优解' : '已满足题意·可进阶'}</span>
     ${codeNotes.length ? '<span class="badge hard">重点复习</span>' : ''}

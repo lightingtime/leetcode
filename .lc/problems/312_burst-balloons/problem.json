@@ -1,0 +1,42 @@
+{
+  "id": "312",
+  "slug": "burst-balloons",
+  "title": "Burst Balloons",
+  "titleCn": "戳气球",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/burst-balloons/",
+  "tags": [
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,1,5,8]"
+        }
+      ],
+      "output": "167",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,5]"
+        }
+      ],
+      "output": "10",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[3,1,5,8]\n[1,5]",
+  "javaSnippet": "class Solution {\n    public int maxCoins(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-20T12:07:12.574Z"
+}
