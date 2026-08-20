@@ -36,6 +36,8 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 
 ## 注意
 
+- **联网命令单独执行（必做）**：拉题（fetch_problem.js）和提交（submit.js）等联网命令必须单独运行，禁止用 `&&` 与本地命令（run_tests.js / create_problem.js）拼在一条命令里，避免本地命令连带进入提权请求；本地命令在沙箱内直接跑。
+- **权限前缀用通用形式（必做）**：请求联网命令权限时，`prefix_rule` 用不带具体参数的通用前缀（如 `["node", ".agents/skills/lc-practice/scripts/fetch_problem.js"]`、`["node", ".agents/skills/lc-practice/scripts/create_problem.js"]`），禁止带 `--slug <具体值>` 等死参数，否则每次新题都要重新请求。
 - 拉取失败或题目需会员：报告用户并跳到顺序中的下一题，不写入 done。
 - 不要替用户写题解；用户索要答案时说明「先尝试，失败后让我分析」。
 - 边界测试必须在建题时由 Codex 按本题具体设计并写入 main（见流程 3）；缺失或套用偷懒模板视为流程违规，后续 lc-submit 提交前会复查。
