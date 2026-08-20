@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-20",
-  "current_seq": 96,
+  "current_seq": 97,
   "done": [
     {
       "seq": 1,
@@ -1046,6 +1046,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "中心扩散：枚举 2n-1 个奇数/偶数中心，向两侧扩展；每次成功扩展计数，O(n^2)/O(1)，一次 Accepted"
+    },
+    {
+      "seq": 97,
+      "id": "32",
+      "title": "最长有效括号",
+      "slug": "longest-valid-parentheses",
+      "category": "动态规划",
+      "date": "2026-08-20",
+      "firstPass": false,
+      "optimal": false,
+      "notes": "一维 DP：dp[i] 以 i 结尾的最长有效长度；遇 ) 分直接配对与跳段配对+向前拼接；O(n)/O(n)，本地修 3 处边界后力扣一次 Accepted"
     }
   ],
   "error_habits": [
@@ -1813,6 +1824,17 @@
       "count": 1,
       "examples": [
         "palindromic-substrings"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-20"
+    },
+    {
+      "habit": "DP 转移的配对/拼接边界写错：① j<0 时仍 +2 错误延长（s[i] 前无配对左括号应保持 0）；② 配对后向前拼接用了 dp[j] 而非 dp[j-1]（s[j] 本身是 '('，不可能是有效段结尾）；③ 把 j-1>=0 越界保护当成配对条件，导致 j=0 的合法配对被跳过；配对成立条件是 j>=0 且 s[j]=='('，dp[j-1] 仅在 j-1>=0 时加",
+      "count": 1,
+      "examples": [
+        "longest-valid-parentheses"
       ],
       "categories": [
         "动态规划"

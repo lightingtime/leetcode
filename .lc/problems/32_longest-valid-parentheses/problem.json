@@ -1,0 +1,56 @@
+{
+  "id": "32",
+  "slug": "longest-valid-parentheses",
+  "title": "Longest Valid Parentheses",
+  "titleCn": "最长有效括号",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/longest-valid-parentheses/",
+  "tags": [
+    "Stack",
+    "String",
+    "Dynamic Programming",
+    "括号序列"
+  ],
+  "tagsCn": [
+    "栈",
+    "字符串",
+    "动态规划",
+    "括号序列"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"(()\""
+        }
+      ],
+      "output": "2",
+      "explain": "最长有效括号子串是 \"()\""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\")()())\""
+        }
+      ],
+      "output": "4",
+      "explain": "最长有效括号子串是 \"()()\""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"\""
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"(()\"\n\")()())\"\n\"\"",
+  "javaSnippet": "class Solution {\n    public int longestValidParentheses(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-20T10:30:48.841Z"
+}
