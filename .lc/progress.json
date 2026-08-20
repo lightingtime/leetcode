@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-20",
-  "current_seq": 98,
+  "current_seq": 99,
   "done": [
     {
       "seq": 1,
@@ -1068,6 +1068,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "逐行高度 + 单调栈直方图：heights 递推每列向上连续 1，每行单调栈求最大矩形；O(mn)/O(n)，修压栈下标后 Accepted"
+    },
+    {
+      "seq": 99,
+      "id": "312",
+      "title": "戳气球",
+      "slug": "burst-balloons",
+      "category": "动态规划",
+      "date": "2026-08-20",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "区间 DP：补 1 哨兵 + dp[i][j] 开区间最后戳 k 切分，按区间长度从小到大填表；O(n^3)/O(n^2)，修 3 处后 Accepted"
     }
   ],
   "error_habits": [
@@ -1857,6 +1868,17 @@
       "count": 1,
       "examples": [
         "maximal-rectangle"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-20"
+    },
+    {
+      "habit": "区间 DP 实现三坑：① 转移里访问原数组 nums 而非补哨兵数组，i/j 范围到 n+1 直接越界（报 ArrayIndexOutOfBounds）；② 补哨兵数组 new int[n+2] 后忘记把两端设成 1，边界值默认 0 导致乘积错；③ 右子区间写成 dp[j][k]（下三角恒 0），应为 dp[k][j]。写区间 DP 先确认所有访问都走补丁数组、哨兵值正确、子区间方向正确",
+      "count": 1,
+      "examples": [
+        "burst-balloons"
       ],
       "categories": [
         "动态规划"

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC312 戳气球 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 99</div>
+  <h1>LC312 · 戳气球</h1>
+  <div class="sub">区间 DP · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 73/73</span>
+    <span class="badge hard">难度 HARD</span>
+    <span class="badge tag">分类 动态规划</span>
+    <span class="badge tag">子类型 区间DP</span>
+    <span class="badge plain">多次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-20</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 区间 DP</h3>
+    <p><span class="chip">时间 O(n^3)</span><span class="chip">空间 O(n^2)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 73/73</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0312_BurstBalloons.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxCoins(int[] nums) {
+        int n = nums.length;
+        int[][] dp = new int[n + 2][n + 2];
+        int[] array = new int[n + 2];
+        System.arraycopy(nums, 0, array, 1, nums.length);
+        array[0] = array[n + 1] = 1;
+        for (int len = 2; len &lt;= n + 1; len++) {
+            for (int i = 0; i + len &lt;= n + 1; i++) {
+                int j = i + len;
+                for (int k = i + 1; k &lt; j; k++) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);
+                }
+            }
+        }
+        return dp[0][n+ 1];
+    }</pre></div>
+    <p class="muted">区间 DP：补 1 哨兵 + dp[i][j] 开区间最后戳 k 切分，按区间长度从小到大填表；O(n^3)/O(n^2)，修 3 处后 Accepted</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n 个气球按某个顺序全部戳破，每次得分依赖「当前相邻气球」，求最大总得分。直接枚举顺序是 O(n!)，不可行；正着做会不断改变相邻关系，所以倒过来想「最后一个戳谁」——最后一个被戳的气球左右邻居固定，且把问题切成两个互不影响的子区间。</p><p>解法选择理由（区间 DP）：</p><ul><li>在数组两端补 1 哨兵，<code>val = [1] + nums + [1]</code>，下标 0..n+1。</li><li>定义 <code>dp[i][j]</code> = 戳破开区间 <code>(i, j)</code> 内所有气球（端点 i、j 不戳，只当边界）能拿到的最大硬币。</li><li>最后戳 <code>k</code>（i &lt; k &lt; j）时，<code>(i,k)</code> 和 <code>(k,j)</code> 已戳完，k 的左右邻居就是 i 和 j，得分 = <code>val[i] * val[k] * val[j]</code>；左右子区间互不影响。</li><li>答案 = <code>dp[0][n+1]</code>（0 和 n+1 是哨兵，戳完中间全部真实气球）。</li></ul><p>关键设计：</p><ol><li>转移：<code>dp[i][j] = max(dp[i][k] + val[i]*val[k]*val[j] + dp[k][j])</code>，枚举所有 <code>i &lt; k &lt; j</code>。</li><li>填表顺序：三层循环，外层按区间长度 <code>len</code> 从小到大（2..n+1），中层左端点 <code>i</code>（<code>j = i+len</code>），内层枚举 <code>k</code>。长度小的区间先算完，<code>dp[i][k]</code>、<code>dp[k][j]</code> 才可用。</li><li>哨兵数组创建后必须把 <code>val[0]</code>、<code>val[n+1]</code> 设为 1；转移里所有取值都用 <code>val</code>，不能用原 <code>nums</code>（否则越界且边界不是 1）。</li></ol><p>具体 case 推演（<code>nums = [3,1,5]</code>，<code>val = [1,3,1,5,1]</code>，期望 35）：</p><div class="table-wrap"><table><thead><tr><th>len</th><th>i</th><th>j</th><th>k 候选</th><th>dp</th></tr></thead><tbody><tr><td>2</td><td>0</td><td>2</td><td>k=1: <code>0+1×3×1+0</code></td><td>3</td></tr><tr><td>2</td><td>1</td><td>3</td><td>k=2: <code>0+3×1×5+0</code></td><td>15</td></tr><tr><td>2</td><td>2</td><td>4</td><td>k=3: <code>0+1×5×1+0</code></td><td>5</td></tr><tr><td>3</td><td>0</td><td>3</td><td>k=1: <code>0+1×3×5+15=30</code>；k=2: <code>3+1×1×5+0=8</code></td><td>30</td></tr><tr><td>3</td><td>1</td><td>4</td><td>k=2: <code>0+3×1×1+5=8</code>；k=3: <code>15+3×5×1+0=30</code></td><td>30</td></tr><tr><td>4</td><td>0</td><td>4</td><td>k=1: <code>0+1×3×1+30=33</code>；k=2: <code>3+1×1×1+5=9</code>；k=3: <code>30+1×5×1+0=35</code></td><td>35</td></tr></tbody></table></div><p>答案 = <code>dp[0][4] = 35</code>。</p><p>边界与细节：</p><ul><li>单元素 <code>[5]</code>：<code>val=[1,5,1]</code>，<code>dp[0][2] = 1×5×1 = 5</code>。</li><li>全 0：所有乘积为 0，返回 0。</li><li>全 1：每个气球得分 1，n 个气球共 n。</li><li>0 在中间（<code>[1,0,1]</code>）：0 只会在某次乘积中贡献 0，最优把 1 的气球各拿 1 分，共 2。</li><li>300 个全 1：int 范围内 300，验证大输入不溢出。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n^3)：len 有 n 种、i 有 O(n) 种、k 有 O(n) 种。</li><li>空间 O(n^2)：dp 表。</li><li>这是本题的标准最优解：每个子区间都要枚举分界点，O(n^3) 是区间 DP 的下限形态；n&lt;=300 时完全可接受。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>区间 DP 实现三坑：① 转移里访问原数组 nums 而非补哨兵数组，i/j 范围到 n+1 直接越界（报 ArrayIndexOutOfBounds）；② 补哨兵数组 new int[n+2] 后忘记把两端设成 1，边界值默认 0 导致乘积错；③ 右子区间写成 dp[j][k]（下三角恒 0），应为 dp[k][j]。写区间 DP 先确认所有访问都走补丁数组、哨兵值正确、子区间方向正确</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>73/73 用例。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>区间 DP：最后一步切分 + 补哨兵</h3><p>正着操作会破坏相邻关系时，倒过来想最后一步处理谁：最后处理的对象把区间切成两个独立子区间。dp[i][j] 表示开区间 (i,j)（端点当边界不处理），转移枚举最后处理的 k：dp[i][k] + 边界代价 + dp[k][j]；数组两端补哨兵简化边界；填表按区间长度从小到大。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">73/73</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 42.7 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n^3) · O(n^2)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
+      <h3>错误习惯复盘</h3><p><b>区间 DP 实现三坑：① 转移里访问原数组 nums 而非补哨兵数组，i/j 范围到 n+1 直接越界（报 ArrayIndexOutOfBounds）；② 补哨兵数组 new int[n+2] 后忘记把两端设成 1，边界值默认 0 导致乘积错；③ 右子区间写成 dp[j][k]（下三角恒 0），应为 dp[k][j]。写区间 DP 先确认所有访问都走补丁数组、哨兵值正确、子区间方向正确</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 99 · burst-balloons</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
+      <div class="quote">区间 DP：补 1 哨兵 + dp[i][j] 开区间最后戳 k 切分，按区间长度从小到大填表；O(n^3)/O(n^2)，修 3 处后 Accepted</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/312_burst-balloons/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0312_BurstBalloons.java">src/动态规划/LC0312_BurstBalloons.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-20
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
