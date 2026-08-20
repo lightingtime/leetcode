@@ -16,6 +16,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 2. 先跑本地测试：`node ".agents/skills/lc-practice/scripts/run_tests.js" --file <文件路径>`。
    - 若未全部通过：回到 lc-analyze 流程，不提交。
    - **提交前复查边界测试（必做）**：确认 main 测试区包含针对本题具体逻辑的边界用例（lc-practice 建题时应已写入）；若缺失或只有示例测试，先按本题易错点补齐再跑测试，禁止以「只有示例测试」提交。
+   - **复查用例范围（必做）**：对照 `problem.md` 的约束段逐条检查测试输入是否越界（如约束非负却有负数、约束长度下限却有空输入）；发现越界用例先修正再提交，禁止用范围外输入当测试。
 3. 提交：`node ".agents/skills/lc-submit/scripts/submit.js" --file <文件路径> --slug <slug>`。
    - **提交前必做清理（用户明确要求）**：删除提交区内的 `// TODO: 在这里实现你的解法` 等占位注释，以及文件头的「思路/复杂度 TODO」占位行；只删注释、不动逻辑。清理后跑一次本地测试确认仍通过再提交。
    - 若 `config.json` 未配置 cookie：明确告诉用户需要手动到 leetcode.cn 提交并把结果贴回来，或按提示把浏览器 cookie 填入 `config.json`（`leetcode_session` 与 `csrf_token`）。
