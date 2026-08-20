@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-20",
-  "current_seq": 95,
+  "current_seq": 96,
   "done": [
     {
       "seq": 1,
@@ -1035,6 +1035,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一次 AC；加减号→选 P 子集和=(sum+target)/2 的 0-1 背包计数 DP，倒序防元素复用，上下界+奇偶剪枝；O(n·total)/O(total)"
+    },
+    {
+      "seq": 96,
+      "id": "647",
+      "title": "回文子串",
+      "slug": "palindromic-substrings",
+      "category": "动态规划",
+      "date": "2026-08-20",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "中心扩散：枚举 2n-1 个奇数/偶数中心，向两侧扩展；每次成功扩展计数，O(n^2)/O(1)，一次 Accepted"
     }
   ],
   "error_habits": [
@@ -1796,6 +1807,17 @@
         "动态规划"
       ],
       "last_seen": "2026-08-19"
+    },
+    {
+      "habit": "统计类 DP 的格子语义没定死：dp[i][j] 只在『[i..j] 本身是回文』时 +1，从不继承/合并子区间的既有计数，导致 dp 格子永远只是 0/1 标志，return dp[0][n-1] 只能输出整个串是否回文（0/1），空串还直接越界",
+      "count": 1,
+      "examples": [
+        "palindromic-substrings"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-20"
     }
   ],
   "category_hints": {
