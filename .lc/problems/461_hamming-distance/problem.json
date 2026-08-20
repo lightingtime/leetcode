@@ -1,0 +1,48 @@
+{
+  "id": "461",
+  "slug": "hamming-distance",
+  "title": "Hamming Distance",
+  "titleCn": "汉明距离",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/hamming-distance/",
+  "tags": [
+    "Bit Manipulation"
+  ],
+  "tagsCn": [
+    "位运算"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "1"
+        },
+        {
+          "name": "y",
+          "value": "4"
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "3"
+        },
+        {
+          "name": "y",
+          "value": "1"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "1\n4\n3\n1",
+  "javaSnippet": "class Solution {\n    public int hammingDistance(int x, int y) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-20T15:43:26.307Z"
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-20",
-  "current_seq": 99,
+  "current_seq": 100,
   "done": [
     {
       "seq": 1,
@@ -1079,6 +1079,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "区间 DP：补 1 哨兵 + dp[i][j] 开区间最后戳 k 切分，按区间长度从小到大填表；O(n^3)/O(n^2)，修 3 处后 Accepted"
+    },
+    {
+      "seq": 100,
+      "id": "461",
+      "title": "汉明距离",
+      "slug": "hamming-distance",
+      "category": "数学与位运算",
+      "date": "2026-08-20",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "x^y 差异掩码 + 逐位 popcount（&1 判断 + >>> 右移）；O(1)/O(1)，修无条件计数后 Accepted"
     }
   ],
   "error_habits": [
@@ -1882,6 +1893,17 @@
       ],
       "categories": [
         "动态规划"
+      ],
+      "last_seen": "2026-08-20"
+    },
+    {
+      "habit": "位计数循环忘记按位判断：while(t!=0){ ans++; t>>>=1; } 无条件 +1 数的是二进制位数（最高位位置+1）而非 1 的个数，如 5(101) 数出 3；必须 if ((t&1)==1) ans++ 再右移，且负数要 >>> 逻辑右移避免算术右移死循环",
+      "count": 1,
+      "examples": [
+        "hamming-distance"
+      ],
+      "categories": [
+        "数学与位运算"
       ],
       "last_seen": "2026-08-20"
     }

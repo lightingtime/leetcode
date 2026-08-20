@@ -4,8 +4,8 @@
 // 链接：https://leetcode.cn/problems/hamming-distance/
 // 刷题日期：2026-08-20
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 思路：x ^ y 得到差异位掩码，统计其中 1 的个数（逐位 & 1 后 >>> 右移）。
+// 复杂度：时间 O(1)（最多 32 位），空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -14,7 +14,6 @@ public class LC0461_HammingDistance {
 
     // ==== 提交代码开始 ====
     public int hammingDistance(int x, int y) {
-        // TODO: 在这里实现你的解法
         int t = x ^ y;
         int ans = 0;
         while (t != 0) {

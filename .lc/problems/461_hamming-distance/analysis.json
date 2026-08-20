@@ -1,0 +1,53 @@
+{
+  "seq": 100,
+  "id": "461",
+  "slug": "hamming-distance",
+  "title": "汉明距离",
+  "category": "数学与位运算",
+  "date": "2026-08-20",
+  "verdict": "Accepted",
+  "testcases": "149/149",
+  "runtime_ms": null,
+  "memory_bytes": 42728000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "异或 + 位计数",
+  "dp_subtype": "位运算",
+  "approach_detail": "问题本质：统计两个整数二进制表示中不同位的个数。逐位比较 x 和 y 需要固定 32 次且要处理对齐，而「异或」天然把不同位置 1、相同位置 0，于是问题转化为统计异或结果的 1 的个数（popcount）。\n\n解法选择理由（位运算子类型）：\n- `x ^ y` 得到差异掩码：某位不同则为 1，相同则为 0。\n- 统计掩码中 1 的个数即汉明距离。\n- 不需要处理符号/对齐，负数的补码也由 `^` 和 popcount 统一处理（但本题约束 x、y 非负）。\n\n关键设计：\n1. `t = x ^ y`。\n2. 循环统计：`while (t != 0)` 内先看最低位 `(t & 1) == 1` 才 `ans++`，然后 `t >>>= 1`（必须用逻辑右移 >>>，负数时算术右移 >> 会补 1 死循环）。\n3. 等价做法：`Integer.bitCount(x ^ y)` 一步完成。\n\n具体 case 推演（x=1, y=4）：\n- `t = 1 ^ 4 = 5`（二进制 `101`）。\n- 第 1 轮：`5 & 1 = 1`，ans=1，`t >>>= 1` → 2（`10`）。\n- 第 2 轮：`2 & 1 = 0`，不加，`t >>>= 1` → 1（`1`）。\n- 第 3 轮：`1 & 1 = 1`，ans=2，`t >>>= 1` → 0。\n- 返回 2 ✓。\n\n边界与细节：\n- `x == y`：异或为 0，返回 0。\n- `0` 与 `Integer.MAX_VALUE`（`0..2^31-1` 范围内最大距离）：31 个 1。\n- `MAX` 与 `MAX-1`：只有最低位不同，返回 1。\n- `0` 与 `2^30`：只有最高位不同，返回 1。\n- 全部用例都在题目约束 `0 <= x, y <= 2^31-1` 内。\n\n复杂度分析：\n- 时间 O(1)：最多循环 32 次（int 固定 32 位），`bitCount` 也是 O(1)。\n- 空间 O(1)：只有两个局部变量。\n- 已是最优：必须检查每一位是否不同，32 位是常数下界。\n",
+  "time_complexity": "O(1)",
+  "space_complexity": "O(1)",
+  "notes": "x^y 差异掩码 + 逐位 popcount（&1 判断 + >>> 右移）；O(1)/O(1)，修无条件计数后 Accepted",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "位计数循环忘记按位判断：while(t!=0){ ans++; t>>>=1; } 无条件 +1 数的是二进制位数（最高位位置+1）而非 1 的个数，如 5(101) 数出 3；必须 if ((t&1)==1) ans++ 再右移，且负数要 >>> 逻辑右移避免算术右移死循环",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "异或求差异位 + popcount",
+      "text": "求两个数二进制不同位个数：先 x^y 得到差异掩码，再统计 1 的个数（逐位 &1 + >>> 右移，或 Integer.bitCount）。统计 1 个数时先判断最低位是否为 1 再累加，不要无条件 ++。",
+      "category": "数学与位运算",
+      "problem": "hamming-distance",
+      "date": "2026-08-20"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-20",
+      "verdict": "Accepted",
+      "testcases": "149/149",
+      "runtime_ms": null,
+      "memory_bytes": 42728000,
+      "approach": "异或 + 位计数",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "x^y 差异掩码 + 逐位 popcount（&1 判断 + >>> 右移）；O(1)/O(1)，修无条件计数后 Accepted"
+    }
+  ],
+  "hints": [
+    "位运算先想 XOR、掩码、移位；计数先想数学公式能否代替循环。"
+  ]
+}
