@@ -37,16 +37,36 @@ if (srcFile) {
 }
 const fileBase = srcFile ? path.basename(srcFile, '.java') : `LC${String(q.id).padStart(4, '0')}`;
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-// 轻量 Markdown 渲染（逐行状态机）：连续 - 列表成 <ul>、连续 1. 编号成 <ol>、其余为 <p>；支持 `行内代码`、**加粗**
+// 轻量 Markdown 渲染（逐行状态机）：列表、简单表格、段落；支持 `行内代码`、**加粗**
 const md = raw => {
   const lines = esc(String(raw)).replace(/\\n/g, '\n').split('\n').map(l => l.replace(/\s+$/, ''));
   const fmt = s => s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  const splitCells = line => line.replace(/^\||\|$/g, '').split('|').map(cell => fmt(cell.trim()));
+  const isTableSeparator = line => /^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?$/.test(line);
   const out = [];
   let listTag = null;
   const close = () => { if (listTag) { out.push('</' + listTag + '>'); listTag = null; } };
-  for (const rawLine of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i];
     const line = rawLine.trim();
     if (!line) { close(); continue; }
+    if (i + 1 < lines.length && line.includes('|') && isTableSeparator(lines[i + 1].trim())) {
+      close();
+      const header = splitCells(line);
+      const tableRows = [];
+      i += 2;
+      while (i < lines.length && lines[i].trim() && lines[i].includes('|')) {
+        tableRows.push(splitCells(lines[i].trim()));
+        i++;
+      }
+      i--;
+      out.push('<div class="table-wrap"><table><thead><tr>' +
+        header.map(cell => '<th>' + cell + '</th>').join('') +
+        '</tr></thead>' +
+        (tableRows.length ? '<tbody>' + tableRows.map(row => '<tr>' + row.map(cell => '<td>' + cell + '</td>').join('') + '</tr>').join('') + '</tbody>' : '') +
+        '</table></div>');
+      continue;
+    }
     const bm = line.match(/^[-*]\s+(.*)$/);
     const nm = line.match(/^\d+[.、]\s+(.*)$/);
     if (bm) {
@@ -138,6 +158,7 @@ const html = `<!DOCTYPE html>
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
   .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
   .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
