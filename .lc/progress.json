@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-20",
-  "current_seq": 97,
+  "current_seq": 98,
   "done": [
     {
       "seq": 1,
@@ -1057,6 +1057,17 @@
       "firstPass": false,
       "optimal": false,
       "notes": "一维 DP：dp[i] 以 i 结尾的最长有效长度；遇 ) 分直接配对与跳段配对+向前拼接；O(n)/O(n)，本地修 3 处边界后力扣一次 Accepted"
+    },
+    {
+      "seq": 98,
+      "id": "85",
+      "title": "最大矩形",
+      "slug": "maximal-rectangle",
+      "category": "动态规划",
+      "date": "2026-08-20",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "逐行高度 + 单调栈直方图：heights 递推每列向上连续 1，每行单调栈求最大矩形；O(mn)/O(n)，修压栈下标后 Accepted"
     }
   ],
   "error_habits": [
@@ -1835,6 +1846,17 @@
       "count": 1,
       "examples": [
         "longest-valid-parentheses"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-20"
+    },
+    {
+      "habit": "单调栈压入下标时用错变量：直方图遍历里把行号 i 当列下标压栈（stack.offerLast(i)），导致 heights[行号] 错位访问、栈内下标重复、弹空栈后 peekLast() 为 null 抛 NPE；单调栈里必须存当前列下标 j，弹出后新栈顶就是左边界",
+      "count": 1,
+      "examples": [
+        "maximal-rectangle"
       ],
       "categories": [
         "动态规划"

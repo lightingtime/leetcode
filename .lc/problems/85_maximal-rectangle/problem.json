@@ -1,0 +1,58 @@
+{
+  "id": "85",
+  "slug": "maximal-rectangle",
+  "title": "Maximal Rectangle",
+  "titleCn": "最大矩形",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/maximal-rectangle/",
+  "tags": [
+    "Stack",
+    "Array",
+    "Dynamic Programming",
+    "Matrix",
+    "Monotonic Stack"
+  ],
+  "tagsCn": [
+    "栈",
+    "数组",
+    "动态规划",
+    "矩阵",
+    "单调栈"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]"
+        }
+      ],
+      "output": "6",
+      "explain": "最大矩形如上图所示。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[\"0\"]]"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[\"1\"]]"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]\n[[\"0\"]]\n[[\"1\"]]",
+  "javaSnippet": "class Solution {\n    public int maximalRectangle(char[][] matrix) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-20T11:28:03.707Z"
+}
