@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-20",
-  "current_seq": 100,
+  "updated": "2026-08-21",
+  "current_seq": 101,
   "done": [
     {
       "seq": 1,
@@ -1090,6 +1090,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "x^y 差异掩码 + 逐位 popcount（&1 判断 + >>> 右移）；O(1)/O(1)，修无条件计数后 Accepted"
+    },
+    {
+      "seq": 101,
+      "id": "13",
+      "title": "罗马数字转整数",
+      "slug": "roman-to-integer",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "哈希表符号映射 + 相邻比较：当前值<右边值则减否则加，一次扫描处理 6 种减法特例；O(n)/O(1)，一次 Accepted"
     }
   ],
   "error_habits": [

@@ -1,0 +1,74 @@
+{
+  "id": "13",
+  "slug": "roman-to-integer",
+  "title": "Roman to Integer",
+  "titleCn": "罗马数字转整数",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/roman-to-integer/",
+  "tags": [
+    "Hash Table",
+    "Math",
+    "String"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "数学",
+    "字符串"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"III\""
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"IV\""
+        }
+      ],
+      "output": "4",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"IX\""
+        }
+      ],
+      "output": "9",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"LVIII\""
+        }
+      ],
+      "output": "58",
+      "explain": "L = 50, V= 5, III = 3."
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"MCMXCIV\""
+        }
+      ],
+      "output": "1994",
+      "explain": "M = 1000, CM = 900, XC = 90, IV = 4."
+    }
+  ],
+  "exampleTestcases": "\"III\"\n\"LVIII\"\n\"MCMXCIV\"",
+  "javaSnippet": "class Solution {\n    public int romanToInt(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-20T15:59:06.979Z"
+}
