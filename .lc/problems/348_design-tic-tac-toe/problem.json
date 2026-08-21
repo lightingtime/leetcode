@@ -1,0 +1,27 @@
+{
+  "id": "348",
+  "slug": "design-tic-tac-toe",
+  "title": "Design Tic-Tac-Toe",
+  "titleCn": "设计井字棋",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/design-tic-tac-toe/",
+  "tags": [
+    "Design",
+    "Array",
+    "Hash Table",
+    "Matrix",
+    "Simulation"
+  ],
+  "tagsCn": [
+    "设计",
+    "数组",
+    "哈希表",
+    "矩阵",
+    "模拟"
+  ],
+  "category": "哈希表",
+  "examples": [],
+  "exampleTestcases": "[\"TicTacToe\",\"move\",\"move\",\"move\",\"move\",\"move\",\"move\",\"move\"]\n[[3],[0,0,1],[0,2,2],[2,2,1],[1,1,2],[2,0,1],[1,0,2],[2,1,1]]",
+  "javaSnippet": "",
+  "fetchedAt": "2026-08-21T06:06:11.384Z"
+}
