@@ -5,6 +5,9 @@
 
 default_permissions = "lc-repo"
 
+[features]
+network_proxy = true
+
 [permissions.lc-repo]
 extends = ":workspace"
 
