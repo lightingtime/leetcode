@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 110,
+  "current_seq": 111,
   "done": [
     {
       "seq": 1,
@@ -1189,6 +1189,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "nums1+nums2 全部两两和对存入 map 计数；nums3+nums4 两两求和对取负查 map 累加答案；O(n²)/O(n²)，一次 Accepted"
+    },
+    {
+      "seq": 111,
+      "id": "41",
+      "title": "缺失的第一个正数",
+      "slug": "first-missing-positive",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "答案在 [1,n+1]：v 归位到 v-1；while 条件= v 有效(1..n) && 目标位!=v，无效值占位也交换、重复值停止；扫描 nums[i]!=i+1 返回 i+1，全对返回 n+1；本地多轮修正+力扣一次 WA 后 AC"
     }
   ],
   "error_habits": [
@@ -2022,6 +2033,28 @@
       "count": 1,
       "examples": [
         "missing-number"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-21"
+    },
+    {
+      "habit": "cyclic sort 复用到值域不同的题没做偏移：268 值域 [0,n-1] 用 nums[i]==i，41 答案 [1,n+1] 需 v 放下标 v-1、扫描 nums[i]==i+1、兜底 n+1；且 41 允许重复，交换前不防 nums[target]==nums[i] 会死循环；0 也要当无效值跳过",
+      "count": 1,
+      "examples": [
+        "first-missing-positive"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-21"
+    },
+    {
+      "habit": "cyclic sort 目标位无效时 break 而非交换：位置被无效值（>n/<=0）占着时，有效值 v 需要交换进去、把无效值换出来；唯一停止条件应是目标位已放相同值（防重复死循环）",
+      "count": 1,
+      "examples": [
+        "first-missing-positive"
       ],
       "categories": [
         "哈希表"

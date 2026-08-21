@@ -1,0 +1,52 @@
+{
+  "id": "41",
+  "slug": "first-missing-positive",
+  "title": "First Missing Positive",
+  "titleCn": "缺失的第一个正数",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/first-missing-positive/",
+  "tags": [
+    "Array",
+    "Hash Table"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,2,0]"
+        }
+      ],
+      "output": "3",
+      "explain": "范围 [1,2] 中的数字都在数组中。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,4,-1,1]"
+        }
+      ],
+      "output": "2",
+      "explain": "1 在数组中，但 2 没有。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[7,8,9,11,12]"
+        }
+      ],
+      "output": "1",
+      "explain": "最小的正数 1 没有出现。"
+    }
+  ],
+  "exampleTestcases": "[1,2,0]\n[3,4,-1,1]\n[7,8,9,11,12]",
+  "javaSnippet": "class Solution {\n    public int firstMissingPositive(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-21T07:46:16.435Z"
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC41 缺失的第一个正数 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 111</div>
+  <h1>LC41 · 缺失的第一个正数</h1>
+  <div class="sub">原地归位（cyclic sort 值域偏移） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 179/179</span>
+    <span class="badge hard">难度 HARD</span>
+    <span class="badge tag">分类 哈希表</span>
+    
+    <span class="badge plain">多次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-21</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 原地归位（cyclic sort 值域偏移）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 68.0 MB</span><span class="chip">用例 179/179</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0041_FirstMissingPositive.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int firstMissingPositive(int[] nums) {
+        for (int i = 0; i &lt; nums.length; i++) {
+            if (nums[i] &gt; nums.length || nums[i] &lt;= 0) {
+                continue;
+            }
+            while (nums[i] &gt; 0 &amp;&amp; nums[i] &lt;= nums.length &amp;&amp; nums[nums[i] - 1] != nums[i]) {
+                int temp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = temp;
+            }
+        }
+        for (int i = 0; i &lt; nums.length; i++) {
+            if (nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        return nums.length + 1;
+    }</pre></div>
+    <p class="muted">答案在 [1,n+1]：v 归位到 v-1；while 条件= v 有效(1..n) &amp;&amp; 目标位!=v，无效值占位也交换、重复值停止；扫描 nums[i]!=i+1 返回 i+1，全对返回 n+1；本地多轮修正+力扣一次 WA 后 AC</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找出数组中没有出现的最小正整数，答案必在 [1, n+1] 内（n 个位置最多覆盖 1..n）。要求 O(n) 时间 + O(1) 空间，不能排序、不能开额外集合。</p><p>解法选择理由（cyclic sort 值域偏移）：</p><ul><li>与 268 同一套路：把「值 v 放到它该待的位置」，扫描位置与值是否一致，第一个不一致的位置就是答案。</li><li>关键差异：268 值域 [0,n-1] 用「值 v 放下标 v」；本题答案从 1 开始，<strong>值 v 应放下标 v-1</strong>（1→0、2→1、…、n→n-1），位置 i 的正确值是 i+1。</li><li>只有 1..n 的值值得归位；v&lt;=0 或 v&gt;n 是无效值，不参与归位但可能占位——需要被交换出来。</li></ul><p>关键设计决策：</p><ol><li>外层 for 遍历每个位置；内层 while 把当前位置的有效值 v 连环交换到正确位置 v-1。</li><li>while 条件三合一（&amp;&amp;）：<code>nums[i] &gt; 0 &amp;&amp; nums[i] &lt;= nums.length &amp;&amp; nums[nums[i]-1] != nums[i]</code>。</li></ol><ul><li>前两个保证 v 有效，无效值一到当前位置就退出 → 永不拿无效值当下标（防越界）；</li><li>第三个保证目标位没放着同样的 v，重复值不交换 → 防死循环（41 允许重复，268 无此问题）；</li><li>目标位是无效值或别的值时<strong>都交换</strong>——无效值占位时更要换，把无效值挤出来（这是本地踩过的坑：break 会让有效值换不进被无效值占的位置）。</li></ul><ol><li>扫描 i=0..n-1：<code>nums[i] != i+1</code> 返回 <code>i+1</code>；全部归位返回 <code>n+1</code>（1..n 全在时缺 n+1）。</li></ol><p>具体 case 推演：</p><p>力扣 WA 用例 [100000, 3, 4000, 2, 15, 1, 99999]（n=7，期望 4）：</p><div class="table-wrap"><table><thead><tr><th>i</th><th>进入时 nums[i]</th><th>动作</th><th>数组</th></tr></thead><tbody><tr><td>0</td><td>100000 无效</td><td>continue</td><td>不变</td></tr><tr><td>1</td><td>3 有效，目标 nums[2]=4000≠3</td><td>swap(1,2)</td><td>[100000,4000,3,2,15,1,99999]</td></tr><tr><td>2</td><td>3 已在目标位（nums[2]=3）</td><td>while 停</td><td>不变</td></tr><tr><td>3</td><td>2 有效，目标 nums[1]=4000≠2</td><td>swap(3,1)</td><td>[100000,2,3,4000,15,1,99999]</td></tr><tr><td>5</td><td>1 有效，目标 nums[0]=100000≠1</td><td>swap(5,0)</td><td>[1,2,3,4000,15,100000,99999]</td></tr><tr><td>扫描</td><td>i=0:1 ✓ i=1:2 ✓ i=2:3 ✓ i=3:4000≠4</td><td>返回 4 ✓</td></tr></tbody></table></div><p>关键在第 5 步：位置 0 被无效值 100000 占着，但 1 有效、目标位≠1 → 照样交换，把无效值换出来。</p><p>[1,1]（n=2，期望 2，重复值防死循环）：i=0 nums[0]=1 已在目标位；i=1 nums[1]=1 有效，目标 nums[0]=1==1 → while 第三个条件不满足 → 不交换、不死循环；扫描 i=0 通过、i=1 nums[1]=1≠2 → 返回 2 ✓</p><p>[3,1,2]（n=3，期望 4）：3 有效（3≤3）→ 归位到下标 2；1→0；2→1；扫描全对 → 返回 n+1=4 ✓（v==n 必须保留处理，不能跳过）</p><p>边界与细节：</p><ul><li>单元素 [1]→2、[0]/[-1]/[2]→1。</li><li>全非正 → 扫描 i=0 即返回 1。</li><li>重复值 [1,1]→2、[1,2,2]→3。</li><li>值超范围/负数 → 无效值被交换到后方，扫描时自然暴露空位。</li><li>n 上限 5×10^5：while 总交换次数 O(n)（每个元素最多被换走一次），无性能问题。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：每个元素至多被交换一次到正确位置，扫描 O(n)，均摊 O(n)。</li><li>空间 O(1)：完全原地。</li><li>最优性：必须至少读每个元素一次（Ω(n)），O(1) 空间满足题目硬性要求，是标准最优解。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>cyclic sort 复用到值域不同的题没做偏移：268 值域 [0,n-1] 用 nums[i]==i，41 答案 [1,n+1] 需 v 放下标 v-1、扫描 nums[i]==i+1、兜底 n+1；且 41 允许重复，交换前不防 nums[target]==nums[i] 会死循环；0 也要当无效值跳过</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>cyclic sort 目标位无效时 break 而非交换：位置被无效值（&gt;n/&lt;=0）占着时，有效值 v 需要交换进去、把无效值换出来；唯一停止条件应是目标位已放相同值（防重复死循环）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>179/179 用例。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">179/179</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 68.0 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p><b>cyclic sort 复用到值域不同的题没做偏移：268 值域 [0,n-1] 用 nums[i]==i，41 答案 [1,n+1] 需 v 放下标 v-1、扫描 nums[i]==i+1、兜底 n+1；且 41 允许重复，交换前不防 nums[target]==nums[i] 会死循环；0 也要当无效值跳过</b>（累计 1 次）</p><p><b>cyclic sort 目标位无效时 break 而非交换：位置被无效值（&gt;n/&lt;=0）占着时，有效值 v 需要交换进去、把无效值换出来；唯一停止条件应是目标位已放相同值（防重复死循环）</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 111 · first-missing-positive</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
+      <div class="quote">答案在 [1,n+1]：v 归位到 v-1；while 条件= v 有效(1..n) &amp;&amp; 目标位!=v，无效值占位也交换、重复值停止；扫描 nums[i]!=i+1 返回 i+1，全对返回 n+1；本地多轮修正+力扣一次 WA 后 AC</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/41_first-missing-positive/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0041_FirstMissingPositive.java">src/哈希表/LC0041_FirstMissingPositive.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-21
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
