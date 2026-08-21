@@ -1133,7 +1133,7 @@
       "date": "2026-08-21",
       "firstPass": false,
       "optimal": true,
-      "notes": "cyclic sort：每个 v 换到 nums[v]，n 是哨兵；同一 i 上 while 连环交换直到归位或遇 n，扫描 nums[i]!=i 即缺失；O(n)/O(1)，满足进阶，本地两轮修正后一次提交 AC"
+      "notes": "求和差分累加：ans 从 n 起步，每轮 ans += i - nums[i]，用 long+Math.toIntExact 防溢出；O(n)/O(1)，第二种写法再次 Accepted"
     }
   ],
   "error_habits": [

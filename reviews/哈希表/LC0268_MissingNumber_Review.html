@@ -50,7 +50,7 @@
 <div class="hero"><div class="wrap">
   <div class="kicker">LEETCODE 刷题复盘 · SEQ 104</div>
   <h1>LC268 · 丢失的数字</h1>
-  <div class="sub">原地交换（cyclic sort） · Accepted</div>
+  <div class="sub">求和（差值累加） · Accepted</div>
   <div class="badges">
     <span class="badge ok">✓ Accepted 122/122</span>
     <span class="badge easy">难度 EASY</span>
@@ -66,7 +66,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 原地交换（cyclic sort）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.4 MB</span><span class="chip">用例 122/122</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0268_MissingNumber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int missingNumber(int[] nums) {
+    <div class="code-wrap"><div class="code-head"><span>LC0268_MissingNumber.java · 原地交换（cyclic sort）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int missingNumber(int[] nums) {
         for (int i = 0; i &lt; nums.length; i++) {
             if (nums[i] == nums.length) {
                 continue;
@@ -88,15 +88,26 @@
         return nums.length;
     }</pre></div>
     <p class="muted">cyclic sort：每个 v 换到 nums[v]，n 是哨兵；同一 i 上 while 连环交换直到归位或遇 n，扫描 nums[i]!=i 即缺失；O(n)/O(1)，满足进阶，本地两轮修正后一次提交 AC</p>
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 求和（差值累加）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 122/122</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0268_MissingNumber.java · 求和（差值累加）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int missingNumber(int[] nums) {
+        long ans = nums.length;
+        for (int i = 0; i &lt; nums.length; i++) {
+            ans = ans + i - nums[i];
+        }
+        return Math.toIntExact(ans);
+    }</pre></div>
+    <p class="muted">求和差分累加：ans 从 n 起步，每轮 ans += i - nums[i]，用 long+Math.toIntExact 防溢出；O(n)/O(1)，第二种写法再次 Accepted</p>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在 [0,n] 共 n+1 个数中缺一个，数组给 n 个（每个独一无二）。等价于找「0..n 与数组」的唯一差集元素。</p><p>解法选择理由：</p><ul><li>排序比较是 O(n log n)/O(1)，哈希表是 O(n)/O(n)，都不满足进阶要求的 O(1) 空间。</li><li>原地交换（cyclic sort）：每个数 v 有唯一目标下标 v（0..n-1），把 v 换到 nums[v] 后，理想状态是 nums[i]==i；n 没有下标 n 可去，是天然哨兵。扫描第一个 nums[i]!=i 的位置即缺失值；全部归位则缺的是 n。</li><li>为什么是最优：每个元素最多被交换常数次（被换走一次、被换入一次），总交换次数 O(n)，扫描 O(n)，空间 O(1)，达到时间下限 Ω(n)（至少读一遍）。</li></ul><p>关键设计决策：</p><ol><li>外层 for 负责「推进 i」，内层 while (nums[i] != i) 负责「在同一位置连环交换」：交换后当前位置换来了新值，必须继续处理它，直到归位或遇到 n，否则错位值会遗留（这是本地踩过的坑）。</li><li>n 的处理：nums[i]==n 时跳过/break，它没有位置可去，留在原地当哨兵。</li><li>越界安全：进入交换前保证 nums[i] != n；交换后若换到 n 立即 break，避免下一步用下标 n 访问（nums[n] 不存在）。</li><li>死循环防护：本题元素独一无二，nums[i]=v 时 nums[v] 必不等于 v（否则 v 出现两次），while 必然把 v 换走、单调推进；若题目允许重复则需额外加防。</li></ol><p>具体 case 推演：</p><p>[3,0,1]（n=3，缺 2，期望 2）：</p><div class="table-wrap"><table><thead><tr><th>i</th><th>动作</th><th>数组</th></tr></thead><tbody><tr><td>0</td><td>nums[0]=3 == n → continue</td><td>[3,0,1]</td></tr><tr><td>1</td><td>while: nums[1]=0≠1 → swap(1,0) → [0,3,1]；nums[1]=3==n → break</td><td>[0,3,1]</td></tr><tr><td>2</td><td>while: nums[2]=1≠2 → swap(2,1) → [0,1,3]；nums[2]=3==n → break</td><td>[0,1,3]</td></tr></tbody></table></div><p>扫描：i=0、1 归位；i=2 时 nums[2]=3≠2 → 返回 2 ✓</p><p>[4,3,0,1]（n=4，缺 2，且缺失位置恰好存 0，期望 2）：</p><div class="table-wrap"><table><thead><tr><th>i</th><th>动作</th><th>数组</th></tr></thead><tbody><tr><td>0</td><td>nums[0]=4 == n → continue</td><td>[4,3,0,1]</td></tr><tr><td>1</td><td>while: nums[1]=3≠1 → swap(1,3) → [4,1,0,3]；nums[1]=1 归位</td><td>[4,1,0,3]</td></tr><tr><td>2</td><td>while: nums[2]=0≠2 → swap(2,0) → [0,1,4,3]；nums[2]=4==n → break</td><td>[0,1,4,3]</td></tr><tr><td>3</td><td>nums[3]=3 归位</td><td>[0,1,4,3]</td></tr></tbody></table></div><p>扫描：i=2 时 nums[2]=4≠2 → 返回 2 ✓（0 不再成为盲区）</p><p>边界与细节：</p><ul><li>n=1：[0] → 归位后全对，返回 1；[1] → nums[0]=1==n continue，扫描 nums[0]=1≠0 返回 0。</li><li>缺 0 / 缺 n / 缺中间 / 10^4 上限（缺 n、缺 0、缺中间）全部覆盖。</li><li>对比之前失败的取负标记法：标记法依赖「正=未标记」，而 -0 仍是 0，缺失位置存 0 时会漏判；交换法不依赖正负号，0 也被换到 0 号位，缺失位置自然暴露为 nums[i]!=i。</li><li>对比之前失败的「只换一次」版本：必须 while 连环交换到归位，不能换一次就 i++。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：每个元素被换到最终位置后不再移动，总交换次数 ≤ n；加一次扫描 O(n)，均摊 O(n)。</li><li>空间 O(1)：完全原地。</li><li>下限论证：判缺失至少要读每个元素一次（Ω(n)），O(n) 时间已达下限；O(1) 空间同时满足进阶要求，是最优解。</li></ul></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在 [0,n] 共 n+1 个数中缺一个，数组给 n 个（每个独一无二）。缺失值 = 0..n 的总和 - 数组总和。</p><p>解法选择理由（求和 + 差值累加）：</p><ul><li>数学恒等式：∑0..n - ∑nums = 缺失值。每个数只读一次，O(n) 时间、O(1) 空间，满足进阶要求。</li><li>不用「先算总和再减」而是「边加边减」，是因为差分累加的中间值量级始终贴近 [−n, n]，不会像 n(n+1)/2 那样先堆出大数；再用 long 兜底、Math.toIntExact 收尾，通用场景也不怕溢出（本题 n≤10^4 时 n(n+1)/2≈5×10^7，int 本就安全）。</li></ul><p>关键设计决策：</p><ol><li>ans 从 nums.length 起步：0..n 的和 = n + ∑(0..n−1)，循环里 i 贡献 0..n−1，nums[i] 减去实际值，正好等于「期望总和 − 实际总和」。</li><li>循环 i=0..n−1：ans += i − nums[i]，把每个位置的「期望值 − 实际值」累加。</li><li>long 累加 + Math.toIntExact(ans)：防中间溢出，并在结果超 int 时抛异常（本题不会）。</li><li>与异或的关系：异或也能达到同样复杂度且完全无溢出；求和的优点是直观，缺点是必须处理大数，差分 + long 就是它的防溢出手段。</li></ol><p>具体 case 推演：</p><p>[3,0,1]（n=3，期望 2）：</p><div class="table-wrap"><table><thead><tr><th>步骤</th><th>ans 初值</th><th>i</th><th>计算</th><th>ans</th></tr></thead><tbody><tr><td>初始</td><td>3</td><td>-</td><td>-</td><td>3</td></tr><tr><td>1</td><td>3</td><td>0</td><td>3+0−3</td><td>0</td></tr><tr><td>2</td><td>0</td><td>1</td><td>0+1−0</td><td>1</td></tr><tr><td>3</td><td>1</td><td>2</td><td>1+2−1</td><td>2 ✓</td></tr></tbody></table></div><p>[4,3,0,1]（n=4，期望 2，缺失位置恰好存 0）：</p><div class="table-wrap"><table><thead><tr><th>步骤</th><th>ans</th><th>i</th><th>计算</th><th>ans</th></tr></thead><tbody><tr><td>初始</td><td>4</td><td>-</td><td>-</td><td>4</td></tr><tr><td>1</td><td>4</td><td>0</td><td>4+0−4</td><td>0</td></tr><tr><td>2</td><td>0</td><td>1</td><td>0+1−3</td><td>−2</td></tr><tr><td>3</td><td>−2</td><td>2</td><td>−2+2−0</td><td>0</td></tr><tr><td>4</td><td>0</td><td>3</td><td>0+3−1</td><td>2 ✓</td></tr></tbody></table></div><p>[0,1]（n=2，期望 2）：ans=2；i=0: 2+0−0=2；i=1: 2+1−1=2 → 2 ✓（缺 n 时差值累加恰好落在 n）</p><p>边界与细节：</p><ul><li>n=1：[0] → ans=1+0−0=1 ✓；[1] → ans=1+0−1=0 ✓。</li><li>缺 0 / 缺 n / 缺中间、10^4 上限全覆盖，与 cyclic sort 同一套边界用例。</li><li>不会误判：即使缺失位置存 0，也只需算术，不依赖数组内容符号。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：单次遍历，每步 O(1)，达到下限 Ω(n)（至少要读完数组）。</li><li>空间 O(1)：只用一个 long。</li><li>最优性：与异或同为 O(n)/O(1) 且代码极简；cyclic sort 复杂度同级但实现重、交换多，不是本题的首选最优写法。求和与异或二选一即可。</li></ul><p>写法对比（本题两种 Accepted 写法）：</p><ul><li>写法 1 cyclic sort：原地交换把每个 v 换到 nums[v]，n 当哨兵；O(n)/O(1)，思路通用但代码长。</li><li>写法 2 求和差分累加：∑0..n − ∑nums；O(n)/O(1)，3~4 行，防溢出用 long/差分。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>取负标记法把 0 当盲区：-0 仍是 0，缺失位置恰好存 0 时无法被标记成负，扫描用 nums[i]&gt;0 判未标记会漏掉该位置，最后误返回 n</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>原地交换（cyclic sort）只交换一次就推进 i：交换后当前位置仍错位但循环已 i++，错位值被遗留到末尾，最后扫描误判缺失；应在同一 i 上循环交换直到 nums[i]==i 或 nums[i]==n 才前进</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>122/122 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>取负标记法</h3><p>取负标记法的前提是「每个可标记位置的值都非 0」或「0 能表达已标记」：-0 仍是 0，缺失位置恰好存 0 时无法被标记成负，扫描用 nums[i]&gt;0 判未标记会漏掉该位置；对策是把值平移（v+1）再标记，或换 cyclic sort / 异或 / 求和。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">122/122</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 45.4 MB</div><div class="l">内存占用</div></div>
+      <div class="metric"><div class="v">≈ 45.6 MB</div><div class="l">内存占用</div></div>
       <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
       <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
     </div>
@@ -108,7 +119,7 @@
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 104 · missing-number</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
-      <div class="quote">cyclic sort：每个 v 换到 nums[v]，n 是哨兵；同一 i 上 while 连环交换直到归位或遇 n，扫描 nums[i]!=i 即缺失；O(n)/O(1)，满足进阶，本地两轮修正后一次提交 AC</div>
+      <div class="quote">求和差分累加：ans 从 n 起步，每轮 ans += i - nums[i]，用 long+Math.toIntExact 防溢出；O(n)/O(1)，第二种写法再次 Accepted</div>
     </div>
   </section>
   <div class="foot">

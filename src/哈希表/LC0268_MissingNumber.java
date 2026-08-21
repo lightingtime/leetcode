@@ -12,25 +12,11 @@ public class LC0268_MissingNumber {
 
     // ==== 提交代码开始 ====
     public int missingNumber(int[] nums) {
+        long ans = nums.length;
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] == nums.length) {
-                continue;
-            }
-            while (nums[i] != i) {
-                int temp = nums[nums[i]];
-                nums[nums[i]] = nums[i];
-                nums[i] = temp;
-                if (nums[i] == nums.length) {
-                    break;
-                }
-            }
+            ans = ans + i - nums[i];
         }
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != i) {
-                return i;
-            }
-        }
-        return nums.length;
+        return Math.toIntExact(ans);
     }
     // ==== 提交代码结束 ====
 
