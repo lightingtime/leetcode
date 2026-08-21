@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 101,
+  "current_seq": 102,
   "done": [
     {
       "seq": 1,
@@ -1101,6 +1101,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "哈希表符号映射 + 相邻比较：当前值<右边值则减否则加，一次扫描处理 6 种减法特例；O(n)/O(1)，一次 Accepted"
+    },
+    {
+      "seq": 102,
+      "id": "217",
+      "title": "存在重复元素",
+      "slug": "contains-duplicate",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "HashSet 单遍扫描：先查后加，遇重复提前返回；O(n)/O(n)，一次 Accepted"
     }
   ],
   "error_habits": [
