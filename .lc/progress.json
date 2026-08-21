@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 105,
+  "current_seq": 106,
   "done": [
     {
       "seq": 1,
@@ -1145,6 +1145,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "固定 9x9：rows/cols/sub 三个计数数组一次遍历，数字 ++ 后任一 >1 立即 false；O(81)/O(81) 常数规模，一次 Accepted"
+    },
+    {
+      "seq": 106,
+      "id": "73",
+      "title": "矩阵置零",
+      "slug": "set-matrix-zeroes",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "用首行/首列当标记位：先单独记录首行首列是否有 0，再对内部 0 标记首行 matrix[0][j] 与首列 matrix[i][0]，最后按标记清内部并还原首行首列；O(mn)/O(1)，满足进阶，一次 Accepted"
     }
   ],
   "error_habits": [
