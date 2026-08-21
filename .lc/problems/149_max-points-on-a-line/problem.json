@@ -1,0 +1,50 @@
+{
+  "id": "149",
+  "slug": "max-points-on-a-line",
+  "title": "Max Points on a Line",
+  "titleCn": "直线上最多的点数",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/max-points-on-a-line/",
+  "tags": [
+    "Geometry",
+    "Array",
+    "Hash Table",
+    "Math",
+    "最大公约数",
+    "欧几里得算法"
+  ],
+  "tagsCn": [
+    "几何",
+    "数组",
+    "哈希表",
+    "数学",
+    "最大公约数",
+    "欧几里得算法"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "points",
+          "value": "[[1,1],[2,2],[3,3]]"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "points",
+          "value": "[[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]"
+        }
+      ],
+      "output": "4",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[1,1],[2,2],[3,3]]\n[[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]",
+  "javaSnippet": "class Solution {\n    public int maxPoints(int[][] points) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-21T08:12:47.353Z"
+}
