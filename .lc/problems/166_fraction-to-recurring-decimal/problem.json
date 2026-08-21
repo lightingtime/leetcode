@@ -1,0 +1,66 @@
+{
+  "id": "166",
+  "slug": "fraction-to-recurring-decimal",
+  "title": "Fraction to Recurring Decimal",
+  "titleCn": "分数到小数",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/fraction-to-recurring-decimal/",
+  "tags": [
+    "Hash Table",
+    "Math",
+    "String"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "数学",
+    "字符串"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "numerator",
+          "value": "1"
+        },
+        {
+          "name": "denominator",
+          "value": "2"
+        }
+      ],
+      "output": "\"0.5\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "numerator",
+          "value": "2"
+        },
+        {
+          "name": "denominator",
+          "value": "1"
+        }
+      ],
+      "output": "\"2\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "numerator",
+          "value": "4"
+        },
+        {
+          "name": "denominator",
+          "value": "333"
+        }
+      ],
+      "output": "\"0.(012)\"",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "1\n2\n2\n1\n4\n333",
+  "javaSnippet": "class Solution {\n    public String fractionToDecimal(int numerator, int denominator) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-21T05:49:03.791Z"
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 106,
+  "current_seq": 107,
   "done": [
     {
       "seq": 1,
@@ -1156,6 +1156,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "用首行/首列当标记位：先单独记录首行首列是否有 0，再对内部 0 标记首行 matrix[0][j] 与首列 matrix[i][0]，最后按标记清内部并还原首行首列；O(mn)/O(1)，满足进阶，一次 Accepted"
+    },
+    {
+      "seq": 107,
+      "id": "166",
+      "title": "分数到小数",
+      "slug": "fraction-to-recurring-decimal",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "long 防溢出（-2^31/-1）；整除先返回；符号异号加 '-';长除法 map 存余数->sb.length()，余数重复即循环节插入括号；一次 Accepted"
     }
   ],
   "error_habits": [

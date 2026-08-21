@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC166 分数到小数 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 107</div>
+  <h1>LC166 · 分数到小数</h1>
+  <div class="sub">长除法 + HashMap 余数定位循环节 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 42/42</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 哈希表</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-21</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 长除法 + HashMap 余数定位循环节</h3>
+    <p><span class="chip">时间 O(len)</span><span class="chip">空间 O(len)</span><span class="chip">内存 ≈ 41.0 MB</span><span class="chip">用例 42/42</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0166_FractionToRecurringDecimal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public String fractionToDecimal(int numerator, int denominator) {
+        long a = numerator, b = denominator;
+        if (a % b == 0) {
+            return String.valueOf(a / b);
+        }
+        StringBuilder sb = new StringBuilder();
+        if (a * b &lt; 0) {
+            sb.append("-");
+        }
+        a = Math.abs(a);
+        b = Math.abs(b);
+        sb.append(a / b).append(".");
+        a %= b;
+        Map&lt;Long, Integer&gt; map = new HashMap&lt;&gt;();
+        while (a != 0) {
+            map.put(a, sb.length());
+            a *= 10;
+            sb.append(a / b);
+            a %= b;
+            if (map.containsKey(a)) {
+                int u = map.get(a);
+                return String.format("%s(%s)", sb.substring(0, u), sb.substring(u));
+            }
+        }
+        return sb.toString();
+    }</pre></div>
+    <p class="muted">long 防溢出（-2^31/-1）；整除先返回；符号异号加 '-';长除法 map 存余数-&gt;sb.length()，余数重复即循环节插入括号；一次 Accepted</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：把分数 numerator/denominator 转成十进制小数字符串，循环节用括号标出。核心难点不是「算小数」，而是「检测循环节从哪开始、到哪里结束」——浮点数直接算会丢精度、也看不出循环。</p><p>解法选择理由（长除法 + HashMap）：</p><ul><li>长除法天然逐位产生十进制数字：每次 余数×10 ÷ 分母 得一位商、一个新余数。</li><li>关键数学事实：一旦某个余数重复出现，之后的商序列必然完全重复——所以循环节检测 = 检测余数是否重复。</li><li>HashMap 记录「余数 → 它第一次出现时的小数位下标」，余数重复时，第一次出现的位置就是循环节起点，当前末尾就是终点，插入括号即可。</li><li>全程整数运算（long），无精度丢失，还能覆盖 int 溢出。</li></ul><p>关键设计决策：</p><ol><li>long 防溢出：numerator/denominator 先转 long。经典反例 -2^31 / -1 = 2^31 超出 int；Math.abs(Integer.MIN_VALUE) 在 int 下仍是负数，必须 long。</li><li>整除提前返回：a % b == 0 时结果是整数，不加小数点，直接返回 String.valueOf(a / b)（如 2/1="2"、0/5="0"）。</li><li>符号处理：先判 a * b &lt; 0（异号）就在最前面加 "-"，再对 a、b 取绝对值；这样负号只出现一次。</li><li>整数部分 + "."：sb.append(a/b + ".")，然后 a %= b 进入小数部分模拟。</li><li>长除法循环：map.put(a, sb.length()) 存余数与当前小数位起点（直接用字符串长度当位置，正好是循环节插入点）；a *= 10 放大 10 倍；sb.append(a / b)；a %= b；若新余数已在 map 中，u=map.get(a)，返回 sb[0..u) + "(" + sb[u..] + ")"。</li><li>退出条件：a == 0 表示除尽（有限小数）；余数重复表示循环（提前 return）。</li></ol><p>具体 case 推演：</p><p>4/333（期望 0.(012)，纯循环）：</p><div class="table-wrap"><table><thead><tr><th>轮</th><th>余数 a（进入时）</th><th>map 记录</th><th>a×10</th><th>商</th><th>新余数</th><th>命中?</th></tr></thead><tbody><tr><td>1</td><td>4</td><td>4→2</td><td>40</td><td>0</td><td>40</td><td>否</td></tr><tr><td>2</td><td>40</td><td>40→3</td><td>400</td><td>1</td><td>67</td><td>否</td></tr><tr><td>3</td><td>67</td><td>67→4</td><td>670</td><td>2</td><td>4</td><td>是！u=2</td></tr></tbody></table></div><p>sb="0.012"，u=2 → "0." + "(" + "012" + ")" = "0.(012)" ✓</p><p>1/6（期望 0.1(6)，混循环）：</p><div class="table-wrap"><table><thead><tr><th>轮</th><th>余数 a</th><th>map 记录</th><th>a×10</th><th>商</th><th>新余数</th><th>命中?</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>1→2</td><td>10</td><td>1</td><td>4</td><td>否</td></tr><tr><td>2</td><td>4</td><td>4→3</td><td>40</td><td>6</td><td>4</td><td>是！u=3</td></tr></tbody></table></div><p>sb="0.16"，u=3 → "0.1" + "(" + "6" + ")" = "0.1(6)" ✓（循环节不是从第一位开始，map 精确记录了起点）</p><p>1/8（期望 0.125，有限小数）：a=1 → 商0 余1；×10=10 商1 余2；×10=20 商2 余4；×10=40 商5 余0 → a==0 退出，返回 "0.125" ✓</p><p>-4/333（期望 -0.(012)）：a*b&lt;0 → 先 append "-"，abs 后同 4/333 → "-0.(012)" ✓</p><p>-2147483648 / -1（期望 2147483648）：a%b==0 → String.valueOf(2147483648L) → "2147483648" ✓（int 会溢出，long 不会）</p><p>边界与细节：</p><ul><li>0/5：整除分支返回 "0"，不会输出 "0.0"。</li><li>分母为 MIN_VALUE：abs 后 2147483648L，long 安全；MIN/MIN=1。</li><li>a *= 10 后最大约 2^34（abs 后的 a &lt; 2^31），long 无溢出。</li><li>map value 直接用 sb.length() 而非单独计数器——省一个变量，且正好是插入括号的位置。</li><li>题目保证答案长度 &lt; 10^4，循环不会无限跑。</li></ul><p>复杂度分析：</p><ul><li>时间 O(L)：L 为结果字符串长度，每位小数一次常数操作；L &lt; 10^4。</li><li>空间 O(L)：HashMap 存不同余数（最多 L 个）+ StringBuilder。</li><li>最优性：每个小数位至少产生一次，O(L) 时间/空间都是下限；长除法是十进制展开的标准最优做法。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>42/42 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">42/42</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.0 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(len) · O(len)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 107 · fraction-to-recurring-decimal</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">long 防溢出（-2^31/-1）；整除先返回；符号异号加 '-';长除法 map 存余数-&gt;sb.length()，余数重复即循环节插入括号；一次 Accepted</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/166_fraction-to-recurring-decimal/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0166_FractionToRecurringDecimal.java">src/哈希表/LC0166_FractionToRecurringDecimal.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-21
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
