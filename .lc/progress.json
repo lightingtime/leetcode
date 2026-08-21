@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 109,
+  "current_seq": 110,
   "done": [
     {
       "seq": 1,
@@ -1178,6 +1178,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "ArrayList 提供 O(1) 随机下标，HashMap<val,index> 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC"
+    },
+    {
+      "seq": 110,
+      "id": "454",
+      "title": "四数相加 II",
+      "slug": "4sum-ii",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "nums1+nums2 全部两两和对存入 map 计数；nums3+nums4 两两求和对取负查 map 累加答案；O(n²)/O(n²)，一次 Accepted"
     }
   ],
   "error_habits": [

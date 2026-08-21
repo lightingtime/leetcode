@@ -1,0 +1,66 @@
+{
+  "id": "454",
+  "slug": "4sum-ii",
+  "title": "4Sum II",
+  "titleCn": "四数相加 II",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/4sum-ii/",
+  "tags": [
+    "Array",
+    "Hash Table"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[1,2]"
+        },
+        {
+          "name": "nums2",
+          "value": "[-2,-1]"
+        },
+        {
+          "name": "nums3",
+          "value": "[-1,2]"
+        },
+        {
+          "name": "nums4",
+          "value": "[0,2]"
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[0]"
+        },
+        {
+          "name": "nums2",
+          "value": "[0]"
+        },
+        {
+          "name": "nums3",
+          "value": "[0]"
+        },
+        {
+          "name": "nums4",
+          "value": "[0]"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2]\n[-2,-1]\n[-1,2]\n[0,2]\n[0]\n[0]\n[0]\n[0]",
+  "javaSnippet": "class Solution {\n    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-21T07:37:44.599Z"
+}
