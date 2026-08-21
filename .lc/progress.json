@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 104,
+  "current_seq": 105,
   "done": [
     {
       "seq": 1,
@@ -1134,6 +1134,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "求和差分累加：ans 从 n 起步，每轮 ans += i - nums[i]，用 long+Math.toIntExact 防溢出；O(n)/O(1)，第二种写法再次 Accepted"
+    },
+    {
+      "seq": 105,
+      "id": "36",
+      "title": "有效的数独",
+      "slug": "valid-sudoku",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "固定 9x9：rows/cols/sub 三个计数数组一次遍历，数字 ++ 后任一 >1 立即 false；O(81)/O(81) 常数规模，一次 Accepted"
     }
   ],
   "error_habits": [

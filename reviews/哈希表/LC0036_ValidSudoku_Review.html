@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC36 有效的数独 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 105</div>
+  <h1>LC36 · 有效的数独</h1>
+  <div class="sub">三数组计数（行/列/宫） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 507/507</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 哈希表</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-21</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 三数组计数（行/列/宫）</h3>
+    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 507/507</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0036_ValidSudoku.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isValidSudoku(char[][] board) {
+        int[][] rows = new int[9][9];
+        int[][] cols = new int[9][9];
+        int[][][] sub = new int[3][3][9];
+        for (int i = 0; i &lt; 9; i++) {
+            for (int j = 0; j &lt; 9; j++) {
+                if (board[i][j] != '.') {
+                    Integer num = board[i][j] - '0' - 1;
+                    rows[i][num]++;
+                    cols[j][num]++;
+                    sub[i / 3][j / 3][num]++;
+                    if (rows[i][num] &gt; 1 || cols[j][num] &gt; 1 || sub[i / 3][j / 3][num] &gt; 1) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }</pre></div>
+    <p class="muted">固定 9x9：rows/cols/sub 三个计数数组一次遍历，数字 ++ 后任一 &gt;1 立即 false；O(81)/O(81) 常数规模，一次 Accepted</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：验证 9×9 棋盘的三组约束——数字 1-9 在每行、每列、每个 3×3 宫内都不能重复；只验证已填入的数字，空白 . 跳过，不要求棋盘可解。</p><p>解法选择理由（三个计数数组 + 一次遍历）：</p><ul><li>棋盘固定 9×9，最直接的做法是分别检查 9 行、9 列、9 宫，但那样要扫三遍；用三个计数数组可以「一次遍历同时登记三组约束」，代码更短、提前返回更快。</li><li>每个数字出现一次就同时在「它所在行、所在列、所在宫」三个计数器里 +1，任一计数器到 2 即冲突。</li><li>因为是固定 9×9，时间空间都是常数（81 个格子），不存在更低的复杂度——已是最优。</li></ul><p>关键设计决策：</p><ol><li>三个计数器：rows[9][9]（行 → 数字）、cols[9][9]（列 → 数字）、sub[3][3][9]（宫 → 数字）。</li><li>数字转下标：board[i][j] - 0 - 1，把 1-9 映射到 0-8，正好当数组下标。</li><li>宫定位：i/3、j/3 得到 0-2 的宫坐标，sub[i/3][j/3][num] 即该数字在哪个宫的出现次数。</li><li>每个非 . 格子：三个计数器同步 ++，然后立刻检查是否 &gt;1，是则 return false（提前结束，不必扫完）。</li><li>. 直接跳过，不参与任何计数。</li></ol><p>具体 case 推演：</p><p>边界8（左上宫两个 1，期望 false）：棋盘 (0,0)=1、(1,2)=1，其余 .。</p><div class="table-wrap"><table><thead><tr><th>格子</th><th>行计数</th><th>列计数</th><th>宫计数</th><th>结果</th></tr></thead><tbody><tr><td>(0,0)=1 → 下标0</td><td>rows[0][0]=1</td><td>cols[0][0]=1</td><td>sub[0][0][0]=1</td><td>继续</td></tr><tr><td>(1,2)=1 → 下标0</td><td>rows[1][0]=1</td><td>cols[2][0]=1</td><td><strong>sub[0][0][0]=2</strong></td><td>&gt;1 → false ✓</td></tr></tbody></table></div><p>两个 1 不同行（0 vs 1）、不同列（0 vs 2），只有宫计数器暴露冲突——这正是「三个计数器缺一不可」的原因。</p><p>示例2（左上宫两个 8，期望 false）：(0,0)=8 → sub[0][0][7]=1；(2,2)=8 → sub[0][0][7]=2 → false ✓</p><p>边界2（第 0 行两个 1，期望 false）：(0,0)=1 → rows[0][0]=1；(0,8)=1 → rows[0][0]=2 → false ✓</p><p>边界1（全空白）：所有格子都是 .，全部跳过，循环结束 return true ✓</p><p>边界与细节：</p><ul><li>. 不计数：只有非 . 才走三个 ++。</li><li>数字 1-9 下标化 0-8，不会越界（board 保证是数字或 .）。</li><li>固定 9×9：i/3、j/3 恒在 0-2，sub 数组大小正好。</li><li>多处冲突时第一个触发点即返回，结果与题目要求一致（只要有一个冲突就无效）。</li></ul><p>复杂度分析：</p><ul><li>时间 O(81) = O(1)：每个格子常数操作；固定棋盘下这是下限（至少看每个格子一次）。</li><li>空间 O(81) = O(1)：三个计数数组总大小 81 + 81 + 81，固定常数。</li><li>最优性：固定 9×9 使任何 O(81) 解法都达到下限；三个计数器写法是其中最简单直接的一种。</li><li>可微调点：第 24 行 Integer num 装箱可改 int num，减少无谓装箱。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>507/507 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">507/507</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 44.6 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(1) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 105 · valid-sudoku</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">固定 9x9：rows/cols/sub 三个计数数组一次遍历，数字 ++ 后任一 &gt;1 立即 false；O(81)/O(81) 常数规模，一次 Accepted</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/36_valid-sudoku/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0036_ValidSudoku.java">src/哈希表/LC0036_ValidSudoku.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-21
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
