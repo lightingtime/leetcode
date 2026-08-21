@@ -1,0 +1,40 @@
+{
+  "seq": 109,
+  "id": "380",
+  "slug": "insert-delete-getrandom-o1",
+  "title": "O(1) 时间插入、删除和获取随机元素",
+  "category": "哈希表",
+  "date": "2026-08-21",
+  "verdict": "Accepted",
+  "testcases": "21/21",
+  "runtime_ms": null,
+  "memory_bytes": 101024000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "HashMap + ArrayList（换位删除）",
+  "dp_subtype": "",
+  "approach_detail": "问题本质：设计一个集合，支持 O(1) 均摊的插入、删除、随机等概率取值。难点在于三个约束同时成立：哈希表能 O(1) 插删但无法按下标随机；数组能 O(1) 随机但删除中间元素是 O(n)；需要两者配合。\n\n解法选择理由（HashMap + ArrayList）：\n- getRandom 要 O(1) 且等概率 → 必须能按下标 O(1) 随机访问 → ArrayList，random.nextInt(size) 取下标。\n- insert/remove 要 O(1) → HashMap<val, index> 记录每个值在数组中的下标，O(1) 定位。\n- 数组删除中间元素 O(n) 的问题用「换位删除」解决：把最后一个元素复制到被删位置，再删末尾——删除变成 O(1)。\n- 关键不变量：数组元素与 map 中「值 → 下标」始终一致，任何移动都必须同步更新 map。\n\n关键设计决策：\n1. insert：先查 map 是否已有（有则 false）；没有则 indices.put(val, nums.size())，再 nums.add(val)。\n2. remove：先查 map（没有则 false）；拿到 index；把 nums 最后一个元素 lastVal 换到 index（nums.set(index, lastVal)）；**必须 indices.put(lastVal, index) 同步 lastVal 的新下标**；再删末尾 nums.remove(size-1)；最后 indices.remove(val)。\n3. getRandom：nums.get(random.nextInt(nums.size()))，每个下标等概率 → 每个元素等概率。\n4. 顺序细节：先 put(lastVal, index) 再 remove(val)，保证 map 始终准确；若 lastVal==val（删的就是最后一个），put 后 remove 会清掉，结果一致。\n\n具体 case 推演：\n\n边界6（换位后删除）：insert(1), insert(2), insert(3), remove(1), remove(3)\n\n| 操作 | nums | indices |\n|---|---|---|\n| insert(1) | [1] | {1:0} |\n| insert(2) | [1,2] | {1:0, 2:1} |\n| insert(3) | [1,2,3] | {1:0, 2:1, 3:2} |\n| remove(1)：index=0，lastVal=3 | nums[0]=3 → [3,2] | put(3,0) → {2:1, 3:0}，remove(1) → {2:1, 3:0} |\n| remove(3)：index=0，lastVal=2 | nums[0]=2 → [2] | put(2,0) → {2:0}，remove(3) → {2:0} |\n| getRandom | 2 | ✓ |\n\n如果漏掉 put(lastVal, index)：remove(1) 后 map 仍是 {3:2}，remove(3) 时 nums.get(2) 越界——这就是本地边界6 抓到的隐藏 bug。\n\n示例：insert(1) true → remove(2) false → insert(2) true → getRandom ∈ {1,2} → remove(1) true（2 换到下标 0）→ insert(2) false → getRandom == 2 ✓\n\n边界与细节：\n- 重复 insert / 不存在的 remove 都先查 map，返回 false。\n- 删除最后一个元素：lastVal==val，put 再 remove 无害。\n- 删除后集合变空再 insert：nums.size() 作为新下标，正确。\n- int 端点值 MIN/MAX 都能作 key。\n- 2×10^5 次调用：ArrayList/HashMap 均摊 O(1)，无性能问题。\n\n复杂度分析：\n- 时间 O(1) 均摊：insert/remove 各常数次 map/数组操作（HashMap 均摊 O(1)），getRandom O(1)。\n- 空间 O(n)：ArrayList + HashMap 各存 n 个元素。\n- 最优性：信息论上随机访问需要数组、定位需要哈希，两者结合是标准最优结构；无法低于 O(1) 均摊。",
+  "time_complexity": "O(1)",
+  "space_complexity": "O(n)",
+  "notes": "ArrayList 提供 O(1) 随机下标，HashMap<val,index> 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-21",
+      "verdict": "Accepted",
+      "testcases": "21/21",
+      "runtime_ms": null,
+      "memory_bytes": 101024000,
+      "approach": "HashMap + ArrayList（换位删除）",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "ArrayList 提供 O(1) 随机下标，HashMap<val,index> 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC"
+    }
+  ],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}

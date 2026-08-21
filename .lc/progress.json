@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 107,
+  "current_seq": 109,
   "done": [
     {
       "seq": 1,
@@ -1167,6 +1167,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "long 防溢出（-2^31/-1）；整除先返回；符号异号加 '-';长除法 map 存余数->sb.length()，余数重复即循环节插入括号；一次 Accepted"
+    },
+    {
+      "seq": 109,
+      "id": "380",
+      "title": "O(1) 时间插入、删除和获取随机元素",
+      "slug": "insert-delete-getrandom-o1",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "ArrayList 提供 O(1) 随机下标，HashMap<val,index> 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC"
     }
   ],
   "error_habits": [
@@ -2024,6 +2035,7 @@
     "其他": "设计题先明确 API 与复杂度要求；分治想能否拆成左右两个子问题。"
   },
   "skipped": [
-    15
+    15,
+    108
   ]
 }

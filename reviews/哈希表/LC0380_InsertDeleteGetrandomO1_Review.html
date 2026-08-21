@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC380 O(1) 时间插入、删除和获取随机元素 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 109</div>
+  <h1>LC380 · O(1) 时间插入、删除和获取随机元素</h1>
+  <div class="sub">HashMap + ArrayList（换位删除） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 21/21</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 哈希表</span>
+    
+    <span class="badge plain">多次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-21</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · HashMap + ArrayList（换位删除）</h3>
+    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.3 MB</span><span class="chip">用例 21/21</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0380_InsertDeleteGetrandomO1.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>static class RandomizedSet {
+        List&lt;Integer&gt; nums;
+        Map&lt;Integer, Integer&gt; indices;
+        Random random;
+        public RandomizedSet() {
+            nums = new ArrayList&lt;&gt;();
+            indices = new HashMap&lt;&gt;();
+            random = new Random();
+        }
+        public boolean insert(int val) {
+            if (indices.containsKey(val)) {
+                return false;
+            }
+            indices.put(val, nums.size());
+            nums.add(val);
+            return true;
+        }
+        public boolean remove(int val) {
+            if (!indices.containsKey(val)) {
+                return false;
+            }
+            int index = indices.get(val);
+            int lastVal = nums.get(nums.size() - 1);
+            nums.set(index, lastVal);
+            indices.put(lastVal, index);
+            nums.remove(nums.size() - 1);
+            indices.remove(val);
+            return true;
+        }
+        public int getRandom() {
+            return nums.get(random.nextInt(nums.size()));
+        }
+    }</pre></div>
+    <p class="muted">ArrayList 提供 O(1) 随机下标，HashMap&lt;val,index&gt; 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：设计一个集合，支持 O(1) 均摊的插入、删除、随机等概率取值。难点在于三个约束同时成立：哈希表能 O(1) 插删但无法按下标随机；数组能 O(1) 随机但删除中间元素是 O(n)；需要两者配合。</p><p>解法选择理由（HashMap + ArrayList）：</p><ul><li>getRandom 要 O(1) 且等概率 → 必须能按下标 O(1) 随机访问 → ArrayList，random.nextInt(size) 取下标。</li><li>insert/remove 要 O(1) → HashMap&lt;val, index&gt; 记录每个值在数组中的下标，O(1) 定位。</li><li>数组删除中间元素 O(n) 的问题用「换位删除」解决：把最后一个元素复制到被删位置，再删末尾——删除变成 O(1)。</li><li>关键不变量：数组元素与 map 中「值 → 下标」始终一致，任何移动都必须同步更新 map。</li></ul><p>关键设计决策：</p><ol><li>insert：先查 map 是否已有（有则 false）；没有则 indices.put(val, nums.size())，再 nums.add(val)。</li><li>remove：先查 map（没有则 false）；拿到 index；把 nums 最后一个元素 lastVal 换到 index（nums.set(index, lastVal)）；<strong>必须 indices.put(lastVal, index) 同步 lastVal 的新下标</strong>；再删末尾 nums.remove(size-1)；最后 indices.remove(val)。</li><li>getRandom：nums.get(random.nextInt(nums.size()))，每个下标等概率 → 每个元素等概率。</li><li>顺序细节：先 put(lastVal, index) 再 remove(val)，保证 map 始终准确；若 lastVal==val（删的就是最后一个），put 后 remove 会清掉，结果一致。</li></ol><p>具体 case 推演：</p><p>边界6（换位后删除）：insert(1), insert(2), insert(3), remove(1), remove(3)</p><div class="table-wrap"><table><thead><tr><th>操作</th><th>nums</th><th>indices</th></tr></thead><tbody><tr><td>insert(1)</td><td>[1]</td><td>{1:0}</td></tr><tr><td>insert(2)</td><td>[1,2]</td><td>{1:0, 2:1}</td></tr><tr><td>insert(3)</td><td>[1,2,3]</td><td>{1:0, 2:1, 3:2}</td></tr><tr><td>remove(1)：index=0，lastVal=3</td><td>nums[0]=3 → [3,2]</td><td>put(3,0) → {2:1, 3:0}，remove(1) → {2:1, 3:0}</td></tr><tr><td>remove(3)：index=0，lastVal=2</td><td>nums[0]=2 → [2]</td><td>put(2,0) → {2:0}，remove(3) → {2:0}</td></tr><tr><td>getRandom</td><td>2</td><td>✓</td></tr></tbody></table></div><p>如果漏掉 put(lastVal, index)：remove(1) 后 map 仍是 {3:2}，remove(3) 时 nums.get(2) 越界——这就是本地边界6 抓到的隐藏 bug。</p><p>示例：insert(1) true → remove(2) false → insert(2) true → getRandom ∈ {1,2} → remove(1) true（2 换到下标 0）→ insert(2) false → getRandom == 2 ✓</p><p>边界与细节：</p><ul><li>重复 insert / 不存在的 remove 都先查 map，返回 false。</li><li>删除最后一个元素：lastVal==val，put 再 remove 无害。</li><li>删除后集合变空再 insert：nums.size() 作为新下标，正确。</li><li>int 端点值 MIN/MAX 都能作 key。</li><li>2×10^5 次调用：ArrayList/HashMap 均摊 O(1)，无性能问题。</li></ul><p>复杂度分析：</p><ul><li>时间 O(1) 均摊：insert/remove 各常数次 map/数组操作（HashMap 均摊 O(1)），getRandom O(1)。</li><li>空间 O(n)：ArrayList + HashMap 各存 n 个元素。</li><li>最优性：信息论上随机访问需要数组、定位需要哈希，两者结合是标准最优结构；无法低于 O(1) 均摊。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>21/21 用例。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">21/21</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 96.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(1) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 109 · insert-delete-getrandom-o1</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
+      <div class="quote">ArrayList 提供 O(1) 随机下标，HashMap&lt;val,index&gt; 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/380_insert-delete-getrandom-o1/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0380_InsertDeleteGetrandomO1.java">src/哈希表/LC0380_InsertDeleteGetrandomO1.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-21
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
