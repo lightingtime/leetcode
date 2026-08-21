@@ -1,0 +1,57 @@
+{
+  "seq": 104,
+  "id": "268",
+  "slug": "missing-number",
+  "title": "丢失的数字",
+  "category": "哈希表",
+  "date": "2026-08-21",
+  "verdict": "Accepted",
+  "testcases": "122/122",
+  "runtime_ms": null,
+  "memory_bytes": 47584000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "原地交换（cyclic sort）",
+  "dp_subtype": "",
+  "approach_detail": "问题本质：在 [0,n] 共 n+1 个数中缺一个，数组给 n 个（每个独一无二）。等价于找「0..n 与数组」的唯一差集元素。\n\n解法选择理由：\n- 排序比较是 O(n log n)/O(1)，哈希表是 O(n)/O(n)，都不满足进阶要求的 O(1) 空间。\n- 原地交换（cyclic sort）：每个数 v 有唯一目标下标 v（0..n-1），把 v 换到 nums[v] 后，理想状态是 nums[i]==i；n 没有下标 n 可去，是天然哨兵。扫描第一个 nums[i]!=i 的位置即缺失值；全部归位则缺的是 n。\n- 为什么是最优：每个元素最多被交换常数次（被换走一次、被换入一次），总交换次数 O(n)，扫描 O(n)，空间 O(1)，达到时间下限 Ω(n)（至少读一遍）。\n\n关键设计决策：\n1. 外层 for 负责「推进 i」，内层 while (nums[i] != i) 负责「在同一位置连环交换」：交换后当前位置换来了新值，必须继续处理它，直到归位或遇到 n，否则错位值会遗留（这是本地踩过的坑）。\n2. n 的处理：nums[i]==n 时跳过/break，它没有位置可去，留在原地当哨兵。\n3. 越界安全：进入交换前保证 nums[i] != n；交换后若换到 n 立即 break，避免下一步用下标 n 访问（nums[n] 不存在）。\n4. 死循环防护：本题元素独一无二，nums[i]=v 时 nums[v] 必不等于 v（否则 v 出现两次），while 必然把 v 换走、单调推进；若题目允许重复则需额外加防。\n\n具体 case 推演：\n\n[3,0,1]（n=3，缺 2，期望 2）：\n\n| i | 动作 | 数组 |\n|---:|---|---|\n| 0 | nums[0]=3 == n → continue | [3,0,1] |\n| 1 | while: nums[1]=0≠1 → swap(1,0) → [0,3,1]；nums[1]=3==n → break | [0,3,1] |\n| 2 | while: nums[2]=1≠2 → swap(2,1) → [0,1,3]；nums[2]=3==n → break | [0,1,3] |\n\n扫描：i=0、1 归位；i=2 时 nums[2]=3≠2 → 返回 2 ✓\n\n[4,3,0,1]（n=4，缺 2，且缺失位置恰好存 0，期望 2）：\n\n| i | 动作 | 数组 |\n|---:|---|---|\n| 0 | nums[0]=4 == n → continue | [4,3,0,1] |\n| 1 | while: nums[1]=3≠1 → swap(1,3) → [4,1,0,3]；nums[1]=1 归位 | [4,1,0,3] |\n| 2 | while: nums[2]=0≠2 → swap(2,0) → [0,1,4,3]；nums[2]=4==n → break | [0,1,4,3] |\n| 3 | nums[3]=3 归位 | [0,1,4,3] |\n\n扫描：i=2 时 nums[2]=4≠2 → 返回 2 ✓（0 不再成为盲区）\n\n边界与细节：\n- n=1：[0] → 归位后全对，返回 1；[1] → nums[0]=1==n continue，扫描 nums[0]=1≠0 返回 0。\n- 缺 0 / 缺 n / 缺中间 / 10^4 上限（缺 n、缺 0、缺中间）全部覆盖。\n- 对比之前失败的取负标记法：标记法依赖「正=未标记」，而 -0 仍是 0，缺失位置存 0 时会漏判；交换法不依赖正负号，0 也被换到 0 号位，缺失位置自然暴露为 nums[i]!=i。\n- 对比之前失败的「只换一次」版本：必须 while 连环交换到归位，不能换一次就 i++。\n\n复杂度分析：\n- 时间 O(n)：每个元素被换到最终位置后不再移动，总交换次数 ≤ n；加一次扫描 O(n)，均摊 O(n)。\n- 空间 O(1)：完全原地。\n- 下限论证：判缺失至少要读每个元素一次（Ω(n)），O(n) 时间已达下限；O(1) 空间同时满足进阶要求，是最优解。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "cyclic sort：每个 v 换到 nums[v]，n 是哨兵；同一 i 上 while 连环交换直到归位或遇 n，扫描 nums[i]!=i 即缺失；O(n)/O(1)，满足进阶，本地两轮修正后一次提交 AC",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "取负标记法把 0 当盲区：-0 仍是 0，缺失位置恰好存 0 时无法被标记成负，扫描用 nums[i]>0 判未标记会漏掉该位置，最后误返回 n",
+      "count": 1
+    },
+    {
+      "habit": "原地交换（cyclic sort）只交换一次就推进 i：交换后当前位置仍错位但循环已 i++，错位值被遗留到末尾，最后扫描误判缺失；应在同一 i 上循环交换直到 nums[i]==i 或 nums[i]==n 才前进",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "取负标记法",
+      "text": "取负标记法的前提是「每个可标记位置的值都非 0」或「0 能表达已标记」：-0 仍是 0，缺失位置恰好存 0 时无法被标记成负，扫描用 nums[i]>0 判未标记会漏掉该位置；对策是把值平移（v+1）再标记，或换 cyclic sort / 异或 / 求和。",
+      "category": "哈希表",
+      "problem": "missing-number",
+      "date": "2026-08-21"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-21",
+      "verdict": "Accepted",
+      "testcases": "122/122",
+      "runtime_ms": null,
+      "memory_bytes": 47584000,
+      "approach": "原地交换（cyclic sort）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "cyclic sort：每个 v 换到 nums[v]，n 是哨兵；同一 i 上 while 连环交换直到归位或遇 n，扫描 nums[i]!=i 即缺失；O(n)/O(1)，满足进阶，本地两轮修正后一次提交 AC"
+    }
+  ],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}

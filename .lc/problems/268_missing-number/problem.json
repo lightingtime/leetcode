@@ -1,0 +1,29 @@
+{
+  "id": "268",
+  "slug": "missing-number",
+  "title": "Missing Number",
+  "titleCn": "丢失的数字",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/missing-number/",
+  "tags": [
+    "Bit Manipulation",
+    "Array",
+    "Hash Table",
+    "Math",
+    "Binary Search",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "位运算",
+    "数组",
+    "哈希表",
+    "数学",
+    "二分查找",
+    "排序"
+  ],
+  "category": "哈希表",
+  "examples": [],
+  "exampleTestcases": "[3,0,1]\n[0,1]\n[9,6,4,2,3,5,7,0,1]",
+  "javaSnippet": "class Solution {\n    public int missingNumber(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-21T04:50:48.217Z"
+}

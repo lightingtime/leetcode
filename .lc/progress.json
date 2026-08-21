@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 103,
+  "current_seq": 104,
   "done": [
     {
       "seq": 1,
@@ -1123,6 +1123,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "HashMap 双向计数：s 每个字符 +1、t 每个字符 -1，最后 value 全 0 即异位词；长度不等先剪枝；O(n)/O(k)（k≤26），一次 Accepted"
+    },
+    {
+      "seq": 104,
+      "id": "268",
+      "title": "丢失的数字",
+      "slug": "missing-number",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "cyclic sort：每个 v 换到 nums[v]，n 是哨兵；同一 i 上 while 连环交换直到归位或遇 n，扫描 nums[i]!=i 即缺失；O(n)/O(1)，满足进阶，本地两轮修正后一次提交 AC"
     }
   ],
   "error_habits": [
@@ -1939,6 +1950,28 @@
         "数学与位运算"
       ],
       "last_seen": "2026-08-20"
+    },
+    {
+      "habit": "取负标记法把 0 当盲区：-0 仍是 0，缺失位置恰好存 0 时无法被标记成负，扫描用 nums[i]>0 判未标记会漏掉该位置，最后误返回 n",
+      "count": 1,
+      "examples": [
+        "missing-number"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-21"
+    },
+    {
+      "habit": "原地交换（cyclic sort）只交换一次就推进 i：交换后当前位置仍错位但循环已 i++，错位值被遗留到末尾，最后扫描误判缺失；应在同一 i 上循环交换直到 nums[i]==i 或 nums[i]==n 才前进",
+      "count": 1,
+      "examples": [
+        "missing-number"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-08-21"
     }
   ],
   "category_hints": {
