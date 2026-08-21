@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-21",
-  "current_seq": 102,
+  "current_seq": 103,
   "done": [
     {
       "seq": 1,
@@ -1112,6 +1112,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "HashSet 单遍扫描：先查后加，遇重复提前返回；O(n)/O(n)，一次 Accepted"
+    },
+    {
+      "seq": 103,
+      "id": "242",
+      "title": "有效的字母异位词",
+      "slug": "valid-anagram",
+      "category": "哈希表",
+      "date": "2026-08-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "HashMap 双向计数：s 每个字符 +1、t 每个字符 -1，最后 value 全 0 即异位词；长度不等先剪枝；O(n)/O(k)（k≤26），一次 Accepted"
     }
   ],
   "error_habits": [

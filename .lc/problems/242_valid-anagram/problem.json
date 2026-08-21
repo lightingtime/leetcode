@@ -1,0 +1,52 @@
+{
+  "id": "242",
+  "slug": "valid-anagram",
+  "title": "Valid Anagram",
+  "titleCn": "有效的字母异位词",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/valid-anagram/",
+  "tags": [
+    "Hash Table",
+    "String",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串",
+    "排序"
+  ],
+  "category": "哈希表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"anagram\""
+        },
+        {
+          "name": "t",
+          "value": "\"nagaram\""
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"rat\""
+        },
+        {
+          "name": "t",
+          "value": "\"car\""
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"anagram\"\n\"nagaram\"\n\"rat\"\n\"car\"",
+  "javaSnippet": "class Solution {\n    public boolean isAnagram(String s, String t) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-21T04:38:14.847Z"
+}
