@@ -1,0 +1,42 @@
+{
+  "id": "26",
+  "slug": "remove-duplicates-from-sorted-array",
+  "title": "Remove Duplicates from Sorted Array",
+  "titleCn": "删除有序数组中的重复项",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-array/",
+  "tags": [
+    "Array",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "数组",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[1,1,2]"
+        }
+      ],
+      "output": "2, nums = [1,2,_]",
+      "explain": "函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[0,0,1,1,1,2,2,3,3,4]"
+        }
+      ],
+      "output": "5, nums = [0,1,2,3,4,_,_,_,_,_]",
+      "explain": "函数应该返回新的长度 5 ， 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。不需要考虑数组中超出新长度后面的元素。"
+    }
+  ],
+  "exampleTestcases": "[1,1,2]\n[0,0,1,1,1,2,2,3,3,4]",
+  "javaSnippet": "class Solution {\n    public int removeDuplicates(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-22T06:22:17.194Z"
+}

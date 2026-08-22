@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-21",
-  "current_seq": 112,
+  "updated": "2026-08-22",
+  "current_seq": 113,
   "done": [
     {
       "seq": 1,
@@ -1211,6 +1211,17 @@
       "firstPass": false,
       "optimal": false,
       "notes": "枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优"
+    },
+    {
+      "seq": 113,
+      "id": "26",
+      "title": "删除有序数组中的重复项",
+      "slug": "remove-duplicates-from-sorted-array",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-22",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "双指针原地去重，慢指针 l 同时充当写入位与唯一值个数"
     }
   ],
   "error_habits": [
