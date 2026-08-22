@@ -39,7 +39,7 @@ public class LC0028_FindTheIndexOfTheFirstOccurrenceInAString {
         return -1;
     }
 
-// ==== 提交代码结束 ====
+    // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
         LC0028_FindTheIndexOfTheFirstOccurrenceInAString s = new LC0028_FindTheIndexOfTheFirstOccurrenceInAString();
