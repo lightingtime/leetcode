@@ -1,0 +1,56 @@
+{
+  "id": "350",
+  "slug": "intersection-of-two-arrays-ii",
+  "title": "Intersection of Two Arrays II",
+  "titleCn": "两个数组的交集 II",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/intersection-of-two-arrays-ii/",
+  "tags": [
+    "Array",
+    "Hash Table",
+    "Two Pointers",
+    "Binary Search",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "数组",
+    "哈希表",
+    "双指针",
+    "二分查找",
+    "排序"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[1,2,2,1]"
+        },
+        {
+          "name": "nums2",
+          "value": "[2,2]"
+        }
+      ],
+      "output": "[2,2]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[4,9,5]"
+        },
+        {
+          "name": "nums2",
+          "value": "[9,4,9,8,4]"
+        }
+      ],
+      "output": "[4,9]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,2,1]\n[2,2]\n[4,9,5]\n[9,4,9,8,4]",
+  "javaSnippet": "class Solution {\n    public int[] intersect(int[] nums1, int[] nums2) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-22T12:51:34.751Z"
+}

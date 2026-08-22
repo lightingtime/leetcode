@@ -1,0 +1,48 @@
+{
+  "seq": 119,
+  "id": "350",
+  "slug": "intersection-of-two-arrays-ii",
+  "title": "两个数组的交集 II",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-22",
+  "verdict": "Accepted",
+  "testcases": "61/61",
+  "runtime_ms": null,
+  "memory_bytes": 45492000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "计数数组（值域0..1000）",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 求两数组交集，且每个元素**保留重复次数**（出现次数取 `min`），输出顺序任意。\n- 一般化解法：哈希表统计较小数组（`O(m+n)` / `O(min(m,n))`）或排序+双指针（`O(m log m + n log n)` / `O(1)`）。\n- 本题值域被限制在 `0..1000`，可以用**固定大小 1001 的计数数组**：`O(m+n)` 时间 + `O(1)` 空间，时间空间双维度最优。\n\n**② 关键设计决策**\n- `a[1001]`、`b[1001]` 分别统计 `nums1`、`nums2` 中各值出现次数。\n- 遍历 `i=0..1000`：若 `a[i]>0 && b[i]>0`，往答案里追加 `min(a[i], b[i])` 个 `i`。\n- 答案先用 `List<Integer>` 收集再转 `int[]`。\n\n**③ 边界与细节**\n- 无交集 → 返回空数组。\n- 重复次数不等 → 取较小值（如 `[1,1,1,1] ∩ [1,1] = [1,1]`，不是 4 个 1）。\n- `0` 与 `1000` 都在数组下标范围内，不漏边界值。\n- 长度上限 1000：两次线性统计 + 1001 次扫描，快。\n- 输出顺序任意，按升序输出也满足要求。\n\n**④ 复杂度与最优性**\n- 时间 `O(m+n+1001) = O(m+n)`；空间 `O(1001) = O(1)`（固定常数）。\n- 最优性：每个元素至少被读一次，时间下界 `Ω(m+n)`，达到；值域固定时用常数数组即可，比哈希表（`O(min(m,n))` 空间）更省。在本题约束下时间与空间均为最优。\n\n**⑤ 具体 case 推演：`nums1=[1,2,2,1]`、`nums2=[2,2]`**\n- 统计后 `a[1]=2`、`a[2]=2`；`b[2]=2`。\n- `i=1`：`a[1]=2>0` 但 `b[1]=0` → 跳过。\n- `i=2`：`a[2]=2>0` 且 `b[2]=2>0` → `min=2`，追加两个 `2`。\n- 结果 `[2,2]`，与示例一致。",
+  "time_complexity": "O(m+n)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "固定值域计数数组",
+      "text": "值域已知且小（如 0..1000）时，用定长计数数组代替哈希表统计次数，O(n) 时间 O(1) 空间；交集次数取 min。",
+      "category": "双指针与滑动窗口",
+      "problem": "intersection-of-two-arrays-ii",
+      "date": "2026-08-22"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-22",
+      "verdict": "Accepted",
+      "testcases": "61/61",
+      "runtime_ms": null,
+      "memory_bytes": 45492000,
+      "approach": "计数数组（值域0..1000）",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
