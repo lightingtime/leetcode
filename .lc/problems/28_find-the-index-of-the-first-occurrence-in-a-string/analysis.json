@@ -1,0 +1,48 @@
+{
+  "seq": 114,
+  "id": "28",
+  "slug": "find-the-index-of-the-first-occurrence-in-a-string",
+  "title": "找出字符串中第一个匹配项的下标",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-22",
+  "verdict": "Accepted",
+  "testcases": "86/86",
+  "runtime_ms": null,
+  "memory_bytes": 43212000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "KMP（前缀函数）",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 单模式字符串匹配：在 `haystack` 中找 `needle` **首次**出现的下标，不存在返回 -1。\n- 暴力做法每次失配把 `needle` 指针直接归零、从头重比，最坏 `O(n*m)`；长度上限 `10^4` 时最坏 `10^8` 次比较，虽勉强可过但存在大量重复比对。\n- KMP 核心：失配时**不归零**，而是利用「已匹配前缀的最长相等前后缀」跳到合适位置，避免重新比对已经匹配过的字符。\n\n**② 关键设计决策**\n- `pi[i]`（前缀函数）= `needle[0..i]` 的**最长相等真前后缀**长度，`pi[0]=0`。\n- 构建 `pi`：`j` 为上一轮留下的 `pi[i-1]`（即当前候选边界长度）；失配用 `while (j>0 && needle[i]!=needle[j]) j=pi[j-1]` 回退到更短边界；若 `needle[i]==needle[j]` 则 `j++`（边界加长）；迭代末尾 `pi[i]=j`。\n- 匹配：`j` 从 0 起；失配同样 `j=pi[j-1]`，匹配则 `j++`；当 `j==needle.length()` 时返回 `i-j+1`。\n- 易错点：**构建完 `pi` 后必须把 `j` 重置为 0**，因为构建循环结束后 `j` 停在 `pi[m-1]`，不一定是 0；直接沿用会把匹配窗口初始化错位。\n\n**③ 边界与细节**\n- 约束 `1 <= haystack.length, needle.length <= 10^4`，两串仅小写字母；无空串，无需特判。\n- `needle` 比 `haystack` 长：匹配循环扫完 `haystack` 也达不到 `j==m`，自然返回 -1。\n- 全相同字符（如 `\"aaaaa\"` / `\"aa\"`）：`pi` 递增、支持**重叠**匹配，仍返回首个位置 0。\n- 命中起点 = `i-j+1`：窗口长 `j`、末尾在 `i`，起点需左移 `j-1` 格（末尾格自身占 1 个）。\n\n**④ 复杂度与最优性**\n- 构建 `pi`：内层 `while` 的 `j` 回退总次数有界 `O(m)`（`j` 至多单调增到 `m`，回退总数被总增量封顶），故 `O(m)`；匹配同理 `O(n)`；总时间 **`O(n+m)`**。\n- 空间：`pi` 数组 **`O(m)`**。\n- 最优性：单模式串匹配在比较模型下界为 `Ω(n+m)`（至少要读入 `haystack` 与 `needle` 两个串），KMP 达到该下界，故为最优。\n\n**⑤ 具体 case 推演：`haystack=\"mississippi\"`、`needle=\"issip\"`\n- `needle` 的 `pi = [0,0,0,1,0]`。\n- 逐行推演（`j` 为匹配阶段进入该 `i` 时的 needle 指针）：\n| i | hay[i] | 进入时 j | 动作 | 结束 j |\n|---|---|---|---|---|\n| 0 | m | 0 | `m` vs `i` 不等 | 0 |\n| 1 | i | 0 | `i==i` → j++ | 1 |\n| 2 | s | 1 | `s==s` → j++ | 2 |\n| 3 | s | 2 | `s==s` → j++ | 3 |\n| 4 | i | 3 | `i==i` → j++ | 4 |\n| 5 | s | 4 | `s` vs `p` 不等 → `j=pi[3]=1`，`s==s` → j++ | 2 |\n| 6 | s | 2 | `s==s` → j++ | 3 |\n| 7 | i | 3 | `i==i` → j++ | 4 |\n| 8 | p | 4 | `p==p` → j++ | 5 |\n| - | - | 5 | `j==m` → 返回 `8-5+1=4` | - |\n- 关键失配格 `i=5`：已匹配到 `\"issi\"`（j=4），但 `hay[5]='s'` 对不上 `needle[4]='p'`；KMP 不退回 0，而是 `j=pi[3]=1`，复用窗口末尾那个 `\"i\"` 直接接着比 `needle[1]='s'`，从而省去前面重复比对。",
+  "time_complexity": "O(n+m)",
+  "space_complexity": "O(m)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "KMP / 前缀函数",
+      "text": "字符串单模式匹配：先建前缀函数 pi（最长相等真前后缀），匹配失配时用 j=pi[j-1] 回退而非归零，避免重复比对；达到 O(n+m) 最优。",
+      "category": "双指针与滑动窗口",
+      "problem": "find-the-index-of-the-first-occurrence-in-a-string",
+      "date": "2026-08-22"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-22",
+      "verdict": "Accepted",
+      "testcases": "86/86",
+      "runtime_ms": null,
+      "memory_bytes": 43212000,
+      "approach": "KMP（前缀函数）",
+      "time_complexity": "O(n+m)",
+      "space_complexity": "O(m)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

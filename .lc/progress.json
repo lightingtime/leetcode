@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-22",
-  "current_seq": 113,
+  "current_seq": 114,
   "done": [
     {
       "seq": 1,
@@ -1222,6 +1222,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "双指针原地去重，慢指针 l 同时充当写入位与唯一值个数"
+    },
+    {
+      "seq": 114,
+      "id": "28",
+      "title": "找出字符串中第一个匹配项的下标",
+      "slug": "find-the-index-of-the-first-occurrence-in-a-string",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-22",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
