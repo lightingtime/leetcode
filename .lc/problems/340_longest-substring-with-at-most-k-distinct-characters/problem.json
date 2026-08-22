@@ -1,0 +1,23 @@
+{
+  "id": "340",
+  "slug": "longest-substring-with-at-most-k-distinct-characters",
+  "title": "Longest Substring with At Most K Distinct Characters",
+  "titleCn": "至多包含 K 个不同字符的最长子串",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/longest-substring-with-at-most-k-distinct-characters/",
+  "tags": [
+    "Hash Table",
+    "String",
+    "Sliding Window"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串",
+    "滑动窗口"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [],
+  "exampleTestcases": "\"eceba\"\n2\n\"aa\"\n1",
+  "javaSnippet": "",
+  "fetchedAt": "2026-08-22T14:28:47.308Z"
+}
