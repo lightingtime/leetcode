@@ -1,0 +1,42 @@
+{
+  "id": "344",
+  "slug": "reverse-string",
+  "title": "Reverse String",
+  "titleCn": "反转字符串",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/reverse-string/",
+  "tags": [
+    "Two Pointers",
+    "String"
+  ],
+  "tagsCn": [
+    "双指针",
+    "字符串"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "[\"h\",\"e\",\"l\",\"l\",\"o\"]"
+        }
+      ],
+      "output": "[\"o\",\"l\",\"l\",\"e\",\"h\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "[\"H\",\"a\",\"n\",\"n\",\"a\",\"h\"]"
+        }
+      ],
+      "output": "[\"h\",\"a\",\"n\",\"n\",\"a\",\"H\"]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[\"h\",\"e\",\"l\",\"l\",\"o\"]\n[\"H\",\"a\",\"n\",\"n\",\"a\",\"h\"]",
+  "javaSnippet": "class Solution {\n    public void reverseString(char[] s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-22T12:33:19.856Z"
+}

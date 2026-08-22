@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-22",
-  "current_seq": 117,
+  "current_seq": 118,
   "done": [
     {
       "seq": 1,
@@ -1261,6 +1261,17 @@
       "id": "202",
       "title": "快乐数",
       "slug": "happy-number",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-22",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 118,
+      "id": "344",
+      "title": "反转字符串",
+      "slug": "reverse-string",
       "category": "双指针与滑动窗口",
       "date": "2026-08-22",
       "firstPass": true,

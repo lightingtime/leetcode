@@ -1,0 +1,48 @@
+{
+  "seq": 118,
+  "id": "344",
+  "slug": "reverse-string",
+  "title": "反转字符串",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-22",
+  "verdict": "Accepted",
+  "testcases": "477/477",
+  "runtime_ms": null,
+  "memory_bytes": 48716000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "首尾双下标原地交换",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 反转字符数组，题目硬性要求**原地**、`O(1)` 额外空间，不能开新数组。\n- 最直观做法：用**首尾两个下标**从两端向中间推进，每步交换一对字符，走到中点即完成。\n\n**② 关键设计决策**\n- 下标 `i` 从 `0` 到 `s.length/2 - 1`（即 `i < s.length/2`）。\n- 每次交换 `s[i]` 与 `s[s.length-1-i]`。\n- 中点处理：奇数长度时正中间那个字符位置恰好不变，无需特殊处理；`i < length/2` 天然不会碰它。\n\n**③ 边界与细节**\n- 单字符：`length/2 = 0`，循环不进，数组不变，结果正确。\n- 偶数长度：所有字符成对交换。\n- 奇数长度：中间一个字符不参与交换，位置天然正确。\n- 全相同 / 回文：交换后数组不变，结果仍正确。\n- 上限 `10^5`：线性时间，快。\n\n**④ 复杂度与最优性**\n- 每个元素至多参与一次交换（共 `n/2` 对），时间 `O(n)`；空间 `O(1)`（临时变量 `c`）。\n- 最优性：反转必须移动 `n/2` 对元素，下界 `Ω(n)`；空间上题目要求 `O(1)`，二者均达到，故最优。\n\n**⑤ 具体 case 推演：`s=['h','e','l','l','o']`（长度 5）**\n- `i=0`：交换 `s[0]='h'` 与 `s[4]='o'` → `['o','e','l','l','h']`；\n- `i=1`：交换 `s[1]='e'` 与 `s[3]='l'` → `['o','l','l','e','h']`；\n- `i=2` 等于 `length/2=2`，循环停止；中间 `s[2]='l'` 未动。\n- 结果 `['o','l','l','e','h']`，与示例一致。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "首尾双下标原地交换",
+      "text": "原地反转/对称交换：左右下标向中间推进，交换 s[l] 与 s[r]，走到中点（l>=r）停止；O(n)、O(1)。",
+      "category": "双指针与滑动窗口",
+      "problem": "reverse-string",
+      "date": "2026-08-22"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-22",
+      "verdict": "Accepted",
+      "testcases": "477/477",
+      "runtime_ms": null,
+      "memory_bytes": 48716000,
+      "approach": "首尾双下标原地交换",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
