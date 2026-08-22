@@ -55,6 +55,27 @@ function collectReviewFiles(dir, base) {
 }
 const reviewFiles = fs.existsSync(REVIEWS) ? collectReviewFiles(REVIEWS, '') : [];
 
+// 补充知识：扫描 reviews 下所有 .md 文档，按所在目录标注分类
+function collectKnowledgeDocs(dir, base) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'index.html') continue;
+    const rel = base ? base + '/' + entry.name : entry.name;
+    if (entry.isDirectory()) out.push(...collectKnowledgeDocs(path.join(dir, entry.name), rel));
+    else if (entry.isFile() && entry.name.endsWith('.md')) out.push(rel);
+  }
+  return out;
+}
+const knowledgeDocs = fs.existsSync(REVIEWS) ? collectKnowledgeDocs(REVIEWS, '') : [];
+const knowledgeItems = knowledgeDocs.map(rel => {
+  const dir = path.dirname(rel);
+  const name = path.basename(rel, '.md');
+  const cat = dir === '.' ? '通用' : dir;
+  return `      <div class="card">
+        <p><a href="${esc(rel)}">${esc(name)}</a> <span class="badge plain">分类：${esc(cat)}</span></p>
+      </div>`;
+}).join('\n');
+
 function padId(id) { return 'LC' + String(id).padStart(4, '0') + '_'; }
 function reviewLink(id) {
   const hit = reviewFiles.find(f => path.basename(f).startsWith(padId(id)));
@@ -116,7 +137,10 @@ done.forEach(d => {
   reviewGroups[groupIndexOf.get(d.category)].cards.push(card);
 });
 const reviewSections = reviewGroups.map(g =>
-  `    <div class="cat-head">${esc(g.category)}</div>\n${g.cards.join('\n')}`
+  `    <details class="rv-group">
+      <summary>${esc(g.category)} · ${g.cards.length} 题 <span class="muted">（点击展开 / 收起）</span></summary>
+${g.cards.join('\n')}
+    </details>`
 ).join('\n');
 
 const html = `<!DOCTYPE html>
@@ -159,6 +183,16 @@ const html = `<!DOCTYPE html>
   th { background:#f1f5f9; font-weight:600; }
   tr:last-child td { border-bottom:none; }
   .foot { margin-top:56px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; text-align:center; }
+  .rv-toolbar { display:flex; justify-content:flex-end; margin-top:14px; }
+  .rv-toolbar button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:6px 14px; font-size:13px; cursor:pointer; }
+  .rv-toolbar button:hover { filter:brightness(1.08); }
+  details.rv-group { margin-top:14px; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,.05); }
+  details.rv-group summary { cursor:pointer; padding:14px 20px; font-weight:700; font-size:16px; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  details.rv-group summary::-webkit-details-marker { display:none; }
+  details.rv-group summary::after { content:'▾'; transition:transform .15s; color:var(--muted); }
+  details.rv-group[open] summary::after { transform:rotate(180deg); }
+  details.rv-group .card { border:none; box-shadow:none; border-top:1px solid var(--line); border-radius:0; margin-top:0; }
+  details.rv-group .card:last-child { border-bottom-left-radius:14px; border-bottom-right-radius:14px; }
   @media (max-width:600px) { .metrics { grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
@@ -207,8 +241,14 @@ ${rows}
     <h2>题目复盘</h2>
     ${done.length === 0
       ? '<div class="card muted">暂无复盘。</div>'
-      : `<p class="muted">按分类分组展示，点击「打开完整复盘页」查看每题报告。</p>
+      : `<p class="muted">按分类分组，默认折叠；点击分类可展开 / 收起，或点右上「全部展开 / 收起」。</p>
+      <div class="rv-toolbar"><button id="rvToggle" type="button" onclick="toggleReviewGroups()">全部展开</button></div>
 ${reviewSections}`}
+  </section>
+
+  <section>
+    <h2>补充知识</h2>
+    ${knowledgeItems.length ? knowledgeItems : '<div class="card muted">暂无补充知识文档。</div>'}
   </section>
 
   <section>
@@ -221,6 +261,15 @@ ${reviewSections}`}
   </section>
 
   <div class="foot">生成于 ${todayStr} ｜ 数据源：.lc/progress.json · .lc/problems/*/analysis.json</div>
+
+<script>
+function toggleReviewGroups() {
+  const groups = document.querySelectorAll('details.rv-group');
+  const openAll = Array.from(groups).some(d => !d.open);
+  groups.forEach(d => { d.open = openAll; });
+  document.getElementById('rvToggle').textContent = openAll ? '全部收起' : '全部展开';
+}
+</script>
 </div>
 
 </body>
