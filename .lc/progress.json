@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-22",
-  "current_seq": 119,
+  "current_seq": 120,
   "done": [
     {
       "seq": 1,
@@ -1283,6 +1283,17 @@
       "id": "350",
       "title": "两个数组的交集 II",
       "slug": "intersection-of-two-arrays-ii",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-22",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 120,
+      "id": "189",
+      "title": "轮转数组",
+      "slug": "rotate-array",
       "category": "双指针与滑动窗口",
       "date": "2026-08-22",
       "firstPass": true,
