@@ -1,0 +1,48 @@
+{
+  "seq": 116,
+  "id": "125",
+  "slug": "valid-palindrome",
+  "title": "验证回文串",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-22",
+  "verdict": "Accepted",
+  "testcases": "491/491",
+  "runtime_ms": null,
+  "memory_bytes": 44576000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双指针两端向内，字母数字忽略大小写",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 判断字符串是否回文，但只比较「**字母或数字**」字符，并**忽略大小写**，非字母数字一律跳过。\n- 两种思路：① 先过滤+转小写生成干净串，再双指针判断（`O(n)` 时间、`O(n)` 额外空间）；② 直接在原串上用双指针跳过非字母数字（`O(n)` 时间、`O(1)` 空间）。本题选后者更省空间。\n\n**② 关键设计决策**\n- `l=0`、`r=s.length()-1`。\n- `while (l<r)`：\n  - `!isLetterOrDigit(s.charAt(l))` → `l++`（左端非法字符，跳过）；\n  - 否则 `!isLetterOrDigit(s.charAt(r))` → `r--`（右端非法字符，跳过）；\n  - 否则 `toLowerCase(s[l])` 与 `toLowerCase(s[r])` 比较：不同 → `return false`；相同 → `l++`、`r--`。\n- 关键点：判「字母数字」要用 `Character.isLetterOrDigit`（**含数字**）。`Character.isAlphabetic` 只认字母，会把数字当非法字符误跳过——这被用例 `\"0P\"` 暴露过。\n\n**③ 边界与细节**\n- 全部为非字母数字（如 `\".,!\"`）：`l` 持续右移越过 `r`，循环退出，返回 `true`（等价于过滤后空串回文）。\n- 单字符（字母或数字）：`l==r` 不进入循环，返回 `true`。\n- 大小写：统一 `toLowerCase` 后再比较。\n- 数字参与比较：用 `isLetterOrDigit` 保留数字。\n- 上限 `2*10^5`：线性扫描，快。\n\n**④ 复杂度与最优性**\n- 每个字符至多被左右指针各扫一次，`O(n)`；空间 `O(1)`。\n- 最优性：每个字符至少要读一次以决定忽略或比较，下界 `Ω(n)`；本题达到下界且无需额外数组，空间也为最优。\n\n**⑤ 具体 case 推演：`s=\"0P\"`\n- `l=0` 指向 `'0'`、`r=1` 指向 `'P'`。\n- `isLetterOrDigit('0')=true`、`isLetterOrDigit('P')=true`，二者都合法，进入比较。\n- `toLowerCase('0')='0'` vs `toLowerCase('P')='p'` → 不同 → `return false`。**正确**（核心 `\"0p\"` 非回文）。\n- 对比错误写法：若用 `isAlphabetic`，`'0'` 会被当非法跳过 → 只剩 `'P'` vs `'P'` → 误返回 `true`。\n\n**⑥ 正例推演：`s=\"ab@ba\"`\n- `l=0('a')`、`r=4('a')` 都对，比较相等 → `l=1`、`r=3`。\n- `l=1('b')`、`r=3('b')` 相等 → `l=2`、`r=2`。\n- `l=2('@')` 非法 → `l++` → `l=3`，`l<r` 不成立，退出。\n- 返回 `true`（过滤后 `\"abba\"` 回文），符号被正确跳过。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "原串双指针跳过非法字符判回文",
+      "text": "判回文且忽略大小写/非字母数字：两端指针只比较 isLetterOrDigit 字符并用 toLowerCase 归一，非法字符仅移动指针不比较；O(n)、O(1)。",
+      "category": "双指针与滑动窗口",
+      "problem": "valid-palindrome",
+      "date": "2026-08-22"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-22",
+      "verdict": "Accepted",
+      "testcases": "491/491",
+      "runtime_ms": null,
+      "memory_bytes": 44576000,
+      "approach": "双指针两端向内，字母数字忽略大小写",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
