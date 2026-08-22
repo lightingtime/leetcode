@@ -1,0 +1,90 @@
+{
+  "id": "88",
+  "slug": "merge-sorted-array",
+  "title": "Merge Sorted Array",
+  "titleCn": "合并两个有序数组",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/merge-sorted-array/",
+  "tags": [
+    "Array",
+    "Two Pointers",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "数组",
+    "双指针",
+    "排序"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[1,2,3,0,0,0]"
+        },
+        {
+          "name": "m",
+          "value": "3"
+        },
+        {
+          "name": "nums2",
+          "value": "[2,5,6]"
+        },
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "[1,2,2,3,5,6]",
+      "explain": "需要合并 [1,2,3] 和 [2,5,6] 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[1]"
+        },
+        {
+          "name": "m",
+          "value": "1"
+        },
+        {
+          "name": "nums2",
+          "value": "[]"
+        },
+        {
+          "name": "n",
+          "value": "0"
+        }
+      ],
+      "output": "[1]",
+      "explain": "需要合并 [1] 和 [] 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums1",
+          "value": "[0]"
+        },
+        {
+          "name": "m",
+          "value": "0"
+        },
+        {
+          "name": "nums2",
+          "value": "[1]"
+        },
+        {
+          "name": "n",
+          "value": "1"
+        }
+      ],
+      "output": "[1]",
+      "explain": "需要合并的数组是 [] 和 [1] 。"
+    }
+  ],
+  "exampleTestcases": "[1,2,3,0,0,0]\n3\n[2,5,6]\n3\n[1]\n1\n[]\n0\n[0]\n0\n[1]\n1",
+  "javaSnippet": "class Solution {\n    public void merge(int[] nums1, int m, int[] nums2, int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-22T11:16:02.572Z"
+}

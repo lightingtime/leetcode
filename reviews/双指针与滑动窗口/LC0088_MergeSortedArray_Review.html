@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC88 合并两个有序数组 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 115</div>
+  <h1>LC88 · 合并两个有序数组</h1>
+  <div class="sub">三指针从后往前原地合并 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 63/63</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 双指针与滑动窗口</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-22</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 三指针从后往前原地合并</h3>
+    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.0 MB</span><span class="chip">用例 63/63</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/LC0088_MergeSortedArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m - 1, p2 = n - 1;
+        int p = m + n - 1;
+        while (p1 &gt;= 0 || p2 &gt;= 0) {
+            if (p1 &lt; 0) {
+                nums1[p--] = nums2[p2];
+                p2--;
+            } else if (p2 &lt; 0) {
+                nums1[p--] = nums1[p1--];
+            } else {
+                if (nums1[p1] &gt; nums2[p2]) {
+                    nums1[p] = nums1[p1];
+                    p1--;
+                } else {
+                    nums1[p] = nums2[p2];
+                    p2--;
+                }
+                p--;
+            }
+        }
+
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>把两个<strong>非递减</strong>数组合并进 <code>nums1</code>（原地），结果仍非递减。<code>nums1</code> 长度 <code>m+n</code>，前 <code>m</code> 个有效、后 <code>n</code> 个占位 0。</li><li>若从前往后写，会用到未动过的 <code>nums1</code> 前段，需要额外数组或 <code>O(m)</code> 空间暂存；而 <code>nums1</code> 尾部恰好有 <code>n</code> 个空位，<strong>从后往前写</strong>可完全就地完成。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li>三指针：<code>p1=m-1</code>（指向 <code>nums1</code> 有效末尾）、<code>p2=n-1</code>（指向 <code>nums2</code> 末尾）、<code>p=m+n-1</code>（指向 <code>nums1</code> 写入位）。</li><li><code>while (p1&gt;=0 || p2&gt;=0)</code>：</li><li><code>p1&lt;0</code>：<code>nums1</code> 已取完，只搬 <code>nums2</code>：<code>nums1[p--]=nums2[p2--]</code>。</li><li><code>p2&lt;0</code>：<code>nums2</code> 已取完，把剩余 <code>nums1</code> 从后往前搬回原位：<code>nums1[p--]=nums1[p1--]</code>。</li><li>否则比较 <code>nums1[p1]</code> 与 <code>nums2[p2]</code>，把<strong>较大者</strong>放到 <code>p</code>，对应指针左移。</li><li>关键点：写入位 <code>p</code> 总是当前未填的最大下标，而 <code>p1</code> 是还没搬的最右有效元素，二者不会覆盖到未处理数据，所以原地安全。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li><code>n=0</code>：<code>nums2</code> 空，走 <code>p2&lt;0</code> 分支把 <code>nums1</code> 原样搬回，结果不变。</li><li><code>m=0</code>：<code>nums1</code> 全占位 0，走 <code>p1&lt;0</code> 分支直接拷入 <code>nums2</code>。</li><li><code>m,n</code> 可为 0，但 <code>m+n&gt;=1</code>，<code>nums1</code> 长度至少 1。</li><li>相等元素：用 <code>nums1[p1] &gt; nums2[p2]</code>（<strong>严格大于</strong>），相等时取 <code>nums2</code>，合并后仍非递减。</li><li>已覆盖负数值、全相同、上限 200 等。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每个写入位只被写一次，<code>p1/p2</code> 各自只左移，总时间 <code>O(m+n)</code>；空间 <code>O(1)</code>（原地）。</li><li>最优性：结果需把 <code>m+n</code> 个元素全部归位且每个元素至少被读一次，下界 <code>Ω(m+n)</code>；本题达到下界且无需额外数组，空间也为最优。</li></ul><p>**⑤ 具体 case 推演：<code>nums1=[1,2,3,0,0,0]</code>、<code>m=3</code>、<code>nums2=[2,5,6]</code>、<code>n=3</code></p><ul><li>逐行推演（<code>p1/p2</code> 为有效末尾，<code>p</code> 为写入位）：</li></ul><div class="table-wrap"><table><thead><tr><th>p1</th><th>p2</th><th>p</th><th>比较 / 条件</th><th>动作</th></tr></thead><tbody><tr><td>2</td><td>2</td><td>5</td><td>3 vs 6 → 取 6</td><td><code>nums1[5]=6</code>，p2→1</td></tr><tr><td>2</td><td>1</td><td>4</td><td>3 vs 5 → 取 5</td><td><code>nums1[4]=5</code>，p2→0</td></tr><tr><td>2</td><td>0</td><td>3</td><td>3 vs 2 → 取 3</td><td><code>nums1[3]=3</code>，p1→1</td></tr><tr><td>1</td><td>0</td><td>2</td><td>2 vs 2 → 相等取 nums2</td><td><code>nums1[2]=2</code>，p2→-1</td></tr><tr><td>1</td><td>-1</td><td>1</td><td>p2&lt;0</td><td><code>nums1[1]=2</code>，p1→0</td></tr><tr><td>0</td><td>-1</td><td>0</td><td>p2&lt;0</td><td><code>nums1[0]=1</code>，p1→-1</td></tr></tbody></table></div><ul><li>最终 <code>nums1=[1,2,2,3,5,6]</code>，与示例一致。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>63/63 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>从后往前双指针原地合并</h3><p>原地合并有序数组：nums1 尾部有 n 个空位时，用 p1/p2/p 从大到小填，每次取较大者放到写位，避免覆盖未处理元素；O(m+n)、O(1)。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">63/63</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 42.0 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(m+n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 115 · merge-sorted-array</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote"></div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/88_merge-sorted-array/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0088_MergeSortedArray.java">src/双指针与滑动窗口/LC0088_MergeSortedArray.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-22
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
