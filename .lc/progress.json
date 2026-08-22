@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-22",
-  "current_seq": 116,
+  "current_seq": 117,
   "done": [
     {
       "seq": 1,
@@ -1250,6 +1250,17 @@
       "id": "125",
       "title": "验证回文串",
       "slug": "valid-palindrome",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-22",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 117,
+      "id": "202",
+      "title": "快乐数",
+      "slug": "happy-number",
       "category": "双指针与滑动窗口",
       "date": "2026-08-22",
       "firstPass": true,

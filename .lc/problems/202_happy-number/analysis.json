@@ -1,0 +1,48 @@
+{
+  "seq": 117,
+  "id": "202",
+  "slug": "happy-number",
+  "title": "快乐数",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-22",
+  "verdict": "Accepted",
+  "testcases": "423/423",
+  "runtime_ms": null,
+  "memory_bytes": 42740000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Floyd快慢指针判环",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 快乐数 = 反复把数替换成**各位数字平方和**，若能到 `1` 则快乐；否则必然陷入**无限循环**（数学上已知非快乐数都会进入 `4→16→37→58→89→145→42→20→4` 这个环）。\n- 判循环两种思路：① `HashSet` 记录出现过的数，重复即非快乐（空间 `O(logn)`）；② **Floyd 快慢指针**：slow 走一步、fast 走两步，相遇即说明入环（空间 `O(1)`）。本题选 Floyd，空间更省。\n\n**② 关键设计决策**\n- `getNext(n)`：对每个十进制位取平方并累加；`n` 最大 `2^31-1` 只有 10 位，平方和上限 `10*81=810`，中间值很小、不会溢出。\n- `slow=n`、`fast=getNext(n)`；`while (fast!=1 && slow!=fast)` 内 `slow` 走一步、`fast` 走两步；退出后 `return fast==1`。\n- 相遇有两种：`fast` 先到 1（快乐），或 `slow==fast` 落在环上（不快乐）。\n\n**③ 边界与细节**\n- `n=1`：`fast=getNext(1)=1`，循环不进入，直接返回 `true`。\n- 直接到 1（如 `10`）：`fast` 首步即 `1`，返回 `true`。\n- 不快乐数（如 `2`）：slow/fast 最终在 4 的环上相遇，`slow==fast` 退出，返回 `false`。\n- 上限 `2^31-1`：`getNext` 处理 10 位数字，平方和 ≤ 810，无溢出风险。\n\n**④ 复杂度与最优性**\n- 每次 `getNext` 为 `O(logn)`（位数）；快乐过程存在有限上界（平方和 ≤ 810 后进入小状态空间），循环次数有常数界；总时间 `O(logn)` 量级。\n- 空间 `O(1)`（只用两个指针）。\n- 最优性：HashSet 法需要 `O(logn)` 空间；Floyd 把空间降到常数，是判环问题的空间最优解。\n\n**⑤ 具体 case 推演：`n=19`（快乐）**\n- 序列：`19 → 82 → 68 → 100 → 1`。\n- `slow=19`、`fast=82`：\n  - iter1：slow=`82`，fast=`getNext(getNext(82))=getNext(68)=100`；\n  - iter2：slow=`68`，fast=`getNext(getNext(100))=getNext(1)=1`；\n  - `fast==1` 退出 → `return true`。\n\n**⑥ 具体 case 推演：`n=2`（不快乐）**\n- `slow=2`、`fast=4`：\n  - iter1：slow=`4`，fast=`getNext(getNext(4))=getNext(16)=37`；\n  - iter2：slow=`16`，fast=`getNext(getNext(37))=getNext(58)=89`；\n  - iter3：slow=`37`，fast=`getNext(getNext(89))=getNext(145)=42`；\n  - iter4：slow=`58`，fast=`getNext(getNext(42))=getNext(20)=4`；\n  - 继续后 slow/fast 在环 `4→16→37→58→89→145→42→20→4` 上相遇 → `return false`。",
+  "time_complexity": "O(logn)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "Floyd快慢指针判环",
+      "text": "状态反复转移且可能成环时，用 slow 一步 / fast 两步，相遇即入环（到 1 则快乐），O(1) 空间代替 HashSet。",
+      "category": "双指针与滑动窗口",
+      "problem": "happy-number",
+      "date": "2026-08-22"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-22",
+      "verdict": "Accepted",
+      "testcases": "423/423",
+      "runtime_ms": null,
+      "memory_bytes": 42740000,
+      "approach": "Floyd快慢指针判环",
+      "time_complexity": "O(logn)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

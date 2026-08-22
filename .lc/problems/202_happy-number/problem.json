@@ -1,0 +1,46 @@
+{
+  "id": "202",
+  "slug": "happy-number",
+  "title": "Happy Number",
+  "titleCn": "快乐数",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/happy-number/",
+  "tags": [
+    "Hash Table",
+    "Math",
+    "Two Pointers",
+    "Floyd 判圈算法"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "数学",
+    "双指针",
+    "Floyd 判圈算法"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "19"
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "2"
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "19\n2",
+  "javaSnippet": "class Solution {\n    public boolean isHappy(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-22T12:14:02.892Z"
+}
