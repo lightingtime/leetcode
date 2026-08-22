@@ -1,0 +1,25 @@
+{
+  "id": "251",
+  "slug": "flatten-2d-vector",
+  "title": "Flatten 2D Vector",
+  "titleCn": "展开二维向量",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/flatten-2d-vector/",
+  "tags": [
+    "Design",
+    "Array",
+    "Two Pointers",
+    "Iterator"
+  ],
+  "tagsCn": [
+    "设计",
+    "数组",
+    "双指针",
+    "迭代器"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [],
+  "exampleTestcases": "[\"Vector2D\",\"next\",\"next\",\"next\",\"hasNext\",\"hasNext\",\"next\",\"hasNext\"]\n[[[[1,2],[3],[4]]],[],[],[],[],[],[],[]]",
+  "javaSnippet": "",
+  "fetchedAt": "2026-08-22T14:06:20.238Z"
+}
