@@ -55,14 +55,15 @@ function collectReviewFiles(dir, base) {
 }
 const reviewFiles = fs.existsSync(REVIEWS) ? collectReviewFiles(REVIEWS, '') : [];
 
-// 补充知识：扫描 reviews 下所有 .md 文档，按所在目录标注分类
+// 补充知识：扫描 reviews 下的通用文档（.html/.md，排除 index.html 与 LC*_Review.html 复盘页），按所在目录标注分类
 function collectKnowledgeDocs(dir, base) {
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name === 'index.html') continue;
+    if (entry.isFile() && /^LC\d{4}_.*_Review\.html$/.test(entry.name)) continue;
     const rel = base ? base + '/' + entry.name : entry.name;
     if (entry.isDirectory()) out.push(...collectKnowledgeDocs(path.join(dir, entry.name), rel));
-    else if (entry.isFile() && entry.name.endsWith('.md')) out.push(rel);
+    else if (entry.isFile() && (entry.name.endsWith('.html') || entry.name.endsWith('.md'))) out.push(rel);
   }
   return out;
 }
