@@ -1,0 +1,54 @@
+{
+  "id": "395",
+  "slug": "longest-substring-with-at-least-k-repeating-characters",
+  "title": "Longest Substring with At Least K Repeating Characters",
+  "titleCn": "至少有 K 个重复字符的最长子串",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/",
+  "tags": [
+    "Hash Table",
+    "String",
+    "Divide and Conquer",
+    "Sliding Window"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串",
+    "分治",
+    "滑动窗口"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"aaabb\""
+        },
+        {
+          "name": "k",
+          "value": "3"
+        }
+      ],
+      "output": "3",
+      "explain": "最长子串为 \"aaa\" ，其中 'a' 重复了 3 次。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"ababbc\""
+        },
+        {
+          "name": "k",
+          "value": "2"
+        }
+      ],
+      "output": "5",
+      "explain": "最长子串为 \"ababb\" ，其中 'a' 重复了 2 次， 'b' 重复了 3 次。"
+    }
+  ],
+  "exampleTestcases": "\"aaabb\"\n3\n\"ababbc\"\n2",
+  "javaSnippet": "class Solution {\n    public int longestSubstring(String s, int k) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-22T14:29:08.116Z"
+}

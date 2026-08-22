@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-22",
-  "current_seq": 120,
+  "current_seq": 124,
   "done": [
     {
       "seq": 1,
@@ -1299,6 +1299,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 124,
+      "id": "395",
+      "title": "至少有 K 个重复字符的最长子串",
+      "slug": "longest-substring-with-at-least-k-repeating-characters",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-22",
+      "firstPass": true,
+      "optimal": false,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2159,6 +2170,17 @@
         "哈希表"
       ],
       "last_seen": "2026-08-21"
+    },
+    {
+      "habit": "切分法段内验证缺失：按全局频次<k 的字符切分后，直接拿两切点间原始长度当答案，没对每段重新统计并验证段内每个字符都>=k（全局够、段内可能不够），导致把非法段长度计入；且无切分点（所有字符全局>=k）时漏掉整串合法的情况",
+      "count": 1,
+      "examples": [
+        "longest-substring-with-at-least-k-repeating-characters"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-22"
     }
   ],
   "category_hints": {
