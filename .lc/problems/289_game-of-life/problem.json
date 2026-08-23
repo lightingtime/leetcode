@@ -1,0 +1,44 @@
+{
+  "id": "289",
+  "slug": "game-of-life",
+  "title": "Game of Life",
+  "titleCn": "生命游戏",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/game-of-life/",
+  "tags": [
+    "Array",
+    "Matrix",
+    "Simulation"
+  ],
+  "tagsCn": [
+    "数组",
+    "矩阵",
+    "模拟"
+  ],
+  "category": "数组与矩阵",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "board",
+          "value": "[[0,1,0],[0,0,1],[1,1,1],[0,0,0]]"
+        }
+      ],
+      "output": "[[0,0,0],[1,0,1],[0,1,1],[0,1,0]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "board",
+          "value": "[[1,1],[1,0]]"
+        }
+      ],
+      "output": "[[1,1],[1,1]]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[0,1,0],[0,0,1],[1,1,1],[0,0,0]]\n[[1,1],[1,0]]",
+  "javaSnippet": "class Solution {\n    public void gameOfLife(int[][] board) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-23T07:28:43.515Z"
+}

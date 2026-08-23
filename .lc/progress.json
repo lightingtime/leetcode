@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 128,
+  "current_seq": 129,
   "done": [
     {
       "seq": 1,
@@ -1341,6 +1341,17 @@
       "category": "数组与矩阵",
       "date": "2026-08-23",
       "firstPass": false,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 129,
+      "id": "289",
+      "title": "生命游戏",
+      "slug": "game-of-life",
+      "category": "数组与矩阵",
+      "date": "2026-08-23",
+      "firstPass": true,
       "optimal": true,
       "notes": ""
     }
