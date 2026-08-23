@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 132,
+  "current_seq": 133,
   "done": [
     {
       "seq": 1,
@@ -1387,6 +1387,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 133,
+      "id": "8",
+      "title": "字符串转换整数 (atoi)",
+      "slug": "string-to-integer-atoi",
+      "category": "字符串",
+      "date": "2026-08-23",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2278,6 +2289,39 @@
       ],
       "categories": [
         "数组与矩阵"
+      ],
+      "last_seen": "2026-08-23"
+    },
+    {
+      "habit": "atoi 溢出检测漏最后一位加法：temp*=10 后 temp+digit 本身溢出没被拦住（2147483640+8=2147483648 爆 int）；应在累加前检查 temp > (上限-digit)/10。且用 temp==MAX 当溢出标志对负数不对称，-2147483647（绝对值恰为 MAX）被误截成 MIN；负数应按 [-2^31,0] 方向判断",
+      "count": 1,
+      "examples": [
+        "string-to-integer-atoi"
+      ],
+      "categories": [
+        "字符串"
+      ],
+      "last_seen": "2026-08-23"
+    },
+    {
+      "habit": "atoi 解析把数字中的 '0' 当终止符：hasNum 后遇 '0' 直接 break，'1000' 返回 1；前导零无需特判（累加 0 无影响），'0' 应走统一数字分支，只有非数字字符才停止读取",
+      "count": 1,
+      "examples": [
+        "string-to-integer-atoi"
+      ],
+      "categories": [
+        "字符串"
+      ],
+      "last_seen": "2026-08-23"
+    },
+    {
+      "habit": "负数溢出/边界处理：Integer.MAX_VALUE * -1 == -2147483647 不是最小值，负方向截断下限应为 Integer.MIN_VALUE(-2147483648)，两者差 1；且 -2147483648 的绝对值 2147483648 超出 int 无法按正数累加再取负，累加应沿负数方向或改用 long 容器",
+      "count": 1,
+      "examples": [
+        "string-to-integer-atoi"
+      ],
+      "categories": [
+        "字符串"
       ],
       "last_seen": "2026-08-23"
     }

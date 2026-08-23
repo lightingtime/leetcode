@@ -1,0 +1,19 @@
+{
+  "id": "8",
+  "slug": "string-to-integer-atoi",
+  "title": "String to Integer (atoi)",
+  "titleCn": "字符串转换整数 (atoi)",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/string-to-integer-atoi/",
+  "tags": [
+    "String"
+  ],
+  "tagsCn": [
+    "字符串"
+  ],
+  "category": "字符串",
+  "examples": [],
+  "exampleTestcases": "\"42\"\n\"   -042\"\n\"1337c0d3\"\n\"0-1\"\n\"words and 987\"",
+  "javaSnippet": "class Solution {\n    public int myAtoi(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-23T08:03:13.441Z"
+}
