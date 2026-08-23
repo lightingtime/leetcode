@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 131,
+  "current_seq": 132,
   "done": [
     {
       "seq": 1,
@@ -1371,6 +1371,17 @@
       "id": "171",
       "title": "Excel 表列序号",
       "slug": "excel-sheet-column-number",
+      "category": "字符串",
+      "date": "2026-08-23",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 132,
+      "id": "412",
+      "title": "Fizz Buzz",
+      "slug": "fizz-buzz",
       "category": "字符串",
       "date": "2026-08-23",
       "firstPass": true,

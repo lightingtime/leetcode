@@ -1,0 +1,54 @@
+{
+  "id": "412",
+  "slug": "fizz-buzz",
+  "title": "Fizz Buzz",
+  "titleCn": "Fizz Buzz",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/fizz-buzz/",
+  "tags": [
+    "Math",
+    "String",
+    "Simulation"
+  ],
+  "tagsCn": [
+    "数学",
+    "字符串",
+    "模拟"
+  ],
+  "category": "字符串",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "[\"1\",\"2\",\"Fizz\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "5"
+        }
+      ],
+      "output": "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "15"
+        }
+      ],
+      "output": "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\",\"7\",\"8\",\"Fizz\",\"Buzz\",\"11\",\"Fizz\",\"13\",\"14\",\"FizzBuzz\"]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "3\n5\n15",
+  "javaSnippet": "class Solution {\n    public List<String> fizzBuzz(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-23T07:58:24.501Z"
+}

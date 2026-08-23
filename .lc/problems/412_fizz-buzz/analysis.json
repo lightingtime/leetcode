@@ -1,0 +1,48 @@
+{
+  "seq": 132,
+  "id": "412",
+  "slug": "fizz-buzz",
+  "title": "Fizz Buzz",
+  "category": "字符串",
+  "date": "2026-08-23",
+  "verdict": "Accepted",
+  "testcases": "8/8",
+  "runtime_ms": null,
+  "memory_bytes": 47360000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "单循环分类：15 倍数优先 FizzBuzz，再 Fizz/Buzz/数字",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 对 `1..n` 每个数做**分类映射**：15 的倍数 → FizzBuzz，3 的倍数 → Fizz，5 的倍数 → Buzz，否则数字本身。本质是简单的模拟/条件分支题。\n- 核心难点只有一处：**判断优先级**——同时是 3 和 5 的倍数（即 15 的倍数）必须最先处理，否则会被 Fizz 或 Buzz 抢先。\n\n**② 关键设计决策**\n- `for i = 1..n`，按优先级依次判断：\n  1. `i % 15 == 0` → `\"FizzBuzz\"`（等价于 `i%3==0 && i%5==0`，15 是 3 和 5 的最小公倍数）；\n  2. `i % 3 == 0` → `\"Fizz\"`；\n  3. `i % 5 == 0` → `\"Buzz\"`；\n  4. 否则 `String.valueOf(i)`。\n- 用 `if / else if` 链保证**互斥**：每个 i 只命中一个分支。\n\n**③ 边界与细节**\n- `n=1`：`i%15/3/5` 都不成立 → `[\"1\"]`。\n- 15 的倍数：`15` → FizzBuzz；若把 `i%15==0` 放后面，15 会先命中 `i%3==0` 输出 Fizz——顺序错误。\n- 非倍数数字：`14` → `\"14\"`、`16` → `\"16\"`。\n- 上限 `n=10000`：`9999` 是 3 的倍数非 5 → Fizz；`10000` 是 5 的倍数非 3 → Buzz；`9997` → 数字。\n\n**④ 复杂度与最优性**\n- 每个数 O(1) 分支判断，总 `O(n)`；输出列表本身 `O(n)`，辅助空间 `O(1)`。\n- 最优性：必须为每个 i 生成一个结果元素，下界 `Ω(n)`；本解法达到。\n\n**⑤ 具体 case 推演：`n=15` 的关键位置**\n| i | 判断 | 结果 |\n| --- | --- | --- |\n| 3 | `3%15≠0`、`3%3==0` | Fizz |\n| 5 | `5%15≠0`、`5%3≠0`、`5%5==0` | Buzz |\n| 14 | 三个条件都不成立 | \"14\" |\n| 15 | `15%15==0`（最先命中） | FizzBuzz |\n- 若把 `i%3==0` 放最前，15 会被判成 Fizz——`%15` 置顶是关键。**正确**。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "多取模条件分类：交叠条件优先",
+      "text": "多条件 if/else 分类且条件有交叠（如同时是 3 和 5 的倍数）时，交叠条件（公倍数，%15）必须放最前，否则会被单一条件抢先；else if 链保证互斥。O(n) 时间。",
+      "category": "字符串",
+      "problem": "fizz-buzz",
+      "date": "2026-08-23"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-23",
+      "verdict": "Accepted",
+      "testcases": "8/8",
+      "runtime_ms": null,
+      "memory_bytes": 47360000,
+      "approach": "单循环分类：15 倍数优先 FizzBuzz，再 Fizz/Buzz/数字",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "字符串子串/子序列题先想双指针、滑动窗口、DP 三大件。"
+  ]
+}
