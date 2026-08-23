@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 125,
+  "current_seq": 127,
   "done": [
     {
       "seq": 1,
@@ -1321,6 +1321,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 127,
+      "id": "54",
+      "title": "螺旋矩阵",
+      "slug": "spiral-matrix",
+      "category": "数组与矩阵",
+      "date": "2026-08-23",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2215,6 +2226,7 @@
     108,
     121,
     122,
-    123
+    123,
+    126
   ]
 }
