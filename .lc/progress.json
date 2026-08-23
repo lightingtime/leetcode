@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-22",
-  "current_seq": 124,
+  "updated": "2026-08-23",
+  "current_seq": 125,
   "done": [
     {
       "seq": 1,
@@ -1309,6 +1309,17 @@
       "date": "2026-08-22",
       "firstPass": true,
       "optimal": false,
+      "notes": ""
+    },
+    {
+      "seq": 125,
+      "id": "295",
+      "title": "数据流的中位数",
+      "slug": "find-median-from-data-stream",
+      "category": "双指针与滑动窗口",
+      "date": "2026-08-23",
+      "firstPass": true,
+      "optimal": true,
       "notes": ""
     }
   ],

@@ -1,0 +1,48 @@
+{
+  "seq": 125,
+  "id": "295",
+  "slug": "find-median-from-data-stream",
+  "title": "数据流的中位数",
+  "category": "双指针与滑动窗口",
+  "date": "2026-08-23",
+  "verdict": "Accepted",
+  "testcases": "22/22",
+  "runtime_ms": null,
+  "memory_bytes": 112568000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "对顶堆（大顶堆存较小一半 + 小顶堆存较大一半）",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 数据流不断追加整数，随时要回答「当前已插入元素的中位数」：本质是**动态集合的中间值查询**，需要一种既能快速插入、又能快速取中间值的结构。\n- 朴素思路：每次插入后重排，`findMedian` 取中间，插入 `O(n log n)`；或维护有序数组二分插入，插入 `O(n)`（数组搬移）。对 `5*10^4` 次调用都太慢。\n- 关键观察：中位数只依赖「较小的一半最大值」和「较大的一半最小值」。把数据分成两半，各用一个堆维护极值：**大顶堆（max-heap）存较小的一半，小顶堆（min-heap）存较大的一半**，中位数就是两个堆顶的组合——这就是「对顶堆」思路，插入 `O(log n)`、查询 `O(1)`。\n- 为什么选堆而不是平衡树/有序数组：堆只关心「顶」，插入 `O(log n)` 且无需搬移，完美匹配「只取中间两个数」的需求。\n\n**② 关键设计决策**\n- 两个堆：`firstHeap`（大顶堆，存较小一半）、`secondHeap`（小顶堆，存较大一半）。\n- 平衡不变式：`secondHeap.size() <= firstHeap.size() <= secondHeap.size() + 1`，且 `firstHeap` 内所有元素 <= `secondHeap` 内所有元素。\n- `addNum(num)`：\n  1. 若 `firstHeap` 为空或 `num < firstHeap.peek()` → 进 `firstHeap`（比当前中位数小，进下半区）；否则进 `secondHeap`。\n  2. 平衡修正：若 `secondHeap.size() + 1 < firstHeap.size()` → 把 `firstHeap` 顶搬给 `secondHeap`；若 `firstHeap.size() < secondHeap.size()` → 把 `secondHeap` 顶搬给 `firstHeap`。\n- `findMedian()`：`firstHeap.size() > secondHeap.size()`（总数奇数）→ 返回 `firstHeap.peek()`；否则（偶数）→ 返回 `(firstHeap.peek() + secondHeap.peek()) / 2.0`。\n- 相等元素走 else 进 `secondHeap`：相等时进哪边都不破坏极值关系，平衡规则会把数量拉回合法区间，中位数不变。\n\n**③ 边界与细节**\n- 单元素：`firstHeap` 1 个、`secondHeap` 空，奇数分支返回堆顶。\n- 偶数个：两堆各一半，取两堆顶平均（必须 `/ 2.0`，`/ 2` 会整除丢精度）。\n- 全相同：相等元素交替进堆，两堆大小始终合法，中位数恒为该值。\n- 数值范围 `-10^5 ~ 10^5`：堆比较无溢出问题，中位数最大 `(100000+100000)/2 = 100000`，`int` 内。\n- 大流量递增插入：元素不断进 `secondHeap`，平衡规则每次把 `secondHeap` 顶搬回 `firstHeap`，两堆交替增长。\n\n**④ 复杂度与最优性**\n- `addNum`：单次堆插入 + 至多一次堆顶搬移，`O(log n)`；`findMedian`：只看堆顶，`O(1)`。空间 `O(n)` 存全部元素。\n- 最优性论证（下限）：若 `addNum` 能 `O(1)`，则插入 `n` 个数后 `findMedian` 若也 `O(1)`，就得到 `O(n)` 的比较排序，与比较排序下界 `Ω(n log n)` 矛盾 → 插入至少 `Ω(log n)`。本解法达到 `O(log n)`；且任何解法都必须存全部数据（`Ω(n)` 空间），时间空间均为最优。\n\n**⑤ 具体 case 推演：官方示例 1,2,3**\n| 操作 | 堆变化 | 结果 |\n| --- | --- | --- |\n| `addNum(1)` | `firstHeap=[1]`，`secondHeap=[]` | 左空进左；`0+1<1` 否 |\n| `findMedian()` | 左 1 > 右 0 | `1.0` |\n| `addNum(2)` | `2<1` 否 → 进右 | `firstHeap=[1]`，`secondHeap=[2]` |\n| `findMedian()` | 左 1 == 右 1 | `(1+2)/2 = 1.5` |\n| `addNum(3)` | `3<1` 否 → 进右 | `firstHeap=[1]`，`secondHeap=[2,3]`；平衡 `1<2` → 右顶 `2` 搬回左 → `firstHeap=[1,2]`，`secondHeap=[3]` |\n| `findMedian()` | 左 2 > 右 1 | `2.0` |\n\n**⑥ 具体 case 推演：逆序 30,20,10（中位应为 20）**\n- `addNum(30)`：左空进左 → `firstHeap=[30]`，`secondHeap=[]`。\n- `addNum(20)`：`20<30` 进左 → `firstHeap=[20,30]`，`secondHeap=[]`；平衡 `0+1<2` 成立 → 左顶 `30` 搬右 → `firstHeap=[20]`，`secondHeap=[30]`。\n- `addNum(10)`：`10<20` 进左 → `firstHeap=[10,20]`，`secondHeap=[30]`；平衡 `1+1<2` 否、`2<1` 否 → 保持。\n- `findMedian()`：左 2 > 右 1 → 返回 `firstHeap` 顶 `20`。**正确**（排序后 `[10,20,30]` 中位 20）。\n- 中途校验：`[20,30]` 时 `findMedian = (20+30)/2 = 25.0`，与排序结果一致。",
+  "time_complexity": "O(log n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "对顶堆维护动态中位数",
+      "text": "数据流动态取中位数：大顶堆存较小一半、小顶堆存较大一半，保持 second<=first<=second+1；addNum 先按与 firstHeap 顶比较决定进哪堆，再单向搬堆顶平衡，findMedian 看两堆大小取堆顶或平均。O(log n) 插入 / O(1) 查询。",
+      "category": "双指针与滑动窗口",
+      "problem": "find-median-from-data-stream",
+      "date": "2026-08-23"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-23",
+      "verdict": "Accepted",
+      "testcases": "22/22",
+      "runtime_ms": null,
+      "memory_bytes": 112568000,
+      "approach": "对顶堆（大顶堆存较小一半 + 小顶堆存较大一半）",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}
