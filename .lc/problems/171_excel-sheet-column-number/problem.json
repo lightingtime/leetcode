@@ -1,0 +1,52 @@
+{
+  "id": "171",
+  "slug": "excel-sheet-column-number",
+  "title": "Excel Sheet Column Number",
+  "titleCn": "Excel 表列序号",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/excel-sheet-column-number/",
+  "tags": [
+    "Math",
+    "String"
+  ],
+  "tagsCn": [
+    "数学",
+    "字符串"
+  ],
+  "category": "字符串",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "columnTitle",
+          "value": "\"A\""
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "columnTitle",
+          "value": "\"AB\""
+        }
+      ],
+      "output": "28",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "columnTitle",
+          "value": "\"ZY\""
+        }
+      ],
+      "output": "701",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"A\"\n\"AB\"\n\"ZY\"",
+  "javaSnippet": "class Solution {\n    public int titleToNumber(String columnTitle) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-23T07:50:34.984Z"
+}

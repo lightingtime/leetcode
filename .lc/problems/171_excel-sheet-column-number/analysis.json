@@ -1,0 +1,48 @@
+{
+  "seq": 131,
+  "id": "171",
+  "slug": "excel-sheet-column-number",
+  "title": "Excel 表列序号",
+  "category": "字符串",
+  "date": "2026-08-23",
+  "verdict": "Accepted",
+  "testcases": "1002/1002",
+  "runtime_ms": null,
+  "memory_bytes": 43956000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "从右往左按位加权累加（26 进制无 0）",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- Excel 列名是**无 0 的 26 进制**：`A=1, ..., Z=26, AA=27`。与普通 26 进制（0~25）的区别是这里每一位取值 1~26，且没有表示 0 的字符。\n- 任务就是把这个特殊 26 进制数转成十进制整数。\n- 两种等价写法：从左往右 `ans = ans * 26 + k`；或从右往左 `ans += k * mul, mul *= 26`。本题用户采用**从右往左按位加权**。\n\n**② 关键设计决策**\n- `k = columnTitle.charAt(i) - A + 1`：把字母映射到 1~26（`A` 是 1，不是 0，这是本题和普通 26 进制最大的区别）。\n- `mul` 从 1 开始，表示当前位的权值（最低位 26^0，向左依次 26^1、26^2 ...）；每处理一位 `ans += k * mul`，然后 `mul *= 26`。\n- 从右往左遍历：最低位权值 1，最高位权值 26^(len-1)。\n\n**③ 边界与细节**\n- 单字符：`A=1`、`Z=26`——`Z` 不是 0，是 26，所以它进位后才是 `AA=27`。\n- 进位：`AZ=52`（1×26 + 26）、`BA=53`、`ZZ=702`（26×26 + 26）。\n- 三字符：`AAA=703`（1×676 + 1×26 + 1）。\n- 上限 `FXSHRXW=2147483647`：中间累加值均小于 int 上限（`ans*26` 在最后一步前约 8.2e8），无溢出风险；若用 `Math.pow` 浮点会丢精度，应避免。\n- 长度 1 也正确：`mul` 只乘一次。\n\n**④ 复杂度与最优性**\n- 每个字符处理一次，`O(n)`；只用 `ans`、`mul` 两个变量，`O(1)`。\n- 最优性：必须读取每个字符才能确定其贡献，下界 `Ω(n)`；本解法达到。\n\n**⑤ 具体 case 推演：`\"AB\"`（期望 28）**\n| i | 字符 | k | mul | ans 累加 |\n| --- | --- | --- | --- | --- |\n| 1 | B | 2 | 1 | 0 + 2×1 = 2 |\n| 0 | A | 1 | 26 | 2 + 1×26 = 28 |\n- 返回 28。**正确**（A 在最左是 26 位）。\n\n**⑥ 具体 case 推演：`\"ZY\"`（期望 701）**\n| i | 字符 | k | mul | ans 累加 |\n| --- | --- | --- | --- | --- |\n| 1 | Y | 25 | 1 | 0 + 25×1 = 25 |\n| 0 | Z | 26 | 26 | 25 + 26×26 = 701 |\n- 返回 701。**正确**。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "无 0 的 26 进制转十进制",
+      "text": "Excel 列名转序号：A=1..Z=26，无 0 位；从右往左 ans += k*mul（k=char-'A'+1，mul 从 1 起每次 *26），或等价从左往右 ans=ans*26+k。O(n) 时间、O(1) 空间，上限 FXSHRXW=2^31-1 无溢出。",
+      "category": "字符串",
+      "problem": "excel-sheet-column-number",
+      "date": "2026-08-23"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-23",
+      "verdict": "Accepted",
+      "testcases": "1002/1002",
+      "runtime_ms": null,
+      "memory_bytes": 43956000,
+      "approach": "从右往左按位加权累加（26 进制无 0）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "字符串子串/子序列题先想双指针、滑动窗口、DP 三大件。"
+  ]
+}

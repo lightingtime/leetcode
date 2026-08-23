@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 130,
+  "current_seq": 131,
   "done": [
     {
       "seq": 1,
@@ -1360,6 +1360,17 @@
       "id": "14",
       "title": "最长公共前缀",
       "slug": "longest-common-prefix",
+      "category": "字符串",
+      "date": "2026-08-23",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 131,
+      "id": "171",
+      "title": "Excel 表列序号",
+      "slug": "excel-sheet-column-number",
       "category": "字符串",
       "date": "2026-08-23",
       "firstPass": true,
