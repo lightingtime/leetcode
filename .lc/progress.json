@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 127,
+  "current_seq": 128,
   "done": [
     {
       "seq": 1,
@@ -1332,6 +1332,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 128,
+      "id": "162",
+      "title": "寻找峰值",
+      "slug": "find-peak-element",
+      "category": "数组与矩阵",
+      "date": "2026-08-23",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2203,6 +2214,28 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-08-22"
+    },
+    {
+      "habit": "峰值二分方向依据错：用 nums[mid] 与区间右端点 nums[r] 比较决定收缩方向，丢失局部趋势信息，上坡段被错误丢到左半；应比较 nums[mid] 与相邻元素 nums[mid+1]，邻居更大则峰在右半、更小则峰在左半含 mid",
+      "count": 1,
+      "examples": [
+        "find-peak-element"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-23"
+    },
+    {
+      "habit": "二分端点特判无 else 推进：mid 落在 0 或 n-1 且该位置非峰时，if 分支成立但内部不 return，else 链被整体跳过，l/r 都不更新导致死循环；端点非峰时也必须收缩搜索区间，或让端点走统一方向判断避免特判",
+      "count": 1,
+      "examples": [
+        "find-peak-element"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-08-23"
     }
   ],
   "category_hints": {
