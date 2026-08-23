@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-23",
-  "current_seq": 129,
+  "current_seq": 130,
   "done": [
     {
       "seq": 1,
@@ -1350,6 +1350,17 @@
       "title": "生命游戏",
       "slug": "game-of-life",
       "category": "数组与矩阵",
+      "date": "2026-08-23",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 130,
+      "id": "14",
+      "title": "最长公共前缀",
+      "slug": "longest-common-prefix",
+      "category": "字符串",
       "date": "2026-08-23",
       "firstPass": true,
       "optimal": true,

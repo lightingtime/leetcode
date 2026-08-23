@@ -1,0 +1,48 @@
+{
+  "seq": 130,
+  "id": "14",
+  "slug": "longest-common-prefix",
+  "title": "最长公共前缀",
+  "category": "字符串",
+  "date": "2026-08-23",
+  "verdict": "Accepted",
+  "testcases": "126/126",
+  "runtime_ms": null,
+  "memory_bytes": 43776000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "纵向逐字符比较（以 strs[0] 为基准逐列扫描）",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 求字符串数组的**最长公共前缀**：一个前缀要同时是每个串的前缀，且长度不能超过最短串。\n- 两种思路：① **横向**——拿第一个串作为候选，逐个与后面串取公共前缀逐步缩短；② **纵向**——按「列」扫描，所有串同一位置的字符都相等才继续下一列，遇到第一个不等或某个串到头就停。\n- 本题选纵向：逻辑直观（逐位对齐比较），且天然处理「某串较短」——那串到头就是公共前缀的终点。\n\n**② 关键设计决策**\n- 以 `strs[0]` 为基准，`index` 从 0 递增，`while (index < strs[0].length())`。\n- 每轮取基准串的 `c = strs[0].charAt(index)`，遍历所有串：\n  - 若 `index >= str.length()`（该串比基准短，此位置已超出其末尾）→ 不相等，停止；\n  - 若 `str.charAt(index) != c` → 不相等，停止。\n- `index++` 后判断：`allEquals` 为真 → `sb.append(c)`（该列全部相等，纳入公共前缀）；否则 `break` 结束。\n- 返回 `sb.toString()`。\n\n**③ 边界与细节**\n- `strs[0]` 为空串：`while` 条件 `0 < 0` 不成立，直接返回 `\"\"`——空串与任何串公共前缀为空。\n- 某串比基准短：`index >= str.length()` 必须**先于** `charAt(index)` 判断，否则 `charAt` 越界抛异常。\n- 单元素数组：基准串自身全部列相等，返回它本身。\n- 首字符即不同：第一轮 `allEquals=false`，`sb` 为空，返回 `\"\"`。\n\n**④ 复杂度与最优性**\n- 最坏情况（所有串相同且等长）：每个串每个字符都比较一次，`O(S)`（S = 所有串长度之和）；辅助空间 `O(1)`（不含返回串）。\n- 最优性：公共前缀的每个字符必须在每个串中被确认一次，最坏（全相同）需读全部字符，下界 `Ω(S)`；本解法达到。\n\n**⑤ 具体 case 推演：示例 1 `[\"flower\",\"flow\",\"flight\"]`**\n| index | 基准字符 c | 各串该位 | 结果 |\n| --- | --- | --- | --- |\n| 0 | f | flower=f, flow=f, flight=f | 全等 → append f |\n| 1 | l | flower=l, flow=l, flight=l | 全等 → append l |\n| 2 | o | flower=o, flow=o, flight=i | flight 不等 → 停止 |\n- 返回 `\"fl\"`。**正确**。\n\n**⑥ 具体 case 推演：短串截断 `[\"ab\",\"a\"]`**\n| index | 基准字符 c | 各串该位 | 结果 |\n| --- | --- | --- | --- |\n| 0 | a | ab=a, a=a | 全等 → append a |\n| 1 | b | ab=b, \"a\" 的 `1 >= 1`（到头） | 不等 → 停止 |\n- 返回 `\"a\"`。**正确**——若没有 `index >= str.length()` 检查，这里会对长度 1 的串 `charAt(1)` 越界。",
+  "time_complexity": "O(S)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "纵向逐列扫描求公共前缀",
+      "text": "多串最长公共前缀：以 strs[0] 为基准逐列比较，所有串同位置字符相等才 append，遇到某串到头(index>=str.length())或字符不等即停；strs[0] 空串直接返回空。O(S) 时间、O(1) 空间。",
+      "category": "字符串",
+      "problem": "longest-common-prefix",
+      "date": "2026-08-23"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-23",
+      "verdict": "Accepted",
+      "testcases": "126/126",
+      "runtime_ms": null,
+      "memory_bytes": 43776000,
+      "approach": "纵向逐字符比较（以 strs[0] 为基准逐列扫描）",
+      "time_complexity": "O(S)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "字符串子串/子序列题先想双指针、滑动窗口、DP 三大件。"
+  ]
+}

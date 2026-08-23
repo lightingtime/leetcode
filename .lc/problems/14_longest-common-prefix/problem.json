@@ -1,0 +1,44 @@
+{
+  "id": "14",
+  "slug": "longest-common-prefix",
+  "title": "Longest Common Prefix",
+  "titleCn": "最长公共前缀",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/longest-common-prefix/",
+  "tags": [
+    "Trie",
+    "Array",
+    "String"
+  ],
+  "tagsCn": [
+    "字典树",
+    "数组",
+    "字符串"
+  ],
+  "category": "字符串",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "strs",
+          "value": "[\"flower\",\"flow\",\"flight\"]"
+        }
+      ],
+      "output": "\"fl\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "strs",
+          "value": "[\"dog\",\"racecar\",\"car\"]"
+        }
+      ],
+      "output": "\"\"",
+      "explain": "输入不存在公共前缀。"
+    }
+  ],
+  "exampleTestcases": "[\"flower\",\"flow\",\"flight\"]\n[\"dog\",\"racecar\",\"car\"]",
+  "javaSnippet": "class Solution {\n    public String longestCommonPrefix(String[] strs) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-23T07:42:33.725Z"
+}
