@@ -1,0 +1,56 @@
+{
+  "id": "387",
+  "slug": "first-unique-character-in-a-string",
+  "title": "First Unique Character in a String",
+  "titleCn": "字符串中的第一个唯一字符",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/first-unique-character-in-a-string/",
+  "tags": [
+    "Queue",
+    "Hash Table",
+    "String",
+    "Counting"
+  ],
+  "tagsCn": [
+    "队列",
+    "哈希表",
+    "字符串",
+    "计数"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"leetcode\""
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"loveleetcode\""
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"aabb\""
+        }
+      ],
+      "output": "-1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"leetcode\"\n\"loveleetcode\"\n\"aabb\"",
+  "javaSnippet": "class Solution {\n    public int firstUniqChar(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-24T12:31:49.968Z"
+}

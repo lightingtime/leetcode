@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 138,
+  "current_seq": 139,
   "done": [
     {
       "seq": 1,
@@ -1451,6 +1451,17 @@
       "category": "链表",
       "date": "2026-08-24",
       "firstPass": false,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 139,
+      "id": "387",
+      "title": "字符串中的第一个唯一字符",
+      "slug": "first-unique-character-in-a-string",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-24",
+      "firstPass": true,
       "optimal": true,
       "notes": ""
     }
