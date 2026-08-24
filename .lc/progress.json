@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 137,
+  "current_seq": 138,
   "done": [
     {
       "seq": 1,
@@ -1442,6 +1442,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 138,
+      "id": "328",
+      "title": "奇偶链表",
+      "slug": "odd-even-linked-list",
+      "category": "链表",
+      "date": "2026-08-24",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2374,6 +2385,17 @@
       "count": 1,
       "examples": [
         "copy-list-with-random-pointer"
+      ],
+      "categories": [
+        "链表"
+      ],
+      "last_seen": "2026-08-24"
+    },
+    {
+      "habit": "链表拆链时边遍历边覆盖原 next：把节点挂到哨兵链的 eP.next=p 覆盖了原链表指向该节点的边，但遍历仍依赖原 next 前进，且被拆节点未断开，导致奇偶交替处成环（偶数长度碰巧通过、奇数长度 OOM）；应先保存 p.next 再挂载并断开，或用 odd/even 跳 next.next 的原地法",
+      "count": 1,
+      "examples": [
+        "odd-even-linked-list"
       ],
       "categories": [
         "链表"

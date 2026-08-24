@@ -1,0 +1,53 @@
+{
+  "seq": 138,
+  "id": "328",
+  "slug": "odd-even-linked-list",
+  "title": "奇偶链表",
+  "category": "链表",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "70/70",
+  "runtime_ms": null,
+  "memory_bytes": 46828000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "双哨兵拆链：先保存 p.next 再挂载并断开，奇数位/偶数位各成一链，最后拼接",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择理由**\n- 按索引奇偶分组：第 1、3、5… 个节点（奇数位）在前、第 2、4、6… 个（偶数位）在后，各自保持原相对顺序。\n- 题目硬性要求 O(1) 额外空间 + O(n) 时间 → 必须原地改 next，不能新建数组/链表；拆成两条链再拼接是直观做法。\n\n**② 关键设计决策**\n- 两个哨兵 `evenHead`/`oddHead` 分别挂奇数位/偶数位节点，避免头节点特判。\n- `size` 从 1 计数（第 1 个节点是奇数位），`(size & 1) == 1` 判奇偶。\n- **先保存 `p.next` 再挂载，挂载后断开 `p.next`**：这是正确性核心——① 挂载 `eP.next=p` 会覆盖原链表「指向 p 的边」，遍历必须沿保存的 next 前进；② 被拆节点必须断开，否则尾节点残留原 next（如偶数位 4 的 next 仍指向奇数位 5）会在拼接处成环。\n- 最后 `eP.next = oddHead.next` 把偶数段接到奇数段后，返回 `evenHead.next`。\n\n**③ 边界与细节**\n- 空链表返回 null；单节点直接挂奇数段返回。\n- 奇数长度（如 5 节点）：最后一个奇数位节点挂载后 next=null，无环。\n- 偶数长度（如 4 节点）：偶数位尾节点挂载后 next=null。\n- 10000 节点上限：单次遍历 O(n)，两哨兵 O(1) 空间。\n\n**④ 复杂度分析与下限论证**\n- 时间 O(n)：每个节点恰好访问、挂载一次。\n- 空间 O(1)：两个哨兵 + 若干指针，无随 n 增长的存储。\n- 最优性：每个节点必须被移动/重连一次（否则奇偶顺序无法调整），时间 Ω(n) 达到；不新建链表则空间 Ω(1) 达到——O(n)/O(1) 即题目要求的下限。\n\n**⑤ 具体 case 推演：[1,2,3,4,5]**\n- p=1(奇)：保存 next=2；挂 even：even→1，断开 1.next=null；p=2。\n- p=2(偶)：保存 next=3；挂 odd：odd→2，2.next=null；p=3。\n- p=3(奇)：保存 next=4；even：1→3，3.next=null；p=4。\n- p=4(偶)：保存 next=5；odd：2→4，4.next=null；p=5。\n- p=5(奇)：保存 next=null；even：1→3→5，5.next=null；p=null。\n- 拼接：5.next = oddHead.next = 2 → 1→3→5→2→4，与示例一致 ✅。\n- 对比错误写法：若挂载不断开，p=4 挂 odd 后 4.next 仍指向 5，拼接后 5.next=2 → 4→5→2→4… 成环 OOM。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "链表拆链时边遍历边覆盖原 next：把节点挂到哨兵链的 eP.next=p 覆盖了原链表指向该节点的边，但遍历仍依赖原 next 前进，且被拆节点未断开，导致奇偶交替处成环（偶数长度碰巧通过、奇数长度 OOM）；应先保存 p.next 再挂载并断开，或用 odd/even 跳 next.next 的原地法",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "链表拆链/重连：先保存 next 再挂载，或跳 next.next 原地重连",
+      "text": "原地拆分链表（奇偶、分区等）时不能边遍历边覆盖原 next：挂载节点的 eP.next=p 会破坏原链表前进路径，且被拆节点未断开会成环。方向① 先保存 p.next 再挂载、挂载后断开 p.next；方向② 用 odd/even 指针各走 next.next 跳两步原地重连，最后拼尾。O(n) 时间 O(1) 空间。",
+      "category": "链表",
+      "problem": "odd-even-linked-list",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "70/70",
+      "runtime_ms": null,
+      "memory_bytes": 46828000,
+      "approach": "双哨兵拆链：先保存 p.next 再挂载并断开，奇数位/偶数位各成一链，最后拼接",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}
