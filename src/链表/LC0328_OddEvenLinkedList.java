@@ -15,27 +15,16 @@ public class LC0328_OddEvenLinkedList {
         if (head == null) {
             return head;
         }
-        ListNode evenHead = new ListNode();
-        ListNode eP = evenHead;
-        ListNode oddHead = new ListNode();
-        ListNode oP = oddHead;
-        int size = 1;
-        for (ListNode p = head; p != null;) {
-            ListNode next = p.next;
-            if ((size & 1) == 1) {
-                eP.next = p;
-                eP = eP.next;
-                eP.next = null;
-            } else {
-                oP.next = p;
-                oP = oP.next;
-                oP.next = null;
-            }
-            size++;
-            p = next;
+        ListNode evenHead = head.next;
+        ListNode odd = head, even = evenHead;
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
         }
-        eP.next = oddHead.next;
-        return evenHead.next;
+        odd.next = evenHead;
+        return head;
     }
     // ==== 提交代码结束 ====
 
