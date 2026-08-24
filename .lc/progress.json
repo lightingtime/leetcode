@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 139,
+  "current_seq": 140,
   "done": [
     {
       "seq": 1,
@@ -1464,6 +1464,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 140,
+      "id": "150",
+      "title": "逆波兰表达式求值",
+      "slug": "evaluate-reverse-polish-notation",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-24",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2410,6 +2421,17 @@
       ],
       "categories": [
         "链表"
+      ],
+      "last_seen": "2026-08-24"
+    },
+    {
+      "habit": "ArrayDeque 当栈用时混用 offerLast（队尾）与 pop（队头）：数字入栈走队尾、算符弹栈走队头，后入的数字反而最后被取，栈序错乱；栈操作必须统一用 push/pop（都在队头）",
+      "count": 1,
+      "examples": [
+        "evaluate-reverse-polish-notation"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
       ],
       "last_seen": "2026-08-24"
     }

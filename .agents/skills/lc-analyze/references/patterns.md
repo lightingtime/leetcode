@@ -760,3 +760,15 @@ Excel 列名转序号：`A=1..Z=26`，每一位取值 1~26（无 0 字符），�
 - 共性：任何「边遍历边改 next」都要先想清楚**遍历前进的路径是否被自己破坏**。
 
 要点：改链表 next 前先自问「改的是谁指向谁的边，谁还依赖这条边前进」。
+
+## 53. ArrayDeque 当栈用：push/pop 同侧，禁止混 offerLast
+
+出处：LC0150 逆波兰表达式求值
+
+`ArrayDeque` 作栈用时 push=addFirst、pop=removeFirst，都在队头；`offerLast` 是队尾操作：
+
+- 数字/元素入栈必须也用 `push`，混用 `offerLast` 会让后入的元素跑到队尾、pop 却从队头取，栈序错乱（后入反而最后被取）。
+- 后缀表达式求值：遇数字 push、遇算符 pop 两个算完再 push；减/除时先弹的是后操作数，用 `b - a`、`b / a`。
+- 除法向零截断：Java int 除法本身向零截断（-7/2 = -3），无需额外处理。
+
+要点：用 Deque 当栈前先想清楚操作的是 first 还是 last，push/pop/peek 必须同一侧。
