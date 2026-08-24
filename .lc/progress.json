@@ -1418,7 +1418,7 @@
       "category": "链表",
       "date": "2026-08-24",
       "firstPass": false,
-      "optimal": false,
+      "optimal": true,
       "notes": ""
     }
   ],

@@ -50,14 +50,14 @@
 <div class="hero"><div class="wrap">
   <div class="kicker">LEETCODE 刷题复盘 · SEQ 135</div>
   <h1>LC116 · 填充每个节点的下一个右侧节点指针</h1>
-  <div class="sub">BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队 · Accepted</div>
+  <div class="sub">O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2） · Accepted</div>
   <div class="badges">
     <span class="badge ok">✓ Accepted 59/59</span>
     <span class="badge medium">难度 MEDIUM</span>
     <span class="badge tag">分类 链表</span>
     
     <span class="badge plain">多次通过</span>
-    <span class="badge plain">已满足题意·可进阶</span>
+    <span class="badge ok">最优解</span>
     
     <span class="badge">2026-08-24</span>
   </div>
@@ -66,7 +66,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 59/59</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0116_PopulatingNextRightPointersInEachNode.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public Node connect(Node root) {
+    <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public Node connect(Node root) {
             if (root == null) {
                 return root;
             }
@@ -90,28 +90,52 @@
                 }
             }
             return root;
-        }</pre></div>
+        }
+</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 59/59</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
+    public Node connect(Node root) {
+        if (root == null) {
+            return root;
+        }
+        Node mostLeft = root;
+        while (mostLeft.left != null) {
+            Node cur = mostLeft;
+            while (cur != null) {
+                cur.left.next = cur.right;
+                if (cur.next != null) {
+                    cur.right.next = cur.next.left;
+                }
+                cur = cur.next;
+            }
+            mostLeft = mostLeft.left;
+        }
+        return root;
+    }</pre></div>
     
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择理由</strong></p><ul><li>完美二叉树，要把同一层节点用 next 串成链表，核心操作是「按层处理」。</li><li>BFS（队列 + size 记录当前层节点数）是最直观的按层手段：队列天然按层存放节点，size 划出本层边界。</li><li>选 BFS 而非 DFS：DFS 也能按层号串联，但 BFS 直译「层」的语义；进阶要求 O(1) 额外空间（利用上一层 next 指针），BFS 队列版空间 O(n) 不达进阶，但正确性优先、先写对。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li>每轮 while 前记录 <code>size = queue.size()</code>，for 循环只处理 size 个节点——这是「不跨层」的保证。</li><li><code>pre</code> 指针记本层上一个节点，弹出 <code>node</code> 后 <code>pre.next = node</code> 完成同层串联；每层 pre 初始 null，层首节点的 next 保持 null。</li><li><strong>null 子节点不入队</strong>：叶子节点 left/right 为 null，若直接 offerLast 会把 null 混进队列，下一轮 size 计数错乱、pollFirst 取到 null 后访问 node.left 直接 NPE。这是本题最容易踩的坑。</li><li>完美二叉树父节点都有两个子节点，root 非空时只需对左右子判空（叶子层触发）。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>空树 root==null 直接返回 root。</li><li>单节点：队列 [root]，size=1，无子节点入队，pre 恒为 null，root.next 保持 null，正确。</li><li>层尾：每层最后一个节点的 next 保持 null，绝不连到下一层。</li><li>节点数上限 2^12-1=4095（12 层满树）：队列最多存一层 2048 个节点，无性能问题。</li></ul><p><strong>④ 复杂度分析与下限论证</strong></p><ul><li>每个节点恰好入队出队一次，时间 O(n)；队列最坏存最后一层 n/2 个节点，空间 O(n)。</li><li>时间下限：每个节点的 next 都必须被设置，至少要访问全部节点，Ω(n)，本解达到。</li><li>空间并非最优：进阶的 O(1) 空间解法不存队列，而是利用「上一层已连好的 next」从最左节点一路向右、同时把下一层连好——本轮先保证正确，优化方向明确。</li></ul><p><strong>⑤ 具体 case 推演：7 节点树 [1,2,3,4,5,6,7]</strong></p><ul><li>第 1 轮：队列 [1]，size=1。弹 1：pre=null，不连；入队 2,3；pre=1。队列 [2,3]。</li><li>第 2 轮：size=2。弹 2：pre=null；入队 4,5；pre=2。弹 3：pre=2 → 2.next=3；入队 6,7；pre=3。队列 [4,5,6,7]。得到 "2 3"。</li><li>第 3 轮：size=4。弹 4：pre=null，4 的子节点全 null、不入队；pre=4。弹 5：4.next=5…… 依次 5.next=6、6.next=7。得到 "4 5 6 7"。</li><li>队列空，结束。按层输出 "1" / "2 3" / "4 5 6 7" 与题目示例一致。</li></ul><p><strong>⑥ 踩坑修复（NPE）</strong></p><ul><li>最初写法无条件 <code>offerLast(node.left/right)</code>：第 3 轮叶子 4 把两个 null 入队，队列变成 [5,6,7,null,null]；第 4 轮 size 含 null，pollFirst 取出 null 后 <code>node.left</code> 抛 NPE。</li><li>修复：入队前判断 <code>node.left != null</code> / <code>node.right != null</code>。这暴露通用套路：<strong>BFS 遍历树时，空子节点不要入队</strong>。</li></ul></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><ul><li>完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，那么处理这一层时，可以借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列存下一层。</li></ul><p><strong>写法 1（BFS + 队列）</strong></p><ul><li>每轮 while 前记 <code>size = queue.size()</code> 划出本层，只处理 size 个节点，<code>pre.next = node</code> 串联同层，层首 next 保持 null。</li><li>空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 <code>node.left</code> 抛 NPE（本版真实踩过）。</li><li>时间 O(n)、空间 O(n)（队列最坏存一层 n/2 个节点）。正确但未达进阶空间要求。</li></ul><p><strong>写法 2（O(1) 空间，利用上一层 next）</strong></p><ul><li><code>mostLeft</code> 指向每层最左节点，外层 <code>while (mostLeft.left != null)</code> 按层向下；<code>cur</code> 遍历当前层（该层 next 已连好）。</li><li>对每个 cur 两步连接：</li><li><code>cur.left.next = cur.right</code>：同一父节点的两个孩子直接相连；</li><li>若 <code>cur.next != null</code>：<code>cur.right.next = cur.next.left</code> —— 跨父节点连接，依赖「cur.next 已连好」（当前层 next 就绪）。</li><li>一层处理完 <code>mostLeft = mostLeft.left</code> 下移；初始化第 1 层只有 root，天然就绪。</li><li>为什么完美二叉树才可行：每个父节点必有左右子，<code>mostLeft.left != null</code> 时 cur.left/cur.right 必然非空；叶子层不进入外层循环，不会访问空。</li></ul><p><strong>具体 case 推演：7 节点树 [1,2,3,4,5,6,7]</strong></p><ul><li>mostLeft=1，left=2 非空：cur=1 → 2.next=3；cur.next=null 不连跨父；内层结束，mostLeft=2。</li><li>mostLeft=2，left=4 非空：cur=2 → 4.next=5；cur.next=3 → 5.next=6；cur=3 → 6.next=7；mostLeft=4。</li><li>mostLeft=4，left=null，外层退出。结果：2→3、4→5→6→7，与示例一致。</li></ul><p><strong>复杂度与最优性</strong></p><ul><li>每个节点作为 cur 或 cur.left/right 被访问 O(1) 次，时间 O(n)；只用了 mostLeft/cur 两个指针，空间 O(1)，满足进阶要求。</li><li>时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，达到；空间下限：除返回值外无需额外存储，O(1) 即最优。写法 2 是该题最优解。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>59/59 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>BFS 层序遍历：size 划层 + 空子节点不入队</h3><p>树的 BFS 层序：每轮先记 size 只处理本层节点，用 pre 串联同层；叶子节点的 null 子节点不要入队，否则 size 计数错乱且 poll 出 null 后访问字段 NPE。O(n) 时间 O(n) 空间。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">59/59</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 44.7 MB</div><div class="l">内存占用</div></div>
-      <div class="metric ok"><div class="v">O(n) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric"><div class="v">≈ 44.6 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
       <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
     </div>
     <div class="card">
       <h3>算法判定</h3>
-      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 链表</h3><div class="quote">看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
       
       <h3>完成记录</h3>
-      <p><span class="chip">seq 135 · populating-next-right-pointers-in-each-node</span><span class="chip">firstPass: false</span><span class="chip">optimal: false</span></p>
+      <p><span class="chip">seq 135 · populating-next-right-pointers-in-each-node</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
       <div class="quote"></div>
     </div>
   </section>

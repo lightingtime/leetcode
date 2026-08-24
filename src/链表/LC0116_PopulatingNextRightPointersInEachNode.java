@@ -32,30 +32,23 @@ public class LC0116_PopulatingNextRightPointersInEachNode {
 
     // ==== 提交代码开始 ====
     public Node connect(Node root) {
-            if (root == null) {
-                return root;
-            }
-            Deque<Node> queue = new ArrayDeque<>();
-            queue.offerLast(root);
-            while (!queue.isEmpty()) {
-                int size = queue.size();
-                Node pre = null;
-                for (int i = 0; i < size; i++) {
-                    Node node = queue.pollFirst();
-                    if (pre != null) {
-                        pre.next = node;
-                    }
-                    if (node.left != null) {
-                        queue.offerLast(node.left);
-                    }
-                    if (node.right != null) {
-                        queue.offerLast(node.right);
-                    }
-                    pre = node;
-                }
-            }
+        if (root == null) {
             return root;
         }
+        Node mostLeft = root;
+        while (mostLeft.left != null) {
+            Node cur = mostLeft;
+            while (cur != null) {
+                cur.left.next = cur.right;
+                if (cur.next != null) {
+                    cur.right.next = cur.next.left;
+                }
+                cur = cur.next;
+            }
+            mostLeft = mostLeft.left;
+        }
+        return root;
+    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -73,7 +66,8 @@ public class LC0116_PopulatingNextRightPointersInEachNode {
         }
         // 示例2: 空树
         try {
-            if (!TestUtil.checkEq(null, new LC0116_PopulatingNextRightPointersInEachNode().connect(null), "示例2: 空树返回null")) failures++;
+            if (!TestUtil.checkEq(null, new LC0116_PopulatingNextRightPointersInEachNode().connect(null), "示例2: 空树返回null"))
+                failures++;
         } catch (Throwable t) {
             failures++;
             System.out.println("示例2 异常: " + t);
