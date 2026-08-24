@@ -105,10 +105,10 @@ async function main() {
   };
 
   let submission;
-  const staticClass = fragment.match(/^static\s+class\s+(\w+)\s*\{([\s\S]*)\}$/);
+  const staticClass = fragment.match(/^static\s+class\s+(\w+)([^{]*)\{([\s\S]*)\}$/);
   if (staticClass) {
-    // 设计题：解包嵌套类，恢复为顶层类
-    submission = `class ${staticClass[1]} {\n${staticClass[2].trim()}\n}\n${helperClasses(fragment, providedHelpers)}`;
+    // 设计题：解包嵌套类，恢复为顶层类（保留 implements/extends 声明）
+    submission = `class ${staticClass[1]}${staticClass[2]} {\n${staticClass[3].trim()}\n}\n${helperClasses(fragment, providedHelpers)}`;
   } else if (/^\s*(public\s+)?class\s+\w+/.test(fragment)) {
     submission = fragment;
   } else {

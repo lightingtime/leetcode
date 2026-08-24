@@ -1,0 +1,53 @@
+{
+  "seq": 142,
+  "id": "341",
+  "slug": "flatten-nested-list-iterator",
+  "title": "扁平化嵌套列表迭代器",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "43/43",
+  "runtime_ms": null,
+  "memory_bytes": 48576000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择理由**\n- 嵌套列表按先序（遇到列表先深入）输出全部整数；判题环境提供 NestedInteger（isInteger/getInteger/getList）。\n- 迭代器要求惰性：不预先摊平全部，而是「要一个给一个」。嵌套结构 + 先序 = 栈天然适配：后进先出，逆序压入让最左元素先出。\n\n**② 关键设计决策**\n- 构造器：把 nestedList 元素**逆序压栈**（栈顶 = 第一个待输出元素）。\n- hasNext：`while (!stack.isEmpty() && !stack.peek().isInteger())` 弹出栈顶列表、**逆序压回其元素**（getList()），直到栈顶是整数或栈空；返回 `!stack.isEmpty()`。\n- next：直接 `stack.pop().getInteger()`（hasNext 已保证栈顶是整数，无需再判断）。\n- 为什么逆序压回：栈 LIFO，正序压会让最后一个元素在栈顶、输出反序；逆序保证最左元素先弹出。\n\n**③ 边界与细节**\n- 空列表 `[[]]`：弹出空列表后不压回任何元素，栈变空 → hasNext 返回 false，不会调用 next。\n- 深层嵌套 `[[[[1]]]]`：hasNext 循环展开多层，直到栈顶是整数 1。\n- 展开循环起点用 `size()-1`（`size()` 会越界）。\n- 单整数/值边界 ±10^6：直接走整数分支。\n- 整数值可能为 0，不能用值判断，必须用 isInteger() 判断类型。\n\n**④ 复杂度分析与下限论证**\n- 构造 O(n)：nestedList 所有元素逆序压栈一次。\n- next/hasNext 均摊 O(1)：每个元素恰好入栈一次、出栈一次；hasNext 的展开循环把「列表节点」也各处理一次，总 O(n)。\n- 空间 O(n)：栈最多存所有待处理元素。\n- 最优性：输出 n 个整数至少要 O(n) 时间、且要保存全部未输出元素 O(n) 空间，均达下限；惰性栈是本题标准最优实现（预先摊平写法同为 O(n)/O(n)，但失去惰性语义）。\n\n**⑤ 具体 case 推演：[[1,1],2,[1,1]]（期望 1,1,2,1,1）**\n- 构造：逆序压入 [A,2,B]（A=B=[1,1]），栈底→顶 [B,2,A]。\n- hasNext：栈顶 A 是列表 → 弹出，逆序压回 1,1 → 栈 [B,2,1,1]；栈顶 1 是整数 → true。\n- next：弹 1 → 输出 1；next：弹 1 → 1。\n- next：弹 2 → 2。\n- hasNext：栈顶 B 是列表 → 弹出，压回 1,1 → 栈 [1,1]；true。next：1；next：1。\n- hasNext：栈空 → false。输出 1,1,2,1,1 ✅。",
+  "time_complexity": "O(n)（构造+均摊 O(1)/元素）",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "惰性栈迭代器三坑：①展开列表循环起点用 size() 而非 size()-1 导致越界；②hasNext 只展开一次就 return true，深层嵌套时栈顶仍是列表、next 取到 null；③展开后栈可能已空（空列表），不能无条件 return true，应返回 !stack.isEmpty()",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "惰性栈展开嵌套结构：逆序压栈 + hasNext 循环展开栈顶",
+      "text": "嵌套列表/树按先序展开：构造时把元素逆序压栈（栈顶=最左）；hasNext 用 while 持续弹出栈顶列表、逆序压回其元素，直到栈顶是整数或栈空，返回 !isEmpty()；next 直接 pop().getInteger()。展开循环用 size()-1 起点，空列表弹出后可能栈空。均摊 O(1)/元素，空间 O(n)。",
+      "category": "栈、队列与优先队列",
+      "problem": "flatten-nested-list-iterator",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "43/43",
+      "runtime_ms": null,
+      "memory_bytes": 48576000,
+      "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
+      "time_complexity": "O(n)（构造+均摊 O(1)/元素）",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}

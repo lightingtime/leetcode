@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 141,
+  "current_seq": 142,
   "done": [
     {
       "seq": 1,
@@ -1486,6 +1486,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 142,
+      "id": "341",
+      "title": "扁平化嵌套列表迭代器",
+      "slug": "flatten-nested-list-iterator",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-24",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2440,6 +2451,17 @@
       "count": 1,
       "examples": [
         "evaluate-reverse-polish-notation"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-08-24"
+    },
+    {
+      "habit": "惰性栈迭代器三坑：①展开列表循环起点用 size() 而非 size()-1 导致越界；②hasNext 只展开一次就 return true，深层嵌套时栈顶仍是列表、next 取到 null；③展开后栈可能已空（空列表），不能无条件 return true，应返回 !stack.isEmpty()",
+      "count": 1,
+      "examples": [
+        "flatten-nested-list-iterator"
       ],
       "categories": [
         "栈、队列与优先队列"
