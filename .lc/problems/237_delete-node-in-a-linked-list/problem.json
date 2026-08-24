@@ -1,0 +1,48 @@
+{
+  "id": "237",
+  "slug": "delete-node-in-a-linked-list",
+  "title": "Delete Node in a Linked List",
+  "titleCn": "删除链表中的节点",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/delete-node-in-a-linked-list/",
+  "tags": [
+    "Linked List"
+  ],
+  "tagsCn": [
+    "链表"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[4,5,1,9]"
+        },
+        {
+          "name": "node",
+          "value": "5"
+        }
+      ],
+      "output": "[4,1,9]",
+      "explain": "指定链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9"
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[4,5,1,9]"
+        },
+        {
+          "name": "node",
+          "value": "1"
+        }
+      ],
+      "output": "[4,5,9]",
+      "explain": "指定链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9"
+    }
+  ],
+  "exampleTestcases": "[4,5,1,9]\n5\n[4,5,1,9]\n1",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode(int x) { val = x; }\n * }\n */\nclass Solution {\n    public void deleteNode(ListNode node) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-24T11:30:25.762Z"
+}

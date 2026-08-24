@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 136,
+  "current_seq": 137,
   "done": [
     {
       "seq": 1,
@@ -1429,6 +1429,17 @@
       "category": "链表",
       "date": "2026-08-24",
       "firstPass": false,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 137,
+      "id": "237",
+      "title": "删除链表中的节点",
+      "slug": "delete-node-in-a-linked-list",
+      "category": "链表",
+      "date": "2026-08-24",
+      "firstPass": true,
       "optimal": true,
       "notes": ""
     }

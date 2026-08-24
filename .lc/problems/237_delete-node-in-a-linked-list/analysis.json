@@ -1,0 +1,48 @@
+{
+  "seq": 137,
+  "id": "237",
+  "slug": "delete-node-in-a-linked-list",
+  "title": "删除链表中的节点",
+  "category": "链表",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "41/41",
+  "runtime_ms": null,
+  "memory_bytes": 45644000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "无前驱删除：后继值覆盖当前节点，再跳过后继",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择理由**\n- 只给要删除的节点 node、不给 head，拿不到前驱，「前驱.next = 后继」的标准删法不可用；node 又保证非末尾（必有后继可借）。\n- 解法核心：**不删「当前节点」这个对象，而是让后继顶替它**——把后继的值复制给当前节点，再把当前节点指向后继的后继，等效于当前节点消失、节点数减 1。\n\n**② 关键设计决策**\n- `node.val = node.next.val`：后继的值顶替当前节点（链表值唯一，无需担心值冲突）。\n- `node.next = node.next.next`：跳过后继节点，链表长度减 1。\n- 两步缺一不可：只改值不改指针会残留后继节点（节点数不减）；只改指针不改值会让当前值残留。\n- 为什么能成立：题目保证 node 非末尾 → `node.next` 必非空，两步都不会空指针。\n\n**③ 边界与细节**\n- 删除头节点：node=head，值覆盖后从原 head 遍历即新链表（无返回值的 void 原地修改）。\n- 删除倒数第二个节点：node.next 是末尾，`node.next = null` 收尾正确。\n- 两节点链表删头：node.val=后继值，node.next=null，链表剩 1 个节点。\n- 值范围 -1000..1000、节点数 2..1000：int 赋值无溢出，O(1) 操作不受规模影响。\n\n**④ 复杂度分析与下限论证**\n- 时间 O(1)：只访问 node 与 node.next 两个节点，不遍历链表。\n- 空间 O(1)：无额外存储。\n- 最优性：必须至少修改 node（否则删不掉），一次赋值 + 一次改指针即完成，任何解法都要 Ω(1) 时间，达到下限；空间无额外需求，O(1) 最优。\n\n**⑤ 具体 case 推演：链表 [4,5,1,9]，删除 node=值为 5 的节点**\n- node(5).val = node.next(1).val → node 变成 4→1→1→9（值 5 被 1 覆盖）。\n- node(1).next = node(1).next.next → 跳过原 1 节点，链表 4→1→9。\n- 结果 [4,1,9]，与示例一致；值 5 不再存在，节点数 4→3，前后顺序 4、1、9 保持不变。",
+  "time_complexity": "O(1)",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "无前驱删除：后继值覆盖当前节点再跳过后继",
+      "text": "只给待删节点、拿不到前驱时：node.val = node.next.val; node.next = node.next.next——后继顶替当前节点，等效删除。前提：node 非末尾（必有后继）。O(1) 时间空间。",
+      "category": "链表",
+      "problem": "delete-node-in-a-linked-list",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "41/41",
+      "runtime_ms": null,
+      "memory_bytes": 45644000,
+      "approach": "无前驱删除：后继值覆盖当前节点，再跳过后继",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}
