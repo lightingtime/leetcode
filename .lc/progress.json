@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 134,
+  "current_seq": 135,
   "done": [
     {
       "seq": 1,
@@ -1408,6 +1408,17 @@
       "date": "2026-08-24",
       "firstPass": true,
       "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 135,
+      "id": "116",
+      "title": "填充每个节点的下一个右侧节点指针",
+      "slug": "populating-next-right-pointers-in-each-node",
+      "category": "链表",
+      "date": "2026-08-24",
+      "firstPass": false,
+      "optimal": false,
       "notes": ""
     }
   ],

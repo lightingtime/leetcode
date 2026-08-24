@@ -1,0 +1,48 @@
+{
+  "seq": 135,
+  "id": "116",
+  "slug": "populating-next-right-pointers-in-each-node",
+  "title": "填充每个节点的下一个右侧节点指针",
+  "category": "链表",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "59/59",
+  "runtime_ms": null,
+  "memory_bytes": 46920000,
+  "firstPass": false,
+  "optimal": false,
+  "approach": "BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择理由**\n- 完美二叉树，要把同一层节点用 next 串成链表，核心操作是「按层处理」。\n- BFS（队列 + size 记录当前层节点数）是最直观的按层手段：队列天然按层存放节点，size 划出本层边界。\n- 选 BFS 而非 DFS：DFS 也能按层号串联，但 BFS 直译「层」的语义；进阶要求 O(1) 额外空间（利用上一层 next 指针），BFS 队列版空间 O(n) 不达进阶，但正确性优先、先写对。\n\n**② 关键设计决策**\n- 每轮 while 前记录 `size = queue.size()`，for 循环只处理 size 个节点——这是「不跨层」的保证。\n- `pre` 指针记本层上一个节点，弹出 `node` 后 `pre.next = node` 完成同层串联；每层 pre 初始 null，层首节点的 next 保持 null。\n- **null 子节点不入队**：叶子节点 left/right 为 null，若直接 offerLast 会把 null 混进队列，下一轮 size 计数错乱、pollFirst 取到 null 后访问 node.left 直接 NPE。这是本题最容易踩的坑。\n- 完美二叉树父节点都有两个子节点，root 非空时只需对左右子判空（叶子层触发）。\n\n**③ 边界与细节**\n- 空树 root==null 直接返回 root。\n- 单节点：队列 [root]，size=1，无子节点入队，pre 恒为 null，root.next 保持 null，正确。\n- 层尾：每层最后一个节点的 next 保持 null，绝不连到下一层。\n- 节点数上限 2^12-1=4095（12 层满树）：队列最多存一层 2048 个节点，无性能问题。\n\n**④ 复杂度分析与下限论证**\n- 每个节点恰好入队出队一次，时间 O(n)；队列最坏存最后一层 n/2 个节点，空间 O(n)。\n- 时间下限：每个节点的 next 都必须被设置，至少要访问全部节点，Ω(n)，本解达到。\n- 空间并非最优：进阶的 O(1) 空间解法不存队列，而是利用「上一层已连好的 next」从最左节点一路向右、同时把下一层连好——本轮先保证正确，优化方向明确。\n\n**⑤ 具体 case 推演：7 节点树 [1,2,3,4,5,6,7]**\n- 第 1 轮：队列 [1]，size=1。弹 1：pre=null，不连；入队 2,3；pre=1。队列 [2,3]。\n- 第 2 轮：size=2。弹 2：pre=null；入队 4,5；pre=2。弹 3：pre=2 → 2.next=3；入队 6,7；pre=3。队列 [4,5,6,7]。得到 \"2 3\"。\n- 第 3 轮：size=4。弹 4：pre=null，4 的子节点全 null、不入队；pre=4。弹 5：4.next=5…… 依次 5.next=6、6.next=7。得到 \"4 5 6 7\"。\n- 队列空，结束。按层输出 \"1\" / \"2 3\" / \"4 5 6 7\" 与题目示例一致。\n\n**⑥ 踩坑修复（NPE）**\n- 最初写法无条件 `offerLast(node.left/right)`：第 3 轮叶子 4 把两个 null 入队，队列变成 [5,6,7,null,null]；第 4 轮 size 含 null，pollFirst 取出 null 后 `node.left` 抛 NPE。\n- 修复：入队前判断 `node.left != null` / `node.right != null`。这暴露通用套路：**BFS 遍历树时，空子节点不要入队**。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "BFS 层序遍历：size 划层 + 空子节点不入队",
+      "text": "树的 BFS 层序：每轮先记 size 只处理本层节点，用 pre 串联同层；叶子节点的 null 子节点不要入队，否则 size 计数错乱且 poll 出 null 后访问字段 NPE。O(n) 时间 O(n) 空间。",
+      "category": "链表",
+      "problem": "populating-next-right-pointers-in-each-node",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "runtime_ms": null,
+      "memory_bytes": 46920000,
+      "approach": "BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}

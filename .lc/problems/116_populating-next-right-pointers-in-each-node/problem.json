@@ -1,0 +1,48 @@
+{
+  "id": "116",
+  "slug": "populating-next-right-pointers-in-each-node",
+  "title": "Populating Next Right Pointers in Each Node",
+  "titleCn": "填充每个节点的下一个右侧节点指针",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/",
+  "tags": [
+    "Tree",
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Linked List",
+    "Binary Tree"
+  ],
+  "tagsCn": [
+    "树",
+    "深度优先搜索",
+    "广度优先搜索",
+    "链表",
+    "二叉树"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[1,2,3,4,5,6,7]"
+        }
+      ],
+      "output": "[1,#,2,3,#,4,5,6,7,#]",
+      "explain": "给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "root",
+          "value": "[]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4,5,6,7]\n[]",
+  "javaSnippet": "/*\n// Definition for a Node.\nclass Node {\n    public int val;\n    public Node left;\n    public Node right;\n    public Node next;\n\n    public Node() {}\n    \n    public Node(int _val) {\n        val = _val;\n    }\n\n    public Node(int _val, Node _left, Node _right, Node _next) {\n        val = _val;\n        left = _left;\n        right = _right;\n        next = _next;\n    }\n};\n*/\n\nclass Solution {\n    public Node connect(Node root) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-24T10:43:51.682Z"
+}
