@@ -1,0 +1,67 @@
+{
+ "seq": 136,
+ "id": "138",
+ "slug": "copy-list-with-random-pointer",
+ "title": "随机链表的复制",
+ "category": "链表",
+ "date": "2026-08-24",
+ "verdict": "Accepted",
+ "testcases": "19/19",
+ "runtime_ms": null,
+ "memory_bytes": 47116000,
+ "firstPass": false,
+ "optimal": true,
+ "approach": "原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）",
+ "dp_subtype": "",
+ "approach_detail": "**问题本质**\n- 深拷贝带 random 的链表，难点在 random 映射：克隆节点的 random 必须指向「原 random 节点的克隆」。\n- 两条路线：① 用 Map<原节点,克隆节点> 显式记录映射（空间 O(n)）；② 把克隆节点插到原节点**后面**，让「原节点的克隆」天然就是「原节点.next」，无需额外映射（空间 O(1)）。\n\n**写法 1（哈希表单遍）**\n- `map`：原节点 → 克隆节点，保证一节点一克隆——创建前先 `map.getOrDefault(p, new ...)`，已存在则复用。\n- 踩坑：最初「无条件 new 再 put」导致同一原节点被创建两次（一次作为被 next/random 引用、一次作为主节点），put 覆盖后旧克隆成孤儿且其 random 未设置（示例 `[[1,1],[2,1]]` 的 B 被建两次、B₁'.random 为 null）。\n- 单遍完成 next/random 连接，时间 O(n)、空间 O(n)。\n\n**写法 2（原地穿插三遍，O(1) 空间）**\n- 第一遍：每个原节点后插入克隆：`nodeNew.next = node.next; node.next = nodeNew`。克隆与其原节点的位置关系即映射。\n- 第二遍：设克隆 random：`nodeNew.random = node.random != null ? node.random.next : null`（原 random 的克隆 = 原 random.next，因为克隆紧跟在原节点后）。\n- 第三遍：拆开两链表：原链表恢复 `node.next = nodeNew.next`（步进 `node = node.next`）；克隆链表连 `nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null`。\n- 时间 O(n)、空间 O(1)（不含返回值），满足进阶，为该题最优。\n\n**具体 case 推演（写法 2）：[[1,1],[2,1]]（A.random=B，B.random=B）**\n- 第一遍：A→A'→B→B'（A'.next=B、B'.next=null）。\n- 第二遍：A'.random = A.random(B).next = B'；B'.random = B.random(B).next = B'。\n- 第三遍：A.next=B（恢复原链表）；A'.next = B.next = B'；B.next=null；B'.next = null。\n- 结果：A'→B'，A'.random=B'、B'.random=B'，与原链表状态一致 ✅。\n\n**复杂度对比与最优性**\n| 写法 | 时间 | 空间 |\n| 哈希表单遍 | O(n) | O(n) |\n| 原地穿插三遍 | O(n) | O(1) |\n- 时间下限：每个节点都必须复制，至少访问全部节点 Ω(n)，两种都达到。\n- 空间下限：除返回的克隆链表外无需额外存储，O(1) 即最优；写法 2 是本题最优解。",
+ "time_complexity": "O(n)",
+ "space_complexity": "O(1)",
+ "notes": "",
+ "code_notes": [],
+ "mistakes": [
+  {
+   "habit": "复制结构题先无条件 new 再 put：同一原节点被创建两次（一次作为被引用对象、一次作为主节点），map 覆盖后旧节点成孤儿、其指针未设置；应「先查 map 已存在则复用、不存在才创建」，保证一原节点对应一新节点",
+   "count": 1
+  }
+ ],
+ "patterns": [
+  {
+   "title": "复制带引用结构：一原节点一克隆，先查后建",
+   "text": "复制带 next/random 等引用的结构：用 Map<原节点,新节点> 保证一一对应；创建前先 map.get 判存在，已存在则复用、不存在才 new，禁止无条件 new 后 put（会覆盖旧登记、产生孤儿节点且孤儿指针未设置）；或两遍法：第一遍建全量映射、第二遍只连指针。O(n) 时间 O(n) 空间。",
+   "category": "链表",
+   "problem": "copy-list-with-random-pointer",
+   "date": "2026-08-24"
+  }
+ ],
+ "submissions": [
+  {
+   "date": "2026-08-24",
+   "verdict": "Accepted",
+   "testcases": "19/19",
+   "runtime_ms": null,
+   "memory_bytes": 47032000,
+   "approach": "哈希表「一节点一克隆」单遍法（O(n) 空间，写法1）",
+   "time_complexity": "O(n)",
+   "space_complexity": "O(n)",
+   "optimal": false,
+   "notes": "",
+   "code": "    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return head;\n        }\n        Map<Node, Node> map = new HashMap<>();\n        Node p = head;\n        while (p != null) {\n            Node node = map.getOrDefault(p, new Node(p.val));\n            map.put(p, node);\n            if (p.next != null) {\n                node.next = map.getOrDefault(p.next, new Node(p.next.val));\n                map.put(p.next, node.next);\n            }\n            if (p.random != null) {\n                node.random = map.getOrDefault(p.random, new Node(p.random.val));\n                map.put(p.random, node.random);\n            }\n            p = p.next;\n        }\n        return map.get(head);\n    }"
+  },
+  {
+   "date": "2026-08-24",
+   "verdict": "Accepted",
+   "testcases": "19/19",
+   "runtime_ms": null,
+   "memory_bytes": 47116000,
+   "approach": "原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）",
+   "time_complexity": "O(n)",
+   "space_complexity": "O(1)",
+   "optimal": true,
+   "notes": "",
+   "code": "\n    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return head;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = new Node(node.val);\n            nodeNew.next = node.next;\n            node.next = nodeNew;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = node.next;\n            nodeNew.random = node.random != null ? node.random.next : null;\n        }\n        Node newHead = head.next;\n        for (Node node = head; node != null; node = node.next) {\n            Node nodeNew = node.next;\n            node.next = nodeNew.next;\n            nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null;\n        }\n        return newHead;\n    }"
+  }
+ ],
+ "hints": [
+  "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+ ]
+}

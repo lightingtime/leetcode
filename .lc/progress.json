@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 135,
+  "current_seq": 136,
   "done": [
     {
       "seq": 1,
@@ -1420,6 +1420,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 136,
+      "id": "138",
+      "title": "随机链表的复制",
+      "slug": "copy-list-with-random-pointer",
+      "category": "链表",
+      "date": "2026-08-24",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2346,6 +2357,17 @@
         "字符串"
       ],
       "last_seen": "2026-08-23"
+    },
+    {
+      "habit": "复制结构题先无条件 new 再 put：同一原节点被创建两次（一次作为被引用对象、一次作为主节点），map 覆盖后旧节点成孤儿、其指针未设置；应「先查 map 已存在则复用、不存在才创建」，保证一原节点对应一新节点",
+      "count": 1,
+      "examples": [
+        "copy-list-with-random-pointer"
+      ],
+      "categories": [
+        "链表"
+      ],
+      "last_seen": "2026-08-24"
     }
   ],
   "category_hints": {
