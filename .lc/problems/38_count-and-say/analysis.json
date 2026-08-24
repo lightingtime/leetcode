@@ -1,0 +1,48 @@
+{
+  "seq": 134,
+  "id": "38",
+  "slug": "count-and-say",
+  "title": "外观数列",
+  "category": "字符串",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "30/30",
+  "runtime_ms": null,
+  "memory_bytes": 43232000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "从 1 起迭代 n-1 次，逐轮做行程长度编码（RLE）",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择理由**\n- 题目按递归定义逐轮生成：countAndSay(1)=\"1\"，第 n 项 = 对第 n-1 项做行程长度编码（RLE）。\n- 核心操作就是「数连续相同字符的个数」，没有隐藏技巧；n ≤ 30 时最长一轮约 4462 字符，直接按定义迭代模拟即可，也不存在更复杂的算法。\n\n**② 关键设计决策**\n- 用 `pre` 存当前轮字符串，初始 `\"1\"`；对 i=2..n 循环执行 `pre = getNext(pre)`，最后返回 `pre`。\n- `getNext` 内部：`c` 记录当前组字符，`count` 记录当前组已累计个数，`l` 为扫描指针；字符变化时把「count+c」追加进 StringBuilder 并开启新组。\n- 最后一组在循环结束后单独追加：循环里只在「字符变化」时结算，字符串末尾不会再变化，必须补一次，否则漏掉最后一组。\n\n**③ 边界与细节**\n- n=1 直接返回 \"1\"，不进循环，也不会对空串做 charAt(0)。\n- 每组至少 1 个字符：`c` 先取第 0 个字符、count 从 1 起数，不会出现 0 计数。\n- 外观数列只会出现字符 1~3，count 用 int 足够，无溢出。\n- n=30 上限结果长度 4462，StringBuilder 动态扩容无性能问题。\n\n**④ 复杂度分析与下限论证**\n- 设第 k 轮长度为 L_k，第 k 轮扫描 O(L_k)，总时间 O(ΣL_k)；长度严格单调增长，ΣL_k = O(L_n)，n=30 时约数千字符。\n- 空间 O(L_n)：每轮需要一个 StringBuilder 加上一轮字符串。\n- 最优性：输出本身就有 L_n 个字符，任何解法至少要写出全部输出（下界 Ω(L_n)），且每轮必须完整读一遍上一轮才能编码，因此 O(L_n) 时间、O(L_n) 空间均达下限，模拟就是本题最优解。\n\n**⑤ 具体 case 推演：n=4**\n- 初始 pre=\"1\"。\n- i=2：扫 \"1\" → 1 个 1 → pre=\"11\"\n- i=3：扫 \"11\" → 2 个 1 → pre=\"21\"\n- i=4：扫 \"21\" → 1 个 2、1 个 1 → pre=\"1211\"\n- 返回 \"1211\"（与题目示例一致）。\n\n**⑥ getNext 内部指针推演：pre=\"21\"**\n- 初始化：c=2、count=1、l=1、sb=\"\"\n- l=1：charAt(1)=1 ≠ 2 → sb 追加 \"12\"；c=1、count=1、l=2\n- l=2 不满足 l<2，循环退出\n- 循环后补最后一组：sb 追加 \"11\" → sb=\"1211\"\n- 返回 \"1211\"。\"",
+  "time_complexity": "O(L_n)（L_n 为第 n 轮字符串长度）",
+  "space_complexity": "O(L_n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "行程长度编码（RLE）扫描套路",
+      "text": "数连续相同字符：c 记当前组字符、count 累计个数、指针 l 顺序扫描，字符变化时结算「count+c」并开启新组；最后一组循环结束后补一次。O(长度) 一轮。",
+      "category": "字符串",
+      "problem": "count-and-say",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "30/30",
+      "runtime_ms": null,
+      "memory_bytes": 43232000,
+      "approach": "从 1 起迭代 n-1 次，逐轮做行程长度编码（RLE）",
+      "time_complexity": "O(L_n)（L_n 为第 n 轮字符串长度）",
+      "space_complexity": "O(L_n)",
+      "optimal": true,
+      "notes": ""
+    }
+  ],
+  "hints": [
+    "字符串子串/子序列题先想双指针、滑动窗口、DP 三大件。"
+  ]
+}

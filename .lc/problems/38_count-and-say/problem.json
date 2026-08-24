@@ -1,0 +1,19 @@
+{
+  "id": "38",
+  "slug": "count-and-say",
+  "title": "Count and Say",
+  "titleCn": "外观数列",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/count-and-say/",
+  "tags": [
+    "String"
+  ],
+  "tagsCn": [
+    "字符串"
+  ],
+  "category": "字符串",
+  "examples": [],
+  "exampleTestcases": "1\n4",
+  "javaSnippet": "class Solution {\n    public String countAndSay(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-24T10:08:18.060Z"
+}
