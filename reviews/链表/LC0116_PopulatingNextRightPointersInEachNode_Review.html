@@ -50,7 +50,7 @@
 <div class="hero"><div class="wrap">
   <div class="kicker">LEETCODE 刷题复盘 · SEQ 135</div>
   <h1>LC116 · 填充每个节点的下一个右侧节点指针</h1>
-  <div class="sub">O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2） · Accepted</div>
+  <div class="sub">递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3） · Accepted</div>
   <div class="badges">
     <span class="badge ok">✓ Accepted 59/59</span>
     <span class="badge medium">难度 MEDIUM</span>
@@ -116,16 +116,33 @@
         return root;
     }</pre></div>
     
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 3 · 递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)（递归栈不计额外空间）</span><span class="chip">内存 ≈ 44.9 MB</span><span class="chip">用例 59/59</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · 递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
+    public Node connect(Node root) {
+        if (root == null) {
+            return root;
+        }
+        if (root.left != null) {
+            root.left.next = root.right;
+            root.right.next = root.next != null ? root.next.left : null;
+            connect(root.left);
+            connect(root.right);
+        }
+        return root;
+    }</pre></div>
+    
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><ul><li>完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，那么处理这一层时，可以借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列存下一层。</li></ul><p><strong>写法 1（BFS + 队列）</strong></p><ul><li>每轮 while 前记 <code>size = queue.size()</code> 划出本层，只处理 size 个节点，<code>pre.next = node</code> 串联同层，层首 next 保持 null。</li><li>空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 <code>node.left</code> 抛 NPE（本版真实踩过）。</li><li>时间 O(n)、空间 O(n)（队列最坏存一层 n/2 个节点）。正确但未达进阶空间要求。</li></ul><p><strong>写法 2（O(1) 空间，利用上一层 next）</strong></p><ul><li><code>mostLeft</code> 指向每层最左节点，外层 <code>while (mostLeft.left != null)</code> 按层向下；<code>cur</code> 遍历当前层（该层 next 已连好）。</li><li>对每个 cur 两步连接：</li><li><code>cur.left.next = cur.right</code>：同一父节点的两个孩子直接相连；</li><li>若 <code>cur.next != null</code>：<code>cur.right.next = cur.next.left</code> —— 跨父节点连接，依赖「cur.next 已连好」（当前层 next 就绪）。</li><li>一层处理完 <code>mostLeft = mostLeft.left</code> 下移；初始化第 1 层只有 root，天然就绪。</li><li>为什么完美二叉树才可行：每个父节点必有左右子，<code>mostLeft.left != null</code> 时 cur.left/cur.right 必然非空；叶子层不进入外层循环，不会访问空。</li></ul><p><strong>具体 case 推演：7 节点树 [1,2,3,4,5,6,7]</strong></p><ul><li>mostLeft=1，left=2 非空：cur=1 → 2.next=3；cur.next=null 不连跨父；内层结束，mostLeft=2。</li><li>mostLeft=2，left=4 非空：cur=2 → 4.next=5；cur.next=3 → 5.next=6；cur=3 → 6.next=7；mostLeft=4。</li><li>mostLeft=4，left=null，外层退出。结果：2→3、4→5→6→7，与示例一致。</li></ul><p><strong>复杂度与最优性</strong></p><ul><li>每个节点作为 cur 或 cur.left/right 被访问 O(1) 次，时间 O(n)；只用了 mostLeft/cur 两个指针，空间 O(1)，满足进阶要求。</li><li>时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，达到；空间下限：除返回值外无需额外存储，O(1) 即最优。写法 2 是该题最优解。</li></ul></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><ul><li>完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，处理这一层时能借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列。这一观察对迭代与递归都成立。</li></ul><p><strong>写法 1（BFS + 队列）</strong></p><ul><li>每轮 while 前记 <code>size = queue.size()</code> 划出本层，只处理 size 个节点，<code>pre.next = node</code> 串联同层，层首 next 保持 null。</li><li>空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 <code>node.left</code> 抛 NPE（真实踩过）。</li><li>时间 O(n)、空间 O(n)。正确但未达进阶空间要求。</li></ul><p><strong>写法 2（O(1) 空间迭代，利用上一层 next）</strong></p><ul><li><code>mostLeft</code> 指向每层最左节点，外层 <code>while (mostLeft.left != null)</code> 按层向下；<code>cur</code> 遍历当前层（该层 next 已连好）。</li><li>对每个 cur：<code>cur.left.next = cur.right</code>（同父相连）；若 <code>cur.next != null</code> 则 <code>cur.right.next = cur.next.left</code>（跨父连接，依赖当前层 next 就绪）。</li><li>一层处理完 <code>mostLeft = mostLeft.left</code> 下移；初始化第 1 层只有 root 天然就绪。空间 O(1)。</li></ul><p><strong>写法 3（递归 / 前序 DFS）</strong></p><ul><li>递归语义：处理当前节点的两个子节点——<code>root.left.next = root.right</code>（同父相连）；<code>root.right.next = root.next != null ? root.next.left : null</code>（跨父，依赖「当前节点所在层的 next 已连好」）。</li><li>处理完当前节点后递归 <code>connect(root.left)</code>、<code>connect(root.right)</code>：前序保证进入下一层前，其父层 next 已由上层处理完毕；先左后右保持同层从左到右。</li><li>完美二叉树保证 <code>root.left</code> 非空时 <code>root.right</code> 也非空（<code>root.left != null</code> 一个判断覆盖两者）。</li><li>空间：递归栈 O(log n)（完美二叉树高度=层数），题目声明递归栈不算额外空间，因此同样满足进阶 O(1) 额外空间。</li></ul><p><strong>具体 case 推演（写法 3）：7 节点树 [1,2,3,4,5,6,7]</strong></p><ul><li>connect(1)：2.next=3；3.next = 1.next(null) → null；递归 connect(2)、connect(3)。</li><li>connect(2)：4.next=5；5.next = 2.next(3).left = 6；递归 connect(4)、connect(5)。</li><li>connect(3)：6.next=7；7.next = 3.next(null) → null；递归 connect(6)、connect(7)。</li><li>结果：2→3、4→5→6→7，与示例一致。</li></ul><p><strong>复杂度与最优性（三写法对比）</strong></p><p>| 写法 | 时间 | 额外空间 | 满足进阶 O(1) |</p><p>| BFS 队列 | O(n) | O(n) | 否 |</p><p>| 迭代利用 next | O(n) | O(1) | 是 |</p><p>| 递归 DFS | O(n) | O(1)（递归栈不计） | 是 |</p><ul><li>时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，三种写法都达到。</li><li>空间下限：除返回值外无需额外存储，写法 2/3 的 O(1) 即最优；写法 2 与写法 3 为该题并列最优解。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>59/59 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>BFS 层序遍历：size 划层 + 空子节点不入队</h3><p>树的 BFS 层序：每轮先记 size 只处理本层节点，用 pre 串联同层；叶子节点的 null 子节点不要入队，否则 size 计数错乱且 poll 出 null 后访问字段 NPE。O(n) 时间 O(n) 空间。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
       <div class="metric ok"><div class="v">59/59</div><div class="l">通过用例</div></div>
-      <div class="metric"><div class="v">≈ 44.6 MB</div><div class="l">内存占用</div></div>
-      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric"><div class="v">≈ 44.9 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)（递归栈不计额外空间）</div><div class="l">时间 · 空间</div></div>
       <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
     </div>
     <div class="card">

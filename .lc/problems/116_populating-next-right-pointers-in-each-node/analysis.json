@@ -1,62 +1,75 @@
 {
- "seq": 135,
- "id": "116",
- "slug": "populating-next-right-pointers-in-each-node",
- "title": "填充每个节点的下一个右侧节点指针",
- "category": "链表",
- "date": "2026-08-24",
- "verdict": "Accepted",
- "testcases": "59/59",
- "runtime_ms": null,
- "memory_bytes": 46736000,
- "firstPass": false,
- "optimal": true,
- "approach": "O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）",
- "dp_subtype": "",
- "approach_detail": "**问题本质**\n- 完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，那么处理这一层时，可以借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列存下一层。\n\n**写法 1（BFS + 队列）**\n- 每轮 while 前记 `size = queue.size()` 划出本层，只处理 size 个节点，`pre.next = node` 串联同层，层首 next 保持 null。\n- 空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 `node.left` 抛 NPE（本版真实踩过）。\n- 时间 O(n)、空间 O(n)（队列最坏存一层 n/2 个节点）。正确但未达进阶空间要求。\n\n**写法 2（O(1) 空间，利用上一层 next）**\n- `mostLeft` 指向每层最左节点，外层 `while (mostLeft.left != null)` 按层向下；`cur` 遍历当前层（该层 next 已连好）。\n- 对每个 cur 两步连接：\n  - `cur.left.next = cur.right`：同一父节点的两个孩子直接相连；\n  - 若 `cur.next != null`：`cur.right.next = cur.next.left` —— 跨父节点连接，依赖「cur.next 已连好」（当前层 next 就绪）。\n- 一层处理完 `mostLeft = mostLeft.left` 下移；初始化第 1 层只有 root，天然就绪。\n- 为什么完美二叉树才可行：每个父节点必有左右子，`mostLeft.left != null` 时 cur.left/cur.right 必然非空；叶子层不进入外层循环，不会访问空。\n\n**具体 case 推演：7 节点树 [1,2,3,4,5,6,7]**\n- mostLeft=1，left=2 非空：cur=1 → 2.next=3；cur.next=null 不连跨父；内层结束，mostLeft=2。\n- mostLeft=2，left=4 非空：cur=2 → 4.next=5；cur.next=3 → 5.next=6；cur=3 → 6.next=7；mostLeft=4。\n- mostLeft=4，left=null，外层退出。结果：2→3、4→5→6→7，与示例一致。\n\n**复杂度与最优性**\n- 每个节点作为 cur 或 cur.left/right 被访问 O(1) 次，时间 O(n)；只用了 mostLeft/cur 两个指针，空间 O(1)，满足进阶要求。\n- 时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，达到；空间下限：除返回值外无需额外存储，O(1) 即最优。写法 2 是该题最优解。",
- "time_complexity": "O(n)",
- "space_complexity": "O(1)",
- "notes": "",
- "code_notes": [],
- "mistakes": [],
- "patterns": [
-  {
-   "title": "BFS 层序遍历：size 划层 + 空子节点不入队",
-   "text": "树的 BFS 层序：每轮先记 size 只处理本层节点，用 pre 串联同层；叶子节点的 null 子节点不要入队，否则 size 计数错乱且 poll 出 null 后访问字段 NPE。O(n) 时间 O(n) 空间。",
-   "category": "链表",
-   "problem": "populating-next-right-pointers-in-each-node",
-   "date": "2026-08-24"
-  }
- ],
- "submissions": [
-  {
-   "date": "2026-08-24",
-   "verdict": "Accepted",
-   "testcases": "59/59",
-   "runtime_ms": null,
-   "memory_bytes": 46920000,
-   "approach": "BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队",
-   "time_complexity": "O(n)",
-   "space_complexity": "O(n)",
-   "optimal": false,
-   "notes": "",
-   "code": "public Node connect(Node root) {\n            if (root == null) {\n                return root;\n            }\n            Deque<Node> queue = new ArrayDeque<>();\n            queue.offerLast(root);\n            while (!queue.isEmpty()) {\n                int size = queue.size();\n                Node pre = null;\n                for (int i = 0; i < size; i++) {\n                    Node node = queue.pollFirst();\n                    if (pre != null) {\n                        pre.next = node;\n                    }\n                    if (node.left != null) {\n                        queue.offerLast(node.left);\n                    }\n                    if (node.right != null) {\n                        queue.offerLast(node.right);\n                    }\n                    pre = node;\n                }\n            }\n            return root;\n        }\n"
-  },
-  {
-   "date": "2026-08-24",
-   "verdict": "Accepted",
-   "testcases": "59/59",
-   "runtime_ms": null,
-   "memory_bytes": 46736000,
-   "approach": "O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）",
-   "time_complexity": "O(n)",
-   "space_complexity": "O(1)",
-   "optimal": true,
-   "notes": "",
-   "code": "\n    public Node connect(Node root) {\n        if (root == null) {\n            return root;\n        }\n        Node mostLeft = root;\n        while (mostLeft.left != null) {\n            Node cur = mostLeft;\n            while (cur != null) {\n                cur.left.next = cur.right;\n                if (cur.next != null) {\n                    cur.right.next = cur.next.left;\n                }\n                cur = cur.next;\n            }\n            mostLeft = mostLeft.left;\n        }\n        return root;\n    }"
-  }
- ],
- "hints": [
-  "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
- ]
+  "seq": 135,
+  "id": "116",
+  "slug": "populating-next-right-pointers-in-each-node",
+  "title": "填充每个节点的下一个右侧节点指针",
+  "category": "链表",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "59/59",
+  "runtime_ms": null,
+  "memory_bytes": 47056000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**\n- 完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，处理这一层时能借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列。这一观察对迭代与递归都成立。\n\n**写法 1（BFS + 队列）**\n- 每轮 while 前记 `size = queue.size()` 划出本层，只处理 size 个节点，`pre.next = node` 串联同层，层首 next 保持 null。\n- 空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 `node.left` 抛 NPE（真实踩过）。\n- 时间 O(n)、空间 O(n)。正确但未达进阶空间要求。\n\n**写法 2（O(1) 空间迭代，利用上一层 next）**\n- `mostLeft` 指向每层最左节点，外层 `while (mostLeft.left != null)` 按层向下；`cur` 遍历当前层（该层 next 已连好）。\n- 对每个 cur：`cur.left.next = cur.right`（同父相连）；若 `cur.next != null` 则 `cur.right.next = cur.next.left`（跨父连接，依赖当前层 next 就绪）。\n- 一层处理完 `mostLeft = mostLeft.left` 下移；初始化第 1 层只有 root 天然就绪。空间 O(1)。\n\n**写法 3（递归 / 前序 DFS）**\n- 递归语义：处理当前节点的两个子节点——`root.left.next = root.right`（同父相连）；`root.right.next = root.next != null ? root.next.left : null`（跨父，依赖「当前节点所在层的 next 已连好」）。\n- 处理完当前节点后递归 `connect(root.left)`、`connect(root.right)`：前序保证进入下一层前，其父层 next 已由上层处理完毕；先左后右保持同层从左到右。\n- 完美二叉树保证 `root.left` 非空时 `root.right` 也非空（`root.left != null` 一个判断覆盖两者）。\n- 空间：递归栈 O(log n)（完美二叉树高度=层数），题目声明递归栈不算额外空间，因此同样满足进阶 O(1) 额外空间。\n\n**具体 case 推演（写法 3）：7 节点树 [1,2,3,4,5,6,7]**\n- connect(1)：2.next=3；3.next = 1.next(null) → null；递归 connect(2)、connect(3)。\n- connect(2)：4.next=5；5.next = 2.next(3).left = 6；递归 connect(4)、connect(5)。\n- connect(3)：6.next=7；7.next = 3.next(null) → null；递归 connect(6)、connect(7)。\n- 结果：2→3、4→5→6→7，与示例一致。\n\n**复杂度与最优性（三写法对比）**\n| 写法 | 时间 | 额外空间 | 满足进阶 O(1) |\n| BFS 队列 | O(n) | O(n) | 否 |\n| 迭代利用 next | O(n) | O(1) | 是 |\n| 递归 DFS | O(n) | O(1)（递归栈不计） | 是 |\n- 时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，三种写法都达到。\n- 空间下限：除返回值外无需额外存储，写法 2/3 的 O(1) 即最优；写法 2 与写法 3 为该题并列最优解。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)（递归栈不计额外空间）",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "BFS 层序遍历：size 划层 + 空子节点不入队",
+      "text": "树的 BFS 层序：每轮先记 size 只处理本层节点，用 pre 串联同层；叶子节点的 null 子节点不要入队，否则 size 计数错乱且 poll 出 null 后访问字段 NPE。O(n) 时间 O(n) 空间。",
+      "category": "链表",
+      "problem": "populating-next-right-pointers-in-each-node",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "runtime_ms": null,
+      "memory_bytes": 46920000,
+      "approach": "BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "",
+      "code": "public Node connect(Node root) {\n            if (root == null) {\n                return root;\n            }\n            Deque<Node> queue = new ArrayDeque<>();\n            queue.offerLast(root);\n            while (!queue.isEmpty()) {\n                int size = queue.size();\n                Node pre = null;\n                for (int i = 0; i < size; i++) {\n                    Node node = queue.pollFirst();\n                    if (pre != null) {\n                        pre.next = node;\n                    }\n                    if (node.left != null) {\n                        queue.offerLast(node.left);\n                    }\n                    if (node.right != null) {\n                        queue.offerLast(node.right);\n                    }\n                    pre = node;\n                }\n            }\n            return root;\n        }\n"
+    },
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "runtime_ms": null,
+      "memory_bytes": 46736000,
+      "approach": "O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "",
+      "code": "\n    public Node connect(Node root) {\n        if (root == null) {\n            return root;\n        }\n        Node mostLeft = root;\n        while (mostLeft.left != null) {\n            Node cur = mostLeft;\n            while (cur != null) {\n                cur.left.next = cur.right;\n                if (cur.next != null) {\n                    cur.right.next = cur.next.left;\n                }\n                cur = cur.next;\n            }\n            mostLeft = mostLeft.left;\n        }\n        return root;\n    }"
+    },
+    {
+      "date": "2026-08-24",
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "runtime_ms": null,
+      "memory_bytes": 47056000,
+      "approach": "递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)（递归栈不计额外空间）",
+      "optimal": true,
+      "notes": "",
+      "code": "\n    public Node connect(Node root) {\n        if (root == null) {\n            return root;\n        }\n        if (root.left != null) {\n            root.left.next = root.right;\n            root.right.next = root.next != null ? root.next.left : null;\n            connect(root.left);\n            connect(root.right);\n        }\n        return root;\n    }"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
 }

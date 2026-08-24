@@ -35,17 +35,11 @@ public class LC0116_PopulatingNextRightPointersInEachNode {
         if (root == null) {
             return root;
         }
-        Node mostLeft = root;
-        while (mostLeft.left != null) {
-            Node cur = mostLeft;
-            while (cur != null) {
-                cur.left.next = cur.right;
-                if (cur.next != null) {
-                    cur.right.next = cur.next.left;
-                }
-                cur = cur.next;
-            }
-            mostLeft = mostLeft.left;
+        if (root.left != null) {
+            root.left.next = root.right;
+            root.right.next = root.next != null ? root.next.left : null;
+            connect(root.left);
+            connect(root.right);
         }
         return root;
     }
