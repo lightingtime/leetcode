@@ -1,0 +1,54 @@
+{
+ "seq": 141,
+ "id": "227",
+ "slug": "basic-calculator-ii",
+ "title": "基本计算器 II",
+ "category": "栈、队列与优先队列",
+ "date": "2026-08-24",
+ "verdict": "Accepted",
+ "testcases": "111/111",
+ "runtime_ms": null,
+ "memory_bytes": 46748000,
+ "firstPass": false,
+ "optimal": true,
+ "approach": "O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）",
+ "dp_subtype": "",
+ "approach_detail": "**① 问题本质与解法选择理由**\n- 无括号中缀表达式（+ - * /），难点在优先级：`* /` 必须先算，`+ -` 之间按顺序。\n- 两种做法：① 栈：乘除立即与栈顶算、加减把带符号数字入栈，最后统一求和（直观，空间 O(n)）；② 两个变量：`last` 存当前累积项、`sum` 存已定稿项之和，遇加减定稿、遇乘除合并，空间 O(1)。\n\n**写法 1（栈，O(n) 空间）**\n- 维护 `stack`，`sign` 记录当前数字前的运算符。\n- 结算点（非数字非空格或末尾）：`+` push(num)、`-` push(-num)、`*`/`/` 弹栈顶与新数计算后 push。\n- 最后栈内全部数字相加（带符号）即结果。\n- 时间 O(n)、空间 O(n)。\n\n**写法 2（sum/last 两变量，O(1) 空间）**\n- `last` 当前项（乘除原地合并），`sum` 已定稿项之和，`sign` 当前数字前的运算符。\n- 结算时：`+`/`-`：`sum += last; last = ±num`（当前项定稿入 sum，开新项）；`*`/`/`：`last *= num` / `last /= num`（乘除合并进当前项）。\n- 最后 `return sum + last`。\n- 关键：乘除永远作用于 `last` 内部，`sum` 只收已定稿的整项，优先级天然正确；空间 O(1)。\n\n**③ 边界与细节**\n- 单数字 \"42\"：末尾结算 sign='+' → sum=0、last=42，返回 42。\n- 连续除法左结合：`last /= num` 每次都用上一个 last 除，等价 (100/10)/2。\n- 负数结果 \"1-2\"：'-' 把 last=1 定稿入 sum，新 last=-2，返回 -1。\n- 乘除优先级 \"1-2*3\"：'*' 直接 last=-2*3=-6，sum=1，返回 -5。\n- 除法截断：int 除法向零截断（14-3/2：last=3/2=1，sum=14，返回 13）。\n- 长度上限 3*10^5：单遍扫描，两写法均无性能问题；写法 2 无栈、内存更省。\n\n**④ 复杂度分析与下限论证**\n- 时间 O(n)：每个字符扫描一次，两种写法都是。\n- 空间：写法 1 O(n)（栈），写法 2 O(1)（两个变量）——写法 2 达空间下限。\n- 最优性：每个字符至少读一次，时间 Ω(n) 达到；表达式求值只需保存「当前项 + 已定稿和」，空间 Ω(1) 即可，写法 2 达到——写法 2 是本题最优解。\n\n**⑤ 具体 case 推演（写法 2）：\"3+2*2\"（期望 7）**\n- '3'：num=3。\n- '+'（结算）：sign='+' → sum+=0、last=3；sign='+'、num=0。\n- '2'：num=2。\n- '*'（结算）：sign='+' → sum+=3、last=2；sign='*'、num=0。\n- '2'（末尾结算）：sign='*' → last=2*2=4。\n- 返回 sum+last = 3+4 = 7 ✅。",
+ "time_complexity": "O(n)",
+ "space_complexity": "O(1)",
+ "notes": "",
+ "code_notes": [],
+ "mistakes": [],
+ "patterns": [],
+ "submissions": [
+  {
+   "date": "2026-08-24",
+   "verdict": "Accepted",
+   "testcases": "111/111",
+   "runtime_ms": null,
+   "memory_bytes": 48552000,
+   "approach": "带符号栈：+ - 压栈、* / 与栈顶计算，最后求和（O(n) 空间，写法1）",
+   "time_complexity": "O(n)",
+   "space_complexity": "O(n)",
+   "optimal": false,
+   "notes": "",
+   "code": "    public int calculate(String s) {\n        int index = 0;\n        Deque<Integer> stack = new ArrayDeque<>();\n        int num = 0;\n        char sign = '+';\n        while (index < s.length()) {\n            if (Character.isDigit(s.charAt(index))) {\n                num = num * 10 + (s.charAt(index) - '0');\n            }\n            if (!Character.isDigit(s.charAt(index)) && s.charAt(index) != ' ' || index == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> {\n                        stack.push(num);\n                        break;\n                    }\n                    case '-' -> {\n                        stack.push(-num);\n                        break;\n                    }\n                    case '*' -> {\n                        stack.push(stack.pop() * num);\n                        break;\n                    }\n                    case '/' -> {\n                        stack.push(stack.pop() / num);\n                        break;\n                    }\n                }\n                sign = s.charAt(index);\n                num = 0;\n            }\n            index++;\n        }\n        int ans = 0;\n        while (!stack.isEmpty()) {\n            ans += stack.pop();\n        }\n        return ans;\n    }"
+  },
+  {
+   "date": "2026-08-24",
+   "verdict": "Accepted",
+   "testcases": "111/111",
+   "runtime_ms": null,
+   "memory_bytes": 46748000,
+   "approach": "O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）",
+   "time_complexity": "O(n)",
+   "space_complexity": "O(1)",
+   "optimal": true,
+   "notes": "",
+   "code": "    public int calculate(String s) {\n        int num = 0, last = 0, sum = 0;\n        char sign = '+';\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> { sum += last; last = num; }\n                    case '-' -> { sum += last; last = -num; }\n                    case '*' -> { last *= num; }\n                    case '/' -> { last /= num; }\n                }\n                sign = c;\n                num = 0;\n            }\n        }\n        return sum + last;\n    }"
+  }
+ ],
+ "hints": [
+  "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+ ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "227",
+  "slug": "basic-calculator-ii",
+  "title": "Basic Calculator II",
+  "titleCn": "基本计算器 II",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/basic-calculator-ii/",
+  "tags": [
+    "Stack",
+    "Math",
+    "String"
+  ],
+  "tagsCn": [
+    "栈",
+    "数学",
+    "字符串"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"3+2*2\""
+        }
+      ],
+      "output": "7",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\" 3/2 \""
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\" 3+5 / 2 \""
+        }
+      ],
+      "output": "5",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"3+2*2\"\n\" 3/2 \"\n\" 3+5 / 2 \"",
+  "javaSnippet": "class Solution {\n    public int calculate(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-24T12:59:36.404Z"
+}

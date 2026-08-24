@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-24",
-  "current_seq": 140,
+  "current_seq": 141,
   "done": [
     {
       "seq": 1,
@@ -1470,6 +1470,17 @@
       "id": "150",
       "title": "逆波兰表达式求值",
       "slug": "evaluate-reverse-polish-notation",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-24",
+      "firstPass": false,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 141,
+      "id": "227",
+      "title": "基本计算器 II",
+      "slug": "basic-calculator-ii",
       "category": "栈、队列与优先队列",
       "date": "2026-08-24",
       "firstPass": false,
