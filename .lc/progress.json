@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 146,
+  "current_seq": 147,
   "done": [
     {
       "seq": 1,
@@ -1536,6 +1536,17 @@
       "id": "103",
       "title": "二叉树的锯齿形层序遍历",
       "slug": "binary-tree-zigzag-level-order-traversal",
+      "category": "树与二叉树",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 147,
+      "id": "230",
+      "title": "二叉搜索树中第 K 小的元素",
+      "slug": "kth-smallest-element-in-a-bst",
       "category": "树与二叉树",
       "date": "2026-08-25",
       "firstPass": true,

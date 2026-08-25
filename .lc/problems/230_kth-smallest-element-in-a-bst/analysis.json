@@ -1,0 +1,41 @@
+{
+  "seq": 147,
+  "id": "230",
+  "slug": "kth-smallest-element-in-a-bst",
+  "title": "二叉搜索树中第 K 小的元素",
+  "category": "树与二叉树",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "93/93",
+  "runtime_ms": null,
+  "memory_bytes": 47384000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "递归中序 DFS（实例字段计数）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：BST 的关键性质——中序遍历结果就是升序序列。因此「第 k 小」等价于「中序遍历的第 k 个节点」，k 从 1 计数。\n\n**解法选择理由**：递归中序 DFS，配合实例字段计数器。每次查询重置 count 和 cur，完整中序遍历，当 count 数到 k 时把当前节点记到 cur。单次查询下界 O(n)（最坏需访问全部节点才能确定第 k 小，如 k=n 且退化成链），此解达到。\n\n**关键设计决策**：\n1. 中序顺序 = 左 → 中 → 右：先递归左子树，再 count++ 访问当前节点，再递归右子树。\n2. 用实例字段 count/cur 传递状态：递归里不需要返回值传来传去，找到后记到 cur。\n3. 每次查询前重置 count=0、cur=null，保证同一个实例多次调用互不污染（这是容易漏的细节）。\n4. 完整遍历、不提前停：逻辑最简；提前停需要额外的 found 标志，收益只在 k 很小时明显。\n\n**具体 case 推演**（示例2：[5,3,6,2,4,null,null,1]，k=3，中序应为 1,2,3,4,5,6）：\n1. dfs 沿左走到最左 1（count=1）\n2. 回溯到 2（count=2）\n3. 回溯到 3（count=3 == k → cur=3）\n4. 继续遍历完剩余节点（count 继续增大，但 count==k 只触发一次，cur 不被覆盖）\n返回 3 ✓\n\n**边界与细节**：\n- k=1：第一个中序节点即最小值（沿左走到最底）。\n- k=n：最后访问的节点即最大值。\n- 单节点：count 直接到 1 → 返回自身。\n- 退化链（左链/右链）：递归深度 = 链长，n ≤ 10^4 在栈深度安全范围内；迭代版可彻底规避。\n- 值域端点 0 / 10^4：只比较大小关系，无溢出。\n\n**复杂度与下限论证**：每个节点访问一次 → O(n) 时间；递归栈深度 O(h)，最坏（链）O(n) → 空间 O(n)。单次查询在无额外数据结构时，最坏必须访问 O(n) 个节点，此解达到该下界。\n\n**进阶问法（频繁查询 + 频繁修改）**：基础解每次查询 O(n) 不满足。标准优化是在每个节点维护「子树大小 size」，查询时比较 k 与左子树大小决定走向，O(h)；插入/删除同步维护 size；配合平衡树（AVL/红黑）可到 O(log n)。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "93/93",
+      "runtime_ms": null,
+      "memory_bytes": 47384000,
+      "approach": "递归中序 DFS（实例字段计数）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "",
+      "code": "    TreeNode cur;\n    int count;\n    public int kthSmallest(TreeNode root, int k) {\n        count = 0;\n        cur = null;\n        dfs(root, k);\n        return cur.val;\n    }\n\n    private void dfs(TreeNode node, int k) {\n        if (node == null) {\n            return;\n        }\n        dfs(node.left, k);\n        count++;\n        if (count == k) {\n            cur = node;\n        }\n        dfs(node.right, k);\n    }"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}
