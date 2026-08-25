@@ -1,0 +1,41 @@
+{
+  "seq": 144,
+  "id": "218",
+  "slug": "the-skyline-problem",
+  "title": "天际线问题",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "44/44",
+  "runtime_ms": null,
+  "memory_bytes": 54400000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "扫描线 + 最大堆（惰性删除）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：任一 x 处的天际线高度 = 覆盖该 x 的所有建筑的最大高度；关键点只可能在建筑左/右边缘出现（建筑内部高度恒定），且高度连续相同的水平线必须合并。\n\n**解法选择理由**：朴素做法对每个候选 x 遍历全部建筑取最大高度 → O(n²)。转机：相邻 x 之间活跃建筑集合只变化少量（几个开始、几个结束），适合增量维护「当前活跃最高高度」。把所有左/右边缘拍平成事件排序扫描，用最大堆（惰性删除）维护活跃高度：加入/删除 O(log n)、取最大 O(1)，总 O(n log n)，是本题最优复杂度。\n\n**关键设计决策**：\n1. 事件化：每栋建筑 [l, r, h] 生成两个事件——(l, h, 开始)、(r, h, 结束)，按 x 升序；同 x 时结束排在开始前，保证「先移除再加入」。\n2. 堆元素存 {right, height}，按 height 降序；结束事件不显式删除，而是惰性删除：每次查询前把堆顶 right <= 当前 x 的过期元素弹掉。\n3. 按 x 分组：同一 x 的所有事件先处理完（开始入堆），再统一清理过期、查询一次最高高度，避免同 x 多事件时输出多个错误点。\n4. 输出条件：cur = 堆空 ? 0 : 堆顶高度；cur != 上一个输出高度 h 才输出 (x, cur)，天然满足「无连续等高」。\n\n**具体 case 推演**（[[0,4,5],[4,8,3]]，事件排序后：(0,5,开始), (4,5,结束), (4,3,开始), (8,3,结束)）：\n\n| 分组 x | 处理 | 清理后堆 | cur | 输出 |\n| --- | --- | --- | --- | --- |\n| 0 | 入 {4,5} | {4,5} | 5 | (0,5) |\n| 4 | 结束事件跳过；入 {8,3} | 清掉 {4,5}（right=4≤4）→ {8,3} | 3 | (4,3) |\n| 8 | 结束事件跳过 | 清掉 {8,3} → 空 | 0 | (8,0) |\n\n结果 [[0,5],[4,3],[8,0]] ✓。注意 x=4 若不加分组、poll 一个事件就查询一次，会先输出 (4,0) 再输出 (4,3) 两个错误点——分组是关键。\n\n**边界与细节**：\n- 等高紧贴（[[0,3,4],[3,6,4]]）：x=3 先清掉旧的再入新的，cur 不变 → 不输出中间点，自动合并。\n- 完全覆盖（[[2,9,10],[3,7,8]]）：矮建筑入堆但永远到不了堆顶，被覆盖者不产生关键点。\n- 高先结束矮后继续（[[0,5,10],[3,8,6]]）：x=5 清掉 10 → cur=6 → 输出 (5,6)。\n- 大数端点（right=2^31-1）：比较差值在 int 范围不溢出；惰性删除用 right <= x 正确表达「右边缘处建筑已不覆盖地面」。\n- 首个点从 h=0 开始保证 (left, height) 能输出；最后一个结束事件后堆空 → cur=0 → 输出 (right, 0) 收尾。\n\n**复杂度与下限论证**：每栋建筑生成 2 个事件，排序 O(n log n)；每个事件至多入堆/出堆一次，每次 O(log n)，总时间 O(n log n)，空间 O(n)。天际线输出本身可达 O(n) 个点，且确定扫描顺序必须按边缘 x 排序（比较排序下界 O(n log n)），因此 O(n log n) 时间 + O(n) 空间是本题的标准最优解。",
+  "time_complexity": "O(n log n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "44/44",
+      "runtime_ms": null,
+      "memory_bytes": 54400000,
+      "approach": "扫描线 + 最大堆（惰性删除）",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "",
+      "code": "    public List<List<Integer>> getSkyline(int[][] buildings) {\n        // 1. 生成事件：每栋建筑 = 左边缘“开始” + 右边缘“结束”，按 x 升序（同 x 时结束排在开始前）\n        PriorityQueue<Event> queue = new PriorityQueue<>((a, b) -> {\n            if (a.x == b.x) {\n                return a.isStart - b.isStart; // isStart 0=结束 先于 1=开始，保证同 x 先移除再加入\n            }\n            return a.x - b.x;\n        });\n        for (int[] building : buildings) {\n            queue.offer(new Event(building[0], building[1], building[2], 1)); // 左边缘：开始\n            queue.offer(new Event(building[1], building[1], building[2], 0)); // 右边缘：结束\n        }\n\n        List<List<Integer>> ans = new ArrayList<>();\n        // 2. 活跃建筑最大堆（惰性删除）：元素 = {right, height}，按 height 降序\n        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> b[1] - a[1]);\n        int h = 0; // 上一个已记录的天际线高度，初始为地面高度 0\n\n        // 3. 按 x 分组扫描：同一 x 的所有事件处理完，再查询一次当前最高高度\n        while (!queue.isEmpty()) {\n            int x = queue.peek().x; // 本组事件共同的 x\n            while (!queue.isEmpty() && queue.peek().x == x) {\n                Event top = queue.poll();\n                if (top.isStart == 1) {\n                    heap.offer(new int[]{top.right, top.h}); // 开始事件：加入活跃集合\n                }\n                // 结束事件无需显式处理，由下面的惰性删除统一清理\n            }\n            // 惰性删除：right <= x 的建筑已经结束，从堆顶弹出\n            while (!heap.isEmpty() && heap.peek()[0] <= x) {\n                heap.poll();\n            }\n            // 当前最高高度变化处输出关键点 (x, cur)\n            int cur = heap.isEmpty() ? 0 : heap.peek()[1];\n            if (cur != h) {\n                List<Integer> node = new ArrayList<>();\n                node.add(x);\n                node.add(cur);\n                ans.add(node);\n                h = cur;\n            }\n        }\n        return ans;\n    }\n\n    static class Event {\n        int x;       // 事件发生的横坐标（左边缘或右边缘）\n        int right;   // 该建筑的右边缘（开始事件用它判断何时过期；结束事件时等于 x）\n        int h;       // 该建筑高度\n        int isStart; // 1=开始（左边缘，入堆），0=结束（右边缘）\n\n        public Event(int x, int right, int h, int isStart) {\n            this.x = x;\n            this.right = right;\n            this.h = h;\n            this.isStart = isStart;\n        }\n    }"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}

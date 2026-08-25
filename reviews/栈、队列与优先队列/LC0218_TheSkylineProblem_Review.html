@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC218 天际线问题 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 144</div>
+  <h1>LC218 · 天际线问题</h1>
+  <div class="sub">扫描线 + 最大堆（惰性删除） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 44/44</span>
+    <span class="badge hard">难度 HARD</span>
+    <span class="badge tag">分类 栈、队列与优先队列</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-25</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 扫描线 + 最大堆（惰性删除）</h3>
+    <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 51.9 MB</span><span class="chip">用例 44/44</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0218_TheSkylineProblem.java · 扫描线 + 最大堆（惰性删除）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public List&lt;List&lt;Integer&gt;&gt; getSkyline(int[][] buildings) {
+        // 1. 生成事件：每栋建筑 = 左边缘“开始” + 右边缘“结束”，按 x 升序（同 x 时结束排在开始前）
+        PriorityQueue&lt;Event&gt; queue = new PriorityQueue&lt;&gt;((a, b) -&gt; {
+            if (a.x == b.x) {
+                return a.isStart - b.isStart; // isStart 0=结束 先于 1=开始，保证同 x 先移除再加入
+            }
+            return a.x - b.x;
+        });
+        for (int[] building : buildings) {
+            queue.offer(new Event(building[0], building[1], building[2], 1)); // 左边缘：开始
+            queue.offer(new Event(building[1], building[1], building[2], 0)); // 右边缘：结束
+        }
+
+        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
+        // 2. 活跃建筑最大堆（惰性删除）：元素 = {right, height}，按 height 降序
+        PriorityQueue&lt;int[]&gt; heap = new PriorityQueue&lt;&gt;((a, b) -&gt; b[1] - a[1]);
+        int h = 0; // 上一个已记录的天际线高度，初始为地面高度 0
+
+        // 3. 按 x 分组扫描：同一 x 的所有事件处理完，再查询一次当前最高高度
+        while (!queue.isEmpty()) {
+            int x = queue.peek().x; // 本组事件共同的 x
+            while (!queue.isEmpty() &amp;&amp; queue.peek().x == x) {
+                Event top = queue.poll();
+                if (top.isStart == 1) {
+                    heap.offer(new int[]{top.right, top.h}); // 开始事件：加入活跃集合
+                }
+                // 结束事件无需显式处理，由下面的惰性删除统一清理
+            }
+            // 惰性删除：right &lt;= x 的建筑已经结束，从堆顶弹出
+            while (!heap.isEmpty() &amp;&amp; heap.peek()[0] &lt;= x) {
+                heap.poll();
+            }
+            // 当前最高高度变化处输出关键点 (x, cur)
+            int cur = heap.isEmpty() ? 0 : heap.peek()[1];
+            if (cur != h) {
+                List&lt;Integer&gt; node = new ArrayList&lt;&gt;();
+                node.add(x);
+                node.add(cur);
+                ans.add(node);
+                h = cur;
+            }
+        }
+        return ans;
+    }
+
+    static class Event {
+        int x;       // 事件发生的横坐标（左边缘或右边缘）
+        int right;   // 该建筑的右边缘（开始事件用它判断何时过期；结束事件时等于 x）
+        int h;       // 该建筑高度
+        int isStart; // 1=开始（左边缘，入堆），0=结束（右边缘）
+
+        public Event(int x, int right, int h, int isStart) {
+            this.x = x;
+            this.right = right;
+            this.h = h;
+            this.isStart = isStart;
+        }
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：任一 x 处的天际线高度 = 覆盖该 x 的所有建筑的最大高度；关键点只可能在建筑左/右边缘出现（建筑内部高度恒定），且高度连续相同的水平线必须合并。</p><p><strong>解法选择理由</strong>：朴素做法对每个候选 x 遍历全部建筑取最大高度 → O(n²)。转机：相邻 x 之间活跃建筑集合只变化少量（几个开始、几个结束），适合增量维护「当前活跃最高高度」。把所有左/右边缘拍平成事件排序扫描，用最大堆（惰性删除）维护活跃高度：加入/删除 O(log n)、取最大 O(1)，总 O(n log n)，是本题最优复杂度。</p><p><strong>关键设计决策</strong>：</p><ol><li>事件化：每栋建筑 [l, r, h] 生成两个事件——(l, h, 开始)、(r, h, 结束)，按 x 升序；同 x 时结束排在开始前，保证「先移除再加入」。</li><li>堆元素存 {right, height}，按 height 降序；结束事件不显式删除，而是惰性删除：每次查询前把堆顶 right &lt;= 当前 x 的过期元素弹掉。</li><li>按 x 分组：同一 x 的所有事件先处理完（开始入堆），再统一清理过期、查询一次最高高度，避免同 x 多事件时输出多个错误点。</li><li>输出条件：cur = 堆空 ? 0 : 堆顶高度；cur != 上一个输出高度 h 才输出 (x, cur)，天然满足「无连续等高」。</li></ol><p><strong>具体 case 推演</strong>（[[0,4,5],[4,8,3]]，事件排序后：(0,5,开始), (4,5,结束), (4,3,开始), (8,3,结束)）：</p><div class="table-wrap"><table><thead><tr><th>分组 x</th><th>处理</th><th>清理后堆</th><th>cur</th><th>输出</th></tr></thead><tbody><tr><td>0</td><td>入 {4,5}</td><td>{4,5}</td><td>5</td><td>(0,5)</td></tr><tr><td>4</td><td>结束事件跳过；入 {8,3}</td><td>清掉 {4,5}（right=4≤4）→ {8,3}</td><td>3</td><td>(4,3)</td></tr><tr><td>8</td><td>结束事件跳过</td><td>清掉 {8,3} → 空</td><td>0</td><td>(8,0)</td></tr></tbody></table></div><p>结果 [[0,5],[4,3],[8,0]] ✓。注意 x=4 若不加分组、poll 一个事件就查询一次，会先输出 (4,0) 再输出 (4,3) 两个错误点——分组是关键。</p><p><strong>边界与细节</strong>：</p><ul><li>等高紧贴（[[0,3,4],[3,6,4]]）：x=3 先清掉旧的再入新的，cur 不变 → 不输出中间点，自动合并。</li><li>完全覆盖（[[2,9,10],[3,7,8]]）：矮建筑入堆但永远到不了堆顶，被覆盖者不产生关键点。</li><li>高先结束矮后继续（[[0,5,10],[3,8,6]]）：x=5 清掉 10 → cur=6 → 输出 (5,6)。</li><li>大数端点（right=2^31-1）：比较差值在 int 范围不溢出；惰性删除用 right &lt;= x 正确表达「右边缘处建筑已不覆盖地面」。</li><li>首个点从 h=0 开始保证 (left, height) 能输出；最后一个结束事件后堆空 → cur=0 → 输出 (right, 0) 收尾。</li></ul><p><strong>复杂度与下限论证</strong>：每栋建筑生成 2 个事件，排序 O(n log n)；每个事件至多入堆/出堆一次，每次 O(log n)，总时间 O(n log n)，空间 O(n)。天际线输出本身可达 O(n) 个点，且确定扫描顺序必须按边缘 x 排序（比较排序下界 O(n log n)），因此 O(n log n) 时间 + O(n) 空间是本题的标准最优解。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>44/44 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">44/44</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 51.9 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n log n) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 144 · the-skyline-problem</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote"></div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/218_the-skyline-problem/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E6%A0%88%E3%80%81%E9%98%9F%E5%88%97%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/LC0218_TheSkylineProblem.java">src/栈、队列与优先队列/LC0218_TheSkylineProblem.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-25
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
