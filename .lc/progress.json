@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 144,
+  "current_seq": 145,
   "done": [
     {
       "seq": 1,
@@ -1515,6 +1515,17 @@
       "title": "天际线问题",
       "slug": "the-skyline-problem",
       "category": "栈、队列与优先队列",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 145,
+      "id": "108",
+      "title": "将有序数组转换为二叉搜索树",
+      "slug": "convert-sorted-array-to-binary-search-tree",
+      "category": "树与二叉树",
       "date": "2026-08-25",
       "firstPass": true,
       "optimal": true,
