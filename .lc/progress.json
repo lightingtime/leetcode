@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 150,
+  "current_seq": 151,
   "done": [
     {
       "seq": 1,
@@ -1563,6 +1563,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "复习重点：手写归并计数"
+    },
+    {
+      "seq": 151,
+      "id": "127",
+      "title": "单词接龙",
+      "slug": "word-ladder",
+      "category": "DFS / BFS",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "复习提醒：重新做一遍（虚拟节点图 + 双向 BFS + 相遇公式推导）"
     }
   ],
   "error_habits": [

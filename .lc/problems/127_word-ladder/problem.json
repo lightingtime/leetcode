@@ -1,0 +1,62 @@
+{
+  "id": "127",
+  "slug": "word-ladder",
+  "title": "Word Ladder",
+  "titleCn": "单词接龙",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/word-ladder/",
+  "tags": [
+    "Breadth-First Search",
+    "Hash Table",
+    "String",
+    "双向搜索"
+  ],
+  "tagsCn": [
+    "广度优先搜索",
+    "哈希表",
+    "字符串",
+    "双向搜索"
+  ],
+  "category": "DFS / BFS",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "beginWord",
+          "value": "\"hit\""
+        },
+        {
+          "name": "endWord",
+          "value": "\"cog\""
+        },
+        {
+          "name": "wordList",
+          "value": "[\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]"
+        }
+      ],
+      "output": "5",
+      "explain": "一个最短转换序列是 \"hit\" -> \"hot\" -> \"dot\" -> \"dog\" -> \"cog\", 返回它的长度 5。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "beginWord",
+          "value": "\"hit\""
+        },
+        {
+          "name": "endWord",
+          "value": "\"cog\""
+        },
+        {
+          "name": "wordList",
+          "value": "[\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]"
+        }
+      ],
+      "output": "0",
+      "explain": "endWord \"cog\" 不在字典中，所以无法进行转换。"
+    }
+  ],
+  "exampleTestcases": "\"hit\"\n\"cog\"\n[\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]\n\"hit\"\n\"cog\"\n[\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]",
+  "javaSnippet": "class Solution {\n    public int ladderLength(String beginWord, String endWord, List<String> wordList) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-25T13:03:59.159Z"
+}

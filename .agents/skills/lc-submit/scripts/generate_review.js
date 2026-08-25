@@ -36,6 +36,7 @@ if (srcFile) {
   if (m) code = m[1].trim();
 }
 const fileBase = srcFile ? path.basename(srcFile, '.java') : `LC${String(q.id).padStart(4, '0')}`;
+const safeCat = s => String(s).replace(/[\/\\]+/g, '-');
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // 轻量 Markdown 渲染（逐行状态机）：列表、简单表格、段落；支持 `行内代码`、**加粗**
 const md = raw => {
@@ -214,7 +215,7 @@ const html = `<!DOCTYPE html>
   </section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/${q.id}_${slug}/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
-    相关文件：<a href="../../src/${encodeURIComponent(q.category)}/${encodeURIComponent(fileBase)}.java">src/${esc(q.category)}/${fileBase}.java</a> ·
+    相关文件：<a href="../../src/${encodeURIComponent(safeCat(q.category))}/${encodeURIComponent(fileBase)}.java">src/${esc(q.category)}/${fileBase}.java</a> ·
     <a href="../../index.html">训练主页</a><br>
     生成于 ${date}
   </div>
@@ -250,7 +251,7 @@ function flash(btn) {
 </body>
 </html>`;
 
-const outDir = path.join(ROOT, 'reviews', q.category);
+const outDir = path.join(ROOT, 'reviews', safeCat(q.category));
 fs.mkdirSync(outDir, { recursive: true });
 const outFile = path.join(outDir, `${fileBase}_Review.html`);
 fs.writeFileSync(outFile, html);
