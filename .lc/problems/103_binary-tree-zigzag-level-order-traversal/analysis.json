@@ -1,0 +1,54 @@
+{
+  "seq": 146,
+  "id": "103",
+  "slug": "binary-tree-zigzag-level-order-traversal",
+  "title": "二叉树的锯齿形层序遍历",
+  "category": "树与二叉树",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "33/33",
+  "runtime_ms": null,
+  "memory_bytes": 44040000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "BFS 层序 + 方向标记（LinkedList 头插 O(1)）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：层序遍历 + 每层方向交替。BFS 天然按「层」推进，锯齿只改变每层内部的方向，不改变遍历顺序——核心就是「先按层 BFS，再把奇数层倒过来输出」。\n\n**解法**：队列逐层 BFS + boolean 方向标记。每层先记下 size，再循环处理正好 size 个节点；正序层 append 到链表尾部，逆序层在链表头部插入（LinkedList 头插 O(1)）。空树直接返回空列表。\n\n**关键设计决策**：\n1. 每层先取 size 再循环：队列在处理过程中会不断入队新节点，若不固定 size 会把下一层混进当前层。\n2. 方向标记每层取反：第 0 层正序、第 1 层逆序、第 2 层正序……\n3. 逆序层用 LinkedList 头插：头插 O(1)，避免 ArrayList.add(0) 的 O(层大小) 移位（这是写法 1 到写法 2 的关键优化点）。\n4. BFS 队列用 ArrayDeque：队首出队、队尾入队均 O(1)。\n\n**具体 case 推演**（[3,9,20,null,null,15,7]）：\n1. 层 0（正序）：队列 [3] → size=1 → 出 3，入 9、20 → list=[3] → 输出 [3]\n2. 层 1（逆序）：size=2 → 出 9（入 null 跳过）头插 9→[9]；出 20（入 15、7）头插 20→[20,9] → 输出 [20,9]\n3. 层 2（正序）：size=2 → 出 15→[15]；出 7→[15,7] → 输出 [15,7]\n结果 [[3],[20,9],[15,7]] ✓\n\n**边界与细节**：\n- 空树 → []；单节点 → [[1]]。\n- 单链（左/右链）：每层单节点，方向切换无影响 → [[1],[2],[3]]。\n- 满二叉树：第二层逆序 [3,2]，第三层正序 [4,5,6,7]。\n- 节点值含 0/负数：值不影响顺序。\n- 大输入 2000 节点：队列峰值 O(n)，迭代 BFS 无栈溢出。\n\n**复杂度与下限论证**：每个节点入队/出队各一次，每层每个节点 O(1) 插入（LinkedList 头插/尾插均 O(1)）→ 总时间 O(n)；空间 O(n)（队列 + 结果）。时间下界 O(n)（每个节点至少访问一次），此写法达到最优。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "33/33",
+      "runtime_ms": null,
+      "memory_bytes": 43768000,
+      "approach": "BFS 层序 + 方向标记（逆序层头插）",
+      "time_complexity": "O(n^2) 最坏",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "",
+      "code": "    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new ArrayDeque<>();\n        queue.offer(root);\n        boolean left = true;\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.removeFirst();\n                if (left) {\n                    list.add(cur.val);\n                } else {\n                    list.add(0, cur.val);\n                }\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n            left = !left;\n        }\n        return ans;\n    }"
+    },
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "33/33",
+      "runtime_ms": null,
+      "memory_bytes": 44040000,
+      "approach": "BFS 层序 + 方向标记（LinkedList 头插 O(1)）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "",
+      "code": "    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new ArrayDeque<>();\n        queue.offer(root);\n        boolean left = true;\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new LinkedList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.removeFirst();\n                if (left) {\n                    list.add(cur.val);\n                } else {\n                    list.add(0, cur.val);\n                }\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n            left = !left;\n        }\n        return ans;\n    }"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}

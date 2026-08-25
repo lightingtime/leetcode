@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 145,
+  "current_seq": 146,
   "done": [
     {
       "seq": 1,
@@ -1525,6 +1525,17 @@
       "id": "108",
       "title": "将有序数组转换为二叉搜索树",
       "slug": "convert-sorted-array-to-binary-search-tree",
+      "category": "树与二叉树",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 146,
+      "id": "103",
+      "title": "二叉树的锯齿形层序遍历",
+      "slug": "binary-tree-zigzag-level-order-traversal",
       "category": "树与二叉树",
       "date": "2026-08-25",
       "firstPass": true,
