@@ -1,0 +1,41 @@
+{
+  "seq": 153,
+  "id": "210",
+  "slug": "course-schedule-ii",
+  "title": "课程表 II",
+  "category": "图与并查集",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "47/47",
+  "runtime_ms": null,
+  "memory_bytes": 47200000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Kahn 拓扑排序（入度 + 队列收集出队顺序）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：把课程依赖建模成有向图（边 before→after，先修指向后修），求**拓扑排序**；存在环则无解（返回空数组）。207 只判「能否完成」，210 额外要求给出一种顺序。\n\n**解法选择理由**：Kahn 算法（入度 + 队列）天然按「先修在前」的顺序产出——入度为 0 表示所有先修已完成，可以先学。O(V+E) 时间，达到拓扑排序的标准最优（每条边、每个节点访问一次）。\n\n**关键设计决策**：\n1. 建图：`graph.get(before).add(after)`，同时 `inDegree[after]++`。\n2. 初始把所有入度为 0 的课程入队（没有先修，随时可学）。\n3. 出队即「学会」：写入结果数组；对其每个后继 `inDegree--`，归零就入队（它的先修全学完了）。\n4. 判环：若最终处理数 `index != numCourses`，说明有节点入度始终 >0（在环里），返回空数组。\n\n**具体 case 推演**（示例2：numCourses=4，[[1,0],[2,0],[3,1],[3,2]]）：\n1. 入度：0→0，1→1，2→1，3→2；初始队列 [0]\n2. 出队 0 → ans=[0]；后继 1、2 入度减到 0 → 入队 [1,2]\n3. 出队 1 → ans=[0,1]；3 入度 2→1\n4. 出队 2 → ans=[0,1,2]；3 入度 1→0 → 入队 [3]\n5. 出队 3 → ans=[0,1,2,3]，index==4 → 返回 ✓（[0,2,1,3] 也是合法答案，测试用性质校验）\n\n**边界与细节**：\n- 环（[[0,1],[1,0]]）：1、0 入度都不为 0 → 队列空 → index=0≠2 → 返回空数组。\n- 无先修：所有入度 0，出队顺序即 0..n-1（任意顺序均合法）。\n- 链式依赖：唯一顺序。\n- 大输入 2000 节点链/环：O(V+E) 线性时间通过。\n- 自环/重复边：题目保证 ai!=bi 且所有 [ai,bi] 互不相同。\n\n**复杂度与下限论证**：建图 O(E)，BFS 每个节点出队一次、每条边处理一次 → O(V+E)；空间 O(V+E)（邻接表 + 入度 + 队列）。拓扑排序必须至少看每条边一次 → 下界 Ω(V+E)，此解达到最优。",
+  "time_complexity": "O(V+E)",
+  "space_complexity": "O(V+E)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "47/47",
+      "runtime_ms": null,
+      "memory_bytes": 47200000,
+      "approach": "Kahn 拓扑排序（入度 + 队列收集出队顺序）",
+      "time_complexity": "O(V+E)",
+      "space_complexity": "O(V+E)",
+      "optimal": true,
+      "notes": "",
+      "code": "    public int[] findOrder(int numCourses, int[][] prerequisites) {\n        List<List<Integer>> graph = new ArrayList<>();\n        for (int i = 0; i < numCourses; i++) {\n            graph.add(new ArrayList<>());\n        }\n        int[] inDegree = new int[numCourses];\n        for (int[] prerequisite : prerequisites) {\n            int before = prerequisite[1];\n            int after = prerequisite[0];\n            graph.get(before).add(after);\n            inDegree[after]++;\n        }\n        Deque<Integer> deque = new ArrayDeque<>();\n        for (int i = 0; i < numCourses; i++) {\n            if (inDegree[i] == 0) {\n                deque.offerLast(i);\n            }\n        }\n        int[] ans = new int[numCourses];\n        int index = 0;\n        while (!deque.isEmpty()) {\n            int cur = deque.removeFirst();\n            ans[index++] = cur;\n            for (Integer course : graph.get(cur)) {\n                inDegree[course]--;\n                if (inDegree[course] == 0) {\n                    deque.offerLast(course);\n                }\n            }\n        }\n        if (index == numCourses) {\n            return ans;\n        }\n        return new int[0];\n    }"
+    }
+  ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ]
+}

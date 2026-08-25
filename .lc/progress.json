@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 152,
+  "current_seq": 153,
   "done": [
     {
       "seq": 1,
@@ -1580,6 +1580,17 @@
       "id": "130",
       "title": "被围绕的区域",
       "slug": "surrounded-regions",
+      "category": "图与并查集",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 153,
+      "id": "210",
+      "title": "课程表 II",
+      "slug": "course-schedule-ii",
       "category": "图与并查集",
       "date": "2026-08-25",
       "firstPass": true,

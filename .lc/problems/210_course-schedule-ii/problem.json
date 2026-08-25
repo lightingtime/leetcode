@@ -1,0 +1,68 @@
+{
+  "id": "210",
+  "slug": "course-schedule-ii",
+  "title": "Course Schedule II",
+  "titleCn": "课程表 II",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/course-schedule-ii/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Graph",
+    "Topological Sort"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "图",
+    "拓扑排序"
+  ],
+  "category": "图与并查集",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "numCourses",
+          "value": "2"
+        },
+        {
+          "name": "prerequisites",
+          "value": "[[1,0]]"
+        }
+      ],
+      "output": "[0,1]",
+      "explain": "总共有 2 门课程。要学习课程 1，你需要先完成课程 0。因此，正确的课程顺序为 [0,1] 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "numCourses",
+          "value": "4"
+        },
+        {
+          "name": "prerequisites",
+          "value": "[[1,0],[2,0],[3,1],[3,2]]"
+        }
+      ],
+      "output": "[0,2,1,3]",
+      "explain": "总共有 4 门课程。要学习课程 3，你应该先完成课程 1 和课程 2。并且课程 1 和课程 2 都应该排在课程 0 之后。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "numCourses",
+          "value": "1"
+        },
+        {
+          "name": "prerequisites",
+          "value": "[]"
+        }
+      ],
+      "output": "[0]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "2\n[[1,0]]\n4\n[[1,0],[2,0],[3,1],[3,2]]\n1\n[]",
+  "javaSnippet": "class Solution {\n    public int[] findOrder(int numCourses, int[][] prerequisites) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-25T14:50:02.522Z"
+}
