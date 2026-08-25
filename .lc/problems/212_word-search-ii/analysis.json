@@ -1,0 +1,53 @@
+{
+  "seq": 155,
+  "id": "212",
+  "slug": "word-search-ii",
+  "title": "单词搜索 II",
+  "category": "回溯",
+  "date": "2026-08-26",
+  "verdict": "Accepted",
+  "testcases": "65/65",
+  "runtime_ms": null,
+  "memory_bytes": 47508000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Trie+回溯DFS",
+  "time_complexity": "O(ΣL建树 + m·n·3^L搜索)",
+  "space_complexity": "O(26·Trie节点数 + m·n + L递归栈)",
+  "notes": "Trie 建树词尾存整词便于收集与清空去重；DFS 携带树上当前节点同步前进，children 查不到即整枝剪枝；visited 进栈标记回溯撤销",
+  "mistakes": [
+    {
+      "habit": "Trie insert 游标移动再次踩坑：p=p.children[idx] 必须无条件执行，不能只写在新建分支里，否则复用已有孩子时游标原地不动，后续字符挂错层（如 ab 后插 ac 变成挂在 root 下）",
+      "count": 1
+    }
+  ],
+  "hints": [
+    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ],
+  "dp_subtype": "",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：在棋盘的全部路径中，找出恰好等于字典中某个单词的路径。朴素做法是逐词 DFS：每个词都从 m·n 个起点各搜一遍，words 可达 3×10^4 个，重复扫描量爆炸必超时。\n- 解法选择：Trie + 回溯。把全部单词压进共享前缀的字典树后，「往这个方向走还有没有词活着」从查 3 万次变成查 1 次 children 槽位；棋盘每走一格、树上同步走一层，死前缀整枝剪掉。\n\n## ② 关键设计决策\n\n| 设计点 | 决策 | 理由 |\n|---|---|---|\n| 词尾标记 | 存完整单词 String 而非 boolean | 命中直接收集不用回拼路径字符串；置回 null 即天然去重 |\n| dfs 的树参数 | 每层递归传当前节点的孩子 | 树上位置随路径推进；Java 引用按值传，形参换指向不影响外层 root |\n| 去重机制 | trie.word = null 改对象内容 | 改的是节点本体，全局可见，任何路径二次走到同一词尾不会重复收录 |\n| 回溯现场 | visited 进栈标记、返回前撤销 | 当前路径用过的格子释放给兄弟分支复用 |\n\ndfs 单帧五步顺序：守卫(越界或已访问直接 return) → 剪枝(children[idx]==null return) → 前进+命中(word!=null 则收集并清空) → 标记 visited → 四方向递归 → 撤销 visited。\n\n## ③ 具体 case 推演（边界5）\n\nboard=[a,b,c] 单行，words=[ab, abc, ac]，建树结果（ac 与 ab 共享前缀 a）：\n\n```\nroot───a(A)───b(B,word=ab)───c(C,word=abc)\n               └────c(E,word=ac)\n```\n\n| 步骤 | 格子 | 树上位置 | 动作与状态变化 |\n|---|---|---|---|\n| 1 | (0,0)=a | root→A | root.children[a] 存在，进入 A，标记 (0,0) |\n| 2 | (0,1)=b | A→B | B.word=ab 非空，收集 ab 并把 B.word 置 null |\n| 3 | (0,2)=c | B→C | C.word=abc 命中收集；C 无孩子，开始回溯 |\n| 4 | — | A 的另一孩子 E(ac) | 树上说 ac 存在，但 (0,0) 的邻格里没有未访问的 c，走不出去，放弃 |\n| 5 | (0,1)=b | root | root 无 b 孩子，该起点秒退 |\n| 6 | (0,2)=c | root | root 无 c 孩子，同样秒退 |\n\n输出 [ab, abc]。三个结论：词在字典存在不代表棋盘有路（步骤4）；字典没有的前缀连搜都不搜（步骤5、6）；B 命中后 children 未清空所以 abc 仍能继续深走收上来（前缀嵌套）。\n\n## ④ 边界与细节\n\n- 1x1 棋盘 + 单字符词：起点循环与命中逻辑的最小闭环\n- 单元格不可复用（aba）：visited 漏撤销会让后续路径误判格子被占用\n- 多路径同词（aa）：两条路径先后到达同一词尾节点，第二次因 word 已置 null 不重复收录\n- 前缀嵌套（ab/abc）：命中短词不动 children，长词在同一路径上继续收\n- 竖条棋盘（ba/bab/bb）：bb 两字母不相邻，几何相邻性自然淘汰\n\n## ⑤ 复杂度与下限论证\n\n- 时间：建树 O(ΣL)，ΣL ≤ 3×10^4×10 = 3×10^5；搜索上界 O(m·n·3^L)——144 个起点 × 每步至多 3 个新方向（不走回头格）× 深度 ≤ 10，约 8.5×10^6 量级，65 用例实测通过。\n- 空间：Trie 节点 O(ΣL) 主导，另加 visited O(m·n)、递归栈 O(L)。\n- 下限论证：任何正确算法都要读完 words（Ω(ΣL)），也必须允许每个格子作为起点候选（Ω(m·n)）。本解法两项均贴下限，是该题公认最优框架。（可选进阶：命中后若无剩余孩子可向上剪掉子树，缩小后续搜索的树，量级不变。）",
+  "code_notes": [],
+  "patterns": [
+    {
+      "title": "Trie+回溯剪枝",
+      "text": "多串网格匹配：先把词典建成 Trie，再以每格为起点 DFS，递归参数携带树上当前节点同步前进；children 查不到该字母即整枝剪掉，词尾存整词、命中后清空 word 实现去重",
+      "category": "回溯",
+      "problem": "word-search-ii",
+      "date": "2026-08-26"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "65/65",
+      "runtime_ms": null,
+      "memory_bytes": 47508000,
+      "approach": "Trie+回溯DFS",
+      "time_complexity": "O(ΣL建树 + m·n·3^L搜索)",
+      "space_complexity": "O(26·Trie节点数 + m·n + L递归栈)",
+      "optimal": true,
+      "notes": "Trie 建树词尾存整词便于收集与清空去重；DFS 携带树上当前节点同步前进，children 查不到即整枝剪枝；visited 进栈标记回溯撤销"
+    }
+  ]
+}

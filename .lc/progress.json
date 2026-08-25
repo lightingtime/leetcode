@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-25",
-  "current_seq": 153,
+  "updated": "2026-08-26",
+  "current_seq": 155,
   "done": [
     {
       "seq": 1,
@@ -1596,6 +1596,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 155,
+      "id": "212",
+      "title": "单词搜索 II",
+      "slug": "word-search-ii",
+      "category": "回溯",
+      "date": "2026-08-26",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "Trie 建树词尾存整词便于收集与清空去重；DFS 携带树上当前节点同步前进，children 查不到即整枝剪枝；visited 进栈标记回溯撤销"
     }
   ],
   "error_habits": [
@@ -2588,6 +2599,17 @@
         "图与并查集"
       ],
       "last_seen": "2026-08-25"
+    },
+    {
+      "habit": "Trie insert 游标移动再次踩坑：p=p.children[idx] 必须无条件执行，不能只写在新建分支里，否则复用已有孩子时游标原地不动，后续字符挂错层（如 ab 后插 ac 变成挂在 root 下）",
+      "count": 1,
+      "examples": [
+        "word-search-ii"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-08-26"
     }
   ],
   "category_hints": {

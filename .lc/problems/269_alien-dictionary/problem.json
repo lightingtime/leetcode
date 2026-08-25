@@ -1,0 +1,31 @@
+{
+  "id": "269",
+  "slug": "alien-dictionary",
+  "title": "Alien Dictionary",
+  "titleCn": "火星词典",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/alien-dictionary/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Graph",
+    "Topological Sort",
+    "Array",
+    "String",
+    "有向无环图"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "图",
+    "拓扑排序",
+    "数组",
+    "字符串",
+    "有向无环图"
+  ],
+  "category": "图与并查集",
+  "examples": [],
+  "exampleTestcases": "[\"wrt\",\"wrf\",\"er\",\"ett\",\"rftt\"]\n[\"z\",\"x\"]\n[\"z\",\"x\",\"z\"]",
+  "javaSnippet": "",
+  "fetchedAt": "2026-08-25T17:16:01.930Z"
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC212 单词搜索 II · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 155</div>
+  <h1>LC212 · 单词搜索 II</h1>
+  <div class="sub">Trie+回溯DFS · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 65/65</span>
+    <span class="badge hard">难度 HARD</span>
+    <span class="badge tag">分类 回溯</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-26</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · Trie+回溯DFS</h3>
+    <p><span class="chip">时间 O(ΣL建树 + m·n·3^L搜索)</span><span class="chip">空间 O(26·Trie节点数 + m·n + L递归栈)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 65/65</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0212_WordSearchIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;String&gt; ans;
+    boolean[][] visited;
+    public List&lt;String&gt; findWords(char[][] board, String[] words) {
+        ans = new ArrayList&lt;&gt;();
+        visited = new boolean[board.length][board[0].length];
+        Trie trie = new Trie();
+        for (String word : words) {
+            Trie p = trie;
+            for (char c : word.toCharArray()) {
+                if (p.children[c - 'a'] == null) {
+                    p.children[c - 'a'] = new Trie();
+                }
+                p = p.children[c - 'a'];
+            }
+            p.word = word;
+        }
+        for (int i = 0; i &lt; board.length; i++) {
+            for (int j = 0; j &lt; board[0].length; j++) {
+                dfs(board, i, j, trie);
+            }
+        }
+        return ans;
+    }
+
+    private void dfs(char[][] board, int i, int j, Trie trie) {
+        if (i &lt; 0 || i &gt;= board.length || j &lt; 0 || j &gt;= board[0].length || visited[i][j]) {
+            return;
+        }
+        if (trie.children[board[i][j] - 'a'] == null) {
+            return;
+        }
+        trie = trie.children[board[i][j] - 'a'];
+        if (trie.word != null) {
+            ans.add(trie.word);
+            trie.word = null;
+        }
+        visited[i][j] = true;
+        dfs(board, i - 1, j, trie);
+        dfs(board, i + 1, j, trie);
+        dfs(board, i, j - 1, trie);
+        dfs(board, i, j + 1, trie);
+        visited[i][j] = false;
+    }
+
+    static class Trie {
+        Trie[] children;
+        String word;
+
+        public Trie() {
+            this.children = new Trie[26];
+        }
+
+        public Trie(Trie[] children, String word) {
+            this.children = children;
+            this.word = word;
+        }
+    }</pre></div>
+    <p class="muted">Trie 建树词尾存整词便于收集与清空去重；DFS 携带树上当前节点同步前进，children 查不到即整枝剪枝；visited 进栈标记回溯撤销</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>## ① 问题本质与解法选择</p><ul><li>本质：在棋盘的全部路径中，找出恰好等于字典中某个单词的路径。朴素做法是逐词 DFS：每个词都从 m·n 个起点各搜一遍，words 可达 3×10^4 个，重复扫描量爆炸必超时。</li><li>解法选择：Trie + 回溯。把全部单词压进共享前缀的字典树后，「往这个方向走还有没有词活着」从查 3 万次变成查 1 次 children 槽位；棋盘每走一格、树上同步走一层，死前缀整枝剪掉。</li></ul><p>## ② 关键设计决策</p><div class="table-wrap"><table><thead><tr><th>设计点</th><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>词尾标记</td><td>存完整单词 String 而非 boolean</td><td>命中直接收集不用回拼路径字符串；置回 null 即天然去重</td></tr><tr><td>dfs 的树参数</td><td>每层递归传当前节点的孩子</td><td>树上位置随路径推进；Java 引用按值传，形参换指向不影响外层 root</td></tr><tr><td>去重机制</td><td>trie.word = null 改对象内容</td><td>改的是节点本体，全局可见，任何路径二次走到同一词尾不会重复收录</td></tr><tr><td>回溯现场</td><td>visited 进栈标记、返回前撤销</td><td>当前路径用过的格子释放给兄弟分支复用</td></tr></tbody></table></div><p>dfs 单帧五步顺序：守卫(越界或已访问直接 return) → 剪枝(children[idx]==null return) → 前进+命中(word!=null 则收集并清空) → 标记 visited → 四方向递归 → 撤销 visited。</p><p>## ③ 具体 case 推演（边界5）</p><p>board=[a,b,c] 单行，words=[ab, abc, ac]，建树结果（ac 与 ab 共享前缀 a）：</p><p>```</p><p>root───a(A)───b(B,word=ab)───c(C,word=abc)</p><p>└────c(E,word=ac)</p><p>```</p><div class="table-wrap"><table><thead><tr><th>步骤</th><th>格子</th><th>树上位置</th><th>动作与状态变化</th></tr></thead><tbody><tr><td>1</td><td>(0,0)=a</td><td>root→A</td><td>root.children[a] 存在，进入 A，标记 (0,0)</td></tr><tr><td>2</td><td>(0,1)=b</td><td>A→B</td><td>B.word=ab 非空，收集 ab 并把 B.word 置 null</td></tr><tr><td>3</td><td>(0,2)=c</td><td>B→C</td><td>C.word=abc 命中收集；C 无孩子，开始回溯</td></tr><tr><td>4</td><td>—</td><td>A 的另一孩子 E(ac)</td><td>树上说 ac 存在，但 (0,0) 的邻格里没有未访问的 c，走不出去，放弃</td></tr><tr><td>5</td><td>(0,1)=b</td><td>root</td><td>root 无 b 孩子，该起点秒退</td></tr><tr><td>6</td><td>(0,2)=c</td><td>root</td><td>root 无 c 孩子，同样秒退</td></tr></tbody></table></div><p>输出 [ab, abc]。三个结论：词在字典存在不代表棋盘有路（步骤4）；字典没有的前缀连搜都不搜（步骤5、6）；B 命中后 children 未清空所以 abc 仍能继续深走收上来（前缀嵌套）。</p><p>## ④ 边界与细节</p><ul><li>1x1 棋盘 + 单字符词：起点循环与命中逻辑的最小闭环</li><li>单元格不可复用（aba）：visited 漏撤销会让后续路径误判格子被占用</li><li>多路径同词（aa）：两条路径先后到达同一词尾节点，第二次因 word 已置 null 不重复收录</li><li>前缀嵌套（ab/abc）：命中短词不动 children，长词在同一路径上继续收</li><li>竖条棋盘（ba/bab/bb）：bb 两字母不相邻，几何相邻性自然淘汰</li></ul><p>## ⑤ 复杂度与下限论证</p><ul><li>时间：建树 O(ΣL)，ΣL ≤ 3×10^4×10 = 3×10^5；搜索上界 O(m·n·3^L)——144 个起点 × 每步至多 3 个新方向（不走回头格）× 深度 ≤ 10，约 8.5×10^6 量级，65 用例实测通过。</li><li>空间：Trie 节点 O(ΣL) 主导，另加 visited O(m·n)、递归栈 O(L)。</li><li>下限论证：任何正确算法都要读完 words（Ω(ΣL)），也必须允许每个格子作为起点候选（Ω(m·n)）。本解法两项均贴下限，是该题公认最优框架。（可选进阶：命中后若无剩余孩子可向上剪掉子树，缩小后续搜索的树，量级不变。）</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>Trie insert 游标移动再次踩坑：p=p.children[idx] 必须无条件执行，不能只写在新建分支里，否则复用已有孩子时游标原地不动，后续字符挂错层（如 ab 后插 ac 变成挂在 root 下）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>65/65 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>Trie+回溯剪枝</h3><p>多串网格匹配：先把词典建成 Trie，再以每格为起点 DFS，递归参数携带树上当前节点同步前进；children 查不到该字母即整枝剪掉，词尾存整词、命中后清空 word 实现去重</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">65/65</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 45.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(ΣL建树 + m·n·3^L搜索) · O(26·Trie节点数 + m·n + L递归栈)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 回溯</h3><div class="quote">回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。</div>
+      <h3>错误习惯复盘</h3><p><b>Trie insert 游标移动再次踩坑：p=p.children[idx] 必须无条件执行，不能只写在新建分支里，否则复用已有孩子时游标原地不动，后续字符挂错层（如 ab 后插 ac 变成挂在 root 下）</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 155 · word-search-ii</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">Trie 建树词尾存整词便于收集与清空去重；DFS 携带树上当前节点同步前进，children 查不到即整枝剪枝；visited 进栈标记回溯撤销</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/212_word-search-ii/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%9B%9E%E6%BA%AF/LC0212_WordSearchIi.java">src/回溯/LC0212_WordSearchIi.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-26
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
