@@ -1,0 +1,54 @@
+{
+  "seq": 143,
+  "id": "378",
+  "slug": "kth-smallest-element-in-a-sorted-matrix",
+  "title": "有序矩阵中第 K 小的元素",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "87/87",
+  "runtime_ms": null,
+  "memory_bytes": 52528000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "二分答案（值域二分）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：n×n 矩阵每行、每列分别升序，但整体拉平并不是有序数组，所以「第 k 小」没有固定坐标、不能按下标直接取。可用的性质是行、列各自的局部序。\n\n**两种写法对比**：\n- 写法 1（最小堆 k 路归并）：把每行看成一条有序链表，堆里维护每行当前队头（带 row,col 坐标），弹 k 次即第 k 小。时间 O(k log n)，最坏 O(n^2 log n)；空间 O(n)。\n- 写法 2（值域二分，最优）：对数值范围二分，用「≤ mid 的元素个数 ≥ k」判定并收敛。时间 O(n·log(值域))，空间 O(1)，满足进阶「O(1) 内存」要求。\n\n**写法 2 关键设计**：\n1. 二分对象是**值**而不是下标：第 k 小的值 v = 满足 count(≤x) ≥ k 的最小 x。count 随 x 单调不减，所以可在 [matrix[0][0], matrix[n-1][n-1]] 上二分。\n2. 统计 count 用左下角游走 O(n) 完成：从 (n-1, 0) 出发，若 matrix[i][j] ≤ mid，则这一列第 0..i 行都 ≤ mid，count += i+1 后 j++；否则这一行右边只会更大，i--。每轮最多走 2n 步。\n3. 判据必须用 ≥ 而不是 ==：count 只在 mid 跨过某些值时恰好等于 k，其余时候都大于 k，用 == 会让二分走错方向（全相同元素时直接错）。\n\n**具体 case 推演**（示例 1：matrix=[[1,5,9],[10,11,13],[12,13,15]]，k=8，值域 [1,15]）：\n\n| mid | count(≤mid) | 与 k=8 比较 | 边界调整 |\n| --- | --- | --- | --- |\n| 8 | 2 | < 8 | left=9 |\n| 12 | 6 | < 8 | left=13 |\n| 14 | 8 | ≥ 8 | right=14 |\n| 13 | 8 | ≥ 8 | right=13 |\n\n收敛到 13，第 8 小 = 13 ✓\n\ncount(≤13) 的游走细节：\n1. (2,0)=12 ≤ 13 → count += 3（列 0 的 1,10,12），j=1\n2. (2,1)=13 ≤ 13 → count += 3（列 1 的 5,11,13），j=2\n3. (2,2)=15 > 13 → i=1\n4. (1,2)=13 ≤ 13 → count += 2（列 2 的 9,13），j=3 结束\n合计 8 ✓\n\n**边界与细节**：\n- k=1：left 初始即 matrix[0][0]，二分直接返回最小值。\n- k=n^2：收敛到 matrix[n-1][n-1]。\n- 全相同元素：count(≤v)=n^2 ≥ k 恒成立，left 停在 matrix[0][0]，正确。\n- 重复元素：≥ 判据让门槛正好落在重复值上（两个 13 凑够第 8 个）。\n- 负数与 ±10^9 值域：mid = left + (right-left)/2 防溢出，int 足够。\n\n**复杂度与下限论证**：单次判定 O(n)（游走最多 2n 步），二分次数 O(log(值域)) ≤ 31，总 O(n·log(值域)) ≈ 300×31，空间 O(1)。堆写法最坏 O(n^2 log n) 且空间 O(n)；值域二分把判定降到 O(n)、空间降到 O(1)，是本题进阶要求下的最优写法。",
+  "time_complexity": "O(n·log(值域))",
+  "space_complexity": "O(1)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "87/87",
+      "runtime_ms": null,
+      "memory_bytes": 51784000,
+      "approach": "最小堆 k 路归并",
+      "time_complexity": "O(k log n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "",
+      "code": "    public int kthSmallest(int[][] matrix, int k) {\n        PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));\n        int n = matrix.length;\n        for (int i = 0; i < n; i++) {\n            queue.offer(new Node(matrix[i][0], i, 0));\n        }\n        int count = 0;\n        while (count < k - 1) {\n            Node top = queue.poll();\n            if (top.col != n - 1) {\n                queue.offer(new Node(matrix[top.row][top.col + 1], top.row, top.col + 1));\n            }\n            count++;\n        }\n        return queue.peek().val;\n    }\n    static class Node {\n        int val;\n        int row;\n        int col;\n\n        public Node(int val, int row, int col) {\n            this.val = val;\n            this.row = row;\n            this.col = col;\n        }\n    }"
+    },
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "87/87",
+      "runtime_ms": null,
+      "memory_bytes": 52528000,
+      "approach": "二分答案（值域二分）",
+      "time_complexity": "O(n·log(值域))",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "",
+      "code": "    public int kthSmallest(int[][] matrix, int k) {\n        int n = matrix.length;\n        int left = matrix[0][0];\n        int right = matrix[n - 1][n - 1];\n        while (left < right) {\n            int mid = left + (right - left) / 2;\n            if (check(mid, matrix, n, k)) {\n                right = mid;\n            } else {\n                left = mid + 1;\n            }\n        }\n        return left;\n    }\n\n    private boolean check(int target, int[][] matrix, int n, int k) {\n        int j = 0;\n        int i = n - 1;\n        int count = 0;\n        while (i >= 0 && j < n) {\n            if (matrix[i][j] <= target) {\n                count += i + 1;\n                j++;\n            } else {\n                i--;\n            }\n        }\n        return count >= k;\n    }"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}

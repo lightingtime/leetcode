@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-24",
-  "current_seq": 142,
+  "updated": "2026-08-25",
+  "current_seq": 143,
   "done": [
     {
       "seq": 1,
@@ -1495,6 +1495,17 @@
       "category": "栈、队列与优先队列",
       "date": "2026-08-24",
       "firstPass": false,
+      "optimal": true,
+      "notes": ""
+    },
+    {
+      "seq": 143,
+      "id": "378",
+      "title": "有序矩阵中第 K 小的元素",
+      "slug": "kth-smallest-element-in-a-sorted-matrix",
+      "category": "栈、队列与优先队列",
+      "date": "2026-08-25",
+      "firstPass": true,
       "optimal": true,
       "notes": ""
     }

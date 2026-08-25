@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC378 有序矩阵中第 K 小的元素 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 143</div>
+  <h1>LC378 · 有序矩阵中第 K 小的元素</h1>
+  <div class="sub">二分答案（值域二分） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 87/87</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 栈、队列与优先队列</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-25</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 最小堆 k 路归并</h3>
+    <p><span class="chip">时间 O(k log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 49.4 MB</span><span class="chip">用例 87/87</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0378_KthSmallestElementInASortedMatrix.java · 最小堆 k 路归并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public int kthSmallest(int[][] matrix, int k) {
+        PriorityQueue&lt;Node&gt; queue = new PriorityQueue&lt;&gt;(Comparator.comparingInt(a -&gt; a.val));
+        int n = matrix.length;
+        for (int i = 0; i &lt; n; i++) {
+            queue.offer(new Node(matrix[i][0], i, 0));
+        }
+        int count = 0;
+        while (count &lt; k - 1) {
+            Node top = queue.poll();
+            if (top.col != n - 1) {
+                queue.offer(new Node(matrix[top.row][top.col + 1], top.row, top.col + 1));
+            }
+            count++;
+        }
+        return queue.peek().val;
+    }
+    static class Node {
+        int val;
+        int row;
+        int col;
+
+        public Node(int val, int row, int col) {
+            this.val = val;
+            this.row = row;
+            this.col = col;
+        }
+    }</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 二分答案（值域二分）</h3>
+    <p><span class="chip">时间 O(n·log(值域))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 50.1 MB</span><span class="chip">用例 87/87</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0378_KthSmallestElementInASortedMatrix.java · 二分答案（值域二分）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        int left = matrix[0][0];
+        int right = matrix[n - 1][n - 1];
+        while (left &lt; right) {
+            int mid = left + (right - left) / 2;
+            if (check(mid, matrix, n, k)) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    private boolean check(int target, int[][] matrix, int n, int k) {
+        int j = 0;
+        int i = n - 1;
+        int count = 0;
+        while (i &gt;= 0 &amp;&amp; j &lt; n) {
+            if (matrix[i][j] &lt;= target) {
+                count += i + 1;
+                j++;
+            } else {
+                i--;
+            }
+        }
+        return count &gt;= k;
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：n×n 矩阵每行、每列分别升序，但整体拉平并不是有序数组，所以「第 k 小」没有固定坐标、不能按下标直接取。可用的性质是行、列各自的局部序。</p><p><strong>两种写法对比</strong>：</p><ul><li>写法 1（最小堆 k 路归并）：把每行看成一条有序链表，堆里维护每行当前队头（带 row,col 坐标），弹 k 次即第 k 小。时间 O(k log n)，最坏 O(n^2 log n)；空间 O(n)。</li><li>写法 2（值域二分，最优）：对数值范围二分，用「≤ mid 的元素个数 ≥ k」判定并收敛。时间 O(n·log(值域))，空间 O(1)，满足进阶「O(1) 内存」要求。</li></ul><p><strong>写法 2 关键设计</strong>：</p><ol><li>二分对象是<strong>值</strong>而不是下标：第 k 小的值 v = 满足 count(≤x) ≥ k 的最小 x。count 随 x 单调不减，所以可在 [matrix[0][0], matrix[n-1][n-1]] 上二分。</li><li>统计 count 用左下角游走 O(n) 完成：从 (n-1, 0) 出发，若 matrix[i][j] ≤ mid，则这一列第 0..i 行都 ≤ mid，count += i+1 后 j++；否则这一行右边只会更大，i--。每轮最多走 2n 步。</li><li>判据必须用 ≥ 而不是 ==：count 只在 mid 跨过某些值时恰好等于 k，其余时候都大于 k，用 == 会让二分走错方向（全相同元素时直接错）。</li></ol><p><strong>具体 case 推演</strong>（示例 1：matrix=[[1,5,9],[10,11,13],[12,13,15]]，k=8，值域 [1,15]）：</p><div class="table-wrap"><table><thead><tr><th>mid</th><th>count(≤mid)</th><th>与 k=8 比较</th><th>边界调整</th></tr></thead><tbody><tr><td>8</td><td>2</td><td>&lt; 8</td><td>left=9</td></tr><tr><td>12</td><td>6</td><td>&lt; 8</td><td>left=13</td></tr><tr><td>14</td><td>8</td><td>≥ 8</td><td>right=14</td></tr><tr><td>13</td><td>8</td><td>≥ 8</td><td>right=13</td></tr></tbody></table></div><p>收敛到 13，第 8 小 = 13 ✓</p><p>count(≤13) 的游走细节：</p><ol><li>(2,0)=12 ≤ 13 → count += 3（列 0 的 1,10,12），j=1</li><li>(2,1)=13 ≤ 13 → count += 3（列 1 的 5,11,13），j=2</li><li>(2,2)=15 &gt; 13 → i=1</li><li>(1,2)=13 ≤ 13 → count += 2（列 2 的 9,13），j=3 结束</li></ol><p>合计 8 ✓</p><p><strong>边界与细节</strong>：</p><ul><li>k=1：left 初始即 matrix[0][0]，二分直接返回最小值。</li><li>k=n^2：收敛到 matrix[n-1][n-1]。</li><li>全相同元素：count(≤v)=n^2 ≥ k 恒成立，left 停在 matrix[0][0]，正确。</li><li>重复元素：≥ 判据让门槛正好落在重复值上（两个 13 凑够第 8 个）。</li><li>负数与 ±10^9 值域：mid = left + (right-left)/2 防溢出，int 足够。</li></ul><p><strong>复杂度与下限论证</strong>：单次判定 O(n)（游走最多 2n 步），二分次数 O(log(值域)) ≤ 31，总 O(n·log(值域)) ≈ 300×31，空间 O(1)。堆写法最坏 O(n^2 log n) 且空间 O(n)；值域二分把判定降到 O(n)、空间降到 O(1)，是本题进阶要求下的最优写法。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>87/87 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">87/87</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 50.1 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n·log(值域)) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 143 · kth-smallest-element-in-a-sorted-matrix</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote"></div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/378_kth-smallest-element-in-a-sorted-matrix/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E6%A0%88%E3%80%81%E9%98%9F%E5%88%97%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/LC0378_KthSmallestElementInASortedMatrix.java">src/栈、队列与优先队列/LC0378_KthSmallestElementInASortedMatrix.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-25
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

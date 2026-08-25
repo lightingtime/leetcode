@@ -1,0 +1,56 @@
+{
+  "id": "378",
+  "slug": "kth-smallest-element-in-a-sorted-matrix",
+  "title": "Kth Smallest Element in a Sorted Matrix",
+  "titleCn": "有序矩阵中第 K 小的元素",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/",
+  "tags": [
+    "Array",
+    "Binary Search",
+    "Matrix",
+    "Sorting",
+    "Heap (Priority Queue)"
+  ],
+  "tagsCn": [
+    "数组",
+    "二分查找",
+    "矩阵",
+    "排序",
+    "堆（优先队列）"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[1,5,9],[10,11,13],[12,13,15]]"
+        },
+        {
+          "name": "k",
+          "value": "8"
+        }
+      ],
+      "output": "13",
+      "explain": "矩阵中的元素为 [1,5,9,10,11,12,13,13,15]，第 8 小元素是 13"
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[-5]]"
+        },
+        {
+          "name": "k",
+          "value": "1"
+        }
+      ],
+      "output": "-5",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[1,5,9],[10,11,13],[12,13,15]]\n8\n[[-5]]\n1",
+  "javaSnippet": "class Solution {\n    public int kthSmallest(int[][] matrix, int k) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-24T14:25:30.783Z"
+}
