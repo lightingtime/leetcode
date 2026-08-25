@@ -1,0 +1,49 @@
+{
+  "seq": 150,
+  "id": "315",
+  "slug": "count-of-smaller-numbers-after-self",
+  "title": "计算右侧小于当前元素的个数",
+  "category": "树与二叉树",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "66/66",
+  "runtime_ms": null,
+  "memory_bytes": 103748000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "归并排序计数（rightTaken 累计 + index 数组）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：counts[i] = nums[i] 右侧严格小于它的元素个数，属于「顺序统计 / 逆序对」类问题：既要按值排序，又要记录原始位置才能把结果写回。\n\n**解法选择理由**：归并排序天然把数组分成左右两半——左半每个元素在原数组中都位于右半所有元素左侧。合并两个有序段时，每当右半元素先于左半元素被取走，就说明它比该左半元素小、且在它右侧，正好是一次「右侧更小」的命中。用 rightTaken 累计可做到每个元素 O(1) 统计，总 O(n log n)，是本题标准最优之一（与树状数组同阶）。\n\n**关键设计决策**：\n1. index 数组存原始位置：nums 会被原地排序，只有靠 index 才能把计数写回原位置（ans[index[i]] += ...）。\n2. rightTaken = 已取走的右半元素个数；放左半元素时一次 += rightTaken（被取走的右半元素全都比它小）。\n3. 严格小于判断：只有 nums[j] < nums[i] 才先取右半；相等时取左半，保证不把相等元素误计为「更小」。\n4. 剩余左半循环也要 += rightTaken（此时右半已全部取走，剩余左半元素都比它们大）。\n5. temp / tempIndex 成对暂存值与下标，合并完拷回，避免覆盖未读元素。\n\n**具体 case 推演**（[3,1,2]，counts 应为 [2,0,0]）：\n1. 拆：[3] | [1,2]\n2. 底层合并 [1]|[2]：1<2 取左，2 是右半 → counts 不变\n3. 顶层合并 [3]|[1,2]：\n   - 1 vs 3：1<3 → 取右半 1，rightTaken=1\n   - 2 vs 3：2<3 → 取右半 2，rightTaken=2\n   - 左半剩 3 → ans[原位置0] += 2\n   结果 counts=[2,0,0] ✓\n\n对照示例 [5,2,6,1] → [2,1,1,0]：底层合并 [5]|[2] 给 5 +1；[6]|[1] 给 6 +1；顶层合并 [2,5]|[1,6] 先取 1（rt=1）→ 放 2 时 +1、放 5 时 +1 → 5 总计 2、2 总计 1、6 保持 1、1 为 0 ✓\n\n**边界与细节**：\n- 递增 [1,2,3,4]：右侧无更小 → 全 0。\n- 递减 [4,3,2,1]：每个元素右侧都更小 → [3,2,1,0]。\n- 全相同 [5,5,5]：严格小于 → 全 0（验证相等处理）。\n- 值域端点 -10^4 / 10^4：只比较大小，无溢出。\n- 大输入 10^5：归并 O(n log n) 秒过。\n\n**复杂度与下限论证**：归并排序本身 O(n log n)，合并过程中每个元素 O(1) 累计 → 总 O(n log n)；空间 O(n)（temp/tempIndex/index/ans）。比较排序下界 O(n log n)，此解达到该下界，是本题标准最优解之一。\n\n**复习重点（必须手写）**：merge 里 rightTaken 的累计时机（放左半才加、剩余左半也要加）、index 数组写回原始位置、相等值取左不误计数。",
+  "time_complexity": "O(n log n)",
+  "space_complexity": "O(n)",
+  "notes": "复习重点：手写归并计数",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "归并排序计数（复习手写重点）",
+      "text": "复习时必须手写一遍：merge 中 rightTaken 累计（放左半元素才 +=，剩余左半也要 +=）；index 数组记录原始位置以便写回 ans；相等值取左、严格小于才取右，避免误计数。",
+      "category": "树与二叉树",
+      "problem": "count-of-smaller-numbers-after-self",
+      "date": "2026-08-25"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "66/66",
+      "runtime_ms": null,
+      "memory_bytes": 103748000,
+      "approach": "归并排序计数（rightTaken 累计 + index 数组）",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "复习重点：手写归并计数",
+      "code": "    int[] ans;\n    int[] temp;\n    int[] tempIndex;\n    int[] index;\n    public List<Integer> countSmaller(int[] nums) {\n        ans = new int[nums.length];\n        temp = new int[nums.length];\n        tempIndex = new int[nums.length];\n        index = new int[nums.length];\n        for (int i = 0; i < nums.length; i++) {\n            index[i] = i;\n        }\n        mergeSort(nums, 0, nums.length - 1);\n        return Arrays.stream(ans).boxed().toList();\n    }\n\n    private void mergeSort(int[] nums, int l, int r) {\n        if (l >= r) {\n            return;\n        }\n        int mid = l + (r - l) / 2;\n        mergeSort(nums, l, mid);\n        mergeSort(nums, mid + 1, r);\n        merge(nums, l, mid, r);\n    }\n\n    private void merge(int[] nums, int l, int mid, int r) {\n        int i = l;          // 左半指针\n        int j = mid + 1;    // 右半指针\n        int k = l;          // temp 写入位置\n        int rightTaken = 0; // 已取走的右半元素个数\n\n        while (i <= mid && j <= r) {\n            if (nums[j] < nums[i]) {\n                // 右半元素更小：先取走，它比当前左半元素小且在它右侧\n                temp[k] = nums[j];\n                tempIndex[k] = index[j];\n                k++;\n                j++;\n                rightTaken++;\n            } else {\n                // 取走左半元素：之前取走的右半元素都是它的“右侧更小”\n                ans[index[i]] += rightTaken;\n                temp[k] = nums[i];\n                tempIndex[k] = index[i];\n                k++;\n                i++;\n            }\n        }\n        // 剩余左半元素：所有右半元素都比它们小\n        while (i <= mid) {\n            ans[index[i]] += rightTaken;\n            temp[k] = nums[i];\n            tempIndex[k] = index[i];\n            k++;\n            i++;\n        }\n        // 剩余右半元素：直接搬走，不加计数\n        while (j <= r) {\n            temp[k] = nums[j];\n            tempIndex[k] = index[j];\n            k++;\n            j++;\n        }\n        // 合并结果拷回 nums 与 index\n        for (int p = l; p <= r; p++) {\n            nums[p] = temp[p];\n            index[p] = tempIndex[p];\n        }\n    }"
+    }
+  ],
+  "hints": [
+    "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ]
+}

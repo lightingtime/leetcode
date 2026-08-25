@@ -1,0 +1,64 @@
+{
+  "id": "315",
+  "slug": "count-of-smaller-numbers-after-self",
+  "title": "Count of Smaller Numbers After Self",
+  "titleCn": "计算右侧小于当前元素的个数",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/count-of-smaller-numbers-after-self/",
+  "tags": [
+    "Binary Indexed Tree",
+    "Segment Tree",
+    "Array",
+    "Binary Search",
+    "Divide and Conquer",
+    "Ordered Set",
+    "树堆",
+    "Merge Sort"
+  ],
+  "tagsCn": [
+    "树状数组",
+    "线段树",
+    "数组",
+    "二分查找",
+    "分治",
+    "有序集合",
+    "树堆",
+    "归并排序"
+  ],
+  "category": "树与二叉树",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[5,2,6,1]"
+        }
+      ],
+      "output": "[2,1,1,0]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[-1]"
+        }
+      ],
+      "output": "[0]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[-1,-1]"
+        }
+      ],
+      "output": "[0,0]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[5,2,6,1]\n[-1]\n[-1,-1]",
+  "javaSnippet": "class Solution {\n    public List<Integer> countSmaller(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-25T11:52:14.134Z"
+}

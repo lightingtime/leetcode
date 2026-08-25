@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 147,
+  "current_seq": 150,
   "done": [
     {
       "seq": 1,
@@ -1552,6 +1552,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": ""
+    },
+    {
+      "seq": 150,
+      "id": "315",
+      "title": "计算右侧小于当前元素的个数",
+      "slug": "count-of-smaller-numbers-after-self",
+      "category": "树与二叉树",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "复习重点：手写归并计数"
     }
   ],
   "error_habits": [
@@ -2546,6 +2557,8 @@
     121,
     122,
     123,
-    126
+    126,
+    148,
+    149
   ]
 }
