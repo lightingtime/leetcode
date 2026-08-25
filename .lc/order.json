@@ -1778,5 +1778,15 @@
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
     "url": "https://leetcode.cn/problems/shuffle-an-array/"
+  },
+  {
+    "seq": 179,
+    "phase": 3,
+    "id": "355",
+    "title": "设计推特",
+    "slug": "design-twitter",
+    "difficulty": "MEDIUM",
+    "category": "链表",
+    "url": "https://leetcode.cn/problems/design-twitter/"
   }
 ]
