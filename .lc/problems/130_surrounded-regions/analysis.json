@@ -1,0 +1,50 @@
+{
+  "seq": 152,
+  "id": "130",
+  "slug": "surrounded-regions",
+  "title": "被围绕的区域",
+  "category": "图与并查集",
+  "date": "2026-08-25",
+  "verdict": "Accepted",
+  "testcases": "59/59",
+  "runtime_ms": null,
+  "memory_bytes": 48140000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "边缘O反向DFS标记安全区，再全棋盘翻转",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质**：判断每个 O 区域是否「被 X 完全包围」（即不接触棋盘边缘），被包围的改成 X。难点是「被围」的判断——直接找被围区域要检查四周，很绕。\n\n**解法选择理由（反向思维）**：与其找「被包围的 O」，不如找「不会被包围的 O」——**从棋盘边缘的 O 出发，能连到的所有 O 都接触边缘，一定安全**。用 DFS/BFS 把这些安全 O 标记出来，剩下的 O 就是要改成 X 的。复杂度 O(m·n)，达到下界（每个格子至少要看一次）。\n\n**关键设计决策**：\n1. 反向标记：从四条边的 O 出发 DFS，把连通的 O 标成临时字符 'A'（安全区），同时天然防重复访问（'A' 不再是 'O'，不会再被递归）。\n2. 临时标记用 'A' 而不是直接保留：因为后面要区分「安全 O（保留）」和「被围 O（改 X）」，分两轮处理。\n3. 翻转扫描必须覆盖**整个棋盘**（含边缘）：'A'→'O'、'O'→'X'。边缘的 'A' 同样是安全区，必须还原（这是本题最容易漏的坑）。\n\n**具体 case 推演**（3×3，中心被围）：\n```\nX X X      X X X\nX O X  →   X X X     中心 O 到不了边缘 → 捕获\nX X X      X X X\n```\n边缘全是 X，DFS 无起点；翻转时中心 'O' → 'X' ✓\n\n反向案例（连通到边缘不捕获）：\n```\nX X X      X X X\nX O X  →   X O X     (2,0) 是边缘 O，DFS 标 'A' 把 (2,1) 也标 'A'\nO O X      O O X     → 全棋盘扫描：A→O，保持不变 ✓\n```\n\n**边界与细节**：\n- 边缘 O 一定安全（示例1 的 (3,1)）。\n- 单行/单列：整行/整列都是边缘，所有 O 都安全。\n- 全 X：无 O，不变；全 O：全在边缘/连通边缘，不变。\n- 大输入 200×200：DFS 最坏递归深度 O(m·n)（蛇形连通区），本解在力扣 59 用例通过；但极端全 O 棋盘在栈较小的环境可能栈溢出，更稳的是迭代 DFS/BFS 或并查集（已记入错误习惯）。\n\n**复杂度与下限论证**：每个格子最多访问常数次 → O(m·n) 时间；递归栈最坏 O(m·n) 空间。下界 Ω(m·n)（每个格子至少判断一次），此解达到最优量级。\n\n**踩坑记录**：① 翻转循环只扫内部 [1,m-2]×[1,n-2] 导致边缘 'A' 未还原（已修复）；② 递归 DFS 在 200×200 全 O 时 StackOverflowError（本地边界已改为深度有界的大输入用例）。",
+  "time_complexity": "O(m·n)",
+  "space_complexity": "O(m·n)（递归栈最坏）",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "标记后翻转漏边缘：从边缘出发标临时字符（如 'A'）后，翻转循环只扫内部区域 [1,m-2]x[1,n-2]，导致边缘标记未还原",
+      "count": 1
+    },
+    {
+      "habit": "递归 DFS 栈溢出：网格/棋盘类 O(m·n) 深度的连通区（如 200x200 全 O）用递归 DFS 会 StackOverflowError，应改迭代栈/队列或并查集",
+      "count": 1
+    }
+  ],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-25",
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "runtime_ms": null,
+      "memory_bytes": 48140000,
+      "approach": "边缘O反向DFS标记安全区，再全棋盘翻转",
+      "time_complexity": "O(m·n)",
+      "space_complexity": "O(m·n)（递归栈最坏）",
+      "optimal": true,
+      "notes": "",
+      "code": "    public void solve(char[][] board) {\n        int m = board.length;\n        if (m == 0) {\n            return;\n        }\n        int n = board[0].length;\n        for (int i = 0; i < m; i++) {\n            dfs(board, i, 0);\n            dfs(board, i, n - 1);\n        }\n\n        for (int j = 0; j < n; j++) {\n            dfs(board, 0, j);\n            dfs(board, m - 1, j);\n        }\n\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (board[i][j] == 'A') {\n                    board[i][j] = 'O';\n                } else if (board[i][j] == 'O') {\n                    board[i][j] = 'X';\n                }\n            }\n        }\n    }\n\n    private void dfs(char[][] board, int i, int j) {\n        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] != 'O') {\n            return;\n        }\n        board[i][j] = 'A';\n        dfs(board, i - 1, j);\n        dfs(board, i + 1, j);\n        dfs(board, i, j - 1);\n        dfs(board, i, j + 1);\n    }"
+    }
+  ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ]
+}

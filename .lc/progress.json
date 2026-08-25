@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-25",
-  "current_seq": 151,
+  "current_seq": 152,
   "done": [
     {
       "seq": 1,
@@ -1574,6 +1574,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "复习提醒：重新做一遍（虚拟节点图 + 双向 BFS + 相遇公式推导）"
+    },
+    {
+      "seq": 152,
+      "id": "130",
+      "title": "被围绕的区域",
+      "slug": "surrounded-regions",
+      "category": "图与并查集",
+      "date": "2026-08-25",
+      "firstPass": true,
+      "optimal": true,
+      "notes": ""
     }
   ],
   "error_habits": [
@@ -2544,6 +2555,28 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-08-24"
+    },
+    {
+      "habit": "标记后翻转漏边缘：从边缘出发标临时字符（如 'A'）后，翻转循环只扫内部区域 [1,m-2]x[1,n-2]，导致边缘标记未还原",
+      "count": 1,
+      "examples": [
+        "surrounded-regions"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-25"
+    },
+    {
+      "habit": "递归 DFS 栈溢出：网格/棋盘类 O(m·n) 深度的连通区（如 200x200 全 O）用递归 DFS 会 StackOverflowError，应改迭代栈/队列或并查集",
+      "count": 1,
+      "examples": [
+        "surrounded-regions"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-08-25"
     }
   ],
   "category_hints": {

@@ -1,0 +1,27 @@
+{
+  "id": "130",
+  "slug": "surrounded-regions",
+  "title": "Surrounded Regions",
+  "titleCn": "被围绕的区域",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/surrounded-regions/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Union Find",
+    "Array",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "并查集",
+    "数组",
+    "矩阵"
+  ],
+  "category": "图与并查集",
+  "examples": [],
+  "exampleTestcases": "[[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"O\",\"O\",\"X\"],[\"X\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"X\"]]\n[[\"X\"]]",
+  "javaSnippet": "class Solution {\n    public void solve(char[][] board) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-25T14:19:08.093Z"
+}
