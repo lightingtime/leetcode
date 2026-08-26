@@ -1,0 +1,58 @@
+{
+  "seq": 162,
+  "id": "329",
+  "slug": "longest-increasing-path-in-a-matrix",
+  "title": "矩阵中的最长递增路径",
+  "category": "动态规划",
+  "date": "2026-08-26",
+  "verdict": "Accepted",
+  "testcases": "139/139",
+  "runtime_ms": null,
+  "memory_bytes": 47692000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "记忆化DFS(DAG最长路径)",
+  "dp_subtype": "DAG最长路径（记忆化）",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：网格 DAG 上的最长路径。严格递增（B>A）让移动方向天然无环——每个格子是节点，四向边指向值更大的邻居。\n- 解法选择：记忆化 DFS。dfs(i,j) 返回从该格出发的最长递增路径长度，每格只算一次，O(m·n)。\n- 为什么不能朴素 DFS：无记忆化时不同起点反复展开同一段后缀路径，200x200 网格路径数指数爆炸（实测直接卡死超时）。\n\n## ② 关键设计决策\n\n| 设计点 | 决策 | 理由 |\n|---|---|---|\n| memo[i][j] | 从 (i,j) 出发的最长路径长度，0 表示未算 | 记忆化核心，每格算一次 |\n| dfs 转移 | 1 + max(四方向中值更大的邻居的 dfs)，无更大邻居为 1 | DAG 最长路径标准形态 |\n| 守卫 | matrix[i][j] <= pre 拦下 | 严格递增要求 B>A；用 < 会放行等值格，相邻等值互走成 2-环 → StackOverflowError |\n| 无环保证 | 严格递增 → DAG → 不需要 visited | 值只增不回头，memo 足够 |\n| 答案 | 主循环遍历每格取 memo 最大值 | 最长路径可从任意格出发 |\n\n## ③ 具体 case 推演\n\n示例1 [[9,9,4],[6,6,8],[2,1,1]] → 4，最长路径 1(2,1)→2(2,0)→6(1,0)→9(0,0)。\n\n| 格子 | 更大邻居 | dfs 计算 | memo |\n|---|---|---|---|\n| (0,0)=9 | 无 | 1 | 1 |\n| (1,0)=6 | (0,0)=9 | 1+dfs(0,0)=2 | 2 |\n| (2,0)=2 | (1,0)=6 | 1+dfs(1,0)=3 | 3 |\n| (2,1)=1 | (1,1)=6、(2,0)=2 | 1+max(dfs(1,1)=2, dfs(2,0)=3)=4 | 4 |\n| (1,1)=6 | (0,1)=9、(0,0)=9、(1,2)=8 | 1+1=2 | 2 |\n\nmax=4 ✓。等值格（两个 9、两个 6）在守卫 matrix[i][j]<=pre 下互不可走，不会成环。\n\n## ④ 边界与细节\n\n- 单行/单列：只能单向移动，答案 = n 或 m\n- 全相同矩阵：等值不可走 → 每格 1，答案 1\n- 2x2 螺旋递增 → 4（验证跨两行路径）\n- 200x200 上限 matrix[i][j]=i+j → 单调右/下路径长 m+n-1=399（验证 O(m·n) 不超时）\n- 取值上限 2^31-1：全程只比较不运算，无溢出\n- 教训沉淀：记忆化入口必查 memo（只存不查等于白存）；严格递增守卫 < 与 <= 一个符号之差决定是否成环\n\n## ⑤ 复杂度与下限论证\n\n- 时间 O(m·n)：每格恰好计算一次，每次看 4 个邻居\n- 空间 O(m·n)：memo 表 + 递归栈最坏 O(m·n)（最长递增路径可贯穿全图）\n- 下限：每个格子至少要被考察一次（可能成为路径成员），O(m·n) 时间即为下限；记忆化让每格只算一次、不重复",
+  "time_complexity": "O(m·n)",
+  "space_complexity": "O(m·n)",
+  "notes": "记忆化DFS（DAG最长路径）：dfs(i,j)=1+max(更大邻居的dfs)，守卫 <= pre 拦等值保证无环，memo 每格只算一次 O(m·n)",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "路径枚举 DFS 未记忆化：从不同起点反复展开同一段后缀路径，网格路径数指数爆炸（200x200 直接卡死）；DAG 最长路径应 dfs 返回长度并用 memo 缓存每格只算一次，O(m·n) 而非指数",
+      "count": 1
+    },
+    {
+      "habit": "严格递增守卫比较符号反：matrix[i][j] < pre 放行等值格，相邻等值格互走成 2-环导致无限递归 StackOverflowError；必须 <= pre 才拦下等值（题目要求严格递增），同时保证 DAG 无环",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "网格DAG最长路径：记忆化DFS",
+      "text": "严格递增的网格路径=DAG 最长路径：dfs(i,j)=1+max(更大邻居的 dfs)，入口必查 memo（只存不查=白存），守卫用 <= pre 拦等值否则相邻等值互走成环 SOE",
+      "category": "动态规划",
+      "problem": "longest-increasing-path-in-a-matrix",
+      "date": "2026-08-26"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "139/139",
+      "runtime_ms": null,
+      "memory_bytes": 47692000,
+      "approach": "记忆化DFS(DAG最长路径)",
+      "time_complexity": "O(m·n)",
+      "space_complexity": "O(m·n)",
+      "optimal": true,
+      "notes": "记忆化DFS（DAG最长路径）：dfs(i,j)=1+max(更大邻居的dfs)，守卫 <= pre 拦等值保证无环，memo 每格只算一次 O(m·n)",
+      "code": "public int longestIncreasingPath(int[][] matrix) {\n        max = 0;\n        memo = new int[matrix.length][matrix[0].length];\n        for (int i = 0; i < matrix.length; i++) {\n            for (int j = 0; j < matrix[0].length; j++) {\n                memo[i][j] = dfs(matrix, i, j, -1);\n                max = Math.max(max, memo[i][j]);\n            }\n        }\n        return max;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] <= pre) {\n            return 0;\n        }\n        if (memo[i][j] != 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        memo[i][j] = count + 1;\n        return count + 1;\n    }"
+    }
+  ],
+  "hints": [
+    "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ]
+}

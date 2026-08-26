@@ -30,13 +30,14 @@ public class LC0140_WordBreakIi {
         suffixOK[n] = true;
         for (int i = n - 1; i >= 0; i--) {
             for (String word : set) {
-                if (i + word.length() <= n && suffixOK[i + word.length()] && s.startsWith(word, i)) {
+                int next = i + word.length();
+                if (next <= n && suffixOK[next] && s.startsWith(word, i)) {
                     suffixOK[i] = true;
                     break;
                 }
             }
         }
-
+        // DFS 从哪里出发，DP 就最好描述“从哪里能不能到终点”。
         dfs(s, 0, new ArrayList<>());
         return ans;
     }
@@ -46,6 +47,7 @@ public class LC0140_WordBreakIi {
             ans.add(String.join(" ", path));
             return;
         }
+        // 从start直接看后面能不能满足，不满足说明从start出发无论怎么拆都没有结果，直接剪枝
         if (!suffixOK[start]) {
             return;
         }

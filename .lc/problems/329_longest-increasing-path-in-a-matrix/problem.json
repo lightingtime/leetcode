@@ -1,0 +1,66 @@
+{
+  "id": "329",
+  "slug": "longest-increasing-path-in-a-matrix",
+  "title": "Longest Increasing Path in a Matrix",
+  "titleCn": "矩阵中的最长递增路径",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/",
+  "tags": [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "Graph",
+    "Topological Sort",
+    "Memoization",
+    "Array",
+    "Dynamic Programming",
+    "有向无环图",
+    "Matrix"
+  ],
+  "tagsCn": [
+    "深度优先搜索",
+    "广度优先搜索",
+    "图",
+    "拓扑排序",
+    "记忆化",
+    "数组",
+    "动态规划",
+    "有向无环图",
+    "矩阵"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[9,9,4],[6,6,8],[2,1,1]]"
+        }
+      ],
+      "output": "4",
+      "explain": "最长递增路径为 [1, 2, 6, 9]。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[3,4,5],[3,2,6],[2,2,1]]"
+        }
+      ],
+      "output": "4",
+      "explain": "最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "matrix",
+          "value": "[[1]]"
+        }
+      ],
+      "output": "1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[[9,9,4],[6,6,8],[2,1,1]]\n[[3,4,5],[3,2,6],[2,2,1]]\n[[1]]",
+  "javaSnippet": "class Solution {\n    public int longestIncreasingPath(int[][] matrix) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-26T11:13:39.789Z"
+}

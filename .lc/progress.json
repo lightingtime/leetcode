@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 161,
+  "current_seq": 162,
   "done": [
     {
       "seq": 1,
@@ -1673,6 +1673,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "后缀可拆预判 suffixOK（右往左）+回溯：DFS入口 !suffixOK[start] 剪到不了终点的子树，set.contains 保证段合法，path+String.join 拼句子"
+    },
+    {
+      "seq": 162,
+      "id": "329",
+      "title": "矩阵中的最长递增路径",
+      "slug": "longest-increasing-path-in-a-matrix",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "记忆化DFS（DAG最长路径）：dfs(i,j)=1+max(更大邻居的dfs)，守卫 <= pre 拦等值保证无环，memo 每格只算一次 O(m·n)"
     }
   ],
   "error_habits": [
@@ -2715,6 +2726,28 @@
       "count": 1,
       "examples": [
         "word-break-ii"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "路径枚举 DFS 未记忆化：从不同起点反复展开同一段后缀路径，网格路径数指数爆炸（200x200 直接卡死）；DAG 最长路径应 dfs 返回长度并用 memo 缓存每格只算一次，O(m·n) 而非指数",
+      "count": 1,
+      "examples": [
+        "longest-increasing-path-in-a-matrix"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "严格递增守卫比较符号反：matrix[i][j] < pre 放行等值格，相邻等值格互走成 2-环导致无限递归 StackOverflowError；必须 <= pre 才拦下等值（题目要求严格递增），同时保证 DAG 无环",
+      "count": 1,
+      "examples": [
+        "longest-increasing-path-in-a-matrix"
       ],
       "categories": [
         "动态规划"

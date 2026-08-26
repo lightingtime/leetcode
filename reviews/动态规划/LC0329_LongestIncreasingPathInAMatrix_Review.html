@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC329 矩阵中的最长递增路径 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 162</div>
+  <h1>LC329 · 矩阵中的最长递增路径</h1>
+  <div class="sub">记忆化DFS(DAG最长路径) · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 139/139</span>
+    <span class="badge hard">难度 HARD</span>
+    <span class="badge tag">分类 动态规划</span>
+    <span class="badge tag">子类型 DAG最长路径（记忆化）</span>
+    <span class="badge plain">多次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-26</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 记忆化DFS(DAG最长路径)</h3>
+    <p><span class="chip">时间 O(m·n)</span><span class="chip">空间 O(m·n)</span><span class="chip">内存 ≈ 45.5 MB</span><span class="chip">用例 139/139</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0329_LongestIncreasingPathInAMatrix.java · 记忆化DFS(DAG最长路径)</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int longestIncreasingPath(int[][] matrix) {
+        max = 0;
+        memo = new int[matrix.length][matrix[0].length];
+        for (int i = 0; i &lt; matrix.length; i++) {
+            for (int j = 0; j &lt; matrix[0].length; j++) {
+                memo[i][j] = dfs(matrix, i, j, -1);
+                max = Math.max(max, memo[i][j]);
+            }
+        }
+        return max;
+    }
+
+    private int dfs(int[][] matrix, int i, int j, int pre) {
+        if (i &lt; 0 || i &gt;= matrix.length || j &lt; 0 || j &gt;= matrix[0].length || matrix[i][j] &lt;= pre) {
+            return 0;
+        }
+        if (memo[i][j] != 0) {
+            return memo[i][j];
+        }
+        int count = 0;
+        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));
+        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));
+        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));
+        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));
+        memo[i][j] = count + 1;
+        return count + 1;
+    }</pre></div>
+    <p class="muted">记忆化DFS（DAG最长路径）：dfs(i,j)=1+max(更大邻居的dfs)，守卫 &lt;= pre 拦等值保证无环，memo 每格只算一次 O(m·n)</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>## ① 问题本质与解法选择</p><ul><li>本质：网格 DAG 上的最长路径。严格递增（B&gt;A）让移动方向天然无环——每个格子是节点，四向边指向值更大的邻居。</li><li>解法选择：记忆化 DFS。dfs(i,j) 返回从该格出发的最长递增路径长度，每格只算一次，O(m·n)。</li><li>为什么不能朴素 DFS：无记忆化时不同起点反复展开同一段后缀路径，200x200 网格路径数指数爆炸（实测直接卡死超时）。</li></ul><p>## ② 关键设计决策</p><div class="table-wrap"><table><thead><tr><th>设计点</th><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>memo[i][j]</td><td>从 (i,j) 出发的最长路径长度，0 表示未算</td><td>记忆化核心，每格算一次</td></tr><tr><td>dfs 转移</td><td>1 + max(四方向中值更大的邻居的 dfs)，无更大邻居为 1</td><td>DAG 最长路径标准形态</td></tr><tr><td>守卫</td><td>matrix[i][j] &lt;= pre 拦下</td><td>严格递增要求 B&gt;A；用 &lt; 会放行等值格，相邻等值互走成 2-环 → StackOverflowError</td></tr><tr><td>无环保证</td><td>严格递增 → DAG → 不需要 visited</td><td>值只增不回头，memo 足够</td></tr><tr><td>答案</td><td>主循环遍历每格取 memo 最大值</td><td>最长路径可从任意格出发</td></tr></tbody></table></div><p>## ③ 具体 case 推演</p><p>示例1 [[9,9,4],[6,6,8],[2,1,1]] → 4，最长路径 1(2,1)→2(2,0)→6(1,0)→9(0,0)。</p><div class="table-wrap"><table><thead><tr><th>格子</th><th>更大邻居</th><th>dfs 计算</th><th>memo</th></tr></thead><tbody><tr><td>(0,0)=9</td><td>无</td><td>1</td><td>1</td></tr><tr><td>(1,0)=6</td><td>(0,0)=9</td><td>1+dfs(0,0)=2</td><td>2</td></tr><tr><td>(2,0)=2</td><td>(1,0)=6</td><td>1+dfs(1,0)=3</td><td>3</td></tr><tr><td>(2,1)=1</td><td>(1,1)=6、(2,0)=2</td><td>1+max(dfs(1,1)=2, dfs(2,0)=3)=4</td><td>4</td></tr><tr><td>(1,1)=6</td><td>(0,1)=9、(0,0)=9、(1,2)=8</td><td>1+1=2</td><td>2</td></tr></tbody></table></div><p>max=4 ✓。等值格（两个 9、两个 6）在守卫 matrix[i][j]&lt;=pre 下互不可走，不会成环。</p><p>## ④ 边界与细节</p><ul><li>单行/单列：只能单向移动，答案 = n 或 m</li><li>全相同矩阵：等值不可走 → 每格 1，答案 1</li><li>2x2 螺旋递增 → 4（验证跨两行路径）</li><li>200x200 上限 matrix[i][j]=i+j → 单调右/下路径长 m+n-1=399（验证 O(m·n) 不超时）</li><li>取值上限 2^31-1：全程只比较不运算，无溢出</li><li>教训沉淀：记忆化入口必查 memo（只存不查等于白存）；严格递增守卫 &lt; 与 &lt;= 一个符号之差决定是否成环</li></ul><p>## ⑤ 复杂度与下限论证</p><ul><li>时间 O(m·n)：每格恰好计算一次，每次看 4 个邻居</li><li>空间 O(m·n)：memo 表 + 递归栈最坏 O(m·n)（最长递增路径可贯穿全图）</li><li>下限：每个格子至少要被考察一次（可能成为路径成员），O(m·n) 时间即为下限；记忆化让每格只算一次、不重复</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>路径枚举 DFS 未记忆化：从不同起点反复展开同一段后缀路径，网格路径数指数爆炸（200x200 直接卡死）；DAG 最长路径应 dfs 返回长度并用 memo 缓存每格只算一次，O(m·n) 而非指数</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>严格递增守卫比较符号反：matrix[i][j] &lt; pre 放行等值格，相邻等值格互走成 2-环导致无限递归 StackOverflowError；必须 &lt;= pre 才拦下等值（题目要求严格递增），同时保证 DAG 无环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>139/139 用例。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>网格DAG最长路径：记忆化DFS</h3><p>严格递增的网格路径=DAG 最长路径：dfs(i,j)=1+max(更大邻居的 dfs)，入口必查 memo（只存不查=白存），守卫用 &lt;= pre 拦等值否则相邻等值互走成环 SOE</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">139/139</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 45.5 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(m·n) · O(m·n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">多次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
+      <h3>错误习惯复盘</h3><p><b>路径枚举 DFS 未记忆化：从不同起点反复展开同一段后缀路径，网格路径数指数爆炸（200x200 直接卡死）；DAG 最长路径应 dfs 返回长度并用 memo 缓存每格只算一次，O(m·n) 而非指数</b>（累计 1 次）</p><p><b>严格递增守卫比较符号反：matrix[i][j] &lt; pre 放行等值格，相邻等值格互走成 2-环导致无限递归 StackOverflowError；必须 &lt;= pre 才拦下等值（题目要求严格递增），同时保证 DAG 无环</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 162 · longest-increasing-path-in-a-matrix</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
+      <div class="quote">记忆化DFS（DAG最长路径）：dfs(i,j)=1+max(更大邻居的dfs)，守卫 &lt;= pre 拦等值保证无环，memo 每格只算一次 O(m·n)</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/329_longest-increasing-path-in-a-matrix/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0329_LongestIncreasingPathInAMatrix.java">src/动态规划/LC0329_LongestIncreasingPathInAMatrix.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-26
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
