@@ -22,9 +22,6 @@ public class LC0118_PascalsTriangle {
         List<Integer> list = new ArrayList<>();
         list.add(1);
         ans.add(list);
-        if (numRows == 1) {
-            return ans;
-        }
         for (int i = 2; i <= numRows; i++) {
             List<Integer> temp = generateHelper(ans.get(ans.size() - 1));
             ans.add(temp);

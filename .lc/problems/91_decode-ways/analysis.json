@@ -1,0 +1,63 @@
+{
+  "seq": 157,
+  "id": "91",
+  "slug": "decode-ways",
+  "title": "解码方法",
+  "category": "动态规划",
+  "date": "2026-08-26",
+  "verdict": "Accepted",
+  "testcases": "269/269",
+  "runtime_ms": null,
+  "memory_bytes": 43604000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "线性DP·以i结尾(n位)",
+  "dp_subtype": "线性DP",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：数字串按 1~2 位切成合法编码（1~26；\\0\\ 不能单独成码）的分组方案计数。每个位置两种来源：当前字符单独解码、或与前一位组成两位数——典型的斐波那契式计数 DP。\n- 解法选择：线性 DP 从左到右扫一遍。两种下标写法数学上完全等价，差别只在「空串基准」放在哪：写法1 开 n+1 数组让 dp[i-2] 在 i=2 时天然存在；写法2 开 n 数组、用一处边界常数 1 代替空串。\n\n## ② 关键设计决策（两写法对照）\n\n| 设计点 | 写法1 空串基准 | 写法2 以 i 结尾 |\n|---|---|---|\n| dp[i] 含义 | 前 i 个字符的方案数 | 到字符 i（含）为止的方案数 |\n| 初值 | dp[0]=1 空串；dp[1]=s[0]!=\\0\\?1:0 | dp[0]=s[0]!=\\0\\?1:0；首字符为 0 提前返回 |\n| 两位组合贡献 | dp[i-2] 始终可用 | i==1 时用常数 1 充当空串 |\n| 返回 | dp[n] | dp[n-1] |\n\n转移只依赖两个独立合法性开关相加：A=当前字符≠\\0\\ → 贡献 dp[i-1]；B=前一位≠\\0\\ 且组合值∈[10,26]（两位数天然≥10，只查≤26 与十位非 0）→ 贡献 dp[i-2]。\n\n## ③ 具体 case 推演（写法2 视角）\n\n边界3 \"10\"：\n\n| i | 字符 | 开关A | 开关B | dp |\n|---|---|---|---|---|\n| 0 | 1 | — | — | 1 |\n| 1 | 0 | 0≠0 false +0 | \"10\"=10 合法 +1 | 1 |\n\n示例2 \"226\"：\n\n| i | 字符 | 开关A | 开关B | dp 计算 | dp |\n|---|---|---|---|---|---|\n| 0 | 2 | — | — | — | 1 |\n| 1 | 2 | ✓ +dp0=1 | \"22\" i==1 常数+1 | 1+1 | 2 |\n| 2 | 6 | ✓ +dp1=2 | \"26\" +dp0=1 | 2+1 | 3 |\n\n边界5 \"301\"：i=1 处 \\0\\：A 关；\"30\"=30>26 B 关 → dp1=0；i=2 \\1\\：A ✓ +dp1=0；\"01\" 十位 0 B 关 → dp2=0，中途断链正确归零。\n\n## ④ 边界与细节\n\n- 首字符 \\0\\：写法1 靠 dp[1]=0 自然传递；写法2 提前 return 0\n- 中间 \\0\\：只可能配 10/20（A 关 B 开，\"10\"）；\"30\" 和 \"01\" 双双非法 → dp 归零\n- \"111\"：1,2,3 斐波那契叠加验证\n- 长度 100 上限全 \\9\\：无任何两位组合 → 恒为 1，检验上界\n- 溢出：题目保证答案在 32 位 int 内\n\n## ⑤ 复杂度与下限论证\n\n- 时间 O(n)：每位置 O(1) 转移（Integer.parseInt 处理固定两位子串也是 O(1)）\n- 空间 O(n)（两写法都是数组；滚动变量可降至 O(1)）\n- 下限：必须读完全串 O(n)，每个字符至少一次转移，O(n) 时间为硬下限；空间可进一步优化但非必须。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "写法2：以i结尾开 n 位，两位组合在 i==1 用常数 1 当空串；diff 1 用 Integer.parseInt 取两位",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "计数型DP误用常数累加：写成 dp[i]=dp[i-1]+1 / dp[i-2]+2，而方案数只能由子问题 dp 按合法性相加（A?dp[i-1]:0)+(B?dp[i-2]:0)；伴随两位数拼接被复合赋值吞掉加法（num*=(10+x)）与 0 合法性分支缺失",
+      "count": 1
+    },
+    {
+      "habit": "线性DP缺空串基准：dp 数组没有 dp[0]=1 的空串状态，i==1 时 dp[i-2] 无处安放、被迫写特判并丢掉两位组合的贡献；0 配对合法性只判了前一位非零，漏判组合值在 10~26 内（如 30、01 都被放过）",
+      "count": 1
+    }
+  ],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "269/269",
+      "runtime_ms": null,
+      "memory_bytes": 43412000,
+      "approach": "线性DP·空串基准(n+1)",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "线性DP计数：两写法（空串基准 n+1 / 以i结尾 n位+边界常数1），开关 A=单字符非0、B=两位组合 10~26",
+      "code": "public int numDecodings(String s) {\n    int[] dp = new int[s.length() + 1];\n    dp[0] = 1;\n    dp[1] = s.charAt(0) == '0' ? 0 : 1;\n    for (int i = 2; i <= s.length(); i++) {\n        int num = s.charAt(i - 2) - '0';\n        num = num * 10 + (s.charAt(i - 1) - '0');\n        boolean curValid = s.charAt(i - 1) != '0';\n        boolean numValid = s.charAt(i - 2) != '0' && num <= 26 && num >= 10;\n        dp[i] = (curValid ? dp[i - 1] : 0) + (numValid ? dp[i - 2] : 0);\n    }\n    return dp[s.length()];\n}"
+    },
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "269/269",
+      "runtime_ms": null,
+      "memory_bytes": 43604000,
+      "approach": "线性DP·以i结尾(n位)",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "写法2：以i结尾开 n 位，两位组合在 i==1 用常数 1 当空串；diff 1 用 Integer.parseInt 取两位",
+      "code": "public int numDecodings(String s) {\n    if (s.charAt(0) == '0') {\n        return 0;\n    }\n    int[] dp = new int[s.length()];\n    dp[0] = 1;\n    for (int i = 1; i < s.length(); i++) {\n        if (s.charAt(i) != '0') {\n            dp[i] = dp[i - 1];\n        }\n        int num = Integer.parseInt(s.substring(i - 1, i + 1));\n        if (num >= 10 && num <= 26) {\n            dp[i] += (i > 1 ? dp[i - 2] : 1);\n        }\n    }\n    return dp[s.length() - 1];\n}"
+    }
+  ],
+  "hints": [
+    "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "91",
+  "slug": "decode-ways",
+  "title": "Decode Ways",
+  "titleCn": "解码方法",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/decode-ways/",
+  "tags": [
+    "String",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "字符串",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"12\""
+        }
+      ],
+      "output": "2",
+      "explain": "它可以解码为 \"AB\"（1 2）或者 \"L\"（12）。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"226\""
+        }
+      ],
+      "output": "3",
+      "explain": "它可以解码为 \"BZ\" (2 26), \"VF\" (22 6), 或者 \"BBF\" (2 2 6) 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"06\""
+        }
+      ],
+      "output": "0",
+      "explain": "\"06\" 无法映射到 \"F\" ，因为存在前导零（\"6\" 和 \"06\" 并不等价）。"
+    }
+  ],
+  "exampleTestcases": "\"12\"\n\"226\"\n\"06\"",
+  "javaSnippet": "class Solution {\n    public int numDecodings(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-26T07:05:25.139Z"
+}

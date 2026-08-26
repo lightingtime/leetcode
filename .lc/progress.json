@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 156,
+  "current_seq": 157,
   "done": [
     {
       "seq": 1,
@@ -1618,6 +1618,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "线性递推逐行生成：ans[i][j]=ans[i-1][j-1]+ans[i-1][j]，首尾置 1，从 [1] 滚动推进"
+    },
+    {
+      "seq": 157,
+      "id": "91",
+      "title": "解码方法",
+      "slug": "decode-ways",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "写法2：以i结尾开 n 位，两位组合在 i==1 用常数 1 当空串；diff 1 用 Integer.parseInt 取两位"
     }
   ],
   "error_habits": [
@@ -2619,6 +2630,28 @@
       ],
       "categories": [
         "回溯"
+      ],
+      "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "计数型DP误用常数累加：写成 dp[i]=dp[i-1]+1 / dp[i-2]+2，而方案数只能由子问题 dp 按合法性相加（A?dp[i-1]:0)+(B?dp[i-2]:0)；伴随两位数拼接被复合赋值吞掉加法（num*=(10+x)）与 0 合法性分支缺失",
+      "count": 1,
+      "examples": [
+        "decode-ways"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "线性DP缺空串基准：dp 数组没有 dp[0]=1 的空串状态，i==1 时 dp[i-2] 无处安放、被迫写特判并丢掉两位组合的贡献；0 配对合法性只判了前一位非零，漏判组合值在 10~26 内（如 30、01 都被放过）",
+      "count": 1,
+      "examples": [
+        "decode-ways"
+      ],
+      "categories": [
+        "动态规划"
       ],
       "last_seen": "2026-08-26"
     }
