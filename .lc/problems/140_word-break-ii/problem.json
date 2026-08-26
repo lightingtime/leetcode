@@ -1,0 +1,74 @@
+{
+  "id": "140",
+  "slug": "word-break-ii",
+  "title": "Word Break II",
+  "titleCn": "单词拆分 II",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/word-break-ii/",
+  "tags": [
+    "Trie",
+    "Memoization",
+    "Array",
+    "Hash Table",
+    "String",
+    "Dynamic Programming",
+    "Backtracking"
+  ],
+  "tagsCn": [
+    "字典树",
+    "记忆化",
+    "数组",
+    "哈希表",
+    "字符串",
+    "动态规划",
+    "回溯"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"catsanddog\""
+        },
+        {
+          "name": "wordDict",
+          "value": "[\"cat\",\"cats\",\"and\",\"sand\",\"dog\"]"
+        }
+      ],
+      "output": "[\"cats and dog\",\"cat sand dog\"]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"pineapplepenapple\""
+        },
+        {
+          "name": "wordDict",
+          "value": "[\"apple\",\"pen\",\"applepen\",\"pine\",\"pineapple\"]"
+        }
+      ],
+      "output": "[\"pine apple pen apple\",\"pineapple pen apple\",\"pine applepen apple\"]",
+      "explain": "注意你可以重复使用字典中的单词。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"catsandog\""
+        },
+        {
+          "name": "wordDict",
+          "value": "[\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]"
+        }
+      ],
+      "output": "[]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"catsanddog\"\n[\"cat\",\"cats\",\"and\",\"sand\",\"dog\"]\n\"pineapplepenapple\"\n[\"apple\",\"pen\",\"applepen\",\"pine\",\"pineapple\"]\n\"catsandog\"\n[\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]",
+  "javaSnippet": "class Solution {\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-26T10:24:45.728Z"
+}

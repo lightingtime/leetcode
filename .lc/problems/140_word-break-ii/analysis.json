@@ -1,0 +1,54 @@
+{
+  "seq": 161,
+  "id": "140",
+  "slug": "word-break-ii",
+  "title": "单词拆分 II",
+  "category": "动态规划",
+  "date": "2026-08-26",
+  "verdict": "Accepted",
+  "testcases": "29/29",
+  "runtime_ms": null,
+  "memory_bytes": 43544000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "后缀可拆预判+回溯",
+  "dp_subtype": "线性DP",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：枚举所有能把 s 拆成字典词的句子，词可重复使用。两层结构：回溯负责枚举，预判负责剪枝。\n- 解法选择：后缀可拆预判 suffixOK（右往左的线性 DP）+ 回溯。set.contains 保证每段是合法词；suffixOK 在 DFS 入口剪掉「从 start 到不了终点」的整棵子树。\n\n## ② 关键设计决策\n\n| 设计点 | 决策 | 理由 |\n|---|---|---|\n| 预判数组 | suffixOK[i] = s[i..n) 能否拼完，suffixOK[n]=true，从右往左算 | 剪枝要问「未来」能否到终点，不是「过去」前缀 |\n| 剪枝位置 | DFS 入口 if (!suffixOK[start]) return | 到不了终点直接整棵剪，不试词 |\n| 段合法性 | set.contains(temp) | 与 dp 无关，前缀本来就一路真拆出来的 |\n| 句子拼接 | List path + 出口 String.join(\" \", path) | 回溯只需 add/remove，避开 StringBuilder 下标手抖 |\n| 前缀 dp | 完全不需要 | 前缀可拆在 DFS 里恒 true（被真拆过），冗余 |\n\n## ③ 具体 case 推演\n\n示例3 catsandog / [cat,cats,and,sand,dog] 的 suffixOK（期望 []）：\n\n| 位置 | 剩余 | 判定 |\n|---|---|---|\n| 10 | 空 | true（基） |\n| 7 | og | 无词匹配 → false |\n| 3 | sandog | sand→suffixOK[7]=false；and→s[3..6)=san 不匹配 → false |\n| 0 | catsandog | cat→suffixOK[3]=false；cats→suffixOK[4] 也 false → false |\n\ndfs(0) 入口 !suffixOK[0] → 一步不进直接返回 []，省掉整棵死树的遍历。\n\n示例1 catsanddog 的 DFS 两条路径（suffixOK[3]、[7] 均为 true）：\n\n| start | temp | path | 出口 |\n|---|---|---|---|\n| 0 | cat → dfs(3) | [cat] | — |\n| 3 | sand → dfs(7) | [cat,sand] | — |\n| 7 | dog → dfs(10) | [cat,sand,dog] | cat sand dog |\n| 0 | cats → dfs(4) → and → dog | [cats,and,dog] | cats and dog |\n\n## ④ 边界与细节\n\n- 单字符命中 / 完全无法拆分 / 整词+细分并存 / 词重复使用（aaa={a,aa} 三种）/ 剩余不可拼（abcd 只有 ab cd）\n- 长度 20 上限：20 个 a 用 {a,aa} 拼 → 方案数 F(21)=10946，验证枚举不漏不重\n- StringBuilder 出口删空格不恢复是乱码根因 → 用 List path + join 根治\n\n## ⑤ 复杂度与下限论证\n\n- 预判 O(n·|dict|)；枚举阶段总开销 = 输出方案数 × 每句拼接 O(n)\n- 空间 O(n)（suffixOK+path）+ 输出结果\n- 枚举类题目下限就是 Ω(方案数)，不可再低；suffixOK 让不可达分支 O(1) 跳过，是可实现的剪枝上限",
+  "time_complexity": "O(n·|dict| + 方案数·n)",
+  "space_complexity": "O(n + 方案数)",
+  "notes": "后缀可拆预判 suffixOK（右往左）+回溯：DFS入口 !suffixOK[start] 剪到不了终点的子树，set.contains 保证段合法，path+String.join 拼句子",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "回溯共享状态不对称：子调用修改 StringBuilder（删末尾空格）后未恢复原状就 return，父层按未修改时的下标做 delete 导致状态错乱；且 dp 剪枝用错方向——前缀可拆 dp[i] 不能当后缀可达用，差一个字符的边界 >0/>=0 也导致 dp 欠算砍掉正确路径",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "后缀可拆预判+回溯剪枝",
+      "text": "枚举拆分句子类：suffixOK[i] 从右往左算 s[i..n) 能否拼完，DFS 入口 !suffixOK[start] 剪掉到不了终点的子树；段合法性用 set.contains；句子用 List path + String.join，别用 StringBuilder 手抖",
+      "category": "动态规划",
+      "problem": "word-break-ii",
+      "date": "2026-08-26"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "29/29",
+      "runtime_ms": null,
+      "memory_bytes": 43544000,
+      "approach": "后缀可拆预判+回溯",
+      "time_complexity": "O(n·|dict| + 方案数·n)",
+      "space_complexity": "O(n + 方案数)",
+      "optimal": true,
+      "notes": "后缀可拆预判 suffixOK（右往左）+回溯：DFS入口 !suffixOK[start] 剪到不了终点的子树，set.contains 保证段合法，path+String.join 拼句子",
+      "code": "public List<String> wordBreak(String s, List<String> wordDict) {\n        set = new HashSet<>(wordDict);\n        ans = new ArrayList<>();\n        int n = s.length();\n\n        suffixOK = new boolean[n + 1];\n        suffixOK[n] = true;\n        for (int i = n - 1; i >= 0; i--) {\n            for (String word : set) {\n                if (i + word.length() <= n && suffixOK[i + word.length()] && s.startsWith(word, i)) {\n                    suffixOK[i] = true;\n                    break;\n                }\n            }\n        }\n\n        dfs(s, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(String s, int start, List<String> path) {\n        if (start == s.length()) {\n            ans.add(String.join(\" \", path));\n            return;\n        }\n        if (!suffixOK[start]) {\n            return;\n        }\n        for (int i = start; i <= s.length(); i++) {\n            String temp = s.substring(start, i);\n            if (set.contains(temp)) {\n                path.add(temp);\n                dfs(s, i, path);\n                path.remove(path.size() - 1);\n            }\n        }\n    }"
+    }
+  ],
+  "hints": [
+    "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ]
+}

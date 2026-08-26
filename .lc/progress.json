@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 160,
+  "current_seq": 161,
   "done": [
     {
       "seq": 1,
@@ -1662,6 +1662,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "写法2：贪心双指针+星号回溯（优化版：合并两处回溯分支，O(1)空间）；遇星记位吞空、失配/模式走完统一回溯多吞、收尾跳尾部星号"
+    },
+    {
+      "seq": 161,
+      "id": "140",
+      "title": "单词拆分 II",
+      "slug": "word-break-ii",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "后缀可拆预判 suffixOK（右往左）+回溯：DFS入口 !suffixOK[start] 剪到不了终点的子树，set.contains 保证段合法，path+String.join 拼句子"
     }
   ],
   "error_habits": [
@@ -2693,6 +2704,17 @@
       "count": 1,
       "examples": [
         "wildcard-matching"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "回溯共享状态不对称：子调用修改 StringBuilder（删末尾空格）后未恢复原状就 return，父层按未修改时的下标做 delete 导致状态错乱；且 dp 剪枝用错方向——前缀可拆 dp[i] 不能当后缀可达用，差一个字符的边界 >0/>=0 也导致 dp 欠算砍掉正确路径",
+      "count": 1,
+      "examples": [
+        "word-break-ii"
       ],
       "categories": [
         "动态规划"
