@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 159,
+  "current_seq": 160,
   "done": [
     {
       "seq": 1,
@@ -1651,6 +1651,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "区间DP回文预判表+回溯枚举：按长度填 isPal（len==1 特判双字符），回溯查表 O(1) 判段、切段递归、返回撤销"
+    },
+    {
+      "seq": 160,
+      "id": "44",
+      "title": "通配符匹配",
+      "slug": "wildcard-matching",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "写法2：贪心双指针+星号回溯（优化版：合并两处回溯分支，O(1)空间）；遇星记位吞空、失配/模式走完统一回溯多吞、收尾跳尾部星号"
     }
   ],
   "error_habits": [
@@ -2671,6 +2682,17 @@
       "count": 1,
       "examples": [
         "decode-ways"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "空串行的星号转移误写恒 true：i==0 时 dp[i-1][j]（星号吃字符）方向不存在，应短路为 false 而不是 true，否则星号无视前面压着的字面字符凭空成立，导致 c*a*b 误匹配 aab",
+      "count": 1,
+      "examples": [
+        "wildcard-matching"
       ],
       "categories": [
         "动态规划"

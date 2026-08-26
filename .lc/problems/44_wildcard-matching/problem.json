@@ -1,0 +1,68 @@
+{
+  "id": "44",
+  "slug": "wildcard-matching",
+  "title": "Wildcard Matching",
+  "titleCn": "通配符匹配",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/wildcard-matching/",
+  "tags": [
+    "Greedy",
+    "Recursion",
+    "String",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "贪心",
+    "递归",
+    "字符串",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"aa\""
+        },
+        {
+          "name": "p",
+          "value": "\"a\""
+        }
+      ],
+      "output": "false",
+      "explain": "\"a\" 无法匹配 \"aa\" 整个字符串。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"aa\""
+        },
+        {
+          "name": "p",
+          "value": "\"*\""
+        }
+      ],
+      "output": "true",
+      "explain": "'*' 可以匹配任意字符串。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"cb\""
+        },
+        {
+          "name": "p",
+          "value": "\"?a\""
+        }
+      ],
+      "output": "false",
+      "explain": "'?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。"
+    }
+  ],
+  "exampleTestcases": "\"aa\"\n\"a\"\n\"aa\"\n\"*\"\n\"cb\"\n\"?a\"",
+  "javaSnippet": "class Solution {\n    public boolean isMatch(String s, String p) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-26T09:06:16.248Z"
+}
