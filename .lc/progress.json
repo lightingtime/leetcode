@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 155,
+  "current_seq": 156,
   "done": [
     {
       "seq": 1,
@@ -1607,6 +1607,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "Trie 建树词尾存整词便于收集与清空去重；DFS 携带树上当前节点同步前进，children 查不到即整枝剪枝；visited 进栈标记回溯撤销"
+    },
+    {
+      "seq": 156,
+      "id": "118",
+      "title": "杨辉三角",
+      "slug": "pascals-triangle",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "线性递推逐行生成：ans[i][j]=ans[i-1][j-1]+ans[i-1][j]，首尾置 1，从 [1] 滚动推进"
     }
   ],
   "error_habits": [
@@ -2636,6 +2647,7 @@
     123,
     126,
     148,
-    149
+    149,
+    154
   ]
 }

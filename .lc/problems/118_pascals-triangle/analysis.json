@@ -1,0 +1,48 @@
+{
+  "seq": 156,
+  "id": "118",
+  "slug": "pascals-triangle",
+  "title": "杨辉三角",
+  "category": "动态规划",
+  "date": "2026-08-26",
+  "verdict": "Accepted",
+  "testcases": "30/30",
+  "runtime_ms": null,
+  "memory_bytes": 44344000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "线性DP逐行递推",
+  "dp_subtype": "线性DP",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：按规则构造二维三角形数组，不求最值——属于「递推生成」型线性 DP：状态天然就是「第 i 行第 j 列」，转移关系由题目定义直接给出。\n- 解法选择：逐行递推。第 i 行只依赖第 i-1 行，拿着上一行滚动前进即可，不需要额外数据结构。\n\n## ② 关键设计决策\n\n| 设计点 | 决策 | 说明 |\n|---|---|---|\n| 状态 | ans[i][j] = 第 i 行第 j 列的值（0 起） | 即二项式系数 C(i,j) |\n| 转移 | 内部位置 ans[i][j] = ans[i-1][j-1] + ans[i-1][j] | 左上 + 右上 |\n| 边界 | 每行首尾 = 1；第 1 行整体 [1] | 对应 C(i,0)=C(i,i)=1 |\n| 填表顺序 | 从 [1] 出发，i 从 2 到 numRows 逐行派生 | numRows=1 时循环体自然不执行 |\n\n具体 case 推演（numRows=5）逐行状态变化：\n\n| 行 i | 长度 | 内部位置的逐个计算 |\n|---|---|---|\n| 0 | 1 | 初值 [1] |\n| 1 | 2 | 只有首尾 → [1,1] |\n| 2 | 3 | cur[1]=prev[0]+prev[1]=1+1=2 → [1,2,1] |\n| 3 | 4 | cur[1]=1+2=3；cur[2]=2+1=3 → [1,3,3,1] |\n| 4 | 5 | cur[1]=1+3=4；cur[2]=3+3=6；cur[3]=3+1=4 → [1,4,6,4,1] |\n\n细节：第 i 行内部下标 j 的有效范围是 1..len-2（开区间，不含首尾），写循环边界时最容易在这里差一。\n\n## ③ 边界与细节\n\n- numRows=1：直接返回 [[1]]；主循环 i<=numRows 条件天然覆盖，无需单独特判 return\n- numRows=2：第一次从上一行派生且没有内部位置，验证首尾分支\n- numRows=30 上限：最大值 C(29,14)=77558760 < 2^31-1，int 不会溢出；总元素 30×31÷2=465\n- 数值锚点：第 10 行等于 C(9,k) 序列 [1,9,36,84,126,126,84,36,9,1]\n\n## ④ 复杂度与下限论证\n\n- 时间 O(n²)：n(n+1)/2 个元素每个恰好计算一次。\n- 空间：输出 O(n²)；辅助只有当前行的临时数组 O(行长)。\n- 下限论证：答案本身就含 Θ(n²) 个数字，任何算法都至少要把它们写出来一遍，因此 O(n²) 是硬下限，本题不存在更快做法。",
+  "time_complexity": "O(n²)",
+  "space_complexity": "输出O(n²)，辅助O(行长)",
+  "notes": "线性递推逐行生成：ans[i][j]=ans[i-1][j-1]+ans[i-1][j]，首尾置 1，从 [1] 滚动推进",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "杨辉恒等式递推",
+      "text": "杨辉三角/二项式系数：C(i,j)=C(i-1,j-1)+C(i-1,j)，首尾 C(i,0)=C(i,i)=1；逐行滚动生成时内部下标开区间 1..len-2，别碰首尾",
+      "category": "动态规划",
+      "problem": "pascals-triangle",
+      "date": "2026-08-26"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "30/30",
+      "runtime_ms": null,
+      "memory_bytes": 44344000,
+      "approach": "线性DP逐行递推",
+      "time_complexity": "O(n²)",
+      "space_complexity": "输出O(n²)，辅助O(行长)",
+      "optimal": true,
+      "notes": "线性递推逐行生成：ans[i][j]=ans[i-1][j-1]+ans[i-1][j]，首尾置 1，从 [1] 滚动推进"
+    }
+  ],
+  "hints": [
+    "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "118",
+  "slug": "pascals-triangle",
+  "title": "Pascal's Triangle",
+  "titleCn": "杨辉三角",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/pascals-triangle/",
+  "tags": [
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "numRows",
+          "value": "5"
+        }
+      ],
+      "output": "[[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "numRows",
+          "value": "1"
+        }
+      ],
+      "output": "[[1]]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "5\n1",
+  "javaSnippet": "class Solution {\n    public List<List<Integer>> generate(int numRows) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-25T18:38:02.409Z"
+}
