@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 158,
+  "current_seq": 159,
   "done": [
     {
       "seq": 1,
@@ -1640,6 +1640,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "写法2：贪心累加所有正相邻差价，O(n)/O(1)，已达空间下限"
+    },
+    {
+      "seq": 159,
+      "id": "131",
+      "title": "分割回文串",
+      "slug": "palindrome-partitioning",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "区间DP回文预判表+回溯枚举：按长度填 isPal（len==1 特判双字符），回溯查表 O(1) 判段、切段递归、返回撤销"
     }
   ],
   "error_habits": [

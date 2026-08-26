@@ -1,0 +1,44 @@
+{
+  "id": "131",
+  "slug": "palindrome-partitioning",
+  "title": "Palindrome Partitioning",
+  "titleCn": "分割回文串",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/palindrome-partitioning/",
+  "tags": [
+    "String",
+    "Dynamic Programming",
+    "Backtracking"
+  ],
+  "tagsCn": [
+    "字符串",
+    "动态规划",
+    "回溯"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"aab\""
+        }
+      ],
+      "output": "[[\"a\",\"a\",\"b\"],[\"aa\",\"b\"]]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"a\""
+        }
+      ],
+      "output": "[[\"a\"]]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"aab\"\n\"a\"",
+  "javaSnippet": "class Solution {\n    public List<List<String>> partition(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-26T08:18:16.694Z"
+}
