@@ -1,0 +1,54 @@
+{
+  "seq": 158,
+  "id": "122",
+  "slug": "best-time-to-buy-and-sell-stock-ii",
+  "title": "买卖股票的最佳时机 II",
+  "category": "动态规划",
+  "date": "2026-08-26",
+  "verdict": "Accepted",
+  "testcases": "203/203",
+  "runtime_ms": null,
+  "memory_bytes": 46540000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "贪心累加正差价",
+  "dp_subtype": "状态机DP",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：交易次数不限、每次至多持有一股，最大化累计利润。两个等价建模视角：状态机 DP（空仓/持有两状态逐天转移）与贪心（累加所有正相邻差价）。\n- 关系：贪心是状态机的极限简化——不限次数时，「每个上涨相邻差值都兑现」等价于「每个局部低点买入、高点卖出」，两者利润一致。\n\n## ② 关键设计决策（两写法对照）\n\n| 写法 | 状态机 DP | 贪心 |\n|---|---|---|\n| 状态 | dp[i][0] 空仓 / dp[i][1] 持有 | 无状态，单变量累加 |\n| 转移 | 空仓=max(昨空, 昨持+今天价)；持有=max(昨空-今天价, 昨持) | profit += max(0, prices[i]-prices[i-1]) |\n| 初值 | dp[0][1]=-prices[0]（第 0 天买入） | profit=0 |\n| 答案 | dp[n-1][0] | profit |\n| 复杂度 | O(n)/O(n) | O(n)/O(1) |\n\n## ③ 具体 case 推演\n\n边界4 [1,2,1,2] 贪心逐差：\n\n| i | prices[i] | 差价 | 累计 profit |\n|---|---|---|---|\n| 1 | 2 | 2-1=1>0 → +1 | 1 |\n| 2 | 1 | 1-2=-1<0 → +0 | 1 |\n| 3 | 2 | 2-1=1>0 → +1 | 2 |\n\n结果 2 ✓（买1卖2 + 买1卖2）。单调增 [1,2,3,4,5]：1+1+1+1=4，等于第 1 天买第 5 天卖——证明逐差相加与整段持有等价。单调减 [7,6,4,3,1]：无正差价 → 0 ✓。\n\n## ④ 边界与细节\n\n- 单日：循环不执行 → 0\n- 全相同：差价全 0 → 0\n- 含 0 价（约束允许）：0 买 1 卖赚 1\n- 长度 30000 上限交替 1,2：15000 个 +1 → 15000\n- 溢出：答案上界约 1.5×10^8 < 2^31-1，int 安全（题目亦保证）\n\n## ⑤ 复杂度与下限论证\n\n- 时间 O(n)：必须读一遍所有差价，Ω(n) 是下限\n- 空间 O(1)：贪心无额外数组，已达下限；状态机 DP 的 O(n) 可滚动到 O(1)\n- 贪心正确性：任意交易收益 = Σ(卖出-买入)，可展开为一串相邻差值的带符号和；正差价互不重叠地对应各段上涨，负差价（下跌段）跳过即等价于不参与。取每个正差价构成全局最优。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "写法2：贪心累加所有正相邻差价，O(n)/O(1)，已达空间下限",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "203/203",
+      "runtime_ms": null,
+      "memory_bytes": 46904000,
+      "approach": "状态机DP",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)可滚动O(1)",
+      "optimal": false,
+      "notes": "写法1：状态机DP（空仓/持有两状态逐天转移），O(n)/O(n)",
+      "code": "public int maxProfit(int[] prices) {\n    int[][] dp = new int[prices.length][2];\n    dp[0][1] = -prices[0];\n    for (int i = 1; i < prices.length; i++) {\n        dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);\n        dp[i][1] = Math.max(dp[i - 1][0] - prices[i], dp[i - 1][1]);\n    }\n    return dp[prices.length - 1][0];\n}"
+    },
+    {
+      "date": "2026-08-26",
+      "verdict": "Accepted",
+      "testcases": "203/203",
+      "runtime_ms": null,
+      "memory_bytes": 46540000,
+      "approach": "贪心累加正差价",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "写法2：贪心累加所有正相邻差价，O(n)/O(1)，已达空间下限",
+      "code": "public int maxProfit(int[] prices) {\n    int max = 0;\n    for (int i = 1; i < prices.length; i++) {\n        if (prices[i] > prices[i - 1]) {\n            max += (prices[i] - prices[i - 1]);\n        }\n    }\n    return max;\n}"
+    }
+  ],
+  "hints": [
+    "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ]
+}

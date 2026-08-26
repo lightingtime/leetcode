@@ -1,0 +1,54 @@
+{
+  "id": "122",
+  "slug": "best-time-to-buy-and-sell-stock-ii",
+  "title": "Best Time to Buy and Sell Stock II",
+  "titleCn": "买卖股票的最佳时机 II",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/",
+  "tags": [
+    "Greedy",
+    "Array",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "prices",
+          "value": "[7,1,5,3,6,4]"
+        }
+      ],
+      "output": "7",
+      "explain": "在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "prices",
+          "value": "[1,2,3,4,5]"
+        }
+      ],
+      "output": "4",
+      "explain": "在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "prices",
+          "value": "[7,6,4,3,1]"
+        }
+      ],
+      "output": "0",
+      "explain": "在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 0。"
+    }
+  ],
+  "exampleTestcases": "[7,1,5,3,6,4]\n[1,2,3,4,5]\n[7,6,4,3,1]",
+  "javaSnippet": "class Solution {\n    public int maxProfit(int[] prices) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-26T08:09:33.860Z"
+}

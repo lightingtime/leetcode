@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-26",
-  "current_seq": 157,
+  "current_seq": 158,
   "done": [
     {
       "seq": 1,
@@ -1629,6 +1629,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "写法2：以i结尾开 n 位，两位组合在 i==1 用常数 1 当空串；diff 1 用 Integer.parseInt 取两位"
+    },
+    {
+      "seq": 158,
+      "id": "122",
+      "title": "买卖股票的最佳时机 II",
+      "slug": "best-time-to-buy-and-sell-stock-ii",
+      "category": "动态规划",
+      "date": "2026-08-26",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "写法2：贪心累加所有正相邻差价，O(n)/O(1)，已达空间下限"
     }
   ],
   "error_habits": [
