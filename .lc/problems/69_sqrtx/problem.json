@@ -1,0 +1,44 @@
+{
+  "id": "69",
+  "slug": "sqrtx",
+  "title": "Sqrt(x)",
+  "titleCn": "x 的平方根 ",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/sqrtx/",
+  "tags": [
+    "Math",
+    "Binary Search",
+    "牛顿迭代法"
+  ],
+  "tagsCn": [
+    "数学",
+    "二分查找",
+    "牛顿迭代法"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "4"
+        }
+      ],
+      "output": "2",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "8"
+        }
+      ],
+      "output": "2",
+      "explain": "8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。"
+    }
+  ],
+  "exampleTestcases": "4\n8",
+  "javaSnippet": "class Solution {\n    public int mySqrt(int x) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-27T14:12:50.155Z"
+}
