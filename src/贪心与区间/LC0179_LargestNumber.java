@@ -18,10 +18,10 @@ public class LC0179_LargestNumber {
         String[] array = Arrays.stream(nums).mapToObj(String::valueOf).toArray(String[]::new);
         Arrays.sort(array, (a, b) -> (b + a).compareTo(a + b));
         StringBuilder sb = new StringBuilder();
+        if (array[0].equals("0")) {
+            return "0";
+        }
         for (String s : array) {
-            if (s.equals("0") && sb.toString().equals("0")) {
-                continue;
-            }
             sb.append(s);
         }
         return sb.toString();
