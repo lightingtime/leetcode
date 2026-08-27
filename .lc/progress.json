@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-27",
-  "current_seq": 163,
+  "current_seq": 164,
   "done": [
     {
       "seq": 1,
@@ -1695,6 +1695,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "两个变量分工：total 全程累加只判有无解，cur 是候选段油箱负时清零换起点"
+    },
+    {
+      "seq": 164,
+      "id": "179",
+      "title": "最大数",
+      "slug": "largest-number",
+      "category": "贪心与区间",
+      "date": "2026-08-27",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "比较器按拼接结果而非数值排序，(b+a).compareTo(a+b)；全零输出单个 0"
     }
   ],
   "error_habits": [

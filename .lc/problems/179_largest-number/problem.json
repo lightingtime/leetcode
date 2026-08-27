@@ -1,0 +1,46 @@
+{
+  "id": "179",
+  "slug": "largest-number",
+  "title": "Largest Number",
+  "titleCn": "最大数",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/largest-number/",
+  "tags": [
+    "Greedy",
+    "Array",
+    "String",
+    "Sorting"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组",
+    "字符串",
+    "排序"
+  ],
+  "category": "贪心与区间",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[10,2]"
+        }
+      ],
+      "output": "\"210\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "nums",
+          "value": "[3,30,34,5,9]"
+        }
+      ],
+      "output": "\"9534330\"",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[10,2]\n[3,30,34,5,9]",
+  "javaSnippet": "class Solution {\n    public String largestNumber(int[] nums) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-27T10:40:49.668Z"
+}
