@@ -1,0 +1,21 @@
+{
+  "id": "190",
+  "slug": "reverse-bits",
+  "title": "Reverse Bits",
+  "titleCn": "颠倒二进制位",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/reverse-bits/",
+  "tags": [
+    "Bit Manipulation",
+    "Divide and Conquer"
+  ],
+  "tagsCn": [
+    "位运算",
+    "分治"
+  ],
+  "category": "数学与位运算",
+  "examples": [],
+  "exampleTestcases": "43261596\n2147483644",
+  "javaSnippet": "class Solution {\n    public int reverseBits(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-27T14:32:56.401Z"
+}
