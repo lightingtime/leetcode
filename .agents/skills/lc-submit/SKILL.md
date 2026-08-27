@@ -37,6 +37,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - 若已最优：点评优点，简要说明为什么这个复杂度已是下限。
   - 思路已最优但代码写法可微调时（如冗余变量、可合并/简化的循环、重复表达式、残留 TODO 注释、赋值写法、字段/变量命名），在复盘与汇报中具体指出可优化点（只提示，不替用户重写）。**每次 Accepted 汇报前必做「精简检查」**：合并循环/三元简化、去冗余变量、清残留 TODO 注释，发现任何一项都要在汇报中指出。赋值/命名类优化提示统一在 Accepted 汇报时给出，提交前不因写法问题打断用户。
    - 精简检查后的处理约定（用户明确要求）：用户按提示改动后，只需本地 `main` 测试通过即视为完成，**不要求再次提交力扣**；无用 import 等文件卫生问题由 Codex 在提交收尾时直接清理，不写进复盘报告。
+   - **Accepted 后代码变更同步分析（必做）**：用户在任何时候重写/微调已 Accepted 的解法（等价精简、换写法等），只要本地测试通过对拍确认正确，就**必须把最新代码同步进该题 `.lc/problems/{题号}_{slug}/analysis.json` 的 `submissions` 记录（用 `--code` 保存最新提交区代码）**，并重新生成复盘页让代码块展示最新写法；若仅代码微调不换思路，不追加新 submission，直接覆盖旧代码字段；同时向用户确认「本地通过即视为完成、无需再提交力扣」。
    - 记录完成：`node ".agents/skills/lc-practice/scripts/update_state.js" done --seq <seq> --firstPass <是否一次通过> --optimal <是否最优> --notes "<一句话复盘>" --verdict Accepted --testcases 65/65 --memory <内存字节> --approach "解法名" --time O(n) --space O(n)`。
    - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，`update_state.js analysis --slug <slug>` 可查看）。
   - 提交历史规则：解法不同才追加到 analysis.json 的 `submissions`；相似解法（仅代码微调）只保留最优解（按 optimal 与内存比较，`done` 自动处理）；复盘报告体现不同解法的提交。

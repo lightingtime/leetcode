@@ -44,7 +44,8 @@
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "非一次AC：3轮对拍暴露双变量更新不变量破坏问题，经随机对拍+32个边界例收敛到单链写法"
+      "notes": "非一次AC：3轮对拍暴露双变量更新不变量破坏问题，经随机对拍+32个边界例收敛到单链写法",
+      "code": "public boolean increasingTriplet(int[] nums) {\n        int first = nums[0], second = Integer.MAX_VALUE;\n        for (int i = 1; i < nums.length; i++) {\n            int num = nums[i];\n            if (num > second) {\n                return true;\n            } else if (num > first) {\n                second = num;\n            } else {\n                first = num;\n            }\n        }\n        return false;\n    }"
     }
   ],
   "hints": [
