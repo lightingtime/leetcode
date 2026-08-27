@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-27",
-  "current_seq": 164,
+  "current_seq": 165,
   "done": [
     {
       "seq": 1,
@@ -1706,6 +1706,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "比较器按拼接结果而非数值排序，(b+a).compareTo(a+b)；全零输出单个 0"
+    },
+    {
+      "seq": 165,
+      "id": "324",
+      "title": "摆动排序 II",
+      "slug": "wiggle-sort-ii",
+      "category": "贪心与区间",
+      "date": "2026-08-27",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "非一次AC：踩了虚拟下标定义域越界、quickselect分区点选错两坑；Hoare分区需用j分界"
     }
   ],
   "error_habits": [
@@ -2775,6 +2786,17 @@
         "动态规划"
       ],
       "last_seen": "2026-08-26"
+    },
+    {
+      "habit": "虚拟下标映射定义域越界：映射函数 f(x)=(1+2x)%(n|1) 只对虚拟下标 0..n-1 有效，但三路划分把 gt 初始化为 n，f(n) 在偶数长度下算出真实下标 n 直接越界、奇数长度下读到错误位置；右端指针必须始终落在有效虚拟下标内",
+      "count": 1,
+      "examples": [
+        "wiggle-sort-ii"
+      ],
+      "categories": [
+        "贪心与区间"
+      ],
+      "last_seen": "2026-08-27"
     }
   ],
   "category_hints": {
