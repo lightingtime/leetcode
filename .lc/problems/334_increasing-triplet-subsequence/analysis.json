@@ -1,0 +1,53 @@
+{
+  "seq": 166,
+  "id": "334",
+  "slug": "increasing-triplet-subsequence",
+  "title": "递增的三元子序列",
+  "category": "贪心与区间",
+  "date": "2026-08-27",
+  "verdict": "Accepted",
+  "testcases": "86/86",
+  "runtime_ms": null,
+  "memory_bytes": 122824000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "双变量贪心（first/second 单链更新）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质与解法选择理由**\n\n判断数组是否存在 `i<j<k` 且 `nums[i]<nums[j]<nums[k]`。暴力 O(n³)，但只需「三个递增元素是否存在」而非最长长度，可用双变量贪心 O(n) 完成，且满足进阶 O(1) 空间要求。\n\n思路：维护两个状态——`first` 为已见过的最小值，`second` 为「大于某个已见过的数、且尽可能小」的第二元素。遍历时若出现 `num > second`，则 `first < second < num` 构成三元组。贪心正确性：把 first/second 都压得足够小，才更可能在后面找到更大的第三个数，所以永远保留更小的候选。\n\n**关键设计决策：单条 if-else 链保证不变量**\n\n| 分支 | 条件 | 动作 | 作用 |\n| --- | --- | --- | --- |\n| 命中 | `num > second` | return true | 找到 first<second<num 三元组 |\n| 更新 second | `first < num < second` | `second = num` | 收缩 second，便于后续命中 |\n| 更新 first | `num < first` | `first = num` | 换更小的首元素，重新开始 |\n\n核心不变量：**每个数只进一个分支**，且恒有 `first < second`、二者都是已见过的数。这保证了：\n- `second` 只在 `num > first` 时更新，永不 ≤ first；\n- `first` 只在 `num < first` 时更新，永不覆盖更小历史值。\n\n**踩坑与修复（3 轮对拍）**\n\n1. **numB 被写成等于 numA**：用 `numA == MAX` 做初始化哨兵，且 else 分支 `num < numB` 无条件写 numB，导致 numB 被写成 == numA → 后续任何更大数误判成三元。修复：numB 赋值加 `num > numA` 前提。\n2. **numA 更新被 numB 状态误拦截**：把整个 else 用 `numB != MAX` 挡住，numA 无法变小 → 漏判。修复：numA 更新独立于 numB 状态。\n3. **first 被更大值无条件覆盖**：`else { first = num }` 无条件执行，MAX 等大数覆盖掉更小的 first → 漏判。修复：else 分支加 `num < first` 条件。\n\n每一轮都用「随机对拍 + 暴力 O(n³) 对照」找出 6 个反例，并全部沉淀进 main 测试区（边界10-32），最终收敛。\n\n**边界与细节**\n\n- 相等元素：`[7,7,7]` 需严格递增 → false；`first < num` 用严格小于保证相等不触发。\n- 极值：`Integer.MIN_VALUE` 出现在 first 更新、`Integer.MAX_VALUE` 作为哨兵值，用 `nums[0]` 初始化 first 避免哨兵与真实值冲突。\n- 单/两元素：遍历从 i=1 开始，second 恒 MAX，返回 false。\n\n**具体 case 逐层推演**\n\n`[-10, MAX, -7, 4, -1]`（真实三元组 -10<-7<4 → true）：\n- first=-10，second=MAX\n- num=MAX：`MAX>second` 假；`MAX>first && MAX<second` 假（MAX<MAX 不成立）；`MAX<first` 假 → 无操作\n- num=-7：`-7>MAX` 假；`-7>-10 && -7<MAX` 真 → second=-7\n- num=4：`4>second(-7)` 真 → 返回 true ✓\n\n`[7,7,7]`（→ false）：\n- first=7，second=MAX\n- num=7：`7>MAX` 假；`7>first && 7<second` 假（非严格大于）；`7<first` 假 → 无操作，循环结束返回 false ✓\n\n**复杂度与下限论证**\n\n- 时间 O(n)：单趟遍历，每元素常数次比较/赋值。任何解法至少要读完整个数组才能确认不存在三元组，Ω(n) 即下限。\n- 空间 O(1)：仅两个整型变量，无额外存储，为理论最低。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "非一次AC：3轮对拍暴露双变量更新不变量破坏问题，经随机对拍+32个边界例收敛到单链写法",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "双变量贪心不变量破坏：first/second 的更新相互独立导致 second 被写成 <= first 或 first 被更大值无条件覆盖，破坏 first<second 且都来自已见过数的不变量；应单条 if-else 链：num<=first 只更新 first、num<=second 才更新 second、否则命中三元组，每个数只进一个分支",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "双变量贪心单链",
+      "text": "判断递增 k 元子序列是否存在：维护尽量小的 first/second 两个变量，单条 if-else 链（num<=first 更新 first；num<=second 更新 second；否则命中），每个数只进一个分支即可保证 first<second 不变量；用 nums[0] 初始化避免哨兵与真实值冲突",
+      "category": "贪心与区间",
+      "problem": "increasing-triplet-subsequence",
+      "date": "2026-08-27"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-27",
+      "verdict": "Accepted",
+      "testcases": "86/86",
+      "runtime_ms": null,
+      "memory_bytes": 122824000,
+      "approach": "双变量贪心（first/second 单链更新）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "非一次AC：3轮对拍暴露双变量更新不变量破坏问题，经随机对拍+32个边界例收敛到单链写法"
+    }
+  ],
+  "hints": [
+    "区间类题先按起点或终点排序，再贪心合并/选点。"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-27",
-  "current_seq": 165,
+  "current_seq": 166,
   "done": [
     {
       "seq": 1,
@@ -1717,6 +1717,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "非一次AC：踩了虚拟下标定义域越界、quickselect分区点选错两坑；Hoare分区需用j分界"
+    },
+    {
+      "seq": 166,
+      "id": "334",
+      "title": "递增的三元子序列",
+      "slug": "increasing-triplet-subsequence",
+      "category": "贪心与区间",
+      "date": "2026-08-27",
+      "firstPass": false,
+      "optimal": true,
+      "notes": "非一次AC：3轮对拍暴露双变量更新不变量破坏问题，经随机对拍+32个边界例收敛到单链写法"
     }
   ],
   "error_habits": [
@@ -2792,6 +2803,17 @@
       "count": 1,
       "examples": [
         "wiggle-sort-ii"
+      ],
+      "categories": [
+        "贪心与区间"
+      ],
+      "last_seen": "2026-08-27"
+    },
+    {
+      "habit": "双变量贪心不变量破坏：first/second 的更新相互独立导致 second 被写成 <= first 或 first 被更大值无条件覆盖，破坏 first<second 且都来自已见过数的不变量；应单条 if-else 链：num<=first 只更新 first、num<=second 才更新 second、否则命中三元组，每个数只进一个分支",
+      "count": 1,
+      "examples": [
+        "increasing-triplet-subsequence"
       ],
       "categories": [
         "贪心与区间"
