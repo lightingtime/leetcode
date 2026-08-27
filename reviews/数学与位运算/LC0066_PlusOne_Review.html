@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC66 加一 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 167</div>
+  <h1>LC66 · 加一</h1>
+  <div class="sub">反向进位模拟 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 114/114</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 数学与位运算</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-27</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 反向进位模拟</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 114/114</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0066_PlusOne.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[] plusOne(int[] digits) {
+        for (int i = digits.length - 1; i &gt;= 0; i--) {
+            if (digits[i] == 9) {
+                digits[i] = 0;
+            } else {
+                digits[i] += 1;
+                return digits;
+            }
+        }
+        int[] ans = new int[digits.length + 1];
+        ans[0] = 1;
+        return ans;
+    }</pre></div>
+    <p class="muted">一次AC：从末尾向前遇9置0、遇非9加1返回；全9才扩容</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>大整数以高位到低位数组表示，加 1 本质是最低位的手算加法 + 进位传播。不能把整个数组转成整数相加（长度可达 100，远超 long 范围），必须逐位模拟进位。从最低位（数组末尾）向前处理，遇 9 会进位（9+1=10 → 本位 0、进 1），遇非 9 加 1 后进位终止，可提前返回。</p><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>写法</th><th>理由</th></tr></thead><tbody><tr><td>反向遍历</td><td><code>for (i = len-1; i &gt;= 0; i--)</code></td><td>低位在数组末尾，模拟手算从个位开始</td></tr><tr><td>遇 9 置 0 继续</td><td><code>digits[i] = 0</code></td><td>9+1=10，本位归 0 且进位继续向左传播</td></tr><tr><td>遇非 9 +1 返回</td><td><code>digits[i] += 1; return digits</code></td><td>进位链在此终止，剩余高位不变，原地返回</td></tr><tr><td>全 9 扩容</td><td>循环走完未返回 → <code>new int[len+1]</code>，首位 1</td><td>全部进位后最高位溢出（999→1000）</td></tr></tbody></table></div><p><strong>边界与细节</strong></p><ul><li>单元素非 9：<code>[4]→[5]</code>，第一步就返回。</li><li>部分 9 进位：<code>[1,9,9]</code> → 末位 9→0，中位 9→0，首位 1→2 返回 <code>[2,0,0]</code>。</li><li>全 9 扩容：<code>[9,9,9]</code> 全部置 0，循环走完，扩容 <code>[1,0,0,0]</code>；100 位全 9 扩到 101 位。</li><li>含 0 数字：<code>[1,0,0]→[1,0,1]</code>，末位 0 非 9 直接 +1。</li><li>无前导 0 约束下，扩容只可能发生在「全 9」，首位必为 1。</li></ul><p><strong>具体 case 逐层推演</strong></p><p><code>[1,9,9]</code>：</p><ul><li>i=2：digits[2]=9 → 置 0，数组 <code>[1,9,0]</code></li><li>i=1：digits[1]=9 → 置 0，数组 <code>[1,0,0]</code></li><li>i=0：digits[0]=1 非 9 → +1=2，返回 <code>[2,0,0]</code> ✓</li></ul><p><code>[9,9]</code>：</p><ul><li>i=1：9 → 0，<code>[9,0]</code></li><li>i=0：9 → 0，<code>[0,0]</code></li><li>循环结束，扩容 <code>new int[3]</code> 首位 1 → <code>[1,0,0]</code> ✓</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：最坏全 9 需遍历整个数组（n 次置 0）+ O(n) 扩容；平均提前返回更快。任何解法至少要处理从末尾开始的连续 9 段才能确定结果，Ω(n) 即下限。</li><li>空间 O(1)：非全 9 原地修改，无额外存储；仅全 9 时需要新数组（结果本身就要多一位），这是必要开销。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>114/114 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>反向进位模拟</h3><p>大整数数组加减：从最低位(数组末尾)向前模拟进位，遇进制位(9)置0继续、遇非进制位加一返回；循环走完说明最高位溢出，扩容首位1；用进位终止判断提前返回，避免全量遍历</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">114/114</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.7 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 数学与位运算</h3><div class="quote">位运算先想 XOR、掩码、移位；计数先想数学公式能否代替循环。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 167 · plus-one</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">一次AC：从末尾向前遇9置0、遇非9加1返回；全9才扩容</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/66_plus-one/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E6%95%B0%E5%AD%A6%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97/LC0066_PlusOne.java">src/数学与位运算/LC0066_PlusOne.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-27
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

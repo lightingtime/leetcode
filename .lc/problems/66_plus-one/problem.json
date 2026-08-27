@@ -1,0 +1,52 @@
+{
+  "id": "66",
+  "slug": "plus-one",
+  "title": "Plus One",
+  "titleCn": "加一",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/plus-one/",
+  "tags": [
+    "Array",
+    "Math"
+  ],
+  "tagsCn": [
+    "数组",
+    "数学"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "digits",
+          "value": "[1,2,3]"
+        }
+      ],
+      "output": "[1,2,4]",
+      "explain": "输入数组表示数字 123。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "digits",
+          "value": "[4,3,2,1]"
+        }
+      ],
+      "output": "[4,3,2,2]",
+      "explain": "输入数组表示数字 4321。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "digits",
+          "value": "[9]"
+        }
+      ],
+      "output": "[1,0]",
+      "explain": "输入数组表示数字 9。"
+    }
+  ],
+  "exampleTestcases": "[1,2,3]\n[4,3,2,1]\n[9]",
+  "javaSnippet": "class Solution {\n    public int[] plusOne(int[] digits) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-27T13:55:45.309Z"
+}

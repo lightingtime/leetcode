@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-27",
-  "current_seq": 166,
+  "current_seq": 167,
   "done": [
     {
       "seq": 1,
@@ -1728,6 +1728,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "非一次AC：3轮对拍暴露双变量更新不变量破坏问题，经随机对拍+32个边界例收敛到单链写法"
+    },
+    {
+      "seq": 167,
+      "id": "66",
+      "title": "加一",
+      "slug": "plus-one",
+      "category": "数学与位运算",
+      "date": "2026-08-27",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次AC：从末尾向前遇9置0、遇非9加1返回；全9才扩容"
     }
   ],
   "error_habits": [
