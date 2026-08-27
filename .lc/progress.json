@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-27",
-  "current_seq": 170,
+  "current_seq": 171,
   "done": [
     {
       "seq": 1,
@@ -1772,6 +1772,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一次AC：n&=n-1 每次清掉最低位1，循环次数=1的个数；比逐位(n&1)+右移的恒32轮更优"
+    },
+    {
+      "seq": 171,
+      "id": "326",
+      "title": "3 的幂",
+      "slug": "power-of-three",
+      "category": "数学与位运算",
+      "date": "2026-08-27",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次AC：n>0 且 int 内最大 3 的幂 1162261467 能整除 n 即 3 的幂；注意 Java ^ 是异或不是幂"
     }
   ],
   "error_habits": [
