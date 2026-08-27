@@ -1,0 +1,52 @@
+{
+  "id": "191",
+  "slug": "number-of-1-bits",
+  "title": "Number of 1 Bits",
+  "titleCn": "位1的个数",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/number-of-1-bits/",
+  "tags": [
+    "Bit Manipulation",
+    "Divide and Conquer"
+  ],
+  "tagsCn": [
+    "位运算",
+    "分治"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "11"
+        }
+      ],
+      "output": "3",
+      "explain": "输入的二进制串 1011 中，共有 3 个设置位。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "128"
+        }
+      ],
+      "output": "1",
+      "explain": "输入的二进制串 10000000 中，共有 1 个设置位。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "2147483645"
+        }
+      ],
+      "output": "30",
+      "explain": "输入的二进制串 1111111111111111111111111111101 中，共有 30 个设置位。"
+    }
+  ],
+  "exampleTestcases": "11\n128\n2147483645",
+  "javaSnippet": "class Solution {\n    public int hammingWeight(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-27T14:56:37.951Z"
+}
