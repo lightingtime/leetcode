@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-26",
-  "current_seq": 162,
+  "updated": "2026-08-27",
+  "current_seq": 163,
   "done": [
     {
       "seq": 1,
@@ -1684,6 +1684,17 @@
       "firstPass": false,
       "optimal": true,
       "notes": "记忆化DFS（DAG最长路径）：dfs(i,j)=1+max(更大邻居的dfs)，守卫 <= pre 拦等值保证无环，memo 每格只算一次 O(m·n)"
+    },
+    {
+      "seq": 163,
+      "id": "134",
+      "title": "加油站",
+      "slug": "gas-station",
+      "category": "贪心与区间",
+      "date": "2026-08-27",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "两个变量分工：total 全程累加只判有无解，cur 是候选段油箱负时清零换起点"
     }
   ],
   "error_habits": [

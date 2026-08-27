@@ -1,0 +1,48 @@
+{
+  "seq": 163,
+  "id": "134",
+  "slug": "gas-station",
+  "title": "加油站",
+  "category": "贪心与区间",
+  "date": "2026-08-27",
+  "verdict": "Accepted",
+  "testcases": "40/40",
+  "runtime_ms": null,
+  "memory_bytes": 119708000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "环形贪心（变负即排除，起点=前缀和最低点之后）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质与解法选择理由**\n\n目标是找唯一的可行起点；最直观是每个起点模拟一整圈，O(n²)，但 n≤10^5 会超时，必须降到 O(n)。\n\n两个结构性质支撑贪心：\n- 若 `total = Σ(gas) - Σ(cost) < 0`，绕一圈净消耗为正，任何起点都无解；\n- 题目保证解存在时唯一，所以「排除法」只要排除掉不可行的起点，剩下的就是答案。\n\n**关键设计决策：两个变量分工**\n\n| 变量 | 语义 | 重置时机 |\n| --- | --- | --- |\n| `total` | 全程净油 Σ(gas[i]-cost[i])，回答「整体有没有解」 | 从不重置 |\n| `cur` | 当前候选段 `start..i` 的累积油箱，回答「这段起点能不能撑下去」 | `cur < 0` 时清零 |\n\n- **变负即排除**：`cur` 走到 `i` 变负，说明从 `start` 出发到 `i` 就油尽；此时 `[start..i]` 内任何一站作为起点，到 `i` 时的油箱都 ≤ 从 `start` 出发的值（前面那段要么净亏、要么净赚但已经被 `cur<0` 覆盖），所以必然也 <0——整段全部排除，`start = i+1` 安全。\n- **起点选在前缀和最低点之后**：`total ≥ 0` 保证最终 `start` 之后的累计恒 ≥0；绕回 `start` 之前那段时，靠全程盈余补足，不需要再走一遍验证。\n\n**边界与细节**\n\n- n=1：油够则 `cur` 恒 ≥0，`start=0` 返回 0；油不够则 `total<0` 返回 -1，两条路径都正确。\n- `total=0`（总油=总耗）同样有唯一解：`gas=[2,1,1]`/`cost=[1,1,2]` → 答案 0。\n- `i+1` 可能在最后一站越出数组：此时 `total` 必 <0（否则最后一段不会净亏到清零），会返回 -1，`start` 不会被读到，无越界风险。\n\n**具体 case 逐层推演**\n\n`gas=[0,5,0]`，`cost=[1,1,1]`，diff=`[-1,4,-1]`，total 总和 2，答案应为 1：\n- i=0：cur=-1，total=-1 → cur<0，start=1，cur=0（站 0 被排除）\n- i=1：cur=4，total=3\n- i=2：cur=3，total=2\n- 循环结束 total=2≥0 → 返回 start=1。从 1 出发 cur 恒非负，绕回站 0 时盈余 3 足够。\n\n`gas=[2,1,1]`，`cost=[1,1,2]`，diff=`[1,0,-1]`，total 总和 0，答案应为 0：\n- i=0：cur=1，total=1\n- i=1：cur=1，total=1\n- i=2：cur=0，total=0\n- cur 从未变负，start 保持 0，返回 0。\n\n`gas=[2,3,4]`，`cost=[3,4,3]`，diff=`[-1,-1,1]`，total 总和 -1，答案应为 -1：\n- i=0：cur=-1，total=-1 → start=1，cur=0\n- i=1：cur=-1，total=-2 → start=2，cur=0\n- i=2：cur=1，total=-1\n- total=-1<0 → 返回 -1。\n\n**复杂度与下限论证**\n\n- 时间 O(n)：单趟遍历，每站只做 O(1) 加法和比较。每个元素至少要访问一次才能算出净油，所以 Ω(n)，O(n) 即下限。\n- 空间 O(1)：只用了 `total`、`cur`、`start` 三个整型，无任何随输入增长的存储，已是最低。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "两个变量分工：total 全程累加只判有无解，cur 是候选段油箱负时清零换起点",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "环形起点贪心",
+      "text": "环形/循环数组找可行起点：前缀累积一旦为负即可排除整段起点，答案必在前缀和最低点之后；total 全程累加只判有无解，cur 分段清零找起点",
+      "category": "贪心与区间",
+      "problem": "gas-station",
+      "date": "2026-08-27"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-27",
+      "verdict": "Accepted",
+      "testcases": "40/40",
+      "runtime_ms": null,
+      "memory_bytes": 119708000,
+      "approach": "环形贪心（变负即排除，起点=前缀和最低点之后）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "两个变量分工：total 全程累加只判有无解，cur 是候选段油箱负时清零换起点"
+    }
+  ],
+  "hints": [
+    "区间类题先按起点或终点排序，再贪心合并/选点。"
+  ]
+}

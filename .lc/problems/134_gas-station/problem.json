@@ -1,0 +1,50 @@
+{
+  "id": "134",
+  "slug": "gas-station",
+  "title": "Gas Station",
+  "titleCn": "加油站",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/gas-station/",
+  "tags": [
+    "Greedy",
+    "Array"
+  ],
+  "tagsCn": [
+    "贪心",
+    "数组"
+  ],
+  "category": "贪心与区间",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "gas",
+          "value": "[1,2,3,4,5]"
+        },
+        {
+          "name": "cost",
+          "value": "[3,4,5,1,2]"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "gas",
+          "value": "[2,3,4]"
+        },
+        {
+          "name": "cost",
+          "value": "[3,4,3]"
+        }
+      ],
+      "output": "-1",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4,5]\n[3,4,5,1,2]\n[2,3,4]\n[3,4,3]",
+  "javaSnippet": "class Solution {\n    public int canCompleteCircuit(int[] gas, int[] cost) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-27T08:52:19.088Z"
+}
