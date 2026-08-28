@@ -1,0 +1,50 @@
+{
+  "id": "371",
+  "slug": "sum-of-two-integers",
+  "title": "Sum of Two Integers",
+  "titleCn": "两整数之和",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/sum-of-two-integers/",
+  "tags": [
+    "Bit Manipulation",
+    "Math"
+  ],
+  "tagsCn": [
+    "位运算",
+    "数学"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "a",
+          "value": "1"
+        },
+        {
+          "name": "b",
+          "value": "2"
+        }
+      ],
+      "output": "3",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "a",
+          "value": "2"
+        },
+        {
+          "name": "b",
+          "value": "3"
+        }
+      ],
+      "output": "5",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "1\n2\n2\n3",
+  "javaSnippet": "class Solution {\n    public int getSum(int a, int b) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-28T13:52:36.392Z"
+}

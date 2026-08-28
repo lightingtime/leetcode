@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-28",
-  "current_seq": 176,
+  "current_seq": 177,
   "done": [
     {
       "seq": 1,
@@ -1838,6 +1838,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "计数质数：写法1 静态埃氏筛+前缀和（AC 385/385）；写法2 线性筛欧拉筛 O(n) 预处理，每合数仅被最小质因子筛一次，本地验证 17 个抽样全过"
+    },
+    {
+      "seq": 177,
+      "id": "371",
+      "title": "两整数之和",
+      "slug": "sum-of-two-integers",
+      "category": "数学与位运算",
+      "date": "2026-08-28",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "两整数之和：XOR 无进位加 + AND 进位左移迭代，先算进位再更新 a，一次 Accepted（31/31），O(1) 最优"
     }
   ],
   "error_habits": [
