@@ -1870,7 +1870,7 @@
       "date": "2026-08-29",
       "firstPass": true,
       "optimal": true,
-      "notes": "设计推特：头插推文流+全局时间戳+归并 Top-10，一次 Accepted（22/22），179 题第一遍收官"
+      "notes": "设计推特：写法1 二分归并；写法2 优先队列多路归并 Top-10 O(k+10logk)，AC 22/22"
     }
   ],
   "error_habits": [

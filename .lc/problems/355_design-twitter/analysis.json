@@ -1,41 +1,54 @@
 {
-  "seq": 179,
-  "id": "355",
-  "slug": "design-twitter",
-  "title": "设计推特",
-  "category": "链表",
-  "date": "2026-08-29",
-  "verdict": "Accepted",
-  "testcases": "22/22",
-  "runtime_ms": null,
-  "memory_bytes": 57420000,
-  "firstPass": true,
-  "optimal": true,
-  "approach": "推文流头插+时间戳归并",
-  "dp_subtype": "",
-  "approach_detail": "**1. 问题本质与解法选择**\n\n本质：设计 Twitter——发推、关注/取关、取「自己 + 关注人」最近 10 条按时间倒序。最多 3×10⁴ 次调用。核心难点在 `getNewsFeed` 的**多路合并 Top-10**：每个用户的推文流都是按时间倒序的链表，合并多个有序流取最近 10 条。用二分归并（或优先队列多路归并）逐个取时间戳最大的。\n\n**2. 关键设计决策**\n\n- **推文流头插**：`tweets` 用 `Map<Integer, List<Integer>>`，`postTweet` 用 `add(0, tweetId)` 头插，保证每个用户列表「最近在前」——这是归并正确的前提（踩坑：尾插会让单用户列表变成正序，feed 顺序全反）。\n- **全局时间戳**：`uniId` 每次发推自增，`tweetMap: tweetId → uniId`。题目只保证 tweetId 唯一、**不保证递增**，所以排序必须用独立时间戳，绝不能拿 tweetId 当时间（踩坑：曾用 tweetId 比较，多关注人合并排错）。\n- **关注表**：`followers: Map<Integer, Set<Integer>>`（userId → 关注的人集合），follow/unfollow O(1)。\n- **二分归并**：`getSortNews` 递归对半拆列表，`mergeList` 双指针比较时间戳（大者=更近=靠前），每个输出列表截断 10。\n\n**3. 边界与细节**\n\n- 空 feed：用户没发过推也没关注人 → 返回空列表。\n- 单用户：只有一个列表时 `l >= r` 原样返回，靠头插保持倒序。\n- 截断：`mergeList` 里 `list.size()==10` 提前停 + 外层 `subList(0, min(10, size))` 双重保证。\n- 排序键是**时间戳**不是 tweetId（本地测试「先发 100、后发 1」验证）。\n- 取关：从 `followers` 移除后 feed 不再包含该用户推文；辅助结构 `followees` 有个条件写反的小 bug（未被读取，不影响对外行为）。\n\n**4. 具体 case 推演**\n\n示例流程：\n\n| 操作 | tweets | feed(1) |\n| --- | --- | --- |\n| postTweet(1,5) | 1:[5] | [5] |\n| follow(1,2)；postTweet(2,6) | 1:[5], 2:[6] | [6,5] |\n| unfollow(1,2) | — | [5] |\n\n多关注人（时间戳 t：20→1, 10→2, 30→3）：\n\n| 合并步骤 | 比较（时间戳） | 结果 |\n| --- | --- | --- |\n| [10] vs [20] | t2 > t1 → 取 10 | [10, 20] |\n| [10,20] vs [30] | t3 > t2 → 取 30 | [30, 10, 20] |\n\n`[30, 10, 20]` ✓（若拿 tweetId 比较会得 `[30,20,10]` ✗）\n\n**5. 复杂度与最优性**\n\n- `postTweet` / `follow` / `unfollow`：O(1)。\n- `getNewsFeed`：参与合并的列表数 k（自己 + 关注人），二分归并 O(L·log k)（L 为参与推文总数），且每层截断 10 → 实际 O(10·k·log k) 以内；也可用优先队列 O(L·log k)。数据规模 3×10⁴ 次调用下足够。\n- 空间：O(总推文数 + 关注关系)。\n- 下界论证：feed 至少要「看」每个关注人链表头部，O(k)；排序取 Top-10 至少 O(k log k) 量级，本解达到合理最优。",
-  "time_complexity": "postTweet O(1), getNewsFeed O(L log k)",
-  "space_complexity": "O(n)",
-  "notes": "设计推特：头插推文流+全局时间戳+归并 Top-10，一次 Accepted（22/22），179 题第一遍收官",
-  "code_notes": [],
-  "mistakes": [],
-  "patterns": [],
-  "submissions": [
-    {
-      "date": "2026-08-29",
-      "verdict": "Accepted",
-      "testcases": "22/22",
-      "runtime_ms": null,
-      "memory_bytes": 57420000,
-      "approach": "推文流头插+时间戳归并",
-      "time_complexity": "postTweet O(1), getNewsFeed O(L log k)",
-      "space_complexity": "O(n)",
-      "optimal": true,
-      "notes": "设计推特：头插推文流+全局时间戳+归并 Top-10，一次 Accepted（22/22），179 题第一遍收官",
-      "code": "    static class Twitter {\n        Map<Integer, List<Integer>> tweets;\n        Map<Integer, Set<Integer>> followers;\n        Map<Integer, Set<Integer>> followees;\n        int uniId;\n        Map<Integer, Integer> tweetMap;\n        public Twitter() {\n            tweets = new HashMap<>();\n            followers = new HashMap<>();\n            followees = new HashMap<>();\n            uniId = 0;\n            tweetMap = new HashMap<>();\n        }\n        public void postTweet(int userId, int tweetId) {\n            uniId++;\n            tweetMap.put(tweetId, uniId);\n            tweets.computeIfAbsent(userId, x -> new LinkedList<>()).add(0, tweetId);\n        }\n        public List<Integer> getNewsFeed(int userId) {\n            List<List<Integer>> allNews = new ArrayList<>();\n            if (tweets.containsKey(userId)) {\n                allNews.add(tweets.get(userId));\n            }\n            if (followers.containsKey(userId)) {\n                for (Integer followeeId : followers.get(userId)) {\n                    if (tweets.containsKey(followeeId)) {\n                        allNews.add(tweets.get(followeeId));\n                    }\n                }\n            }\n            if (allNews.isEmpty()) {\n                return new ArrayList<>();\n            }\n            List<Integer> sortNews = getSortNews(allNews, 0, allNews.size() - 1);\n            return new ArrayList<>(sortNews.subList(0, Math.min(10, sortNews.size())));\n        }\n\n        private List<Integer> getSortNews(List<List<Integer>> allNews, int l, int r) {\n            if (l >= r) {\n                return allNews.get(l);\n            }\n            int mid = l + (r - l) / 2;\n            List<Integer> first = getSortNews(allNews, l, mid);\n            List<Integer> second = getSortNews(allNews, mid + 1, r);\n            return mergeList(first, second);\n        }\n\n        private List<Integer> mergeList(List<Integer> first, List<Integer> second) {\n            List<Integer> list = new ArrayList<>();\n            int i = 0, j = 0;\n            while (i < first.size() && j < second.size()) {\n                if (list.size() == 10) {\n                    break;\n                }\n                if (tweetMap.get(first.get(i)) > tweetMap.get(second.get(j))) {\n                    list.add(first.get(i));\n                    i++;\n                } else {\n                    list.add(second.get(j));\n                    j++;\n                }\n            }\n            while (i != first.size() && list.size() < 10) {\n                list.add(first.get(i));\n                i++;\n            }\n            while (j != second.size() && list.size() < 10) {\n                list.add(second.get(j));\n                j++;\n            }\n            return list;\n        }\n\n        public void follow(int followerId, int followeeId) {\n            followers.computeIfAbsent(followerId, k -> new HashSet<>()).add(followeeId);\n            followees.computeIfAbsent(followeeId, k -> new HashSet<>()).add(followerId);\n        }\n        public void unfollow(int followerId, int followeeId) {\n            if (followers.containsKey(followerId)) {\n                followers.get(followerId).remove(followeeId);\n            }\n            if (followees.containsKey(followeeId)) {\n                followees.get(followeeId).remove(followerId);\n            }\n        }\n    }"
-    }
-  ],
-  "hints": [
-    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
-  ]
+ "seq": 179,
+ "id": "355",
+ "slug": "design-twitter",
+ "title": "设计推特",
+ "category": "链表",
+ "date": "2026-08-29",
+ "verdict": "Accepted",
+ "testcases": "22/22",
+ "runtime_ms": null,
+ "memory_bytes": 57420000,
+ "firstPass": true,
+ "optimal": true,
+ "approach": "优先队列多路归并 Top-10",
+ "dp_subtype": "",
+ "approach_detail": "**写法 1（二分归并版）：头插推文流 + 全局时间戳 + 归并 Top-10**\n\n**1. 问题本质与解法选择**\n\n设计 Twitter：发推、关注/取关、取「自己 + 关注人」最近 10 条按时间倒序。核心是 `getNewsFeed` 的多路合并 Top-10：每个用户推文流是「最近在前」的有序链表，合并多个有序流取最近 10 条。用二分归并逐层合并，每层截断 10。\n\n**2. 关键设计决策**\n\n- 推文流头插：`tweets: Map<Integer, List<Tweet>>`，`postTweet` 用 `add(0, ...)` 头插保证「最近在前」——归并正确的前提（尾插会让单用户列表变正序）。\n- 推文存 `Tweet { id, time }` 对：`time` 来自全局自增 `uniId`；排序键是 time 而非 tweetId（tweetId 唯一但不递增）。\n- 关注表：`followers: Map<Integer, Set<Integer>>`，follow/unfollow O(1)；不用冗余的反向表。\n- 二分归并：`getSortNews` 递归对半拆，`mergeList` 双指针比较 time 取大者，输出截断 10。\n\n**3. 边界与细节**\n\n- 空 feed（无推文无关注）→ 空列表。\n- 单用户：`l >= r` 原样返回，靠头插保持倒序。\n- 截断双保险：`mergeList` 的 `size()==10` 提前停 + 外层 `subList(0, min(10, size))`。\n- 排序键是时间戳（本地「先发 100、后发 1」用例验证）。\n\n**4. 具体 case 推演**\n\n示例流程：\n\n| 操作 | tweets | feed(1) |\n| --- | --- | --- |\n| postTweet(1,5) | 1:[5] | [5] |\n| follow(1,2)；postTweet(2,6) | 1:[5], 2:[6] | [6,5] |\n| unfollow(1,2) | — | [5] |\n\n多关注人（time：20→1, 10→2, 30→3）：归并 `[10]` vs `[20]` → 取 10（t2>t1）→ `[10,20]`；再 vs `[30]` → `[30,10,20]` ✓\n\n**5. 复杂度**\n\n- postTweet/follow/unfollow O(1)；getNewsFeed 二分归并 O(L·log k)（L 参与推文总数），每层截断 10 实际 O(10·k·log k) 内。\n- 空间 O(总推文数 + 关注关系)。\n\n---\n\n**写法 2（优先队列多路归并版，O(k + 10·log k)）：惰性取 Top-10**\n\n**1. 问题本质与解法选择**\n\n同样是合并「自己 + 关注人」的多个倒序推文流取最近 10 条。写法 1 的二分归并会把参与合并的推文**全量**归并一遍（即使只要 10 条）；写法 2 用**最大堆 + 惰性补位**：每个流只把头部（最新一条）进堆，弹出全局最新后，再从该流补下一条——只碰「必要」的条目，复杂度降到 O(k + 10·log k)。\n\n**2. 关键设计决策**\n\n- 数据结构与写法 1 相同：`tweets: Map<Integer, List<Tweet>>`（头插保序）、`Tweet { id, time }`（全局时间戳 `uniId`）、`followers`。\n- **优先队列元素是 `int[]{flow, pos}`**（流编号 + 游标），比较器按 `time` 降序（`b.time - a.time`）构造最大堆。\n- 初始化：每个流 `pos=0`（各自最新）入堆，堆大小 = k。\n- 循环：弹出最大者 → 加入结果 → 该流 `pos++`，若仍有下一条则重新入堆；结果满 10 或堆空停。\n- `idx` 数组在写法里用 `pos` 游标内嵌于堆元素，无需额外状态。\n\n**3. 边界与细节**\n\n- 空 feed → 直接返回空列表。\n- 流耗尽：某流弹完最后一条后 `pos >= size`，不再入堆，堆自动缩小。\n- 截断：`res.size() < 10` 控制最多取 10。\n- 排序键是 time（先发 100、后发 1 用例验证）；tweetId 唯一但不递增，不能当时间。\n\n**4. 具体 case 推演**\n\n多关注人（time：20→1, 10→2, 30→3），流：`[10]`(u1), `[20]`(u2), `[30]`(u3)：\n\n| 步骤 | 堆内容 (flow,time) | 弹出 | 补位 | 结果 |\n| --- | --- | --- | --- | --- |\n| 初始 | (u1,2),(u2,1),(u3,3) | — | — | [] |\n| 1 | — | (u3,3)=30 | u3 无下一条 | [30] |\n| 2 | — | (u1,2)=10 | u1 无下一条 | [30,10] |\n| 3 | — | (u2,1)=20 | — | [30,10,20] |\n\n`[30,10,20]` ✓（与写法 1 一致）\n\n**5. 复杂度与最优性**\n\n- getNewsFeed：初始化 k 个入堆 O(k)；最多弹 10 次，每次 O(log k) → **O(k + 10·log k)**。相比写法 1 的 O(L·log k)（L 为参与推文总数），只处理必要条目，是「多路归并 Top-K」的标准最优形态。\n- postTweet/follow/unfollow 仍 O(1)；空间 O(总推文数 + 关注关系)。",
+ "time_complexity": "postTweet O(1), getNewsFeed O(k + 10 log k)",
+ "space_complexity": "O(n)",
+ "notes": "设计推特：写法1 二分归并；写法2 优先队列多路归并 Top-10 O(k+10logk)，AC 22/22",
+ "code_notes": [],
+ "mistakes": [],
+ "patterns": [],
+ "submissions": [
+  {
+   "date": "2026-08-29",
+   "verdict": "Accepted",
+   "testcases": "22/22",
+   "runtime_ms": null,
+   "memory_bytes": 57420000,
+   "approach": "推文流头插+二分归并",
+   "time_complexity": "postTweet O(1), getNewsFeed O(L log k)",
+   "space_complexity": "O(n)",
+   "optimal": true,
+   "notes": "设计推特：写法1 二分归并（Tweet 内联+时间戳）；写法2 优先队列多路归并 Top-10，AC 22/22",
+   "code": "    static class Twitter {\n        Map<Integer, List<Tweet>> tweets;\n        Map<Integer, Set<Integer>> followers;\n        int uniId;\n\n        static class Tweet {\n            int id;\n            int time;\n            Tweet(int id, int time) {\n                this.id = id;\n                this.time = time;\n            }\n        }\n\n        public Twitter() {\n            tweets = new HashMap<>();\n            followers = new HashMap<>();\n            uniId = 0;\n        }\n\n        public void postTweet(int userId, int tweetId) {\n            uniId++;\n            tweets.computeIfAbsent(userId, x -> new LinkedList<>()).add(0, new Tweet(tweetId, uniId));\n        }\n\n        public List<Integer> getNewsFeed(int userId) {\n            List<List<Tweet>> allNews = new ArrayList<>();\n            if (tweets.containsKey(userId)) {\n                allNews.add(tweets.get(userId));\n            }\n            if (followers.containsKey(userId)) {\n                for (Integer followeeId : followers.get(userId)) {\n                    if (tweets.containsKey(followeeId)) {\n                        allNews.add(tweets.get(followeeId));\n                    }\n                }\n            }\n            if (allNews.isEmpty()) {\n                return new ArrayList<>();\n            }\n            List<Tweet> sortNews = getSortNews(allNews, 0, allNews.size() - 1);\n            List<Integer> res = new ArrayList<>();\n            for (int i = 0; i < Math.min(10, sortNews.size()); i++) {\n                res.add(sortNews.get(i).id);\n            }\n            return res;\n        }\n\n        private List<Tweet> getSortNews(List<List<Tweet>> allNews, int l, int r) {\n            if (l >= r) {\n                return allNews.get(l);\n            }\n            int mid = l + (r - l) / 2;\n            List<Tweet> first = getSortNews(allNews, l, mid);\n            List<Tweet> second = getSortNews(allNews, mid + 1, r);\n            return mergeList(first, second);\n        }\n\n        private List<Tweet> mergeList(List<Tweet> first, List<Tweet> second) {\n            List<Tweet> list = new ArrayList<>();\n            int i = 0, j = 0;\n            while (i < first.size() && j < second.size()) {\n                if (list.size() == 10) {\n                    break;\n                }\n                if (first.get(i).time > second.get(j).time) {\n                    list.add(first.get(i));\n                    i++;\n                } else {\n                    list.add(second.get(j));\n                    j++;\n                }\n            }\n            while (i != first.size() && list.size() < 10) {\n                list.add(first.get(i));\n                i++;\n            }\n            while (j != second.size() && list.size() < 10) {\n                list.add(second.get(j));\n                j++;\n            }\n            return list;\n        }\n\n        public void follow(int followerId, int followeeId) {\n            followers.computeIfAbsent(followerId, k -> new HashSet<>()).add(followeeId);\n        }\n\n        public void unfollow(int followerId, int followeeId) {\n            if (followers.containsKey(followerId)) {\n                followers.get(followerId).remove(followeeId);\n            }\n        }\n    }"
+  },
+  {
+   "date": "2026-08-29",
+   "verdict": "Accepted",
+   "testcases": "22/22",
+   "runtime_ms": null,
+   "memory_bytes": 57420000,
+   "approach": "优先队列多路归并 Top-10",
+   "time_complexity": "postTweet O(1), getNewsFeed O(k + 10 log k)",
+   "space_complexity": "O(n)",
+   "optimal": true,
+   "notes": "设计推特：写法1 二分归并；写法2 优先队列多路归并 Top-10 O(k+10logk)，AC 22/22",
+   "code": "    static class Twitter {\n        Map<Integer, List<Tweet>> tweets;\n        Map<Integer, Set<Integer>> followers;\n        int uniId;\n\n        static class Tweet {\n            int id;\n            int time;\n            Tweet(int id, int time) {\n                this.id = id;\n                this.time = time;\n            }\n        }\n\n        public Twitter() {\n            tweets = new HashMap<>();\n            followers = new HashMap<>();\n            uniId = 0;\n        }\n\n        public void postTweet(int userId, int tweetId) {\n            uniId++;\n            tweets.computeIfAbsent(userId, x -> new LinkedList<>()).add(0, new Tweet(tweetId, uniId));\n        }\n\n        public List<Integer> getNewsFeed(int userId) {\n            List<List<Tweet>> flows = new ArrayList<>();\n            if (tweets.containsKey(userId)) {\n                flows.add(tweets.get(userId));\n            }\n            if (followers.containsKey(userId)) {\n                for (Integer followeeId : followers.get(userId)) {\n                    if (tweets.containsKey(followeeId)) {\n                        flows.add(tweets.get(followeeId));\n                    }\n                }\n            }\n            if (flows.isEmpty()) {\n                return new ArrayList<>();\n            }\n\n            // 优先队列多路归并：每个流头部进最大堆（按 time），弹最大者后从该流补下一个\n            int k = flows.size();\n            int[] idx = new int[k]; // 每个流当前游标（默认 0 = 最新）\n            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) ->\n                    flows.get(b[0]).get(b[1]).time - flows.get(a[0]).get(a[1]).time);\n            for (int i = 0; i < k; i++) {\n                pq.offer(new int[]{i, 0});\n            }\n            List<Integer> res = new ArrayList<>();\n            while (!pq.isEmpty() && res.size() < 10) {\n                int[] cur = pq.poll();\n                res.add(flows.get(cur[0]).get(cur[1]).id);\n                cur[1]++;\n                if (cur[1] < flows.get(cur[0]).size()) {\n                    pq.offer(cur);\n                }\n            }\n            return res;\n        }\n\n        public void follow(int followerId, int followeeId) {\n            followers.computeIfAbsent(followerId, k -> new HashSet<>()).add(followeeId);\n        }\n\n        public void unfollow(int followerId, int followeeId) {\n            if (followers.containsKey(followerId)) {\n                followers.get(followerId).remove(followeeId);\n            }\n        }\n    }"
+  }
+ ],
+ "hints": [
+  "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+ ]
 }

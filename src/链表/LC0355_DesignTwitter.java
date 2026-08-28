@@ -4,8 +4,8 @@
 // 链接：https://leetcode.cn/problems/design-twitter/
 // 刷题日期：2026-08-28
 //
-// 思路：每用户推文链表（头插保持最近在前）+ tweetMap 全局时间戳 + 归并取最近 10 条
-// 复杂度：postTweet/follow/unfollow O(1)，getNewsFeed O(k log k)
+// 思路：头插推文流（Tweet 含 time）+ 优先队列多路归并取最近 10 条（写法 2）
+// 复杂度：postTweet/follow/unfollow O(1)，getNewsFeed O(k + 10 log k)
 // ============================================================
 
 import java.util.*;
@@ -15,92 +15,76 @@ public class LC0355_DesignTwitter {
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 Twitter 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class Twitter {
-        Map<Integer, List<Integer>> tweets;
+        Map<Integer, List<Tweet>> tweets;
         Map<Integer, Set<Integer>> followers;
-        Map<Integer, Set<Integer>> followees;
         int uniId;
-        Map<Integer, Integer> tweetMap;
+
+        static class Tweet {
+            int id;
+            int time;
+            Tweet(int id, int time) {
+                this.id = id;
+                this.time = time;
+            }
+        }
+
         public Twitter() {
             tweets = new HashMap<>();
             followers = new HashMap<>();
-            followees = new HashMap<>();
             uniId = 0;
-            tweetMap = new HashMap<>();
         }
+
         public void postTweet(int userId, int tweetId) {
             uniId++;
-            tweetMap.put(tweetId, uniId);
-            tweets.computeIfAbsent(userId, x -> new LinkedList<>()).add(0, tweetId);
+            tweets.computeIfAbsent(userId, x -> new LinkedList<>()).add(0, new Tweet(tweetId, uniId));
         }
+
         public List<Integer> getNewsFeed(int userId) {
-            List<List<Integer>> allNews = new ArrayList<>();
+            List<List<Tweet>> flows = new ArrayList<>();
             if (tweets.containsKey(userId)) {
-                allNews.add(tweets.get(userId));
+                flows.add(tweets.get(userId));
             }
             if (followers.containsKey(userId)) {
                 for (Integer followeeId : followers.get(userId)) {
                     if (tweets.containsKey(followeeId)) {
-                        allNews.add(tweets.get(followeeId));
+                        flows.add(tweets.get(followeeId));
                     }
                 }
             }
-            if (allNews.isEmpty()) {
+            if (flows.isEmpty()) {
                 return new ArrayList<>();
             }
-            List<Integer> sortNews = getSortNews(allNews, 0, allNews.size() - 1);
-            return new ArrayList<>(sortNews.subList(0, Math.min(10, sortNews.size())));
-        }
 
-        private List<Integer> getSortNews(List<List<Integer>> allNews, int l, int r) {
-            if (l >= r) {
-                return allNews.get(l);
+            // 优先队列多路归并：每个流头部进最大堆（按 time），弹最大者后从该流补下一个
+            int k = flows.size();
+            int[] idx = new int[k]; // 每个流当前游标（默认 0 = 最新）
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) ->
+                    flows.get(b[0]).get(b[1]).time - flows.get(a[0]).get(a[1]).time);
+            for (int i = 0; i < k; i++) {
+                pq.offer(new int[]{i, 0});
             }
-            int mid = l + (r - l) / 2;
-            List<Integer> first = getSortNews(allNews, l, mid);
-            List<Integer> second = getSortNews(allNews, mid + 1, r);
-            return mergeList(first, second);
-        }
-
-        private List<Integer> mergeList(List<Integer> first, List<Integer> second) {
-            List<Integer> list = new ArrayList<>();
-            int i = 0, j = 0;
-            while (i < first.size() && j < second.size()) {
-                if (list.size() == 10) {
-                    break;
-                }
-                if (tweetMap.get(first.get(i)) > tweetMap.get(second.get(j))) {
-                    list.add(first.get(i));
-                    i++;
-                } else {
-                    list.add(second.get(j));
-                    j++;
+            List<Integer> res = new ArrayList<>();
+            while (!pq.isEmpty() && res.size() < 10) {
+                int[] cur = pq.poll();
+                res.add(flows.get(cur[0]).get(cur[1]).id);
+                cur[1]++;
+                if (cur[1] < flows.get(cur[0]).size()) {
+                    pq.offer(cur);
                 }
             }
-            while (i != first.size() && list.size() < 10) {
-                list.add(first.get(i));
-                i++;
-            }
-            while (j != second.size() && list.size() < 10) {
-                list.add(second.get(j));
-                j++;
-            }
-            return list;
+            return res;
         }
 
         public void follow(int followerId, int followeeId) {
             followers.computeIfAbsent(followerId, k -> new HashSet<>()).add(followeeId);
-            followees.computeIfAbsent(followeeId, k -> new HashSet<>()).add(followerId);
         }
+
         public void unfollow(int followerId, int followeeId) {
             if (followers.containsKey(followerId)) {
                 followers.get(followerId).remove(followeeId);
             }
-            if (followees.containsKey(followeeId)) {
-                followees.get(followeeId).remove(followerId);
-            }
         }
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
