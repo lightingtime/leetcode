@@ -4,8 +4,8 @@
 // 链接：https://leetcode.cn/problems/powx-n/
 // 刷题日期：2026-08-28
 //
-// 思路：递归分治快速幂，long 承接 n 避免 MIN 取负溢出，half 只算一次（写法 1）
-// 复杂度：时间 O(log n) 空间 O(log n)
+// 思路：迭代二进制拆分快速幂，n&1 判位、x 自乘、n 右移，long 承接 MIN（写法 2）
+// 复杂度：时间 O(log n) 空间 O(1)
 // ============================================================
 
 
@@ -14,20 +14,22 @@ public class LC0050_PowxN {
     // ==== 提交代码开始 ====
     public double myPow(double x, int n) {
         long N = n;
-        return helper(x, N);
+        return N > 0 ? helper(x, N) : 1 / helper(x, -N);
     }
 
     private double helper(double x, long n) {
         if (n == 0) {
             return 1.0;
         }
-        if (n < 0) {
-            return 1 / helper(x, -n);
+        double ans = 1;
+        while (n != 0) {
+            if ((n & 1) == 1) {
+                ans *= x;
+            }
+            x *= x;
+            n >>= 1;
         }
-        boolean odd = (n & 1) == 1;
-        double half = helper(x, n / 2);
-        double ans = half * half;
-        ans = odd ? ans * x : ans;
+
         return ans;
     }
 

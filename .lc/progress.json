@@ -1814,8 +1814,8 @@
       "category": "数学与位运算",
       "date": "2026-08-28",
       "firstPass": true,
-      "optimal": false,
-      "notes": "Pow(x,n)：递归分治快速幂，long 承接 n 避 MIN 取负溢出，一次 Accepted（307/307）；O(log n) 已达时间下界，可优化为迭代版 O(1) 空间"
+      "optimal": true,
+      "notes": "Pow(x,n)：写法1 递归分治 O(log n)/O(log n)；写法2 迭代二进制拆分 O(log n)/O(1)，力扣均一次 Accepted（307/307），写法2 达最优形态"
     }
   ],
   "error_habits": [
