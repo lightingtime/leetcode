@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-28",
-  "current_seq": 178,
+  "updated": "2026-08-29",
+  "current_seq": 179,
   "done": [
     {
       "seq": 1,
@@ -1860,6 +1860,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "打乱数组：Fisher-Yates 原地交换（j∈[0,i]），shuffle 前恢复原始数据，一次 Accepted（8/8），O(n)/O(n) 最优"
+    },
+    {
+      "seq": 179,
+      "id": "355",
+      "title": "设计推特",
+      "slug": "design-twitter",
+      "category": "链表",
+      "date": "2026-08-29",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "设计推特：头插推文流+全局时间戳+归并 Top-10，一次 Accepted（22/22），179 题第一遍收官"
     }
   ],
   "error_habits": [

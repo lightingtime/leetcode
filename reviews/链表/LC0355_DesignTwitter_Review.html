@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC355 设计推特 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 179</div>
+  <h1>LC355 · 设计推特</h1>
+  <div class="sub">推文流头插+时间戳归并 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 22/22</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 链表</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-29</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 推文流头插+时间戳归并</h3>
+    <p><span class="chip">时间 postTweet O(1), getNewsFeed O(L log k)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 54.8 MB</span><span class="chip">用例 22/22</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0355_DesignTwitter.java · 推文流头插+时间戳归并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    static class Twitter {
+        Map&lt;Integer, List&lt;Integer&gt;&gt; tweets;
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; followers;
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; followees;
+        int uniId;
+        Map&lt;Integer, Integer&gt; tweetMap;
+        public Twitter() {
+            tweets = new HashMap&lt;&gt;();
+            followers = new HashMap&lt;&gt;();
+            followees = new HashMap&lt;&gt;();
+            uniId = 0;
+            tweetMap = new HashMap&lt;&gt;();
+        }
+        public void postTweet(int userId, int tweetId) {
+            uniId++;
+            tweetMap.put(tweetId, uniId);
+            tweets.computeIfAbsent(userId, x -&gt; new LinkedList&lt;&gt;()).add(0, tweetId);
+        }
+        public List&lt;Integer&gt; getNewsFeed(int userId) {
+            List&lt;List&lt;Integer&gt;&gt; allNews = new ArrayList&lt;&gt;();
+            if (tweets.containsKey(userId)) {
+                allNews.add(tweets.get(userId));
+            }
+            if (followers.containsKey(userId)) {
+                for (Integer followeeId : followers.get(userId)) {
+                    if (tweets.containsKey(followeeId)) {
+                        allNews.add(tweets.get(followeeId));
+                    }
+                }
+            }
+            if (allNews.isEmpty()) {
+                return new ArrayList&lt;&gt;();
+            }
+            List&lt;Integer&gt; sortNews = getSortNews(allNews, 0, allNews.size() - 1);
+            return new ArrayList&lt;&gt;(sortNews.subList(0, Math.min(10, sortNews.size())));
+        }
+
+        private List&lt;Integer&gt; getSortNews(List&lt;List&lt;Integer&gt;&gt; allNews, int l, int r) {
+            if (l &gt;= r) {
+                return allNews.get(l);
+            }
+            int mid = l + (r - l) / 2;
+            List&lt;Integer&gt; first = getSortNews(allNews, l, mid);
+            List&lt;Integer&gt; second = getSortNews(allNews, mid + 1, r);
+            return mergeList(first, second);
+        }
+
+        private List&lt;Integer&gt; mergeList(List&lt;Integer&gt; first, List&lt;Integer&gt; second) {
+            List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+            int i = 0, j = 0;
+            while (i &lt; first.size() &amp;&amp; j &lt; second.size()) {
+                if (list.size() == 10) {
+                    break;
+                }
+                if (tweetMap.get(first.get(i)) &gt; tweetMap.get(second.get(j))) {
+                    list.add(first.get(i));
+                    i++;
+                } else {
+                    list.add(second.get(j));
+                    j++;
+                }
+            }
+            while (i != first.size() &amp;&amp; list.size() &lt; 10) {
+                list.add(first.get(i));
+                i++;
+            }
+            while (j != second.size() &amp;&amp; list.size() &lt; 10) {
+                list.add(second.get(j));
+                j++;
+            }
+            return list;
+        }
+
+        public void follow(int followerId, int followeeId) {
+            followers.computeIfAbsent(followerId, k -&gt; new HashSet&lt;&gt;()).add(followeeId);
+            followees.computeIfAbsent(followeeId, k -&gt; new HashSet&lt;&gt;()).add(followerId);
+        }
+        public void unfollow(int followerId, int followeeId) {
+            if (followers.containsKey(followerId)) {
+                followers.get(followerId).remove(followeeId);
+            }
+            if (followees.containsKey(followeeId)) {
+                followees.get(followeeId).remove(followerId);
+            }
+        }
+    }</pre></div>
+    <p class="muted">设计推特：头插推文流+全局时间戳+归并 Top-10，一次 Accepted（22/22），179 题第一遍收官</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>1. 问题本质与解法选择</strong></p><p>本质：设计 Twitter——发推、关注/取关、取「自己 + 关注人」最近 10 条按时间倒序。最多 3×10⁴ 次调用。核心难点在 <code>getNewsFeed</code> 的<strong>多路合并 Top-10</strong>：每个用户的推文流都是按时间倒序的链表，合并多个有序流取最近 10 条。用二分归并（或优先队列多路归并）逐个取时间戳最大的。</p><p><strong>2. 关键设计决策</strong></p><ul><li><strong>推文流头插</strong>：<code>tweets</code> 用 <code>Map&lt;Integer, List&lt;Integer&gt;&gt;</code>，<code>postTweet</code> 用 <code>add(0, tweetId)</code> 头插，保证每个用户列表「最近在前」——这是归并正确的前提（踩坑：尾插会让单用户列表变成正序，feed 顺序全反）。</li><li><strong>全局时间戳</strong>：<code>uniId</code> 每次发推自增，<code>tweetMap: tweetId → uniId</code>。题目只保证 tweetId 唯一、<strong>不保证递增</strong>，所以排序必须用独立时间戳，绝不能拿 tweetId 当时间（踩坑：曾用 tweetId 比较，多关注人合并排错）。</li><li><strong>关注表</strong>：<code>followers: Map&lt;Integer, Set&lt;Integer&gt;&gt;</code>（userId → 关注的人集合），follow/unfollow O(1)。</li><li><strong>二分归并</strong>：<code>getSortNews</code> 递归对半拆列表，<code>mergeList</code> 双指针比较时间戳（大者=更近=靠前），每个输出列表截断 10。</li></ul><p><strong>3. 边界与细节</strong></p><ul><li>空 feed：用户没发过推也没关注人 → 返回空列表。</li><li>单用户：只有一个列表时 <code>l &gt;= r</code> 原样返回，靠头插保持倒序。</li><li>截断：<code>mergeList</code> 里 <code>list.size()==10</code> 提前停 + 外层 <code>subList(0, min(10, size))</code> 双重保证。</li><li>排序键是<strong>时间戳</strong>不是 tweetId（本地测试「先发 100、后发 1」验证）。</li><li>取关：从 <code>followers</code> 移除后 feed 不再包含该用户推文；辅助结构 <code>followees</code> 有个条件写反的小 bug（未被读取，不影响对外行为）。</li></ul><p><strong>4. 具体 case 推演</strong></p><p>示例流程：</p><div class="table-wrap"><table><thead><tr><th>操作</th><th>tweets</th><th>feed(1)</th></tr></thead><tbody><tr><td>postTweet(1,5)</td><td>1:[5]</td><td>[5]</td></tr><tr><td>follow(1,2)；postTweet(2,6)</td><td>1:[5], 2:[6]</td><td>[6,5]</td></tr><tr><td>unfollow(1,2)</td><td>—</td><td>[5]</td></tr></tbody></table></div><p>多关注人（时间戳 t：20→1, 10→2, 30→3）：</p><div class="table-wrap"><table><thead><tr><th>合并步骤</th><th>比较（时间戳）</th><th>结果</th></tr></thead><tbody><tr><td>[10] vs [20]</td><td>t2 &gt; t1 → 取 10</td><td>[10, 20]</td></tr><tr><td>[10,20] vs [30]</td><td>t3 &gt; t2 → 取 30</td><td>[30, 10, 20]</td></tr></tbody></table></div><p><code>[30, 10, 20]</code> ✓（若拿 tweetId 比较会得 <code>[30,20,10]</code> ✗）</p><p><strong>5. 复杂度与最优性</strong></p><ul><li><code>postTweet</code> / <code>follow</code> / <code>unfollow</code>：O(1)。</li><li><code>getNewsFeed</code>：参与合并的列表数 k（自己 + 关注人），二分归并 O(L·log k)（L 为参与推文总数），且每层截断 10 → 实际 O(10·k·log k) 以内；也可用优先队列 O(L·log k)。数据规模 3×10⁴ 次调用下足够。</li><li>空间：O(总推文数 + 关注关系)。</li><li>下界论证：feed 至少要「看」每个关注人链表头部，O(k)；排序取 Top-10 至少 O(k log k) 量级，本解达到合理最优。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>22/22 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">22/22</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 54.8 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">postTweet O(1), getNewsFeed O(L log k) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 链表</h3><div class="quote">看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 179 · design-twitter</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">设计推特：头插推文流+全局时间戳+归并 Top-10，一次 Accepted（22/22），179 题第一遍收官</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/355_design-twitter/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E9%93%BE%E8%A1%A8/LC0355_DesignTwitter.java">src/链表/LC0355_DesignTwitter.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-29
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
