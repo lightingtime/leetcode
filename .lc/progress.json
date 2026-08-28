@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-28",
-  "current_seq": 172,
+  "current_seq": 173,
   "done": [
     {
       "seq": 1,
@@ -1794,6 +1794,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "整数反转：逐位弹出 + 拼装前按 MAX/10、MIN/10 预判溢出，一次 Accepted（1046/1046），O(log n)/O(1) 已达最优"
+    },
+    {
+      "seq": 173,
+      "id": "29",
+      "title": "两数相除",
+      "slug": "divide-two-integers",
+      "category": "数学与位运算",
+      "date": "2026-08-28",
+      "firstPass": true,
+      "optimal": false,
+      "notes": "两数相除：负数域统一+翻倍减法（time 与 num 同步翻倍），力扣一次 Accepted（994/994）；O(log^2) 可优化到 O(log) 预计算 2 幂表"
     }
   ],
   "error_habits": [
@@ -2885,6 +2896,17 @@
         "贪心与区间"
       ],
       "last_seen": "2026-08-27"
+    },
+    {
+      "habit": "翻倍减法模拟未防 int 溢出：负数域 num<<1 翻过 MIN/2 后溢出成正数/0，导致「负数<正数」恒真、num 变非法，后续 dividend-=num 与 ans 累计全错；翻倍前必须先确认 num*2 不越界且仍减得起",
+      "count": 1,
+      "examples": [
+        "divide-two-integers"
+      ],
+      "categories": [
+        "数学与位运算"
+      ],
+      "last_seen": "2026-08-28"
     }
   ],
   "category_hints": {
