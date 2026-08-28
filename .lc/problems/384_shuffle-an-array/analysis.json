@@ -1,0 +1,41 @@
+{
+  "seq": 178,
+  "id": "384",
+  "slug": "shuffle-an-array",
+  "title": "打乱数组",
+  "category": "数学与位运算",
+  "date": "2026-08-28",
+  "verdict": "Accepted",
+  "testcases": "8/8",
+  "runtime_ms": null,
+  "memory_bytes": 52500000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "Fisher-Yates 洗牌",
+  "dp_subtype": "",
+  "approach_detail": "**1. 问题本质与解法选择**\n\n本质：设计类实现 `reset` + **等概率** `shuffle`（每个排列概率 = 1/n!）。朴素做法「每步从剩余元素里均匀随机挑一个」思路正确，但数组里做「删除」繁琐；Fisher-Yates 用**原地交换**实现同一概率模型：从后往前，位置 `i` 从 `[0, i]`（恰好是剩余元素）均匀随机选 `j` 并交换，位置 `i` 随即定稿。\n\n**2. 关键设计决策**\n\n- 字段：`original`（构造器保存原始副本，`reset` 依赖它）；`after`（工作数组，shuffle 的原地操作对象）；`Random`。\n- **shuffle 前必须恢复原始数据**（从 `original` 拷贝到 `after` 再洗）——否则在「全 0 初始数组」或「上一次洗牌结果」上继续，数据全错（本轮踩坑：初始 `after` 全 0，shuffle 返回 `[0,0,0]`）。\n- `reset()`：拷贝 `original → after` 并返回；返回的是内部数组引用（力扣判题不修改返回值，可接受）。\n- **`j = rand.nextInt(i + 1)`**：`nextInt` 是左闭右开 `[0, bound)`，`nextInt(i+1)` 得到 `[0, i]` 闭区间，包含「不交换（j=i）」选项——漏掉它（如 `nextInt(i)`）会破坏均匀性。\n\n**3. 边界与细节**\n\n- 单元素数组：`i=0`，`nextInt(1)=0`，自交换无影响，shuffle 返回原样。\n- n ≤ 50、最多 10⁴ 次调用：每次 O(n)，完全满足。\n- 等概率验证：n=3 时每排列概率 1/3 × 1/2 × 1 = 1/6 = 1/3!；本地用 30000 次统计（每元素每位置 ≈ 10000，容差 ±10%）验证通过。\n- 测试注意：`shuffle()` 返回内部数组引用，测试里比较快照必须先 `clone()`，否则前后比较的是同一对象恒等。\n\n**4. 具体 case 推演**\n\n`[1,2,3]` Fisher-Yates（i 从 2 到 1）：\n\n| 步 | i | 候选 j∈[0,i] | 假设选到 | 交换后 | 定稿 |\n| --- | --- | --- | --- | --- | --- |\n| 1 | 2 | {0,1,2} | 1 | [1,3,2] | 位置2=3 |\n| 2 | 1 | {0,1} | 0 | [3,1,2] | 位置1=1 |\n| 3 | 0 | {0} | 0 | 不变 | 位置0=3 |\n\n每步均匀 → `[3,1,2]` 概率 = 1/3×1/2×1 = 1/6，与其他 5 个排列相同 ✓\n\n**5. 复杂度与最优性**\n\n- 时间 O(n)：n-1 次交换，每次 O(1)。下界论证：至少要让每个元素有机会到每个位置（处理所有元素），O(n) 是下界，最优。\n- 空间 O(n)：`original` + `after` 两份数组。必须存一份原始数据供 reset，无法低于 O(n)。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "打乱数组：Fisher-Yates 原地交换（j∈[0,i]），shuffle 前恢复原始数据，一次 Accepted（8/8），O(n)/O(n) 最优",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-28",
+      "verdict": "Accepted",
+      "testcases": "8/8",
+      "runtime_ms": null,
+      "memory_bytes": 52500000,
+      "approach": "Fisher-Yates 洗牌",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "打乱数组：Fisher-Yates 原地交换（j∈[0,i]），shuffle 前恢复原始数据，一次 Accepted（8/8），O(n)/O(n) 最优",
+      "code": "    static class Solution {\n        int[] original;\n        int[] after;\n        Random random;\n\n        public Solution(int[] nums) {\n            original = new int[nums.length];\n            System.arraycopy(nums, 0, original, 0, nums.length);\n            after = new int[nums.length];\n            System.arraycopy(original, 0, after, 0, original.length);\n            random = new Random();\n        }\n\n        public int[] reset() {\n            System.arraycopy(original, 0, after, 0, original.length);\n            return after;\n        }\n\n        public int[] shuffle() {\n            reset();\n            for (int i = after.length - 1; i >= 0; i--) {\n                int j = random.nextInt(i + 1);\n                int temp = after[i];\n                after[i] = after[j];\n                after[j] = temp;\n            }\n            return after;\n        }\n    }"
+    }
+  ],
+  "hints": [
+    "位运算先想 XOR、掩码、移位；计数先想数学公式能否代替循环。"
+  ]
+}
