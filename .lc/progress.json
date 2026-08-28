@@ -1803,8 +1803,8 @@
       "category": "数学与位运算",
       "date": "2026-08-28",
       "firstPass": true,
-      "optimal": false,
-      "notes": "两数相除：负数域统一+翻倍减法（time 与 num 同步翻倍），力扣一次 Accepted（994/994）；O(log^2) 可优化到 O(log) 预计算 2 幂表"
+      "optimal": true,
+      "notes": "两数相除：写法1 负数域+翻倍减法 O(log^2)；写法2 预计算 2^k 倍除数表+从大到小试减 O(log)，力扣均一次 Accepted（994/994）"
     }
   ],
   "error_habits": [

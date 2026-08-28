@@ -9,6 +9,9 @@
 // ============================================================
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LC0029_DivideTwoIntegers {
 
     // ==== 提交代码开始 ====
@@ -23,15 +26,25 @@ public class LC0029_DivideTwoIntegers {
         dividend = dividend < 0 ? dividend : -dividend;
         divisor = divisor < 0 ? divisor : -divisor;
         int ans = 0;
+        List<Integer> list = new ArrayList<>();
+        list.add(divisor);
+        int num = divisor;
+        while (num >= (Integer.MIN_VALUE >> 1) && dividend < (num << 1)) {
+            num <<= 1;
+            list.add(num);
+        }
         while (dividend <= divisor && dividend != 0) {
-            int num = divisor;
-            int time = 1;
-            while (num >= (Integer.MIN_VALUE >> 1) && dividend < (num << 1)) {
-                num <<= 1;
-                time <<= 1;
+            int i = list.size() - 1;
+            // 处理成负数后，小于不能减，要拿到第一个大于被除数的除数
+            while (i >= 0 && list.get(i) < dividend) {
+                i--;
             }
+            if (i < 0) {
+                break;
+            }
+            dividend -= list.get(i);
+            int time = 1 << i;
             ans += time;
-            dividend -= num;
         }
         return negative ? -ans : ans;
     }
