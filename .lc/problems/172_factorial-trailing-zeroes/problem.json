@@ -1,0 +1,50 @@
+{
+  "id": "172",
+  "slug": "factorial-trailing-zeroes",
+  "title": "Factorial Trailing Zeroes",
+  "titleCn": "阶乘后的零",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/factorial-trailing-zeroes/",
+  "tags": [
+    "Math"
+  ],
+  "tagsCn": [
+    "数学"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "0",
+      "explain": "3! = 6 ，不含尾随 0"
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "5"
+        }
+      ],
+      "output": "1",
+      "explain": "5! = 120 ，有一个尾随 0"
+    },
+    {
+      "inputs": [
+        {
+          "name": "n",
+          "value": "0"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "3\n5\n0",
+  "javaSnippet": "class Solution {\n    public int trailingZeroes(int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-28T12:27:44.048Z"
+}
