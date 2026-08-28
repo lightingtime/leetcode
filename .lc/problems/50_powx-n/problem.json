@@ -1,0 +1,64 @@
+{
+  "id": "50",
+  "slug": "powx-n",
+  "title": "Pow(x, n)",
+  "titleCn": "Pow(x, n)",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/powx-n/",
+  "tags": [
+    "Recursion",
+    "Math"
+  ],
+  "tagsCn": [
+    "递归",
+    "数学"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "2.00000"
+        },
+        {
+          "name": "n",
+          "value": "10"
+        }
+      ],
+      "output": "1024.00000",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "2.10000"
+        },
+        {
+          "name": "n",
+          "value": "3"
+        }
+      ],
+      "output": "9.26100",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "2.00000"
+        },
+        {
+          "name": "n",
+          "value": "-2"
+        }
+      ],
+      "output": "0.25000",
+      "explain": "2-2 = 1/22 = 1/4 = 0.25"
+    }
+  ],
+  "exampleTestcases": "2.00000\n10\n2.10000\n3\n2.00000\n-2",
+  "javaSnippet": "class Solution {\n    public double myPow(double x, int n) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-28T11:51:34.421Z"
+}
