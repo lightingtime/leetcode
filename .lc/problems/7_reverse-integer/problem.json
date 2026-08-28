@@ -1,0 +1,60 @@
+{
+  "id": "7",
+  "slug": "reverse-integer",
+  "title": "Reverse Integer",
+  "titleCn": "整数反转",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/reverse-integer/",
+  "tags": [
+    "Math"
+  ],
+  "tagsCn": [
+    "数学"
+  ],
+  "category": "数学与位运算",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "123"
+        }
+      ],
+      "output": "321",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "-123"
+        }
+      ],
+      "output": "-321",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "120"
+        }
+      ],
+      "output": "21",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "value": "0"
+        }
+      ],
+      "output": "0",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "123\n-123\n120",
+  "javaSnippet": "class Solution {\n    public int reverse(int x) {\n        \n    }\n}",
+  "fetchedAt": "2026-08-28T10:33:38.144Z"
+}

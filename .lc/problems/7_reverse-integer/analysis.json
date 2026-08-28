@@ -1,0 +1,49 @@
+{
+  "seq": 172,
+  "id": "7",
+  "slug": "reverse-integer",
+  "title": "整数反转",
+  "category": "数学与位运算",
+  "date": "2026-08-28",
+  "verdict": "Accepted",
+  "testcases": "1046/1046",
+  "runtime_ms": null,
+  "memory_bytes": 43176000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "逐位弹出 + 溢出预判",
+  "dp_subtype": "",
+  "approach_detail": "**1. 问题本质与解法选择**\n\n反转十进制整数 = 反复「弹出最低位 → 拼到结果尾部」。难点不在反转本身而在溢出：题目限定 32 位有符号整数，且**环境不允许 64 位整数**，所以不能用 `long` 兜底再比较，必须在拼装前用数学关系预判越界。逐位弹出是数位处理的标准套路，正负统一处理：Java 中 `x % 10` 对负数返回非正余数、`x / 10` 向零取整，恰好配合。\n\n**2. 关键设计决策**\n\n- 状态：`ans` 保存已反转部分；每轮 `digit = x % 10` 取最低位，`x /= 10` 去掉最低位。\n- 溢出预判（在拼装 `ans*10 + digit` **之前**做，拼装后检查就已溢出成错误值）：\n  - 正方向：`ans > MAX/10` 必溢出；`ans == MAX/10` 时再看 `digit > MAX % 10`（即 > 7）。\n  - 负方向：`ans < MIN/10` 必溢出；`ans == MIN/10` 时再看 `digit < MIN % 10`（即 < -8）。\n  - 理由：`ans*10 + digit` 越界 ⇔ 合法 int 内无法表示，等价于上面两条判断。\n- 终止条件：`x == 0`，所有位弹出完毕。\n\n**3. 边界与细节**\n\n- `x = Integer.MIN_VALUE`：最低位是 -8（负数 `%` 得非正余数），反转后远超下限 → 返回 0。\n- 末尾 0：`120 → 21`，`ans` 从 0 开始拼，反转天然丢弃前导 0。\n- `x = 0` 与单数字：循环一次/直接结束，返回自身。\n- 等号分支最易漏：`ans` 恰好等于 `MAX/10`（214748364）或 `MIN/10`（-214748364）时必须继续比对最后一位，不能直接放行。\n\n**4. 具体 case 推演**\n\nCase A：`x = 123`（普通正数）\n\n| 轮次 | 进入时 x | digit | 溢出预判 | ans 更新后 | x 更新后 |\n| --- | --- | --- | --- | --- | --- |\n| 1 | 123 | 3 | ans=0 ≤ 214748364 且 ≠ MAX/10 → 安全 | 3 | 12 |\n| 2 | 12 | 2 | 3 ≤ 214748364 → 安全 | 32 | 1 |\n| 3 | 1 | 1 | 32 ≤ 214748364 → 安全 | 321 | 0 |\n\n返回 321 ✓\n\nCase B：`x = 1534236469`（反转溢出 → 0）\n低位依次弹出 9, 6, 4, 6, 3, 2, 4, 3, 5, 1；前 9 轮拼出 `ans = 964632435`，最后一轮：\n\n| 轮次 | 进入时 x | digit | 溢出预判 | 结果 |\n| --- | --- | --- | --- | --- |\n| 第 10 轮 | 1 | 1 | ans=964632435 > 214748364 → 溢出 | return 0 |\n\n返回 0 ✓\n\nCase C：`x = 1463847412`（命中等号分支，恰好在范围内）\n低位依次弹出 2, 1, 4, 7, 4, 8, 3, 6, 4, 1；前 9 轮后 `ans = 214748364`，最后一轮：\n\n| 轮次 | 进入时 x | digit | 溢出预判 | 结果 |\n| --- | --- | --- | --- | --- |\n| 第 10 轮 | 1 | 1 | ans=214748364 == MAX/10，且 1 ≤ 7 → 安全 | ans = 2147483641 |\n\n返回 2147483641 ✓（若末位是 8/9，此处应 return 0）\n\n**5. 复杂度与最优性论证**\n\n- 时间 O(log₁₀|x|)：每个十进制位常数次操作。下界论证：反转必须读取全部数位，任何算法至少 Ω(log₁₀|x|)，此解达到下界，最优。\n- 空间 O(1)：只用一个 `int ans`。至少需要一个累加器，无法低于常数空间，已达下限。\n- 对比「用 long 拼完再判断」：在「不允许 64 位整数」约束下不成立；本解纯 32 位运算完成，是题意下的正确且最优写法。",
+  "time_complexity": "O(log10(x))",
+  "space_complexity": "O(1)",
+  "notes": "整数反转：逐位弹出 + 拼装前按 MAX/10、MIN/10 预判溢出，一次 Accepted（1046/1046），O(log n)/O(1) 已达最优",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "数位弹出 + 拼装前溢出预判",
+      "text": "逐位反转/拼接时，若题目禁止 64 位中间量，就用 ans 与 MAX/10（MIN/10）比较：先比大小，相等再比最后一位 digit 与 MAX%10（MIN%10）；预判必须在拼装 ans*10+digit 之前做。适用于 reverse-integer、字符串转整数等数位拼接题。",
+      "category": "数学与位运算",
+      "problem": "reverse-integer",
+      "date": "2026-08-28"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-28",
+      "verdict": "Accepted",
+      "testcases": "1046/1046",
+      "runtime_ms": null,
+      "memory_bytes": 43176000,
+      "approach": "逐位弹出 + 溢出预判",
+      "time_complexity": "O(log10(x))",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "整数反转：逐位弹出 + 拼装前按 MAX/10、MIN/10 预判溢出，一次 Accepted（1046/1046），O(log n)/O(1) 已达最优",
+      "code": "    public int reverse(int x) {\n        int ans = 0;\n        while (x != 0) {\n            if (ans > Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 && x % 10 > Integer.MAX_VALUE % 10)) {\n                return 0;\n            } else if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && x % 10 < Integer.MIN_VALUE % 10)) {\n                return 0;\n            }\n            ans = ans * 10 + x % 10;\n            x /= 10;\n        }\n        return ans;\n    }"
+    }
+  ],
+  "hints": [
+    "位运算先想 XOR、掩码、移位；计数先想数学公式能否代替循环。"
+  ]
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC7 整数反转 · 刷题复盘</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
+  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
+  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
+  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
+  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
+  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
+  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
+  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
+  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
+  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
+  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
+  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
+  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
+  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
+  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
+  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
+  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
+  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
+  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
+  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
+  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
+  .code-actions{display:flex;align-items:center;gap:8px}
+  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
+  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
+  .copy-btn:hover{background:rgba(255,255,255,.22)}
+  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
+  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
+  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 172</div>
+  <h1>LC7 · 整数反转</h1>
+  <div class="sub">逐位弹出 + 溢出预判 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 1046/1046</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 数学与位运算</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    <span class="badge">2026-08-28</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 逐位弹出 + 溢出预判</h3>
+    <p><span class="chip">时间 O(log10(x))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 1046/1046</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0007_ReverseInteger.java · 逐位弹出 + 溢出预判</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public int reverse(int x) {
+        int ans = 0;
+        while (x != 0) {
+            if (ans &gt; Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 &amp;&amp; x % 10 &gt; Integer.MAX_VALUE % 10)) {
+                return 0;
+            } else if (ans &lt; Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 &amp;&amp; x % 10 &lt; Integer.MIN_VALUE % 10)) {
+                return 0;
+            }
+            ans = ans * 10 + x % 10;
+            x /= 10;
+        }
+        return ans;
+    }</pre></div>
+    <p class="muted">整数反转：逐位弹出 + 拼装前按 MAX/10、MIN/10 预判溢出，一次 Accepted（1046/1046），O(log n)/O(1) 已达最优</p>
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>1. 问题本质与解法选择</strong></p><p>反转十进制整数 = 反复「弹出最低位 → 拼到结果尾部」。难点不在反转本身而在溢出：题目限定 32 位有符号整数，且<strong>环境不允许 64 位整数</strong>，所以不能用 <code>long</code> 兜底再比较，必须在拼装前用数学关系预判越界。逐位弹出是数位处理的标准套路，正负统一处理：Java 中 <code>x % 10</code> 对负数返回非正余数、<code>x / 10</code> 向零取整，恰好配合。</p><p><strong>2. 关键设计决策</strong></p><ul><li>状态：<code>ans</code> 保存已反转部分；每轮 <code>digit = x % 10</code> 取最低位，<code>x /= 10</code> 去掉最低位。</li><li>溢出预判（在拼装 <code>ans*10 + digit</code> <strong>之前</strong>做，拼装后检查就已溢出成错误值）：</li><li>正方向：<code>ans &gt; MAX/10</code> 必溢出；<code>ans == MAX/10</code> 时再看 <code>digit &gt; MAX % 10</code>（即 &gt; 7）。</li><li>负方向：<code>ans &lt; MIN/10</code> 必溢出；<code>ans == MIN/10</code> 时再看 <code>digit &lt; MIN % 10</code>（即 &lt; -8）。</li><li>理由：<code>ans*10 + digit</code> 越界 ⇔ 合法 int 内无法表示，等价于上面两条判断。</li><li>终止条件：<code>x == 0</code>，所有位弹出完毕。</li></ul><p><strong>3. 边界与细节</strong></p><ul><li><code>x = Integer.MIN_VALUE</code>：最低位是 -8（负数 <code>%</code> 得非正余数），反转后远超下限 → 返回 0。</li><li>末尾 0：<code>120 → 21</code>，<code>ans</code> 从 0 开始拼，反转天然丢弃前导 0。</li><li><code>x = 0</code> 与单数字：循环一次/直接结束，返回自身。</li><li>等号分支最易漏：<code>ans</code> 恰好等于 <code>MAX/10</code>（214748364）或 <code>MIN/10</code>（-214748364）时必须继续比对最后一位，不能直接放行。</li></ul><p><strong>4. 具体 case 推演</strong></p><p>Case A：<code>x = 123</code>（普通正数）</p><div class="table-wrap"><table><thead><tr><th>轮次</th><th>进入时 x</th><th>digit</th><th>溢出预判</th><th>ans 更新后</th><th>x 更新后</th></tr></thead><tbody><tr><td>1</td><td>123</td><td>3</td><td>ans=0 ≤ 214748364 且 ≠ MAX/10 → 安全</td><td>3</td><td>12</td></tr><tr><td>2</td><td>12</td><td>2</td><td>3 ≤ 214748364 → 安全</td><td>32</td><td>1</td></tr><tr><td>3</td><td>1</td><td>1</td><td>32 ≤ 214748364 → 安全</td><td>321</td><td>0</td></tr></tbody></table></div><p>返回 321 ✓</p><p>Case B：<code>x = 1534236469</code>（反转溢出 → 0）</p><p>低位依次弹出 9, 6, 4, 6, 3, 2, 4, 3, 5, 1；前 9 轮拼出 <code>ans = 964632435</code>，最后一轮：</p><div class="table-wrap"><table><thead><tr><th>轮次</th><th>进入时 x</th><th>digit</th><th>溢出预判</th><th>结果</th></tr></thead><tbody><tr><td>第 10 轮</td><td>1</td><td>1</td><td>ans=964632435 &gt; 214748364 → 溢出</td><td>return 0</td></tr></tbody></table></div><p>返回 0 ✓</p><p>Case C：<code>x = 1463847412</code>（命中等号分支，恰好在范围内）</p><p>低位依次弹出 2, 1, 4, 7, 4, 8, 3, 6, 4, 1；前 9 轮后 <code>ans = 214748364</code>，最后一轮：</p><div class="table-wrap"><table><thead><tr><th>轮次</th><th>进入时 x</th><th>digit</th><th>溢出预判</th><th>结果</th></tr></thead><tbody><tr><td>第 10 轮</td><td>1</td><td>1</td><td>ans=214748364 == MAX/10，且 1 ≤ 7 → 安全</td><td>ans = 2147483641</td></tr></tbody></table></div><p>返回 2147483641 ✓（若末位是 8/9，此处应 return 0）</p><p><strong>5. 复杂度与最优性论证</strong></p><ul><li>时间 O(log₁₀|x|)：每个十进制位常数次操作。下界论证：反转必须读取全部数位，任何算法至少 Ω(log₁₀|x|)，此解达到下界，最优。</li><li>空间 O(1)：只用一个 <code>int ans</code>。至少需要一个累加器，无法低于常数空间，已达下限。</li><li>对比「用 long 拼完再判断」：在「不允许 64 位整数」约束下不成立；本解纯 32 位运算完成，是题意下的正确且最优写法。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>1046/1046 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>数位弹出 + 拼装前溢出预判</h3><p>逐位反转/拼接时，若题目禁止 64 位中间量，就用 ans 与 MAX/10（MIN/10）比较：先比大小，相等再比最后一位 digit 与 MAX%10（MIN%10）；预判必须在拼装 ans*10+digit 之前做。适用于 reverse-integer、字符串转整数等数位拼接题。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">1046/1046</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.2 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(log10(x)) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 数学与位运算</h3><div class="quote">位运算先想 XOR、掩码、移位；计数先想数学公式能否代替循环。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 172 · reverse-integer</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">整数反转：逐位弹出 + 拼装前按 MAX/10、MIN/10 预判溢出，一次 Accepted（1046/1046），O(log n)/O(1) 已达最优</div>
+    </div>
+  </section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/7_reverse-integer/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E6%95%B0%E5%AD%A6%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97/LC0007_ReverseInteger.java">src/数学与位运算/LC0007_ReverseInteger.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-08-28
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
