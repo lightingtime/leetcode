@@ -28,6 +28,18 @@ public class LC0355_DesignTwitter {
             }
         }
 
+        // 优先队列元素：候选推文 + 来源流 + 游标，避免裸数组下标
+        static class Node {
+            Tweet tweet;
+            int flow;
+            int pos;
+            Node(Tweet tweet, int flow, int pos) {
+                this.tweet = tweet;
+                this.flow = flow;
+                this.pos = pos;
+            }
+        }
+
         public Twitter() {
             tweets = new HashMap<>();
             followers = new HashMap<>();
@@ -55,21 +67,18 @@ public class LC0355_DesignTwitter {
                 return new ArrayList<>();
             }
 
-            // 优先队列多路归并：每个流头部进最大堆（按 time），弹最大者后从该流补下一个
-            int k = flows.size();
-            int[] idx = new int[k]; // 每个流当前游标（默认 0 = 最新）
-            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) ->
-                    flows.get(b[0]).get(b[1]).time - flows.get(a[0]).get(a[1]).time);
-            for (int i = 0; i < k; i++) {
-                pq.offer(new int[]{i, 0});
+            // 多路归并：每个流的头部（最新一条）进最大堆，弹最大者后从该流补下一条
+            PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> b.tweet.time - a.tweet.time);
+            for (int i = 0; i < flows.size(); i++) {
+                pq.offer(new Node(flows.get(i).get(0), i, 0));
             }
             List<Integer> res = new ArrayList<>();
             while (!pq.isEmpty() && res.size() < 10) {
-                int[] cur = pq.poll();
-                res.add(flows.get(cur[0]).get(cur[1]).id);
-                cur[1]++;
-                if (cur[1] < flows.get(cur[0]).size()) {
-                    pq.offer(cur);
+                Node cur = pq.poll();
+                res.add(cur.tweet.id);
+                int next = cur.pos + 1;
+                if (next < flows.get(cur.flow).size()) {
+                    pq.offer(new Node(flows.get(cur.flow).get(next), cur.flow, next));
                 }
             }
             return res;
