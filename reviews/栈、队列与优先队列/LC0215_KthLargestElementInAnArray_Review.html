@@ -65,7 +65,6 @@
         }
         return quickSort(nums, j + 1, r, k);
     }</pre></div>
-    <p class="muted">快选（Hoare 双指针分区）：目标下标 n-k，每次分区后只递归目标所在半边，平均 O(n)。第一版死循环（i/j 未每轮重置、无左右边界、比较基准 nums[position] 被交换覆盖）分析后重写；本地 9 组全绿，力扣 46/46 一次 Accepted</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>46/46 用例。</p></div></div></div></section>

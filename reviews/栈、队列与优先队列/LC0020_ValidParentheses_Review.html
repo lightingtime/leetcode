@@ -57,7 +57,6 @@
         }
         return stack.isEmpty();
     }</pre></div>
-    <p class="muted">栈匹配：遇到左括号把对应右括号压栈，遇右括号弹栈比对，最后栈空即有效；O(n)/O(n)。12 组本地用例一次全过，力扣 103/103 一次 Accepted</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：括号匹配是「后出现的先闭合」，天然用栈：左括号入栈，右括号与栈顶配对。</p><p>关键设计：优化写法是左括号入栈时直接压入对应的右括号，这样遇到右括号只需比较是否等于栈顶，省去配对的 switch/if；不匹配或栈空直接 false；遍历结束栈空才是合法串。</p><p>边界：空串返回 true；只有左括号（结束栈非空 false）；只有右括号（栈空即 false）；多层嵌套；右括号多余与左括号多余要分别拦截。</p><p>复杂度：O(n) 时间、O(n) 空间（栈），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>103/103 用例一次通过。</p></div></div></div></section>

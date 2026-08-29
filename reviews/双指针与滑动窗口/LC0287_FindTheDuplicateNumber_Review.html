@@ -50,7 +50,6 @@
         }
         return fast;
     }</pre></div>
-    <p class="muted">数组当下标链，Floyd 判圈找环入口：相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1) 一次 Accepted（59/59）</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n+1 个数取值 1..n，必有一个重复。限制不能改数组、O(1) 空间，于是把数组看作链：下标 i → nums[i]。重复值意味着有多个前驱指向同一节点 → 链成环，环入口就是重复值。</p><p>关键设计：快慢指针在值上跳：slow=nums[slow]、fast=nums[nums[fast]]，相遇后把 slow 重置为 0，再同速走，再次相遇处即环入口（重复值）。原理：入环前的路径长度与相遇点到入口的距离存在固定的映射关系。</p><p>边界：下标 0 一定不在环内（值域 1..n 没有任何元素指向 0），所以从 0 出发必能进入环；重复可能多个，返回任一即可；题目保证至少一个重复。</p><p>复杂度：O(n) 时间、O(1) 空间，且不修改数组，完全满足题目全部约束，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>相遇检测用 while 导致先判后走：两个指针从同一起点出发时 fast != slow 初始即为 false，循环体一次不执行，指针从未移动，直接返回初始值；相遇阶段必须先移动再比较（do-while 或初始错开）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>59/59 用例一次通过。</p></div></div></div></section>

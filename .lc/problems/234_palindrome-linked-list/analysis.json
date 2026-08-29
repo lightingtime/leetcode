@@ -50,7 +50,8 @@
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": false,
-      "notes": "回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优"
+      "notes": "回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优",
+      "code": "public boolean isPalindrome(ListNode head) {\n        if (head == null) {\n            return false;\n        }\n        ListNode fast = head, slow = head;\n        while (fast != null && fast.next != null) {\n            // 偶数情况slow 在第二部分的开头\n            // 奇数情况slow 在正中间\n            fast = fast.next.next;\n            slow = slow.next;\n        }\n        ListNode p1 = slow;\n        Stack<Integer> stack = new Stack<>();\n        // 奇数情况 fast不会为空\n        if (fast != null) {\n            slow = slow.next;\n        }\n        while (slow != null) {\n            stack.push(slow.val);\n            slow = slow.next;\n        }\n        fast = head;\n        while (fast != p1 && !stack.isEmpty()) {\n            if (fast.val != stack.peek()) {\n                return false;\n            }\n            stack.pop();\n            fast = fast.next;\n        }\n        return stack.isEmpty();\n    }"
     },
     {
       "date": "2026-08-04",

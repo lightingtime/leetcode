@@ -37,8 +37,37 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快慢指针+栈</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 88.0 MB</span><span class="chip">用例 93/93</span></p>
-    <p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>
-    <p class="muted">回文链表：快慢指针找中点 + 栈比较后半段，一次 Accepted（93/93），空间 O(n) 未达进阶最优</p>
+    <div class="code-wrap"><div class="code-head"><span>LC0234_PalindromeLinkedList.java · 快慢指针+栈</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isPalindrome(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode fast = head, slow = head;
+        while (fast != null &amp;&amp; fast.next != null) {
+            // 偶数情况slow 在第二部分的开头
+            // 奇数情况slow 在正中间
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode p1 = slow;
+        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+        // 奇数情况 fast不会为空
+        if (fast != null) {
+            slow = slow.next;
+        }
+        while (slow != null) {
+            stack.push(slow.val);
+            slow = slow.next;
+        }
+        fast = head;
+        while (fast != p1 &amp;&amp; !stack.isEmpty()) {
+            if (fast.val != stack.peek()) {
+                return false;
+            }
+            stack.pop();
+            fast = fast.next;
+        }
+        return stack.isEmpty();
+    }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 快慢指针+原地反转</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.2 MB</span><span class="chip">用例 93/93</span></p>
@@ -83,7 +112,6 @@
         }
         return slow;
     }</pre></div>
-    <p class="muted">回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断链表是否回文。复制到数组比较是 O(n) 空间；O(1) 空间做法：快慢指针找中点 → 反转后半段 → 逐节点对称比较。</p><p>关键设计：fastSlow 让 fast 走 2 步、slow 走 1 步，结束时 slow 停在（前半段的）末尾 firstEnd；反转 firstEnd.next 得到后半段头 secondStart；然后 p1 从头、p2 从 secondStart 同步比较。比较循环以 p2!=null 为条件，奇数长度时中间节点自然被跳过。</p><p>边界：空链表返回 true；偶数长度 slow 恰在中点前、奇数长度 slow 在前半段末尾，反转后半段长度 ≤ 前半段，比较不会越界；比较完不要求恢复链表结构。</p><p>复杂度：O(n) 时间、O(1) 额外空间（反转用迭代），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>93/93 用例一次通过。</p></div></div></div></section>

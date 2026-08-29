@@ -53,7 +53,6 @@ private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
     }
     return isSymmetricHelper(left.left, right.right) &amp;&amp; isSymmetricHelper(left.right, right.left);
 }</pre></div>
-    <p class="muted">递归镜像比较：helper(root,root) 出口先判双 null/单 null/值不同，再镜像递归 left.left vs right.right 且 left.right vs right.left；8 组本地一次全过，力扣 201/201 一次 Accepted</p>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈成对比较</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树宽)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 201/201</span></p>
@@ -92,7 +91,6 @@ private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
         }
         return isSymmetricHelper(left.left, right.right) &amp;&amp; isSymmetricHelper(left.right, right.left);
     }</pre></div>
-    <p class="muted">迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：树关于根镜像对称 ⟺ 左子树与右子树互为镜像。比较两棵子树时要交叉：p 的左对 q 的右、p 的右对 q 的左。</p><p>关键设计：递归 helper(left, right)：都空返回 true、一空返回 false、值不等返回 false，否则递归 (left.left, right.right) &amp;&amp; (left.right, right.left)；入口调用 isSymmetricHelper(root, root)。代码里同时有迭代栈版本（成对压入再成对弹出比较）和递归版本，思路一致。</p><p>边界：空树 true；单节点 true；结构对称但值不对称；值对称但结构不对称（null 位置不同）——必须同时检查空与值。</p><p>复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（h 为树高），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>201/201 用例一次通过。</p></div></div></div></section>

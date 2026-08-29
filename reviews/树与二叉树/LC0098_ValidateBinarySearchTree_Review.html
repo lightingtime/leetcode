@@ -50,7 +50,6 @@
         }
         return isValidBSTHelper(root.left, root.val, lower) &amp;&amp; isValidBSTHelper(root.right, upper, root.val);
     }</pre></div>
-    <p class="muted">递归上下界校验：左子树收紧 upper 并继承 lower，右子树收紧 lower 并继承 upper（曾把未收紧侧重置为 ±∞ 丢失祖先约束，修正）；long 防 int 边界。10 组本地全绿，力扣 86/86 Accepted</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>BST 校验递归：只收紧靠近根的一侧边界，另一侧重置为 ±∞，导致祖先约束丢失（如右子树的左子树没再和根比较），误判为合法</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>86/86 用例。</p></div></div></div></section>

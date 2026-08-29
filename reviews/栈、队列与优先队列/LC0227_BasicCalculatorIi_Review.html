@@ -76,7 +76,6 @@
         }
         return ans;
     }</pre></div>
-    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 111/111</span></p>
@@ -101,7 +100,6 @@
         }
         return sum + last;
     }</pre></div>
-    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择理由</strong></p><ul><li>无括号中缀表达式（+ - * /），难点在优先级：<code>* /</code> 必须先算，<code>+ -</code> 之间按顺序。</li><li>两种做法：① 栈：乘除立即与栈顶算、加减把带符号数字入栈，最后统一求和（直观，空间 O(n)）；② 两个变量：<code>last</code> 存当前累积项、<code>sum</code> 存已定稿项之和，遇加减定稿、遇乘除合并，空间 O(1)。</li></ul><p><strong>写法 1（栈，O(n) 空间）</strong></p><ul><li>维护 <code>stack</code>，<code>sign</code> 记录当前数字前的运算符。</li><li>结算点（非数字非空格或末尾）：<code>+</code> push(num)、<code>-</code> push(-num)、<code>*</code>/<code>/</code> 弹栈顶与新数计算后 push。</li><li>最后栈内全部数字相加（带符号）即结果。</li><li>时间 O(n)、空间 O(n)。</li></ul><p><strong>写法 2（sum/last 两变量，O(1) 空间）</strong></p><ul><li><code>last</code> 当前项（乘除原地合并），<code>sum</code> 已定稿项之和，<code>sign</code> 当前数字前的运算符。</li><li>结算时：<code>+</code>/<code>-</code>：<code>sum += last; last = ±num</code>（当前项定稿入 sum，开新项）；<code>*</code>/<code>/</code>：<code>last *= num</code> / <code>last /= num</code>（乘除合并进当前项）。</li><li>最后 <code>return sum + last</code>。</li><li>关键：乘除永远作用于 <code>last</code> 内部，<code>sum</code> 只收已定稿的整项，优先级天然正确；空间 O(1)。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>单数字 "42"：末尾结算 sign='+' → sum=0、last=42，返回 42。</li><li>连续除法左结合：<code>last /= num</code> 每次都用上一个 last 除，等价 (100/10)/2。</li><li>负数结果 "1-2"：'-' 把 last=1 定稿入 sum，新 last=-2，返回 -1。</li><li>乘除优先级 "1-2*3"：'*' 直接 last=-2*3=-6，sum=1，返回 -5。</li><li>除法截断：int 除法向零截断（14-3/2：last=3/2=1，sum=14，返回 13）。</li><li>长度上限 3*10^5：单遍扫描，两写法均无性能问题；写法 2 无栈、内存更省。</li></ul><p><strong>④ 复杂度分析与下限论证</strong></p><ul><li>时间 O(n)：每个字符扫描一次，两种写法都是。</li><li>空间：写法 1 O(n)（栈），写法 2 O(1)（两个变量）——写法 2 达空间下限。</li><li>最优性：每个字符至少读一次，时间 Ω(n) 达到；表达式求值只需保存「当前项 + 已定稿和」，空间 Ω(1) 即可，写法 2 达到——写法 2 是本题最优解。</li></ul><p>**⑤ 具体 case 推演（写法 2）："3+2*2"（期望 7）**</p><ul><li>'3'：num=3。</li><li>'+'（结算）：sign='+' → sum+=0、last=3；sign='+'、num=0。</li><li>'2'：num=2。</li><li>'*'（结算）：sign='+' → sum+=3、last=2；sign='*'、num=0。</li><li>'2'（末尾结算）：sign='*' → last=2*2=4。</li><li>返回 sum+last = 3+4 = 7 ✅。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>111/111 用例。</p></div></div></div></section>

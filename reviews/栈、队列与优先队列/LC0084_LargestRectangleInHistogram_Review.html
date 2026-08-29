@@ -53,7 +53,6 @@
         }
         return max;
     }</pre></div>
-    <p class="muted">单调递增栈 + 左右高度0哨兵：弹栈结算（左边界=新栈顶，右边界=i），O(n)。思路从朴素 O(n²)（每根柱子左右扫更矮）引导到单调栈；10 组本地用例一次全过，力扣 99/99 一次 Accepted</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：每个柱子能形成的最大矩形 = 柱高 × 左右第一个更矮柱子之间的宽度。暴力枚举每对边界 O(n²)；单调栈让每个柱子只结算一次。</p><p>关键设计：单调递增栈存下标。遇到比栈顶矮的柱子时，栈顶柱子作为高被弹出结算：其左边界是栈内前一个下标、右边界是当前 i，宽度 = i - 栈内前一个 - 1。在数组两端补高度 0 的哨兵，保证所有柱子最终必然出栈、且结算时栈不为空。</p><p>边界：全部递增时靠末尾哨兵逐个结算；全部相等（用 &gt; 弹出，相等延后结算但宽度照样覆盖整个区间）；单柱；连续多个可弹出的柱子依次结算。</p><p>复杂度：O(n) 时间（每个下标入栈出栈各一次）、O(n) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>99/99 用例一次通过。</p></div></div></div></section>

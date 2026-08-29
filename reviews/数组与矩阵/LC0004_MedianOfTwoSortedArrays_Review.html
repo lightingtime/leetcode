@@ -81,7 +81,6 @@
             }
         }
     }</pre></div>
-    <p class="muted">两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：两个有序数组合并后的中位数，要求 O(log(m+n))，所以不能真合并，只能用二分排除求第 k 小。</p><p>关键设计：中位数换算成第 k 小：奇数总长取第 totLen/2+1 小，偶数取第 totLen/2 与第 totLen/2+1 小的平均。kthSmallest 维护两数组的有效起点 p1、p2，每轮从两侧各取第 k/2 个候选，比较后排除较小一侧的 k/2 个元素并让 k 减去实际排除数量——每轮 k 减半，达到 log 复杂度。</p><p>边界：k==1 时取两侧有效区头部较小者；某一侧排空时答案在另一侧 p+k-1；候选下标超界时封顶到数组末尾（cand=min(len-1, p+k/2-1)），排除数量按实际移除计算；偶数长度要算两个 k。</p><p>复杂度：O(log(m+n)) 时间、O(1) 空间，最优；合并法 O(m+n) 不满足题目要求。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>2099/2099 用例一次通过。</p></div></div></div></section>

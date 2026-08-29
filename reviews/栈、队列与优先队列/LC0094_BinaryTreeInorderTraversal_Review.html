@@ -52,7 +52,6 @@
         ans.add(root.val);
         dfs(root.right);
     }</pre></div>
-    <p class="muted">递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现</p>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈（cur指针）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 71/71</span></p>
@@ -74,7 +73,6 @@
         }
         return ans;
     }</pre></div>
-    <p class="muted">两种写法均 AC：递归 DFS 中序（71/71）+ 迭代栈 cur 指针版（71/71，内存≈41.4MB）。迭代版历经 4 轮修正（重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）后通过；analysis.json submissions 含两条不同解法</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序遍历重复压栈死循环：弹栈访问后只处理右孩子，下一轮从栈顶重新把该节点左链再压一遍（left 指针未变），无限循环 OOM；且空 root 直接 push(null) 导致 NPE</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序：内层只压左孩子、当前节点 cur 自己未入栈，首次弹栈取到 null 直接 NPE；访问后未把 cur 移到右孩子（只 push 右孩子），会再次重复压栈</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序：内层 while (cur.left) 未把 cur==null 当正常状态（栈非空时访问完右空节点后 cur 为 null），直接解引用 NPE；内层应以 cur!=null 为条件</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>71/71 用例。</p></div></div></div></section>

@@ -59,7 +59,6 @@
         }
         return ans;
     }</pre></div>
-    <p class="muted">区间 DP，长度 2 base 与填表顺序是两处关键坑</p>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 中心扩散</h3>
     <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 144/144</span></p>
@@ -87,7 +86,6 @@
         }
         return r - l - 1;
     }</pre></div>
-    <p class="muted">中心扩散：2n-1 个中心向两边扩展，O(1) 空间</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找最长回文子串。本题有 DP 与中心扩散两种常规解法，均已提交记录。</p><p>写法 1 · 区间 DP（已提交）：</p><ul><li>dp[i][j] = s[i..j] 是否为回文，转移 dp[i][j] = (s[i]==s[j]) &amp;&amp; dp[i+1][j-1]（j-i &gt;= 2）；</li><li>base：长度 1 恒真、长度 2 两端相等；填表用 i 倒序满足依赖方向；答案更新必须校验 dp[i][j]==true；</li><li>复杂度 O(n^2) 时间、O(n^2) 空间。</li></ul><p>写法 2 · 中心扩散（已提交）：</p><ul><li>每个回文有唯一中心：奇数长度中心是字符本身，偶数长度中心是两个字符之间，共 2n-1 个中心；</li><li>对每个中心向两边扩散直到两端不等，返回半径长度；</li><li>主循环对每个 i 分别以 (i,i) 和 (i,i+1) 为起点扩散，取更长者更新答案；</li><li>起点换算：start = i - (maxLen-1)/2；</li><li>复杂度 O(n^2) 时间（每个中心最多扩 O(n)）、O(1) 空间。</li></ul><p>具体 case 推演（s=babad）：</p><ul><li>中心 = 下标 1 的 a：b==b → bab（长 3），越界停；</li><li>中心 = 下标 2 的 b：a==a → aba（长 3），再外 b!=d 停；</li><li>空隙中心（a 与 b 之间）：a!=b，长 0；</li><li>最长 3，bab / aba 任取。</li></ul><p>两种写法对比：</p><ul><li>DP 状态定义更「正统」，方便扩展（如回文子序列）；中心扩散代码更简洁、空间 O(1)；</li><li>时间同为 O(n^2)；Manacher 可到 O(n) 是进阶。</li></ul><p>为什么是最优/可接受：O(n^2) 是本题常规最优解（暴力 O(n^3) 不可接受）；中心扩散的空间 O(1) 是两种常规解法里最优的。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>144/144 用例。</p></div></div></div></section>

@@ -48,13 +48,33 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三指针分区</h3>
     <p><span class="chip">时间 O(n)~O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 89/89</span></p>
-    <p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>
-    <p class="muted">三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)</p>
+    <div class="code-wrap"><div class="code-head"><span>LC0075_SortColors.java · 三指针分区</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
+        int start = 0, end = nums.length - 1;
+        int mid = start;
+        while (mid &lt;= end) {
+            if (nums[mid] == 0) {
+                int temp = nums[start];
+                nums[start] = nums[mid];
+                nums[mid] = temp;
+                start++;
+                mid = start;
+            } else if (nums[mid] == 2) {
+                int temp = nums[end];
+                nums[end] = nums[mid];
+                nums[mid] = temp;
+                end--;
+            } else {
+                mid++;
+            }
+        }
+    }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 三指针分区（荷兰国旗）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
-        // lt: [0,lt) 全 0；i: [lt,i) 全 1；(gt,n-1] 全 2；[i,gt] 未处理 → 循环条件 i&lt;=gt（i==gt 时那一格未处理）
+        // 分区不变量：
+        //   [0,lt) 全 0；[lt,i) 全 1；(gt,n-1] 全 2；[i,gt] 未处理
+        // 故循环条件 i&lt;=gt：i==gt 时那一格仍未处理
         int lt = 0, i = 0, gt = nums.length - 1;
         while (i &lt;= gt) {
             if (nums[i] == 2) {
@@ -75,11 +95,6 @@
         nums[i] = nums[j];
         nums[j] = temp;
     }</pre></div>
-    <p class="muted">**与一刷对比**：思路一致（三指针分区），写法等价——本次用 lt/i/gt：交换 2 后 i 不动（回看换来的值）、交换 0 后 lt 与 i 都前进、1 跳过；一刷同此语义。
-
-**一次 AC 归因**：一刷栽在 0 分支误重置 mid 导致非严格一趟；本次每一步推进明确（2→右端、0→左端、1→中间），并沿用一刷边界测试（全 0/全 2/已排序/逆序/回归），从设计与验证两端规避同类错误。
-
-**掌握度依据**：一次提交 Accepted（90/90）、无探讨 → 较强，间隔 ×2.5。</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>分区双指针死循环：没有覆盖无可交换的终态，当 start/end 都指向 1 且中间全为 1 时无任何指针移动，外层 while 永不退出（表现为测试超时）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>分区交换后未回看换入值：扫描指针交换后直接前进，换进来的 0/2 可能被困在中间；且每轮都重扫整段中间，不是一趟 O(n)</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>扫描指针推进逻辑有跳跃：0 分支将 mid 重置为 start 后循环底部又无条件 mid++，跳过未处理位置；2 分支交换后也没有停住回看换入值，导致 [0,2,1] 中下标 1 的 2 从未被检查</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>89/89 用例。</p></div></div></div></section>

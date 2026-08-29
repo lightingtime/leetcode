@@ -54,7 +54,6 @@
         }
         return root;
     }</pre></div>
-    <p class="muted">二叉树的最近公共祖先：递归两侧搜索，两边都有命中则当前节点为答案，单边命中向上传递，一次 Accepted（33/33）</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：p、q 的最近公共祖先 = 从根往下找第一个「自身是 p/q，或左右子树分别找到 p 和 q」的节点。</p><p>关键设计：后序递归：root 为 null 返回 null；root 是 p 或 q 直接返回 root（自己就是祖先，不必再往下找）；然后分别在左、右子树递归找；左空返回右、右空返回左、两边都非空说明 p、q 分居两侧，root 就是 LCA。</p><p>边界：题目保证 p、q 存在且互异；p 是 q 的祖先时递归在 p 处提前返回，另一侧不会误判；树只有单节点。</p><p>复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（递归栈），最优；不需要 parent 指针或路径记录。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>33/33 用例一次通过。</p></div></div></div></section>

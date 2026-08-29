@@ -56,7 +56,6 @@
             list.remove(list.size() - 1);
             dfs(nums, index + 1, list);
     }</pre></div>
-    <p class="muted">回溯选/不选框架，答案只在叶子收集</p>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 回溯（起点推进）</h3>
     <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 10/10</span></p>
@@ -75,7 +74,6 @@
             list.remove(list.size() - 1);
         }
     }</pre></div>
-    <p class="muted">回溯起点推进框架，每个节点都是唯一子集</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。本题有两种等价写法，一次只选一种框架。</p><p>写法 1 · 选/不选（已提交）：</p><ul><li>递归参数 index 表示下一个待决策的元素；每层两个分支：加入 nums[index] 递归 index+1，或不加入直接递归 index+1；</li><li>答案只在叶子收集：index == nums.length 时所有元素决策完毕，把 list 副本加入答案；</li><li>必须显式终止，否则 index 越界访问；空集由根节点一路「不选」产生。</li></ul><p>写法 2 · 起点推进（已提交）：</p><ul><li>递归参数 start 表示下一个可选的起点；for 循环枚举「下一个加入子集的元素」，选 nums[i] 后递归 i+1 并撤销；</li><li>「不选」由循环 i++ 隐含表达，不需要第二个递归分支；</li><li>答案在每个节点入口收集：该框架下每个节点形成的列表互不相同，不会重复；循环自然结束，无需显式终止。</li></ul><p>两种写法对比：</p><ul><li>复杂度相同：时间 O(n·2^n)（2^n 个子集，每个复制 O(n)），空间 O(n)（递归栈 + 当前列表，不含输出）；</li><li>差别只在「答案收集时机」：选/不选框架内部节点会与叶子重复，只能叶子加；起点推进框架每个节点唯一，入口加即可；</li><li>都无需排序（元素互异）；含重复元素时两种框架都要排序 + 跳过相邻相同值。</li></ul><p>为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；两种写法每个子集恰好生成一次、无重复枚举，已达下限。</p><p>补充：写法 2 的「不选」到底在哪里（具体 case 推演）——</p><ul><li>起点推进的循环不是在问「要不要选 nums[i]」，而是在决定「下一个加入子集的元素是哪个」；</li><li>具体 case：nums=[1,2,3]，dfs(0, []) 的三条分支：i=0 选 1 → 生成包含 1 的全部子集；i=1 选 2 → list 从未加入过 1，「循环从 0 推进到 1」这个动作本身就是不选 1；i=2 选 3 → 同时跳过 1 和 2，即不选 1、不选 2；</li><li>结论：选/不选框架把「不选」写成显式分支；起点推进框架把「不选」编码在循环推进里——i 每前进一位就放弃前面那位；若在循环里再写显式「不选」递归，等于把同一动作做两遍（写法 1 调试时的重复问题）。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>回溯递归起点传错/框架混用：下一层起点必须从当前选中下标的下一个位置继续（传 i+1），传旧 index 会让同一元素重复入选（如 [1,3,3]）、子集重复、递归树爆炸 OOM；「选/不选」与「起点推进」两种回溯框架不要叠用</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>选/不选递归缺少终止条件：删掉 for 循环后没有处理 index 越界，仍访问 nums[index] 导致 AIOOBE；换框架后要同步补上新的边界出口（没有元素可决策时直接返回）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>答案收集时机与框架不匹配：选/不选框架里当前列表要等所有元素决策完才是完整子集，只能在叶子（index==n）加答案；在入口加会把同一子集重复记录（n=10 得到 2047=2^11-1 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>10/10 用例。</p></div></div></div></section>

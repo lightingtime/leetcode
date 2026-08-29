@@ -60,7 +60,6 @@
         }
         return ans;
     }</pre></div>
-    <p class="muted">单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（&lt;= i-k），O(n)/O(k) 一次 Accepted（53/53）</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：每个固定长度 k 窗口的最大值。暴力 O(nk)；单调队列把每个窗口取最大值摊到 O(1)。</p><p>关键设计：双端队列存下标，从队头到队尾保持数值单调递减。新元素入队前弹掉队尾所有比它小的——那些元素比新元素更小且更早过期，永远不可能再成为最大值；入队后弹掉队头中已滑出窗口的下标（≤ i-k）；此时队头就是当前窗口最大值。窗口形成后（i≥k-1）每次记录。</p><p>边界：k=1 时每个窗口即单元素；k=n 只有一个窗口；形成窗口前的阶段只入队不记录；过期判断基于闭区间 [i-k+1, i]。</p><p>复杂度：O(n) 时间（每个下标至多入队出队一次）、O(k) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>单调队列缺少过期队头淘汰：只弹队尾小值，未弹出已滑出窗口的队头下标，递减数组/全负数用例中旧最大值一直占着队头导致答案不变；读取答案前需先弹出 peekFirst() 小于窗口左边界的下标</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>过期淘汰边界差一：窗口左边界是 i-k+1（闭区间 [i-k+1, i]），队头下标 &lt; i-k+1（等价 ≤ i-k）才算过期；写成 &lt; i-k 会漏掉恰好滑出窗口的那一格，递减/全负数用例仍错</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>53/53 用例一次通过。</p></div></div></div></section>

@@ -57,7 +57,6 @@
         root.right = buildTreeHelper(preorder, preStart + leftLength + 1, preEnd, inorder, index + 1, inEnd);
         return root;
     }</pre></div>
-    <p class="muted">从前序与中序遍历构造二叉树：前序定根、中序哈希定位划分左右子树，递归分治，一次 Accepted（203/203）</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：前序第一个元素是根，中序中根的位置把左右子树区间一分为二 → 递归分治重建整棵树。</p><p>关键设计：先用 HashMap 存中序值→下标，实现 O(1) 查根位置；递归参数是前序区间 [preStart, preEnd] 与中序区间 [inStart, inEnd)：根 = preorder[preStart]，rootIndex = map.get(根)，左子树长度 leftLength = rootIndex - inStart；左子树前序区间 [preStart+1, preStart+leftLength]，右子树 [preStart+leftLength+1, preEnd]。</p><p>边界：区间为空（preStart&gt;preEnd）返回 null；单节点；只有左子树或只有右子树的斜树；题目保证节点值互异，map 不会冲突。</p><p>复杂度：O(n) 时间（每个节点一次、map 查询 O(1)）、O(n) 空间（map + 递归栈），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>203/203 用例一次通过。</p></div></div></div></section>

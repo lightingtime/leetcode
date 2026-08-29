@@ -74,7 +74,6 @@
         dfs(board, i, j - 1);
         dfs(board, i, j + 1);
     }</pre></div>
-    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：判断每个 O 区域是否「被 X 完全包围」（即不接触棋盘边缘），被包围的改成 X。难点是「被围」的判断——直接找被围区域要检查四周，很绕。</p><p><strong>解法选择理由（反向思维）</strong>：与其找「被包围的 O」，不如找「不会被包围的 O」——<strong>从棋盘边缘的 O 出发，能连到的所有 O 都接触边缘，一定安全</strong>。用 DFS/BFS 把这些安全 O 标记出来，剩下的 O 就是要改成 X 的。复杂度 O(m·n)，达到下界（每个格子至少要看一次）。</p><p><strong>关键设计决策</strong>：</p><ol><li>反向标记：从四条边的 O 出发 DFS，把连通的 O 标成临时字符 'A'（安全区），同时天然防重复访问（'A' 不再是 'O'，不会再被递归）。</li><li>临时标记用 'A' 而不是直接保留：因为后面要区分「安全 O（保留）」和「被围 O（改 X）」，分两轮处理。</li><li>翻转扫描必须覆盖<strong>整个棋盘</strong>（含边缘）：'A'→'O'、'O'→'X'。边缘的 'A' 同样是安全区，必须还原（这是本题最容易漏的坑）。</li></ol><p><strong>具体 case 推演</strong>（3×3，中心被围）：</p><div class="md-code"><pre>X X X      X X X
 X O X  →   X X X     中心 O 到不了边缘 → 捕获

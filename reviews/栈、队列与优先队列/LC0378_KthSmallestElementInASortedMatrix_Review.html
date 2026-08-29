@@ -64,7 +64,6 @@
             this.col = col;
         }
     }</pre></div>
-    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 二分答案（值域二分）</h3>
     <p><span class="chip">时间 O(n·log(值域))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 50.1 MB</span><span class="chip">用例 87/87</span></p>
@@ -97,7 +96,6 @@
         }
         return count &gt;= k;
     }</pre></div>
-    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：n×n 矩阵每行、每列分别升序，但整体拉平并不是有序数组，所以「第 k 小」没有固定坐标、不能按下标直接取。可用的性质是行、列各自的局部序。</p><p><strong>两种写法对比</strong>：</p><ul><li>写法 1（最小堆 k 路归并）：把每行看成一条有序链表，堆里维护每行当前队头（带 row,col 坐标），弹 k 次即第 k 小。时间 O(k log n)，最坏 O(n^2 log n)；空间 O(n)。</li><li>写法 2（值域二分，最优）：对数值范围二分，用「≤ mid 的元素个数 ≥ k」判定并收敛。时间 O(n·log(值域))，空间 O(1)，满足进阶「O(1) 内存」要求。</li></ul><p><strong>写法 2 关键设计</strong>：</p><ol><li>二分对象是<strong>值</strong>而不是下标：第 k 小的值 v = 满足 count(≤x) ≥ k 的最小 x。count 随 x 单调不减，所以可在 [matrix[0][0], matrix[n-1][n-1]] 上二分。</li><li>统计 count 用左下角游走 O(n) 完成：从 (n-1, 0) 出发，若 matrix[i][j] ≤ mid，则这一列第 0..i 行都 ≤ mid，count += i+1 后 j++；否则这一行右边只会更大，i--。每轮最多走 2n 步。</li><li>判据必须用 ≥ 而不是 ==：count 只在 mid 跨过某些值时恰好等于 k，其余时候都大于 k，用 == 会让二分走错方向（全相同元素时直接错）。</li></ol><p><strong>具体 case 推演</strong>（示例 1：matrix=[[1,5,9],[10,11,13],[12,13,15]]，k=8，值域 [1,15]）：</p><div class="table-wrap"><table><thead><tr><th>mid</th><th>count(≤mid)</th><th>与 k=8 比较</th><th>边界调整</th></tr></thead><tbody><tr><td>8</td><td>2</td><td>&lt; 8</td><td>left=9</td></tr><tr><td>12</td><td>6</td><td>&lt; 8</td><td>left=13</td></tr><tr><td>14</td><td>8</td><td>≥ 8</td><td>right=14</td></tr><tr><td>13</td><td>8</td><td>≥ 8</td><td>right=13</td></tr></tbody></table></div><p>收敛到 13，第 8 小 = 13 ✓</p><p>count(≤13) 的游走细节：</p><ol><li>(2,0)=12 ≤ 13 → count += 3（列 0 的 1,10,12），j=1</li><li>(2,1)=13 ≤ 13 → count += 3（列 1 的 5,11,13），j=2</li><li>(2,2)=15 &gt; 13 → i=1</li><li>(1,2)=13 ≤ 13 → count += 2（列 2 的 9,13），j=3 结束</li></ol><p>合计 8 ✓</p><p><strong>边界与细节</strong>：</p><ul><li>k=1：left 初始即 matrix[0][0]，二分直接返回最小值。</li><li>k=n^2：收敛到 matrix[n-1][n-1]。</li><li>全相同元素：count(≤v)=n^2 ≥ k 恒成立，left 停在 matrix[0][0]，正确。</li><li>重复元素：≥ 判据让门槛正好落在重复值上（两个 13 凑够第 8 个）。</li><li>负数与 ±10^9 值域：mid = left + (right-left)/2 防溢出，int 足够。</li></ul><p><strong>复杂度与下限论证</strong>：单次判定 O(n)（游走最多 2n 步），二分次数 O(log(值域)) ≤ 31，总 O(n·log(值域)) ≈ 300×31，空间 O(1)。堆写法最坏 O(n^2 log n) 且空间 O(n)；值域二分把判定降到 O(n)、空间降到 O(1)，是本题进阶要求下的最优写法。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>87/87 用例一次通过。</p></div></div></div></section>

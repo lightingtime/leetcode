@@ -70,7 +70,6 @@
         }
         return ans;
     }</pre></div>
-    <p class="muted">去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找出所有和为 0 且不重复的三元组。排序 + 双指针把三数问题降维为「固定一个数 + 剩余区间内两数之和」。</p><p>关键设计：排序后外层 i 固定第一个数，内层 k（左）、j（右）双指针：三数和 &lt;0 左移 k，&gt;0 右移 j，==0 记录三元组并把 k 前移。去重是关键：i 与 k 都跳过和前一位置相同的值（k 还要满足 k&gt;i+1 防止与 i 混淆），j 不用显式去重——与 i、k 去重配合即可保证三元组不重复不遗漏。</p><p>边界：长度不足 3 无解；全零数组只输出一个 [0,0,0]；每轮外层结束 j 必须重新置为末尾；负数与正数混合时双指针方向判断要仔细。</p><p>复杂度：O(n²) 时间（排序 O(n log n) + 双指针 O(n²)）、O(1) 额外空间（忽略排序栈），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>去重方向写反：跳过重复值中靠前的第一个，而不是跳过后续重复，导致需要两个相同值的合法组合（如 -1,-1,2）被丢弃，或同一组合重复输出</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>指针移动决策引用了已跑到边界的变量：内层扫描结束后 k==j，仍用 nums[i]+nums[k]+nums[j] 判断移动 i 或 j，等于同一元素被用了两次，移动依据失真</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>316/316 用例一次通过。</p></div></div></div></section>

@@ -86,7 +86,6 @@
             return root;
         }
     }</pre></div>
-    <p class="muted">二叉树的序列化与反序列化：层序 BFS + # 占位，修复队列进出配对（offerLast 配 pollLast 变成栈序导致顺序错位）后往返一致，Accepted（53/53）</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>Deque 当队列用但 offerLast 配 pollLast 实际是栈（LIFO）：遍历顺序变成后进先出（右子树先访问），与反序列化从左到右读的顺序约定不一致；序列化与反序列化必须使用同一种顺序</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>53/53 用例。</p></div></div></div></section>

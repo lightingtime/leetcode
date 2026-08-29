@@ -29,7 +29,8 @@
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": false,
-      "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化"
+      "notes": "左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化",
+      "code": "public int[] productExceptSelf(int[] nums) {\n        if (nums.length < 1) {\n            return nums;\n        }\n        int[] leftMul = new int[nums.length];\n        leftMul[0] = 1;\n        for (int i = 1; i < leftMul.length; i++) {\n            leftMul[i] = leftMul[i - 1] * nums[i - 1];\n        }\n        int[] rightMul = new int[nums.length];\n        rightMul[nums.length - 1] = 1;\n        for (int i = nums.length - 2; i >= 0; i--) {\n            rightMul[i] = rightMul[i + 1] * nums[i + 1];\n        }\n        for (int i = 0; i < nums.length; i++) {\n            nums[i] = leftMul[i] * rightMul[i];\n        }\n        return nums;\n    }"
     },
     {
       "date": "2026-08-06",

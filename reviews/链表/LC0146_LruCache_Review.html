@@ -115,7 +115,6 @@
             }
         }
     }</pre></div>
-    <p class="muted">哈希表+双向链表标准设计：插入要 map.put+挂链+size++，淘汰要 map.remove+断链+size--，三者同步；本地三轮修复（map.put 遗漏、普通插入分支为空、size 未维护）后全绿，力扣 25/25 Accepted（O(1) 时间/O(capacity) 空间，已最优）</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>设计题双结构同步遗漏：put 新 key 只操作链表、漏掉 map.put（get 查不到新 key），且 size 从未自增/自减导致 size==capacity 永不成立、淘汰永不触发；淘汰时也未 map.remove 被逐出 key（节点未存 key 无从删除）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>条件分支覆盖不全：容量未满的普通插入 else 路径完全为空（没建节点/没挂链/没 map.put），只写了容量已满时的淘汰分支，导致所有 put 新 key 都无效</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>

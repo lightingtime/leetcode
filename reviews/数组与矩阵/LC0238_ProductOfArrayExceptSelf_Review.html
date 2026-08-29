@@ -37,8 +37,25 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前缀积×后缀积</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 60.9 MB</span><span class="chip">用例 24/24</span></p>
-    <p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>
-    <p class="muted">左前缀积×右后缀积两次遍历一次 AC；空间 O(n)，进阶 O(1) 额外空间待优化</p>
+    <div class="code-wrap"><div class="code-head"><span>LC0238_ProductOfArrayExceptSelf.java · 前缀积×后缀积</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[] productExceptSelf(int[] nums) {
+        if (nums.length &lt; 1) {
+            return nums;
+        }
+        int[] leftMul = new int[nums.length];
+        leftMul[0] = 1;
+        for (int i = 1; i &lt; leftMul.length; i++) {
+            leftMul[i] = leftMul[i - 1] * nums[i - 1];
+        }
+        int[] rightMul = new int[nums.length];
+        rightMul[nums.length - 1] = 1;
+        for (int i = nums.length - 2; i &gt;= 0; i--) {
+            rightMul[i] = rightMul[i + 1] * nums[i + 1];
+        }
+        for (int i = 0; i &lt; nums.length; i++) {
+            nums[i] = leftMul[i] * rightMul[i];
+        }
+        return nums;
+    }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 答案数组前缀积+滚动后缀</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 69.2 MB</span><span class="chip">用例 24/24</span></p>
@@ -58,7 +75,6 @@
         }
         return leftMul;
     }</pre></div>
-    <p class="muted">答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：每个位置输出左边所有数乘积 × 右边所有数乘积。题目禁止用除法（0 会破坏除法），所以用两趟累乘。</p><p>关键设计：第一趟从左到右：leftMul[i] = nums[0..i-1] 的累积乘积（leftMul[0]=1）；第二趟从右到左：滚动变量 right 累积 nums[i+1..n-1] 的乘积，leftMul[i] *= right，再 right *= nums[i]。两趟合起来每个位置恰好乘上左右两侧全部元素，且全程不用除法。</p><p>边界：数组长度 1 时输出 [1]；含 0 或多个 0 时乘法天然正确处理，这正是不用除法的优势；空数组直接原样返回。</p><p>复杂度：O(n) 时间、O(1) 额外空间（复用输出数组，不计入额外空间），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>24/24 用例一次通过。</p></div></div></div></section>

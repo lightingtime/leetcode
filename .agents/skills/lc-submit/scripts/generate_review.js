@@ -176,7 +176,6 @@ function renderSolutions() {
     <h3 style="margin:0 0 8px">写法 ${i + 1} · ${esc(s.approach || '')}</h3>
     <p><span class="chip">时间 ${esc(s.time_complexity || '—')}</span><span class="chip">空间 ${esc(s.space_complexity || '—')}</span><span class="chip">内存 ${fmtMem(s.memory_bytes)}</span><span class="chip">用例 ${esc(s.testcases || '—')}</span></p>
     ${codeHtml}
-    ${s.notes ? `<p class="muted">${esc(s.notes)}</p>` : ''}
   </div>`;
   }).join('');
 }

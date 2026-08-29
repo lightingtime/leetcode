@@ -66,7 +66,6 @@
         }
         return dummy.next;
     }</pre></div>
-    <p class="muted">合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：两个有序链表合并成一个。归并式双指针：每步取较小节点接在结果链尾。</p><p>关键设计：p1、p2 比较取小者接在 p 后并前移；一方走完时把另一方的剩余链整体续接（链表天然 O(1) 续接）。dummy 哑节点避免头节点特判，最后返回 dummy.next。</p><p>边界：一方为空时直接返回另一方；两链长度不等；值相等时取哪边都行。</p><p>复杂度：O(n+m) 时间、O(1) 额外空间，最优。代码里相等值用 new ListNode 复制节点而非直接续接，正确但可简化——直接续接原节点更省空间。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>208/208 用例一次通过。</p></div></div></div></section>

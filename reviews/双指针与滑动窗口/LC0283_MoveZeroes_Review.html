@@ -51,7 +51,6 @@
             }
         }
     }</pre></div>
-    <p class="muted">移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：原地把 0 全部移到末尾，同时保持非零元素相对顺序。双指针一趟完成，不额外开数组。</p><p>关键设计：一个扫描位负责找 0，一个交换位指向当前要放置非零元素的位置：扫描位是 0 时与交换位交换并把交换位前移；扫描位非 0 时扫描位继续前移。这样每个非零元素都会被逐步换到前面、0 被推到后面，相对顺序不变。</p><p>边界：全 0（交换后无变化但必须保证不越界）；全非 0（扫描位一路前移）；0 在开头或结尾；交换用临时变量避免覆盖。</p><p>复杂度：O(n) 时间、O(1) 空间，原地最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>75/75 用例一次通过。</p></div></div></div></section>

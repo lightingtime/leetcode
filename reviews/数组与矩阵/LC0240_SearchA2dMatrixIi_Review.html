@@ -56,7 +56,6 @@
         }
         return false;
     }</pre></div>
-    <p class="muted">搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）</p>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：行递增、列递增的矩阵中查找 target。每行二分是 O(m log n)；从右上角出发每次排除一整行或一整列，O(m+n)。</p><p>关键设计：起点 (0, n-1)（右上角）。matrix[x][y] &gt; target 时，本列下方所有元素都更大，排除本列 y--；&lt; target 时，本行左边所有元素都更小，排除本行 x++；相等返回 true。每步确定排除一行或一列，所以最多走 m+n 步。</p><p>边界：空矩阵或空行直接 false；target 小于左上角或大于右下角时快速从边界走出去退出循环；单行退化为线性扫描、单列退化为竖扫。</p><p>复杂度：O(m+n) 时间、O(1) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>130/130 用例一次通过。</p></div></div></div></section>

@@ -50,7 +50,8 @@
       "time_complexity": "O(n)~O(n²)",
       "space_complexity": "O(1)",
       "optimal": false,
-      "notes": "三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)"
+      "notes": "三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)",
+      "code": "public void sortColors(int[] nums) {\n        int start = 0, end = nums.length - 1;\n        int mid = start;\n        while (mid <= end) {\n            if (nums[mid] == 0) {\n                int temp = nums[start];\n                nums[start] = nums[mid];\n                nums[mid] = temp;\n                start++;\n                mid = start;\n            } else if (nums[mid] == 2) {\n                int temp = nums[end];\n                nums[end] = nums[mid];\n                nums[mid] = temp;\n                end--;\n            } else {\n                mid++;\n            }\n        }\n    }"
     },
     {
       "date": "2026-08-30",
