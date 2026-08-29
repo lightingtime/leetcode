@@ -11,7 +11,7 @@
 - `tools/`：用户侧辅助脚本，如 `tools/setup_cookie.cmd`（一键读取浏览器 cookie）。
 - `.lc/`：刷题状态目录，不要手工改动
   - `progress.json`：精简索引（完成列表、聚合错误习惯、分类宽泛提示）。错误习惯只记录算法/逻辑类问题，环境配置与编译错误不计入。
-  - `order.json`：178 题推荐顺序（seq 1..178）
+  - `order.json`：170 题推荐顺序（seq 1..170）
   - `config.json`：力扣 cookie（供 lc-submit 使用）
   - `problems/{题号}_{slug}/`：题目数据（problem.json / problem.md）+ 每题分析明细（analysis.json：判题结果、复杂度、错误习惯等）
 

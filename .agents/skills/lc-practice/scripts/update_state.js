@@ -14,7 +14,7 @@
 //       打卡表并入训练主页 reviews/index.html，由 checkin 命令自动重新生成，无需用户提醒
 //       可复用套路（如指针判空取舍）用 pattern add 记录到 analysis.json 的 patterns 字段，并同步沉淀到 lc-analyze skill 的 references/patterns.md
 //       done 标记 Accepted 时自动维护 analysis.json 的 submissions 历史：解法不同则追加；相似解法（仅代码微调）只保留最优解
-//       每次打卡（checkin）自动核对硬性进度：8.30 前刷完第一遍 178 题，9.15 前完成第二遍；
+//       每次打卡（checkin）自动核对硬性进度：8.30 前刷完第一遍 170 题，9.15 前完成第二遍；
 //       按剩余天数反推日均训练量，并评估当天训练量是否达标
 const fs = require('fs');
 const path = require('path');

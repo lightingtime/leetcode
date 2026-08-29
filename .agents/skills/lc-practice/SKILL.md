@@ -9,7 +9,7 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 
 - 项目根目录：仓库根目录（IntelliJ IDEA 项目，Java 21）
 - 状态目录：`仓库根目录\.lc`
-  - `order.json`：178 题推荐顺序（seq 1..178，含阶段/分类/力扣链接）
+  - `order.json`：170 题推荐顺序（seq 1..170，含阶段/分类/力扣链接）
   - `progress.json`：当前进度（done）、错误习惯（error_habits）、分类宽泛提示（category_hints）
   - `config.json`：力扣 cookie（可选，供 lc-submit 自动提交）
   - `problems/{题号}_{slug}/`：每次拉取的题目数据（problem.json / problem.md）
