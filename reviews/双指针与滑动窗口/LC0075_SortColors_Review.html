@@ -73,8 +73,10 @@
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
         // 分区不变量：
-        //   [0,lt) 全 0；[lt,i) 全 1；(gt,n-1] 全 2；[i,gt] 未处理
-        // 故循环条件 i&lt;=gt：i==gt 时那一格仍未处理
+        //   [0,lt)   全 0
+        //   [lt,i)   全 1
+        //   (gt,n-1] 全 2
+        //   [i,gt]   未处理 → 循环条件 i&lt;=gt（i==gt 时那一格仍未处理）
         int lt = 0, i = 0, gt = nums.length - 1;
         while (i &lt;= gt) {
             if (nums[i] == 2) {

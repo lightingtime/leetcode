@@ -15,8 +15,10 @@ public class LC0075_SortColors {
     // ==== 提交代码开始 ====
     public void sortColors(int[] nums) {
         // 分区不变量：
-        //   [0,lt) 全 0；[lt,i) 全 1；(gt,n-1] 全 2；[i,gt] 未处理
-        // 故循环条件 i<=gt：i==gt 时那一格仍未处理
+        //   [0,lt)   全 0
+        //   [lt,i)   全 1
+        //   (gt,n-1] 全 2
+        //   [i,gt]   未处理 → 循环条件 i<=gt（i==gt 时那一格仍未处理）
         int lt = 0, i = 0, gt = nums.length - 1;
         while (i <= gt) {
             if (nums[i] == 2) {
