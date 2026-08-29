@@ -32,6 +32,7 @@
   .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
   .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
   .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
+  .md .table-wrap{overflow-x:auto;margin:14px 0}.md table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}.md th,.md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.md th{background:#eef2ff;color:#3730a3;font-weight:700}.md tr:nth-child(even) td{background:#f8fafc}
   .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
   .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
   .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
@@ -54,48 +55,47 @@
     <span class="badge ok">✓ Accepted 129/129</span>
     <span class="badge medium">难度 MEDIUM</span>
     <span class="badge tag">分类 哈希表</span>
+    
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-03</span>
   </div>
 </div></div>
 <div class="wrap">
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>计数编码键 + 哈希表</p>
-    <p><span class="chip">时间 O(n*L)</span><span class="chip">空间 O(n*L)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>计数编码键 + 哈希表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-08-29 <span class="tl-badge ok">较强</span></span>
+      <p>Accepted（—）｜ 一次 AC ｜ 计数编码键 + 哈希表 ｜ O(L) · O(L) ｜ 掌握：较强（间隔拉长）</p>
+      <p class="muted">二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简</p>
+    </div></div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 计数编码键 + 哈希表</h3>
+    <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(L)</span><span class="chip">内存 ≈ 48.0 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0049_GroupAnagrams.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
         Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
         for (String str : strs) {
-            String pre = cal(str);
-            if (map.containsKey(pre)) {
-                map.get(pre).add(str);
-            } else {
-                List&lt;String&gt; list = new ArrayList&lt;&gt;();
-                list.add(str);
-                map.put(pre, list);
-            }
+            map.computeIfAbsent(getKey(str), k -&gt; new ArrayList&lt;&gt;()).add(str);
         }
         return map.values().stream().toList();
     }
 
-	private String cal(String str) {
-        int[] counts = new int[26];
-        for (Character c : str.toCharArray()) {
-            counts[c - 'a']++;
+    private String getKey(String str) {
+        int[] count = new int[26];
+        for (char c : str.toCharArray()) {
+            count[c - 'a']++;
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i &lt; 26; i++) {
-            if (counts[i] &gt; 0) {
-                sb.append(i + 'a');
-                sb.append(counts[i]);
+            if (count[i] &gt; 0) {
+                sb.append(i + 'a').append(count[i]);
             }
         }
-		return sb.toString();
-
-	}</pre></div>
+        return sb.toString();
+    }</pre></div>
+    <p class="muted">二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简</p>
   </div></section>
-  
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：把「互为字母异位词」的字符串归到同一组。异位词 = 相同字符多重集合（与排列顺序无关），所以核心是把「等价关系」转成「相同键」。</p><p><strong>解法选择理由</strong>：归组需要 O(1) 查找，用哈希表；键有两条路线——① 排序后的字符串（每串 O(k log k)）；② 字符计数编码（每串 O(k)）。计数编码把 26 个字母计数拼成固定格式，达到线性最优。</p><p><strong>关键设计决策</strong>：</p><ul><li>键 = 逐字符统计次数后拼接「字母+次数」，如 <code>aabbbc</code> → <code>a2b3c1</code>；同字符多重集合必得同键，异位词必然同组。</li><li>编码<strong>必须带次数</strong>：只拼字母会漏次数（<code>aab</code> 与 <code>ab</code> 都变 <code>ab</code> 而撞键）——一刷正是栽在「编码键遗漏次数」。</li><li>用 <code>computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(str)</code> 一步完成「取组/建组」，避免 containsKey 双查。</li></ul><p><strong>具体 case 推演</strong>（输入 <code>["eat","tea","tan","ate","nat","bat"]</code>）：</p><div class="table-wrap"><table><thead><tr><th>字符串</th><th>计数</th><th>编码 key</th><th>分组</th></tr></thead><tbody><tr><td>eat</td><td>a1 e1 t1</td><td>a1e1t1</td><td>[eat, tea, ate]</td></tr><tr><td>tea</td><td>a1 e1 t1</td><td>a1e1t1</td><td>↑</td></tr><tr><td>tan</td><td>a1 n1 t1</td><td>a1n1t1</td><td>[tan, nat]</td></tr><tr><td>ate</td><td>a1 e1 t1</td><td>a1e1t1</td><td>↑</td></tr><tr><td>nat</td><td>a1 n1 t1</td><td>a1n1t1</td><td>↑</td></tr><tr><td>bat</td><td>a1 b1 t1</td><td>a1b1t1</td><td>[bat]</td></tr></tbody></table></div><p><strong>边界与细节</strong>：空串 <code>""</code> 计数全 0、编码为空串，仍独立成组（示例2）；全相同字符串同键同组；单字符、长度上限 100、数组上限 10^4 均只需线性时间，编码串长度 ≤ 26×4，不会膨胀。</p><p><strong>复杂度下限论证</strong>：输出必须包含全部字符串（每个至少写一次），时间下界 Ω(L)；空间上所有分组必须存下所有字符串，Ω(L)。计数编码实现 O(L) 时间 + O(L) 空间，已达到下限，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>键编码遗漏次数：分组键只编码出现的字母集合，漏掉每个字母的出现次数，导致 'a' 与 'aa'、'ab' 与 'aab' 被错误分到同一组</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>129/129 用例。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>

@@ -72,13 +72,13 @@ public class TestUtil {
         }
         if (o instanceof Object[]) {
             List<String> es = new ArrayList<>();
-            for (Object v : (Object[]) o) es.add(norm(v));
+            for (Object v : (Object[]) o) es.add(normUnordered(v));
             Collections.sort(es);
             return "[" + String.join(", ", es) + "]";
         }
         if (o instanceof List) {
             List<String> es = new ArrayList<>();
-            for (Object v : (List<?>) o) es.add(norm(v));
+            for (Object v : (List<?>) o) es.add(normUnordered(v));
             Collections.sort(es);
             return "[" + String.join(", ", es) + "]";
         }

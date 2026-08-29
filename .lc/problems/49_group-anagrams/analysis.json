@@ -23,5 +23,36 @@
   ],
   "hints": [
     "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
-  ]
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-08-29",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "计数编码键 + 哈希表",
+      "time_complexity": "O(L)",
+      "space_complexity": "O(L)",
+      "optimal": true,
+      "notes": "二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-29",
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "计数编码键 + 哈希表",
+      "time_complexity": "O(L)",
+      "space_complexity": "O(L)",
+      "optimal": true,
+      "notes": "二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简",
+      "mastery": "strong",
+      "pass": 1,
+      "memory_bytes": 50288000
+    }
+  ],
+  "approach_detail": "**问题本质**：把「互为字母异位词」的字符串归到同一组。异位词 = 相同字符多重集合（与排列顺序无关），所以核心是把「等价关系」转成「相同键」。\n\n**解法选择理由**：归组需要 O(1) 查找，用哈希表；键有两条路线——① 排序后的字符串（每串 O(k log k)）；② 字符计数编码（每串 O(k)）。计数编码把 26 个字母计数拼成固定格式，达到线性最优。\n\n**关键设计决策**：\n- 键 = 逐字符统计次数后拼接「字母+次数」，如 `aabbbc` → `a2b3c1`；同字符多重集合必得同键，异位词必然同组。\n- 编码**必须带次数**：只拼字母会漏次数（`aab` 与 `ab` 都变 `ab` 而撞键）——一刷正是栽在「编码键遗漏次数」。\n- 用 `computeIfAbsent(key, k -> new ArrayList<>()).add(str)` 一步完成「取组/建组」，避免 containsKey 双查。\n\n**具体 case 推演**（输入 `[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]`）：\n\n| 字符串 | 计数 | 编码 key | 分组 |\n| --- | --- | --- | --- |\n| eat | a1 e1 t1 | a1e1t1 | [eat, tea, ate] |\n| tea | a1 e1 t1 | a1e1t1 | ↑ |\n| tan | a1 n1 t1 | a1n1t1 | [tan, nat] |\n| ate | a1 e1 t1 | a1e1t1 | ↑ |\n| nat | a1 n1 t1 | a1n1t1 | ↑ |\n| bat | a1 b1 t1 | a1b1t1 | [bat] |\n\n**边界与细节**：空串 `\"\"` 计数全 0、编码为空串，仍独立成组（示例2）；全相同字符串同键同组；单字符、长度上限 100、数组上限 10^4 均只需线性时间，编码串长度 ≤ 26×4，不会膨胀。\n\n**复杂度下限论证**：输出必须包含全部字符串（每个至少写一次），时间下界 Ω(L)；空间上所有分组必须存下所有字符串，Ω(L)。计数编码实现 O(L) 时间 + O(L) 空间，已达到下限，最优。"
 }
