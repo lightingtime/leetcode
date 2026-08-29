@@ -20,23 +20,21 @@ public class LC0148_SortList {
         }
         ListNode mid = getMid(head);
         ListNode second = mid.next;
-        return mergeList(head, second);
+        mid.next = null;
+        ListNode newHead = sortList(head);
+        second = sortList(second);
+        return mergeList(newHead, second);
     }
 
     private ListNode mergeList(ListNode head, ListNode second) {
         ListNode newHead = new ListNode();
         ListNode p1 = head, p2 = second, p = newHead;
         while (p1 != null && p2 != null) {
-            ListNode next;
             if (p1.val < p2.val) {
-                next = p1.next;
-                p1.next = null;
-                p.next = next;
-                p1 = next;
+                p.next = p1;
+                p1 = p1.next;
             } else {
-                next = p2.next;
-                p1.next = null;
-                p.next = next;
+                p.next = p2;
                 p2 = p2.next;
             }
             p = p.next;
@@ -54,12 +52,11 @@ public class LC0148_SortList {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode dummy = new ListNode(0, head);
-        ListNode fast = dummy, slow = dummy;
-        while (fast != null) {
+        ListNode fast = head, slow = head;
+        while (fast.next != null) {
             fast = fast.next;
             slow = slow.next;
-            if (fast != null) {
+            if (fast.next != null) {
                 fast = fast.next;
             }
         }

@@ -31,6 +31,10 @@
     {
       "habit": "merge 合并断链写错（else 分支断 p1 而非 p2；next 为 null 时 p 变 null 引发 NPE）",
       "count": 1
+    },
+    {
+      "habit": "快慢指针找中点第二次犯：循环条件 fast.next!=null 判停+slow 无条件前移，[1,2] 仍返回节点2 → second=null → sortList 无限递归栈溢出",
+      "count": 1
     }
   ],
   "hints": [
