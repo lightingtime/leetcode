@@ -6,7 +6,8 @@
 // 非 LC 项目输出为空（调用方应回退到默认显示）；输出为单行，TTY 时带 ANSI 颜色。
 import fs from 'fs';
 
-let cwd = process.argv[2] || process.cwd();
+const forceColor = process.argv.includes('--color');
+let cwd = process.argv[2] && !process.argv[2].startsWith('-') ? process.argv[2] : process.cwd();
 if (!process.stdin.isTTY) {
   try {
     const buf = fs.readFileSync(0, 'utf8').trim();
@@ -42,7 +43,7 @@ const strong = probs.filter(p => p.mastery === 'strong').length;
 const weak = probs.filter(p => p.mastery === 'weak').length;
 const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
 const due = probs.filter(p => p.review_count > 0 && p.next_review_date && p.next_review_date <= today && !p.mastered).length;
-const tty = process.stdout.isTTY;
+const tty = process.stdout.isTTY || forceColor;
 const C = { grn: tty ? '\x1b[32m' : '', yel: tty ? '\x1b[33m' : '', cyn: tty ? '\x1b[36m' : '', red: tty ? '\x1b[31m' : '', rst: tty ? '\x1b[0m' : '' };
 const parts = [];
 if (pendingNew > 0) {
