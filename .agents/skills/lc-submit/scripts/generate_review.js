@@ -94,6 +94,7 @@ const mistakes = Array.isArray(a.mistakes) ? a.mistakes : [];
 const codeNotes = Array.isArray(a.code_notes) ? a.code_notes : [];
 const patterns = Array.isArray(a.patterns) ? a.patterns : [];
 const approachDetail = a.approach_detail || '';
+const reviews = Array.isArray(a.reviews) ? a.reviews : [];
 
 const tlItems = [];
 mistakes.forEach((m, i) => tlItems.push(
@@ -104,6 +105,21 @@ tlItems.push(
 
 const fmtMem = b => b != null ? `≈ ${(b / 1048576).toFixed(1)} MB` : '—';
 const codeBlock = (title, c) => c ? `<div class="code-wrap"><div class="code-head"><span>${esc(title)}</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>${esc(c)}</pre></div>` : '';
+function renderReviews() {
+  if (!reviews.length) return '';
+  const items = reviews.slice().reverse().map(r => {
+    const m = r.mastery === 'strong' ? '<span class="tl-badge ok">较强</span>' : '<span class="tl-badge bug">较弱</span>';
+    const fp = r.firstTry ? '一次 AC' : '多次提交';
+    const ts = [r.time_complexity, r.space_complexity].filter(Boolean).join(' · ');
+    const verdict = r.verdict || 'Accepted';
+    return `<div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 ${esc(r.pass)} 次复习 · ${esc(r.date)} ${m}</span>
+      <p>${verdict}（${esc(r.testcases || '—')}）｜ ${fp} ｜ ${esc(r.approach || '—')}${ts ? ' ｜ ' + esc(ts) : ''} ｜ 掌握：${r.mastery === 'strong' ? '较强（间隔拉长）' : '较弱（间隔重置）'}</p>
+      ${r.notes ? `<p class="muted">${esc(r.notes)}</p>` : ''}
+    </div></div>`;
+  }).join('');
+  return `<section><h2>复习记录</h2><div class="tl">${items}</div></section>`;
+}
 function renderSolutions() {
   const subs = Array.isArray(a.submissions) && a.submissions.length ? a.submissions : null;
   if (!subs) {
@@ -186,10 +202,12 @@ const html = `<!DOCTYPE html>
     <span class="badge plain">${done.firstPass ? '一次通过' : '多次通过'}</span>
     <span class="badge ${done.optimal ? 'ok' : 'plain'}">${done.optimal ? '最优解' : '已满足题意·可进阶'}</span>
     ${codeNotes.length ? '<span class="badge hard">重点复习</span>' : ''}
+    ${reviews.length ? `<span class="badge plain">二刷 ×${reviews.length}</span>` : ''}
     <span class="badge">${date}</span>
   </div>
 </div></div>
 <div class="wrap">
+  ${renderReviews()}
   <section><h2>我的解法</h2>${renderSolutions()}</section>
   ${approachDetail ? `<section><h2>思路拆解</h2><div class="card md">${md(approachDetail)}</div></section>` : ''}
   <section><h2>解题过程</h2><div class="tl">${tlItems.join('')}</div></section>

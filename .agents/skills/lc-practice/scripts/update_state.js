@@ -84,9 +84,10 @@ if (cmd === 'next') {
   console.log(`进度：已完成 ${doneSeqs.size}/${order.length}`);
   if (!next) {
     const allSkipped = order.every(o => doneSeqs.has(o.seq) || skippedSeqs.has(o.seq));
+    const reviewCmd = 'node ".agents/skills/lc-review/scripts/review.js" next';
     console.log(allSkipped
-      ? '未完成题目均为已跳过（会员题等），进入复习模式（随机抽已完成题重写）。'
-      : '全部完成，进入复习模式（随机抽已完成题重写）。');
+      ? '未完成题目均已处理（会员题已剔除），进入复习模式：' + reviewCmd
+      : '全部完成，进入复习模式（二刷 + 间隔复习）：' + reviewCmd);
     process.exit(0);
   }
   console.log(`下一题：seq=${next.seq} | ${next.id}. ${next.title}（${next.difficulty}）分类=${next.category}`);
@@ -332,6 +333,10 @@ if (cmd === 'next') {
   console.log(`最近完成：${(done[done.length - 1] || {}).title || '无'}`);
 } else if (cmd === 'plan') {
   planReport(progress).forEach(l => console.log(l));
+} else if (cmd === 'review') {
+  // 复习调度委托给 lc-review skill（review.js 独立维护 review_state.json）
+  const r = spawnSync('node', [path.join(__dirname, '..', '..', 'lc-review', 'scripts', 'review.js'), ...args.slice(1)], { encoding: 'utf8', stdio: 'inherit' });
+  process.exit(r.status || 0);
 } else {
-  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--approachDetail "完整思路拆解"] [--dpSubtype "区间DP"] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | stats');
+  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--approachDetail "完整思路拆解"] [--dpSubtype "区间DP"] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | review next|done|stats | stats');
 }

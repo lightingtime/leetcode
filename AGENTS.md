@@ -13,7 +13,8 @@
   - `progress.json`：精简索引（完成列表、聚合错误习惯、分类宽泛提示）。错误习惯只记录算法/逻辑类问题，环境配置与编译错误不计入。
   - `order.json`：170 题推荐顺序（seq 1..170）
   - `config.json`：力扣 cookie（供 lc-submit 使用）
-  - `problems/{题号}_{slug}/`：题目数据（problem.json / problem.md）+ 每题分析明细（analysis.json：判题结果、复杂度、错误习惯等）
+  - `problems/{题号}_{slug}/`：题目数据（problem.json / problem.md）+ 每题分析明细（analysis.json：判题结果、复杂度、错误习惯、reviews 复习事件流等）
+  - `review_state.json`：复习调度状态（每题 last/next_review_date、间隔、掌握度、是否已掌握），由 lc-review 维护，供复习抽题与主页展示
 
 ## 可用的 lc skill（按用户意图触发）
 
@@ -23,6 +24,7 @@
 | 「提交」「提交力扣」「帮我提交」「测试过了」 | lc-submit | 确认本地测试通过后提交力扣，Accepted 后更新进度 |
 | 「帮我分析」「我哪里错了」「测试不过」「看看我的代码」 | lc-analyze | 编译/运行拿到报错，指出思路中哪步假设或写法导致问题（只给宽泛提示） |
 | 「不懂」「不会写」「卡住了」「帮我看看思路」（尚未跑测试） | lc-guide | 名词先解释清楚、先规划变量及用途、分块推进，一次只讲一块，不直接给答案 |
+| 「开始复习」「二刷」「复习下一题」「开始第二轮」 | lc-review | 二刷 + 间隔复习调度（较强×2.5 / 较弱重置），重开题目重写并重提交，按掌握度更新复盘 |
 
 ## 工作流约定
 
@@ -45,6 +47,8 @@
 - Java 21（`javac` / `java` 需可用）
 - Node.js：lc 系列 skill 的脚本均为 Node 脚本
 - Python 3.13：已安装（部分工具脚本使用）
+
+12. 复习轮（二刷）走 `lc-review`：抽题看 `node ".agents/skills/lc-review/scripts/review.js" next`；复习提交由 `lc-submit` 自动识别，Accepted 后调用 `review.js done` 写入 analysis.json `reviews` + 更新 `review_state.json`，**不覆盖 progress.json 的一刷事实**（date/firstPass/notes 保留，仅 optimal 可更新为当前最优）；掌握度判定：一次 AC 且无探讨 = 较强，探讨过/非一次 AC = 较弱。
 
 ## 展示约定
 

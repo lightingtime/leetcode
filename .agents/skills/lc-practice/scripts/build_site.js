@@ -95,6 +95,21 @@ const firstPassCnt = done.filter(d => d.firstPass).length;
 const optimalCnt = done.filter(d => d.optimal).length;
 const pct = Math.min(100, Math.round((done.length / total) * 100));
 
+// 二刷复习统计（数据源 .lc/review_state.json，由 lc-review 维护）
+let reviewState = null;
+const reviewStatePath = path.join(LC_DIR, 'review_state.json');
+if (fs.existsSync(reviewStatePath)) {
+  try { reviewState = JSON.parse(fs.readFileSync(reviewStatePath, 'utf8')); } catch {}
+}
+const reviewProblems = reviewState ? Object.values(reviewState.problems || {}) : [];
+const reviewedCnt = reviewProblems.filter(p => p.review_count > 0).length;
+const masteredCnt = reviewProblems.filter(p => p.mastered).length;
+const strongCnt = reviewProblems.filter(p => p.mastery === 'strong').length;
+const weakCnt = reviewProblems.filter(p => p.mastery === 'weak').length;
+const dueToday = reviewProblems.filter(p => p.review_count > 0 && p.next_review_date && p.next_review_date <= todayStr && !p.mastered).length;
+const pendingCnt = Math.max(0, total - reviewedCnt);
+const reviewPct = total ? Math.min(100, Math.round((reviewedCnt / total) * 100)) : 0;
+
 const rows = checkinDates.map(date => {
   const items = done.filter(d => d.date === date).sort((a, b) => a.seq - b.seq);
   const idLinks = items.map(d => {
@@ -228,6 +243,20 @@ const html = `<!DOCTYPE html>
   </section>
 
   <section>
+    <h2>二刷复习</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">${reviewedCnt}/${total}</div><div class="l">二刷进度（${SECOND_PASS_DEADLINE} 前）</div></div>
+      <div class="metric"><div class="v">${pendingCnt}</div><div class="l">第一轮待刷</div></div>
+      <div class="metric"><div class="v">${dueToday}</div><div class="l">今日到期</div></div>
+      <div class="metric ok"><div class="v">${strongCnt}</div><div class="l">较强掌握</div></div>
+      <div class="metric"><div class="v">${weakCnt}</div><div class="l">较弱掌握</div></div>
+      <div class="metric"><div class="v">${masteredCnt}</div><div class="l">已掌握</div></div>
+    </div>
+    <div class="bar"><i style="width:${reviewPct}%"></i></div>
+    <p class="muted">调度：Ebbinghaus + SM-2（较强 ×2.5 拉长、较弱重置 1 天，上限 60 天）｜ 数据源 .lc/review_state.json，由 lc-review 维护。</p>
+  </section>
+
+  <section>
     <h2>打卡表</h2>
     ${done.length === 0
       ? '<div class="card muted">还没有打卡记录，完成第一题后会显示在这里。</div>'
@@ -235,7 +264,7 @@ const html = `<!DOCTYPE html>
       <tr><th>日期</th><th>题数</th><th>完成题目（点击看复盘）</th><th>一次 AC</th><th>最优</th><th>复习日期</th></tr>
 ${rows}
     </table>`}
-    <p class="muted">复习节奏：1 / 3 / 7 / 14 天；「是否最优」由 lc-submit 在 Accepted 后分析得出。</p>
+    <p class="muted">「是否最优」由 lc-submit 在 Accepted 后分析得出；二刷间隔由 lc-review 按掌握度调度。</p>
   </section>
 
   <section>
@@ -261,7 +290,7 @@ ${reviewSections}`}
     </div>
   </section>
 
-  <div class="foot">生成于 ${todayStr} ｜ 数据源：.lc/progress.json · .lc/problems/*/analysis.json</div>
+  <div class="foot">生成于 ${todayStr} ｜ 数据源：.lc/progress.json · .lc/review_state.json · .lc/problems/*/analysis.json</div>
 
 <script>
 function toggleReviewGroups() {
