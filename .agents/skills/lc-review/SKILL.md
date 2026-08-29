@@ -33,7 +33,7 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
    - 读取今日推荐（含配额）与队列；同时跑 `update_state.js code-notes`，把「当时写法未达最精简」的题合并进今日清单，重写时要求达到精简写法。
    - 展示时给出：题目链接、难度、分类、一刷完成日期、是否薄弱（⚠）、需要在 IDEA 打开的文件。
 2. 重开题目：复用 `lc-practice` 的拉题/建题脚本生成新的 `src/LC{题号}_{题名}.java`。
-   - **示例测试为主，不预塞边界用例**（避免剧透、考回忆）；文件头注明「二刷 · 一刷日期/思路」。
+   - **测试用例与一刷保持一致（必做）**：把一刷归档 `main` 测试区（示例 + 边界 + 回归用例）原样同步到二刷文件，禁止重新设计或留 TODO；文件头注明「二刷 · 一刷日期/思路」和「测试用例与一刷归档保持一致」。
    - 一刷源码已在 `src/{分类}/` 归档，不删除；git 历史保留旧版。
 3. 用户重写并本地测试通过后，走 `lc-submit` 提交力扣（复习提交由 lc-submit 自动识别）。
 4. 记录掌握度：Accepted 后由 lc-submit 调用 `node ".agents/skills/lc-review/scripts/review.js" done --seq <seq> --mastery strong|weak ...`（含 approach/time/space/optimal/firstTry），写入 analysis.json reviews + 更新调度。

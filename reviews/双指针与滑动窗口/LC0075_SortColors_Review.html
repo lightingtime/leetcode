@@ -20,18 +20,29 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-05</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>75. 颜色分类 (Sort Colors)</h1><p>&gt; <a href="https://leetcode.cn/problems/sort-colors/" rel="noopener">https://leetcode.cn/problems/sort-colors/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针、冒泡排序、排序、快速排序</p><h2>题目描述</h2><p>给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地 对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。</p><p>我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。</p><p>必须在不使用库内置的 sort 函数的情况下解决这个问题。</p><p>示例 1：</p><p>输入：nums = [2,0,2,1,1,0]</p><p>输出：[0,0,1,1,2,2]</p><p>解释：</p><p>该数组包含两个 0、两个 1 和两个 2。将它们原地排序后，所有 0 排在最前面，接着是所有 1，最后是所有 2。</p><p>示例 2：</p><p>输入：nums = [2,0,1]</p><p>输出：[0,1,2]</p><p>解释：</p><p>数组中有且仅有一个 0、一个 1 和一个 2，按 0、1、2 的顺序原地排列。</p><p>提示：</p><p>n == nums.length</p><p>1</p><p>nums[i] 为 0、1 或 2</p><p>进阶：</p><p>你能想出一个仅使用常数空间的一趟扫描算法吗？</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-08-30 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 三指针分区（荷兰国旗） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路一致（三指针分区），写法等价——本次用 lt/i/gt：交换 2 后 i 不动（回看换来的值）、交换 0 后 lt 与 i 都前进、1 跳过；一刷同此语义。</p><p><strong>一次 AC 归因</strong>：一刷栽在 0 分支误重置 mid 导致非严格一趟；本次每一步推进明确（2→右端、0→左端、1→中间），并沿用一刷边界测试（全 0/全 2/已排序/逆序/回归），从设计与验证两端规避同类错误。</p><p><strong>掌握度依据</strong>：一次提交 Accepted（90/90）、无探讨 → 较强，间隔 ×2.5。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>三指针分区（荷兰国旗）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
+      </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>三指针分区（荷兰国旗）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -41,12 +52,43 @@
     <p class="muted">三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)</p>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 三指针分区（荷兰国旗）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 89/89</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
-        // TODO: 在这里实现你的解法
-        
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
+        // 不变量（分区含义）：
+        //   [0, lt)    已处理，全是 0
+        //   [lt, i)    已处理，全是 1
+        //   [i, gt]    未处理区（待扫描）
+        //   (gt, n-1]  已处理，全是 2
+        // lt：下一个 0 应放的位置（0 区右边界，不含）
+        // i ：当前扫描指针（未处理区左端点）
+        // gt：下一个 2 应放的位置（2 区左边界，不含）——gt 位置本身未处理，不代表已完成
+        int lt = 0, i = 0, gt = nums.length - 1;
+        // 未处理区是 [i, gt] 闭区间：i == gt 时还剩最后一个元素未处理；
+        // 交换 2 后 gt--，新 gt 处放着换回的未知值（可能 0/1），必须由 i 再扫一次，故条件写 i &lt;= gt
+        while (i &lt;= gt) {
+            if (nums[i] == 2) {
+                swap(nums, i, gt);   // 2 归位到 gt；换回的值未知，i 不前进，下一轮继续检查
+                gt--;
+            } else if (nums[i] == 0) {
+                swap(nums, lt, i);   // 0 归位到 lt；换回的值来自已处理区（必为 1），可放心 i++
+                lt++;
+                i++;
+            } else {                 // nums[i] == 1
+                i++;
+            }
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }</pre></div>
-    <p class="muted">重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）</p>
+    <p class="muted">**与一刷对比**：思路一致（三指针分区），写法等价——本次用 lt/i/gt：交换 2 后 i 不动（回看换来的值）、交换 0 后 lt 与 i 都前进、1 跳过；一刷同此语义。
+
+**一次 AC 归因**：一刷栽在 0 分支误重置 mid 导致非严格一趟；本次每一步推进明确（2→右端、0→左端、1→中间），并沿用一刷边界测试（全 0/全 2/已排序/逆序/回归），从设计与验证两端规避同类错误。
+
+**掌握度依据**：一次提交 Accepted（90/90）、无探讨 → 较强，间隔 ×2.5。</p>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>分区双指针死循环：没有覆盖无可交换的终态，当 start/end 都指向 1 且中间全为 1 时无任何指针移动，外层 while 永不退出（表现为测试超时）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>分区交换后未回看换入值：扫描指针交换后直接前进，换进来的 0/2 可能被困在中间；且每轮都重扫整段中间，不是一趟 O(n)</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>扫描指针推进逻辑有跳跃：0 分支将 mid 重置为 start 后循环底部又无条件 mid++，跳过未处理位置；2 分支交换后也没有停住回看换入值，导致 [0,2,1] 中下标 1 的 2 从未被检查</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>89/89 用例。</p></div></div></div></section>

@@ -53,19 +53,36 @@
       "notes": "三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)"
     },
     {
-      "date": "2026-08-05",
+      "date": "2026-08-30",
       "verdict": "Accepted",
-      "testcases": "89/89",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 43904000,
+      "memory_bytes": 43852000,
       "approach": "三指针分区（荷兰国旗）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）"
+      "notes": "**与一刷对比**：思路一致（三指针分区），写法等价——本次用 lt/i/gt：交换 2 后 i 不动（回看换来的值）、交换 0 后 lt 与 i 都前进、1 跳过；一刷同此语义。\n\n**一次 AC 归因**：一刷栽在 0 分支误重置 mid 导致非严格一趟；本次每一步推进明确（2→右端、0→左端、1→中间），并沿用一刷边界测试（全 0/全 2/已排序/逆序/回归），从设计与验证两端规避同类错误。\n\n**掌握度依据**：一次提交 Accepted（90/90）、无探讨 → 较强，间隔 ×2.5。",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-08-30",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "三指针分区（荷兰国旗）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（三指针分区），写法等价——本次用 lt/i/gt：交换 2 后 i 不动（回看换来的值）、交换 0 后 lt 与 i 都前进、1 跳过；一刷同此语义。\n\n**一次 AC 归因**：一刷栽在 0 分支误重置 mid 导致非严格一趟；本次每一步推进明确（2→右端、0→左端、1→中间），并沿用一刷边界测试（全 0/全 2/已排序/逆序/回归），从设计与验证两端规避同类错误。\n\n**掌握度依据**：一次提交 Accepted（90/90）、无探讨 → 较强，间隔 ×2.5。"
+    }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-08-29",
+  "updated": "2026-08-30",
   "deadline": "2026-09-15",
   "problems": {
     "two-sum": {
@@ -177,12 +177,12 @@
       "title": "颜色分类",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-05",
-      "last_review_date": null,
-      "next_review_date": null,
-      "interval_days": null,
-      "review_count": 0,
-      "mastery": null,
-      "consecutive_strong": 0,
+      "last_review_date": "2026-08-30",
+      "next_review_date": "2026-08-31",
+      "interval_days": 1,
+      "review_count": 1,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "sort-list": {

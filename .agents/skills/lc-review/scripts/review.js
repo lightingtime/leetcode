@@ -128,6 +128,7 @@ if (cmd === 'init') {
     const st = problems[q.slug];
     if (!st) continue;
     if (st.mastered) { mastered.push(st); continue; }
+    if (st.skipped) continue; // 用户跳过的题：不推荐，完成复习或 --undo 后恢复
     if (st.review_count === 0) pending.push(st);
     else if (st.next_review_date && st.next_review_date <= today) due.push(st);
   }
@@ -147,6 +148,18 @@ if (cmd === 'init') {
   console.log('今日推荐（按优先级）：');
   todayList.forEach((st, i) => console.log(`  ${i + 1}. ${fmt(st)}`));
   if (queue.length > todayList.length) console.log(`  …… 队列中还有 ${queue.length - todayList.length} 题（今日做不完顺延）`);
+} else if (cmd === 'skip') {
+  const seq = parseInt(arg('--seq', ''), 10);
+  const undo = arg('--undo', '') === 'true';
+  if (!seq) { console.error('用法: review.js skip --seq N [--undo true]'); process.exit(1); }
+  const state = ensureState();
+  const q = order.find(o => o.seq === seq);
+  if (!q) { console.error(`找不到 seq=${seq}`); process.exit(1); }
+  const st = state.problems[q.slug];
+  if (undo) { delete st.skipped; console.log(`已取消跳过：${q.id}. ${q.title}（重新进入复习队列）`); }
+  else { st.skipped = true; console.log(`已跳过：${q.id}. ${q.title}（next 不再推荐；完成复习或 --undo true 可恢复）`); }
+  state.updated = todayStr();
+  writeJson(STATE, state);
 } else if (cmd === 'done') {
   const seq = parseInt(arg('--seq', '0'), 10);
   const q = order.find(o => o.seq === seq);
@@ -185,6 +198,7 @@ if (cmd === 'init') {
   st.next_review_date = addDays(today, interval);
   st.review_count += 1;
   st.mastery = mastery;
+  delete st.skipped; // 完成复习即取消跳过标记
   if (mastery === 'strong' && interval >= MAX_INTERVAL_DAYS && st.consecutive_strong >= MASTER_CONSECUTIVE_STRONG) st.mastered = true;
   state.updated = today;
 

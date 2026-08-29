@@ -2,8 +2,10 @@
 // LeetCode 75. 颜色分类 (Sort Colors)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-colors/
-// 刷题日期：2026-08-05
+// 刷题日期：2026-08-29（测试用例与一刷归档保持一致）（二刷 · 一刷 2026-08-05，一刷非一次 AC：0 分支误重置 mid 导致非严格一趟）
 //
+// 思路：三指针分区（荷兰国旗）——0 归左、2 归右、1 居中
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -12,24 +14,35 @@ public class LC0075_SortColors {
 
     // ==== 提交代码开始 ====
     public void sortColors(int[] nums) {
-        int start = 0, end = nums.length - 1;
-        int mid = start;
-        while (mid <= end) {
-                if (nums[mid] == 0) {
-                    int temp = nums[start];
-                    nums[start] = nums[mid];
-                    nums[mid] = temp;
-                    start++;
-                    mid++;
-                } else if (nums[mid] == 2) {
-                    int temp = nums[end];
-                    nums[end] = nums[mid];
-                    nums[mid] = temp;
-                    end--;
-                } else {
-                    mid++;
-                }
+        // 不变量（分区含义）：
+        //   [0, lt)    已处理，全是 0
+        //   [lt, i)    已处理，全是 1
+        //   [i, gt]    未处理区（待扫描）
+        //   (gt, n-1]  已处理，全是 2
+        // lt：下一个 0 应放的位置（0 区右边界，不含）
+        // i ：当前扫描指针（未处理区左端点）
+        // gt：下一个 2 应放的位置（2 区左边界，不含）——gt 位置本身未处理，不代表已完成
+        int lt = 0, i = 0, gt = nums.length - 1;
+        // 未处理区是 [i, gt] 闭区间：i == gt 时还剩最后一个元素未处理；
+        // 交换 2 后 gt--，新 gt 处放着换回的未知值（可能 0/1），必须由 i 再扫一次，故条件写 i <= gt
+        while (i <= gt) {
+            if (nums[i] == 2) {
+                swap(nums, i, gt);   // 2 归位到 gt；换回的值未知，i 不前进，下一轮继续检查
+                gt--;
+            } else if (nums[i] == 0) {
+                swap(nums, lt, i);   // 0 归位到 lt；换回的值来自已处理区（必为 1），可放心 i++
+                lt++;
+                i++;
+            } else {                 // nums[i] == 1
+                i++;
+            }
         }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
     // ==== 提交代码结束 ====
 
