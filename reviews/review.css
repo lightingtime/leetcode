@@ -1258,11 +1258,11 @@ details.review-problem .md h2 { font-size:16px; margin-top:16px; }
 /* ============ 代码语法高亮（GitHub 浅色主题配色） ============ */
 .tk-c { color:#6e7781; font-style:italic; }              /* 注释：灰 */
 .tk-s { color:#0a3069; }                                  /* 字符串：深蓝 */
-.tk-k { color:#cf222e; font-weight:600; }                 /* 关键字：深红 */
+.tk-k { color:#8250df; font-weight:600; }                 /* 关键字：紫 */
 .tk-n { color:#0550ae; }                                  /* 数字：蓝 */
-.tk-a { color:#953800; }                                  /* 注解：橙棕 */
+.tk-a { color:#9a6700; }                                  /* 注解：棕黄 */
 .tk-t { color:#0550ae; }                                  /* 类型：蓝 */
-.tk-f { color:#8250df; }                                  /* 方法名：紫 */
+.tk-f { color:#0e7490; }                                  /* 方法名：深青 */
 
 /* ============ Markdown 内容多色系增强（蓝/紫/绿/橙/红） ============ */
 .markdown-body h2 { color:#0a3069; }                      /* 小节标题：深蓝 */
