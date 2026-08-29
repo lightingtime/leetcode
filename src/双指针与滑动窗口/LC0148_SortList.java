@@ -2,10 +2,10 @@
 // LeetCode 148. 排序链表 (Sort List)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-list/
-// 刷题日期：2026-08-30（二刷 · 一刷 2026-08-05，一刷一次 AC 但空间 O(log n) 未达进阶；测试用例与一刷归档保持一致）
+// 刷题日期：2026-08-30（进阶练习 · 自底向上归并 O(1) 空间；保留 mergeList，删自顶向下递归与 getMid）
 //
-// 思路：自顶向下归并——快慢指针找中点切分，两半递归排序后合并
-// 复杂度：时间 O(n log n) 空间 O(log n)（递归栈，进阶自底向上可 O(1)）
+// 思路：自底向上归并——subLen 从 1 翻倍，走 k 步取段 + 断链 + merge，迭代无递归
+// 复杂度：时间 O(n log n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -17,13 +17,46 @@ public class LC0148_SortList {
         if (head == null || head.next == null) {
             return head;
         }
-        // 两半必须各自递归排序后再合并（此前漏掉分治，直接 merge 两个乱序序列）
-        ListNode mid = getMid(head);
-        ListNode second = mid.next;
-        mid.next = null;
-        ListNode newHead = sortList(head);
-        second = sortList(second);
-        return mergeList(newHead, second);
+        int len = getLen(head);
+        ListNode dummy = new ListNode(0, head);
+        for (int subLen = 1; subLen < len; subLen <<= 1) {
+            ListNode pre = dummy, cur = dummy.next;
+            while (cur != null) {
+                ListNode first = cur;
+                for (int i = 1; i < subLen && cur.next != null; i++) {
+                    cur = cur.next;
+                }
+                ListNode second = cur.next;
+                cur.next = null;
+                cur = second;
+                for (int i = 1; i < subLen && cur != null && cur.next != null; i++) {
+                    cur = cur.next;
+                }
+                ListNode next = null;
+                if (cur != null) {
+                    next = cur.next;
+                    cur.next = null;
+                }
+                pre.next = mergeList(first, second);
+                while (pre.next != null) {
+                    pre = pre.next;
+                }
+                cur = next;
+            }
+
+        }
+        return dummy.next;
+    }
+
+    private int getLen(ListNode head) {
+        int count = 0;
+        ListNode dummy = new ListNode(0, head);
+        ListNode p = dummy.next;
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        return count;
     }
 
     private ListNode mergeList(ListNode head, ListNode second) {
@@ -43,20 +76,6 @@ public class LC0148_SortList {
         if (p1 != null) p.next = p1;
         if (p2 != null) p.next = p2;
         return newHead.next;
-    }
-
-    private ListNode getMid(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-        // fast 每轮完整走 2 步、slow 走 1 步，fast 到尾时 slow 恰在中点
-        // 条件 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」（此前偶数长度 slow 多走，[1,2] 返回节点 2 致无限递归）
-        ListNode fast = head, slow = head;
-        while (fast.next != null && fast.next.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
-        }
-        return slow;
     }
     // ==== 提交代码结束 ====
 
