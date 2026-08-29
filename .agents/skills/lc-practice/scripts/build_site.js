@@ -101,6 +101,9 @@ const reviewStatePath = path.join(LC_DIR, 'review_state.json');
 if (fs.existsSync(reviewStatePath)) {
   try { reviewState = JSON.parse(fs.readFileSync(reviewStatePath, 'utf8')); } catch {}
 }
+let curMode = 'practice';
+const modePath = path.join(LC_DIR, 'mode.json');
+if (fs.existsSync(modePath)) { try { curMode = (JSON.parse(fs.readFileSync(modePath, 'utf8')).mode || 'practice'); } catch {} }
 const reviewProblems = reviewState ? Object.values(reviewState.problems || {}) : [];
 const reviewedCnt = reviewProblems.filter(p => p.review_count > 0).length;
 const masteredCnt = reviewProblems.filter(p => p.mastered).length;
@@ -224,6 +227,7 @@ const html = `<!DOCTYPE html>
       <span class="badge">完成 ${done.length}/${total} 题</span>
       <span class="badge">距 ${FIRST_PASS_DEADLINE} 还有 ${daysLeft} 天</span>
       <span class="badge">开始：${checkinDates.length ? checkinDates[checkinDates.length - 1] : '—'}</span>
+      <span class="badge ${curMode === 'review' ? 'ok' : 'plain'}">模式：${curMode === 'review' ? '复习' : '刷题'}</span>
     </div>
   </div>
 </div>

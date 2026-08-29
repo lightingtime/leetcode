@@ -78,17 +78,22 @@ function planReport(p) {
 }
 
 if (cmd === 'next') {
+  const MODE = path.join(LC_DIR, 'mode.json');
+  let mode = 'practice';
+  try { mode = (readJson(MODE).mode || 'practice'); } catch {}
+  if (mode === 'review') {
+    const r = spawnSync('node', [path.join(__dirname, '..', '..', 'lc-review', 'scripts', 'review.js'), 'next', ...args.slice(1)], { encoding: 'utf8', stdio: 'inherit' });
+    process.exit(r.status || 0);
+  }
   const doneSeqs = new Set((progress.done || []).map(d => d.seq));
   const skippedSeqs = new Set(progress.skipped || []);
   const next = order.find(o => !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq));
   console.log(`进度：已完成 ${doneSeqs.size}/${order.length}`);
   if (!next) {
-    const allSkipped = order.every(o => doneSeqs.has(o.seq) || skippedSeqs.has(o.seq));
-    const reviewCmd = 'node ".agents/skills/lc-review/scripts/review.js" next';
-    console.log(allSkipped
-      ? '未完成题目均已处理（会员题已剔除），进入复习模式：' + reviewCmd
-      : '全部完成，进入复习模式（二刷 + 间隔复习）：' + reviewCmd);
-    process.exit(0);
+    writeJson(MODE, { mode: 'review', updated: date });
+    console.log('第一遍全部完成，已自动切换为复习模式（二刷 + 间隔复习）。');
+    const r = spawnSync('node', [path.join(__dirname, '..', '..', 'lc-review', 'scripts', 'review.js'), 'next', ...args.slice(1)], { encoding: 'utf8', stdio: 'inherit' });
+    process.exit(r.status || 0);
   }
   console.log(`下一题：seq=${next.seq} | ${next.id}. ${next.title}（${next.difficulty}）分类=${next.category}`);
   console.log(`链接：${next.url}`);
@@ -337,6 +342,17 @@ if (cmd === 'next') {
   // 复习调度委托给 lc-review skill（review.js 独立维护 review_state.json）
   const r = spawnSync('node', [path.join(__dirname, '..', '..', 'lc-review', 'scripts', 'review.js'), ...args.slice(1)], { encoding: 'utf8', stdio: 'inherit' });
   process.exit(r.status || 0);
+} else if (cmd === 'mode') {
+  const MODE = path.join(LC_DIR, 'mode.json');
+  const modeArg = args[1];
+  if (modeArg === 'review' || modeArg === 'practice') {
+    writeJson(MODE, { mode: modeArg, updated: date });
+    console.log(`已切换为${modeArg === 'review' ? '复习' : '刷题'}模式：说「下一题」将走 ${modeArg === 'review' ? 'lc-review（二刷复习）' : 'lc-practice（一刷刷题）'}。`);
+  } else {
+    let cur = 'practice';
+    try { cur = (readJson(MODE).mode || 'practice'); } catch {}
+    console.log(`当前模式：${cur === 'review' ? '复习（二刷）' : '刷题（一刷）'}（.lc/mode.json）`);
+  }
 } else {
-  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--approachDetail "完整思路拆解"] [--dpSubtype "区间DP"] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | review next|done|stats | stats');
+  console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--approachDetail "完整思路拆解"] [--dpSubtype "区间DP"] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | review next|done|stats | mode [review|practice] | stats');
 }

@@ -14,6 +14,11 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
   - `config.json`：力扣 cookie（可选，供 lc-submit 自动提交）
   - `problems/{题号}_{slug}/`：每次拉取的题目数据（problem.json / problem.md）
 
+## 模式切换
+
+- 本 skill 服务 `practice` 模式（`.lc/mode.json`，一刷刷题）。「开始刷题 / 拉题」时先确保 `node ".agents/skills/lc-practice/scripts/update_state.js" mode practice`。
+- 若当前模式是 `review`（二刷复习），「下一题」改走 lc-review，不要走本 skill。
+
 ## 流程
 
 1. 运行 `node ".agents/skills/lc-practice/scripts/update_state.js" next` 查看进度与下一题，记录其 seq、slug、分类。

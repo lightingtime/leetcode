@@ -21,9 +21,14 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
 - 第一轮二刷不走间隔：配额 = 第一轮剩余题数 ÷ 距 `2026-09-15` 剩余天数；题序 = 薄弱优先（一刷非一次 AC / 非最优）→ 一刷日期从旧到新
 - 到期队列内：薄弱优先 → 到期日从早到晚
 
+## 模式切换
+
+- 本 skill 对应 `review` 模式（`.lc/mode.json`）。触发「开始复习 / 二刷」时先确保 `node ".agents/skills/lc-practice/scripts/update_state.js" mode review`；此后用户说「下一题」自动走本 skill 的 `review.js next`。
+- 想回到一刷刷题：`update_state.js mode practice`。
+
 ## 流程
 
-1. 抽题：`node ".agents/skills/lc-review/scripts/review.js" next`。
+1. 抽题：`node ".agents/skills/lc-review/scripts/review.js" next`（或复习模式下直接 `update_state.js next`）。
    - 读取今日推荐（含配额）与队列；同时跑 `update_state.js code-notes`，把「当时写法未达最精简」的题合并进今日清单，重写时要求达到精简写法。
    - 展示时给出：题目链接、难度、分类、一刷完成日期、是否薄弱（⚠）、需要在 IDEA 打开的文件。
 2. 重开题目：复用 `lc-practice` 的拉题/建题脚本生成新的 `src/LC{题号}_{题名}.java`。
