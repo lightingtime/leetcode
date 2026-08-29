@@ -59,17 +59,34 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-05",
+      "date": "2026-08-30",
       "verdict": "Accepted",
-      "testcases": "30/30",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 59752000,
+      "memory_bytes": 59524000,
       "approach": "自顶向下归并排序",
       "time_complexity": "O(n log n)",
       "space_complexity": "O(log n)",
       "optimal": false,
-      "notes": "自顶向下归并排序：快慢指针找中点 + 递归合并，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并"
+      "notes": "**与一刷对比**：思路一致（自顶向下归并：快慢指针找中点切分 + 递归排序 + merge）；本次实现从一刷的 sortList(head, tail) 带尾参数改为「返回左半最后一个」写法，merge 去掉了多余断链。\n\n**为什么这次没想起来**：两次卡点——① 分治结构缺失（切完直接 merge，两半未排序）；② 快慢指针找中点偶数长度偏后（[1,2] 返回节点 2）→ second=null → sortList 无限递归栈溢出；经提示后在 getMid 用 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」修正。\n\n**掌握度依据**：测试多次失败、经两轮提示定位后改对 → 较弱，间隔重置 1 天。\n\n**下一步提醒**：递归栈 O(log n) 未达进阶，可尝试自底向上迭代归并（1→2→4 逐段合并）达 O(1) 空间。",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "approach_detail": "问题本质：O(n log n) 排序链表。数组排序需要随机访问，归并排序只需要 next 指针，天然适配链表。\n关键设计：递归分治——快慢指针找中点（fast 走 2 步、slow 走 1 步，fast 到区间尾时 slow 是中点）；区间写成 [head, tail)，当 head.next==tail 时断开为单节点；两半分别排序后 merge 有序合并（dummy 节点串接，每次取较小者，一方走完直接续接剩余链）。\n边界：空链表和单节点直接返回；奇数/偶数长度切分都正确；[head,tail) 左闭右开让切分不重不漏；merge 时一方为 null 要处理。\n复杂度：时间 O(n log n)；空间 O(log n) 递归栈（若题目严格要求 O(1) 空间，可改自底向上归并，但递归版已通过判题）。"
+  "approach_detail": "问题本质：O(n log n) 排序链表。数组排序需要随机访问，归并排序只需要 next 指针，天然适配链表。\n关键设计：递归分治——快慢指针找中点（fast 走 2 步、slow 走 1 步，fast 到区间尾时 slow 是中点）；区间写成 [head, tail)，当 head.next==tail 时断开为单节点；两半分别排序后 merge 有序合并（dummy 节点串接，每次取较小者，一方走完直接续接剩余链）。\n边界：空链表和单节点直接返回；奇数/偶数长度切分都正确；[head,tail) 左闭右开让切分不重不漏；merge 时一方为 null 要处理。\n复杂度：时间 O(n log n)；空间 O(log n) 递归栈（若题目严格要求 O(1) 空间，可改自底向上归并，但递归版已通过判题）。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-08-30",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "自顶向下归并排序",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(log n)",
+      "optimal": false,
+      "notes": "**与一刷对比**：思路一致（自顶向下归并：快慢指针找中点切分 + 递归排序 + merge）；本次实现从一刷的 sortList(head, tail) 带尾参数改为「返回左半最后一个」写法，merge 去掉了多余断链。\n\n**为什么这次没想起来**：两次卡点——① 分治结构缺失（切完直接 merge，两半未排序）；② 快慢指针找中点偶数长度偏后（[1,2] 返回节点 2）→ second=null → sortList 无限递归栈溢出；经提示后在 getMid 用 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」修正。\n\n**掌握度依据**：测试多次失败、经两轮提示定位后改对 → 较弱，间隔重置 1 天。\n\n**下一步提醒**：递归栈 O(log n) 未达进阶，可尝试自底向上迭代归并（1→2→4 逐段合并）达 O(1) 空间。"
+    }
+  ]
 }
