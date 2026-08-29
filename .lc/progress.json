@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-29",
+  "updated": "2026-08-30",
   "current_seq": 170,
   "done": [
     {
@@ -3006,6 +3006,39 @@
         "数学与位运算"
       ],
       "last_seen": "2026-08-28"
+    },
+    {
+      "habit": "归并排序切分后未递归排序两半直接合并（漏掉 sort(左)/sort(右) 分治结构）",
+      "count": 1,
+      "examples": [
+        "sort-list"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-30"
+    },
+    {
+      "habit": "快慢指针找中点：dummy 起步+推进顺序导致偶数长度中点偏后（[1,2] 返回节点2而非1）",
+      "count": 1,
+      "examples": [
+        "sort-list"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-30"
+    },
+    {
+      "habit": "merge 合并断链写错（else 分支断 p1 而非 p2；next 为 null 时 p 变 null 引发 NPE）",
+      "count": 1,
+      "examples": [
+        "sort-list"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-30"
     }
   ],
   "category_hints": {
