@@ -24,6 +24,8 @@
     <span class="badge">2026-08-17</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>543. 二叉树的直径 (Diameter of Binary Tree)</h1><p>&gt; https://leetcode.cn/problems/diameter-of-binary-tree/</p><p>难度：Easy ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、二叉树、树形 DP</p><h2>题目描述</h2><p>给你一棵二叉树的根节点，返回该树的 直径 。</p><p>二叉树的 直径 是指树中任意两个节点之间最长路径的 长度 。这条路径可能经过也可能不经过根节点 root 。</p><p>两节点之间路径的 长度 由它们之间边数表示。</p><p>示例 1：</p><p>输入：root = [1,2,3,4,5]</p><p>输出：3</p><p>解释：3 ，取路径 [4,2,1,3] 或 [5,2,1,3] 的长度。</p><p>示例 2：</p><p>输入：root = [1,2]</p><p>输出：1</p><p>提示：</p><p>树中节点数目在范围 [1, 104] 内</p><p>-100</p><h2>示例</h2><ol><li>输入：root = [1,2,3,4,5]</li></ol><p>输出：3</p><p>解释：3 ，取路径 [4,2,1,3] 或 [5,2,1,3] 的长度。</p><ol><li>输入：root = [1,2]</li></ol><p>输出：1</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 后序递归（返回子树高度，全局更新直径）</h3>
@@ -68,6 +70,7 @@
       <div class="quote">二叉树的直径：后序递归返回子树高度max(左,右)+1，每层用左高+右高更新全局max；注意成员变量多次调用要重置，O(n)/O(h)，一次Accepted（106/106）</div>
     </div>
   </section>
+  <section><h2>同类题 · 树与二叉树</h2><ul class="similar-list"><li><a href="../树与二叉树/LC0101_SymmetricTree_Review.html">LC101 · 对称二叉树</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0104_MaximumDepthOfBinaryTree_Review.html">LC104 · 二叉树的最大深度</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0098_ValidateBinarySearchTree_Review.html">LC98 · 验证二叉搜索树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0102_BinaryTreeLevelOrderTraversal_Review.html">LC102 · 二叉树的层序遍历</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal_Review.html">LC105 · 从前序与中序遍历序列构造二叉树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0236_LowestCommonAncestorOfABinaryTree_Review.html">LC236 · 二叉树的最近公共祖先</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0297_SerializeAndDeserializeBinaryTree_Review.html">LC297 · 二叉树的序列化与反序列化</a><span class="chip">HARD</span></li><li><a href="../树与二叉树/LC0226_InvertBinaryTree_Review.html">LC226 · 翻转二叉树</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/543_diameter-of-binary-tree/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91/LC0543_DiameterOfBinaryTree.java">src/树与二叉树/LC0543_DiameterOfBinaryTree.java</a> ·

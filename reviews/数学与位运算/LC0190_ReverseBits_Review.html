@@ -24,6 +24,8 @@
     <span class="badge">2026-08-27</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>190. 颠倒二进制位 (Reverse Bits)</h1><p>&gt; https://leetcode.cn/problems/reverse-bits/</p><p>难度：Easy ｜ 分类：数学与位运算</p><p>标签：位运算、分治</p><h2>题目描述</h2><p>颠倒给定的 32 位有符号整数的二进制位。</p><p>示例 1：</p><p>输入：n = 43261596</p><p>输出：964176192</p><p>解释：</p><p>整数</p><p>二进制</p><p>43261596</p><p>00000010100101000001111010011100</p><p>964176192</p><p>00111001011110000010100101000000</p><p>示例 2：</p><p>输入：n = 2147483644</p><p>输出：1073741822</p><p>解释：</p><p>整数</p><p>二进制</p><p>2147483644</p><p>01111111111111111111111111111100</p><p>1073741822</p><p>00111111111111111111111111111110</p><p>提示：</p><p>0 31 - 2</p><p>n 为偶数</p><p>进阶: 如果多次调用这个函数，你将如何优化你的算法？</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 逐位颠倒（n&amp;1 + 无符号右移）</h3>
@@ -60,6 +62,7 @@
       <div class="quote">一次AC：循环32次取最低位放入对称位，n&gt;&gt;&gt;1无符号右移；进阶可换分治掩码但循环已是O(1)</div>
     </div>
   </section>
+  <section><h2>同类题 · 数学与位运算</h2><ul class="similar-list"><li><a href="../数学与位运算/LC0136_SingleNumber_Review.html">LC136 · 只出现一次的数字</a><span class="chip">EASY</span></li><li><a href="../数学与位运算/LC0048_RotateImage_Review.html">LC48 · 旋转图像</a><span class="chip">MEDIUM</span></li><li><a href="../数学与位运算/LC0461_HammingDistance_Review.html">LC461 · 汉明距离</a><span class="chip">EASY</span></li><li><a href="../数学与位运算/LC0066_PlusOne_Review.html">LC66 · 加一</a><span class="chip">EASY</span></li><li><a href="../数学与位运算/LC0069_Sqrtx_Review.html">LC69 · x 的平方根 </a><span class="chip">EASY</span></li><li><a href="../数学与位运算/LC0191_NumberOf1Bits_Review.html">LC191 · 位1的个数</a><span class="chip">EASY</span></li><li><a href="../数学与位运算/LC0326_PowerOfThree_Review.html">LC326 · 3 的幂</a><span class="chip">EASY</span></li><li><a href="../数学与位运算/LC0007_ReverseInteger_Review.html">LC7 · 整数反转</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/190_reverse-bits/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%95%B0%E5%AD%A6%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97/LC0190_ReverseBits.java">src/数学与位运算/LC0190_ReverseBits.java</a> ·

@@ -1204,3 +1204,11 @@ details.rv-group[open] summary::after { transform:rotate(180deg); }
 details.rv-group .card { border:none; border-top:1px solid #d0d7de; border-radius:0; margin-top:0; }
 details.rv-group .card:last-child { border-bottom-left-radius:8px; border-bottom-right-radius:8px; }
 .markdown-body table { display:table; width:100%; }
+
+/* 同类题导航 */
+.similar-list { list-style:none; padding:0; margin:14px 0 4px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px; }
+.similar-list li { display:flex; align-items:center; justify-content:space-between; gap:8px; border:1px solid #d0d7de; border-radius:8px; padding:8px 12px; background:#fff; font-size:13.5px; }
+.similar-list li:hover { border-color:#0969da; background:#f6f8fa; }
+.similar-list a { color:#0969da; text-decoration:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.similar-list a:hover { text-decoration:underline; }
+.similar-list .chip { margin:0; flex:none; }

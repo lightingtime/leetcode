@@ -24,6 +24,8 @@
     <span class="badge">2026-08-05</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>287. 寻找重复数 (Find the Duplicate Number)</h1><p>&gt; https://leetcode.cn/problems/find-the-duplicate-number/</p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：位运算、数组、双指针、二分查找、Floyd 判圈算法、抽屉原理</p><h2>题目描述</h2><p>给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。</p><p>假设 nums 只有 一个重复的整数 ，返回 这个重复的数 。</p><p>你设计的解决方案必须 不修改 数组 nums 且只用常量级 O(1) 的额外空间。</p><p>示例 1：</p><p>输入：nums = [1,3,4,2,2]</p><p>输出：2</p><p>示例 2：</p><p>输入：nums = [3,1,3,4,2]</p><p>输出：3</p><p>示例 3 :</p><p>输入：nums = [3,3,3,3,3]</p><p>输出：3</p><p>提示：</p><p>1 5</p><p>nums.length == n + 1</p><p>1</p><p>nums 中 只有一个整数 出现 两次或多次 ，其余整数均只出现 一次</p><p>进阶：</p><p>如何证明 nums 中至少存在一个重复的数字?</p><p>你可以设计一个线性级时间复杂度 O(n) 的解决方案吗？</p><h2>示例</h2><ol><li>输入：nums = [1,3,4,2,2]</li></ol><p>输出：2</p><ol><li>输入：nums = [3,1,3,4,2]</li></ol><p>输出：3</p><ol><li>输入：nums = [3,3,3,3,3]</li></ol><p>输出：3</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Floyd 判圈</h3>
@@ -65,6 +67,7 @@
       <div class="quote">数组当下标链，Floyd 判圈找环入口：相遇阶段 do-while 先移动后比较、入口阶段同速，O(n)/O(1) 一次 Accepted（59/59）</div>
     </div>
   </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/287_find-the-duplicate-number/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0287_FindTheDuplicateNumber.java">src/双指针与滑动窗口/LC0287_FindTheDuplicateNumber.java</a> ·

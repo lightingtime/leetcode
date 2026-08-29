@@ -24,6 +24,8 @@
     <span class="badge">2026-08-23</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>289. 生命游戏 (Game of Life)</h1><p>&gt; https://leetcode.cn/problems/game-of-life/</p><p>难度：Medium ｜ 分类：数组与矩阵</p><p>标签：数组、矩阵、模拟</p><h2>题目描述</h2><p>根据 百度百科 ， 生命游戏 ，简称为 生命 ，是英国数学家约翰·何顿·康威在 1970 年发明的细胞自动机。</p><p>给定一个包含 m × n 个格子的面板，每一个格子都可以看成是一个细胞。每个细胞都具有一个初始状态： 1 即为 活细胞 （live），或 0 即为 死细胞 （dead）。每个细胞与其八个相邻位置（水平，垂直，对角线）的细胞都遵循以下四条生存定律：</p><p>如果活细胞周围八个位置的活细胞数少于两个，则该位置活细胞死亡；</p><p>如果活细胞周围八个位置有两个或三个活细胞，则该位置活细胞仍然存活；</p><p>如果活细胞周围八个位置有超过三个活细胞，则该位置活细胞死亡；</p><p>如果死细胞周围正好有三个活细胞，则该位置死细胞复活；</p><p>下一个状态是通过将上述规则同时应用于当前状态下的每个细胞所形成的，其中细胞的出生和死亡是 同时 发生的。给你 m x n 网格面板 board 的当前状态，返回下一个状态。</p><p>给定当前 board 的状态，更新 board 到下一个状态。</p><p>注意 你不需要返回任何东西。</p><p>示例 1：</p><p>输入：board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]</p><p>输出：[[0,0,0],[1,0,1],[0,1,1],[0,1,0]]</p><p>示例 2：</p><p>输入：board = [[1,1],[1,0]]</p><p>输出：[[1,1],[1,1]]</p><p>提示：</p><p>m == board.length</p><p>n == board[i].length</p><p>1</p><p>board[i][j] 为 0 或 1</p><p>进阶：</p><p>你可以使用原地算法解决本题吗？请注意，面板上所有格子需要同时被更新：你不能先更新某些格子，然后使用它们的更新后的值再更新其他格子。</p><p>本题中，我们使用二维数组来表示面板。原则上，面板是无限的，但当活细胞侵占了面板边界时会造成问题。你将如何解决这些问题？</p><h2>示例</h2><ol><li>输入：board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]</li></ol><p>输出：[[0,0,0],[1,0,1],[0,1,1],[0,1,0]]</p><ol><li>输入：board = [[1,1],[1,0]]</li></ol><p>输出：[[1,1],[1,1]]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双状态编码(-1/-2)两阶段原地模拟</h3>
@@ -91,6 +93,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 数组与矩阵</h2><ul class="similar-list"><li><a href="../数组与矩阵/LC0033_SearchInRotatedSortedArray_Review.html">LC33 · 搜索旋转排序数组</a><span class="chip">MEDIUM</span></li><li><a href="../数组与矩阵/LC0034_FindFirstAndLastPositionOfElementInSortedArray_Review.html">LC34 · 在排序数组中查找元素的第一个和最后一个位置</a><span class="chip">MEDIUM</span></li><li><a href="../数组与矩阵/LC0056_MergeIntervals_Review.html">LC56 · 合并区间</a><span class="chip">MEDIUM</span></li><li><a href="../数组与矩阵/LC0238_ProductOfArrayExceptSelf_Review.html">LC238 · 除了自身以外数组的乘积</a><span class="chip">MEDIUM</span></li><li><a href="../数组与矩阵/LC0240_SearchA2dMatrixIi_Review.html">LC240 · 搜索二维矩阵 II</a><span class="chip">MEDIUM</span></li><li><a href="../数组与矩阵/LC0004_MedianOfTwoSortedArrays_Review.html">LC4 · 寻找两个正序数组的中位数</a><span class="chip">HARD</span></li><li><a href="../数组与矩阵/LC0054_SpiralMatrix_Review.html">LC54 · 螺旋矩阵</a><span class="chip">MEDIUM</span></li><li><a href="../数组与矩阵/LC0162_FindPeakElement_Review.html">LC162 · 寻找峰值</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/289_game-of-life/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%95%B0%E7%BB%84%E4%B8%8E%E7%9F%A9%E9%98%B5/LC0289_GameOfLife.java">src/数组与矩阵/LC0289_GameOfLife.java</a> ·

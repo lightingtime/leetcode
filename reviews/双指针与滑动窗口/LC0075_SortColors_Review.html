@@ -24,6 +24,8 @@
     <span class="badge">2026-08-05</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>75. 颜色分类 (Sort Colors)</h1><p>&gt; https://leetcode.cn/problems/sort-colors/</p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针、冒泡排序、排序、快速排序</p><h2>题目描述</h2><p>给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地 对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。</p><p>我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。</p><p>必须在不使用库内置的 sort 函数的情况下解决这个问题。</p><p>示例 1：</p><p>输入：nums = [2,0,2,1,1,0]</p><p>输出：[0,0,1,1,2,2]</p><p>解释：</p><p>该数组包含两个 0、两个 1 和两个 2。将它们原地排序后，所有 0 排在最前面，接着是所有 1，最后是所有 2。</p><p>示例 2：</p><p>输入：nums = [2,0,1]</p><p>输出：[0,1,2]</p><p>解释：</p><p>数组中有且仅有一个 0、一个 1 和一个 2，按 0、1、2 的顺序原地排列。</p><p>提示：</p><p>n == nums.length</p><p>1</p><p>nums[i] 为 0、1 或 2</p><p>进阶：</p><p>你能想出一个仅使用常数空间的一趟扫描算法吗？</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三指针分区</h3>
@@ -61,6 +63,7 @@
       <div class="quote">重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）</div>
     </div>
   </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/75_sort-colors/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0075_SortColors.java">src/双指针与滑动窗口/LC0075_SortColors.java</a> ·

@@ -24,6 +24,8 @@
     <span class="badge">2026-08-08</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>236. 二叉树的最近公共祖先 (Lowest Common Ancestor of a Binary Tree)</h1><p>&gt; https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/</p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、二叉树、最近公共祖先、Binary Lifting</p><h2>题目描述</h2><p>给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。</p><p>百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”</p><p>示例 1：</p><p>输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1</p><p>输出：3</p><p>解释：节点 5 和节点 1 的最近公共祖先是节点 3 。</p><p>示例 2：</p><p>输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4</p><p>输出：5</p><p>解释：节点 5 和节点 4 的最近公共祖先是节点 5 。因为根据定义最近公共祖先节点可以为节点本身。</p><p>示例 3：</p><p>输入：root = [1,2], p = 1, q = 2</p><p>输出：1</p><p>提示：</p><p>树中节点数目在范围 [2, 105] 内。</p><p>-109 9</p><p>所有 Node.val 互不相同 。</p><p>p != q</p><p>p 和 q 均存在于给定的二叉树中。</p><h2>示例</h2><ol><li>输入：root = [3,5,1,6,2,0,8,null,null,7,4]，p = 5，q = 1</li></ol><p>输出：3</p><p>解释：节点 5 和节点 1 的最近公共祖先是节点 3 。</p><ol><li>输入：root = [3,5,1,6,2,0,8,null,null,7,4]，p = 5，q = 4</li></ol><p>输出：5</p><p>解释：节点 5 和节点 4 的最近公共祖先是节点 5 。因为根据定义最近公共祖先节点可以为节点本身。</p><ol><li>输入：root = [1,2]，p = 1，q = 2</li></ol><p>输出：1</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归分治：两侧搜索合并</h3>
@@ -69,6 +71,7 @@
       <div class="quote">二叉树的最近公共祖先：递归两侧搜索，两边都有命中则当前节点为答案，单边命中向上传递，一次 Accepted（33/33）</div>
     </div>
   </section>
+  <section><h2>同类题 · 树与二叉树</h2><ul class="similar-list"><li><a href="../树与二叉树/LC0101_SymmetricTree_Review.html">LC101 · 对称二叉树</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0104_MaximumDepthOfBinaryTree_Review.html">LC104 · 二叉树的最大深度</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0098_ValidateBinarySearchTree_Review.html">LC98 · 验证二叉搜索树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0102_BinaryTreeLevelOrderTraversal_Review.html">LC102 · 二叉树的层序遍历</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal_Review.html">LC105 · 从前序与中序遍历序列构造二叉树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0297_SerializeAndDeserializeBinaryTree_Review.html">LC297 · 二叉树的序列化与反序列化</a><span class="chip">HARD</span></li><li><a href="../树与二叉树/LC0226_InvertBinaryTree_Review.html">LC226 · 翻转二叉树</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0543_DiameterOfBinaryTree_Review.html">LC543 · 二叉树的直径</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/236_lowest-common-ancestor-of-a-binary-tree/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91/LC0236_LowestCommonAncestorOfABinaryTree.java">src/树与二叉树/LC0236_LowestCommonAncestorOfABinaryTree.java</a> ·

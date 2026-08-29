@@ -24,6 +24,8 @@
     <span class="badge">2026-08-21</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>242. 有效的字母异位词 (Valid Anagram)</h1><p>&gt; https://leetcode.cn/problems/valid-anagram/</p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：哈希表、字符串、排序</p><h2>题目描述</h2><p>给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的 字母异位词。</p><p>示例 1:</p><p>输入: s = "anagram", t = "nagaram"</p><p>输出: true</p><p>示例 2:</p><p>输入: s = "rat", t = "car"</p><p>输出: false</p><p>提示:</p><p>1 4</p><p>s 和 t 仅包含小写字母</p><p>进阶: 如果输入字符串包含 unicode 字符怎么办？你能否调整你的解法来应对这种情况？</p><h2>示例</h2><ol><li>输入：s = "anagram"，t = "nagaram"</li></ol><p>输出：true</p><ol><li>输入：s = "rat"，t = "car"</li></ol><p>输出：false</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap 双向计数</h3>
@@ -68,6 +70,7 @@
       <div class="quote">HashMap 双向计数：s 每个字符 +1、t 每个字符 -1，最后 value 全 0 即异位词；长度不等先剪枝；O(n)/O(k)（k≤26），一次 Accepted</div>
     </div>
   </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0001_TwoSum_Review.html">LC1 · 两数之和</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0049_GroupAnagrams_Review.html">LC49 · 字母异位词分组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/242_valid-anagram/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0242_ValidAnagram.java">src/哈希表/LC0242_ValidAnagram.java</a> ·

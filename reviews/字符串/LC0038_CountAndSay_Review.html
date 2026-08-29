@@ -24,6 +24,8 @@
     <span class="badge">2026-08-24</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>38. 外观数列 (Count and Say)</h1><p>&gt; https://leetcode.cn/problems/count-and-say/</p><p>难度：Medium ｜ 分类：字符串</p><p>标签：字符串</p><h2>题目描述</h2><p>「外观数列」是一个数位字符串序列，由递归公式定义：</p><p>countAndSay(1) = "1"</p><p>countAndSay(n) 是 countAndSay(n-1) 的行程长度编码。</p><p>行程长度编码（RLE）是一种字符串压缩方法，其工作原理是通过将每个最大连续相同字符组替换为该组的长度后加上该字符本身。例如，要压缩字符串 "3322251" ，我们将 "33" 用 "23" 替换，将 "222" 用 "32" 替换，将 "5" 用 "15" 替换并将 "1" 用 "11" 替换。因此压缩后字符串变为 "23321511"。</p><p>给定一个整数 n ，返回 外观数列 的第 n 个元素。</p><p>示例 1：</p><p>输入：n = 4</p><p>输出："1211"</p><p>解释：</p><p>countAndSay(1) = "1"</p><p>countAndSay(2) = "1" 的行程长度编码 = "11"</p><p>countAndSay(3) = "11" 的行程长度编码 = "21"</p><p>countAndSay(4) = "21" 的行程长度编码 = "1211"</p><p>示例 2：</p><p>输入：n = 1</p><p>输出："1"</p><p>解释：</p><p>这是基本情况。</p><p>提示：</p><p>1</p><p>进阶：你能迭代解决该问题吗？</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 从 1 起迭代 n-1 次，逐轮做行程长度编码（RLE）</h3>
@@ -81,6 +83,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 字符串</h2><ul class="similar-list"><li><a href="../字符串/LC0014_LongestCommonPrefix_Review.html">LC14 · 最长公共前缀</a><span class="chip">EASY</span></li><li><a href="../字符串/LC0171_ExcelSheetColumnNumber_Review.html">LC171 · Excel 表列序号</a><span class="chip">EASY</span></li><li><a href="../字符串/LC0412_FizzBuzz_Review.html">LC412 · Fizz Buzz</a><span class="chip">EASY</span></li><li><a href="../字符串/LC0008_StringToIntegerAtoi_Review.html">LC8 · 字符串转换整数 (atoi)</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/38_count-and-say/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%AD%97%E7%AC%A6%E4%B8%B2/LC0038_CountAndSay.java">src/字符串/LC0038_CountAndSay.java</a> ·

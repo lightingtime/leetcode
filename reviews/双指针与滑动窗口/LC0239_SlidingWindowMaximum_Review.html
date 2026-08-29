@@ -24,6 +24,8 @@
     <span class="badge">2026-08-05</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>239. 滑动窗口最大值 (Sliding Window Maximum)</h1><p>&gt; https://leetcode.cn/problems/sliding-window-maximum/</p><p>难度：Hard ｜ 分类：双指针与滑动窗口</p><p>标签：队列、数组、滑动窗口、单调队列、堆（优先队列）、区间最值查询</p><h2>题目描述</h2><p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。</p><p>返回 滑动窗口中的最大值 。</p><p>示例 1：</p><p>输入：nums = [1,3,-1,-3,5,3,6,7], k = 3</p><p>输出：[3,3,5,5,6,7]</p><p>解释：</p><p>滑动窗口的位置 最大值</p><p>--------------- -----</p><p>[1 3 -1] -3 5 3 6 7 3</p><p>1 [3 -1 -3] 5 3 6 7 3</p><p>1 3 [-1 -3 5] 3 6 7 5</p><p>1 3 -1 [-3 5 3] 6 7 5</p><p>1 3 -1 -3 [5 3 6] 7 6</p><p>1 3 -1 -3 5 [3 6 7] 7</p><p>示例 2：</p><p>输入：nums = [1], k = 1</p><p>输出：[1]</p><p>提示：</p><p>1 5</p><p>-104 4</p><p>1</p><h2>示例</h2><ol><li>输入：nums = [1,3,-1,-3,5,3,6,7]，k = 3</li></ol><p>输出：[3,3,5,5,6,7]</p><ol><li>输入：nums = [1]，k = 1</li></ol><p>输出：[1]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单调队列</h3>
@@ -75,6 +77,7 @@
       <div class="quote">单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（&lt;= i-k），O(n)/O(k) 一次 Accepted（53/53）</div>
     </div>
   </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/239_sliding-window-maximum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0239_SlidingWindowMaximum.java">src/双指针与滑动窗口/LC0239_SlidingWindowMaximum.java</a> ·

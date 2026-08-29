@@ -24,6 +24,8 @@
     <span class="badge">2026-08-24</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>227. 基本计算器 II (Basic Calculator II)</h1><p>&gt; https://leetcode.cn/problems/basic-calculator-ii/</p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、数学、字符串</p><h2>题目描述</h2><p>给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。</p><p>整数除法仅保留整数部分。</p><p>你可以假设给定的表达式总是有效的。所有中间结果将在 [-231, 231 - 1] 的范围内。</p><p>注意：不允许使用任何将字符串作为数学表达式计算的内置函数，比如 eval() 。</p><p>示例 1：</p><p>输入：s = "3+2*2"</p><p>输出：7</p><p>示例 2：</p><p>输入：s = " 3/2 "</p><p>输出：1</p><p>示例 3：</p><p>输入：s = " 3+5 / 2 "</p><p>输出：5</p><p>提示：</p><p>1 5</p><p>s 由整数和算符 ('+', '-', '*', '/') 组成，中间由一些空格隔开</p><p>s 表示一个有效表达式</p><p>表达式中的所有整数都是非负整数，且在范围 [0, 231 - 1] 内</p><p>题目数据 保证 答案是一个 32-bit 整数</p><h2>示例</h2><ol><li>输入：s = "3+2*2"</li></ol><p>输出：7</p><ol><li>输入：s = " 3/2 "</li></ol><p>输出：1</p><ol><li>输入：s = " 3+5 / 2 "</li></ol><p>输出：5</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 带符号栈：+ - 压栈、* / 与栈顶计算，最后求和（O(n) 空间，写法1）</h3>
@@ -116,6 +118,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 栈、队列与优先队列</h2><ul class="similar-list"><li><a href="../栈、队列与优先队列/LC0020_ValidParentheses_Review.html">LC20 · 有效的括号</a><span class="chip">EASY</span></li><li><a href="../栈、队列与优先队列/LC0094_BinaryTreeInorderTraversal_Review.html">LC94 · 二叉树的中序遍历</a><span class="chip">EASY</span></li><li><a href="../栈、队列与优先队列/LC0155_MinStack_Review.html">LC155 · 最小栈</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0215_KthLargestElementInAnArray_Review.html">LC215 · 数组中的第K个最大元素</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0347_TopKFrequentElements_Review.html">LC347 · 前 K 个高频元素</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0084_LargestRectangleInHistogram_Review.html">LC84 · 柱状图中最大的矩形</a><span class="chip">HARD</span></li><li><a href="../栈、队列与优先队列/LC0394_DecodeString_Review.html">LC394 · 字符串解码</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0621_TaskScheduler_Review.html">LC621 · 任务调度器</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/227_basic-calculator-ii/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%A0%88%E3%80%81%E9%98%9F%E5%88%97%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/LC0227_BasicCalculatorIi.java">src/栈、队列与优先队列/LC0227_BasicCalculatorIi.java</a> ·

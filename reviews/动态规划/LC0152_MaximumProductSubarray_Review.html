@@ -24,6 +24,8 @@
     <span class="badge">2026-08-10</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>152. 乘积最大子数组 (Maximum Product Subarray)</h1><p>&gt; https://leetcode.cn/problems/maximum-product-subarray/</p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续 子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。</p><p>测试用例的答案是一个 32-位 整数。</p><p>请注意，一个只包含一个元素的数组的乘积是这个元素的值。</p><p>示例 1:</p><p>输入: nums = [2,3,-2,4]</p><p>输出: 6</p><p>解释: 子数组 [2,3] 有最大乘积 6。</p><p>示例 2:</p><p>输入: nums = [-2,0,-1]</p><p>输出: 0</p><p>解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。</p><p>提示:</p><p>1 4</p><p>-10</p><p>nums 的任何子数组的乘积都 保证 是一个 32-位 整数</p><h2>示例</h2><ol><li>输入：nums = [2,3,-2,4]</li></ol><p>输出：6</p><p>解释：子数组 [2,3] 有最大乘积 6。</p><ol><li>输入：nums = [-2,0,-1]</li></ol><p>输出：0</p><p>解释：结果不能为 2, 因为 [-2,-1] 不是子数组。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双状态DP（最大/最小乘积）</h3>
@@ -63,6 +65,7 @@
       <div class="quote">双状态DP维护最大/最小乘积，一次通过</div>
     </div>
   </section>
+  <section><h2>同类题 · 动态规划</h2><ul class="similar-list"><li><a href="../动态规划/LC0070_ClimbingStairs_Review.html">LC70 · 爬楼梯</a><span class="chip">EASY</span></li><li><a href="../动态规划/LC0121_BestTimeToBuyAndSellStock_Review.html">LC121 · 买卖股票的最佳时机</a><span class="chip">EASY</span></li><li><a href="../动态规划/LC0005_LongestPalindromicSubstring_Review.html">LC5 · 最长回文子串</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0022_GenerateParentheses_Review.html">LC22 · 括号生成</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0053_MaximumSubarray_Review.html">LC53 · 最大子数组和</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0055_JumpGame_Review.html">LC55 · 跳跃游戏</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0062_UniquePaths_Review.html">LC62 · 不同路径</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0139_WordBreak_Review.html">LC139 · 单词拆分</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/152_maximum-product-subarray/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0152_MaximumProductSubarray.java">src/动态规划/LC0152_MaximumProductSubarray.java</a> ·

@@ -24,6 +24,8 @@
     <span class="badge">2026-08-25</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>130. 被围绕的区域 (Surrounded Regions)</h1><p>&gt; https://leetcode.cn/problems/surrounded-regions/</p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、并查集、数组、矩阵</p><h2>题目描述</h2><p>给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' 组成，捕获 所有 被围绕的区域：</p><p>连接：一个单元格与水平或垂直方向上相邻的单元格连接。</p><p>区域：连接所有 'O' 的单元格来形成一个区域。</p><p>围绕：如果一个区域中的所有 'O' 单元格都不在棋盘的边缘，则该区域被包围。这样的区域 完全 被 'X' 单元格包围。</p><p>通过 原地 将输入矩阵中的所有 'O' 替换为 'X' 来 捕获被围绕的区域。你不需要返回任何值。</p><p>示例 1：</p><p>输入：board = [['X','X','X','X'],['X','O','O','X'],['X','X','O','X'],['X','O','X','X']]</p><p>输出：[['X','X','X','X'],['X','X','X','X'],['X','X','X','X'],['X','O','X','X']]</p><p>解释：</p><p>在上图中，底部的区域没有被捕获，因为它在 board 的边缘并且不能被围绕。</p><p>示例 2：</p><p>输入：board = [['X']]</p><p>输出：[['X']]</p><p>提示：</p><p>m == board.length</p><p>n == board[i].length</p><p>1</p><p>board[i][j] 为 'X' 或 'O'</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 边缘O反向DFS标记安全区，再全棋盘翻转</h3>
@@ -89,6 +91,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 图与并查集</h2><ul class="similar-list"><li><a href="../图与并查集/LC0128_LongestConsecutiveSequence_Review.html">LC128 · 最长连续序列</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0200_NumberOfIslands_Review.html">LC200 · 岛屿数量</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0207_CourseSchedule_Review.html">LC207 · 课程表</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0399_EvaluateDivision_Review.html">LC399 · 除法求值</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0210_CourseScheduleIi_Review.html">LC210 · 课程表 II</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/130_surrounded-regions/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%9B%BE%E4%B8%8E%E5%B9%B6%E6%9F%A5%E9%9B%86/LC0130_SurroundedRegions.java">src/图与并查集/LC0130_SurroundedRegions.java</a> ·

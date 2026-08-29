@@ -24,6 +24,8 @@
     <span class="badge">2026-08-25</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>103. 二叉树的锯齿形层序遍历 (Binary Tree Zigzag Level Order Traversal)</h1><p>&gt; https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/</p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、广度优先搜索、二叉树</p><h2>题目描述</h2><p>给你二叉树的根节点 root ，返回其节点值的 锯齿形层序遍历 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。</p><p>示例 1：</p><p>输入：root = [3,9,20,null,null,15,7]</p><p>输出：[[3],[20,9],[15,7]]</p><p>示例 2：</p><p>输入：root = [1]</p><p>输出：[[1]]</p><p>示例 3：</p><p>输入：root = []</p><p>输出：[]</p><p>提示：</p><p>树中节点数目在范围 [0, 2000] 内</p><p>-100</p><h2>示例</h2><ol><li>输入：root = [3,9,20,null,null,15,7]</li></ol><p>输出：[[3],[20,9],[15,7]]</p><ol><li>输入：root = [1]</li></ol><p>输出：[[1]]</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · BFS 层序 + 方向标记（逆序层头插）</h3>
@@ -116,6 +118,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 树与二叉树</h2><ul class="similar-list"><li><a href="../树与二叉树/LC0101_SymmetricTree_Review.html">LC101 · 对称二叉树</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0104_MaximumDepthOfBinaryTree_Review.html">LC104 · 二叉树的最大深度</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0098_ValidateBinarySearchTree_Review.html">LC98 · 验证二叉搜索树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0102_BinaryTreeLevelOrderTraversal_Review.html">LC102 · 二叉树的层序遍历</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal_Review.html">LC105 · 从前序与中序遍历序列构造二叉树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0236_LowestCommonAncestorOfABinaryTree_Review.html">LC236 · 二叉树的最近公共祖先</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0297_SerializeAndDeserializeBinaryTree_Review.html">LC297 · 二叉树的序列化与反序列化</a><span class="chip">HARD</span></li><li><a href="../树与二叉树/LC0226_InvertBinaryTree_Review.html">LC226 · 翻转二叉树</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/103_binary-tree-zigzag-level-order-traversal/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91/LC0103_BinaryTreeZigzagLevelOrderTraversal.java">src/树与二叉树/LC0103_BinaryTreeZigzagLevelOrderTraversal.java</a> ·

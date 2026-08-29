@@ -24,6 +24,8 @@
     <span class="badge">2026-08-01</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>1. 两数之和 (Two Sum)</h1><p>&gt; https://leetcode.cn/problems/two-sum/</p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表</p><h2>题目描述</h2><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target 的那 两个 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p><p>你可以按任意顺序返回答案。</p><p>示例 1：</p><p>输入：nums = [2,7,11,15], target = 9</p><p>输出：[0,1]</p><p>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p><p>示例 2：</p><p>输入：nums = [3,2,4], target = 6</p><p>输出：[1,2]</p><p>示例 3：</p><p>输入：nums = [3,3], target = 6</p><p>输出：[0,1]</p><p>提示：</p><p>2 4</p><p>-109 9</p><p>-109 9</p><p>只会存在一个有效答案</p><p>进阶：你可以想出一个时间复杂度小于 O(n2) 的算法吗？</p><h2>示例</h2><ol><li>输入：nums = [2,7,11,15]，target = 9</li></ol><p>输出：[0,1]</p><p>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p><ol><li>输入：nums = [3,2,4]，target = 6</li></ol><p>输出：[1,2]</p><ol><li>输入：nums = [3,3]，target = 6</li></ol><p>输出：[0,1]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>单遍哈希表（边查边存，重复值场景天然正确）</p>
@@ -62,6 +64,7 @@
       <div class="quote">单遍哈希表 O(n)，一次 Accepted（65/65）</div>
     </div>
   </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0049_GroupAnagrams_Review.html">LC49 · 字母异位词分组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0242_ValidAnagram_Review.html">LC242 · 有效的字母异位词</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/1_two-sum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0001_TwoSum.java">src/哈希表/LC0001_TwoSum.java</a> ·

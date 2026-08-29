@@ -24,11 +24,13 @@
     <span class="badge">2026-08-03</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>49. 字母异位词分组 (Group Anagrams)</h1><p>&gt; https://leetcode.cn/problems/group-anagrams/</p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：数组、哈希表、字符串、排序</p><h2>题目描述</h2><p>给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。</p><p>示例 1:</p><p>输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]</p><p>输出: [["bat"],["nat","tan"],["ate","eat","tea"]]</p><p>解释：</p><p>在 strs 中没有字符串可以通过重新排列来形成 "bat"。</p><p>字符串 "nat" 和 "tan" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>字符串 "ate" ，"eat" 和 "tea" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>示例 2:</p><p>输入: strs = [""]</p><p>输出: [[""]]</p><p>示例 3:</p><p>输入: strs = ["a"]</p><p>输出: [["a"]]</p><p>提示：</p><p>1 4</p><p>0</p><p>strs[i] 仅包含小写字母</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-08-29 <span class="tl-badge ok">较强</span></span>
       <p>Accepted（—）｜ 一次 AC ｜ 计数编码键 + 哈希表 ｜ O(L) · O(L) ｜ 掌握：较强（间隔拉长）</p>
       <p class="muted">二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简</p>
     </div></div></div></section>
+  <section><h2>一刷 vs 二刷</h2><div class="table-wrap"><table><tbody><tr><th style="width:120px">一刷日期</th><td>2026-08-03</td></tr><tr><th style="width:120px">二刷日期</th><td>2026-08-29</td></tr><tr><th style="width:120px">一刷提交</th><td>多次提交</td></tr><tr><th style="width:120px">二刷提交</th><td>一次 AC</td></tr><tr><th style="width:120px">二刷思路</th><td>计数编码键 + 哈希表</td></tr><tr><th style="width:120px">二刷复杂度</th><td>O(L) · O(L)</td></tr><tr><th style="width:120px">掌握度</th><td>较强（间隔拉长 ×2.5）</td></tr><tr><th style="width:120px">二刷备注</th><td>二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简</td></tr></tbody></table></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 计数编码键 + 哈希表</h3>
     <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(L)</span><span class="chip">内存 ≈ 48.0 MB</span><span class="chip">用例 —</span></p>
@@ -77,6 +79,7 @@
       <div class="quote">字母异位词分组：计数编码键分组，修复键遗漏次数后第二次提交 Accepted（129/129）</div>
     </div>
   </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0001_TwoSum_Review.html">LC1 · 两数之和</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0242_ValidAnagram_Review.html">LC242 · 有效的字母异位词</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/49_group-anagrams/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0049_GroupAnagrams.java">src/哈希表/LC0049_GroupAnagrams.java</a> ·

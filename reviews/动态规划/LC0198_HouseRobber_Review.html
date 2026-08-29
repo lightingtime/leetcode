@@ -24,6 +24,8 @@
     <span class="badge">2026-08-10</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>198. 打家劫舍 (House Robber)</h1><p>&gt; https://leetcode.cn/problems/house-robber/</p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。</p><p>给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。</p><p>示例 1：</p><p>输入：[1,2,3,1]</p><p>输出：4</p><p>解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。</p><p>偷窃到的最高金额 = 1 + 3 = 4 。</p><p>示例 2：</p><p>输入：[2,7,9,3,1]</p><p>输出：12</p><p>解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。</p><p>偷窃到的最高金额 = 2 + 9 + 1 = 12 。</p><p>提示：</p><p>1</p><p>0</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：4</p><p>解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。</p><ol><li>输入：</li></ol><p>输出：12</p><p>解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二维交替链DP</h3>
@@ -62,6 +64,7 @@
       <div class="quote">二维交替链DP（两列互相推进），穷举核对后一次通过</div>
     </div>
   </section>
+  <section><h2>同类题 · 动态规划</h2><ul class="similar-list"><li><a href="../动态规划/LC0070_ClimbingStairs_Review.html">LC70 · 爬楼梯</a><span class="chip">EASY</span></li><li><a href="../动态规划/LC0121_BestTimeToBuyAndSellStock_Review.html">LC121 · 买卖股票的最佳时机</a><span class="chip">EASY</span></li><li><a href="../动态规划/LC0005_LongestPalindromicSubstring_Review.html">LC5 · 最长回文子串</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0022_GenerateParentheses_Review.html">LC22 · 括号生成</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0053_MaximumSubarray_Review.html">LC53 · 最大子数组和</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0055_JumpGame_Review.html">LC55 · 跳跃游戏</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0062_UniquePaths_Review.html">LC62 · 不同路径</a><span class="chip">MEDIUM</span></li><li><a href="../动态规划/LC0139_WordBreak_Review.html">LC139 · 单词拆分</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/198_house-robber/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LC0198_HouseRobber.java">src/动态规划/LC0198_HouseRobber.java</a> ·

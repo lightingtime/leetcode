@@ -24,6 +24,8 @@
     <span class="badge">2026-08-21</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>454. 四数相加 II (4Sum II)</h1><p>&gt; https://leetcode.cn/problems/4sum-ii/</p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：数组、哈希表</p><h2>题目描述</h2><p>给你四个整数数组 nums1、nums2、nums3 和 nums4 ，数组长度都是 n ，请你计算有多少个元组 (i, j, k, l) 能满足：</p><p>0</p><p>nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0</p><p>示例 1：</p><p>输入：nums1 = [1,2], nums2 = [-2,-1], nums3 = [-1,2], nums4 = [0,2]</p><p>输出：2</p><p>解释：</p><p>两个元组如下：</p><ol><li>(0, 0, 0, 1) -&gt; nums1[0] + nums2[0] + nums3[0] + nums4[1] = 1 + (-2) + (-1) + 2 = 0</li><li>(1, 1, 0, 0) -&gt; nums1[1] + nums2[1] + nums3[0] + nums4[0] = 2 + (-1) + (-1) + 0 = 0</li></ol><p>示例 2：</p><p>输入：nums1 = [0], nums2 = [0], nums3 = [0], nums4 = [0]</p><p>输出：1</p><p>提示：</p><p>n == nums1.length</p><p>n == nums2.length</p><p>n == nums3.length</p><p>n == nums4.length</p><p>1</p><p>-228 28</p><h2>示例</h2><ol><li>输入：nums1 = [1,2]，nums2 = [-2,-1]，nums3 = [-1,2]，nums4 = [0,2]</li></ol><p>输出：2</p><ol><li>输入：nums1 = [0]，nums2 = [0]，nums3 = [0]，nums4 = [0]</li></ol><p>输出：1</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 两两分组哈希计数</h3>
@@ -68,6 +70,7 @@
       <div class="quote">nums1+nums2 全部两两和对存入 map 计数；nums3+nums4 两两求和对取负查 map 累加答案；O(n²)/O(n²)，一次 Accepted</div>
     </div>
   </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0001_TwoSum_Review.html">LC1 · 两数之和</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0049_GroupAnagrams_Review.html">LC49 · 字母异位词分组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/454_4sum-ii/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0454_4sumIi.java">src/哈希表/LC0454_4sumIi.java</a> ·

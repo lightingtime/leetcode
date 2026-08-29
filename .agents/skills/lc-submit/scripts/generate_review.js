@@ -21,6 +21,26 @@ if (!q) { console.error('找不到 slug'); process.exit(1); }
 const a = read(path.join(LC, 'problems', `${q.id}_${slug}`, 'analysis.json'));
 const done = (progress.done || []).find(d => d.slug === slug) || {};
 const hint = (progress.category_hints || {})[q.category] || '';
+const orderAll = read(path.join(LC, 'order.json'));
+
+// 收集所有已生成复盘页：题号(4位) -> reviews 下的相对路径
+const reviewMap = {};
+(function collect(dir, base) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'index.html') continue;
+    const rel = base ? base + '/' + entry.name : entry.name;
+    if (entry.isDirectory()) collect(path.join(dir, entry.name), rel);
+    else if (entry.isFile() && /_Review\.html$/.test(entry.name)) {
+      const m = entry.name.match(/^LC(\d{4})_/);
+      if (m) reviewMap[m[1]] = rel;
+    }
+  }
+})(path.join(ROOT, 'reviews'), '');
+
+// 题目原文（含描述 / 示例 / 提示），渲染进「题目回顾」区块
+const probMdPath = path.join(LC, 'problems', `${q.id}_${slug}`, 'problem.md');
+const probMd = (fs.existsSync(probMdPath) ? fs.readFileSync(probMdPath, 'utf8') : '')
+  .replace(/\n## 示例\n+## 约定/, '\n## 约定'); // 拉题未返回示例时去掉空的示例段
 
 // 定位源码文件并提取提交区
 const walk = dir => fs.existsSync(dir)
@@ -51,6 +71,8 @@ const md = raw => {
     const rawLine = lines[i];
     const line = rawLine.trim();
     if (!line) { close(); continue; }
+    const hm = line.match(/^(#{1,3})\s+(.*)$/);
+    if (hm) { close(); out.push(`<h${hm[1].length}>${fmt(hm[2])}</h${hm[1].length}>`); continue; }
     if (i + 1 < lines.length && line.includes('|') && isTableSeparator(lines[i + 1].trim())) {
       close();
       const header = splitCells(line);
@@ -141,6 +163,47 @@ function renderSolutions() {
   }).join('');
 }
 
+// 题目回顾：渲染 problem.md（描述 / 示例 / 提示）
+function renderProblem() {
+  if (!probMd) return '';
+  return `<section><h2>题目回顾</h2><div class="card md">${md(probMd)}</div></section>`;
+}
+
+// 一刷 vs 二刷对比表（有复习记录时）
+function renderCompare() {
+  if (!reviews.length) return '';
+  const last = reviews[reviews.length - 1];
+  const rows = [
+    ['一刷日期', date || '—'],
+    ['二刷日期', last.date || '—'],
+    ['一刷提交', done.firstPass ? '一次 AC' : '多次提交'],
+    ['二刷提交', last.firstTry ? '一次 AC' : '多次提交'],
+    ['二刷思路', last.approach || '—'],
+    ['二刷复杂度', [last.time_complexity, last.space_complexity].filter(Boolean).join(' · ') || '—'],
+    ['掌握度', last.mastery === 'strong' ? '较强（间隔拉长 ×2.5）' : '较弱（间隔重置 1 天）'],
+    ['二刷备注', last.notes || '—'],
+  ];
+  const trs = rows.map(r => `<tr><th style="width:120px">${r[0]}</th><td>${esc(r[1])}</td></tr>`).join('');
+  return `<section><h2>一刷 vs 二刷</h2><div class="table-wrap"><table><tbody>${trs}</tbody></table></div></section>`;
+}
+
+// 同类题导航：同分类下其他已复盘题目
+function renderSimilar() {
+  const list = orderAll
+    .filter(o => o.category === q.category && String(o.id) !== String(q.id) && reviewMap[String(o.id).padStart(4, '0')])
+    .sort((x, y) => x.seq - y.seq)
+    .slice(0, 8);
+  if (!list.length) return '';
+  const items = list.map(o => {
+    const f = reviewMap[String(o.id).padStart(4, '0')];
+    const dir = path.dirname(f);
+    const base = path.basename(f, '.html');
+    const href = '../' + (dir === '.' ? base + '.html' : dir + '/' + base + '.html');
+    return `<li><a href="${href}">LC${o.id} · ${esc(o.title)}</a><span class="chip">${esc(o.difficulty)}</span></li>`;
+  }).join('');
+  return `<section><h2>同类题 · ${esc(q.category)}</h2><ul class="similar-list">${items}</ul></section>`;
+}
+
 const html = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -167,7 +230,9 @@ const html = `<!DOCTYPE html>
     <span class="badge">${date}</span>
   </div>
 </div>
+  ${renderProblem()}
   ${renderReviews()}
+  ${renderCompare()}
   <section><h2>我的解法</h2>${renderSolutions()}</section>
   ${approachDetail ? `<section><h2>思路拆解</h2><div class="card md">${md(approachDetail)}</div></section>` : ''}
   <section><h2>解题过程</h2><div class="tl">${tlItems.join('')}</div></section>
@@ -191,6 +256,7 @@ const html = `<!DOCTYPE html>
       <div class="quote">${esc(a.notes || '')}</div>
     </div>
   </section>
+  ${renderSimilar()}
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/${q.id}_${slug}/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/${encodeURIComponent(safeCat(q.category))}/${encodeURIComponent(fileBase)}.java">src/${esc(q.category)}/${fileBase}.java</a> ·

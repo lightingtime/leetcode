@@ -24,6 +24,8 @@
     <span class="badge">2026-08-22</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>202. 快乐数 (Happy Number)</h1><p>&gt; https://leetcode.cn/problems/happy-number/</p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、数学、双指针、Floyd 判圈算法</p><h2>题目描述</h2><p>编写一个算法来判断一个数 n 是不是快乐数。</p><p>「快乐数」 定义为：</p><p>对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。</p><p>然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。</p><p>如果这个过程 结果为 1，那么这个数就是快乐数。</p><p>如果 n 是 快乐数 就返回 true ；不是，则返回 false 。</p><p>示例 1：</p><p>输入：n = 19</p><p>输出：true</p><p>解释：</p><p>12 + 92 = 82</p><p>82 + 22 = 68</p><p>62 + 82 = 100</p><p>12 + 02 + 02 = 1</p><p>示例 2：</p><p>输入：n = 2</p><p>输出：false</p><p>提示：</p><p>1 31 - 1</p><h2>示例</h2><ol><li>输入：n = 19</li></ol><p>输出：true</p><ol><li>输入：n = 2</li></ol><p>输出：false</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Floyd快慢指针判环</h3>
@@ -71,6 +73,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/202_happy-number/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0202_HappyNumber.java">src/双指针与滑动窗口/LC0202_HappyNumber.java</a> ·

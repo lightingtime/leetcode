@@ -24,6 +24,8 @@
     <span class="badge">2026-08-07</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>101. 对称二叉树 (Symmetric Tree)</h1><p>&gt; https://leetcode.cn/problems/symmetric-tree/</p><p>难度：Easy ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、广度优先搜索、二叉树</p><h2>题目描述</h2><p>给你一个二叉树的根节点 root ， 检查它是否轴对称。</p><p>示例 1：</p><p>输入：root = [1,2,2,3,4,4,3]</p><p>输出：true</p><p>示例 2：</p><p>输入：root = [1,2,2,null,3,null,3]</p><p>输出：false</p><p>提示：</p><p>树中节点数目在范围 [1, 1000] 内</p><p>-100</p><p>进阶：你可以运用递归和迭代两种方法解决这个问题吗？</p><h2>示例</h2><ol><li>输入：root = [1,2,2,3,4,4,3]</li></ol><p>输出：true</p><ol><li>输入：root = [1,2,2,null,3,null,3]</li></ol><p>输出：false</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归镜像比较</h3>
@@ -107,6 +109,7 @@ private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
       <div class="quote">迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted</div>
     </div>
   </section>
+  <section><h2>同类题 · 树与二叉树</h2><ul class="similar-list"><li><a href="../树与二叉树/LC0104_MaximumDepthOfBinaryTree_Review.html">LC104 · 二叉树的最大深度</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0098_ValidateBinarySearchTree_Review.html">LC98 · 验证二叉搜索树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0102_BinaryTreeLevelOrderTraversal_Review.html">LC102 · 二叉树的层序遍历</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal_Review.html">LC105 · 从前序与中序遍历序列构造二叉树</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0236_LowestCommonAncestorOfABinaryTree_Review.html">LC236 · 二叉树的最近公共祖先</a><span class="chip">MEDIUM</span></li><li><a href="../树与二叉树/LC0297_SerializeAndDeserializeBinaryTree_Review.html">LC297 · 二叉树的序列化与反序列化</a><span class="chip">HARD</span></li><li><a href="../树与二叉树/LC0226_InvertBinaryTree_Review.html">LC226 · 翻转二叉树</a><span class="chip">EASY</span></li><li><a href="../树与二叉树/LC0543_DiameterOfBinaryTree_Review.html">LC543 · 二叉树的直径</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/101_symmetric-tree/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91/LC0101_SymmetricTree.java">src/树与二叉树/LC0101_SymmetricTree.java</a> ·

@@ -24,6 +24,8 @@
     <span class="badge">2026-08-08</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>207. 课程表 (Course Schedule)</h1><p>&gt; https://leetcode.cn/problems/course-schedule/</p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、图、拓扑排序、有向无环图</p><h2>题目描述</h2><p>你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。</p><p>在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程 bi 。</p><p>例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。</p><p>请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。</p><p>示例 1：</p><p>输入：numCourses = 2, prerequisites = [[1,0]]</p><p>输出：true</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。</p><p>示例 2：</p><p>输入：numCourses = 2, prerequisites = [[1,0],[0,1]]</p><p>输出：false</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。</p><p>提示：</p><p>1</p><p>0</p><p>prerequisites[i].length == 2</p><p>0 i, bi</p><p>prerequisites[i] 中的所有课程对 互不相同</p><h2>示例</h2><ol><li>输入：numCourses = 2，prerequisites = [[1,0]]</li></ol><p>输出：true</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。</p><ol><li>输入：numCourses = 2，prerequisites = [[1,0],[0,1]]</li></ol><p>输出：false</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Kahn 拓扑排序</h3>
@@ -82,6 +84,7 @@
       <div class="quote">课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）</div>
     </div>
   </section>
+  <section><h2>同类题 · 图与并查集</h2><ul class="similar-list"><li><a href="../图与并查集/LC0128_LongestConsecutiveSequence_Review.html">LC128 · 最长连续序列</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0200_NumberOfIslands_Review.html">LC200 · 岛屿数量</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0399_EvaluateDivision_Review.html">LC399 · 除法求值</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0130_SurroundedRegions_Review.html">LC130 · 被围绕的区域</a><span class="chip">MEDIUM</span></li><li><a href="../图与并查集/LC0210_CourseScheduleIi_Review.html">LC210 · 课程表 II</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/207_course-schedule/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%9B%BE%E4%B8%8E%E5%B9%B6%E6%9F%A5%E9%9B%86/LC0207_CourseSchedule.java">src/图与并查集/LC0207_CourseSchedule.java</a> ·

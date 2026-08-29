@@ -24,6 +24,8 @@
     <span class="badge">2026-08-21</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>380. O(1) 时间插入、删除和获取随机元素 (Insert Delete GetRandom O(1))</h1><p>&gt; https://leetcode.cn/problems/insert-delete-getrandom-o1/</p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：设计、数组、哈希表、数学、随机化</p><h2>题目描述</h2><p>实现RandomizedSet 类：</p><p>RandomizedSet() 初始化 RandomizedSet 对象</p><p>bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。</p><p>bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。</p><p>int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。</p><p>你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。</p><p>示例：</p><p>输入</p><p>["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]</p><p>[[], [1], [2], [2], [], [1], [2], []]</p><p>输出</p><p>[null, true, false, true, 2, true, false, 2]</p><p>解释</p><p>RandomizedSet randomizedSet = new RandomizedSet();</p><p>randomizedSet.insert(1); // 向集合中插入 1 。返回 true 表示 1 被成功地插入。</p><p>randomizedSet.remove(2); // 返回 false ，表示集合中不存在 2 。</p><p>randomizedSet.insert(2); // 向集合中插入 2 。返回 true 。集合现在包含 [1,2] 。</p><p>randomizedSet.getRandom(); // getRandom 应随机返回 1 或 2 。</p><p>randomizedSet.remove(1); // 从集合中移除 1 ，返回 true 。集合现在包含 [2] 。</p><p>randomizedSet.insert(2); // 2 已在集合中，所以返回 false 。</p><p>randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom 总是返回 2 。</p><p>提示：</p><p>-231 31 - 1</p><p>最多调用 insert、remove 和 getRandom 函数 2 * 105 次</p><p>在调用 getRandom 方法时，数据结构中 至少存在一个 元素。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap + ArrayList（换位删除）</h3>
@@ -85,6 +87,7 @@
       <div class="quote">ArrayList 提供 O(1) 随机下标，HashMap&lt;val,index&gt; 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC</div>
     </div>
   </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0001_TwoSum_Review.html">LC1 · 两数之和</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0049_GroupAnagrams_Review.html">LC49 · 字母异位词分组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/380_insert-delete-getrandom-o1/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0380_InsertDeleteGetrandomO1.java">src/哈希表/LC0380_InsertDeleteGetrandomO1.java</a> ·

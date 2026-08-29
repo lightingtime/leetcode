@@ -24,6 +24,8 @@
     <span class="badge">2026-08-23</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>295. 数据流的中位数 (Find Median from Data Stream)</h1><p>&gt; https://leetcode.cn/problems/find-median-from-data-stream/</p><p>难度：Hard ｜ 分类：双指针与滑动窗口</p><p>标签：设计、双指针、数据流、排序、堆（优先队列）</p><h2>题目描述</h2><p>中位数是有序整数列表中的中间值。如果列表的大小是偶数，则没有中间值，中位数是两个中间值的平均值。</p><p>例如 arr = [2,3,4] 的中位数是 3 。</p><p>例如 arr = [2,3] 的中位数是 (2 + 3) / 2 = 2.5 。</p><p>实现 MedianFinder 类:</p><p>MedianFinder() 初始化 MedianFinder 对象。</p><p>void addNum(int num) 将数据流中的整数 num 添加到数据结构中。</p><p>double findMedian() 返回到目前为止所有元素的中位数。与实际答案相差 10-5 以内的答案将被接受。</p><p>示例 1：</p><p>输入</p><p>["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]</p><p>[[], [1], [2], [], [3], []]</p><p>输出</p><p>[null, null, null, 1.5, null, 2.0]</p><p>解释</p><p>MedianFinder medianFinder = new MedianFinder();</p><p>medianFinder.addNum(1); // arr = [1]</p><p>medianFinder.addNum(2); // arr = [1, 2]</p><p>medianFinder.findMedian(); // 返回 1.5 ((1 + 2) / 2)</p><p>medianFinder.addNum(3); // arr[1, 2, 3]</p><p>medianFinder.findMedian(); // return 2.0</p><p>提示:</p><p>-105 5</p><p>在调用 findMedian 之前，数据结构中至少有一个元素</p><p>最多 5 * 104 次调用 addNum 和 findMedian</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 对顶堆（大顶堆存较小一半 + 小顶堆存较大一半）</h3>
@@ -79,6 +81,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/295_find-median-from-data-stream/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0295_FindMedianFromDataStream.java">src/双指针与滑动窗口/LC0295_FindMedianFromDataStream.java</a> ·

@@ -24,6 +24,8 @@
     <span class="badge">2026-08-18</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>39. 组合总和 (Combination Sum)</h1><p>&gt; https://leetcode.cn/problems/combination-sum/</p><p>难度：Medium ｜ 分类：回溯</p><p>标签：数组、回溯</p><h2>题目描述</h2><p>给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。</p><p>candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。</p><p>对于给定的输入，保证和为 target 的不同组合数少于 150 个。</p><p>示例 1：</p><p>输入：candidates = [2,3,6,7], target = 7</p><p>输出：[[2,2,3],[7]]</p><p>解释：</p><p>2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。</p><p>7 也是一个候选， 7 = 7 。</p><p>仅有这两种组合。</p><p>示例 2：</p><p>输入: candidates = [2,3,5], target = 8</p><p>输出: [[2,2,2,2],[2,3,3],[3,5]]</p><p>示例 3：</p><p>输入: candidates = [2], target = 1</p><p>输出: []</p><p>提示：</p><p>1</p><p>2</p><p>candidates 的所有元素 互不相同</p><p>1</p><h2>示例</h2><ol><li>输入：candidates = [2,3,6,7]，target = 7</li></ol><p>输出：[[2,2,3],[7]]</p><ol><li>输入：candidates = [2,3,5]，target = 8</li></ol><p>输出：[[2,2,2,2],[2,3,3],[3,5]]</p><ol><li>输入：candidates = [2]，target = 1</li></ol><p>输出：[]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 排序 + 回溯（start 下标去重 + 大于剩余剪枝）</h3>
@@ -75,6 +77,7 @@
       <div class="quote">组合枚举回溯：排序后 start 下标保证组合内按下标非降去重（杜绝 [2,3,2]），candidates[i]&gt;remain 直接 break 剪枝，remain==0 拷贝加入结果；160/160 一次 Accepted</div>
     </div>
   </section>
+  <section><h2>同类题 · 回溯</h2><ul class="similar-list"><li><a href="../回溯/LC0017_LetterCombinationsOfAPhoneNumber_Review.html">LC17 · 电话号码的字母组合</a><span class="chip">MEDIUM</span></li><li><a href="../回溯/LC0046_Permutations_Review.html">LC46 · 全排列</a><span class="chip">MEDIUM</span></li><li><a href="../回溯/LC0078_Subsets_Review.html">LC78 · 子集</a><span class="chip">MEDIUM</span></li><li><a href="../回溯/LC0079_WordSearch_Review.html">LC79 · 单词搜索</a><span class="chip">MEDIUM</span></li><li><a href="../回溯/LC0301_RemoveInvalidParentheses_Review.html">LC301 · 删除无效的括号</a><span class="chip">HARD</span></li><li><a href="../回溯/LC0212_WordSearchIi_Review.html">LC212 · 单词搜索 II</a><span class="chip">HARD</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/39_combination-sum/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E5%9B%9E%E6%BA%AF/LC0039_CombinationSum.java">src/回溯/LC0039_CombinationSum.java</a> ·

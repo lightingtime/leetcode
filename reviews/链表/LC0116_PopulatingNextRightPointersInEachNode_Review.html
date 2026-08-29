@@ -24,6 +24,8 @@
     <span class="badge">2026-08-24</span>
   </div>
 </div>
+  <section><h2>题目回顾</h2><div class="card md"><h1>116. 填充每个节点的下一个右侧节点指针 (Populating Next Right Pointers in Each Node)</h1><p>&gt; https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/</p><p>难度：Medium ｜ 分类：链表</p><p>标签：树、深度优先搜索、广度优先搜索、链表、二叉树</p><h2>题目描述</h2><p>给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：</p><p>struct Node {</p><p>int val;</p><p>Node *left;</p><p>Node *right;</p><p>Node *next;</p><p>}</p><p>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p><p>初始状态下，所有 next 指针都被设置为 NULL。</p><p>示例 1：</p><p>输入：root = [1,2,3,4,5,6,7]</p><p>输出：[1,#,2,3,#,4,5,6,7,#]</p><p>解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。</p><p>示例 2:</p><p>输入：root = []</p><p>输出：[]</p><p>提示：</p><p>树中节点的数量在 [0, 212 - 1] 范围内</p><p>-1000</p><p>进阶：</p><p>你只能使用常量级额外空间。</p><p>使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。</p><h2>示例</h2><ol><li>输入：root = [1,2,3,4,5,6,7]</li></ol><p>输出：[1,#,2,3,#,4,5,6,7,#]</p><p>解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  
   
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队</h3>
@@ -118,6 +120,7 @@
       <div class="quote"></div>
     </div>
   </section>
+  <section><h2>同类题 · 链表</h2><ul class="similar-list"><li><a href="../链表/LC0021_MergeTwoSortedLists_Review.html">LC21 · 合并两个有序链表</a><span class="chip">EASY</span></li><li><a href="../链表/LC0206_ReverseLinkedList_Review.html">LC206 · 反转链表</a><span class="chip">EASY</span></li><li><a href="../链表/LC0002_AddTwoNumbers_Review.html">LC2 · 两数相加</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0146_LruCache_Review.html">LC146 · LRU 缓存</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0023_MergeKSortedLists_Review.html">LC23 · 合并 K 个升序链表</a><span class="chip">HARD</span></li><li><a href="../链表/LC0114_FlattenBinaryTreeToLinkedList_Review.html">LC114 · 二叉树展开为链表</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0138_CopyListWithRandomPointer_Review.html">LC138 · 随机链表的复制</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0237_DeleteNodeInALinkedList_Review.html">LC237 · 删除链表中的节点</a><span class="chip">MEDIUM</span></li></ul></section>
   <div class="foot">
     数据来源：力扣判题接口 · <code>.lc/problems/116_populating-next-right-pointers-in-each-node/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
     相关文件：<a href="../../src/%E9%93%BE%E8%A1%A8/LC0116_PopulatingNextRightPointersInEachNode.java">src/链表/LC0116_PopulatingNextRightPointersInEachNode.java</a> ·
