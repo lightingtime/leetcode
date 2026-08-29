@@ -24,32 +24,32 @@
     <span class="badge">2026-08-03</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>49. 字母异位词分组 (Group Anagrams)</h1><p>&gt; <a href="https://leetcode.cn/problems/group-anagrams/" rel="noopener">https://leetcode.cn/problems/group-anagrams/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：数组、哈希表、字符串、排序</p><h2>题目描述</h2><p>给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。</p><p>示例 1:</p><p>输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]</p><p>输出: [["bat"],["nat","tan"],["ate","eat","tea"]]</p><p>解释：</p><p>在 strs 中没有字符串可以通过重新排列来形成 "bat"。</p><p>字符串 "nat" 和 "tan" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>字符串 "ate" ，"eat" 和 "tea" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>示例 2:</p><p>输入: strs = [""]</p><p>输出: [[""]]</p><p>示例 3:</p><p>输入: strs = ["a"]</p><p>输出: [["a"]]</p><p>提示：</p><p>1 4</p><p>0</p><p>strs[i] 仅包含小写字母</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>49. 字母异位词分组 (Group Anagrams)</h1><p>&gt; <a href="https://leetcode.cn/problems/group-anagrams/" rel="noopener">https://leetcode.cn/problems/group-anagrams/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：数组、哈希表、字符串、排序</p><h2>题目描述</h2><p>给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。</p><p>示例 1:</p><p>输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]</p><p>输出: [["bat"],["nat","tan"],["ate","eat","tea"]]</p><p>解释：</p><p>在 strs 中没有字符串可以通过重新排列来形成 "bat"。</p><p>字符串 "nat" 和 "tan" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>字符串 "ate" ，"eat" 和 "tea" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>示例 2:</p><p>输入: strs = [""]</p><p>输出: [[""]]</p><p>示例 3:</p><p>输入: strs = ["a"]</p><p>输出: [["a"]]</p><p>提示：</p><p>1 4</p><p>0</p><p>strs[i] 仅包含小写字母</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-08-29 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 计数编码键 + 哈希表 ｜ O(L) · O(L)</p>
-      <div class="review-note md"><p><strong>与一刷对比</strong>：思路未换路线（同为「计数编码键 + 哈希表」），差异在写法——一刷 <code>containsKey + new ArrayList</code> 双查，二刷 <code>computeIfAbsent</code> 一步取组/建组，逻辑等价但更不易漏分支。</p><p><strong>一次 AC 归因</strong>：一刷栽在编码键漏次数（<code>a</code> 与 <code>aa</code> 撞到同一键）；二刷 key 采用「字母+次数」完整编码（<code>aabbbc</code> → <code>a2b3c1</code>），动手前先自查空串、全相同、万级数组三类边界，从设计上规避了同类错误。</p><p><strong>掌握度依据</strong>：一次提交 Accepted（129/129）且全程无探讨，判定「较强」，间隔 ×2.5。</p><p><strong>下一步提醒</strong>：排序键方案（每串排序 O(L log L)）仍未尝试，但计数编码已达最优，不必为刷而刷；可顺带复习 LC242 异位词判定，巩固「等价类 → 统一键」的建模思路。</p></div>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路未换（计数编码键 + 哈希表），改进在代码组织。一刷对每个 key 做「查 → 建 → 插」三步分支：</p><div class="md-code"><pre>if (map.containsKey(pre)) {
+    map.get(pre).add(str);
+} else {
+    List&lt;String&gt; list = new ArrayList&lt;&gt;();
+    list.add(str);
+    map.put(pre, list);
+}</pre></div><p>二刷用 <code>computeIfAbsent</code> 一步收敛「组不存在则初始化」：</p><div class="md-code"><pre>map.computeIfAbsent(getKey(str), k -&gt; new ArrayList&lt;&gt;()).add(str);</pre></div><p>差异实质：一刷把「取组」和「建组」拆成两条路径，改 key 逻辑时容易漏分支；<code>computeIfAbsent</code> 把初始化收敛为单一入口，逻辑等价但分支更少、不易错。</p><p><strong>一次 AC 归因</strong>：一刷编码键漏次数（<code>a</code>/<code>aa</code> 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。</p><p><strong>掌握度依据</strong>：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。</p></div>
     </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-03</b></li>
-        <li><span>提交</span><b>多次提交</b></li>
         <li><span>思路</span><b>计数编码键 + 哈希表</b></li>
         <li><span>复杂度</span><b>O(n*L) · O(n*L)</b></li>
         
       </ul>
-      <div class="round-note md"><p>字母异位词分组：计数编码键分组，修复键遗漏次数后第二次提交 Accepted（129/129）</p></div>
     </div><div class="round-card strong">
       <h3>2. 第 1 轮（二刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-29</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>计数编码键 + 哈希表</b></li>
         <li><span>复杂度</span><b>O(L) · O(L)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
-      <div class="round-note md"><p><strong>与一刷对比</strong>：思路未换路线（同为「计数编码键 + 哈希表」），差异在写法——一刷 <code>containsKey + new ArrayList</code> 双查，二刷 <code>computeIfAbsent</code> 一步取组/建组，逻辑等价但更不易漏分支。</p><p><strong>一次 AC 归因</strong>：一刷栽在编码键漏次数（<code>a</code> 与 <code>aa</code> 撞到同一键）；二刷 key 采用「字母+次数」完整编码（<code>aabbbc</code> → <code>a2b3c1</code>），动手前先自查空串、全相同、万级数组三类边界，从设计上规避了同类错误。</p><p><strong>掌握度依据</strong>：一次提交 Accepted（129/129）且全程无探讨，判定「较强」，间隔 ×2.5。</p><p><strong>下一步提醒</strong>：排序键方案（每串排序 O(L log L)）仍未尝试，但计数编码已达最优，不必为刷而刷；可顺带复习 LC242 异位词判定，巩固「等价类 → 统一键」的建模思路。</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 计数编码键 + 哈希表</h3>

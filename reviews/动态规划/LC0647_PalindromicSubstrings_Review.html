@@ -24,18 +24,15 @@
     <span class="badge">2026-08-20</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>647. 回文子串 (Palindromic Substrings)</h1><p>&gt; <a href="https://leetcode.cn/problems/palindromic-substrings/" rel="noopener">https://leetcode.cn/problems/palindromic-substrings/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：双指针、字符串、动态规划</p><h2>题目描述</h2><p>给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。</p><p>回文字符串 是正着读和倒过来读一样的字符串。</p><p>子字符串 是字符串中的由连续字符组成的一个序列。</p><p>示例 1：</p><p>输入：s = "abc"</p><p>输出：3</p><p>解释：三个回文子串: "a", "b", "c"</p><p>示例 2：</p><p>输入：s = "aaa"</p><p>输出：6</p><p>解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"</p><p>提示：</p><p>1</p><p>s 由小写英文字母组成</p><h2>示例</h2><ol><li>输入：s = "abc"</li></ol><p>输出：3</p><p>解释：三个回文子串: "a", "b", "c"</p><ol><li>输入：s = "aaa"</li></ol><p>输出：6</p><p>解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>647. 回文子串 (Palindromic Substrings)</h1><p>&gt; <a href="https://leetcode.cn/problems/palindromic-substrings/" rel="noopener">https://leetcode.cn/problems/palindromic-substrings/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：双指针、字符串、动态规划</p><h2>题目描述</h2><p>给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。</p><p>回文字符串 是正着读和倒过来读一样的字符串。</p><p>子字符串 是字符串中的由连续字符组成的一个序列。</p><p>示例 1：</p><p>输入：s = "abc"</p><p>输出：3</p><p>解释：三个回文子串: "a", "b", "c"</p><p>示例 2：</p><p>输入：s = "aaa"</p><p>输出：6</p><p>解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"</p><p>提示：</p><p>1</p><p>s 由小写英文字母组成</p><h2>示例</h2><ol><li>输入：s = "abc"</li></ol><p>输出：3</p><p>解释：三个回文子串: "a", "b", "c"</p><ol><li>输入：s = "aaa"</li></ol><p>输出：6</p><p>解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-20</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>中心扩散</b></li>
         <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>中心扩散：枚举 2n-1 个奇数/偶数中心，向两侧扩展；每次成功扩展计数，O(n^2)/O(1)，一次 Accepted</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 中心扩散</h3>

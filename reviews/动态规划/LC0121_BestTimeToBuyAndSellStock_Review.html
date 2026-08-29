@@ -24,18 +24,15 @@
     <span class="badge">2026-08-09</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>121. 买卖股票的最佳时机 (Best Time to Buy and Sell Stock)</h1><p>&gt; <a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/" rel="noopener">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/</a></p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。</p><p>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p><p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p><p>示例 1：</p><p>输入：[7,1,5,3,6,4]</p><p>输出：5</p><p>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</p><p>注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p><p>示例 2：</p><p>输入：prices = [7,6,4,3,1]</p><p>输出：0</p><p>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p><p>提示：</p><p>1 5</p><p>0 4</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：5</p><p>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</p><ol><li>输入：prices = [7,6,4,3,1]</li></ol><p>输出：0</p><p>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>121. 买卖股票的最佳时机 (Best Time to Buy and Sell Stock)</h1><p>&gt; <a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/" rel="noopener">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/</a></p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。</p><p>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p><p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p><p>示例 1：</p><p>输入：[7,1,5,3,6,4]</p><p>输出：5</p><p>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</p><p>注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p><p>示例 2：</p><p>输入：prices = [7,6,4,3,1]</p><p>输出：0</p><p>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p><p>提示：</p><p>1 5</p><p>0 4</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：5</p><p>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</p><ol><li>输入：prices = [7,6,4,3,1]</li></ol><p>输出：0</p><p>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-09</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>单趟扫描维护历史最低</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>单趟扫描维护历史最低买入价</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单趟扫描维护历史最低</h3>

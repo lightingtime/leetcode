@@ -24,18 +24,15 @@
     <span class="badge">2026-08-08</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>200. 岛屿数量 (Number of Islands)</h1><p>&gt; <a href="https://leetcode.cn/problems/number-of-islands/" rel="noopener">https://leetcode.cn/problems/number-of-islands/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、并查集、数组、矩阵</p><h2>题目描述</h2><p>给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。</p><p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p><p>此外，你可以假设该网格的四条边均被水包围。</p><p>示例 1：</p><p>输入：grid = [</p><p>['1','1','1','1','0'],</p><p>['1','1','0','1','0'],</p><p>['1','1','0','0','0'],</p><p>['0','0','0','0','0']</p><p>]</p><p>输出：1</p><p>示例 2：</p><p>输入：grid = [</p><p>['1','1','0','0','0'],</p><p>['1','1','0','0','0'],</p><p>['0','0','1','0','0'],</p><p>['0','0','0','1','1']</p><p>]</p><p>输出：3</p><p>提示：</p><p>m == grid.length</p><p>n == grid[i].length</p><p>1</p><p>grid[i][j] 的值为 '0' 或 '1'</p><h2>示例</h2><ol><li>输入：grid = [</li></ol><p>输出：1</p><ol><li>输入：grid = [</li></ol><p>输出：3</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>200. 岛屿数量 (Number of Islands)</h1><p>&gt; <a href="https://leetcode.cn/problems/number-of-islands/" rel="noopener">https://leetcode.cn/problems/number-of-islands/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、并查集、数组、矩阵</p><h2>题目描述</h2><p>给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。</p><p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p><p>此外，你可以假设该网格的四条边均被水包围。</p><p>示例 1：</p><p>输入：grid = [</p><p>['1','1','1','1','0'],</p><p>['1','1','0','1','0'],</p><p>['1','1','0','0','0'],</p><p>['0','0','0','0','0']</p><p>]</p><p>输出：1</p><p>示例 2：</p><p>输入：grid = [</p><p>['1','1','0','0','0'],</p><p>['1','1','0','0','0'],</p><p>['0','0','1','0','0'],</p><p>['0','0','0','1','1']</p><p>]</p><p>输出：3</p><p>提示：</p><p>m == grid.length</p><p>n == grid[i].length</p><p>1</p><p>grid[i][j] 的值为 '0' 或 '1'</p><h2>示例</h2><ol><li>输入：grid = [</li></ol><p>输出：1</p><ol><li>输入：grid = [</li></ol><p>输出：3</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-08</b></li>
-        <li><span>提交</span><b>多次提交</b></li>
         <li><span>思路</span><b>DFS 洪水填充</b></li>
         <li><span>复杂度</span><b>O(m*n) · O(m*n)</b></li>
         
       </ul>
-      <div class="round-note md"><p>岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DFS 洪水填充</h3>

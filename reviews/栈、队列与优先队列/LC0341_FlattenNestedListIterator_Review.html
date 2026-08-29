@@ -24,18 +24,15 @@
     <span class="badge">2026-08-24</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>341. 扁平化嵌套列表迭代器 (Flatten Nested List Iterator)</h1><p>&gt; <a href="https://leetcode.cn/problems/flatten-nested-list-iterator/" rel="noopener">https://leetcode.cn/problems/flatten-nested-list-iterator/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、设计、队列、迭代器</p><h2>题目描述</h2><p>给你一个嵌套的整数列表 nestedList 。每个元素要么是一个整数，要么是一个列表；该列表的元素也可能是整数或者是其他列表。请你实现一个迭代器将其扁平化，使之能够遍历这个列表中的所有整数。</p><p>实现扁平迭代器类 NestedIterator ：</p><p>NestedIterator(List nestedList) 用嵌套列表 nestedList 初始化迭代器。</p><p>int next() 返回嵌套列表的下一个整数。</p><p>boolean hasNext() 如果仍然存在待迭代的整数，返回 true ；否则，返回 false 。</p><p>你的代码将会用下述伪代码检测：</p><p>initialize iterator with nestedList</p><p>res = []</p><p>while iterator.hasNext()</p><p>append iterator.next() to the end of res</p><p>return res</p><p>如果 res 与预期的扁平化列表匹配，那么你的代码将会被判为正确。</p><p>示例 1：</p><p>输入：nestedList = [[1,1],2,[1,1]]</p><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><p>示例 2：</p><p>输入：nestedList = [1,[4,[6]]]</p><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p><p>提示：</p><p>1</p><p>嵌套列表中的整数值在范围 [-106, 106] 内</p><h2>示例</h2><ol><li>输入：nestedList = [[1,1],2,[1,1]]</li></ol><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><ol><li>输入：nestedList = [1,[4,[6]]]</li></ol><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>341. 扁平化嵌套列表迭代器 (Flatten Nested List Iterator)</h1><p>&gt; <a href="https://leetcode.cn/problems/flatten-nested-list-iterator/" rel="noopener">https://leetcode.cn/problems/flatten-nested-list-iterator/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、设计、队列、迭代器</p><h2>题目描述</h2><p>给你一个嵌套的整数列表 nestedList 。每个元素要么是一个整数，要么是一个列表；该列表的元素也可能是整数或者是其他列表。请你实现一个迭代器将其扁平化，使之能够遍历这个列表中的所有整数。</p><p>实现扁平迭代器类 NestedIterator ：</p><p>NestedIterator(List nestedList) 用嵌套列表 nestedList 初始化迭代器。</p><p>int next() 返回嵌套列表的下一个整数。</p><p>boolean hasNext() 如果仍然存在待迭代的整数，返回 true ；否则，返回 false 。</p><p>你的代码将会用下述伪代码检测：</p><p>initialize iterator with nestedList</p><p>res = []</p><p>while iterator.hasNext()</p><p>append iterator.next() to the end of res</p><p>return res</p><p>如果 res 与预期的扁平化列表匹配，那么你的代码将会被判为正确。</p><p>示例 1：</p><p>输入：nestedList = [[1,1],2,[1,1]]</p><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><p>示例 2：</p><p>输入：nestedList = [1,[4,[6]]]</p><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p><p>提示：</p><p>1</p><p>嵌套列表中的整数值在范围 [-106, 106] 内</p><h2>示例</h2><ol><li>输入：nestedList = [[1,1],2,[1,1]]</li></ol><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><ol><li>输入：nestedList = [1,[4,[6]]]</li></ol><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-24</b></li>
-        <li><span>提交</span><b>多次提交</b></li>
         <li><span>思路</span><b>惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</b></li>
         <li><span>复杂度</span><b>O(n)（构造+均摊 O(1)/元素） · O(n)</b></li>
         
       </ul>
-      
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</h3>

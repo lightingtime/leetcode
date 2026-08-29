@@ -24,18 +24,15 @@
     <span class="badge">2026-08-20</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>32. 最长有效括号 (Longest Valid Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-valid-parentheses/" rel="noopener">https://leetcode.cn/problems/longest-valid-parentheses/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：栈、字符串、动态规划、括号序列</p><h2>题目描述</h2><p>给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号 子串 的长度。</p><p>左右括号匹配，即每个左括号都有对应的右括号将其闭合的字符串是格式正确的，比如 "(()())"。</p><p>示例 1：</p><p>输入：s = "(()"</p><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><p>示例 2：</p><p>输入：s = ")()())"</p><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><p>示例 3：</p><p>输入：s = ""</p><p>输出：0</p><p>提示：</p><p>0 4</p><p>s[i] 为 '(' 或 ')'</p><h2>示例</h2><ol><li>输入：s = "(()"</li></ol><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><ol><li>输入：s = ")()())"</li></ol><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><ol><li>输入：s = ""</li></ol><p>输出：0</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>32. 最长有效括号 (Longest Valid Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-valid-parentheses/" rel="noopener">https://leetcode.cn/problems/longest-valid-parentheses/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：栈、字符串、动态规划、括号序列</p><h2>题目描述</h2><p>给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号 子串 的长度。</p><p>左右括号匹配，即每个左括号都有对应的右括号将其闭合的字符串是格式正确的，比如 "(()())"。</p><p>示例 1：</p><p>输入：s = "(()"</p><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><p>示例 2：</p><p>输入：s = ")()())"</p><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><p>示例 3：</p><p>输入：s = ""</p><p>输出：0</p><p>提示：</p><p>0 4</p><p>s[i] 为 '(' 或 ')'</p><h2>示例</h2><ol><li>输入：s = "(()"</li></ol><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><ol><li>输入：s = ")()())"</li></ol><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><ol><li>输入：s = ""</li></ol><p>输出：0</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-20</b></li>
-        <li><span>提交</span><b>多次提交</b></li>
         <li><span>思路</span><b>一维 DP</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
-      <div class="round-note md"><p>一维 DP：dp[i] 以 i 结尾的最长有效长度；遇 ) 分直接配对与跳段配对+向前拼接；O(n)/O(n)，本地修 3 处边界后力扣一次 Accepted</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维 DP</h3>

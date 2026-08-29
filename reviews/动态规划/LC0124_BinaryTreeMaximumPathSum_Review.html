@@ -24,18 +24,15 @@
     <span class="badge">2026-08-11</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>124. 二叉树中的最大路径和 (Binary Tree Maximum Path Sum)</h1><p>&gt; <a href="https://leetcode.cn/problems/binary-tree-maximum-path-sum/" rel="noopener">https://leetcode.cn/problems/binary-tree-maximum-path-sum/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：树、深度优先搜索、动态规划、二叉树、树形 DP</p><h2>题目描述</h2><p>二叉树中的 路径 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。</p><p>路径和 是路径中各节点值的总和。</p><p>给你一个二叉树的根节点 root ，返回其 最大路径和 。</p><p>示例 1：</p><p>输入：root = [1,2,3]</p><p>输出：6</p><p>解释：最优路径是 2 -&gt; 1 -&gt; 3 ，路径和为 2 + 1 + 3 = 6</p><p>示例 2：</p><p>输入：root = [-10,9,20,null,null,15,7]</p><p>输出：42</p><p>解释：最优路径是 15 -&gt; 20 -&gt; 7 ，路径和为 15 + 20 + 7 = 42</p><p>提示：</p><p>树中节点数目范围是 [1, 3 * 104]</p><p>-1000</p><h2>示例</h2><ol><li>输入：root = [1,2,3]</li></ol><p>输出：6</p><p>解释：最优路径是 2 -&gt; 1 -&gt; 3 ，路径和为 2 + 1 + 3 = 6</p><ol><li>输入：root = [-10,9,20,null,null,15,7]</li></ol><p>输出：42</p><p>解释：最优路径是 15 -&gt; 20 -&gt; 7 ，路径和为 15 + 20 + 7 = 42</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>124. 二叉树中的最大路径和 (Binary Tree Maximum Path Sum)</h1><p>&gt; <a href="https://leetcode.cn/problems/binary-tree-maximum-path-sum/" rel="noopener">https://leetcode.cn/problems/binary-tree-maximum-path-sum/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：树、深度优先搜索、动态规划、二叉树、树形 DP</p><h2>题目描述</h2><p>二叉树中的 路径 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。</p><p>路径和 是路径中各节点值的总和。</p><p>给你一个二叉树的根节点 root ，返回其 最大路径和 。</p><p>示例 1：</p><p>输入：root = [1,2,3]</p><p>输出：6</p><p>解释：最优路径是 2 -&gt; 1 -&gt; 3 ，路径和为 2 + 1 + 3 = 6</p><p>示例 2：</p><p>输入：root = [-10,9,20,null,null,15,7]</p><p>输出：42</p><p>解释：最优路径是 15 -&gt; 20 -&gt; 7 ，路径和为 15 + 20 + 7 = 42</p><p>提示：</p><p>树中节点数目范围是 [1, 3 * 104]</p><p>-1000</p><h2>示例</h2><ol><li>输入：root = [1,2,3]</li></ol><p>输出：6</p><p>解释：最优路径是 2 -&gt; 1 -&gt; 3 ，路径和为 2 + 1 + 3 = 6</p><ol><li>输入：root = [-10,9,20,null,null,15,7]</li></ol><p>输出：42</p><p>解释：最优路径是 15 -&gt; 20 -&gt; 7 ，路径和为 15 + 20 + 7 = 42</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-11</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>树形 DP（后序 DFS）</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
-      <div class="round-note md"><p>二叉树最大路径和：后序 DFS，子树贡献与 0 取 max，全局拼两侧、向上返单链，入口重置 max 后一次 Accepted（96/96）</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 树形 DP（后序 DFS）</h3>

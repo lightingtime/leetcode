@@ -24,18 +24,15 @@
     <span class="badge">2026-08-05</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>76. 最小覆盖子串 (Minimum Window Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/minimum-window-substring/" rel="noopener">https://leetcode.cn/problems/minimum-window-substring/</a></p><p>难度：Hard ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、字符串、滑动窗口</p><h2>题目描述</h2><p>给定两个字符串 s 和 t，长度分别是 m 和 n，返回 s 中的 最短窗口 子串，使得该子串包含 t 中的每一个字符（包括重复字符）。如果没有这样的子串，返回空字符串 ""。</p><p>测试用例保证答案唯一。</p><p>示例 1：</p><p>输入：s = "ADOBECODEBANC", t = "ABC"</p><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><p>示例 2：</p><p>输入：s = "a", t = "a"</p><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><p>示例 3:</p><p>输入: s = "a", t = "aa"</p><p>输出: ""</p><p>解释: t 中两个字符 'a' 均应包含在 s 的子串中，</p><p>因此没有符合条件的子字符串，返回空字符串。</p><p>提示：</p><p>m == s.length</p><p>n == t.length</p><p>1 5</p><p>s 和 t 由英文字母组成</p><p>进阶：你能设计一个在 O(m + n) 时间内解决此问题的算法吗？</p><h2>示例</h2><ol><li>输入：s = "ADOBECODEBANC"，t = "ABC"</li></ol><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><ol><li>输入：s = "a"，t = "a"</li></ol><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><ol><li>输入：s = "a"，t = "aa"</li></ol><p>输出：""</p><p>解释：t 中两个字符 'a' 均应包含在 s 的子串中，</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>76. 最小覆盖子串 (Minimum Window Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/minimum-window-substring/" rel="noopener">https://leetcode.cn/problems/minimum-window-substring/</a></p><p>难度：Hard ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、字符串、滑动窗口</p><h2>题目描述</h2><p>给定两个字符串 s 和 t，长度分别是 m 和 n，返回 s 中的 最短窗口 子串，使得该子串包含 t 中的每一个字符（包括重复字符）。如果没有这样的子串，返回空字符串 ""。</p><p>测试用例保证答案唯一。</p><p>示例 1：</p><p>输入：s = "ADOBECODEBANC", t = "ABC"</p><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><p>示例 2：</p><p>输入：s = "a", t = "a"</p><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><p>示例 3:</p><p>输入: s = "a", t = "aa"</p><p>输出: ""</p><p>解释: t 中两个字符 'a' 均应包含在 s 的子串中，</p><p>因此没有符合条件的子字符串，返回空字符串。</p><p>提示：</p><p>m == s.length</p><p>n == t.length</p><p>1 5</p><p>s 和 t 由英文字母组成</p><p>进阶：你能设计一个在 O(m + n) 时间内解决此问题的算法吗？</p><h2>示例</h2><ol><li>输入：s = "ADOBECODEBANC"，t = "ABC"</li></ol><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><ol><li>输入：s = "a"，t = "a"</li></ol><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><ol><li>输入：s = "a"，t = "aa"</li></ol><p>输出：""</p><p>解释：t 中两个字符 'a' 均应包含在 s 的子串中，</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-05</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>滑动窗口+计数</b></li>
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 滑动窗口+计数</h3>

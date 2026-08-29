@@ -24,18 +24,15 @@
     <span class="badge">2026-08-21</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>242. 有效的字母异位词 (Valid Anagram)</h1><p>&gt; <a href="https://leetcode.cn/problems/valid-anagram/" rel="noopener">https://leetcode.cn/problems/valid-anagram/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：哈希表、字符串、排序</p><h2>题目描述</h2><p>给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的 字母异位词。</p><p>示例 1:</p><p>输入: s = "anagram", t = "nagaram"</p><p>输出: true</p><p>示例 2:</p><p>输入: s = "rat", t = "car"</p><p>输出: false</p><p>提示:</p><p>1 4</p><p>s 和 t 仅包含小写字母</p><p>进阶: 如果输入字符串包含 unicode 字符怎么办？你能否调整你的解法来应对这种情况？</p><h2>示例</h2><ol><li>输入：s = "anagram"，t = "nagaram"</li></ol><p>输出：true</p><ol><li>输入：s = "rat"，t = "car"</li></ol><p>输出：false</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>242. 有效的字母异位词 (Valid Anagram)</h1><p>&gt; <a href="https://leetcode.cn/problems/valid-anagram/" rel="noopener">https://leetcode.cn/problems/valid-anagram/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：哈希表、字符串、排序</p><h2>题目描述</h2><p>给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的 字母异位词。</p><p>示例 1:</p><p>输入: s = "anagram", t = "nagaram"</p><p>输出: true</p><p>示例 2:</p><p>输入: s = "rat", t = "car"</p><p>输出: false</p><p>提示:</p><p>1 4</p><p>s 和 t 仅包含小写字母</p><p>进阶: 如果输入字符串包含 unicode 字符怎么办？你能否调整你的解法来应对这种情况？</p><h2>示例</h2><ol><li>输入：s = "anagram"，t = "nagaram"</li></ol><p>输出：true</p><ol><li>输入：s = "rat"，t = "car"</li></ol><p>输出：false</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-21</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>HashMap 双向计数</b></li>
         <li><span>复杂度</span><b>O(n) · O(k)</b></li>
         
       </ul>
-      <div class="round-note md"><p>HashMap 双向计数：s 每个字符 +1、t 每个字符 -1，最后 value 全 0 即异位词；长度不等先剪枝；O(n)/O(k)（k≤26），一次 Accepted</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap 双向计数</h3>

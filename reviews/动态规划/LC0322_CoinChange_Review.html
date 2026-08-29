@@ -24,18 +24,15 @@
     <span class="badge">2026-08-10</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>322. 零钱兑换 (Coin Change)</h1><p>&gt; <a href="https://leetcode.cn/problems/coin-change/" rel="noopener">https://leetcode.cn/problems/coin-change/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：广度优先搜索、数组、动态规划、背包问题、完全背包</p><h2>题目描述</h2><p>给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。</p><p>计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。</p><p>你可以认为每种硬币的数量是无限的。</p><p>示例 1：</p><p>输入：coins = [1, 2, 5], amount = 11</p><p>输出：3</p><p>解释：11 = 5 + 5 + 1</p><p>示例 2：</p><p>输入：coins = [2], amount = 3</p><p>输出：-1</p><p>示例 3：</p><p>输入：coins = [1], amount = 0</p><p>输出：0</p><p>提示：</p><p>1</p><p>1 31 - 1</p><p>0 4</p><h2>示例</h2><ol><li>输入：coins = [1, 2, 5]，amount = 11</li></ol><p>输出：3</p><p>解释：11 = 5 + 5 + 1</p><ol><li>输入：coins = [2]，amount = 3</li></ol><p>输出：-1</p><ol><li>输入：coins = [1]，amount = 0</li></ol><p>输出：0</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>322. 零钱兑换 (Coin Change)</h1><p>&gt; <a href="https://leetcode.cn/problems/coin-change/" rel="noopener">https://leetcode.cn/problems/coin-change/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：广度优先搜索、数组、动态规划、背包问题、完全背包</p><h2>题目描述</h2><p>给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。</p><p>计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。</p><p>你可以认为每种硬币的数量是无限的。</p><p>示例 1：</p><p>输入：coins = [1, 2, 5], amount = 11</p><p>输出：3</p><p>解释：11 = 5 + 5 + 1</p><p>示例 2：</p><p>输入：coins = [2], amount = 3</p><p>输出：-1</p><p>示例 3：</p><p>输入：coins = [1], amount = 0</p><p>输出：0</p><p>提示：</p><p>1</p><p>1 31 - 1</p><p>0 4</p><h2>示例</h2><ol><li>输入：coins = [1, 2, 5]，amount = 11</li></ol><p>输出：3</p><p>解释：11 = 5 + 5 + 1</p><ol><li>输入：coins = [2]，amount = 3</li></ol><p>输出：-1</p><ol><li>输入：coins = [1]，amount = 0</li></ol><p>输出：0</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-10</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>一维DP（完全背包）</b></li>
         <li><span>复杂度</span><b>O(amount·coins) · O(amount)</b></li>
         
       </ul>
-      <div class="round-note md"><p>完全背包一维DP（外层金额内层硬币），一次通过</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维DP（完全背包）</h3>

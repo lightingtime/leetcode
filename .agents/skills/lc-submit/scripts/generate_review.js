@@ -37,10 +37,11 @@ const reviewMap = {};
   }
 })(path.join(ROOT, 'reviews'), '');
 
-// 题目原文（含描述 / 示例 / 提示），渲染进「题目回顾」区块
+// 题目原文（含描述 / 示例 / 提示），渲染进「题目回顾」区块；剔除流程性「约定」段
 const probMdPath = path.join(LC, 'problems', `${q.id}_${slug}`, 'problem.md');
 const probMd = (fs.existsSync(probMdPath) ? fs.readFileSync(probMdPath, 'utf8') : '')
-  .replace(/\n## 示例\n+## 约定/, '\n## 约定'); // 拉题未返回示例时去掉空的示例段
+  .replace(/\n## 示例\n+## 约定/, '\n## 约定') // 拉题未返回示例时去掉空的示例段
+  .replace(/\n## 约定[\s\S]*$/, '');            // 去掉与题目无关的流程提示
 
 // 定位源码文件并提取提交区
 const walk = dir => fs.existsSync(dir)
@@ -79,6 +80,14 @@ const md = raw => {
     const rawLine = lines[i];
     const line = rawLine.trim();
     if (!line) { close(); continue; }
+    if (line.startsWith('```')) {
+      close();
+      const buf = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) { buf.push(lines[i]); i++; }
+      out.push(`<div class="md-code"><pre>${buf.join('\n')}</pre></div>`);
+      continue;
+    }
     const hm = line.match(/^(#{1,3})\s+(.*)$/);
     if (hm) { close(); out.push(`<h${hm[1].length}>${fmt(hm[2])}</h${hm[1].length}>`); continue; }
     if (i + 1 < lines.length && line.includes('|') && isTableSeparator(lines[i + 1].trim())) {
@@ -182,34 +191,25 @@ function renderRounds() {
   const rounds = [];
   rounds.push({
     label: '第一轮（一刷）',
-    date: date || '—',
-    submit: done.firstPass ? '一次 AC' : '多次提交',
     approach: a.approach || '—',
-    ts: [a.time_complexity, a.space_complexity].filter(Boolean).join(' · ') || '—',
-    note: a.notes || ''
+    ts: [a.time_complexity, a.space_complexity].filter(Boolean).join(' · ') || '—'
   });
   if (reviews.length) {
     const last = reviews[reviews.length - 1];
     rounds.push({
       label: `第 ${esc(last.pass)} 轮（二刷）`,
-      date: last.date || '—',
-      submit: last.firstTry ? '一次 AC' : '多次提交',
       approach: last.approach || '—',
       ts: [last.time_complexity, last.space_complexity].filter(Boolean).join(' · ') || '—',
-      note: last.notes || '',
       mastery: last.mastery
     });
   }
   const cards = rounds.map((r, i) => `<div class="round-card${r.mastery === 'strong' ? ' strong' : r.mastery === 'weak' ? ' weak' : ''}">
       <h3>${i + 1}. ${esc(r.label)}</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>${esc(r.date)}</b></li>
-        <li><span>提交</span><b>${esc(r.submit)}</b></li>
         <li><span>思路</span><b>${esc(r.approach)}</b></li>
         <li><span>复杂度</span><b>${esc(r.ts)}</b></li>
         ${r.mastery ? `<li><span>掌握度</span><b><span class="badge ${r.mastery === 'strong' ? 'ok' : 'hard'}">${r.mastery === 'strong' ? '较强 · 间隔 ×2.5' : '较弱 · 间隔重置'}</span></b></li>` : ''}
       </ul>
-      ${r.note ? `<div class="round-note md">${md(r.note)}</div>` : ''}
     </div>`).join('');
   return `<section><h2>历轮表现</h2><div class="rounds">${cards}</div></section>`;
 }

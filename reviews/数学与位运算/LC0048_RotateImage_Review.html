@@ -24,18 +24,15 @@
     <span class="badge">2026-08-11</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>48. 旋转图像 (Rotate Image)</h1><p>&gt; <a href="https://leetcode.cn/problems/rotate-image/" rel="noopener">https://leetcode.cn/problems/rotate-image/</a></p><p>难度：Medium ｜ 分类：数学与位运算</p><p>标签：数组、数学、矩阵</p><h2>题目描述</h2><p>给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。</p><p>你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。</p><p>示例 1：</p><p>输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]</p><p>输出：[[7,4,1],[8,5,2],[9,6,3]]</p><p>示例 2：</p><p>输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</p><p>输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</p><p>提示：</p><p>n == matrix.length == matrix[i].length</p><p>1</p><p>-1000</p><h2>示例</h2><ol><li>输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]</li></ol><p>输出：[[7,4,1],[8,5,2],[9,6,3]]</p><ol><li>输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</li></ol><p>输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>48. 旋转图像 (Rotate Image)</h1><p>&gt; <a href="https://leetcode.cn/problems/rotate-image/" rel="noopener">https://leetcode.cn/problems/rotate-image/</a></p><p>难度：Medium ｜ 分类：数学与位运算</p><p>标签：数组、数学、矩阵</p><h2>题目描述</h2><p>给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。</p><p>你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。</p><p>示例 1：</p><p>输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]</p><p>输出：[[7,4,1],[8,5,2],[9,6,3]]</p><p>示例 2：</p><p>输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</p><p>输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</p><p>提示：</p><p>n == matrix.length == matrix[i].length</p><p>1</p><p>-1000</p><h2>示例</h2><ol><li>输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]</li></ol><p>输出：[[7,4,1],[8,5,2],[9,6,3]]</p><ol><li>输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</li></ol><p>输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-11</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>对称变换（上下翻转+转置）</b></li>
         <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>旋转图像：上下翻转 + 主对角线转置两步原地变换，O(n^2)/O(1)，一次 Accepted（21/21）</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 对称变换（上下翻转+转置）</h3>

@@ -24,18 +24,15 @@
     <span class="badge">2026-08-26</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>140. 单词拆分 II (Word Break II)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-break-ii/" rel="noopener">https://leetcode.cn/problems/word-break-ii/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：字典树、记忆化、数组、哈希表、字符串、动态规划、回溯</p><h2>题目描述</h2><p>给定一个字符串 s 和一个字符串字典 wordDict ，在字符串 s 中增加空格来构建一个句子，使得句子中所有的单词都在词典中。以任意顺序 返回所有这些可能的句子。</p><p>注意：词典中的同一个单词可能在分段中被重复使用多次。</p><p>示例 1：</p><p>输入:s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]</p><p>输出:["cats and dog","cat sand dog"]</p><p>示例 2：</p><p>输入:s = "pineapplepenapple", wordDict = ["apple","pen","applepen","pine","pineapple"]</p><p>输出:["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释: 注意你可以重复使用字典中的单词。</p><p>示例 3：</p><p>输入:s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]</p><p>输出:[]</p><p>提示：</p><p>1</p><p>1</p><p>1</p><p>s 和 wordDict[i] 仅有小写英文字母组成</p><p>wordDict 中所有字符串都 不同</p><h2>示例</h2><ol><li>输入：s = "catsanddog"，wordDict = ["cat","cats","and","sand","dog"]</li></ol><p>输出：["cats and dog","cat sand dog"]</p><ol><li>输入：s = "pineapplepenapple"，wordDict = ["apple","pen","applepen","pine","pineapple"]</li></ol><p>输出：["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释：注意你可以重复使用字典中的单词。</p><ol><li>输入：s = "catsandog"，wordDict = ["cats","dog","sand","and","cat"]</li></ol><p>输出：[]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>140. 单词拆分 II (Word Break II)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-break-ii/" rel="noopener">https://leetcode.cn/problems/word-break-ii/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：字典树、记忆化、数组、哈希表、字符串、动态规划、回溯</p><h2>题目描述</h2><p>给定一个字符串 s 和一个字符串字典 wordDict ，在字符串 s 中增加空格来构建一个句子，使得句子中所有的单词都在词典中。以任意顺序 返回所有这些可能的句子。</p><p>注意：词典中的同一个单词可能在分段中被重复使用多次。</p><p>示例 1：</p><p>输入:s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]</p><p>输出:["cats and dog","cat sand dog"]</p><p>示例 2：</p><p>输入:s = "pineapplepenapple", wordDict = ["apple","pen","applepen","pine","pineapple"]</p><p>输出:["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释: 注意你可以重复使用字典中的单词。</p><p>示例 3：</p><p>输入:s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]</p><p>输出:[]</p><p>提示：</p><p>1</p><p>1</p><p>1</p><p>s 和 wordDict[i] 仅有小写英文字母组成</p><p>wordDict 中所有字符串都 不同</p><h2>示例</h2><ol><li>输入：s = "catsanddog"，wordDict = ["cat","cats","and","sand","dog"]</li></ol><p>输出：["cats and dog","cat sand dog"]</p><ol><li>输入：s = "pineapplepenapple"，wordDict = ["apple","pen","applepen","pine","pineapple"]</li></ol><p>输出：["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释：注意你可以重复使用字典中的单词。</p><ol><li>输入：s = "catsandog"，wordDict = ["cats","dog","sand","and","cat"]</li></ol><p>输出：[]</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-26</b></li>
-        <li><span>提交</span><b>多次提交</b></li>
         <li><span>思路</span><b>后缀可拆预判+回溯</b></li>
         <li><span>复杂度</span><b>O(n·|dict| + 方案数·n) · O(n + 方案数)</b></li>
         
       </ul>
-      <div class="round-note md"><p>后缀可拆预判 suffixOK（右往左）+回溯：DFS入口 !suffixOK[start] 剪到不了终点的子树，set.contains 保证段合法，path+String.join 拼句子</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 后缀可拆预判+回溯</h3>

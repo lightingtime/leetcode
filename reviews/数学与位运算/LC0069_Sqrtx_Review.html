@@ -24,18 +24,15 @@
     <span class="badge">2026-08-27</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>69. x 的平方根  (Sqrt(x))</h1><p>&gt; <a href="https://leetcode.cn/problems/sqrtx/" rel="noopener">https://leetcode.cn/problems/sqrtx/</a></p><p>难度：Easy ｜ 分类：数学与位运算</p><p>标签：数学、二分查找、牛顿迭代法</p><h2>题目描述</h2><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。</p><p>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。</p><p>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p><p>示例 1：</p><p>输入：x = 4</p><p>输出：2</p><p>示例 2：</p><p>输入：x = 8</p><p>输出：2</p><p>解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</p><p>提示：</p><p>0 31 - 1</p><h2>示例</h2><ol><li>输入：x = 4</li></ol><p>输出：2</p><ol><li>输入：x = 8</li></ol><p>输出：2</p><p>解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>69. x 的平方根  (Sqrt(x))</h1><p>&gt; <a href="https://leetcode.cn/problems/sqrtx/" rel="noopener">https://leetcode.cn/problems/sqrtx/</a></p><p>难度：Easy ｜ 分类：数学与位运算</p><p>标签：数学、二分查找、牛顿迭代法</p><h2>题目描述</h2><p>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。</p><p>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。</p><p>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。</p><p>示例 1：</p><p>输入：x = 4</p><p>输出：2</p><p>示例 2：</p><p>输入：x = 8</p><p>输出：2</p><p>解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</p><p>提示：</p><p>0 31 - 1</p><h2>示例</h2><ol><li>输入：x = 4</li></ol><p>输出：2</p><ol><li>输入：x = 8</li></ol><p>输出：2</p><p>解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-27</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>二分查找（左闭右开+哨兵防溢出）</b></li>
         <li><span>复杂度</span><b>O(log x) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>一次AC：l=-1/r=46341 哨兵二分，mid*mid&lt;=x 右移 l；哨兵保证 mid≤46340 天然防 int 溢出</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二分查找（左闭右开+哨兵防溢出）</h3>

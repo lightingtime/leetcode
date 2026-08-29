@@ -24,18 +24,15 @@
     <span class="badge">2026-08-27</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>324. 摆动排序 II (Wiggle Sort II)</h1><p>&gt; <a href="https://leetcode.cn/problems/wiggle-sort-ii/" rel="noopener">https://leetcode.cn/problems/wiggle-sort-ii/</a></p><p>难度：Medium ｜ 分类：贪心与区间</p><p>标签：贪心、数组、分治、快速选择、排序</p><h2>题目描述</h2><p>给你一个整数数组 nums，将它重新排列成 nums[0] nums[2]  的顺序。</p><p>你可以假设所有输入数组都可以得到满足题目要求的结果。</p><p>示例 1：</p><p>输入：nums = [1,5,1,1,6,4]</p><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><p>示例 2：</p><p>输入：nums = [1,3,2,2,3,1]</p><p>输出：[2,3,1,3,1,2]</p><p>提示：</p><p>1 4</p><p>0</p><p>题目数据保证，对于给定的输入 nums ，总能产生满足题目要求的结果</p><p>进阶：你能用 O(n) 时间复杂度和 / 或原地 O(1) 额外空间来实现吗？</p><h2>示例</h2><ol><li>输入：nums = [1,5,1,1,6,4]</li></ol><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><ol><li>输入：nums = [1,3,2,2,3,1]</li></ol><p>输出：[2,3,1,3,1,2]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>324. 摆动排序 II (Wiggle Sort II)</h1><p>&gt; <a href="https://leetcode.cn/problems/wiggle-sort-ii/" rel="noopener">https://leetcode.cn/problems/wiggle-sort-ii/</a></p><p>难度：Medium ｜ 分类：贪心与区间</p><p>标签：贪心、数组、分治、快速选择、排序</p><h2>题目描述</h2><p>给你一个整数数组 nums，将它重新排列成 nums[0] nums[2]  的顺序。</p><p>你可以假设所有输入数组都可以得到满足题目要求的结果。</p><p>示例 1：</p><p>输入：nums = [1,5,1,1,6,4]</p><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><p>示例 2：</p><p>输入：nums = [1,3,2,2,3,1]</p><p>输出：[2,3,1,3,1,2]</p><p>提示：</p><p>1 4</p><p>0</p><p>题目数据保证，对于给定的输入 nums ，总能产生满足题目要求的结果</p><p>进阶：你能用 O(n) 时间复杂度和 / 或原地 O(1) 额外空间来实现吗？</p><h2>示例</h2><ol><li>输入：nums = [1,5,1,1,6,4]</li></ol><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><ol><li>输入：nums = [1,3,2,2,3,1]</li></ol><p>输出：[2,3,1,3,1,2]</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-27</b></li>
-        <li><span>提交</span><b>多次提交</b></li>
         <li><span>思路</span><b>快速选择中位数 + 虚拟下标三路划分</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>非一次AC：踩了虚拟下标定义域越界、quickselect分区点选错两坑；Hoare分区需用j分界</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快速选择中位数 + 虚拟下标三路划分</h3>

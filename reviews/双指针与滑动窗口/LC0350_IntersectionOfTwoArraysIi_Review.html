@@ -24,18 +24,15 @@
     <span class="badge">2026-08-22</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>350. 两个数组的交集 II (Intersection of Two Arrays II)</h1><p>&gt; <a href="https://leetcode.cn/problems/intersection-of-two-arrays-ii/" rel="noopener">https://leetcode.cn/problems/intersection-of-two-arrays-ii/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：数组、哈希表、双指针、二分查找、排序</p><h2>题目描述</h2><p>给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。可以不考虑输出结果的顺序。</p><p>示例 1：</p><p>输入：nums1 = [1,2,2,1], nums2 = [2,2]</p><p>输出：[2,2]</p><p>示例 2:</p><p>输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]</p><p>输出：[4,9]</p><p>提示：</p><p>1</p><p>0</p><p>进阶：</p><p>如果给定的数组已经排好序呢？你将如何优化你的算法？</p><p>如果 nums1 的大小比 nums2 小，哪种方法更优？</p><p>如果 nums2 的元素存储在磁盘上，内存是有限的，并且你不能一次加载所有的元素到内存中，你该怎么办？</p><h2>示例</h2><ol><li>输入：nums1 = [1,2,2,1]，nums2 = [2,2]</li></ol><p>输出：[2,2]</p><ol><li>输入：nums1 = [4,9,5]，nums2 = [9,4,9,8,4]</li></ol><p>输出：[4,9]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>350. 两个数组的交集 II (Intersection of Two Arrays II)</h1><p>&gt; <a href="https://leetcode.cn/problems/intersection-of-two-arrays-ii/" rel="noopener">https://leetcode.cn/problems/intersection-of-two-arrays-ii/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：数组、哈希表、双指针、二分查找、排序</p><h2>题目描述</h2><p>给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。可以不考虑输出结果的顺序。</p><p>示例 1：</p><p>输入：nums1 = [1,2,2,1], nums2 = [2,2]</p><p>输出：[2,2]</p><p>示例 2:</p><p>输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]</p><p>输出：[4,9]</p><p>提示：</p><p>1</p><p>0</p><p>进阶：</p><p>如果给定的数组已经排好序呢？你将如何优化你的算法？</p><p>如果 nums1 的大小比 nums2 小，哪种方法更优？</p><p>如果 nums2 的元素存储在磁盘上，内存是有限的，并且你不能一次加载所有的元素到内存中，你该怎么办？</p><h2>示例</h2><ol><li>输入：nums1 = [1,2,2,1]，nums2 = [2,2]</li></ol><p>输出：[2,2]</p><ol><li>输入：nums1 = [4,9,5]，nums2 = [9,4,9,8,4]</li></ol><p>输出：[4,9]</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-22</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>计数数组（值域0..1000）</b></li>
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
         
       </ul>
-      
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 计数数组（值域0..1000）</h3>

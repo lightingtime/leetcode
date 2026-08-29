@@ -36,7 +36,7 @@
       "time_complexity": "O(L)",
       "space_complexity": "O(L)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路未换路线（同为「计数编码键 + 哈希表」），差异在写法——一刷 `containsKey + new ArrayList` 双查，二刷 `computeIfAbsent` 一步取组/建组，逻辑等价但更不易漏分支。\n\n**一次 AC 归因**：一刷栽在编码键漏次数（`a` 与 `aa` 撞到同一键）；二刷 key 采用「字母+次数」完整编码（`aabbbc` → `a2b3c1`），动手前先自查空串、全相同、万级数组三类边界，从设计上规避了同类错误。\n\n**掌握度依据**：一次提交 Accepted（129/129）且全程无探讨，判定「较强」，间隔 ×2.5。\n\n**下一步提醒**：排序键方案（每串排序 O(L log L)）仍未尝试，但计数编码已达最优，不必为刷而刷；可顺带复习 LC242 异位词判定，巩固「等价类 → 统一键」的建模思路。"
+      "notes": "**与一刷对比**：思路未换（计数编码键 + 哈希表），改进在代码组织。一刷对每个 key 做「查 → 建 → 插」三步分支：\n\n```java\nif (map.containsKey(pre)) {\n    map.get(pre).add(str);\n} else {\n    List<String> list = new ArrayList<>();\n    list.add(str);\n    map.put(pre, list);\n}\n```\n\n二刷用 `computeIfAbsent` 一步收敛「组不存在则初始化」：\n\n```java\nmap.computeIfAbsent(getKey(str), k -> new ArrayList<>()).add(str);\n```\n\n差异实质：一刷把「取组」和「建组」拆成两条路径，改 key 逻辑时容易漏分支；`computeIfAbsent` 把初始化收敛为单一入口，逻辑等价但分支更少、不易错。\n\n**一次 AC 归因**：一刷编码键漏次数（`a`/`aa` 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。\n\n**掌握度依据**：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。"
     }
   ],
   "submissions": [

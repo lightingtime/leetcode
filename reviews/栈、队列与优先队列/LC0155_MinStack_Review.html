@@ -24,18 +24,15 @@
     <span class="badge">2026-08-07</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>155. 最小栈 (Min Stack)</h1><p>&gt; <a href="https://leetcode.cn/problems/min-stack/" rel="noopener">https://leetcode.cn/problems/min-stack/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、设计</p><h2>题目描述</h2><p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</p><p>实现 MinStack 类:</p><p>MinStack() 初始化堆栈对象。</p><p>void push(int value) 将元素 value 推入堆栈。</p><p>void pop() 删除堆栈顶部的元素。</p><p>int top() 获取堆栈顶部的元素。</p><p>int getMin() 获取堆栈中的最小元素。</p><p>示例 1:</p><p>输入：</p><p>["MinStack","push","push","push","getMin","pop","top","getMin"]</p><p>[[],[-2],[0],[-3],[],[],[],[]]</p><p>输出：</p><p>[null,null,null,null,-3,null,0,-2]</p><p>解释：</p><p>MinStack minStack = new MinStack();</p><p>minStack.push(-2);</p><p>minStack.push(0);</p><p>minStack.push(-3);</p><p>minStack.getMin(); --&gt; 返回 -3.</p><p>minStack.pop();</p><p>minStack.top(); --&gt; 返回 0.</p><p>minStack.getMin(); --&gt; 返回 -2.</p><p>提示：</p><p>-231 31 - 1</p><p>pop、top 和 getMin 操作总是在 非空栈 上调用</p><p>push, pop, top, and getMin最多被调用 3 * 104 次</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>155. 最小栈 (Min Stack)</h1><p>&gt; <a href="https://leetcode.cn/problems/min-stack/" rel="noopener">https://leetcode.cn/problems/min-stack/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、设计</p><h2>题目描述</h2><p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</p><p>实现 MinStack 类:</p><p>MinStack() 初始化堆栈对象。</p><p>void push(int value) 将元素 value 推入堆栈。</p><p>void pop() 删除堆栈顶部的元素。</p><p>int top() 获取堆栈顶部的元素。</p><p>int getMin() 获取堆栈中的最小元素。</p><p>示例 1:</p><p>输入：</p><p>["MinStack","push","push","push","getMin","pop","top","getMin"]</p><p>[[],[-2],[0],[-3],[],[],[],[]]</p><p>输出：</p><p>[null,null,null,null,-3,null,0,-2]</p><p>解释：</p><p>MinStack minStack = new MinStack();</p><p>minStack.push(-2);</p><p>minStack.push(0);</p><p>minStack.push(-3);</p><p>minStack.getMin(); --&gt; 返回 -3.</p><p>minStack.pop();</p><p>minStack.top(); --&gt; 返回 0.</p><p>minStack.getMin(); --&gt; 返回 -2.</p><p>提示：</p><p>-231 31 - 1</p><p>pop、top 和 getMin 操作总是在 非空栈 上调用</p><p>push, pop, top, and getMin最多被调用 3 * 104 次</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-07</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>单栈+Node（值+当前最小）</b></li>
         <li><span>复杂度</span><b>O(1) · O(n)</b></li>
         
       </ul>
-      <div class="round-note md"><p>单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单栈+Node（值+当前最小）</h3>

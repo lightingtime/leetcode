@@ -24,18 +24,15 @@
     <span class="badge">2026-08-24</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>38. 外观数列 (Count and Say)</h1><p>&gt; <a href="https://leetcode.cn/problems/count-and-say/" rel="noopener">https://leetcode.cn/problems/count-and-say/</a></p><p>难度：Medium ｜ 分类：字符串</p><p>标签：字符串</p><h2>题目描述</h2><p>「外观数列」是一个数位字符串序列，由递归公式定义：</p><p>countAndSay(1) = "1"</p><p>countAndSay(n) 是 countAndSay(n-1) 的行程长度编码。</p><p>行程长度编码（RLE）是一种字符串压缩方法，其工作原理是通过将每个最大连续相同字符组替换为该组的长度后加上该字符本身。例如，要压缩字符串 "3322251" ，我们将 "33" 用 "23" 替换，将 "222" 用 "32" 替换，将 "5" 用 "15" 替换并将 "1" 用 "11" 替换。因此压缩后字符串变为 "23321511"。</p><p>给定一个整数 n ，返回 外观数列 的第 n 个元素。</p><p>示例 1：</p><p>输入：n = 4</p><p>输出："1211"</p><p>解释：</p><p>countAndSay(1) = "1"</p><p>countAndSay(2) = "1" 的行程长度编码 = "11"</p><p>countAndSay(3) = "11" 的行程长度编码 = "21"</p><p>countAndSay(4) = "21" 的行程长度编码 = "1211"</p><p>示例 2：</p><p>输入：n = 1</p><p>输出："1"</p><p>解释：</p><p>这是基本情况。</p><p>提示：</p><p>1</p><p>进阶：你能迭代解决该问题吗？</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>38. 外观数列 (Count and Say)</h1><p>&gt; <a href="https://leetcode.cn/problems/count-and-say/" rel="noopener">https://leetcode.cn/problems/count-and-say/</a></p><p>难度：Medium ｜ 分类：字符串</p><p>标签：字符串</p><h2>题目描述</h2><p>「外观数列」是一个数位字符串序列，由递归公式定义：</p><p>countAndSay(1) = "1"</p><p>countAndSay(n) 是 countAndSay(n-1) 的行程长度编码。</p><p>行程长度编码（RLE）是一种字符串压缩方法，其工作原理是通过将每个最大连续相同字符组替换为该组的长度后加上该字符本身。例如，要压缩字符串 "3322251" ，我们将 "33" 用 "23" 替换，将 "222" 用 "32" 替换，将 "5" 用 "15" 替换并将 "1" 用 "11" 替换。因此压缩后字符串变为 "23321511"。</p><p>给定一个整数 n ，返回 外观数列 的第 n 个元素。</p><p>示例 1：</p><p>输入：n = 4</p><p>输出："1211"</p><p>解释：</p><p>countAndSay(1) = "1"</p><p>countAndSay(2) = "1" 的行程长度编码 = "11"</p><p>countAndSay(3) = "11" 的行程长度编码 = "21"</p><p>countAndSay(4) = "21" 的行程长度编码 = "1211"</p><p>示例 2：</p><p>输入：n = 1</p><p>输出："1"</p><p>解释：</p><p>这是基本情况。</p><p>提示：</p><p>1</p><p>进阶：你能迭代解决该问题吗？</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-24</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>从 1 起迭代 n-1 次，逐轮做行程长度编码（RLE）</b></li>
         <li><span>复杂度</span><b>O(L_n)（L_n 为第 n 轮字符串长度） · O(L_n)</b></li>
         
       </ul>
-      
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 从 1 起迭代 n-1 次，逐轮做行程长度编码（RLE）</h3>

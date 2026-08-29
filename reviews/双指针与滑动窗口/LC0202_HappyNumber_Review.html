@@ -24,18 +24,15 @@
     <span class="badge">2026-08-22</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>202. 快乐数 (Happy Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/happy-number/" rel="noopener">https://leetcode.cn/problems/happy-number/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、数学、双指针、Floyd 判圈算法</p><h2>题目描述</h2><p>编写一个算法来判断一个数 n 是不是快乐数。</p><p>「快乐数」 定义为：</p><p>对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。</p><p>然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。</p><p>如果这个过程 结果为 1，那么这个数就是快乐数。</p><p>如果 n 是 快乐数 就返回 true ；不是，则返回 false 。</p><p>示例 1：</p><p>输入：n = 19</p><p>输出：true</p><p>解释：</p><p>12 + 92 = 82</p><p>82 + 22 = 68</p><p>62 + 82 = 100</p><p>12 + 02 + 02 = 1</p><p>示例 2：</p><p>输入：n = 2</p><p>输出：false</p><p>提示：</p><p>1 31 - 1</p><h2>示例</h2><ol><li>输入：n = 19</li></ol><p>输出：true</p><ol><li>输入：n = 2</li></ol><p>输出：false</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>202. 快乐数 (Happy Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/happy-number/" rel="noopener">https://leetcode.cn/problems/happy-number/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、数学、双指针、Floyd 判圈算法</p><h2>题目描述</h2><p>编写一个算法来判断一个数 n 是不是快乐数。</p><p>「快乐数」 定义为：</p><p>对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。</p><p>然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。</p><p>如果这个过程 结果为 1，那么这个数就是快乐数。</p><p>如果 n 是 快乐数 就返回 true ；不是，则返回 false 。</p><p>示例 1：</p><p>输入：n = 19</p><p>输出：true</p><p>解释：</p><p>12 + 92 = 82</p><p>82 + 22 = 68</p><p>62 + 82 = 100</p><p>12 + 02 + 02 = 1</p><p>示例 2：</p><p>输入：n = 2</p><p>输出：false</p><p>提示：</p><p>1 31 - 1</p><h2>示例</h2><ol><li>输入：n = 19</li></ol><p>输出：true</p><ol><li>输入：n = 2</li></ol><p>输出：false</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-22</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>Floyd快慢指针判环</b></li>
         <li><span>复杂度</span><b>O(logn) · O(1)</b></li>
         
       </ul>
-      
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Floyd快慢指针判环</h3>

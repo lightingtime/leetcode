@@ -24,18 +24,15 @@
     <span class="badge">2026-08-08</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>105. 从前序与中序遍历序列构造二叉树 (Construct Binary Tree from Preorder and Inorder Traversal)</h1><p>&gt; <a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" rel="noopener">https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/</a></p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、数组、哈希表、分治、二叉树</p><h2>题目描述</h2><p>给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。</p><p>示例 1:</p><p>输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]</p><p>输出: [3,9,20,null,null,15,7]</p><p>示例 2:</p><p>输入: preorder = [-1], inorder = [-1]</p><p>输出: [-1]</p><p>提示:</p><p>1</p><p>inorder.length == preorder.length</p><p>-3000</p><p>preorder 和 inorder 均 无重复 元素</p><p>inorder 均出现在 preorder</p><p>preorder 保证 为二叉树的前序遍历序列</p><p>inorder 保证 为二叉树的中序遍历序列</p><h2>示例</h2><ol><li>输入：preorder = [3,9,20,15,7]，inorder = [9,3,15,20,7]</li></ol><p>输出：[3,9,20,null,null,15,7]</p><ol><li>输入：preorder = [-1]，inorder = [-1]</li></ol><p>输出：[-1]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>105. 从前序与中序遍历序列构造二叉树 (Construct Binary Tree from Preorder and Inorder Traversal)</h1><p>&gt; <a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" rel="noopener">https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/</a></p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、数组、哈希表、分治、二叉树</p><h2>题目描述</h2><p>给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。</p><p>示例 1:</p><p>输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]</p><p>输出: [3,9,20,null,null,15,7]</p><p>示例 2:</p><p>输入: preorder = [-1], inorder = [-1]</p><p>输出: [-1]</p><p>提示:</p><p>1</p><p>inorder.length == preorder.length</p><p>-3000</p><p>preorder 和 inorder 均 无重复 元素</p><p>inorder 均出现在 preorder</p><p>preorder 保证 为二叉树的前序遍历序列</p><p>inorder 保证 为二叉树的中序遍历序列</p><h2>示例</h2><ol><li>输入：preorder = [3,9,20,15,7]，inorder = [9,3,15,20,7]</li></ol><p>输出：[3,9,20,null,null,15,7]</p><ol><li>输入：preorder = [-1]，inorder = [-1]</li></ol><p>输出：[-1]</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-08</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>前序定根+哈希定位+递归分治</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
-      <div class="round-note md"><p>从前序与中序遍历构造二叉树：前序定根、中序哈希定位划分左右子树，递归分治，一次 Accepted（203/203）</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前序定根+哈希定位+递归分治</h3>

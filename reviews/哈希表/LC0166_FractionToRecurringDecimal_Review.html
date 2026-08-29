@@ -24,18 +24,15 @@
     <span class="badge">2026-08-21</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>166. 分数到小数 (Fraction to Recurring Decimal)</h1><p>&gt; <a href="https://leetcode.cn/problems/fraction-to-recurring-decimal/" rel="noopener">https://leetcode.cn/problems/fraction-to-recurring-decimal/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：哈希表、数学、字符串</p><h2>题目描述</h2><p>给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数 。</p><p>如果小数部分为循环小数，则将循环的部分括在括号内。</p><p>如果存在多个答案，只需返回 任意一个 。</p><p>对于所有给定的输入，保证 答案字符串的长度小于 104 。</p><p>注意，如果分数可以表示为有限长度的字符串，则 必须 返回它。</p><p>示例 1：</p><p>输入：numerator = 1, denominator = 2</p><p>输出："0.5"</p><p>示例 2：</p><p>输入：numerator = 2, denominator = 1</p><p>输出："2"</p><p>示例 3：</p><p>输入：numerator = 4, denominator = 333</p><p>输出："0.(012)"</p><p>提示：</p><p>-231 31 - 1</p><p>denominator != 0</p><h2>示例</h2><ol><li>输入：numerator = 1，denominator = 2</li></ol><p>输出："0.5"</p><ol><li>输入：numerator = 2，denominator = 1</li></ol><p>输出："2"</p><ol><li>输入：numerator = 4，denominator = 333</li></ol><p>输出："0.(012)"</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>166. 分数到小数 (Fraction to Recurring Decimal)</h1><p>&gt; <a href="https://leetcode.cn/problems/fraction-to-recurring-decimal/" rel="noopener">https://leetcode.cn/problems/fraction-to-recurring-decimal/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：哈希表、数学、字符串</p><h2>题目描述</h2><p>给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数 。</p><p>如果小数部分为循环小数，则将循环的部分括在括号内。</p><p>如果存在多个答案，只需返回 任意一个 。</p><p>对于所有给定的输入，保证 答案字符串的长度小于 104 。</p><p>注意，如果分数可以表示为有限长度的字符串，则 必须 返回它。</p><p>示例 1：</p><p>输入：numerator = 1, denominator = 2</p><p>输出："0.5"</p><p>示例 2：</p><p>输入：numerator = 2, denominator = 1</p><p>输出："2"</p><p>示例 3：</p><p>输入：numerator = 4, denominator = 333</p><p>输出："0.(012)"</p><p>提示：</p><p>-231 31 - 1</p><p>denominator != 0</p><h2>示例</h2><ol><li>输入：numerator = 1，denominator = 2</li></ol><p>输出："0.5"</p><ol><li>输入：numerator = 2，denominator = 1</li></ol><p>输出："2"</p><ol><li>输入：numerator = 4，denominator = 333</li></ol><p>输出："0.(012)"</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-21</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>长除法 + HashMap 余数定位循环节</b></li>
         <li><span>复杂度</span><b>O(len) · O(len)</b></li>
         
       </ul>
-      <div class="round-note md"><p>long 防溢出（-2^31/-1）；整除先返回；符号异号加 '-';长除法 map 存余数-&gt;sb.length()，余数重复即循环节插入括号；一次 Accepted</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 长除法 + HashMap 余数定位循环节</h3>

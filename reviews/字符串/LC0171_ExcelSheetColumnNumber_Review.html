@@ -24,18 +24,15 @@
     <span class="badge">2026-08-23</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>171. Excel 表列序号 (Excel Sheet Column Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/excel-sheet-column-number/" rel="noopener">https://leetcode.cn/problems/excel-sheet-column-number/</a></p><p>难度：Easy ｜ 分类：字符串</p><p>标签：数学、字符串</p><h2>题目描述</h2><p>给你一个字符串 columnTitle ，表示 Excel 表格中的列名称。返回 该列名称对应的列序号 。</p><p>例如：</p><p>A -&gt; 1</p><p>B -&gt; 2</p><p>C -&gt; 3</p><p>...</p><p>Z -&gt; 26</p><p>AA -&gt; 27</p><p>AB -&gt; 28</p><p>...</p><p>示例 1:</p><p>输入: columnTitle = "A"</p><p>输出: 1</p><p>示例 2:</p><p>输入: columnTitle = "AB"</p><p>输出: 28</p><p>示例 3:</p><p>输入: columnTitle = "ZY"</p><p>输出: 701</p><p>提示：</p><p>1</p><p>columnTitle 仅由大写英文组成</p><p>columnTitle 在范围 ["A", "FXSHRXW"] 内</p><h2>示例</h2><ol><li>输入：columnTitle = "A"</li></ol><p>输出：1</p><ol><li>输入：columnTitle = "AB"</li></ol><p>输出：28</p><ol><li>输入：columnTitle = "ZY"</li></ol><p>输出：701</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>171. Excel 表列序号 (Excel Sheet Column Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/excel-sheet-column-number/" rel="noopener">https://leetcode.cn/problems/excel-sheet-column-number/</a></p><p>难度：Easy ｜ 分类：字符串</p><p>标签：数学、字符串</p><h2>题目描述</h2><p>给你一个字符串 columnTitle ，表示 Excel 表格中的列名称。返回 该列名称对应的列序号 。</p><p>例如：</p><p>A -&gt; 1</p><p>B -&gt; 2</p><p>C -&gt; 3</p><p>...</p><p>Z -&gt; 26</p><p>AA -&gt; 27</p><p>AB -&gt; 28</p><p>...</p><p>示例 1:</p><p>输入: columnTitle = "A"</p><p>输出: 1</p><p>示例 2:</p><p>输入: columnTitle = "AB"</p><p>输出: 28</p><p>示例 3:</p><p>输入: columnTitle = "ZY"</p><p>输出: 701</p><p>提示：</p><p>1</p><p>columnTitle 仅由大写英文组成</p><p>columnTitle 在范围 ["A", "FXSHRXW"] 内</p><h2>示例</h2><ol><li>输入：columnTitle = "A"</li></ol><p>输出：1</p><ol><li>输入：columnTitle = "AB"</li></ol><p>输出：28</p><ol><li>输入：columnTitle = "ZY"</li></ol><p>输出：701</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-23</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>从右往左按位加权累加（26 进制无 0）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-      
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 从右往左按位加权累加（26 进制无 0）</h3>

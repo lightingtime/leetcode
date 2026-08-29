@@ -24,18 +24,15 @@
     <span class="badge">2026-08-17</span>
   </div>
 </div>
-  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>581. 最短无序连续子数组 (Shortest Unsorted Continuous Subarray)</h1><p>&gt; <a href="https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/" rel="noopener">https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：栈、贪心、数组、双指针、排序、单调栈</p><h2>题目描述</h2><p>给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。</p><p>请你找出符合题意的 最短 子数组，并输出它的长度。</p><p>示例 1：</p><p>输入：nums = [2,6,4,8,10,9,15]</p><p>输出：5</p><p>解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。</p><p>示例 2：</p><p>输入：nums = [1,2,3,4]</p><p>输出：0</p><p>示例 3：</p><p>输入：nums = [1]</p><p>输出：0</p><p>提示：</p><p>1 4</p><p>-105 5</p><p>进阶：你可以设计一个时间复杂度为 O(n) 的解决方案吗？</p><h2>示例</h2><ol><li>输入：nums = [2,6,4,8,10,9,15]</li></ol><p>输出：5</p><p>解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。</p><ol><li>输入：nums = [1,2,3,4]</li></ol><p>输出：0</p><ol><li>输入：nums = [1]</li></ol><p>输出：0</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>581. 最短无序连续子数组 (Shortest Unsorted Continuous Subarray)</h1><p>&gt; <a href="https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/" rel="noopener">https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：栈、贪心、数组、双指针、排序、单调栈</p><h2>题目描述</h2><p>给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。</p><p>请你找出符合题意的 最短 子数组，并输出它的长度。</p><p>示例 1：</p><p>输入：nums = [2,6,4,8,10,9,15]</p><p>输出：5</p><p>解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。</p><p>示例 2：</p><p>输入：nums = [1,2,3,4]</p><p>输出：0</p><p>示例 3：</p><p>输入：nums = [1]</p><p>输出：0</p><p>提示：</p><p>1 4</p><p>-105 5</p><p>进阶：你可以设计一个时间复杂度为 O(n) 的解决方案吗？</p><h2>示例</h2><ol><li>输入：nums = [2,6,4,8,10,9,15]</li></ol><p>输出：5</p><p>解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。</p><ol><li>输入：nums = [1,2,3,4]</li></ol><p>输出：0</p><ol><li>输入：nums = [1]</li></ol><p>输出：0</p></div></details>
   
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
-        <li><span>日期</span><b>2026-08-17</b></li>
-        <li><span>提交</span><b>一次 AC</b></li>
         <li><span>思路</span><b>两趟扫描找左右边界</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-      <div class="round-note md"><p>最短无序连续子数组：两趟扫描维护左右 max/min 找边界，O(n)/O(1)，一次 Accepted（307/307）</p></div>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 排序对比找错位区间（朴素）</h3>
