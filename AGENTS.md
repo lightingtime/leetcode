@@ -28,7 +28,7 @@
 | 「帮我分析」「我哪里错了」「测试不过」「看看我的代码」 | lc-analyze | 编译/运行拿到报错，指出思路中哪步假设或写法导致问题（只给宽泛提示） |
 | 「不懂」「不会写」「卡住了」「帮我看看思路」（尚未跑测试） | lc-guide | 名词先解释清楚、先规划变量及用途、分块推进，一次只讲一块，不直接给答案 |
 | 「开始复习」「二刷」「复习下一题」「开始第二轮」 | lc-review（mode=review 时） | 二刷 + 间隔复习调度（较强×2.5 / 较弱重置），重开题目重写并重提交，按掌握度更新复盘 |
-| 「看状态」「刷题状态」「复习状态」「进度怎么样」「今天复习什么」 | lc-status（lc-dashboard 插件） | 运行 `lc_status.mjs`，展示模式 / 一刷·二刷进度 / 今日队列 / 掌握度面板 |
+| 「看状态」「刷题状态」「复习状态」「进度怎么样」「今天复习什么」 | lc-status（项目 skill，`.agents/skills/lc-status/`；lc-dashboard 插件同步提供） | 运行 `lc_status.mjs`，展示模式 / 一刷·二刷进度 / 今日队列 / 掌握度面板 |
 
 > 「下一题」按当前模式路由（`.lc/mode.json`）：`review` → lc-review 复习队列；`practice` → lc-practice 刷题。切换用 `update_state.js mode review|practice`；一刷全部完成时 `next` 自动切为 `review`；题库新增未刷题时 `next` / `mode` 会自动提示并切回 `practice`。
 
