@@ -48,48 +48,44 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 自顶向下归并排序</h3>
     <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(log n)</span><span class="chip">内存 ≈ 56.8 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0148_SortList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>// 参数 head：待排序链表头
-    public ListNode sortList(ListNode head) {
-        // 递归出口：空链 / 单节点已有序
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0148_SortList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public ListNode sortList(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
-        // 分治：切中点 → 两半各自递归排序 → 合并（两半必须各自有序）
-        ListNode mid = getMid(head);   // 左半最后一个节点
-        ListNode second = mid.next;    // 右半头
-        mid.next = null;               // 切断左右两半
-        ListNode newHead = sortList(head); // 左半排序
-        second = sortList(second);         // 右半排序
+        // 两半必须各自递归排序后再合并（此前漏掉分治，直接 merge 两个乱序序列）
+        ListNode mid = getMid(head);
+        ListNode second = mid.next;
+        mid.next = null;
+        ListNode newHead = sortList(head);
+        second = sortList(second);
         return mergeList(newHead, second);
     }
 
-    // 参数 head/second：两段各自有序的链表头；返回合并后的有序链表头
     private ListNode mergeList(ListNode head, ListNode second) {
-        ListNode newHead = new ListNode(); // 哨兵，避免处理空头
-        ListNode p1 = head, p2 = second, p = newHead; // p 指向结果链尾部
-        // 循环进入条件：两段都还有节点待比较；任一走完则把剩余整段接上（无需断链）
+        ListNode newHead = new ListNode();
+        ListNode p1 = head, p2 = second, p = newHead;
+        // 只把 p 指向较小节点、p 前移，不断任何链（断链会拆碎链表并让 p 变 null 触发 NPE）
         while (p1 != null &amp;&amp; p2 != null) {
             if (p1.val &lt; p2.val) {
-                p.next = p1;      // 只改 p 的指向，不断链
+                p.next = p1;
                 p1 = p1.next;
             } else {
                 p.next = p2;
                 p2 = p2.next;
             }
-            p = p.next;           // p 前移一位
+            p = p.next;
         }
-        if (p1 != null) p.next = p1; // 接上剩余整段
+        if (p1 != null) p.next = p1;
         if (p2 != null) p.next = p2;
         return newHead.next;
     }
 
-    // 参数 head：非空链表头；返回左半最后一个节点（偶数长度停在中偏左）
     private ListNode getMid(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
         // fast 每轮完整走 2 步、slow 走 1 步，fast 到尾时 slow 恰在中点
-        // 循环进入条件：fast 还能走 2 步（fast.next 与 fast.next.next 均非空），保证 slow 前进 ⇔ fast 走满 2 步
+        // 条件 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」（此前偶数长度 slow 多走，[1,2] 返回节点 2 致无限递归）
         ListNode fast = head, slow = head;
         while (fast.next != null &amp;&amp; fast.next.next != null) {
             fast = fast.next.next;
