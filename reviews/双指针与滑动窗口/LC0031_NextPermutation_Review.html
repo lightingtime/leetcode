@@ -37,41 +37,41 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 转折点+交换+反转</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.8 MB</span><span class="chip">用例 268/268</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0031_NextPermutation.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void nextPermutation(int[] nums) {
-        int firstIndex = nums.length - 2;
-        while (firstIndex &gt;= 0) {
-            if (nums[firstIndex] &lt; nums[firstIndex + 1]) {
-                break;
-            } else {
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0031_NextPermutation.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">nextPermutation</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> firstIndex = nums.length - <span class="tk-n">2</span>;
+        <span class="tk-k">while</span> (firstIndex &gt;= <span class="tk-n">0</span>) {
+            <span class="tk-k">if</span> (nums[firstIndex] &lt; nums[firstIndex + <span class="tk-n">1</span>]) {
+                <span class="tk-k">break</span>;
+            } <span class="tk-k">else</span> {
                 firstIndex--;
             }
         }
-        if (firstIndex == -1) {
-            reverse(nums, 0, nums.length - 1);
-            return;
+        <span class="tk-k">if</span> (firstIndex == -<span class="tk-n">1</span>) {
+            <span class="tk-f">reverse</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>);
+            <span class="tk-k">return</span>;
         }
-        int secondIndex = nums.length - 1;
-        while (secondIndex &gt; firstIndex) {
-            if (nums[firstIndex] &lt; nums[secondIndex]) {
-                break;
-            } else {
+        <span class="tk-k">int</span> secondIndex = nums.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (secondIndex &gt; firstIndex) {
+            <span class="tk-k">if</span> (nums[firstIndex] &lt; nums[secondIndex]) {
+                <span class="tk-k">break</span>;
+            } <span class="tk-k">else</span> {
                 secondIndex--;
             }
         }
-        swap(nums, firstIndex, secondIndex);
+        <span class="tk-f">swap</span>(nums, firstIndex, secondIndex);
 
-        reverse(nums, firstIndex + 1, nums.length - 1);
+        <span class="tk-f">reverse</span>(nums, firstIndex + <span class="tk-n">1</span>, nums.length - <span class="tk-n">1</span>);
     }
 
-    private void swap(int[] nums, int firstIndex, int secondIndex) {
-        int temp = nums[firstIndex];
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> firstIndex, <span class="tk-k">int</span> secondIndex) {
+        <span class="tk-k">int</span> temp = nums[firstIndex];
         nums[firstIndex] = nums[secondIndex];
         nums[secondIndex] = temp;
     }
 
-    private void reverse(int[] nums, int begin, int end) {
-        while (begin &lt; end) {
-            swap(nums, begin, end);
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">reverse</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> begin, <span class="tk-k">int</span> end) {
+        <span class="tk-k">while</span> (begin &lt; end) {
+            <span class="tk-f">swap</span>(nums, begin, end);
             begin++;
             end--;
         }

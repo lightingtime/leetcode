@@ -37,24 +37,24 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 右上角消行消列</h3>
     <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.4 MB</span><span class="chip">用例 130/130</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0240_SearchA2dMatrixIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean searchMatrix(int[][] matrix, int target) {
-        if (matrix.length == 0 || matrix[0].length == 0) {
-            return false;
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0240_SearchA2dMatrixIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">searchMatrix</span>(<span class="tk-k">int</span>[][] matrix, <span class="tk-k">int</span> target) {
+        <span class="tk-k">if</span> (matrix.length == <span class="tk-n">0</span> || matrix[<span class="tk-n">0</span>].length == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        int m = matrix.length;
-        int n = matrix[0].length;
+        <span class="tk-k">int</span> m = matrix.length;
+        <span class="tk-k">int</span> n = matrix[<span class="tk-n">0</span>].length;
 
-        int x = 0, y = n - 1;
-        while (x &gt;= 0 &amp;&amp; x &lt; m &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; n) {
-            if (matrix[x][y] == target) {
-                return true;
-            } else if (matrix[x][y] &gt; target) {
+        <span class="tk-k">int</span> x = <span class="tk-n">0</span>, y = n - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (x &gt;= <span class="tk-n">0</span> &amp;&amp; x &lt; m &amp;&amp; y &gt;= <span class="tk-n">0</span> &amp;&amp; y &lt; n) {
+            <span class="tk-k">if</span> (matrix[x][y] == target) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (matrix[x][y] &gt; target) {
                 y--;
-            } else {
+            } <span class="tk-k">else</span> {
                 x++;
             }
         }
-        return false;
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：行递增、列递增的矩阵中查找 target。每行二分是 O(m log n)；从右上角出发每次排除一整行或一整列，O(m+n)。</p><p>关键设计：起点 (0, n-1)（右上角）。matrix[x][y] &gt; target 时，本列下方所有元素都更大，排除本列 y--；&lt; target 时，本行左边所有元素都更小，排除本行 x++；相等返回 true。每步确定排除一行或一列，所以最多走 m+n 步。</p><p>边界：空矩阵或空行直接 false；target 小于左上角或大于右下角时快速从边界走出去退出循环；单行退化为线性扫描、单列退化为竖扫。</p><p>复杂度：O(m+n) 时间、O(1) 空间，最优。</p></div></section>

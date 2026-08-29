@@ -37,33 +37,33 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快速选择（Hoare 分区）</h3>
     <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(log n)</span><span class="chip">内存 ≈ 73.0 MB</span><span class="chip">用例 46/46</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0215_KthLargestElementInAnArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int findKthLargest(int[] nums, int k) {
-        int n = nums.length;
-        return quickSort(nums, 0, n - 1, n - k);
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0215_KthLargestElementInAnArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findKthLargest</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-k">int</span> n = nums.length;
+        <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, n - <span class="tk-n">1</span>, n - k);
     }
 
-    private int quickSort(int[] nums, int l, int r, int k) {
-        if (l == r) {
-            return nums[k];
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSort</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span> nums[k];
         }
-        int x = nums[l], i = l - 1, j = r + 1;
-        while (i &lt; j) {
-            do {
+        <span class="tk-k">int</span> x = nums[l], i = l - <span class="tk-n">1</span>, j = r + <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt; j) {
+            <span class="tk-k">do</span> {
                 i++;
-            } while (nums[i] &lt; x);
-            do {
+            } <span class="tk-k">while</span> (nums[i] &lt; x);
+            <span class="tk-k">do</span> {
                 j--;
-            } while ( nums[j] &gt; x);
-            if (i &lt; j) {
-                int temp = nums[j];
+            } <span class="tk-k">while</span> ( nums[j] &gt; x);
+            <span class="tk-k">if</span> (i &lt; j) {
+                <span class="tk-k">int</span> temp = nums[j];
                 nums[j] = nums[i];
                 nums[i] = temp;
             }
         }
-        if (k &lt;= j) {
-            return quickSort(nums, l, j, k);
+        <span class="tk-k">if</span> (k &lt;= j) {
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, l, j, k);
         }
-        return quickSort(nums, j + 1, r, k);
+        <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, j + <span class="tk-n">1</span>, r, k);
     }</pre></div>
   </div></section>
   

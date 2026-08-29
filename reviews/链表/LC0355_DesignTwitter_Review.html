@@ -37,180 +37,180 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 推文流头插+二分归并</h3>
     <p><span class="chip">时间 postTweet O(1), getNewsFeed O(L log k)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 54.8 MB</span><span class="chip">用例 22/22</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0355_DesignTwitter.java · 推文流头插+二分归并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    static class Twitter {
-        Map&lt;Integer, List&lt;Tweet&gt;&gt; tweets;
-        Map&lt;Integer, Set&lt;Integer&gt;&gt; followers;
-        int uniId;
+    <div class="code-wrap"><div class="code-head"><span>LC0355_DesignTwitter.java · 推文流头插+二分归并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Twitter</span> {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt;&gt; tweets;
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; followers;
+        <span class="tk-k">int</span> uniId;
 
-        static class Tweet {
-            int id;
-            int time;
-            Tweet(int id, int time) {
-                this.id = id;
-                this.time = time;
+        <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Tweet</span> {
+            <span class="tk-k">int</span> id;
+            <span class="tk-k">int</span> time;
+            <span class="tk-t">Tweet</span>(<span class="tk-k">int</span> id, <span class="tk-k">int</span> time) {
+                <span class="tk-k">this</span>.id = id;
+                <span class="tk-k">this</span>.time = time;
             }
         }
 
-        public Twitter() {
-            tweets = new HashMap&lt;&gt;();
-            followers = new HashMap&lt;&gt;();
-            uniId = 0;
+        <span class="tk-k">public</span> <span class="tk-t">Twitter</span>() {
+            tweets = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            followers = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            uniId = <span class="tk-n">0</span>;
         }
 
-        public void postTweet(int userId, int tweetId) {
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">postTweet</span>(<span class="tk-k">int</span> userId, <span class="tk-k">int</span> tweetId) {
             uniId++;
-            tweets.computeIfAbsent(userId, x -&gt; new LinkedList&lt;&gt;()).add(0, new Tweet(tweetId, uniId));
+            tweets.<span class="tk-f">computeIfAbsent</span>(userId, x -&gt; <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;()).<span class="tk-f">add</span>(<span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">Tweet</span>(tweetId, uniId));
         }
 
-        public List&lt;Integer&gt; getNewsFeed(int userId) {
-            List&lt;List&lt;Tweet&gt;&gt; allNews = new ArrayList&lt;&gt;();
-            if (tweets.containsKey(userId)) {
-                allNews.add(tweets.get(userId));
+        <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">getNewsFeed</span>(<span class="tk-k">int</span> userId) {
+            <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt;&gt; allNews = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">if</span> (tweets.<span class="tk-f">containsKey</span>(userId)) {
+                allNews.<span class="tk-f">add</span>(tweets.<span class="tk-f">get</span>(userId));
             }
-            if (followers.containsKey(userId)) {
-                for (Integer followeeId : followers.get(userId)) {
-                    if (tweets.containsKey(followeeId)) {
-                        allNews.add(tweets.get(followeeId));
+            <span class="tk-k">if</span> (followers.<span class="tk-f">containsKey</span>(userId)) {
+                <span class="tk-k">for</span> (<span class="tk-t">Integer</span> followeeId : followers.<span class="tk-f">get</span>(userId)) {
+                    <span class="tk-k">if</span> (tweets.<span class="tk-f">containsKey</span>(followeeId)) {
+                        allNews.<span class="tk-f">add</span>(tweets.<span class="tk-f">get</span>(followeeId));
                     }
                 }
             }
-            if (allNews.isEmpty()) {
-                return new ArrayList&lt;&gt;();
+            <span class="tk-k">if</span> (allNews.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
             }
-            List&lt;Tweet&gt; sortNews = getSortNews(allNews, 0, allNews.size() - 1);
-            List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
-            for (int i = 0; i &lt; Math.min(10, sortNews.size()); i++) {
-                res.add(sortNews.get(i).id);
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; sortNews = <span class="tk-f">getSortNews</span>(allNews, <span class="tk-n">0</span>, allNews.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; res = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; <span class="tk-t">Math</span>.<span class="tk-f">min</span>(<span class="tk-n">10</span>, sortNews.<span class="tk-f">size</span>()); i++) {
+                res.<span class="tk-f">add</span>(sortNews.<span class="tk-f">get</span>(i).id);
             }
-            return res;
+            <span class="tk-k">return</span> res;
         }
 
-        private List&lt;Tweet&gt; getSortNews(List&lt;List&lt;Tweet&gt;&gt; allNews, int l, int r) {
-            if (l &gt;= r) {
-                return allNews.get(l);
+        <span class="tk-k">private</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; <span class="tk-f">getSortNews</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt;&gt; allNews, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r) {
+            <span class="tk-k">if</span> (l &gt;= r) {
+                <span class="tk-k">return</span> allNews.<span class="tk-f">get</span>(l);
             }
-            int mid = l + (r - l) / 2;
-            List&lt;Tweet&gt; first = getSortNews(allNews, l, mid);
-            List&lt;Tweet&gt; second = getSortNews(allNews, mid + 1, r);
-            return mergeList(first, second);
+            <span class="tk-k">int</span> mid = l + (r - l) / <span class="tk-n">2</span>;
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; first = <span class="tk-f">getSortNews</span>(allNews, l, mid);
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; second = <span class="tk-f">getSortNews</span>(allNews, mid + <span class="tk-n">1</span>, r);
+            <span class="tk-k">return</span> <span class="tk-f">mergeList</span>(first, second);
         }
 
-        private List&lt;Tweet&gt; mergeList(List&lt;Tweet&gt; first, List&lt;Tweet&gt; second) {
-            List&lt;Tweet&gt; list = new ArrayList&lt;&gt;();
-            int i = 0, j = 0;
-            while (i &lt; first.size() &amp;&amp; j &lt; second.size()) {
-                if (list.size() == 10) {
-                    break;
+        <span class="tk-k">private</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; <span class="tk-f">mergeList</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; first, <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; second) {
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">int</span> i = <span class="tk-n">0</span>, j = <span class="tk-n">0</span>;
+            <span class="tk-k">while</span> (i &lt; first.<span class="tk-f">size</span>() &amp;&amp; j &lt; second.<span class="tk-f">size</span>()) {
+                <span class="tk-k">if</span> (list.<span class="tk-f">size</span>() == <span class="tk-n">10</span>) {
+                    <span class="tk-k">break</span>;
                 }
-                if (first.get(i).time &gt; second.get(j).time) {
-                    list.add(first.get(i));
+                <span class="tk-k">if</span> (first.<span class="tk-f">get</span>(i).time &gt; second.<span class="tk-f">get</span>(j).time) {
+                    list.<span class="tk-f">add</span>(first.<span class="tk-f">get</span>(i));
                     i++;
-                } else {
-                    list.add(second.get(j));
+                } <span class="tk-k">else</span> {
+                    list.<span class="tk-f">add</span>(second.<span class="tk-f">get</span>(j));
                     j++;
                 }
             }
-            while (i != first.size() &amp;&amp; list.size() &lt; 10) {
-                list.add(first.get(i));
+            <span class="tk-k">while</span> (i != first.<span class="tk-f">size</span>() &amp;&amp; list.<span class="tk-f">size</span>() &lt; <span class="tk-n">10</span>) {
+                list.<span class="tk-f">add</span>(first.<span class="tk-f">get</span>(i));
                 i++;
             }
-            while (j != second.size() &amp;&amp; list.size() &lt; 10) {
-                list.add(second.get(j));
+            <span class="tk-k">while</span> (j != second.<span class="tk-f">size</span>() &amp;&amp; list.<span class="tk-f">size</span>() &lt; <span class="tk-n">10</span>) {
+                list.<span class="tk-f">add</span>(second.<span class="tk-f">get</span>(j));
                 j++;
             }
-            return list;
+            <span class="tk-k">return</span> list;
         }
 
-        public void follow(int followerId, int followeeId) {
-            followers.computeIfAbsent(followerId, k -&gt; new HashSet&lt;&gt;()).add(followeeId);
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">follow</span>(<span class="tk-k">int</span> followerId, <span class="tk-k">int</span> followeeId) {
+            followers.<span class="tk-f">computeIfAbsent</span>(followerId, k -&gt; <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;()).<span class="tk-f">add</span>(followeeId);
         }
 
-        public void unfollow(int followerId, int followeeId) {
-            if (followers.containsKey(followerId)) {
-                followers.get(followerId).remove(followeeId);
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">unfollow</span>(<span class="tk-k">int</span> followerId, <span class="tk-k">int</span> followeeId) {
+            <span class="tk-k">if</span> (followers.<span class="tk-f">containsKey</span>(followerId)) {
+                followers.<span class="tk-f">get</span>(followerId).<span class="tk-f">remove</span>(followeeId);
             }
         }
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 优先队列多路归并 Top-10</h3>
     <p><span class="chip">时间 postTweet O(1), getNewsFeed O(k + 10 log k)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 54.8 MB</span><span class="chip">用例 22/22</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0355_DesignTwitter.java · 优先队列多路归并 Top-10</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    static class Twitter {
-        Map&lt;Integer, List&lt;Tweet&gt;&gt; tweets;
-        Map&lt;Integer, Set&lt;Integer&gt;&gt; followers;
-        int uniId;
+    <div class="code-wrap"><div class="code-head"><span>LC0355_DesignTwitter.java · 优先队列多路归并 Top-10</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Twitter</span> {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt;&gt; tweets;
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; followers;
+        <span class="tk-k">int</span> uniId;
 
-        static class Tweet {
-            int id;
-            int time;
-            Tweet(int id, int time) {
-                this.id = id;
-                this.time = time;
+        <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Tweet</span> {
+            <span class="tk-k">int</span> id;
+            <span class="tk-k">int</span> time;
+            <span class="tk-t">Tweet</span>(<span class="tk-k">int</span> id, <span class="tk-k">int</span> time) {
+                <span class="tk-k">this</span>.id = id;
+                <span class="tk-k">this</span>.time = time;
             }
         }
 
-        // 优先队列元素：候选推文 + 来源流 + 游标，避免裸数组下标
-        static class Node {
-            Tweet tweet;
-            int flow;
-            int pos;
-            Node(Tweet tweet, int flow, int pos) {
-                this.tweet = tweet;
-                this.flow = flow;
-                this.pos = pos;
+        <span class="tk-c">// 优先队列元素：候选推文 + 来源流 + 游标，避免裸数组下标</span>
+        <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+            <span class="tk-t">Tweet</span> tweet;
+            <span class="tk-k">int</span> flow;
+            <span class="tk-k">int</span> pos;
+            <span class="tk-t">Node</span>(<span class="tk-t">Tweet</span> tweet, <span class="tk-k">int</span> flow, <span class="tk-k">int</span> pos) {
+                <span class="tk-k">this</span>.tweet = tweet;
+                <span class="tk-k">this</span>.flow = flow;
+                <span class="tk-k">this</span>.pos = pos;
             }
         }
 
-        public Twitter() {
-            tweets = new HashMap&lt;&gt;();
-            followers = new HashMap&lt;&gt;();
-            uniId = 0;
+        <span class="tk-k">public</span> <span class="tk-t">Twitter</span>() {
+            tweets = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            followers = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            uniId = <span class="tk-n">0</span>;
         }
 
-        public void postTweet(int userId, int tweetId) {
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">postTweet</span>(<span class="tk-k">int</span> userId, <span class="tk-k">int</span> tweetId) {
             uniId++;
-            tweets.computeIfAbsent(userId, x -&gt; new LinkedList&lt;&gt;()).add(0, new Tweet(tweetId, uniId));
+            tweets.<span class="tk-f">computeIfAbsent</span>(userId, x -&gt; <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;()).<span class="tk-f">add</span>(<span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">Tweet</span>(tweetId, uniId));
         }
 
-        public List&lt;Integer&gt; getNewsFeed(int userId) {
-            List&lt;List&lt;Tweet&gt;&gt; flows = new ArrayList&lt;&gt;();
-            if (tweets.containsKey(userId)) {
-                flows.add(tweets.get(userId));
+        <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">getNewsFeed</span>(<span class="tk-k">int</span> userId) {
+            <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Tweet</span>&gt;&gt; flows = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">if</span> (tweets.<span class="tk-f">containsKey</span>(userId)) {
+                flows.<span class="tk-f">add</span>(tweets.<span class="tk-f">get</span>(userId));
             }
-            if (followers.containsKey(userId)) {
-                for (Integer followeeId : followers.get(userId)) {
-                    if (tweets.containsKey(followeeId)) {
-                        flows.add(tweets.get(followeeId));
+            <span class="tk-k">if</span> (followers.<span class="tk-f">containsKey</span>(userId)) {
+                <span class="tk-k">for</span> (<span class="tk-t">Integer</span> followeeId : followers.<span class="tk-f">get</span>(userId)) {
+                    <span class="tk-k">if</span> (tweets.<span class="tk-f">containsKey</span>(followeeId)) {
+                        flows.<span class="tk-f">add</span>(tweets.<span class="tk-f">get</span>(followeeId));
                     }
                 }
             }
-            if (flows.isEmpty()) {
-                return new ArrayList&lt;&gt;();
+            <span class="tk-k">if</span> (flows.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
             }
 
-            // 多路归并：每个流的头部（最新一条）进最大堆，弹最大者后从该流补下一条
-            PriorityQueue&lt;Node&gt; pq = new PriorityQueue&lt;&gt;((a, b) -&gt; b.tweet.time - a.tweet.time);
-            for (int i = 0; i &lt; flows.size(); i++) {
-                pq.offer(new Node(flows.get(i).get(0), i, 0));
+            <span class="tk-c">// 多路归并：每个流的头部（最新一条）进最大堆，弹最大者后从该流补下一条</span>
+            <span class="tk-t">PriorityQueue</span>&lt;<span class="tk-t">Node</span>&gt; pq = <span class="tk-k">new</span> <span class="tk-t">PriorityQueue</span>&lt;&gt;((a, b) -&gt; b.tweet.time - a.tweet.time);
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; flows.<span class="tk-f">size</span>(); i++) {
+                pq.<span class="tk-f">offer</span>(<span class="tk-k">new</span> <span class="tk-t">Node</span>(flows.<span class="tk-f">get</span>(i).<span class="tk-f">get</span>(<span class="tk-n">0</span>), i, <span class="tk-n">0</span>));
             }
-            List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
-            while (!pq.isEmpty() &amp;&amp; res.size() &lt; 10) {
-                Node cur = pq.poll();
-                res.add(cur.tweet.id);
-                int next = cur.pos + 1;
-                if (next &lt; flows.get(cur.flow).size()) {
-                    pq.offer(new Node(flows.get(cur.flow).get(next), cur.flow, next));
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; res = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">while</span> (!pq.<span class="tk-f">isEmpty</span>() &amp;&amp; res.<span class="tk-f">size</span>() &lt; <span class="tk-n">10</span>) {
+                <span class="tk-t">Node</span> cur = pq.<span class="tk-f">poll</span>();
+                res.<span class="tk-f">add</span>(cur.tweet.id);
+                <span class="tk-k">int</span> next = cur.pos + <span class="tk-n">1</span>;
+                <span class="tk-k">if</span> (next &lt; flows.<span class="tk-f">get</span>(cur.flow).<span class="tk-f">size</span>()) {
+                    pq.<span class="tk-f">offer</span>(<span class="tk-k">new</span> <span class="tk-t">Node</span>(flows.<span class="tk-f">get</span>(cur.flow).<span class="tk-f">get</span>(next), cur.flow, next));
                 }
             }
-            return res;
+            <span class="tk-k">return</span> res;
         }
 
-        public void follow(int followerId, int followeeId) {
-            followers.computeIfAbsent(followerId, k -&gt; new HashSet&lt;&gt;()).add(followeeId);
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">follow</span>(<span class="tk-k">int</span> followerId, <span class="tk-k">int</span> followeeId) {
+            followers.<span class="tk-f">computeIfAbsent</span>(followerId, k -&gt; <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;()).<span class="tk-f">add</span>(followeeId);
         }
 
-        public void unfollow(int followerId, int followeeId) {
-            if (followers.containsKey(followerId)) {
-                followers.get(followerId).remove(followeeId);
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">unfollow</span>(<span class="tk-k">int</span> followerId, <span class="tk-k">int</span> followeeId) {
+            <span class="tk-k">if</span> (followers.<span class="tk-f">containsKey</span>(followerId)) {
+                followers.<span class="tk-f">get</span>(followerId).<span class="tk-f">remove</span>(followeeId);
             }
         }
     }</pre></div>

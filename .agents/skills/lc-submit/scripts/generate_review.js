@@ -59,13 +59,39 @@ if (srcFile) {
 const fileBase = srcFile ? path.basename(srcFile, '.java') : `LC${String(q.id).padStart(4, '0')}`;
 const safeCat = s => String(s).replace(/[\/\\]+/g, '-');
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Java 语法高亮（GitHub 浅色主题配色），输出带 span 的 HTML
+const hlJava = src => {
+  const KW = new Set(['abstract','assert','boolean','break','byte','case','catch','char','class','const','continue','default','do','double','else','enum','extends','final','finally','float','for','goto','if','implements','import','instanceof','int','interface','long','native','new','package','private','protected','public','return','short','static','strictfp','super','switch','synchronized','this','throw','throws','transient','try','void','volatile','while','true','false','null']);
+  let out = '', i = 0;
+  while (i < src.length) {
+    const rest = src.slice(i);
+    let m;
+    if ((m = rest.match(/^\/\/[^\n]*/))) { out += `<span class="tk-c">${esc(m[0])}</span>`; i += m[0].length; continue; }
+    if ((m = rest.match(/^\/\*[\s\S]*?\*\//))) { out += `<span class="tk-c">${esc(m[0])}</span>`; i += m[0].length; continue; }
+    if ((m = rest.match(/^"(\\.|[^"\\])*"/))) { out += `<span class="tk-s">${esc(m[0])}</span>`; i += m[0].length; continue; }
+    if ((m = rest.match(/^'(\\.|[^'\\])*'/))) { out += `<span class="tk-s">${esc(m[0])}</span>`; i += m[0].length; continue; }
+    if ((m = rest.match(/^@[A-Za-z_][\w.]*/))) { out += `<span class="tk-a">${esc(m[0])}</span>`; i += m[0].length; continue; }
+    if ((m = rest.match(/^\b\d[\w.]*\b/))) { out += `<span class="tk-n">${esc(m[0])}</span>`; i += m[0].length; continue; }
+    if ((m = rest.match(/^[A-Za-z_]\w*/))) {
+      const w = m[0];
+      const nextCh = src[i + w.length];
+      if (KW.has(w)) out += `<span class="tk-k">${w}</span>`;
+      else if (/^[A-Z]/.test(w)) out += `<span class="tk-t">${w}</span>`;
+      else if (nextCh === '(') out += `<span class="tk-f">${w}</span>`;
+      else out += esc(w);
+      i += w.length; continue;
+    }
+    out += esc(rest[0]); i++;
+  }
+  return out;
+};
 // 轻量 Markdown 渲染（逐行状态机）：列表、简单表格、段落；支持 `行内代码`、**加粗**
 const md = raw => {
-  const lines = esc(String(raw)).replace(/\\n/g, '\n').split('\n').map(l => l.replace(/\s+$/, ''));
+  const rawLines = String(raw).replace(/\\n/g, '\n').split('\n').map(l => l.replace(/\s+$/, ''));
   // 先保护行内代码，再处理加粗与链接（[text](url) 与裸 URL 均可点击），最后还原代码
   const fmt = s => {
     const codes = [];
-    let t = s.replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return '\u0000' + (codes.length - 1) + '\u0000'; });
+    let t = esc(s).replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return '\u0000' + (codes.length - 1) + '\u0000'; });
     t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
       .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s<]+)/g,
         (m, tx, u, bare) => { const url = u || bare; const text = tx || url; return `<a href="${url}" rel="noopener">${text}</a>`; });
@@ -76,27 +102,27 @@ const md = raw => {
   const out = [];
   let listTag = null;
   const close = () => { if (listTag) { out.push('</' + listTag + '>'); listTag = null; } };
-  for (let i = 0; i < lines.length; i++) {
-    const rawLine = lines[i];
+  for (let i = 0; i < rawLines.length; i++) {
+    const rawLine = rawLines[i];
     const line = rawLine.trim();
     if (!line) { close(); continue; }
     if (line.startsWith('```')) {
       close();
       const buf = [];
       i++;
-      while (i < lines.length && !lines[i].trim().startsWith('```')) { buf.push(lines[i]); i++; }
-      out.push(`<div class="md-code"><pre>${buf.join('\n')}</pre></div>`);
+      while (i < rawLines.length && !rawLines[i].trim().startsWith('```')) { buf.push(rawLines[i]); i++; }
+      out.push(`<div class="md-code"><pre>${hlJava(buf.join('\n'))}</pre></div>`);
       continue;
     }
     const hm = line.match(/^(#{1,3})\s+(.*)$/);
     if (hm) { close(); out.push(`<h${hm[1].length}>${fmt(hm[2])}</h${hm[1].length}>`); continue; }
-    if (i + 1 < lines.length && line.includes('|') && isTableSeparator(lines[i + 1].trim())) {
+    if (i + 1 < rawLines.length && line.includes('|') && isTableSeparator(rawLines[i + 1].trim())) {
       close();
       const header = splitCells(line);
       const tableRows = [];
       i += 2;
-      while (i < lines.length && lines[i].trim() && lines[i].includes('|')) {
-        tableRows.push(splitCells(lines[i].trim()));
+      while (i < rawLines.length && rawLines[i].trim() && rawLines[i].includes('|')) {
+        tableRows.push(splitCells(rawLines[i].trim()));
         i++;
       }
       i--;
@@ -143,7 +169,7 @@ tlItems.push(
   `<div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">0${mistakes.length + 2} · 提交<span class="tl-badge ok">${a.verdict || 'Accepted'}</span></span><p>${esc(testcases)} 用例${a.firstPass ? '一次通过' : ''}。</p></div></div>`);
 
 const fmtMem = b => b != null ? `≈ ${(b / 1048576).toFixed(1)} MB` : '—';
-const codeBlock = (title, c) => c ? `<div class="code-wrap"><div class="code-head"><span>${esc(title)}</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>${esc(c)}</pre></div>` : '';
+const codeBlock = (title, c) => c ? `<div class="code-wrap"><div class="code-head"><span>${esc(title)}</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>${hlJava(c)}</pre></div>` : '';
 function renderReviews() {
   if (!reviews.length) return '';
   const items = reviews.slice().reverse().map(r => {

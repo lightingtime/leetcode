@@ -37,22 +37,22 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · dummy+双指针逐位相加维护进位</h3>
     <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.5 MB</span><span class="chip">用例 1569/1569</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0002_AddTwoNumbers.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode dummy = new ListNode();
-        ListNode p1 = l1, p2 = l2, p = dummy;
-        int next = 0;
-        while (p1 != null || p2 != null || next != 0) {
-            int a = p1 == null ? 0 : p1.val;
-            int b = p2 == null ? 0 : p2.val;
-            int sum = a + b + next;
-            ListNode node = new ListNode(sum % 10);
-            next = sum / 10;
+    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0002_AddTwoNumbers.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">addTwoNumbers</span>(<span class="tk-t">ListNode</span> l1, <span class="tk-t">ListNode</span> l2) {
+        <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
+        <span class="tk-t">ListNode</span> p1 = l1, p2 = l2, p = dummy;
+        <span class="tk-k">int</span> next = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (p1 != <span class="tk-k">null</span> || p2 != <span class="tk-k">null</span> || next != <span class="tk-n">0</span>) {
+            <span class="tk-k">int</span> a = p1 == <span class="tk-k">null</span> ? <span class="tk-n">0</span> : p1.val;
+            <span class="tk-k">int</span> b = p2 == <span class="tk-k">null</span> ? <span class="tk-n">0</span> : p2.val;
+            <span class="tk-k">int</span> sum = a + b + next;
+            <span class="tk-t">ListNode</span> node = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(sum % <span class="tk-n">10</span>);
+            next = sum / <span class="tk-n">10</span>;
             p.next = node;
             p = p.next;
-            p1 = p1 == null ? p1 : p1.next;
-            p2 = p2 == null ? p2 : p2.next;
+            p1 = p1 == <span class="tk-k">null</span> ? p1 : p1.next;
+            p2 = p2 == <span class="tk-k">null</span> ? p2 : p2.next;
         }
-        return dummy.next;
+        <span class="tk-k">return</span> dummy.next;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：链表按逆序存数字（头节点是个位），相加就是模拟竖式：逐位求和 + 进位。</p><p>关键设计：循环条件 p1!=null || p2!=null || carry!=0 三个都要判断——最高位产生进位时还要再生成一个节点；短链补 0（p1==null ? 0 : p1.val）；每位存 sum%10、进位 sum/10。</p><p>边界：两链长度不等；最高位连续进位（如 999+1 结果多一位）；一条链为空；9+9 的进位要带进下一位。</p><p>复杂度：O(max(m,n)) 时间、O(1) 额外空间（输出链不算），最优；逆序存储让加法天然从左到右。</p></div></section>

@@ -37,38 +37,38 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 排序+双指针夹逼</h3>
     <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 57.8 MB</span><span class="chip">用例 316/316</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0015_3sum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) {
-        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
-        int i = 0, j = nums.length - 1;
-        Arrays.sort(nums);
-        while (i &lt; j) {
-            if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) {
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0015_3sum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">threeSum</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>, j = nums.length - <span class="tk-n">1</span>;
+        <span class="tk-t">Arrays</span>.<span class="tk-f">sort</span>(nums);
+        <span class="tk-k">while</span> (i &lt; j) {
+            <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; nums[i] == nums[i - <span class="tk-n">1</span>]) {
                 i++;
-                continue;
+                <span class="tk-k">continue</span>;
             }
-            int k = i + 1;
-            j = nums.length - 1;
-            while (k &lt; j) {
-                if (k &gt; i + 1 &amp;&amp; nums[k] == nums[k - 1]) {
+            <span class="tk-k">int</span> k = i + <span class="tk-n">1</span>;
+            j = nums.length - <span class="tk-n">1</span>;
+            <span class="tk-k">while</span> (k &lt; j) {
+                <span class="tk-k">if</span> (k &gt; i + <span class="tk-n">1</span> &amp;&amp; nums[k] == nums[k - <span class="tk-n">1</span>]) {
                     k++;
-                    continue;
+                    <span class="tk-k">continue</span>;
                 }
-                if (nums[i] + nums[k] + nums[j] == 0) {
-                    List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-                    list.add(nums[i]);
-                    list.add(nums[k]);
-                    list.add(nums[j]);
-                    ans.add(list);
+                <span class="tk-k">if</span> (nums[i] + nums[k] + nums[j] == <span class="tk-n">0</span>) {
+                    <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+                    list.<span class="tk-f">add</span>(nums[i]);
+                    list.<span class="tk-f">add</span>(nums[k]);
+                    list.<span class="tk-f">add</span>(nums[j]);
+                    ans.<span class="tk-f">add</span>(list);
                     k++;
-                } else if (nums[i] + nums[k] + nums[j] &lt; 0) {
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[i] + nums[k] + nums[j] &lt; <span class="tk-n">0</span>) {
                     k++;
-                } else {
+                } <span class="tk-k">else</span> {
                     j--;
                 }
             }
             i++;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找出所有和为 0 且不重复的三元组。排序 + 双指针把三数问题降维为「固定一个数 + 剩余区间内两数之和」。</p><p>关键设计：排序后外层 i 固定第一个数，内层 k（左）、j（右）双指针：三数和 &lt;0 左移 k，&gt;0 右移 j，==0 记录三元组并把 k 前移。去重是关键：i 与 k 都跳过和前一位置相同的值（k 还要满足 k&gt;i+1 防止与 i 混淆），j 不用显式去重——与 i、k 去重配合即可保证三元组不重复不遗漏。</p><p>边界：长度不足 3 无解；全零数组只输出一个 [0,0,0]；每轮外层结束 j 必须重新置为末尾；负数与正数混合时双指针方向判断要仔细。</p><p>复杂度：O(n²) 时间（排序 O(n log n) + 双指针 O(n²)）、O(1) 额外空间（忽略排序栈），最优。</p></div></section>

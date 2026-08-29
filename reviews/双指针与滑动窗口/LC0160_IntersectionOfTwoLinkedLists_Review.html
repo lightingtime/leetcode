@@ -37,24 +37,24 @@
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>双指针</p>
     <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) {
-            return null;
+    <div class="code-wrap"><div class="code-head"><span>双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">getIntersectionNode</span>(<span class="tk-t">ListNode</span> headA, <span class="tk-t">ListNode</span> headB) {
+        <span class="tk-k">if</span> (headA == <span class="tk-k">null</span> || headB == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
-        ListNode p1 = headA, p2 = headB;
-        while (p1 != p2) {
-            if (p1 != null) {
+        <span class="tk-t">ListNode</span> p1 = headA, p2 = headB;
+        <span class="tk-k">while</span> (p1 != p2) {
+            <span class="tk-k">if</span> (p1 != <span class="tk-k">null</span>) {
                 p1 = p1.next;
-            } else {
+            } <span class="tk-k">else</span> {
                 p1 = headB;
             }
-            if (p2 != null) {
+            <span class="tk-k">if</span> (p2 != <span class="tk-k">null</span>) {
                 p2 = p2.next;
-            } else {
+            } <span class="tk-k">else</span> {
                 p2 = headA;
             }
         }
-        return p1;
+        <span class="tk-k">return</span> p1;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找两个链表的第一个相交节点。朴素做法先求长度差再对齐；更简洁的是双指针换链：p1 走完 A 后从 B 头继续，p2 走完 B 后从 A 头继续，两指针总路程相等（A+B 与 B+A），必然同时到达交点或同时走到 null。</p><p>关键设计：换链时机是「指针本身走到 null」时，而不是 next 为 null 时——只有指针为 null 才说明把整条链走完了。这样两指针在第二段路径上从相同剩余长度出发，交点处必然对齐。</p><p>边界：无交点时两指针同时为 null，返回 null（A+B 与 B+A 等长）；任一链表为空直接返回 null；有交点时第一次相遇处就是交点，直接返回。</p><p>复杂度：O(m+n) 时间、O(1) 空间，最优。本题历史踩坑就在换链时机上：在 next==null 时切换会导致无交点时死循环、有交点时错位。</p></div></section>

@@ -48,22 +48,22 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三指针分区</h3>
     <p><span class="chip">时间 O(n)~O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 89/89</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0075_SortColors.java · 三指针分区</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
-        int start = 0, end = nums.length - 1;
-        int mid = start;
-        while (mid &lt;= end) {
-            if (nums[mid] == 0) {
-                int temp = nums[start];
+    <div class="code-wrap"><div class="code-head"><span>LC0075_SortColors.java · 三指针分区</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">sortColors</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> start = <span class="tk-n">0</span>, end = nums.length - <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> mid = start;
+        <span class="tk-k">while</span> (mid &lt;= end) {
+            <span class="tk-k">if</span> (nums[mid] == <span class="tk-n">0</span>) {
+                <span class="tk-k">int</span> temp = nums[start];
                 nums[start] = nums[mid];
                 nums[mid] = temp;
                 start++;
                 mid = start;
-            } else if (nums[mid] == 2) {
-                int temp = nums[end];
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[mid] == <span class="tk-n">2</span>) {
+                <span class="tk-k">int</span> temp = nums[end];
                 nums[end] = nums[mid];
                 nums[mid] = temp;
                 end--;
-            } else {
+            } <span class="tk-k">else</span> {
                 mid++;
             }
         }
@@ -71,29 +71,29 @@
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 三指针分区（荷兰国旗）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
-        // 分区不变量：
-        //   [0,lt)   全 0
-        //   [lt,i)   全 1
-        //   (gt,n-1] 全 2
-        //   [i,gt]   未处理 → 循环条件 i&lt;=gt（i==gt 时那一格仍未处理）
-        int lt = 0, i = 0, gt = nums.length - 1;
-        while (i &lt;= gt) {
-            if (nums[i] == 2) {
-                swap(nums, i, gt);
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">sortColors</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-c">// 分区不变量：</span>
+        <span class="tk-c">//   [0,lt)   全 0</span>
+        <span class="tk-c">//   [lt,i)   全 1</span>
+        <span class="tk-c">//   (gt,n-1] 全 2</span>
+        <span class="tk-c">//   [i,gt]   未处理 → 循环条件 i&lt;=gt（i==gt 时那一格仍未处理）</span>
+        <span class="tk-k">int</span> lt = <span class="tk-n">0</span>, i = <span class="tk-n">0</span>, gt = nums.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt;= gt) {
+            <span class="tk-k">if</span> (nums[i] == <span class="tk-n">2</span>) {
+                <span class="tk-f">swap</span>(nums, i, gt);
                 gt--;
-            } else if (nums[i] == 0) {
-                swap(nums, lt, i);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[i] == <span class="tk-n">0</span>) {
+                <span class="tk-f">swap</span>(nums, lt, i);
                 lt++;
                 i++;
-            } else {
+            } <span class="tk-k">else</span> {
                 i++;
             }
         }
     }
 
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">int</span> temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
     }</pre></div>

@@ -37,16 +37,16 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 异或 + 位计数</h3>
     <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 40.7 MB</span><span class="chip">用例 149/149</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0461_HammingDistance.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int hammingDistance(int x, int y) {
-        int t = x ^ y;
-        int ans = 0;
-        while (t != 0) {
-            if ((t &amp; 1) == 1) {
+    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0461_HammingDistance.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">hammingDistance</span>(<span class="tk-k">int</span> x, <span class="tk-k">int</span> y) {
+        <span class="tk-k">int</span> t = x ^ y;
+        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (t != <span class="tk-n">0</span>) {
+            <span class="tk-k">if</span> ((t &amp; <span class="tk-n">1</span>) == <span class="tk-n">1</span>) {
                 ans++;
             }
-            t &gt;&gt;&gt;= 1;
+            t &gt;&gt;&gt;= <span class="tk-n">1</span>;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：统计两个整数二进制表示中不同位的个数。逐位比较 x 和 y 需要固定 32 次且要处理对齐，而「异或」天然把不同位置 1、相同位置 0，于是问题转化为统计异或结果的 1 的个数（popcount）。</p><p>解法选择理由（位运算子类型）：</p><ul><li><code>x ^ y</code> 得到差异掩码：某位不同则为 1，相同则为 0。</li><li>统计掩码中 1 的个数即汉明距离。</li><li>不需要处理符号/对齐，负数的补码也由 <code>^</code> 和 popcount 统一处理（但本题约束 x、y 非负）。</li></ul><p>关键设计：</p><ol><li><code>t = x ^ y</code>。</li><li>循环统计：<code>while (t != 0)</code> 内先看最低位 <code>(t &amp; 1) == 1</code> 才 <code>ans++</code>，然后 <code>t &gt;&gt;&gt;= 1</code>（必须用逻辑右移 &gt;&gt;&gt;，负数时算术右移 &gt;&gt; 会补 1 死循环）。</li><li>等价做法：<code>Integer.bitCount(x ^ y)</code> 一步完成。</li></ol><p>具体 case 推演（x=1, y=4）：</p><ul><li><code>t = 1 ^ 4 = 5</code>（二进制 <code>101</code>）。</li><li>第 1 轮：<code>5 &amp; 1 = 1</code>，ans=1，<code>t &gt;&gt;&gt;= 1</code> → 2（<code>10</code>）。</li><li>第 2 轮：<code>2 &amp; 1 = 0</code>，不加，<code>t &gt;&gt;&gt;= 1</code> → 1（<code>1</code>）。</li><li>第 3 轮：<code>1 &amp; 1 = 1</code>，ans=2，<code>t &gt;&gt;&gt;= 1</code> → 0。</li><li>返回 2 ✓。</li></ul><p>边界与细节：</p><ul><li><code>x == y</code>：异或为 0，返回 0。</li><li><code>0</code> 与 <code>Integer.MAX_VALUE</code>（<code>0..2^31-1</code> 范围内最大距离）：31 个 1。</li><li><code>MAX</code> 与 <code>MAX-1</code>：只有最低位不同，返回 1。</li><li><code>0</code> 与 <code>2^30</code>：只有最高位不同，返回 1。</li><li>全部用例都在题目约束 <code>0 &lt;= x, y &lt;= 2^31-1</code> 内。</li></ul><p>复杂度分析：</p><ul><li>时间 O(1)：最多循环 32 次（int 固定 32 位），<code>bitCount</code> 也是 O(1)。</li><li>空间 O(1)：只有两个局部变量。</li><li>已是最优：必须检查每一位是否不同，32 位是常数下界。</li></ul></div></section>

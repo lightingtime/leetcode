@@ -37,66 +37,66 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Trie+回溯DFS</h3>
     <p><span class="chip">时间 O(ΣL建树 + m·n·3^L搜索)</span><span class="chip">空间 O(26·Trie节点数 + m·n + L递归栈)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 65/65</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0212_WordSearchIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;String&gt; ans;
-    boolean[][] visited;
-    public List&lt;String&gt; findWords(char[][] board, String[] words) {
-        ans = new ArrayList&lt;&gt;();
-        visited = new boolean[board.length][board[0].length];
-        Trie trie = new Trie();
-        for (String word : words) {
-            Trie p = trie;
-            for (char c : word.toCharArray()) {
-                if (p.children[c - 'a'] == null) {
-                    p.children[c - 'a'] = new Trie();
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0212_WordSearchIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">boolean</span>[][] visited;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">findWords</span>(<span class="tk-k">char</span>[][] board, <span class="tk-t">String</span>[] words) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        visited = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[board.length][board[<span class="tk-n">0</span>].length];
+        <span class="tk-t">Trie</span> trie = <span class="tk-k">new</span> <span class="tk-t">Trie</span>();
+        <span class="tk-k">for</span> (<span class="tk-t">String</span> word : words) {
+            <span class="tk-t">Trie</span> p = trie;
+            <span class="tk-k">for</span> (<span class="tk-k">char</span> c : word.<span class="tk-f">toCharArray</span>()) {
+                <span class="tk-k">if</span> (p.children[c - <span class="tk-s">'a'</span>] == <span class="tk-k">null</span>) {
+                    p.children[c - <span class="tk-s">'a'</span>] = <span class="tk-k">new</span> <span class="tk-t">Trie</span>();
                 }
-                p = p.children[c - 'a'];
+                p = p.children[c - <span class="tk-s">'a'</span>];
             }
             p.word = word;
         }
-        for (int i = 0; i &lt; board.length; i++) {
-            for (int j = 0; j &lt; board[0].length; j++) {
-                dfs(board, i, j, trie);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; board.length; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; board[<span class="tk-n">0</span>].length; j++) {
+                <span class="tk-f">dfs</span>(board, i, j, trie);
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(char[][] board, int i, int j, Trie trie) {
-        if (i &lt; 0 || i &gt;= board.length || j &lt; 0 || j &gt;= board[0].length || visited[i][j]) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] board, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j, <span class="tk-t">Trie</span> trie) {
+        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || i &gt;= board.length || j &lt; <span class="tk-n">0</span> || j &gt;= board[<span class="tk-n">0</span>].length || visited[i][j]) {
+            <span class="tk-k">return</span>;
         }
-        if (trie.children[board[i][j] - 'a'] == null) {
-            return;
+        <span class="tk-k">if</span> (trie.children[board[i][j] - <span class="tk-s">'a'</span>] == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span>;
         }
-        trie = trie.children[board[i][j] - 'a'];
-        if (trie.word != null) {
-            ans.add(trie.word);
-            trie.word = null;
+        trie = trie.children[board[i][j] - <span class="tk-s">'a'</span>];
+        <span class="tk-k">if</span> (trie.word != <span class="tk-k">null</span>) {
+            ans.<span class="tk-f">add</span>(trie.word);
+            trie.word = <span class="tk-k">null</span>;
         }
-        visited[i][j] = true;
-        dfs(board, i - 1, j, trie);
-        dfs(board, i + 1, j, trie);
-        dfs(board, i, j - 1, trie);
-        dfs(board, i, j + 1, trie);
-        visited[i][j] = false;
+        visited[i][j] = <span class="tk-k">true</span>;
+        <span class="tk-f">dfs</span>(board, i - <span class="tk-n">1</span>, j, trie);
+        <span class="tk-f">dfs</span>(board, i + <span class="tk-n">1</span>, j, trie);
+        <span class="tk-f">dfs</span>(board, i, j - <span class="tk-n">1</span>, trie);
+        <span class="tk-f">dfs</span>(board, i, j + <span class="tk-n">1</span>, trie);
+        visited[i][j] = <span class="tk-k">false</span>;
     }
 
-    static class Trie {
-        Trie[] children;
-        String word;
+    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Trie</span> {
+        <span class="tk-t">Trie</span>[] children;
+        <span class="tk-t">String</span> word;
 
-        public Trie() {
-            this.children = new Trie[26];
+        <span class="tk-k">public</span> <span class="tk-t">Trie</span>() {
+            <span class="tk-k">this</span>.children = <span class="tk-k">new</span> <span class="tk-t">Trie</span>[<span class="tk-n">26</span>];
         }
 
-        public Trie(Trie[] children, String word) {
-            this.children = children;
-            this.word = word;
+        <span class="tk-k">public</span> <span class="tk-t">Trie</span>(<span class="tk-t">Trie</span>[] children, <span class="tk-t">String</span> word) {
+            <span class="tk-k">this</span>.children = children;
+            <span class="tk-k">this</span>.word = word;
         }
     }</pre></div>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><h2>① 问题本质与解法选择</h2><ul><li>本质：在棋盘的全部路径中，找出恰好等于字典中某个单词的路径。朴素做法是逐词 DFS：每个词都从 m·n 个起点各搜一遍，words 可达 3×10^4 个，重复扫描量爆炸必超时。</li><li>解法选择：Trie + 回溯。把全部单词压进共享前缀的字典树后，「往这个方向走还有没有词活着」从查 3 万次变成查 1 次 children 槽位；棋盘每走一格、树上同步走一层，死前缀整枝剪掉。</li></ul><h2>② 关键设计决策</h2><div class="table-wrap"><table><thead><tr><th>设计点</th><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>词尾标记</td><td>存完整单词 String 而非 boolean</td><td>命中直接收集不用回拼路径字符串；置回 null 即天然去重</td></tr><tr><td>dfs 的树参数</td><td>每层递归传当前节点的孩子</td><td>树上位置随路径推进；Java 引用按值传，形参换指向不影响外层 root</td></tr><tr><td>去重机制</td><td>trie.word = null 改对象内容</td><td>改的是节点本体，全局可见，任何路径二次走到同一词尾不会重复收录</td></tr><tr><td>回溯现场</td><td>visited 进栈标记、返回前撤销</td><td>当前路径用过的格子释放给兄弟分支复用</td></tr></tbody></table></div><p>dfs 单帧五步顺序：守卫(越界或已访问直接 return) → 剪枝(children[idx]==null return) → 前进+命中(word!=null 则收集并清空) → 标记 visited → 四方向递归 → 撤销 visited。</p><h2>③ 具体 case 推演（边界5）</h2><p>board=[a,b,c] 单行，words=[ab, abc, ac]，建树结果（ac 与 ab 共享前缀 a）：</p><div class="md-code"><pre>root───a(A)───b(B,word=ab)───c(C,word=abc)
-               └────c(E,word=ac)</pre></div><div class="table-wrap"><table><thead><tr><th>步骤</th><th>格子</th><th>树上位置</th><th>动作与状态变化</th></tr></thead><tbody><tr><td>1</td><td>(0,0)=a</td><td>root→A</td><td>root.children[a] 存在，进入 A，标记 (0,0)</td></tr><tr><td>2</td><td>(0,1)=b</td><td>A→B</td><td>B.word=ab 非空，收集 ab 并把 B.word 置 null</td></tr><tr><td>3</td><td>(0,2)=c</td><td>B→C</td><td>C.word=abc 命中收集；C 无孩子，开始回溯</td></tr><tr><td>4</td><td>—</td><td>A 的另一孩子 E(ac)</td><td>树上说 ac 存在，但 (0,0) 的邻格里没有未访问的 c，走不出去，放弃</td></tr><tr><td>5</td><td>(0,1)=b</td><td>root</td><td>root 无 b 孩子，该起点秒退</td></tr><tr><td>6</td><td>(0,2)=c</td><td>root</td><td>root 无 c 孩子，同样秒退</td></tr></tbody></table></div><p>输出 [ab, abc]。三个结论：词在字典存在不代表棋盘有路（步骤4）；字典没有的前缀连搜都不搜（步骤5、6）；B 命中后 children 未清空所以 abc 仍能继续深走收上来（前缀嵌套）。</p><h2>④ 边界与细节</h2><ul><li>1x1 棋盘 + 单字符词：起点循环与命中逻辑的最小闭环</li><li>单元格不可复用（aba）：visited 漏撤销会让后续路径误判格子被占用</li><li>多路径同词（aa）：两条路径先后到达同一词尾节点，第二次因 word 已置 null 不重复收录</li><li>前缀嵌套（ab/abc）：命中短词不动 children，长词在同一路径上继续收</li><li>竖条棋盘（ba/bab/bb）：bb 两字母不相邻，几何相邻性自然淘汰</li></ul><h2>⑤ 复杂度与下限论证</h2><ul><li>时间：建树 O(ΣL)，ΣL ≤ 3×10^4×10 = 3×10^5；搜索上界 O(m·n·3^L)——144 个起点 × 每步至多 3 个新方向（不走回头格）× 深度 ≤ 10，约 8.5×10^6 量级，65 用例实测通过。</li><li>空间：Trie 节点 O(ΣL) 主导，另加 visited O(m·n)、递归栈 O(L)。</li><li>下限论证：任何正确算法都要读完 words（Ω(ΣL)），也必须允许每个格子作为起点候选（Ω(m·n)）。本解法两项均贴下限，是该题公认最优框架。（可选进阶：命中后若无剩余孩子可向上剪掉子树，缩小后续搜索的树，量级不变。）</li></ul></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><h2>① 问题本质与解法选择</h2><ul><li>本质：在棋盘的全部路径中，找出恰好等于字典中某个单词的路径。朴素做法是逐词 DFS：每个词都从 m·n 个起点各搜一遍，words 可达 3×10^4 个，重复扫描量爆炸必超时。</li><li>解法选择：Trie + 回溯。把全部单词压进共享前缀的字典树后，「往这个方向走还有没有词活着」从查 3 万次变成查 1 次 children 槽位；棋盘每走一格、树上同步走一层，死前缀整枝剪掉。</li></ul><h2>② 关键设计决策</h2><div class="table-wrap"><table><thead><tr><th>设计点</th><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>词尾标记</td><td>存完整单词 String 而非 boolean</td><td>命中直接收集不用回拼路径字符串；置回 null 即天然去重</td></tr><tr><td>dfs 的树参数</td><td>每层递归传当前节点的孩子</td><td>树上位置随路径推进；Java 引用按值传，形参换指向不影响外层 root</td></tr><tr><td>去重机制</td><td>trie.word = null 改对象内容</td><td>改的是节点本体，全局可见，任何路径二次走到同一词尾不会重复收录</td></tr><tr><td>回溯现场</td><td>visited 进栈标记、返回前撤销</td><td>当前路径用过的格子释放给兄弟分支复用</td></tr></tbody></table></div><p>dfs 单帧五步顺序：守卫(越界或已访问直接 return) → 剪枝(children[idx]==null return) → 前进+命中(word!=null 则收集并清空) → 标记 visited → 四方向递归 → 撤销 visited。</p><h2>③ 具体 case 推演（边界5）</h2><p>board=[a,b,c] 单行，words=[ab, abc, ac]，建树结果（ac 与 ab 共享前缀 a）：</p><div class="md-code"><pre>root───<span class="tk-f">a</span>(<span class="tk-t">A</span>)───<span class="tk-f">b</span>(<span class="tk-t">B</span>,word=ab)───<span class="tk-f">c</span>(<span class="tk-t">C</span>,word=abc)
+               └────<span class="tk-f">c</span>(<span class="tk-t">E</span>,word=ac)</pre></div><div class="table-wrap"><table><thead><tr><th>步骤</th><th>格子</th><th>树上位置</th><th>动作与状态变化</th></tr></thead><tbody><tr><td>1</td><td>(0,0)=a</td><td>root→A</td><td>root.children[a] 存在，进入 A，标记 (0,0)</td></tr><tr><td>2</td><td>(0,1)=b</td><td>A→B</td><td>B.word=ab 非空，收集 ab 并把 B.word 置 null</td></tr><tr><td>3</td><td>(0,2)=c</td><td>B→C</td><td>C.word=abc 命中收集；C 无孩子，开始回溯</td></tr><tr><td>4</td><td>—</td><td>A 的另一孩子 E(ac)</td><td>树上说 ac 存在，但 (0,0) 的邻格里没有未访问的 c，走不出去，放弃</td></tr><tr><td>5</td><td>(0,1)=b</td><td>root</td><td>root 无 b 孩子，该起点秒退</td></tr><tr><td>6</td><td>(0,2)=c</td><td>root</td><td>root 无 c 孩子，同样秒退</td></tr></tbody></table></div><p>输出 [ab, abc]。三个结论：词在字典存在不代表棋盘有路（步骤4）；字典没有的前缀连搜都不搜（步骤5、6）；B 命中后 children 未清空所以 abc 仍能继续深走收上来（前缀嵌套）。</p><h2>④ 边界与细节</h2><ul><li>1x1 棋盘 + 单字符词：起点循环与命中逻辑的最小闭环</li><li>单元格不可复用（aba）：visited 漏撤销会让后续路径误判格子被占用</li><li>多路径同词（aa）：两条路径先后到达同一词尾节点，第二次因 word 已置 null 不重复收录</li><li>前缀嵌套（ab/abc）：命中短词不动 children，长词在同一路径上继续收</li><li>竖条棋盘（ba/bab/bb）：bb 两字母不相邻，几何相邻性自然淘汰</li></ul><h2>⑤ 复杂度与下限论证</h2><ul><li>时间：建树 O(ΣL)，ΣL ≤ 3×10^4×10 = 3×10^5；搜索上界 O(m·n·3^L)——144 个起点 × 每步至多 3 个新方向（不走回头格）× 深度 ≤ 10，约 8.5×10^6 量级，65 用例实测通过。</li><li>空间：Trie 节点 O(ΣL) 主导，另加 visited O(m·n)、递归栈 O(L)。</li><li>下限论证：任何正确算法都要读完 words（Ω(ΣL)），也必须允许每个格子作为起点候选（Ω(m·n)）。本解法两项均贴下限，是该题公认最优框架。（可选进阶：命中后若无剩余孩子可向上剪掉子树，缩小后续搜索的树，量级不变。）</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>Trie insert 游标移动再次踩坑：p=p.children[idx] 必须无条件执行，不能只写在新建分支里，否则复用已有孩子时游标原地不动，后续字符挂错层（如 ab 后插 ac 变成挂在 root 下）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>65/65 用例一次通过。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>Trie+回溯剪枝</h3><p>多串网格匹配：先把词典建成 Trie，再以每格为起点 DFS，递归参数携带树上当前节点同步前进；children 查不到该字母即整枝剪掉，词尾存整词、命中后清空 word 实现去重</p></div></section>
   <section><h2>分析结果</h2>

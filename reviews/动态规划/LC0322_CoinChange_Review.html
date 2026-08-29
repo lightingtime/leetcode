@@ -37,18 +37,18 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维DP（完全背包）</h3>
     <p><span class="chip">时间 O(amount·coins)</span><span class="chip">空间 O(amount)</span><span class="chip">内存 ≈ 44.4 MB</span><span class="chip">用例 189/189</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0322_CoinChange.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
-        Arrays.fill(dp, amount + 1);
-        dp[0] = 0;
-        for (int i = 1; i &lt;= amount; i++) {
-            for (int c : coins) {
-                if (c &lt;= i) {
-                    dp[i] = Math.min(dp[i], dp[i - c] + 1);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0322_CoinChange.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">coinChange</span>(<span class="tk-k">int</span>[] coins, <span class="tk-k">int</span> amount) {
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[amount + <span class="tk-n">1</span>];
+        <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(dp, amount + <span class="tk-n">1</span>);
+        dp[<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= amount; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> c : coins) {
+                <span class="tk-k">if</span> (c &lt;= i) {
+                    dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i], dp[i - c] + <span class="tk-n">1</span>);
                 }
             }
         }
-        return dp[amount] &gt; amount ? -1 : dp[amount];
+        <span class="tk-k">return</span> dp[amount] &gt; amount ? -<span class="tk-n">1</span> : dp[amount];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>凑出 amount 的最少硬币数，硬币无限使用——本质是完全背包/最短路：金额 i 的最优解 = 某枚硬币 coin + 金额 i−coin 的最优解，子问题更小且同构，满足最优子结构。贪心不可行：coins=[1,3,4]、amount=6 时贪心取 4 得 4+1+1=3 个，最优是 3+3=2 个，所以必须枚举全部候选取 min，用一维 DP 自底向上。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>状态：dp[i] = 凑出金额 i 的最少硬币数；dp[0]=0；其余填 INF=100001（大于 amount 上界 10⁴，表示不可达）。</li><li>转移：外层金额 i=1..amount，内层遍历每枚硬币，coin ≤ i 时 dp[i] = min(dp[i], dp[i−coin]+1)。</li><li>无限使用：外层金额、内层硬币的循环顺序天然允许同一面额重复取。</li><li>答案：dp[amount]，仍为 INF 则返回 -1。</li></ol><p><strong>边界与细节</strong></p><ul><li>amount=0：直接返回 dp[0]=0。</li><li>硬币面额大于当前金额：跳过（i−coin≥0 守卫），如 coins=[7]、amount=3 → dp[3] 保持 INF → -1。</li><li>无 1 面额：coins=[2,5]、amount=6 → 2+2+2=3，金额递增的自底向上能组合出来。</li><li>贪心反例：coins=[1,3,4]、amount=6 → dp[6]=min(dp[5]+1=3, dp[3]+1=2, dp[2]+1=3)=2。</li><li>INF 选择：100001 大于任何可达硬币数（最多 amount 个面额 1 的硬币），且 dp[i−coin]+1 不会溢出 int。</li><li>推演 case：coins=[1,2,5]、amount=11：dp[0]=0→dp[1]=1→dp[2]=1→dp[3]=2→dp[4]=2→dp[5]=1→dp[6]=2→dp[7]=2→dp[8]=3→dp[9]=3→dp[10]=2→dp[11]=min(dp[10]+1=3, dp[9]+1=4, dp[6]+1=3)=3 ✓（5+5+1）。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(amount×coins)：两层循环，amount≤10⁴、coins≤12 → 约 12 万次操作。</li><li>空间 O(amount)：dp 数组。</li><li>下限：每个金额至少要比较所有可用面额才能保证最少（贪心会漏最优），O(amount×coins) 是「枚举最后一块」DP 的自然复杂度，也是本题可接受的最优档（BFS 版本同复杂度）。</li></ul></div></section>

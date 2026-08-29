@@ -37,33 +37,33 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Fisher-Yates 洗牌</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 50.1 MB</span><span class="chip">用例 8/8</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0384_ShuffleAnArray.java · Fisher-Yates 洗牌</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    static class Solution {
-        int[] original;
-        int[] after;
-        Random random;
+    <div class="code-wrap"><div class="code-head"><span>LC0384_ShuffleAnArray.java · Fisher-Yates 洗牌</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Solution</span> {
+        <span class="tk-k">int</span>[] original;
+        <span class="tk-k">int</span>[] after;
+        <span class="tk-t">Random</span> random;
 
-        public Solution(int[] nums) {
-            original = new int[nums.length];
-            System.arraycopy(nums, 0, original, 0, nums.length);
-            after = new int[nums.length];
-            System.arraycopy(original, 0, after, 0, original.length);
-            random = new Random();
+        <span class="tk-k">public</span> <span class="tk-t">Solution</span>(<span class="tk-k">int</span>[] nums) {
+            original = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+            <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(nums, <span class="tk-n">0</span>, original, <span class="tk-n">0</span>, nums.length);
+            after = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+            <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(original, <span class="tk-n">0</span>, after, <span class="tk-n">0</span>, original.length);
+            random = <span class="tk-k">new</span> <span class="tk-t">Random</span>();
         }
 
-        public int[] reset() {
-            System.arraycopy(original, 0, after, 0, original.length);
-            return after;
+        <span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">reset</span>() {
+            <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(original, <span class="tk-n">0</span>, after, <span class="tk-n">0</span>, original.length);
+            <span class="tk-k">return</span> after;
         }
 
-        public int[] shuffle() {
-            reset();
-            for (int i = after.length - 1; i &gt;= 0; i--) {
-                int j = random.nextInt(i + 1);
-                int temp = after[i];
+        <span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">shuffle</span>() {
+            <span class="tk-f">reset</span>();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = after.length - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+                <span class="tk-k">int</span> j = random.<span class="tk-f">nextInt</span>(i + <span class="tk-n">1</span>);
+                <span class="tk-k">int</span> temp = after[i];
                 after[i] = after[j];
                 after[j] = temp;
             }
-            return after;
+            <span class="tk-k">return</span> after;
         }
     }</pre></div>
   </div></section>

@@ -37,15 +37,15 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DP 卡塔兰数</h3>
     <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 40.4 MB</span><span class="chip">用例 19/19</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0096_UniqueBinarySearchTrees.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int numTrees(int n) {
-        int[] dp = new int[n + 1];
-        dp[0] = 1;
-        for (int i = 1; i &lt;= n; i++) {
-            for (int k = 0; k &lt; i; k++) {
-                dp[i] += (dp[k] * dp[i - k - 1]);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0096_UniqueBinarySearchTrees.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numTrees</span>(<span class="tk-k">int</span> n) {
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>];
+        dp[<span class="tk-n">0</span>] = <span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= n; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> k = <span class="tk-n">0</span>; k &lt; i; k++) {
+                dp[i] += (dp[k] * dp[i - k - <span class="tk-n">1</span>]);
             }
         }
-        return dp[n];
+        <span class="tk-k">return</span> dp[n];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>本质：计数问题——1..n 共 n 个有序值能组成多少棵结构不同的 BST。固定根后，左右子树各自独立且只与「节点个数」有关，是最优子结构，适合 DP（这组数就是卡塔兰数）。</li><li>为什么不构造所有树：n=19 时种数已达 17 亿，枚举不现实；题目只要数量，不要具体结构。</li></ul><p><strong>关键设计决策</strong></p><ul><li>状态定义：dp[i] = i 个节点能组成的 BST 种数。只与个数有关、与具体值无关（BST 只要求相对顺序，{1,2} 和 {2,3} 的种数相同）。</li><li>转移：对 i 个节点，固定根后左子树放 k 个、右子树放 i-1-k 个，左右独立相乘后对所有 k 累加：dp[i] = Σ_{k=0}^{i-1} dp[k] * dp[i-1-k]。</li><li>根基：dp[0] = 1（空树算 1 种）；dp[1] 由递推自然得到 1。</li><li>返回 dp[n]。</li></ul><p><strong>具体 case 推演：n=3（期望 5）</strong></p><ul><li>初始化 dp[0]=1</li><li>i=1：k=0 → dp[1] = dp[0]*dp[0] = 1</li><li>i=2：k=0 → dp[0]*dp[1] = 1；k=1 → dp[1]*dp[0] = 1 → dp[2] = 2</li><li>i=3：k=0 → dp[0]*dp[2] = 2；k=1 → dp[1]*dp[1] = 1；k=2 → dp[2]*dp[0] = 2 → dp[3] = 5 ✓</li><li>按根拆解验证：根=1（左0右2）=1*2=2，根=2（左1右1）=1*1=1，根=3（左2右0）=2*1=2，合计 5。</li></ul><p><strong>边界与细节</strong></p><ul><li>dp[0]=1 是递推根基；题目约束 n&gt;=1，但算法依赖它（n=0 本地测试覆盖）。</li><li>n=19 时 C19=1767263190 仍落在 int 范围内（C20=6564120420 会溢出，但 LeetCode 约束 n&lt;=19），大数测试已验证不溢出。</li><li>dp 数组长度 n+1，避免越界。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n^2)：两层循环，每对 (i,k) 一次乘加；n&lt;=19 完全够快。</li><li>空间 O(n)：只存 dp[0..n]，不存具体树结构，已达该思路下限。</li><li>计数只需每个前缀长度的结果，O(n) 空间是下限；时间上卡塔兰数有 O(n) 闭式公式（需处理大整数），但 DP O(n^2) 是本题标准解法且足够。</li></ul></div></section>

@@ -37,46 +37,46 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 首行首列标记（O(1) 空间）</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 211/211</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0073_SetMatrixZeroes.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void setZeroes(int[][] matrix) {
-        int m = matrix.length;
-        int n = matrix[0].length;
-        boolean flagCol0 = false, flagRow0 = false;
-        for (int i = 0; i &lt; m; i++) {
-            if (matrix[i][0] == 0) {
-                flagCol0 = true;
-                break;
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0073_SetMatrixZeroes.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">setZeroes</span>(<span class="tk-k">int</span>[][] matrix) {
+        <span class="tk-k">int</span> m = matrix.length;
+        <span class="tk-k">int</span> n = matrix[<span class="tk-n">0</span>].length;
+        <span class="tk-k">boolean</span> flagCol0 = <span class="tk-k">false</span>, flagRow0 = <span class="tk-k">false</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">if</span> (matrix[i][<span class="tk-n">0</span>] == <span class="tk-n">0</span>) {
+                flagCol0 = <span class="tk-k">true</span>;
+                <span class="tk-k">break</span>;
             }
         }
-        for (int j = 0; j &lt; n; j++) {
-            if (matrix[0][j] == 0) {
-                flagRow0 = true;
-                break;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+            <span class="tk-k">if</span> (matrix[<span class="tk-n">0</span>][j] == <span class="tk-n">0</span>) {
+                flagRow0 = <span class="tk-k">true</span>;
+                <span class="tk-k">break</span>;
             }
         }
-        for (int i = 1; i &lt; m; i++) {
-            for (int j = 1; j &lt; n; j++) {
-                if (matrix[i][j] == 0) {
-                    matrix[0][j] = 0;
-                    matrix[i][0] = 0;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (matrix[i][j] == <span class="tk-n">0</span>) {
+                    matrix[<span class="tk-n">0</span>][j] = <span class="tk-n">0</span>;
+                    matrix[i][<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
                 }
             }
         }
-        for (int i = 1; i &lt; m; i++) {
-            for (int j = 1; j &lt; n; j++) {
-                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
-                    matrix[i][j] = 0;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (matrix[i][<span class="tk-n">0</span>] == <span class="tk-n">0</span> || matrix[<span class="tk-n">0</span>][j] == <span class="tk-n">0</span>) {
+                    matrix[i][j] = <span class="tk-n">0</span>;
                 }
             }
         }
-        if (flagCol0) {
-            for (int i = 0; i &lt; m; i++) {
-                matrix[i][0] = 0;
+        <span class="tk-k">if</span> (flagCol0) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+                matrix[i][<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
             }
 
         }
-        if (flagRow0) {
-            for (int j = 0; j &lt; n; j++) {
-                matrix[0][j] = 0;
+        <span class="tk-k">if</span> (flagRow0) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                matrix[<span class="tk-n">0</span>][j] = <span class="tk-n">0</span>;
             }
         }
     }</pre></div>

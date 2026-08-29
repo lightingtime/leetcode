@@ -37,40 +37,40 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 后缀可拆预判+回溯</h3>
     <p><span class="chip">时间 O(n·|dict| + 方案数·n)</span><span class="chip">空间 O(n + 方案数)</span><span class="chip">内存 ≈ 41.5 MB</span><span class="chip">用例 29/29</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0140_WordBreakIi.java · 后缀可拆预判+回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;String&gt; wordBreak(String s, List&lt;String&gt; wordDict) {
-        set = new HashSet&lt;&gt;(wordDict);
-        ans = new ArrayList&lt;&gt;();
-        int n = s.length();
+    <div class="code-wrap"><div class="code-head"><span>LC0140_WordBreakIi.java · 后缀可拆预判+回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
+        set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(wordDict);
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
 
-        suffixOK = new boolean[n + 1];
-        suffixOK[n] = true;
-        for (int i = n - 1; i &gt;= 0; i--) {
-            for (String word : set) {
-                if (i + word.length() &lt;= n &amp;&amp; suffixOK[i + word.length()] &amp;&amp; s.startsWith(word, i)) {
-                    suffixOK[i] = true;
-                    break;
+        suffixOK = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[n + <span class="tk-n">1</span>];
+        suffixOK[n] = <span class="tk-k">true</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = n - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">for</span> (<span class="tk-t">String</span> word : set) {
+                <span class="tk-k">if</span> (i + word.<span class="tk-f">length</span>() &lt;= n &amp;&amp; suffixOK[i + word.<span class="tk-f">length</span>()] &amp;&amp; s.<span class="tk-f">startsWith</span>(word, i)) {
+                    suffixOK[i] = <span class="tk-k">true</span>;
+                    <span class="tk-k">break</span>;
                 }
             }
         }
 
-        dfs(s, 0, new ArrayList&lt;&gt;());
-        return ans;
+        <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(String s, int start, List&lt;String&gt; path) {
-        if (start == s.length()) {
-            ans.add(String.join(" ", path));
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> start, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; path) {
+        <span class="tk-k">if</span> (start == s.<span class="tk-f">length</span>()) {
+            ans.<span class="tk-f">add</span>(<span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">" "</span>, path));
+            <span class="tk-k">return</span>;
         }
-        if (!suffixOK[start]) {
-            return;
+        <span class="tk-k">if</span> (!suffixOK[start]) {
+            <span class="tk-k">return</span>;
         }
-        for (int i = start; i &lt;= s.length(); i++) {
-            String temp = s.substring(start, i);
-            if (set.contains(temp)) {
-                path.add(temp);
-                dfs(s, i, path);
-                path.remove(path.size() - 1);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = start; i &lt;= s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-t">String</span> temp = s.<span class="tk-f">substring</span>(start, i);
+            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(temp)) {
+                path.<span class="tk-f">add</span>(temp);
+                <span class="tk-f">dfs</span>(s, i, path);
+                path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
             }
         }
     }</pre></div>

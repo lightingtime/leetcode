@@ -37,68 +37,68 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · BFS 层序 + 方向标记（逆序层头插）</h3>
     <p><span class="chip">时间 O(n^2) 最坏</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 33/33</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0103_BinaryTreeZigzagLevelOrderTraversal.java · BFS 层序 + 方向标记（逆序层头插）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
-        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
-        if (root == null) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0103_BinaryTreeZigzagLevelOrderTraversal.java · BFS 层序 + 方向标记（逆序层头插）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">zigzagLevelOrder</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> ans;
         }
-        Deque&lt;TreeNode&gt; queue = new ArrayDeque&lt;&gt;();
-        queue.offer(root);
-        boolean left = true;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-            for (int i = 0; i &lt; size; i++) {
-                TreeNode cur = queue.removeFirst();
-                if (left) {
-                    list.add(cur.val);
-                } else {
-                    list.add(0, cur.val);
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        queue.<span class="tk-f">offer</span>(root);
+        <span class="tk-k">boolean</span> left = <span class="tk-k">true</span>;
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
+                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">removeFirst</span>();
+                <span class="tk-k">if</span> (left) {
+                    list.<span class="tk-f">add</span>(cur.val);
+                } <span class="tk-k">else</span> {
+                    list.<span class="tk-f">add</span>(<span class="tk-n">0</span>, cur.val);
                 }
-                if (cur.left != null) {
-                    queue.offerLast(cur.left);
+                <span class="tk-k">if</span> (cur.left != <span class="tk-k">null</span>) {
+                    queue.<span class="tk-f">offerLast</span>(cur.left);
                 }
-                if (cur.right != null) {
-                    queue.offerLast(cur.right);
+                <span class="tk-k">if</span> (cur.right != <span class="tk-k">null</span>) {
+                    queue.<span class="tk-f">offerLast</span>(cur.right);
                 }
             }
-            ans.add(list);
+            ans.<span class="tk-f">add</span>(list);
             left = !left;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · BFS 层序 + 方向标记（LinkedList 头插 O(1)）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.0 MB</span><span class="chip">用例 33/33</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0103_BinaryTreeZigzagLevelOrderTraversal.java · BFS 层序 + 方向标记（LinkedList 头插 O(1)）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) {
-        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
-        if (root == null) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0103_BinaryTreeZigzagLevelOrderTraversal.java · BFS 层序 + 方向标记（LinkedList 头插 O(1)）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">zigzagLevelOrder</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> ans;
         }
-        Deque&lt;TreeNode&gt; queue = new ArrayDeque&lt;&gt;();
-        queue.offer(root);
-        boolean left = true;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            List&lt;Integer&gt; list = new LinkedList&lt;&gt;();
-            for (int i = 0; i &lt; size; i++) {
-                TreeNode cur = queue.removeFirst();
-                if (left) {
-                    list.add(cur.val);
-                } else {
-                    list.add(0, cur.val);
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        queue.<span class="tk-f">offer</span>(root);
+        <span class="tk-k">boolean</span> left = <span class="tk-k">true</span>;
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
+                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">removeFirst</span>();
+                <span class="tk-k">if</span> (left) {
+                    list.<span class="tk-f">add</span>(cur.val);
+                } <span class="tk-k">else</span> {
+                    list.<span class="tk-f">add</span>(<span class="tk-n">0</span>, cur.val);
                 }
-                if (cur.left != null) {
-                    queue.offerLast(cur.left);
+                <span class="tk-k">if</span> (cur.left != <span class="tk-k">null</span>) {
+                    queue.<span class="tk-f">offerLast</span>(cur.left);
                 }
-                if (cur.right != null) {
-                    queue.offerLast(cur.right);
+                <span class="tk-k">if</span> (cur.right != <span class="tk-k">null</span>) {
+                    queue.<span class="tk-f">offerLast</span>(cur.right);
                 }
             }
-            ans.add(list);
+            ans.<span class="tk-f">add</span>(list);
             left = !left;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：层序遍历 + 每层方向交替。BFS 天然按「层」推进，锯齿只改变每层内部的方向，不改变遍历顺序——核心就是「先按层 BFS，再把奇数层倒过来输出」。</p><p><strong>解法</strong>：队列逐层 BFS + boolean 方向标记。每层先记下 size，再循环处理正好 size 个节点；正序层 append 到链表尾部，逆序层在链表头部插入（LinkedList 头插 O(1)）。空树直接返回空列表。</p><p><strong>关键设计决策</strong>：</p><ol><li>每层先取 size 再循环：队列在处理过程中会不断入队新节点，若不固定 size 会把下一层混进当前层。</li><li>方向标记每层取反：第 0 层正序、第 1 层逆序、第 2 层正序……</li><li>逆序层用 LinkedList 头插：头插 O(1)，避免 ArrayList.add(0) 的 O(层大小) 移位（这是写法 1 到写法 2 的关键优化点）。</li><li>BFS 队列用 ArrayDeque：队首出队、队尾入队均 O(1)。</li></ol><p><strong>具体 case 推演</strong>（[3,9,20,null,null,15,7]）：</p><ol><li>层 0（正序）：队列 [3] → size=1 → 出 3，入 9、20 → list=[3] → 输出 [3]</li><li>层 1（逆序）：size=2 → 出 9（入 null 跳过）头插 9→[9]；出 20（入 15、7）头插 20→[20,9] → 输出 [20,9]</li><li>层 2（正序）：size=2 → 出 15→[15]；出 7→[15,7] → 输出 [15,7]</li></ol><p>结果 [[3],[20,9],[15,7]] ✓</p><p><strong>边界与细节</strong>：</p><ul><li>空树 → []；单节点 → [[1]]。</li><li>单链（左/右链）：每层单节点，方向切换无影响 → [[1],[2],[3]]。</li><li>满二叉树：第二层逆序 [3,2]，第三层正序 [4,5,6,7]。</li><li>节点值含 0/负数：值不影响顺序。</li><li>大输入 2000 节点：队列峰值 O(n)，迭代 BFS 无栈溢出。</li></ul><p><strong>复杂度与下限论证</strong>：每个节点入队/出队各一次，每层每个节点 O(1) 插入（LinkedList 头插/尾插均 O(1)）→ 总时间 O(n)；空间 O(n)（队列 + 结果）。时间下界 O(n)（每个节点至少访问一次），此写法达到最优。</p></div></section>

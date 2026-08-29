@@ -37,7 +37,7 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 无前驱删除：后继值覆盖当前节点，再跳过后继</h3>
     <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 43.5 MB</span><span class="chip">用例 41/41</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0237_DeleteNodeInALinkedList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void deleteNode(ListNode node) {
+    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0237_DeleteNodeInALinkedList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">deleteNode</span>(<span class="tk-t">ListNode</span> node) {
         node.val = node.next.val;
         node.next = node.next.next;
     }</pre></div>

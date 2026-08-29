@@ -37,24 +37,24 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三数组计数（行/列/宫）</h3>
     <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 507/507</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0036_ValidSudoku.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isValidSudoku(char[][] board) {
-        int[][] rows = new int[9][9];
-        int[][] cols = new int[9][9];
-        int[][][] sub = new int[3][3][9];
-        for (int i = 0; i &lt; 9; i++) {
-            for (int j = 0; j &lt; 9; j++) {
-                if (board[i][j] != '.') {
-                    Integer num = board[i][j] - '0' - 1;
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0036_ValidSudoku.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValidSudoku</span>(<span class="tk-k">char</span>[][] board) {
+        <span class="tk-k">int</span>[][] rows = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">9</span>][<span class="tk-n">9</span>];
+        <span class="tk-k">int</span>[][] cols = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">9</span>][<span class="tk-n">9</span>];
+        <span class="tk-k">int</span>[][][] sub = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">3</span>][<span class="tk-n">3</span>][<span class="tk-n">9</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; <span class="tk-n">9</span>; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; <span class="tk-n">9</span>; j++) {
+                <span class="tk-k">if</span> (board[i][j] != <span class="tk-s">'.'</span>) {
+                    <span class="tk-t">Integer</span> num = board[i][j] - <span class="tk-s">'0'</span> - <span class="tk-n">1</span>;
                     rows[i][num]++;
                     cols[j][num]++;
-                    sub[i / 3][j / 3][num]++;
-                    if (rows[i][num] &gt; 1 || cols[j][num] &gt; 1 || sub[i / 3][j / 3][num] &gt; 1) {
-                        return false;
+                    sub[i / <span class="tk-n">3</span>][j / <span class="tk-n">3</span>][num]++;
+                    <span class="tk-k">if</span> (rows[i][num] &gt; <span class="tk-n">1</span> || cols[j][num] &gt; <span class="tk-n">1</span> || sub[i / <span class="tk-n">3</span>][j / <span class="tk-n">3</span>][num] &gt; <span class="tk-n">1</span>) {
+                        <span class="tk-k">return</span> <span class="tk-k">false</span>;
                     }
                 }
             }
         }
-        return true;
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：验证 9×9 棋盘的三组约束——数字 1-9 在每行、每列、每个 3×3 宫内都不能重复；只验证已填入的数字，空白 . 跳过，不要求棋盘可解。</p><p>解法选择理由（三个计数数组 + 一次遍历）：</p><ul><li>棋盘固定 9×9，最直接的做法是分别检查 9 行、9 列、9 宫，但那样要扫三遍；用三个计数数组可以「一次遍历同时登记三组约束」，代码更短、提前返回更快。</li><li>每个数字出现一次就同时在「它所在行、所在列、所在宫」三个计数器里 +1，任一计数器到 2 即冲突。</li><li>因为是固定 9×9，时间空间都是常数（81 个格子），不存在更低的复杂度——已是最优。</li></ul><p>关键设计决策：</p><ol><li>三个计数器：rows[9][9]（行 → 数字）、cols[9][9]（列 → 数字）、sub[3][3][9]（宫 → 数字）。</li><li>数字转下标：board[i][j] - 0 - 1，把 1-9 映射到 0-8，正好当数组下标。</li><li>宫定位：i/3、j/3 得到 0-2 的宫坐标，sub[i/3][j/3][num] 即该数字在哪个宫的出现次数。</li><li>每个非 . 格子：三个计数器同步 ++，然后立刻检查是否 &gt;1，是则 return false（提前结束，不必扫完）。</li><li>. 直接跳过，不参与任何计数。</li></ol><p>具体 case 推演：</p><p>边界8（左上宫两个 1，期望 false）：棋盘 (0,0)=1、(1,2)=1，其余 .。</p><div class="table-wrap"><table><thead><tr><th>格子</th><th>行计数</th><th>列计数</th><th>宫计数</th><th>结果</th></tr></thead><tbody><tr><td>(0,0)=1 → 下标0</td><td>rows[0][0]=1</td><td>cols[0][0]=1</td><td>sub[0][0][0]=1</td><td>继续</td></tr><tr><td>(1,2)=1 → 下标0</td><td>rows[1][0]=1</td><td>cols[2][0]=1</td><td><strong>sub[0][0][0]=2</strong></td><td>&gt;1 → false ✓</td></tr></tbody></table></div><p>两个 1 不同行（0 vs 1）、不同列（0 vs 2），只有宫计数器暴露冲突——这正是「三个计数器缺一不可」的原因。</p><p>示例2（左上宫两个 8，期望 false）：(0,0)=8 → sub[0][0][7]=1；(2,2)=8 → sub[0][0][7]=2 → false ✓</p><p>边界2（第 0 行两个 1，期望 false）：(0,0)=1 → rows[0][0]=1；(0,8)=1 → rows[0][0]=2 → false ✓</p><p>边界1（全空白）：所有格子都是 .，全部跳过，循环结束 return true ✓</p><p>边界与细节：</p><ul><li>. 不计数：只有非 . 才走三个 ++。</li><li>数字 1-9 下标化 0-8，不会越界（board 保证是数字或 .）。</li><li>固定 9×9：i/3、j/3 恒在 0-2，sub 数组大小正好。</li><li>多处冲突时第一个触发点即返回，结果与题目要求一致（只要有一个冲突就无效）。</li></ul><p>复杂度分析：</p><ul><li>时间 O(81) = O(1)：每个格子常数操作；固定棋盘下这是下限（至少看每个格子一次）。</li><li>空间 O(81) = O(1)：三个计数数组总大小 81 + 81 + 81，固定常数。</li><li>最优性：固定 9×9 使任何 O(81) 解法都达到下限；三个计数器写法是其中最简单直接的一种。</li><li>可微调点：第 24 行 Integer num 装箱可改 int num，减少无谓装箱。</li></ul></div></section>

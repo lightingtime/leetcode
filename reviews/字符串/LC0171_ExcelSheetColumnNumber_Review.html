@@ -37,15 +37,15 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 从右往左按位加权累加（26 进制无 0）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 1002/1002</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/字符串/LC0171_ExcelSheetColumnNumber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int titleToNumber(String columnTitle) {
-        int ans = 0;
-        int mul = 1;
-        for (int i = columnTitle.length() - 1; i &gt;= 0; i--) {
-            int k = columnTitle.charAt(i) - 'A' + 1;
+    <div class="code-wrap"><div class="code-head"><span>src/字符串/LC0171_ExcelSheetColumnNumber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">titleToNumber</span>(<span class="tk-t">String</span> columnTitle) {
+        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> mul = <span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = columnTitle.<span class="tk-f">length</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">int</span> k = columnTitle.<span class="tk-f">charAt</span>(i) - <span class="tk-s">'A'</span> + <span class="tk-n">1</span>;
             ans += k * mul;
-            mul *= 26;
+            mul *= <span class="tk-n">26</span>;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>Excel 列名是<strong>无 0 的 26 进制</strong>：<code>A=1, ..., Z=26, AA=27</code>。与普通 26 进制（0~25）的区别是这里每一位取值 1~26，且没有表示 0 的字符。</li><li>任务就是把这个特殊 26 进制数转成十进制整数。</li><li>两种等价写法：从左往右 <code>ans = ans * 26 + k</code>；或从右往左 <code>ans += k * mul, mul *= 26</code>。本题用户采用<strong>从右往左按位加权</strong>。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li><code>k = columnTitle.charAt(i) - A + 1</code>：把字母映射到 1~26（<code>A</code> 是 1，不是 0，这是本题和普通 26 进制最大的区别）。</li><li><code>mul</code> 从 1 开始，表示当前位的权值（最低位 26^0，向左依次 26^1、26^2 ...）；每处理一位 <code>ans += k * mul</code>，然后 <code>mul *= 26</code>。</li><li>从右往左遍历：最低位权值 1，最高位权值 26^(len-1)。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>单字符：<code>A=1</code>、<code>Z=26</code>——<code>Z</code> 不是 0，是 26，所以它进位后才是 <code>AA=27</code>。</li><li>进位：<code>AZ=52</code>（1×26 + 26）、<code>BA=53</code>、<code>ZZ=702</code>（26×26 + 26）。</li><li>三字符：<code>AAA=703</code>（1×676 + 1×26 + 1）。</li><li>上限 <code>FXSHRXW=2147483647</code>：中间累加值均小于 int 上限（<code>ans*26</code> 在最后一步前约 8.2e8），无溢出风险；若用 <code>Math.pow</code> 浮点会丢精度，应避免。</li><li>长度 1 也正确：<code>mul</code> 只乘一次。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每个字符处理一次，<code>O(n)</code>；只用 <code>ans</code>、<code>mul</code> 两个变量，<code>O(1)</code>。</li><li>最优性：必须读取每个字符才能确定其贡献，下界 <code>Ω(n)</code>；本解法达到。</li></ul><p><strong>⑤ 具体 case 推演：<code>"AB"</code>（期望 28）</strong></p><div class="table-wrap"><table><thead><tr><th>i</th><th>字符</th><th>k</th><th>mul</th><th>ans 累加</th></tr></thead><tbody><tr><td>1</td><td>B</td><td>2</td><td>1</td><td>0 + 2×1 = 2</td></tr><tr><td>0</td><td>A</td><td>1</td><td>26</td><td>2 + 1×26 = 28</td></tr></tbody></table></div><ul><li>返回 28。<strong>正确</strong>（A 在最左是 26 位）。</li></ul><p><strong>⑥ 具体 case 推演：<code>"ZY"</code>（期望 701）</strong></p><div class="table-wrap"><table><thead><tr><th>i</th><th>字符</th><th>k</th><th>mul</th><th>ans 累加</th></tr></thead><tbody><tr><td>1</td><td>Y</td><td>25</td><td>1</td><td>0 + 25×1 = 25</td></tr><tr><td>0</td><td>Z</td><td>26</td><td>26</td><td>25 + 26×26 = 701</td></tr></tbody></table></div><ul><li>返回 701。<strong>正确</strong>。</li></ul></div></section>

@@ -37,53 +37,53 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快速选择中位数 + 虚拟下标三路划分</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 47.6 MB</span><span class="chip">用例 52/52</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/贪心与区间/LC0324_WiggleSortIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void wiggleSort(int[] nums) {
-        int mid = quickSort(nums, 0, nums.length - 1);
-        int lt = 0, i = 0, gt = nums.length - 1;
-        while (i &lt;= gt) {
-            int fi = (1 + 2 * i) % (nums.length | 1);
-            int flt = (1 + 2 * lt) % (nums.length | 1);
-            int fgt = (1 + 2 * gt) % (nums.length | 1);
-            if (nums[fi] &gt; mid) {
-                swap(nums, fi, flt);
+    <div class="code-wrap"><div class="code-head"><span>src/贪心与区间/LC0324_WiggleSortIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">wiggleSort</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> mid = <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>);
+        <span class="tk-k">int</span> lt = <span class="tk-n">0</span>, i = <span class="tk-n">0</span>, gt = nums.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt;= gt) {
+            <span class="tk-k">int</span> fi = (<span class="tk-n">1</span> + <span class="tk-n">2</span> * i) % (nums.length | <span class="tk-n">1</span>);
+            <span class="tk-k">int</span> flt = (<span class="tk-n">1</span> + <span class="tk-n">2</span> * lt) % (nums.length | <span class="tk-n">1</span>);
+            <span class="tk-k">int</span> fgt = (<span class="tk-n">1</span> + <span class="tk-n">2</span> * gt) % (nums.length | <span class="tk-n">1</span>);
+            <span class="tk-k">if</span> (nums[fi] &gt; mid) {
+                <span class="tk-f">swap</span>(nums, fi, flt);
                 i++;
                 lt++;
-            } else if (nums[fi] == mid) {
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[fi] == mid) {
                 i++;
-            } else {
-                swap(nums, fi, fgt);
+            } <span class="tk-k">else</span> {
+                <span class="tk-f">swap</span>(nums, fi, fgt);
                 gt--;
             }
         }
 
     }
 
-    private int quickSort(int[] nums, int l, int r) {
-        if (l == r) {
-            return nums[l];
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSort</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r) {
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span> nums[l];
         }
-        int x = nums[l], i = l - 1, j = r + 1;
-        while (i &lt; j) {
-            do {
+        <span class="tk-k">int</span> x = nums[l], i = l - <span class="tk-n">1</span>, j = r + <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt; j) {
+            <span class="tk-k">do</span> {
                 i++;
-            } while (nums[i] &lt; x);
-            do {
+            } <span class="tk-k">while</span> (nums[i] &lt; x);
+            <span class="tk-k">do</span> {
                 j--;
-            } while (nums[j] &gt; x);
-            if (i &lt; j) {
-                swap(nums, i, j);
+            } <span class="tk-k">while</span> (nums[j] &gt; x);
+            <span class="tk-k">if</span> (i &lt; j) {
+                <span class="tk-f">swap</span>(nums, i, j);
             }
         }
-        int k = nums.length / 2;
-        if (k &lt;= j) {
-            return quickSort(nums, l, j);
-        } else {
-            return quickSort(nums, j + 1, r);
+        <span class="tk-k">int</span> k = nums.length / <span class="tk-n">2</span>;
+        <span class="tk-k">if</span> (k &lt;= j) {
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, l, j);
+        } <span class="tk-k">else</span> {
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, j + <span class="tk-n">1</span>, r);
         }
     }
 
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">int</span> temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
     }</pre></div>

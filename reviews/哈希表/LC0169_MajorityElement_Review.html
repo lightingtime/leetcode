@@ -37,22 +37,22 @@
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>Boyer-Moore 投票</p>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>Boyer-Moore 投票</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int majorityElement(int[] nums) {
+    <div class="code-wrap"><div class="code-head"><span>Boyer-Moore 投票</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {
 
-        int cnt = 1;
-        int cur = nums[0];
-        for (int i = 1; i &lt; nums.length; i++) {
-            if (cur != nums[i]) {
+        <span class="tk-k">int</span> cnt = <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> cur = nums[<span class="tk-n">0</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (cur != nums[i]) {
                 cnt--;
-                if (cnt &lt;= 0) {
+                <span class="tk-k">if</span> (cnt &lt;= <span class="tk-n">0</span>) {
                     cur = nums[i];
-                    cnt = 1;
+                    cnt = <span class="tk-n">1</span>;
                 }
-            } else {
+            } <span class="tk-k">else</span> {
                 cnt++;
             }
         }
-        return cur;
+        <span class="tk-k">return</span> cur;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找出现次数超过 n/2 的元素。排序后取中位数或哈希计数都能做，但最优是摩尔投票（Boyer-Moore）：O(n) 时间、O(1) 空间。</p><p>关键设计：把当前候选记为 cur、计数 cnt。遍历时遇到相同元素 cnt++，不同元素 cnt--；cnt 归零说明候选在已扫描区间内不占优势，放弃它并换当前元素重新计数。因为众数出现超过一半，正负相消之后最后留下的必是众数。</p><p>边界：cnt 归零后要立即重置为 1 再换候选（代码里 cnt&lt;=0 时 cur=nums[i]、cnt=1），否则计数起点错一位；结论依赖「严格多数」存在，题目已保证。</p><p>复杂度：O(n) 时间、O(1) 空间，是本题下限；不需要任何哈希表或排序。</p></div></section>

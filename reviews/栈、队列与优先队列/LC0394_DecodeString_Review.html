@@ -37,31 +37,31 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双栈（数字栈+字符串栈）</h3>
     <p><span class="chip">时间 O(n+L)</span><span class="chip">空间 O(n+L)</span><span class="chip">内存 ≈ 41.1 MB</span><span class="chip">用例 34/34</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0394_DecodeString.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public String decodeString(String s) {
-        StringBuilder res = new StringBuilder();
-        Deque&lt;Integer&gt; num = new LinkedList&lt;&gt;();
-        Deque&lt;String&gt; subStr = new LinkedList&lt;&gt;();
-        int multi = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '[') {
-                num.addLast(multi);
-                subStr.addLast(res.toString());
-                multi = 0;
-                res = new StringBuilder();
-            } else if (c == ']') {
-                StringBuilder temp = new StringBuilder();
-                int mul = num.removeLast();
-                for (int i = 0; i &lt; mul; i++) {
-                    temp.append(res);
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0394_DecodeString.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">decodeString</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-t">StringBuilder</span> res = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; num = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">String</span>&gt; subStr = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+        <span class="tk-k">int</span> multi = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : s.<span class="tk-f">toCharArray</span>()) {
+            <span class="tk-k">if</span> (c == <span class="tk-s">'['</span>) {
+                num.<span class="tk-f">addLast</span>(multi);
+                subStr.<span class="tk-f">addLast</span>(res.<span class="tk-f">toString</span>());
+                multi = <span class="tk-n">0</span>;
+                res = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">']'</span>) {
+                <span class="tk-t">StringBuilder</span> temp = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+                <span class="tk-k">int</span> mul = num.<span class="tk-f">removeLast</span>();
+                <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; mul; i++) {
+                    temp.<span class="tk-f">append</span>(res);
                 }
-                res = new StringBuilder(subStr.removeLast() + temp);
-            } else if (Character.isDigit(c)) {
-                multi = multi * 10 + Integer.parseInt(c + "");
-            } else {
-                res.append(c);
+                res = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>(subStr.<span class="tk-f">removeLast</span>() + temp);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (<span class="tk-t">Character</span>.<span class="tk-f">isDigit</span>(c)) {
+                multi = multi * <span class="tk-n">10</span> + <span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(c + <span class="tk-s">""</span>);
+            } <span class="tk-k">else</span> {
+                res.<span class="tk-f">append</span>(c);
             }
         }
-        return res.toString();
+        <span class="tk-k">return</span> res.<span class="tk-f">toString</span>();
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>编码规则 <code>k[encoded_string]</code>：方括号内内容重复 k 次，括号可嵌套（如 <code>3[a2[c]]</code>）。</li><li>关键难点：嵌套意味着内层展开结果还要被外层倍数重复，且每层 <code>[</code> 之前还可能有前缀（如 <code>abc3[cd]xyz</code> 的 <code>abc</code>）需要在展开后接回。</li><li>解法选择：遇到 <code>]</code> 时需要把「最近一层」的 k 和前缀取回来拼接，天然符合栈的后进先出结构，因此用双栈：数字栈存 k、字符串栈存前缀。</li></ul><p><strong>关键设计决策</strong></p><ul><li>两个栈：数字栈 <code>num</code> 存每层的 k；字符串栈 <code>subStr</code> 存每层 <code>[</code> 之前已拼好的前缀（保护现场）。</li><li>当前串 <code>res</code>（StringBuilder）：读入过程中边读边拼的「当前层」内容。</li><li>遇到 <code>[</code>：把累计的 k 压数字栈、把 <code>res</code> 当前内容压字符串栈，然后重置 <code>res</code> 与 <code>multi</code>——进入新的一层。</li><li>遇到 <code>]</code>：弹出 k 与前缀，<code>res = 前缀 + res 重复 k 次</code>——<strong>拼回当前串而不是最终结果</strong>，因为外层可能还有倍数要乘。</li><li>数字：多位累计 <code>multi = multi * 10 + digit</code>（如 <code>10[a]</code>）。</li><li>普通字母：直接追加到 <code>res</code>。</li></ul><p><strong>具体 case 推演（3[a2[c]]）</strong></p><ul><li>逐字符处理：</li></ul><ol><li><code>'3'</code>：multi = 3</li><li><code>'['</code>：num=[3]，subStr=[""]，multi=0，res=""</li><li><code>'a'</code>：res="a"</li><li><code>'2'</code>：multi = 2</li><li><code>'['</code>：num=[3,2]，subStr=["", "a"]，multi=0，res=""</li><li><code>'c'</code>：res="c"</li><li><code>']'</code>：弹 k=2、前缀 "a" → res = "a" + "cc" = "acc"</li><li><code>']'</code>：弹 k=3、前缀 "" → res = "" + "acc"×3 = "accaccacc" ✓</li></ol><ul><li>关键：第 7 步的 <code>"acc"</code> 拼回当前串，第 8 步才能被外层 3 重复；若提前拼进最终结果则外层乘不到。</li></ul><p><strong>边界与细节</strong></p><ul><li>纯字母无括号：不进栈，直接返回原串。</li><li>k=1：<code>1[a]</code> → "a"，重复 1 次。</li><li>多位 k：<code>10[a]</code> → multi 连续累计为 10。</li><li>连续嵌套 <code>2[2[a]]</code>：内层 "aa" 后外层再乘 2 → "aaaa"。</li><li>相邻块 <code>2[a]2[b]</code>：各自展开后按顺序拼接 → "aabb"。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n+L)：扫描输入 O(n)，字符串重复拼接总代价 = 最终输出长度 L（StringBuilder 摊还），L ≤ 10^5。L 本身必须逐字符生成，故这是时间下限。</li><li>空间 O(n+L)：数字栈 + 字符串栈 + 当前串，最坏存下所有前缀与输出。</li></ul></div></section>

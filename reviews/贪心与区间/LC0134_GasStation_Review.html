@@ -37,19 +37,19 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 环形贪心（变负即排除，起点=前缀和最低点之后）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 114.2 MB</span><span class="chip">用例 40/40</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/贪心与区间/LC0134_GasStation.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int canCompleteCircuit(int[] gas, int[] cost) {
-        int total = 0;
-        int start = 0;
-        int cur = 0;
-        for (int i = 0; i &lt; gas.length; i++) {
+    <div class="code-wrap"><div class="code-head"><span>src/贪心与区间/LC0134_GasStation.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">canCompleteCircuit</span>(<span class="tk-k">int</span>[] gas, <span class="tk-k">int</span>[] cost) {
+        <span class="tk-k">int</span> total = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> cur = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; gas.length; i++) {
             total += gas[i] - cost[i];
             cur += gas[i] - cost[i];
-            if (cur &lt; 0) {
-                start = i + 1;
-                cur = 0;
+            <span class="tk-k">if</span> (cur &lt; <span class="tk-n">0</span>) {
+                start = i + <span class="tk-n">1</span>;
+                cur = <span class="tk-n">0</span>;
             }
         }
-        return total &lt; 0 ? -1 : start;
+        <span class="tk-k">return</span> total &lt; <span class="tk-n">0</span> ? -<span class="tk-n">1</span> : start;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>目标是找唯一的可行起点；最直观是每个起点模拟一整圈，O(n²)，但 n≤10^5 会超时，必须降到 O(n)。</p><p>两个结构性质支撑贪心：</p><ul><li>若 <code>total = Σ(gas) - Σ(cost) &lt; 0</code>，绕一圈净消耗为正，任何起点都无解；</li><li>题目保证解存在时唯一，所以「排除法」只要排除掉不可行的起点，剩下的就是答案。</li></ul><p><strong>关键设计决策：两个变量分工</strong></p><div class="table-wrap"><table><thead><tr><th>变量</th><th>语义</th><th>重置时机</th></tr></thead><tbody><tr><td><code>total</code></td><td>全程净油 Σ(gas[i]-cost[i])，回答「整体有没有解」</td><td>从不重置</td></tr><tr><td><code>cur</code></td><td>当前候选段 <code>start..i</code> 的累积油箱，回答「这段起点能不能撑下去」</td><td><code>cur &lt; 0</code> 时清零</td></tr></tbody></table></div><ul><li><strong>变负即排除</strong>：<code>cur</code> 走到 <code>i</code> 变负，说明从 <code>start</code> 出发到 <code>i</code> 就油尽；此时 <code>[start..i]</code> 内任何一站作为起点，到 <code>i</code> 时的油箱都 ≤ 从 <code>start</code> 出发的值（前面那段要么净亏、要么净赚但已经被 <code>cur&lt;0</code> 覆盖），所以必然也 &lt;0——整段全部排除，<code>start = i+1</code> 安全。</li><li><strong>起点选在前缀和最低点之后</strong>：<code>total ≥ 0</code> 保证最终 <code>start</code> 之后的累计恒 ≥0；绕回 <code>start</code> 之前那段时，靠全程盈余补足，不需要再走一遍验证。</li></ul><p><strong>边界与细节</strong></p><ul><li>n=1：油够则 <code>cur</code> 恒 ≥0，<code>start=0</code> 返回 0；油不够则 <code>total&lt;0</code> 返回 -1，两条路径都正确。</li><li><code>total=0</code>（总油=总耗）同样有唯一解：<code>gas=[2,1,1]</code>/<code>cost=[1,1,2]</code> → 答案 0。</li><li><code>i+1</code> 可能在最后一站越出数组：此时 <code>total</code> 必 &lt;0（否则最后一段不会净亏到清零），会返回 -1，<code>start</code> 不会被读到，无越界风险。</li></ul><p><strong>具体 case 逐层推演</strong></p><p><code>gas=[0,5,0]</code>，<code>cost=[1,1,1]</code>，diff=<code>[-1,4,-1]</code>，total 总和 2，答案应为 1：</p><ul><li>i=0：cur=-1，total=-1 → cur&lt;0，start=1，cur=0（站 0 被排除）</li><li>i=1：cur=4，total=3</li><li>i=2：cur=3，total=2</li><li>循环结束 total=2≥0 → 返回 start=1。从 1 出发 cur 恒非负，绕回站 0 时盈余 3 足够。</li></ul><p><code>gas=[2,1,1]</code>，<code>cost=[1,1,2]</code>，diff=<code>[1,0,-1]</code>，total 总和 0，答案应为 0：</p><ul><li>i=0：cur=1，total=1</li><li>i=1：cur=1，total=1</li><li>i=2：cur=0，total=0</li><li>cur 从未变负，start 保持 0，返回 0。</li></ul><p><code>gas=[2,3,4]</code>，<code>cost=[3,4,3]</code>，diff=<code>[-1,-1,1]</code>，total 总和 -1，答案应为 -1：</p><ul><li>i=0：cur=-1，total=-1 → start=1，cur=0</li><li>i=1：cur=-1，total=-2 → start=2，cur=0</li><li>i=2：cur=1，total=-1</li><li>total=-1&lt;0 → 返回 -1。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：单趟遍历，每站只做 O(1) 加法和比较。每个元素至少要访问一次才能算出净油，所以 Ω(n)，O(n) 即下限。</li><li>空间 O(1)：只用了 <code>total</code>、<code>cur</code>、<code>start</code> 三个整型，无任何随输入增长的存储，已是最低。</li></ul></div></section>

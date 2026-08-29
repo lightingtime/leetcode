@@ -37,41 +37,41 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归 DFS（中序）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 71/71</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 递归 DFS（中序）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    List&lt;Integer&gt; ans;
-    public List&lt;Integer&gt; inorderTraversal(TreeNode root) {
-        ans = new ArrayList&lt;&gt;();
-        dfs(root);
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 递归 DFS（中序）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-f">dfs</span>(root);
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(TreeNode root) {
-        if (root == null) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span>;
         }
-        dfs(root.left);
-        ans.add(root.val);
-        dfs(root.right);
+        <span class="tk-f">dfs</span>(root.left);
+        ans.<span class="tk-f">add</span>(root.val);
+        <span class="tk-f">dfs</span>(root.right);
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈（cur指针）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 71/71</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public List&lt;Integer&gt; inorderTraversal(TreeNode root) {
-        List&lt;Integer&gt; ans = new ArrayList&lt;&gt;();
-        if (root == null) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> ans;
         }
-        Deque&lt;TreeNode&gt; stack = new ArrayDeque&lt;&gt;();
-        TreeNode cur = root;
-        while (!stack.isEmpty() || cur != null) {
-            while (cur != null) {
-                stack.push(cur);
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-t">TreeNode</span> cur = root;
+        <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() || cur != <span class="tk-k">null</span>) {
+            <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
+                stack.<span class="tk-f">push</span>(cur);
                 cur = cur.left;
             }
-            cur = stack.poll();
-            ans.add(cur.val);
+            cur = stack.<span class="tk-f">poll</span>();
+            ans.<span class="tk-f">add</span>(cur.val);
                 cur = cur.right;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   

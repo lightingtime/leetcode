@@ -37,19 +37,19 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双变量贪心（first/second 单链更新）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 117.1 MB</span><span class="chip">用例 86/86</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0334_IncreasingTripletSubsequence.java · 双变量贪心（first/second 单链更新）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean increasingTriplet(int[] nums) {
-        int first = nums[0], second = Integer.MAX_VALUE;
-        for (int i = 1; i &lt; nums.length; i++) {
-            int num = nums[i];
-            if (num &gt; second) {
-                return true;
-            } else if (num &gt; first) {
+    <div class="code-wrap"><div class="code-head"><span>LC0334_IncreasingTripletSubsequence.java · 双变量贪心（first/second 单链更新）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">increasingTriplet</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> first = nums[<span class="tk-n">0</span>], second = <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">int</span> num = nums[i];
+            <span class="tk-k">if</span> (num &gt; second) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (num &gt; first) {
                 second = num;
-            } else {
+            } <span class="tk-k">else</span> {
                 first = num;
             }
         }
-        return false;
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>判断数组是否存在 <code>i&lt;j&lt;k</code> 且 <code>nums[i]&lt;nums[j]&lt;nums[k]</code>。暴力 O(n³)，但只需「三个递增元素是否存在」而非最长长度，可用双变量贪心 O(n) 完成，且满足进阶 O(1) 空间要求。</p><p>思路：维护两个状态——<code>first</code> 为已见过的最小值，<code>second</code> 为「大于某个已见过的数、且尽可能小」的第二元素。遍历时若出现 <code>num &gt; second</code>，则 <code>first &lt; second &lt; num</code> 构成三元组。贪心正确性：把 first/second 都压得足够小，才更可能在后面找到更大的第三个数，所以永远保留更小的候选。</p><p><strong>关键设计决策：单条 if-else 链保证不变量</strong></p><div class="table-wrap"><table><thead><tr><th>分支</th><th>条件</th><th>动作</th><th>作用</th></tr></thead><tbody><tr><td>命中</td><td><code>num &gt; second</code></td><td>return true</td><td>找到 first&lt;second&lt;num 三元组</td></tr><tr><td>更新 second</td><td><code>first &lt; num &lt; second</code></td><td><code>second = num</code></td><td>收缩 second，便于后续命中</td></tr><tr><td>更新 first</td><td><code>num &lt; first</code></td><td><code>first = num</code></td><td>换更小的首元素，重新开始</td></tr></tbody></table></div><p>核心不变量：<strong>每个数只进一个分支</strong>，且恒有 <code>first &lt; second</code>、二者都是已见过的数。这保证了：</p><ul><li><code>second</code> 只在 <code>num &gt; first</code> 时更新，永不 ≤ first；</li><li><code>first</code> 只在 <code>num &lt; first</code> 时更新，永不覆盖更小历史值。</li></ul><p><strong>踩坑与修复（3 轮对拍）</strong></p><ol><li><strong>numB 被写成等于 numA</strong>：用 <code>numA == MAX</code> 做初始化哨兵，且 else 分支 <code>num &lt; numB</code> 无条件写 numB，导致 numB 被写成 == numA → 后续任何更大数误判成三元。修复：numB 赋值加 <code>num &gt; numA</code> 前提。</li><li><strong>numA 更新被 numB 状态误拦截</strong>：把整个 else 用 <code>numB != MAX</code> 挡住，numA 无法变小 → 漏判。修复：numA 更新独立于 numB 状态。</li><li><strong>first 被更大值无条件覆盖</strong>：<code>else { first = num }</code> 无条件执行，MAX 等大数覆盖掉更小的 first → 漏判。修复：else 分支加 <code>num &lt; first</code> 条件。</li></ol><p>每一轮都用「随机对拍 + 暴力 O(n³) 对照」找出 6 个反例，并全部沉淀进 main 测试区（边界10-32），最终收敛。</p><p><strong>边界与细节</strong></p><ul><li>相等元素：<code>[7,7,7]</code> 需严格递增 → false；<code>first &lt; num</code> 用严格小于保证相等不触发。</li><li>极值：<code>Integer.MIN_VALUE</code> 出现在 first 更新、<code>Integer.MAX_VALUE</code> 作为哨兵值，用 <code>nums[0]</code> 初始化 first 避免哨兵与真实值冲突。</li><li>单/两元素：遍历从 i=1 开始，second 恒 MAX，返回 false。</li></ul><p><strong>具体 case 逐层推演</strong></p><p><code>[-10, MAX, -7, 4, -1]</code>（真实三元组 -10&lt;-7&lt;4 → true）：</p><ul><li>first=-10，second=MAX</li><li>num=MAX：<code>MAX&gt;second</code> 假；<code>MAX&gt;first &amp;&amp; MAX&lt;second</code> 假（MAX&lt;MAX 不成立）；<code>MAX&lt;first</code> 假 → 无操作</li><li>num=-7：<code>-7&gt;MAX</code> 假；<code>-7&gt;-10 &amp;&amp; -7&lt;MAX</code> 真 → second=-7</li><li>num=4：<code>4&gt;second(-7)</code> 真 → 返回 true ✓</li></ul><p><code>[7,7,7]</code>（→ false）：</p><ul><li>first=7，second=MAX</li><li>num=7：<code>7&gt;MAX</code> 假；<code>7&gt;first &amp;&amp; 7&lt;second</code> 假（非严格大于）；<code>7&lt;first</code> 假 → 无操作，循环结束返回 false ✓</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：单趟遍历，每元素常数次比较/赋值。任何解法至少要读完整个数组才能确认不存在三元组，Ω(n) 即下限。</li><li>空间 O(1)：仅两个整型变量，无额外存储，为理论最低。</li></ul></div></section>

@@ -37,61 +37,61 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双重DFS</h3>
     <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 130/130</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0437_PathSumIii.java · 双重DFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>int ans;
-    public int pathSum(TreeNode root, int targetSum) {
-        ans = 0;
-        dfs(root, targetSum);
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0437_PathSumIii.java · 双重DFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> ans;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">pathSum</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">int</span> targetSum) {
+        ans = <span class="tk-n">0</span>;
+        <span class="tk-f">dfs</span>(root, targetSum);
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(TreeNode root, int targetSum) {
-        if (root == null) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">int</span> targetSum) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span>;
         }
-        countFrom(root, 0, targetSum);
-        dfs(root.left, targetSum);
-        dfs(root.right, targetSum);
+        <span class="tk-f">countFrom</span>(root, <span class="tk-n">0</span>, targetSum);
+        <span class="tk-f">dfs</span>(root.left, targetSum);
+        <span class="tk-f">dfs</span>(root.right, targetSum);
 
     }
 
-    private void countFrom(TreeNode root, long cur, int targetSum) {
-        if (root == null) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">countFrom</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">long</span> cur, <span class="tk-k">int</span> targetSum) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span>;
         }
         cur += root.val;
-        if (cur == targetSum) {
+        <span class="tk-k">if</span> (cur == targetSum) {
             ans++;
         }
-        countFrom(root.left, cur, targetSum);
-        countFrom(root.right, cur, targetSum);
+        <span class="tk-f">countFrom</span>(root.left, cur, targetSum);
+        <span class="tk-f">countFrom</span>(root.right, cur, targetSum);
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 前缀和+回溯哈希</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 130/130</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0437_PathSumIii.java · 前缀和+回溯哈希</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>int ans;
-    public int pathSum(TreeNode root, int targetSum) {
-        ans = 0;
-        Map&lt;Long, Integer&gt; map = new HashMap&lt;&gt;();
-        map.put(0L, 1);
-        dfs(root, targetSum, 0, map);
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0437_PathSumIii.java · 前缀和+回溯哈希</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> ans;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">pathSum</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">int</span> targetSum) {
+        ans = <span class="tk-n">0</span>;
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        map.<span class="tk-f">put</span>(<span class="tk-n">0L</span>, <span class="tk-n">1</span>);
+        <span class="tk-f">dfs</span>(root, targetSum, <span class="tk-n">0</span>, map);
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(TreeNode root, int targetSum, long sum, Map&lt;Long, Integer&gt; map) {
-        if (root == null) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">int</span> targetSum, <span class="tk-k">long</span> sum, <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span>;
         }
         sum += root.val;
 
-        ans += map.getOrDefault(sum - targetSum, 0);
-        map.merge(sum, 1, Integer::sum);
+        ans += map.<span class="tk-f">getOrDefault</span>(sum - targetSum, <span class="tk-n">0</span>);
+        map.<span class="tk-f">merge</span>(sum, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
 
-        dfs(root.left, targetSum, sum, map);
-        dfs(root.right, targetSum, sum, map);
+        <span class="tk-f">dfs</span>(root.left, targetSum, sum, map);
+        <span class="tk-f">dfs</span>(root.right, targetSum, sum, map);
 
-        Integer cnt = map.merge(sum, -1, Integer::sum);
-        if (cnt == 0) {
-            map.remove(sum);
+        <span class="tk-t">Integer</span> cnt = map.<span class="tk-f">merge</span>(sum, -<span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+        <span class="tk-k">if</span> (cnt == <span class="tk-n">0</span>) {
+            map.<span class="tk-f">remove</span>(sum);
         }
     }</pre></div>
   </div></section>

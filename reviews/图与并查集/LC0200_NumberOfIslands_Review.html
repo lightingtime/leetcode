@@ -37,46 +37,46 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DFS 洪水填充</h3>
     <p><span class="chip">时间 O(m*n)</span><span class="chip">空间 O(m*n)</span><span class="chip">内存 ≈ 50.4 MB</span><span class="chip">用例 49/49</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0200_NumberOfIslands.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>boolean[][] visited;
-    public int numIslands(char[][] grid) {
-        int count = 0;
-        int m = grid.length;
-        if (m == 0) {
-            return count;
+    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0200_NumberOfIslands.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[][] visited;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numIslands</span>(<span class="tk-k">char</span>[][] grid) {
+        <span class="tk-k">int</span> count = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> m = grid.length;
+        <span class="tk-k">if</span> (m == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> count;
         }
-        int n = grid[0].length;
-        if (n == 0) {
-            return count;
+        <span class="tk-k">int</span> n = grid[<span class="tk-n">0</span>].length;
+        <span class="tk-k">if</span> (n == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> count;
         }
-        visited = new boolean[m][n];
+        visited = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[m][n];
 
-        for (int i = 0; i &lt; m; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                if (!visited[i][j] &amp;&amp; dfs(grid, i, j)) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (!visited[i][j] &amp;&amp; <span class="tk-f">dfs</span>(grid, i, j)) {
                     count++;
                 }
             }
         }
-        return count;
+        <span class="tk-k">return</span> count;
     }
 
-    int[] xd = new int[]{-1,1, 0, 0};
-    int[] yd = new int[]{0, 0 , -1, 1};
-    private boolean dfs(char[][] grid, int i, int j) {
-        if (i &lt; 0 || i &gt;= grid.length || j &lt; 0 || j &gt;= grid[0].length) {
-            return false;
+    <span class="tk-k">int</span>[] xd = <span class="tk-k">new</span> <span class="tk-k">int</span>[]{-<span class="tk-n">1</span>,<span class="tk-n">1</span>, <span class="tk-n">0</span>, <span class="tk-n">0</span>};
+    <span class="tk-k">int</span>[] yd = <span class="tk-k">new</span> <span class="tk-k">int</span>[]{<span class="tk-n">0</span>, <span class="tk-n">0</span> , -<span class="tk-n">1</span>, <span class="tk-n">1</span>};
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] grid, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || i &gt;= grid.length || j &lt; <span class="tk-n">0</span> || j &gt;= grid[<span class="tk-n">0</span>].length) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        if (visited[i][j]) {
-            return false;
+        <span class="tk-k">if</span> (visited[i][j]) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        visited[i][j] = true;
-        if (grid[i][j] == '0') {
-            return false;
+        visited[i][j] = <span class="tk-k">true</span>;
+        <span class="tk-k">if</span> (grid[i][j] == <span class="tk-s">'0'</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        for (int k = 0; k &lt; xd.length; k++) {
-            dfs(grid, i + xd[k], j + yd[k]);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> k = <span class="tk-n">0</span>; k &lt; xd.length; k++) {
+            <span class="tk-f">dfs</span>(grid, i + xd[k], j + yd[k]);
         }
-        return true;
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }</pre></div>
   </div></section>
   

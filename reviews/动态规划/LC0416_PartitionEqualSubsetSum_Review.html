@@ -37,29 +37,29 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 可达和集合（0-1 背包判定）</h3>
     <p><span class="chip">时间 O(n·target)</span><span class="chip">空间 O(target)</span><span class="chip">内存 ≈ 46.4 MB</span><span class="chip">用例 149/149</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0416_PartitionEqualSubsetSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean canPartition(int[] nums) {
-        int sum =0;
-        for (int num : nums) {
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0416_PartitionEqualSubsetSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">canPartition</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> sum =<span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
             sum += num;
         }
-        if ((sum &amp; 1) == 1) {
-            return false;
+        <span class="tk-k">if</span> ((sum &amp; <span class="tk-n">1</span>) == <span class="tk-n">1</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        sum /= 2;
-        HashSet&lt;Integer&gt; set = new HashSet&lt;&gt;();
-        set.add(0);
-        for (int num : nums) {
-            HashSet&lt;Integer&gt; copy = new HashSet&lt;&gt;(set);
-            for (Integer i : copy) {
-                if (i + num &lt;= sum) {
-                    set.add(i + num);
+        sum /= <span class="tk-n">2</span>;
+        <span class="tk-t">HashSet</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
+        set.<span class="tk-f">add</span>(<span class="tk-n">0</span>);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+            <span class="tk-t">HashSet</span>&lt;<span class="tk-t">Integer</span>&gt; copy = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(set);
+            <span class="tk-k">for</span> (<span class="tk-t">Integer</span> i : copy) {
+                <span class="tk-k">if</span> (i + num &lt;= sum) {
+                    set.<span class="tk-f">add</span>(i + num);
                 }
-                if (set.contains(sum)) {
-                    return true;
+                <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(sum)) {
+                    <span class="tk-k">return</span> <span class="tk-k">true</span>;
                 }
             }
         }
-        return false;
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><ul><li>本质：正整数数组能否分成两个和相等的子集 ⟺ 能否选出<strong>一个子集和为 sum/2（target）</strong>，另一组自动是补集。这是 0-1 背包的判定版：每个元素只能选一次，能否恰好装满容量 target。</li><li>为什么不用暴力枚举：2^n 子集不可行；「可达和集合」逐元素扩张，每个元素 O(可达和个数)，总 O(n·target) 伪多项式，是本题约束（n≤200、target≤10000）下的标准最优。</li></ul><p><strong>关键设计决策</strong></p><ul><li>奇数剪枝：sum 为奇数直接 false（一半不是整数，必不可能）。</li><li>状态：可达和集合 set，初始 {0}（空子集和，是「单元素可达」的地基：num 本身 = 0+num）。</li><li>扩张规则：处理 num 时，基于<strong>上一轮的快照</strong>遍历，把每个可达和 i 的 i+num 加入原 set——快照保证每个元素只用一次（不会连锁复用，如 5 不能连用两次凑 10），也避免遍历时修改集合的异常。</li><li>提前返回：set 一出现 target 即 true；最终 return set.contains(target)（实现里用循环内提前 return + 末尾 false 等价）。</li></ul><p><strong>具体 case 推演：[1,5,11,5]（target=11，期望 true）</strong></p><ul><li>初始 set={0}</li><li>num=1：快照{0} → 加 1 → {0,1}</li><li>num=5：快照{0,1} → 加 5,6 → {0,1,5,6}</li><li>num=11：快照{0,1,5,6} → 加 11,12,16,17 → <strong>11 出现 → true</strong> ✓</li></ul><p><strong>具体 case 推演：[1,2,5]（sum=8，target=4，期望 false）</strong></p><ul><li>{0} → 1：{0,1}</li><li>2：快照{0,1} 加 2,3 → {0,1,2,3}</li><li>5：快照{0,1,2,3} 加 5,6,7,8 → {0,1,2,3,5,6,7,8}，始终没有 4 → false ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>单元素 [2]：target=1 凑不出 → false；[1] 奇数 → false。</li><li>全 1 偶数个：target=n/2 可凑 → true；奇数个 sum 奇数 → false。</li><li>大数组 200×100：target=10000，set 去重后规模 ≤ target+1，容量足够且不超时。</li><li>可优化点（不影响正确性）：i+num &gt; target 的入集合没有意义，可剪枝省时间；也可换 boolean[] dp 倒序遍历，常数更小。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n·target)：每元素遍历当前可达和（去重后 ≤ target+1）。子集和是 NP 完全问题，不存在多项式时间算法；O(n·target) 是标准伪多项式 DP，对本约束即预期最优。</li><li>空间 O(target)：set 至多存 target+1 个不同和。</li></ul></div></section>

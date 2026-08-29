@@ -37,23 +37,23 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双指针两端向内，字母数字忽略大小写</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.5 MB</span><span class="chip">用例 491/491</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0125_ValidPalindrome.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isPalindrome(String s) {
-        int l = 0, r = s.length() - 1;
-        while (l &lt; r) {
-            if (!Character.isLetterOrDigit(s.charAt(l))) {
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0125_ValidPalindrome.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isPalindrome</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span> l = <span class="tk-n">0</span>, r = s.<span class="tk-f">length</span>() - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (l &lt; r) {
+            <span class="tk-k">if</span> (!<span class="tk-t">Character</span>.<span class="tk-f">isLetterOrDigit</span>(s.<span class="tk-f">charAt</span>(l))) {
                 l++;
-            } else if (!Character.isLetterOrDigit(s.charAt(r))) {
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (!<span class="tk-t">Character</span>.<span class="tk-f">isLetterOrDigit</span>(s.<span class="tk-f">charAt</span>(r))) {
                 r--;
-            } else {
-                if (Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r))) {
-                    return false;
-                } else {
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">if</span> (<span class="tk-t">Character</span>.<span class="tk-f">toLowerCase</span>(s.<span class="tk-f">charAt</span>(l)) != <span class="tk-t">Character</span>.<span class="tk-f">toLowerCase</span>(s.<span class="tk-f">charAt</span>(r))) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
+                } <span class="tk-k">else</span> {
                     l++;
                     r--;
                 }
             }
         }
-        return true;
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>判断字符串是否回文，但只比较「<strong>字母或数字</strong>」字符，并<strong>忽略大小写</strong>，非字母数字一律跳过。</li><li>两种思路：① 先过滤+转小写生成干净串，再双指针判断（<code>O(n)</code> 时间、<code>O(n)</code> 额外空间）；② 直接在原串上用双指针跳过非字母数字（<code>O(n)</code> 时间、<code>O(1)</code> 空间）。本题选后者更省空间。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li><code>l=0</code>、<code>r=s.length()-1</code>。</li><li><code>while (l&lt;r)</code>：</li><li><code>!isLetterOrDigit(s.charAt(l))</code> → <code>l++</code>（左端非法字符，跳过）；</li><li>否则 <code>!isLetterOrDigit(s.charAt(r))</code> → <code>r--</code>（右端非法字符，跳过）；</li><li>否则 <code>toLowerCase(s[l])</code> 与 <code>toLowerCase(s[r])</code> 比较：不同 → <code>return false</code>；相同 → <code>l++</code>、<code>r--</code>。</li><li>关键点：判「字母数字」要用 <code>Character.isLetterOrDigit</code>（<strong>含数字</strong>）。<code>Character.isAlphabetic</code> 只认字母，会把数字当非法字符误跳过——这被用例 <code>"0P"</code> 暴露过。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>全部为非字母数字（如 <code>".,!"</code>）：<code>l</code> 持续右移越过 <code>r</code>，循环退出，返回 <code>true</code>（等价于过滤后空串回文）。</li><li>单字符（字母或数字）：<code>l==r</code> 不进入循环，返回 <code>true</code>。</li><li>大小写：统一 <code>toLowerCase</code> 后再比较。</li><li>数字参与比较：用 <code>isLetterOrDigit</code> 保留数字。</li><li>上限 <code>2*10^5</code>：线性扫描，快。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每个字符至多被左右指针各扫一次，<code>O(n)</code>；空间 <code>O(1)</code>。</li><li>最优性：每个字符至少要读一次以决定忽略或比较，下界 <code>Ω(n)</code>；本题达到下界且无需额外数组，空间也为最优。</li></ul><p>**⑤ 具体 case 推演：<code>s="0P"</code></p><ul><li><code>l=0</code> 指向 <code>'0'</code>、<code>r=1</code> 指向 <code>'P'</code>。</li><li><code>isLetterOrDigit('0')=true</code>、<code>isLetterOrDigit('P')=true</code>，二者都合法，进入比较。</li><li><code>toLowerCase('0')='0'</code> vs <code>toLowerCase('P')='p'</code> → 不同 → <code>return false</code>。<strong>正确</strong>（核心 <code>"0p"</code> 非回文）。</li><li>对比错误写法：若用 <code>isAlphabetic</code>，<code>'0'</code> 会被当非法跳过 → 只剩 <code>'P'</code> vs <code>'P'</code> → 误返回 <code>true</code>。</li></ul><p>**⑥ 正例推演：<code>s="ab@ba"</code></p><ul><li><code>l=0('a')</code>、<code>r=4('a')</code> 都对，比较相等 → <code>l=1</code>、<code>r=3</code>。</li><li><code>l=1('b')</code>、<code>r=3('b')</code> 相等 → <code>l=2</code>、<code>r=2</code>。</li><li><code>l=2('@')</code> 非法 → <code>l++</code> → <code>l=3</code>，<code>l&lt;r</code> 不成立，退出。</li><li>返回 <code>true</code>（过滤后 <code>"abba"</code> 回文），符号被正确跳过。</li></ul></div></section>

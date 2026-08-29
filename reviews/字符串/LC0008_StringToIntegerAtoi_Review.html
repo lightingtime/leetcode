@@ -37,36 +37,36 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · long 绝对值累加 + 累加前预判溢出 + 按符号截断</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 1096/1096</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/字符串/LC0008_StringToIntegerAtoi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int myAtoi(String s) {
-        int ans = 0;
-        int sign = 1;
-        int m = s.length();
-        int i = 0;
-        while (i &lt; m &amp;&amp; s.charAt(i) == ' ') {
+    <div class="code-wrap"><div class="code-head"><span>src/字符串/LC0008_StringToIntegerAtoi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">myAtoi</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> sign = <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> m = s.<span class="tk-f">length</span>();
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (i &lt; m &amp;&amp; s.<span class="tk-f">charAt</span>(i) == <span class="tk-s">' '</span>) {
             i++;
         }
-        int start = i;
-        for (; i &lt; m; i++) {
-            char c = s.charAt(i);
-            if (i == start &amp;&amp; c == '+') {
-                sign = 1;
-            } else if (i == start &amp;&amp; c == '-') {
-                sign = -1;
-            } else if (Character.isDigit(c)) {
-                int num = c - '0';
-                if (ans &gt; Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 &amp;&amp; num &gt; Integer.MAX_VALUE % 10)) {
-                    return Integer.MAX_VALUE;
+        <span class="tk-k">int</span> start = i;
+        <span class="tk-k">for</span> (; i &lt; m; i++) {
+            <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
+            <span class="tk-k">if</span> (i == start &amp;&amp; c == <span class="tk-s">'+'</span>) {
+                sign = <span class="tk-n">1</span>;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (i == start &amp;&amp; c == <span class="tk-s">'-'</span>) {
+                sign = -<span class="tk-n">1</span>;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (<span class="tk-t">Character</span>.<span class="tk-f">isDigit</span>(c)) {
+                <span class="tk-k">int</span> num = c - <span class="tk-s">'0'</span>;
+                <span class="tk-k">if</span> (ans &gt; <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span> / <span class="tk-n">10</span> || (ans == <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span> / <span class="tk-n">10</span> &amp;&amp; num &gt; <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span> % <span class="tk-n">10</span>)) {
+                    <span class="tk-k">return</span> <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
                 }
 
-                if (ans &lt; Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 &amp;&amp; -num &lt; Integer.MIN_VALUE % 10)) {
-                    return Integer.MIN_VALUE;
+                <span class="tk-k">if</span> (ans &lt; <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span> / <span class="tk-n">10</span> || (ans == <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span> / <span class="tk-n">10</span> &amp;&amp; -num &lt; <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span> % <span class="tk-n">10</span>)) {
+                    <span class="tk-k">return</span> <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
                 }
-                ans = ans * 10 + sign * num;
-            } else {
-                break;
+                ans = ans * <span class="tk-n">10</span> + sign * num;
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">break</span>;
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>实现 atoi：跳过前导空格 → 可选 +/- → 读数字直到非数字或结尾 → 结果截断到 <code>[-2^31, 2^31-1]</code>。</li><li>难点全在<strong>溢出处理</strong>：<code>-2^31</code>（-2147483648）的绝对值 <code>2147483648</code> 比 int 上限大 1，int 放不下；且累加 <code>temp*10 + digit</code> 本身可能爆 int。</li><li>本版选择：<strong>用 <code>long</code> 存绝对值</strong>（能容纳 2147483648），累加前用 <code>(limit - digit)/10</code> 预判是否超界，最后按符号统一截断。相比「int + 正数 MAX 对称判断」，long 方案天然避开两个坑：绝对值容器够大、正负方向各自独立截断。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li>解析状态机：<code>hasNegative/hasPositive</code>（符号只允许在数字前出现一次，重复符号或符号后无数字返回 0）、<code>hasNum</code>（数字已读则后续符号视为停止）。</li><li>数字分支：<code>limit = hasNegative ? 2147483648L : Integer.MAX_VALUE</code>（<strong>按符号取不同上限</strong>，负数方向多 1 格）；<code>temp &gt; (limit - digit)/10</code> 为真 → <code>temp = limit; break</code>（预判溢出截断）；否则 <code>temp = temp*10 + digit</code>。</li><li>前导零不需要特判：<code>0</code> 走统一数字分支，<code>temp*10 + 0</code> 无影响。</li><li>末尾：负数 <code>temp &gt; 2147483648L → MIN</code>，否则 <code>(int)-temp</code>（<code>-2147483648L</code> 转 int 恰好是 <code>MIN_VALUE</code>，不溢出）；正数 <code>temp &gt; MAX → MAX</code>，否则 <code>(int)temp</code>。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li><code>-2147483648</code>：绝对值恰为 2147483648，<code>temp</code>（long）存得下，末尾 <code>temp &gt; 2147483648L</code> 为假 → 返回 <code>(int)-2147483648L = MIN_VALUE</code>。<strong>合法值不被误截</strong>。</li><li><code>-2147483649</code>：累加到最后一位时预判 <code>temp &gt; (2147483648-9)/10</code> → 截断 <code>temp=2147483648L</code> → 返回 MIN_VALUE。<strong>真溢出截到下限</strong>。</li><li><code>2147483648</code> → 正数 limit 2147483647，预判截断 → MAX_VALUE。</li><li>200 位 <code>"1000...0"</code>：每步预判保证 long 不会越界，最终截断到 MAX。</li><li><code>"0-1"</code>：读 0（hasNum=true）后遇 - → 符号分支 <code>hasNum</code> 为真 → break → 0。</li><li><code>"+-12"</code> / <code>"-+12"</code>：第二个符号在 <code>hasPositive/hasNegative</code> 已真时 break → 0。</li><li>纯空格/纯符号/符号后无数字 → <code>hasNum</code> 始终 false，temp=0。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每个字符处理一次，<code>O(n)</code>；只用几个标量变量，<code>O(1)</code> 额外空间。</li><li>最优性：必须读取每个字符（其可能改变结果或触发停止），下界 <code>Ω(n)</code>；本解法达到。</li></ul><p><strong>⑤ 具体 case 推演：<code>"-2147483648"</code>（期望 MIN_VALUE）</strong></p><div class="table-wrap"><table><thead><tr><th>读到</th><th>temp（long）</th><th>预判</th><th>动作</th></tr></thead><tbody><tr><td>-</td><td>0</td><td>—</td><td>hasNegative=true</td></tr><tr><td>2..7</td><td>214748364（逐步累加）</td><td>—</td><td>—</td></tr><tr><td>4 前 temp=21474836</td><td>—</td><td>—</td><td>—</td></tr><tr><td>最后 8 前</td><td>temp=214748364</td><td><code>(2147483648-8)/10=214748364</code>，<code>214748364 &gt; 214748364</code> 否</td><td><code>temp=2147483648</code></td></tr></tbody></table></div><ul><li>末尾 <code>hasNegative</code>：<code>2147483648 &gt; 2147483648L</code> 否 → <code>(int)-2147483648L = -2147483648</code>。<strong>正确</strong>。</li></ul><p><strong>⑥ 具体 case 推演：<code>"2147483648"</code>（期望 MAX_VALUE）</strong></p><div class="table-wrap"><table><thead><tr><th>读到</th><th>temp</th><th>预判</th><th>动作</th></tr></thead><tbody><tr><td>2..7</td><td>214748364</td><td>—</td><td>—</td></tr><tr><td>最后 8</td><td>214748364</td><td>正数 limit=2147483647，<code>(2147483647-8)/10=214748363</code>，<code>214748364 &gt; 214748363</code> 真</td><td><code>temp=2147483647</code>，break</td></tr></tbody></table></div><ul><li>末尾正数：<code>2147483647 &gt; MAX</code> 否 → 返回 MAX_VALUE。<strong>正确</strong>——若没有预判，<code>2147483640+8</code> 会直接溢出成负数。</li></ul></div></section>

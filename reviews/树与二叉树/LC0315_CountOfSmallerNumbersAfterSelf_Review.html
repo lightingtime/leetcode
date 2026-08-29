@@ -37,48 +37,48 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 归并排序计数（rightTaken 累计 + index 数组）</h3>
     <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 98.9 MB</span><span class="chip">用例 66/66</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0315_CountOfSmallerNumbersAfterSelf.java · 归并排序计数（rightTaken 累计 + index 数组）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    int[] ans;
-    int[] temp;
-    int[] tempIndex;
-    int[] index;
-    public List&lt;Integer&gt; countSmaller(int[] nums) {
-        ans = new int[nums.length];
-        temp = new int[nums.length];
-        tempIndex = new int[nums.length];
-        index = new int[nums.length];
-        for (int i = 0; i &lt; nums.length; i++) {
+    <div class="code-wrap"><div class="code-head"><span>LC0315_CountOfSmallerNumbersAfterSelf.java · 归并排序计数（rightTaken 累计 + index 数组）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">int</span>[] ans;
+    <span class="tk-k">int</span>[] temp;
+    <span class="tk-k">int</span>[] tempIndex;
+    <span class="tk-k">int</span>[] index;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">countSmaller</span>(<span class="tk-k">int</span>[] nums) {
+        ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        temp = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        tempIndex = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        index = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
             index[i] = i;
         }
-        mergeSort(nums, 0, nums.length - 1);
-        return Arrays.stream(ans).boxed().toList();
+        <span class="tk-f">mergeSort</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>);
+        <span class="tk-k">return</span> <span class="tk-t">Arrays</span>.<span class="tk-f">stream</span>(ans).<span class="tk-f">boxed</span>().<span class="tk-f">toList</span>();
     }
 
-    private void mergeSort(int[] nums, int l, int r) {
-        if (l &gt;= r) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">mergeSort</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r) {
+        <span class="tk-k">if</span> (l &gt;= r) {
+            <span class="tk-k">return</span>;
         }
-        int mid = l + (r - l) / 2;
-        mergeSort(nums, l, mid);
-        mergeSort(nums, mid + 1, r);
-        merge(nums, l, mid, r);
+        <span class="tk-k">int</span> mid = l + (r - l) / <span class="tk-n">2</span>;
+        <span class="tk-f">mergeSort</span>(nums, l, mid);
+        <span class="tk-f">mergeSort</span>(nums, mid + <span class="tk-n">1</span>, r);
+        <span class="tk-f">merge</span>(nums, l, mid, r);
     }
 
-    private void merge(int[] nums, int l, int mid, int r) {
-        int i = l;          // 左半指针
-        int j = mid + 1;    // 右半指针
-        int k = l;          // temp 写入位置
-        int rightTaken = 0; // 已取走的右半元素个数
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">merge</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> mid, <span class="tk-k">int</span> r) {
+        <span class="tk-k">int</span> i = l;          <span class="tk-c">// 左半指针</span>
+        <span class="tk-k">int</span> j = mid + <span class="tk-n">1</span>;    <span class="tk-c">// 右半指针</span>
+        <span class="tk-k">int</span> k = l;          <span class="tk-c">// temp 写入位置</span>
+        <span class="tk-k">int</span> rightTaken = <span class="tk-n">0</span>; <span class="tk-c">// 已取走的右半元素个数</span>
 
-        while (i &lt;= mid &amp;&amp; j &lt;= r) {
-            if (nums[j] &lt; nums[i]) {
-                // 右半元素更小：先取走，它比当前左半元素小且在它右侧
+        <span class="tk-k">while</span> (i &lt;= mid &amp;&amp; j &lt;= r) {
+            <span class="tk-k">if</span> (nums[j] &lt; nums[i]) {
+                <span class="tk-c">// 右半元素更小：先取走，它比当前左半元素小且在它右侧</span>
                 temp[k] = nums[j];
                 tempIndex[k] = index[j];
                 k++;
                 j++;
                 rightTaken++;
-            } else {
-                // 取走左半元素：之前取走的右半元素都是它的“右侧更小”
+            } <span class="tk-k">else</span> {
+                <span class="tk-c">// 取走左半元素：之前取走的右半元素都是它的“右侧更小”</span>
                 ans[index[i]] += rightTaken;
                 temp[k] = nums[i];
                 tempIndex[k] = index[i];
@@ -86,23 +86,23 @@
                 i++;
             }
         }
-        // 剩余左半元素：所有右半元素都比它们小
-        while (i &lt;= mid) {
+        <span class="tk-c">// 剩余左半元素：所有右半元素都比它们小</span>
+        <span class="tk-k">while</span> (i &lt;= mid) {
             ans[index[i]] += rightTaken;
             temp[k] = nums[i];
             tempIndex[k] = index[i];
             k++;
             i++;
         }
-        // 剩余右半元素：直接搬走，不加计数
-        while (j &lt;= r) {
+        <span class="tk-c">// 剩余右半元素：直接搬走，不加计数</span>
+        <span class="tk-k">while</span> (j &lt;= r) {
             temp[k] = nums[j];
             tempIndex[k] = index[j];
             k++;
             j++;
         }
-        // 合并结果拷回 nums 与 index
-        for (int p = l; p &lt;= r; p++) {
+        <span class="tk-c">// 合并结果拷回 nums 与 index</span>
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> p = l; p &lt;= r; p++) {
             nums[p] = temp[p];
             index[p] = tempIndex[p];
         }

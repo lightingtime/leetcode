@@ -37,27 +37,27 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 排序 + 回溯（start 下标去重 + 大于剩余剪枝）</h3>
     <p><span class="chip">时间 O(n^(target/min))</span><span class="chip">空间 O(target/min)</span><span class="chip">内存 ≈ 44.1 MB</span><span class="chip">用例 160/160</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0039_CombinationSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;List&lt;Integer&gt;&gt; ans;
-    public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] candidates, int target) {
-        ans = new ArrayList&lt;&gt;();
-        Arrays.sort(candidates);
-        dfs(candidates, 0, target, new ArrayList&lt;&gt;());
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0039_CombinationSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">combinationSum</span>(<span class="tk-k">int</span>[] candidates, <span class="tk-k">int</span> target) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-t">Arrays</span>.<span class="tk-f">sort</span>(candidates);
+        <span class="tk-f">dfs</span>(candidates, <span class="tk-n">0</span>, target, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(int[] candidates, int index, int remain, List&lt;Integer&gt; path) {
-        if (remain == 0) {
-            ans.add(new ArrayList&lt;&gt;(path));
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[] candidates, <span class="tk-k">int</span> index, <span class="tk-k">int</span> remain, <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; path) {
+        <span class="tk-k">if</span> (remain == <span class="tk-n">0</span>) {
+            ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(path));
+            <span class="tk-k">return</span>;
         }
 
-        for (int i = index; i &lt; candidates.length; i++) {
-            if (candidates[i] &gt; remain) {
-                break;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = index; i &lt; candidates.length; i++) {
+            <span class="tk-k">if</span> (candidates[i] &gt; remain) {
+                <span class="tk-k">break</span>;
             }
-            path.add(candidates[i]);
-            dfs(candidates, i, remain - candidates[i], path);
-            path.remove(path.size() - 1);
+            path.<span class="tk-f">add</span>(candidates[i]);
+            <span class="tk-f">dfs</span>(candidates, i, remain - candidates[i], path);
+            path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
         }
     }</pre></div>
   </div></section>

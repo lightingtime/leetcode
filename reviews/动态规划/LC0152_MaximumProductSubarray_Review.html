@@ -37,16 +37,16 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双状态DP（最大/最小乘积）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.2 MB</span><span class="chip">用例 191/191</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0152_MaximumProductSubarray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxProduct(int[] nums) {
-        int max = nums[0], min = nums[0];
-        int ans = nums[0];
-        for (int i = 1; i &lt; nums.length; i++) {
-            int temp = max;
-            max = Math.max(nums[i], Math.max(max * nums[i], min * nums[i]));
-            min = Math.min(nums[i], Math.min(temp * nums[i], min * nums[i]));
-            ans = Math.max(max, ans);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0152_MaximumProductSubarray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProduct</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> max = nums[<span class="tk-n">0</span>], min = nums[<span class="tk-n">0</span>];
+        <span class="tk-k">int</span> ans = nums[<span class="tk-n">0</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">int</span> temp = max;
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(nums[i], <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max * nums[i], min * nums[i]));
+            min = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(nums[i], <span class="tk-t">Math</span>.<span class="tk-f">min</span>(temp * nums[i], min * nums[i]));
+            ans = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, ans);
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>在连续子数组中找乘积最大值。乘积与加法最大的区别是符号会反转：负数×负数得正数，且遇到 0 会归零重来，所以「以 i 结尾的最大乘积」不能只由一个状态决定——最大值可能来自上一轮的最小值（负负得正）。这正好构成最优子结构：以 i 结尾的连续子数组要么只有 nums[i]，要么由「以 i-1 结尾的某个子数组」接上 nums[i]，因此双状态一维 DP 能覆盖全部情况，无需回溯或枚举所有子数组。</p><p><strong>关键设计决策</strong></p><ol><li>状态定义：dpMax[i] = 以 i 结尾的连续子数组的最大乘积；dpMin[i] = 以 i 结尾的最小乘积。初始 dpMax[0]=dpMin[0]=nums[0]。</li><li>转移：每个位置有三种候选——nums[i]（重新开始）、nums[i]×dpMax[i-1]、nums[i]×dpMin[i-1]；dpMax 取三者最大、dpMin 取三者最小。必须同时维护两个状态，因为当前 nums[i] 为负时，乘以更负的上一轮值反而得到最大。</li><li>答案：所有 dpMax[i] 的最大值，初始化取 nums[0]，不能从 0 开始，否则全负数组会错。</li><li>实现用 int[n][2] 存两列；每轮只依赖 i-1，实际可以滚动成两个变量把空间降到 O(1)。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：直接返回 nums[0]，正负都适用。</li><li>全负：如 [-2,-3,-1] 答案是 6（子数组 [-2,-3]），靠负负得正；若答案初始化为 0 会错。</li><li>含 0：0 会切断子数组，「重新开始」的候选 nums[i] 保证 0 之后能重来，单个 0 也是合法答案。</li><li>32 位保证：乘积不溢出 int，直接用 int 即可。</li><li>推演 case：nums=[2,-5,-2,-4,3]。</li></ul><ol><li>i=0：max=min=2，ans=2。</li><li>i=1(-5)：候选 -5、-10、-10 → max=-5，min=-10，ans=2。</li><li>i=2(-2)：候选 -2、10、20 → max=20，min=-2，ans=20。</li><li>i=3(-4)：候选 -4、-80、8 → max=8，min=-80，ans=20（此处必须用 i=2 的 min=-2，若错用更早的 -10 会拼出非连续子数组）。</li><li>i=4(3)：候选 3、24、-240 → max=24，min=-240，ans=24 ✓。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个位置常数次运算，一次扫描完成；任何解法都至少要读一遍数组（Ω(n)），已达下限。</li><li>空间：本实现 O(n)（dp 数组）；转移只依赖 i-1，可滚动为两个变量达到 O(1)，是该问题的最优空间。</li><li>无法更优的论证：答案依赖每个元素，且负号传播要求同时知道最大与最小，单状态（只记 max）无法处理负负得正，双状态是最小的必要信息集。</li></ul></div></section>

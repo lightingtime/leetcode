@@ -37,18 +37,18 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归上下界</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树高)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 86/86</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0098_ValidateBinarySearchTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isValidBST(TreeNode root) {
-        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0098_ValidateBinarySearchTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValidBST</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">return</span> <span class="tk-f">isValidBSTHelper</span>(root, <span class="tk-t">Long</span>.<span class="tk-t">MAX_VALUE</span>, <span class="tk-t">Long</span>.<span class="tk-t">MIN_VALUE</span>);
     }
 
-    private boolean isValidBSTHelper(TreeNode root, long upper, long lower) {
-        if (root == null) {
-            return true;
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">isValidBSTHelper</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">long</span> upper, <span class="tk-k">long</span> lower) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
-        if (root.val &gt;= upper || root.val &lt;= lower) {
-            return false;
+        <span class="tk-k">if</span> (root.val &gt;= upper || root.val &lt;= lower) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        return isValidBSTHelper(root.left, root.val, lower) &amp;&amp; isValidBSTHelper(root.right, upper, root.val);
+        <span class="tk-k">return</span> <span class="tk-f">isValidBSTHelper</span>(root.left, root.val, lower) &amp;&amp; <span class="tk-f">isValidBSTHelper</span>(root.right, upper, root.val);
     }</pre></div>
   </div></section>
   

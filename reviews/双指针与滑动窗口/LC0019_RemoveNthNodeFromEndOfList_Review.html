@@ -37,23 +37,23 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 哨兵+快慢指针</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 208/208</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode dummy = new ListNode(0, head);
-        ListNode fast = head;
-        int i = 0;
-        while (i &lt; n) {
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">removeNthFromEnd</span>(<span class="tk-t">ListNode</span> head, <span class="tk-k">int</span> n) {
+        <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(<span class="tk-n">0</span>, head);
+        <span class="tk-t">ListNode</span> fast = head;
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (i &lt; n) {
             fast = fast.next;
             i++;
         }
-        ListNode slow = head;
-        ListNode pre = dummy;
-        while (fast != null) {
+        <span class="tk-t">ListNode</span> slow = head;
+        <span class="tk-t">ListNode</span> pre = dummy;
+        <span class="tk-k">while</span> (fast != <span class="tk-k">null</span>) {
             fast = fast.next;
             slow = slow.next;
             pre = pre.next;
         }
         pre.next = slow.next;
-        return dummy.next;
+        <span class="tk-k">return</span> dummy.next;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：单链表无法回溯，倒数第 n 个节点需要一趟定位。快慢指针：fast 先走 n 步，然后 fast 与 slow 同步走，fast 到末尾时 slow 正好指向待删节点。</p><p>关键设计：dummy 哑节点挂在 head 前，解决删除头节点的特判；pre 记录 slow 的前驱，删除时 pre.next=slow.next 跳过 slow。fast 先走 n 步保持与 slow 的固定间距，保证一趟内完成。</p><p>边界：n 等于链表长度时删除的是头节点，dummy.next 依然正确返回新头；链表只有 1 个节点；题目保证 n 在 1..len 内合法。</p><p>复杂度：O(n) 时间、O(1) 空间；比先求长度再走两趟更简洁，最优。</p></div></section>

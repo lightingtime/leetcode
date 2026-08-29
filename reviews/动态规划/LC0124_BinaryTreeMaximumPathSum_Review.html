@@ -37,21 +37,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 树形 DP（后序 DFS）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.0 MB</span><span class="chip">用例 96/96</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0124_BinaryTreeMaximumPathSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>int max;
-    public int maxPathSum(TreeNode root) {
-        max = Integer.MIN_VALUE;
-        dfs(root);
-        return max;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0124_BinaryTreeMaximumPathSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> max;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPathSum</span>(<span class="tk-t">TreeNode</span> root) {
+        max = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
+        <span class="tk-f">dfs</span>(root);
+        <span class="tk-k">return</span> max;
     }
 
-    private int dfs(TreeNode root) {
-        if (root == null) {
-            return 0;
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
         }
-        int maxLeft = Math.max(0, dfs(root.left));
-        int maxRight = Math.max(0, dfs(root.right));
-        max = Math.max(max, root.val + maxLeft + maxRight);
-        return Math.max(maxLeft, maxRight) + root.val;
+        <span class="tk-k">int</span> maxLeft = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(<span class="tk-n">0</span>, <span class="tk-f">dfs</span>(root.left));
+        <span class="tk-k">int</span> maxRight = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(<span class="tk-n">0</span>, <span class="tk-f">dfs</span>(root.right));
+        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, root.val + maxLeft + maxRight);
+        <span class="tk-k">return</span> <span class="tk-t">Math</span>.<span class="tk-f">max</span>(maxLeft, maxRight) + root.val;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><h3>问题本质与解法选择</h3><ul><li>路径是一条链：树上任意两点间唯一路径，或退化为单个节点；同一节点至多出现一次、不一定经过根。</li><li>对任意一条路径，存在唯一一个「最高点」（离根最近，路径在该处从左右两个方向汇合，或只从一侧下来）。按每个节点作为最高点枚举所有候选路径即可覆盖全部路径——这是树形 DP / 后序 DFS 的天然选择。</li><li>每个节点需要区分两类值：</li></ul><ol><li>向上提供的单链贡献：以该节点为端点、只朝一个方向向下延伸的最大和，供父节点拼接；</li><li>以该节点为最高点的完整路径：左单链 + 节点 + 右单链，直接更新全局答案。</li></ol><ul><li>负数子树贡献直接丢弃（与 0 取 max），因为路径可以选择不接那一侧。</li></ul><h3>关键设计决策</h3><ul><li>状态定义：<code>dfs(node)</code> 返回从 node 出发向下只走一条链能得到的最大贡献；全局 <code>max</code> 记录所有「以某节点为最高点的完整路径」的最大值。</li><li>转移：</li><li><code>maxLeft = max(0, dfs(node.left))</code>，<code>maxRight = max(0, dfs(node.right))</code>：负贡献截断为 0；</li><li>更新 <code>max = max(max, node.val + maxLeft + maxRight)</code>；</li><li>返回 <code>node.val + max(maxLeft, maxRight)</code>——只能带一侧，不能两侧都往上带。</li><li>终止条件：<code>node == null</code> 返回 0，空子树贡献为 0，由上层决定是否采纳。</li><li>状态重置：<code>max</code> 作为实例字段时，每次 <code>maxPathSum</code> 入口必须重置为 <code>Integer.MIN_VALUE</code>，否则同实例多次调用会残留上一次答案。</li></ul><h3>具体 case 推演</h3><p>示例 <code>[1, 2, 3]</code>（root=1，左=2，右=3）：</p><ol><li><code>dfs(2)</code>：叶子，两侧贡献都为 0；更新 <code>max = max(MIN_VALUE, 2) = 2</code>；返回 <code>2 + 0 = 2</code>。</li><li><code>dfs(3)</code>：同样逻辑；<code>max</code> 仍为 2；返回 3。</li><li><code>dfs(1)</code>：<code>maxLeft = max(0, 2) = 2</code>，<code>maxRight = max(0, 3) = 3</code>；更新 <code>max = max(2, 1 + 2 + 3) = 6</code>；返回 <code>1 + max(2, 3) = 4</code>（向上只能带 3 这一侧）。</li><li>结果 <code>max = 6</code>，对应路径 <code>2 -&gt; 1 -&gt; 3</code>。</li></ol><p>全负例 <code>[-2, -1, -3]</code>（root=-2，左=-1，右=-3）：</p><ol><li><code>dfs(-1)</code>：两侧 0；更新 <code>max = max(MIN_VALUE, -1) = -1</code>；返回 -1。</li><li><code>dfs(-3)</code>：更新 <code>max = max(-1, -3) = -1</code>；返回 -3。</li><li><code>dfs(-2)</code>：<code>maxLeft = max(0, -1) = 0</code>，<code>maxRight = max(0, -3) = 0</code>；更新 <code>max = max(-1, -2) = -1</code>。</li><li>结果 -1：全负时最优就是最大的单点，负贡献被 0 截断，避免把路径拉得更低。</li></ol><h3>边界与细节</h3><ul><li><code>max</code> 初值必须是 <code>Integer.MIN_VALUE</code> 而非 0：节点值可全为负，0 起步会把答案错算成 0。</li><li>入口重置 <code>max</code>：本次曾踩坑——实例字段跨多次调用残留，后续用例返回上一次的最大值（如把 42 串到单元素用例）。</li><li>返回值语义：给父节点的必须是单侧链，不能在父节点处「既分叉又向上」。</li><li>空输入不在约束内（节点数 ≥ 1），但 <code>dfs(null) = 0</code> 让递归统一覆盖空子树。</li></ul><h3>复杂度分析与最优性论证</h3><ul><li>时间 O(n)：每个节点恰好后序遍历一次，每次常数次比较与加法；下界同为 Ω(n)，必须看过每个节点才能确定全局最大路径，因此 O(n) 是最优。</li><li>空间 O(height)，最坏退化为链时为 O(n)：递归栈深度等于树高；本题需要在子树聚合完成后才能更新答案，沿树高保留调用栈是最小必要开销，与时间下界一样属于可接受最优。</li></ul></div></section>

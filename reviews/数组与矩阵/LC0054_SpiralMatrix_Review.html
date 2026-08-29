@@ -37,29 +37,29 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 四边界 l/r/u/d 逐层收缩模拟顺时针螺旋</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(mn)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 27/27</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0054_SpiralMatrix.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;Integer&gt; spiralOrder(int[][] matrix) {
-        List&lt;Integer&gt; ans = new ArrayList&lt;&gt;();
-        int l = 0, r = matrix[0].length - 1;
-        int u = 0, d = matrix.length - 1;
-        while (l &lt;= r &amp;&amp; u &lt;= d) {
-            for (int i = l; u &lt;= d &amp;&amp; i &lt;= r; i++) {
-                ans.add(matrix[u][i]);
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0054_SpiralMatrix.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">spiralOrder</span>(<span class="tk-k">int</span>[][] matrix) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">int</span> l = <span class="tk-n">0</span>, r = matrix[<span class="tk-n">0</span>].length - <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> u = <span class="tk-n">0</span>, d = matrix.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (l &lt;= r &amp;&amp; u &lt;= d) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = l; u &lt;= d &amp;&amp; i &lt;= r; i++) {
+                ans.<span class="tk-f">add</span>(matrix[u][i]);
             }
             u++;
-            for (int j = u; l &lt;= r &amp;&amp; j &lt;= d; j++) {
-                ans.add(matrix[j][r]);
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = u; l &lt;= r &amp;&amp; j &lt;= d; j++) {
+                ans.<span class="tk-f">add</span>(matrix[j][r]);
             }
             r--;
-            for (int i = r; u &lt;= d &amp;&amp; i &gt;= l; i--) {
-                ans.add(matrix[d][i]);
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = r; u &lt;= d &amp;&amp; i &gt;= l; i--) {
+                ans.<span class="tk-f">add</span>(matrix[d][i]);
             }
             d--;
-            for (int j = d; l&lt;= r &amp;&amp; j &gt;= u; j--) {
-                ans.add(matrix[j][l]);
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = d; l&lt;= r &amp;&amp; j &gt;= u; j--) {
+                ans.<span class="tk-f">add</span>(matrix[j][l]);
             }
             l++;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>本质是<strong>按层（一圈一圈）有方向地遍历矩阵</strong>，要求顺时针顺序且每个元素恰好一次。</li><li>两种思路：① 状态机 + 方向数组（<code>dirs</code> 右/下/左/上，撞墙或已访问就转向）；② <strong>四边界收缩</strong>：用 <code>l/r/u/d</code> 四条边界框住当前圈，依次走 上→右→下→左 四条边，每条边走完把对应边界往里收一圈。</li><li>本题选四边界收缩：无需 visited 数组，辅助空间 <code>O(1)</code>，且天然保证每个位置只走一次。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li>四个边界变量：<code>l=0, r=n-1, u=0, d=m-1</code>（左、右、上、下）。</li><li>外层 <code>while (l &lt;= r &amp;&amp; u &lt;= d)</code>：只要边界未交叉就还有圈。</li><li>每条边用<strong>当前边界</strong>遍历，走完立即收缩：</li></ul><ol><li>上边：<code>matrix[u][i]</code>，<code>i=l..r</code>，走完 <code>u++</code>；</li><li>右边：<code>matrix[j][r]</code>，<code>j=u..d</code>，走完 <code>r--</code>；</li><li>下边：<code>matrix[d][i]</code>，<code>i=r..l</code>，走完 <code>d--</code>；</li><li>左边：<code>matrix[j][l]</code>，<code>j=d..u</code>，走完 <code>l++</code>。</li></ol><ul><li>关键细节：每条边的 for 条件里加<strong>边界守卫</strong>（如 <code>u &lt;= d &amp;&amp; i &lt;= r</code>）。作用是：当只剩单行/单列时，收缩后某些边会「空转」，守卫让空转的边直接跳过，避免重复添加。例如 1x5 走完上边后 <code>u=1 &gt; d=0</code>，右边/下边/左边的循环体全部被守卫拦住。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>单行 1x5：上边走完 <code>u++</code> 后 <code>u&gt;d</code>，后续三条边被守卫拦截，输出恰为整行。</li><li>单列 4x1：上边 1 个元素，<code>u++</code> 后右边走整列，<code>r--</code> 后 <code>r&lt;l</code>，后续边被拦截。</li><li>2x2：一圈走完四个边界全部交叉，<code>while</code> 退出，不会重复。</li><li>多圈（4x4）：每圈收缩 1，内圈 2x2 时仍按同一逻辑正确收尾。</li><li>值相同 / 负数 / 上下限值：与数值无关，仅位置遍历，天然正确。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每个元素恰好访问一次，<code>O(mn)</code>；返回列表本身 <code>O(mn)</code>，除输出外辅助空间 <code>O(1)</code>（只 4 个边界变量）。</li><li>最优性：输出需要包含全部 <code>mn</code> 个元素，下界 <code>Ω(mn)</code>；本解法达到下界且无额外标记数组，为最优。</li></ul><p><strong>⑤ 具体 case 推演：2x2 <code>[[1,2],[3,4]]</code></strong></p><div class="table-wrap"><table><thead><tr><th>边</th><th>边界状态</th><th>取到的元素</th><th>收缩后</th></tr></thead><tbody><tr><td>上</td><td>l=0,r=1,u=0,d=1</td><td><code>matrix[0][0..1]</code> → 1,2</td><td>u=1</td></tr><tr><td>右</td><td>l=0,r=1,u=1,d=1</td><td><code>matrix[1][1]</code> → 4</td><td>r=0</td></tr><tr><td>下</td><td>l=0,r=0,u=1,d=1</td><td><code>matrix[1][0]</code> → 3</td><td>d=0</td></tr><tr><td>左</td><td>l=0,r=0,u=1,d=0</td><td>守卫 <code>l&lt;=r</code> 假 → 跳过</td><td>l=1</td></tr></tbody></table></div><ul><li>结果 <code>[1,2,4,3]</code>，<code>while (l&lt;=r &amp;&amp; u&lt;=d)</code> 中 <code>1&lt;=0</code> 假 → 退出。<strong>正确</strong>（顺序与边界4一致）。</li></ul><p><strong>⑥ 具体 case 推演：单行 <code>[[1,2,3,4,5]]</code>（u=d=0）</strong></p><ul><li>上边：<code>matrix[0][0..4]</code> → 1,2,3,4,5；<code>u++</code> → u=1。</li><li>右边：守卫 <code>j&lt;=d</code>（<code>j&gt;=1</code> 时 <code>j&lt;=0</code> 假）→ 空转；<code>r--</code> → r=3。</li><li>下边：守卫 <code>u&lt;=d</code>（<code>1&lt;=0</code> 假）→ 空转；<code>d--</code> → d=-1。</li><li>左边：守卫 <code>j&gt;=u</code>（<code>j&lt;=-1</code> 时不可能）→ 空转；<code>l++</code> → l=1。</li><li><code>while</code> 检查 <code>1&lt;=3 &amp;&amp; 1&lt;=-1</code> 假 → 退出，结果 <code>[1,2,3,4,5]</code>。<strong>正确</strong>——若没有守卫，右边会重复取 <code>5</code>。</li></ul></div></section>

@@ -37,39 +37,39 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单栈+Node（值+当前最小）</h3>
     <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.7 MB</span><span class="chip">用例 45/45</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0155_MinStack.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>static class MinStack {
-        Deque&lt;Node&gt; stack;
-        public MinStack() {
-            stack = new ArrayDeque&lt;&gt;();
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0155_MinStack.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">MinStack</span> {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Node</span>&gt; stack;
+        <span class="tk-k">public</span> <span class="tk-t">MinStack</span>() {
+            stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
         }
-        public void push(int value) {
-            if (stack.isEmpty()) {
-                stack.push(new Node(value, value));
-            } else {
-                int min = Math.min(value, getMin());
-                stack.push(new Node(value, min));
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">push</span>(<span class="tk-k">int</span> value) {
+            <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>()) {
+                stack.<span class="tk-f">push</span>(<span class="tk-k">new</span> <span class="tk-t">Node</span>(value, value));
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">int</span> min = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(value, <span class="tk-f">getMin</span>());
+                stack.<span class="tk-f">push</span>(<span class="tk-k">new</span> <span class="tk-t">Node</span>(value, min));
             }
         }
-        public void pop() {
-            stack.pop();
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">pop</span>() {
+            stack.<span class="tk-f">pop</span>();
         }
-        public int top() {
-            return stack.peek().cur;
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">top</span>() {
+            <span class="tk-k">return</span> stack.<span class="tk-f">peek</span>().cur;
         }
-        public int getMin() {
-            return stack.peek().min;
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">getMin</span>() {
+            <span class="tk-k">return</span> stack.<span class="tk-f">peek</span>().min;
         }
 
-        class Node {
-            int cur;
-            int min;
+        <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+            <span class="tk-k">int</span> cur;
+            <span class="tk-k">int</span> min;
 
-            public Node() {
+            <span class="tk-k">public</span> <span class="tk-t">Node</span>() {
             }
 
-            public Node(int cur, int min) {
-                this.cur = cur;
-                this.min = min;
+            <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-k">int</span> cur, <span class="tk-k">int</span> min) {
+                <span class="tk-k">this</span>.cur = cur;
+                <span class="tk-k">this</span>.min = min;
             }
         }
     }</pre></div>

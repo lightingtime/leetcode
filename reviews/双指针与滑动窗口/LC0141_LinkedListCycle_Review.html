@@ -37,20 +37,20 @@
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>快慢指针</p>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>快慢指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean hasCycle(ListNode head) {
-        if (head == null || head.next == null) {
-            return false;
+    <div class="code-wrap"><div class="code-head"><span>快慢指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        ListNode fast = head;
-        ListNode slow = head;
-        while (fast.next != null &amp;&amp; fast.next.next != null) {
+        <span class="tk-t">ListNode</span> fast = head;
+        <span class="tk-t">ListNode</span> slow = head;
+        <span class="tk-k">while</span> (fast.next != <span class="tk-k">null</span> &amp;&amp; fast.next.next != <span class="tk-k">null</span>) {
             fast = fast.next.next;
             slow = slow.next;
-            if (fast == slow) {
-                return true;
+            <span class="tk-k">if</span> (fast == slow) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
             }
         }
-        return false;
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断链表是否有环。哈希表记录访问过的节点可行但 O(n) 空间；快慢指针让 fast 每次走 2 步、slow 走 1 步，只花 O(1) 空间。</p><p>关键设计：若有环，fast 相对 slow 每轮靠近 1 步，必在环内相遇；无环则 fast 先走到 null。判断相遇要在移动之后立刻比较（代码在 fast 前进后检查 fast==slow）。</p><p>边界：空链表或单节点直接返回 false；循环条件 fast.next!=null &amp;&amp; fast.next.next!=null 保证 fast 前进前已有两个后继，不会空指针；自环节点也能正确检测（fast 先入环，slow 随后在环内被追上）。</p><p>复杂度：O(n) 时间（无环走 n/2 步；有环不超过 n+环长）、O(1) 空间，最优。</p></div></section>

@@ -37,30 +37,30 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DP 三邻居min+1</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(mn)</span><span class="chip">内存 ≈ 68.0 MB</span><span class="chip">用例 81/81</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0221_MaximalSquare.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maximalSquare(char[][] matrix) {
-        int m = matrix.length;
-        int n = matrix[0].length;
-        int[][] dp = new int[m][n];
-        int max = 0;
-        for (int i = 0; i &lt; m; i++) {
-            dp[i][0] = matrix[i][0] == '1' ? 1 : 0;
-            max = Math.max(max, dp[i][0]);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0221_MaximalSquare.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maximalSquare</span>(<span class="tk-k">char</span>[][] matrix) {
+        <span class="tk-k">int</span> m = matrix.length;
+        <span class="tk-k">int</span> n = matrix[<span class="tk-n">0</span>].length;
+        <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[m][n];
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            dp[i][<span class="tk-n">0</span>] = matrix[i][<span class="tk-n">0</span>] == <span class="tk-s">'1'</span> ? <span class="tk-n">1</span> : <span class="tk-n">0</span>;
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[i][<span class="tk-n">0</span>]);
         }
-        for (int j = 0; j &lt; n; j++) {
-            dp[0][j] = matrix[0][j] == '1' ? 1 : 0;
-            max = Math.max(max, dp[0][j]);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+            dp[<span class="tk-n">0</span>][j] = matrix[<span class="tk-n">0</span>][j] == <span class="tk-s">'1'</span> ? <span class="tk-n">1</span> : <span class="tk-n">0</span>;
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[<span class="tk-n">0</span>][j]);
         }
-        for (int i = 1; i &lt; m; i++) {
-            for (int j = 1; j &lt; n; j++) {
-                if (matrix[i][j] == '1') {
-                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
-                } else {
-                    dp[i][j] = 0;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (matrix[i][j] == <span class="tk-s">'1'</span>) {
+                    dp[i][j] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(<span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i - <span class="tk-n">1</span>][j], dp[i][j - <span class="tk-n">1</span>]), dp[i - <span class="tk-n">1</span>][j - <span class="tk-n">1</span>]) + <span class="tk-n">1</span>;
+                } <span class="tk-k">else</span> {
+                    dp[i][j] = <span class="tk-n">0</span>;
                 }
-                max = Math.max(max, dp[i][j]);
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[i][j]);
             }
         }
-        return max * max;
+        <span class="tk-k">return</span> max * max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>本质：0/1 矩阵中找全 1 的最大正方形面积。以每个格子为右下角看它能构成多大正方形，最优子结构明显（右下角确定后只依赖左上三个邻居），用 DP。</li><li>为什么不暴力：枚举所有正方形 O(mn·min(m,n)^2)；DP 每格 O(1) 转移，总 O(mn)。</li></ul><p><strong>关键设计决策</strong></p><ul><li>状态定义：dp[i][j] = 以 (i,j) 为右下角的全 1 正方形最大边长。</li><li>转移：matrix[i][j]==0 → dp=0（0 格不能当右下角）；为 1 → dp = min(上, 左, 对角) + 1。</li><li>为什么取 min：边长 k 的正方形以 (i,j) 为右下角，内部必须包含分别以三个邻居为右下角的三个 k-1 正方形；最矮的邻居决定上限，不是「三个都非零就行」。</li><li>基础：第一行 / 第一列 1 格 dp=1，0 格 dp=0。</li><li>答案：全程记录最大边长 maxSide，返回 maxSide*maxSide（面积）。</li></ul><p><strong>具体 case 推演：[[1,1,1],[1,1,1],[0,1,1]]（期望 4）</strong></p><ul><li>第 0 行全 1 → dp[0][0..2]=1；第 0 列 dp[1][0]=1、dp[2][0]=0</li><li>(1,1)：min(1,1,1)+1 = 2；(1,2)：min(1,2,1)+1 = 2</li><li>(2,1)：min(dp[1][1]=2, dp[2][0]=0, dp[1][0]=1)+1 = 1（被 (2,0) 的 0 截断）</li><li>(2,2)：min(dp[1][2]=2, dp[1][1]=2, dp[2][1]=1)+1 = 2 → 面积 4，而不是 3x3=9</li><li>关键：左邻 dp[2][1]=1 让 (2,2) 只能到 2——这正是 min 而非 &amp;&amp; 的意义。</li></ul><p><strong>WA 踩坑（已修复）</strong></p><ul><li>首次提交转移写成 min(邻居) + (是1?1:0)，0 格继承了邻居正数（min+0），假边长连锁：6x6 用例中 (2,3) 是 0 却被算 1，一路抬高 (2,4)、(3,4) 到 (4,5)=3，假 3x3 面积 9（正确 4）。已拆成 if/else 分支：0 格直接置 0，1 格才 min+1，并把该用例加入本地回归。</li></ul><p><strong>边界与细节</strong></p><ul><li>单行 / 单列只能 1x1；全一矩形面积 = min(行,列)^2；对角 0 破坏 2x2；单元素 1/0。</li><li>第一行 / 列单独初始化避免越界。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(mn)：每格 O(1)，每个格子至少要判断一次，已达下限。</li><li>空间 O(mn)：完整 dp 表；每格只依赖上一行与当前行左邻，可滚动压缩到 O(n)。</li></ul></div></section>

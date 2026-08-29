@@ -37,27 +37,27 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯（剩余计数剪枝）</h3>
     <p><span class="chip">时间 O(C_n*n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.3 MB</span><span class="chip">用例 8/8</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0022_GenerateParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;String&gt; ans;
-    public List&lt;String&gt; generateParenthesis(int n) {
-        ans = new ArrayList&lt;&gt;();
-        dfs(n, n, "");
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0022_GenerateParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">generateParenthesis</span>(<span class="tk-k">int</span> n) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-f">dfs</span>(n, n, <span class="tk-s">""</span>);
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(int left, int right, String sb) {
-        if (left &lt; 0 || right &lt; 0) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span> left, <span class="tk-k">int</span> right, <span class="tk-t">String</span> sb) {
+        <span class="tk-k">if</span> (left &lt; <span class="tk-n">0</span> || right &lt; <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span>;
         }
-        if (left == right &amp;&amp; left == 0) {
-            ans.add(sb);
-            return;
+        <span class="tk-k">if</span> (left == right &amp;&amp; left == <span class="tk-n">0</span>) {
+            ans.<span class="tk-f">add</span>(sb);
+            <span class="tk-k">return</span>;
         }
-        if (right &lt; left) {
-            return;
+        <span class="tk-k">if</span> (right &lt; left) {
+            <span class="tk-k">return</span>;
         }
-        dfs(left - 1, right, sb + "(");
+        <span class="tk-f">dfs</span>(left - <span class="tk-n">1</span>, right, sb + <span class="tk-s">"("</span>);
 
-        dfs(left, right - 1, sb + ")");
+        <span class="tk-f">dfs</span>(left, right - <span class="tk-n">1</span>, sb + <span class="tk-s">")"</span>);
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：生成 n 对括号的所有合法组合，数量是卡特兰数 C_n = (2n)!/((n+1)!·n!)。枚举每个位置放 ( 还是 )，用「已用右括号 ≤ 已用左括号」保证每一步前缀都合法。</p><p>为什么用回溯：</p><ul><li>每个位置只有两种选择，但 () 的合法组合不能靠排列硬凑，必须边生成边校验；</li><li>回溯天然支持「生成一条路径 → 到底 → 撤销 → 换分支」的完整枚举。</li></ul><p>关键设计：</p><ol><li>状态：剩余左括号数 left、剩余右括号数 right、当前串 sb；</li><li>终止条件：left==0 &amp;&amp; right==0 时当前串完整，加入答案；</li><li>剪枝：right &lt; left 时说明已用右括号超过已用左括号，前缀已非法，直接返回；负数守卫防止 left 为 0 时仍递归减成 -1；</li><li>两条分支对称：加 ( → dfs(left-1, right)，加 ) → dfs(left, right-1)，各自递归后删除末尾字符撤销。</li></ol><p>具体 case 推演（n=2，dfs(2,2)）：</p><ul><li>加 ( → (1,2)：加 ( → (0,2)：只能加 ) → (0,1) → 加 ) → (0,0) → 得到 (())；</li><li>回溯回 (1,2)：改加 ) → (1,1)：加 ( → (0,1) → 加 ) → (0,0) → 得到 ()()；</li><li>从 (2,2) 直接加 ) 的分支变成 (2,1)，right&lt;left 剪枝，非法分支不产生。</li></ul><p>边界与细节：</p><ul><li>n=1 只有 ()；n=2 两个；n=4 14 个；n=8 1430 个（本地测试逐个校验合法性并检查去重）；</li><li>StringBuilder 加入答案时必须 toString 复制，否则后续撤销会改坏已存结果；</li><li>题目约束 n &gt;= 1，无需处理空输入。</li></ul><p>复杂度分析：</p><ul><li>时间 O(C_n · n)：C_n 个合法串，每个长 2n；剪枝后的递归树只含合法前缀；</li><li>空间 O(n)：递归深度 2n + 当前串（不含输出）。</li></ul><p>为什么是最优：答案数量本身就是卡特兰数，任何算法至少要输出 C_n 个长度为 2n 的串；回溯让每个合法串恰好生成一次、无重复枚举，已达下限。</p></div></section>

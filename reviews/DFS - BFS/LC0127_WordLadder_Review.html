@@ -37,82 +37,82 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 通配符虚拟节点图 + 双向 BFS</h3>
     <p><span class="chip">时间 O(n·L)</span><span class="chip">空间 O(n·L)</span><span class="chip">内存 ≈ 50.7 MB</span><span class="chip">用例 57/57</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0127_WordLadder.java · 通配符虚拟节点图 + 双向 BFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    Map&lt;String, Integer&gt; map;
-    List&lt;List&lt;Integer&gt;&gt; edge;
-    int nodeNum;
-    public int ladderLength(String beginWord, String endWord, List&lt;String&gt; wordList) {
-        if (!wordList.contains(endWord)) {
-            return 0;
+    <div class="code-wrap"><div class="code-head"><span>LC0127_WordLadder.java · 通配符虚拟节点图 + 双向 BFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-t">Map</span>&lt;<span class="tk-t">String</span>, <span class="tk-t">Integer</span>&gt; map;
+    <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; edge;
+    <span class="tk-k">int</span> nodeNum;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">ladderLength</span>(<span class="tk-t">String</span> beginWord, <span class="tk-t">String</span> endWord, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordList) {
+        <span class="tk-k">if</span> (!wordList.<span class="tk-f">contains</span>(endWord)) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
         }
-        map = new HashMap&lt;&gt;();
-        edge = new ArrayList&lt;&gt;();
-        nodeNum = 0;
-        for (String word : wordList) {
-            addEdge(word);
+        map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        edge = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        nodeNum = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-t">String</span> word : wordList) {
+            <span class="tk-f">addEdge</span>(word);
         }
-        addEdge(beginWord);
-        Set&lt;Integer&gt; beginSet = new HashSet&lt;&gt;();
-        Set&lt;Integer&gt; endSet = new HashSet&lt;&gt;();
+        <span class="tk-f">addEdge</span>(beginWord);
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; beginSet = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; endSet = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
 
-        Set&lt;Integer&gt; visitedBegin = new HashSet&lt;&gt;();  // begin 侧已访问
-        Set&lt;Integer&gt; visitedEnd = new HashSet&lt;&gt;();    // end 侧已访问
-        int levelA = 0;                               // begin 侧当前层的虚拟边数
-        int levelB = 0;                               // end 侧当前层的虚拟边数
-        beginSet.add(map.get(beginWord));
-        endSet.add(map.get(endWord));
-        visitedBegin.add(map.get(beginWord));
-        visitedEnd.add(map.get(endWord));
-        while (!beginSet.isEmpty() &amp;&amp; !endSet.isEmpty()) {
-            if (beginSet.size() &gt; endSet.size()) {
-                Set&lt;Integer&gt; temp = new HashSet&lt;&gt;(beginSet);
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; visitedBegin = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();  <span class="tk-c">// begin 侧已访问</span>
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; visitedEnd = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();    <span class="tk-c">// end 侧已访问</span>
+        <span class="tk-k">int</span> levelA = <span class="tk-n">0</span>;                               <span class="tk-c">// begin 侧当前层的虚拟边数</span>
+        <span class="tk-k">int</span> levelB = <span class="tk-n">0</span>;                               <span class="tk-c">// end 侧当前层的虚拟边数</span>
+        beginSet.<span class="tk-f">add</span>(map.<span class="tk-f">get</span>(beginWord));
+        endSet.<span class="tk-f">add</span>(map.<span class="tk-f">get</span>(endWord));
+        visitedBegin.<span class="tk-f">add</span>(map.<span class="tk-f">get</span>(beginWord));
+        visitedEnd.<span class="tk-f">add</span>(map.<span class="tk-f">get</span>(endWord));
+        <span class="tk-k">while</span> (!beginSet.<span class="tk-f">isEmpty</span>() &amp;&amp; !endSet.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">if</span> (beginSet.<span class="tk-f">size</span>() &gt; endSet.<span class="tk-f">size</span>()) {
+                <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; temp = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(beginSet);
                 beginSet = endSet;
                 endSet = temp;
-                temp = new HashSet&lt;&gt;(visitedBegin);
+                temp = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(visitedBegin);
                 visitedBegin = visitedEnd;
                 visitedEnd = temp;
-                int c = levelB;
+                <span class="tk-k">int</span> c = levelB;
                 levelB = levelA;
                 levelA = c;
             }
-            Set&lt;Integer&gt; next = new HashSet&lt;&gt;();
-            for (Integer u : beginSet) {
-                for (Integer v : edge.get(u)) {
-                    if (visitedEnd.contains(v)) {
-                        return ((levelA + 1) + levelB) / 2 + 1;
+            <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; next = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-t">Integer</span> u : beginSet) {
+                <span class="tk-k">for</span> (<span class="tk-t">Integer</span> v : edge.<span class="tk-f">get</span>(u)) {
+                    <span class="tk-k">if</span> (visitedEnd.<span class="tk-f">contains</span>(v)) {
+                        <span class="tk-k">return</span> ((levelA + <span class="tk-n">1</span>) + levelB) / <span class="tk-n">2</span> + <span class="tk-n">1</span>;
                     }
-                    if (!visitedBegin.contains(v)) {
-                        next.add(v);
-                        visitedBegin.add(v);
+                    <span class="tk-k">if</span> (!visitedBegin.<span class="tk-f">contains</span>(v)) {
+                        next.<span class="tk-f">add</span>(v);
+                        visitedBegin.<span class="tk-f">add</span>(v);
                     }
                 }
             }
             beginSet = next;
             levelA++;
         }
-        return 0;
+        <span class="tk-k">return</span> <span class="tk-n">0</span>;
     }
 
-    private void addEdge(String word) {
-        addWord(word);
-        int id1 = map.get(word);
-        char[] charArray = word.toCharArray();
-        int len = charArray.length;
-        for (int i = 0; i &lt; len; i++) {
-            char temp = charArray[i];
-            charArray[i] = '*';
-            String newWord = new String(charArray);
-            addWord(newWord);
-            int id2 = map.get(newWord);
-            edge.get(id1).add(id2);
-            edge.get(id2).add(id1);
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">addEdge</span>(<span class="tk-t">String</span> word) {
+        <span class="tk-f">addWord</span>(word);
+        <span class="tk-k">int</span> id1 = map.<span class="tk-f">get</span>(word);
+        <span class="tk-k">char</span>[] charArray = word.<span class="tk-f">toCharArray</span>();
+        <span class="tk-k">int</span> len = charArray.length;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; len; i++) {
+            <span class="tk-k">char</span> temp = charArray[i];
+            charArray[i] = <span class="tk-s">'*'</span>;
+            <span class="tk-t">String</span> newWord = <span class="tk-k">new</span> <span class="tk-t">String</span>(charArray);
+            <span class="tk-f">addWord</span>(newWord);
+            <span class="tk-k">int</span> id2 = map.<span class="tk-f">get</span>(newWord);
+            edge.<span class="tk-f">get</span>(id1).<span class="tk-f">add</span>(id2);
+            edge.<span class="tk-f">get</span>(id2).<span class="tk-f">add</span>(id1);
             charArray[i] = temp;
         }
     }
 
-    private void addWord(String newWord) {
-        if (!map.containsKey(newWord)) {
-            map.put(newWord, nodeNum++);
-            edge.add(new ArrayList&lt;&gt;());
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">addWord</span>(<span class="tk-t">String</span> newWord) {
+        <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(newWord)) {
+            map.<span class="tk-f">put</span>(newWord, nodeNum++);
+            edge.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
         }
     }</pre></div>
   </div></section>

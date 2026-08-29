@@ -37,32 +37,32 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 贪心+二分（tails数组）</h3>
     <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.2 MB</span><span class="chip">用例 56/56</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0300_LongestIncreasingSubsequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int lengthOfLIS(int[] nums) {
-        int[] tails = new int[nums.length];
-        int tail = 0;
-        for (int i = 0; i &lt; nums.length; i++) {
-            int index = findNumIndex(tails, tail, nums[i]);
-            if (index &lt; tail) {
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0300_LongestIncreasingSubsequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLIS</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span>[] tails = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        <span class="tk-k">int</span> tail = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">int</span> index = <span class="tk-f">findNumIndex</span>(tails, tail, nums[i]);
+            <span class="tk-k">if</span> (index &lt; tail) {
                 tails[index] = nums[i];
-            } else {
+            } <span class="tk-k">else</span> {
                 tails[tail] = nums[i];
                 tail++;
             }
         }
-        return tail;
+        <span class="tk-k">return</span> tail;
     }
 
-    private int findNumIndex(int[] tails, int end, int num) {
-        int l = -1, r = end + 1;
-        while (l + 1 &lt; r) {
-            int mid = l + (r - l) / 2;
-            if (tails[mid] &lt; num) {
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">findNumIndex</span>(<span class="tk-k">int</span>[] tails, <span class="tk-k">int</span> end, <span class="tk-k">int</span> num) {
+        <span class="tk-k">int</span> l = -<span class="tk-n">1</span>, r = end + <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (l + <span class="tk-n">1</span> &lt; r) {
+            <span class="tk-k">int</span> mid = l + (r - l) / <span class="tk-n">2</span>;
+            <span class="tk-k">if</span> (tails[mid] &lt; num) {
                 l = mid;
-            } else {
+            } <span class="tk-k">else</span> {
                 r = mid;
             }
         }
-        return r;
+        <span class="tk-k">return</span> r;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>求最长严格递增子序列长度。朴素 O(n²) DP（dp[i]=以 i 结尾的最长长度，枚举 j&lt;i 且 nums[j]&lt;nums[i]）可行，但题目进阶要求 O(n log n)。核心观察：长度相同的递增子序列，尾值越小越有延展潜力，所以只需保留「每个长度下的最小尾值」——即 patience sorting 的 tails 数组，配合二分把单个元素处理降到 O(log n)。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>tails[k] = 长度为 k+1 的递增子序列的最小尾值，严格递增；tail 变量记录有效长度，只读写 tails[0..tail-1]。</li><li>对每个 nums[i]，二分找第一个 ≥ nums[i] 的下标 index（lower_bound）：index &lt; tail 则替换 tails[index]（长度不变、尾值改小）；否则追加 tails[tail]=nums[i]、tail++（长度 +1）。</li><li>双开区间二分：l=-1、r=end+1，循环 l+1&lt;r；tails[mid] &lt; num → l=mid（mid 及左边都 &lt; num，成为左排除边界），否则 r=mid（mid 及右边都 ≥ num）。返回 r 即 lower_bound。</li><li>哨兵细节：r 初始 end+1 可能让 mid 读到 tails[end]（从未写入、恒为 0 的位置）；只有「全部真实尾巴 &lt; num」时才会访问它——num&gt;0 得 r=end+1、num≤0 得 r=end，主调用都走 append 分支，等价于追加。</li><li>答案：tail。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：直接追加，tail=1。</li><li>严格递减/全相等：每元素都替换到前部（lower_bound 很小），tail 保持 1；相等元素因替换条件是 ≥ 而不能续长，[7,7,7] → 1。</li><li>负数：二分只比大小，与符号无关；穷举（长度 1-9、值 -2..2）与 O(n²) 参考实现全部一致。</li><li>推演 case：nums=[1,3,4,2,5,6,7]。</li></ul><ol><li>1 → tails[0]=1，tail=1。</li><li>3 → 追加 [1,3]，tail=2。</li><li>4 → 追加 [1,3,4]，tail=3。</li><li>2 → lower_bound=1（tails[1]=3≥2）→ 替换 [1,2,4]，tail 仍 3——长度信息不丢，这是与「弹光更大元素」写法的关键区别。</li><li>5 → 追加 [1,2,4,5]，tail=4；6 → 5；7 → 6。</li><li>答案 6 ✓（真实 LIS 为 1,3,4,5,6,7）。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n log n)：外层 n 次 × 每次二分 O(log n)，满足进阶要求。</li><li>空间 O(n)：tails 数组。</li><li>下限：LIS 在比较模型下需要 Ω(n log n)，本解已达最优；O(n²) DP 是正确但非最优的对照。</li></ul></div></section>

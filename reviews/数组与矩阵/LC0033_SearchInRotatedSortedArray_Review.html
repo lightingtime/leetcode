@@ -37,28 +37,28 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 旋转数组二分</h3>
     <p><span class="chip">时间 O(log n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.3 MB</span><span class="chip">用例 196/196</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0033_SearchInRotatedSortedArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int search(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
-        while (left &lt; right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] == target) {
-                return mid;
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0033_SearchInRotatedSortedArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">search</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
+        <span class="tk-k">int</span> left = <span class="tk-n">0</span>, right = nums.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (left &lt; right) {
+            <span class="tk-k">int</span> mid = left + (right - left) / <span class="tk-n">2</span>;
+            <span class="tk-k">if</span> (nums[mid] == target) {
+                <span class="tk-k">return</span> mid;
             }
-            if (nums[mid] &gt;= nums[left]) {
-                if (target &gt;= nums[left] &amp;&amp; target &lt; nums[mid]) {
-                    right = mid - 1;
-                } else {
-                    left = mid + 1;
+            <span class="tk-k">if</span> (nums[mid] &gt;= nums[left]) {
+                <span class="tk-k">if</span> (target &gt;= nums[left] &amp;&amp; target &lt; nums[mid]) {
+                    right = mid - <span class="tk-n">1</span>;
+                } <span class="tk-k">else</span> {
+                    left = mid + <span class="tk-n">1</span>;
                 }
-            } else {
-                if (nums[mid] &lt; target &amp;&amp; target &lt;= nums[right]) {
-                    left = mid + 1;
-                } else {
-                    right = mid - 1;
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">if</span> (nums[mid] &lt; target &amp;&amp; target &lt;= nums[right]) {
+                    left = mid + <span class="tk-n">1</span>;
+                } <span class="tk-k">else</span> {
+                    right = mid - <span class="tk-n">1</span>;
                 }
             }
         }
-        return nums[left] == target ? left : -1;
+        <span class="tk-k">return</span> nums[left] == target ? left : -<span class="tk-n">1</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：旋转后的有序数组是「两段各自递增」。二分时不能直接比较 nums[mid] 与 target，必须先判断 mid 落在哪一段，再按段内有序性收窄区间。</p><p>关键设计：nums[mid] &gt;= nums[left] 说明左段递增：target 落在 [left, mid) 内则 right=mid-1，否则去右段；否则 mid 在右段：target 落在 (mid, right] 内则 left=mid+1，否则去左段。段内有序保证每步排除一半。</p><p>边界：数组长度为 1 时循环不进入，最后统一检查 nums[left]；旋转点恰在 0 处（等价未旋转）走 nums[mid]&gt;=nums[left] 分支仍正确；题目无重复元素，比较不受重复干扰。</p><p>复杂度：O(log n) 时间、O(1) 空间，最优。</p></div></section>

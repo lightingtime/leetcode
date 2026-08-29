@@ -37,20 +37,20 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单循环分类：15 倍数优先 FizzBuzz，再 Fizz/Buzz/数字</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.2 MB</span><span class="chip">用例 8/8</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/字符串/LC0412_FizzBuzz.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;String&gt; fizzBuzz(int n) {
-        List&lt;String&gt; ans = new ArrayList&lt;&gt;();
-        for (int i = 1; i &lt;= n; i++) {
-            if (i % 15 == 0) {
-                ans.add("FizzBuzz");
-            } else if (i % 3 == 0) {
-                ans.add("Fizz");
-            } else if (i % 5 == 0) {
-                ans.add("Buzz");
-            } else {
-                ans.add(String.valueOf(i));
+    <div class="code-wrap"><div class="code-head"><span>src/字符串/LC0412_FizzBuzz.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">fizzBuzz</span>(<span class="tk-k">int</span> n) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= n; i++) {
+            <span class="tk-k">if</span> (i % <span class="tk-n">15</span> == <span class="tk-n">0</span>) {
+                ans.<span class="tk-f">add</span>(<span class="tk-s">"FizzBuzz"</span>);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (i % <span class="tk-n">3</span> == <span class="tk-n">0</span>) {
+                ans.<span class="tk-f">add</span>(<span class="tk-s">"Fizz"</span>);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (i % <span class="tk-n">5</span> == <span class="tk-n">0</span>) {
+                ans.<span class="tk-f">add</span>(<span class="tk-s">"Buzz"</span>);
+            } <span class="tk-k">else</span> {
+                ans.<span class="tk-f">add</span>(<span class="tk-t">String</span>.<span class="tk-f">valueOf</span>(i));
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>对 <code>1..n</code> 每个数做<strong>分类映射</strong>：15 的倍数 → FizzBuzz，3 的倍数 → Fizz，5 的倍数 → Buzz，否则数字本身。本质是简单的模拟/条件分支题。</li><li>核心难点只有一处：<strong>判断优先级</strong>——同时是 3 和 5 的倍数（即 15 的倍数）必须最先处理，否则会被 Fizz 或 Buzz 抢先。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li><code>for i = 1..n</code>，按优先级依次判断：</li></ul><ol><li><code>i % 15 == 0</code> → <code>"FizzBuzz"</code>（等价于 <code>i%3==0 &amp;&amp; i%5==0</code>，15 是 3 和 5 的最小公倍数）；</li><li><code>i % 3 == 0</code> → <code>"Fizz"</code>；</li><li><code>i % 5 == 0</code> → <code>"Buzz"</code>；</li><li>否则 <code>String.valueOf(i)</code>。</li></ol><ul><li>用 <code>if / else if</code> 链保证<strong>互斥</strong>：每个 i 只命中一个分支。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li><code>n=1</code>：<code>i%15/3/5</code> 都不成立 → <code>["1"]</code>。</li><li>15 的倍数：<code>15</code> → FizzBuzz；若把 <code>i%15==0</code> 放后面，15 会先命中 <code>i%3==0</code> 输出 Fizz——顺序错误。</li><li>非倍数数字：<code>14</code> → <code>"14"</code>、<code>16</code> → <code>"16"</code>。</li><li>上限 <code>n=10000</code>：<code>9999</code> 是 3 的倍数非 5 → Fizz；<code>10000</code> 是 5 的倍数非 3 → Buzz；<code>9997</code> → 数字。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每个数 O(1) 分支判断，总 <code>O(n)</code>；输出列表本身 <code>O(n)</code>，辅助空间 <code>O(1)</code>。</li><li>最优性：必须为每个 i 生成一个结果元素，下界 <code>Ω(n)</code>；本解法达到。</li></ul><p><strong>⑤ 具体 case 推演：<code>n=15</code> 的关键位置</strong></p><div class="table-wrap"><table><thead><tr><th>i</th><th>判断</th><th>结果</th></tr></thead><tbody><tr><td>3</td><td><code>3%15≠0</code>、<code>3%3==0</code></td><td>Fizz</td></tr><tr><td>5</td><td><code>5%15≠0</code>、<code>5%3≠0</code>、<code>5%5==0</code></td><td>Buzz</td></tr><tr><td>14</td><td>三个条件都不成立</td><td>"14"</td></tr><tr><td>15</td><td><code>15%15==0</code>（最先命中）</td><td>FizzBuzz</td></tr></tbody></table></div><ul><li>若把 <code>i%3==0</code> 放最前，15 会被判成 Fizz——<code>%15</code> 置顶是关键。<strong>正确</strong>。</li></ul></div></section>

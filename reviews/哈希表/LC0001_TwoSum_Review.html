@@ -37,16 +37,16 @@
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>单遍哈希表（边查边存，重复值场景天然正确）</p>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>单遍哈希表（边查边存，重复值场景天然正确）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[] twoSum(int[] nums, int target) {
-        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (map.containsKey(target - nums[i])) {
-                return new int[]{map.get(target - nums[i]), i};
-            } else {
-                map.put(nums[i], i);
+    <div class="code-wrap"><div class="code-head"><span>单遍哈希表（边查边存，重复值场景天然正确）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(target - nums[i])) {
+                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[]{map.<span class="tk-f">get</span>(target - nums[i]), i};
+            } <span class="tk-k">else</span> {
+                map.<span class="tk-f">put</span>(nums[i], i);
             }
         }
-        return null;
+        <span class="tk-k">return</span> <span class="tk-k">null</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在数组中找两个下标使元素之和等于 target。暴力枚举两两组合是 O(n²)；把「查补数」优化为哈希表 O(1) 查询，本质是空间换时间。</p><p>关键设计：边遍历边把 nums[i] → i 存入 HashMap；对每个元素先查 target-nums[i] 是否已存在，存在即返回 [已存下标, 当前下标]。顺序很重要：先查再存，保证同一个元素不会和自己配对（例如 target=6、数组只有一个 3，先查时 map 还没有 3，不会误返回 [i,i]）。</p><p>边界：题目保证恰好一个解，但实现仍返回 null 兜底；元素值重复时后存的下标覆盖先存的下标，先查后存确保返回的是靠前的那一对。</p><p>复杂度：O(n) 时间、O(n) 空间。相比 O(n²) 暴力是时间最优；空间是 O(1) 查询的必要代价，题目没有限制额外空间。</p></div></section>

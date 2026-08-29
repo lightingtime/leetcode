@@ -37,15 +37,15 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双指针</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 75/75</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0283_MoveZeroes.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void moveZeroes(int[] nums) {
-        int unCheck = 0, check = 0;
-        while (check &lt; nums.length) {
-            if (nums[unCheck] == 0) {
-                int temp = nums[check];
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0283_MoveZeroes.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">moveZeroes</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> unCheck = <span class="tk-n">0</span>, check = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (check &lt; nums.length) {
+            <span class="tk-k">if</span> (nums[unCheck] == <span class="tk-n">0</span>) {
+                <span class="tk-k">int</span> temp = nums[check];
                 nums[check] = nums[unCheck];
                 nums[unCheck] = temp;
                 check++;
-            } else {
+            } <span class="tk-k">else</span> {
                 unCheck++;
                 check = unCheck;
             }

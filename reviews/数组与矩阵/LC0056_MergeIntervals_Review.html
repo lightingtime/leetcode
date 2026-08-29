@@ -37,24 +37,24 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 排序+单遍合并</h3>
     <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 47.5 MB</span><span class="chip">用例 172/172</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0056_MergeIntervals.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[][] merge(int[][] intervals) {
-        Arrays.sort(intervals, Comparator.comparingInt(a -&gt; a[0]));
-        List&lt;int[]&gt; list = new ArrayList&lt;&gt;();
-        for (int[] interval : intervals) {
-            if (list.isEmpty()) {
-                list.add(new int[]{interval[0], interval[1]});
-            } else {
-                int[] last = list.get(list.size() - 1);
-                if (last[1] &gt;= interval[0]) {
-                    if (last[1] &lt; interval[1]) {
-                        last[1] = interval[1];
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0056_MergeIntervals.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[][] <span class="tk-f">merge</span>(<span class="tk-k">int</span>[][] intervals) {
+        <span class="tk-t">Arrays</span>.<span class="tk-f">sort</span>(intervals, <span class="tk-t">Comparator</span>.<span class="tk-f">comparingInt</span>(a -&gt; a[<span class="tk-n">0</span>]));
+        <span class="tk-t">List</span>&lt;<span class="tk-k">int</span>[]&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span>[] interval : intervals) {
+            <span class="tk-k">if</span> (list.<span class="tk-f">isEmpty</span>()) {
+                list.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-k">int</span>[]{interval[<span class="tk-n">0</span>], interval[<span class="tk-n">1</span>]});
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">int</span>[] last = list.<span class="tk-f">get</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+                <span class="tk-k">if</span> (last[<span class="tk-n">1</span>] &gt;= interval[<span class="tk-n">0</span>]) {
+                    <span class="tk-k">if</span> (last[<span class="tk-n">1</span>] &lt; interval[<span class="tk-n">1</span>]) {
+                        last[<span class="tk-n">1</span>] = interval[<span class="tk-n">1</span>];
                     }
-                } else {
-                    list.add(new int[]{interval[0], interval[1]});
+                } <span class="tk-k">else</span> {
+                    list.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-k">int</span>[]{interval[<span class="tk-n">0</span>], interval[<span class="tk-n">1</span>]});
                 }
             }
         }
-        return list.toArray(new int[0][]);
+        <span class="tk-k">return</span> list.<span class="tk-f">toArray</span>(<span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">0</span>][]);
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：把重叠区间合并。区间按 start 排序后，问题变成顺序扫描：当前区间与上一个合并段重叠就扩展，否则开新段。</p><p>关键设计：排序后遍历，用 list 存合并结果；新区间与最后一个重叠（last[1] &gt;= interval[0]，含端点相接）时，end 更新为 max(last[1], interval[1])——必须取 max 而不能直接赋值，因为排序只保证 start 有序，后一个区间可能完全被包含（end 更小）。不重叠则直接追加新区间。</p><p>边界：空数组；单个区间；完全包含（如 [1,10] 与 [2,3]）；端点相接 [1,2]+[2,3] 要合并；多个区间同 start 时按 end 正确合并。</p><p>复杂度：O(n log n) 时间（排序主导）、O(log n) 排序栈空间（不计输出），最优。</p></div></section>

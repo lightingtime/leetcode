@@ -37,16 +37,16 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维DP（枚举最后一块平方数）</h3>
     <p><span class="chip">时间 O(n·√n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.8 MB</span><span class="chip">用例 589/589</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0279_PerfectSquares.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int numSquares(int n) {
-        int[] dp = new int[n + 1];
-        Arrays.fill(dp, Integer.MAX_VALUE);
-        dp[0] = 0;
-        for (int i = 1; i &lt;= n; i++) {
-            for (int j = 1; j * j &lt;= i; j++) {
-                dp[i] = Math.min(dp[i], dp[i - j * j ] + 1);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0279_PerfectSquares.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numSquares</span>(<span class="tk-k">int</span> n) {
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>];
+        <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(dp, <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>);
+        dp[<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= n; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j * j &lt;= i; j++) {
+                dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i], dp[i - j * j ] + <span class="tk-n">1</span>);
             }
         }
-        return dp[n];
+        <span class="tk-k">return</span> dp[n];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>求 n 的完全平方数最少数量，本质是「物品无限可用、凑总和最小化物品数」的完全背包/最短路问题：物品是 1、4、9、16…，要凑出总和 n 使个数最少。任何合法拆法都可以看成「最后一块 j² + 剩余 n−j² 的最优拆法」，剩余部分与整体同构且更小，满足最优子结构；枚举所有组合是指数级，DP 自底向上填表避免重复计算。</p><p><strong>关键设计决策</strong></p><ol><li>状态：dp[i] = 和为 i 所需的最少平方数个数；dp[0]=0（和为 0 用 0 个），dp[1..n] 初始化成一个足够大的值（如 n+1），防止 min 把未计算的 0 当成候选。</li><li>转移：dp[i] = min over j=1..⌊√i⌋ (dp[i−j²] + 1)：枚举最后一块 j²，前面部分用已算好的最优子解，+1 数上这一块本身。</li><li>填表顺序：i 从小到大，保证任何候选 dp[i−j²]（下标更小）先就绪——自底向上原则。</li><li>答案：dp[n]。</li></ol><p><strong>边界与细节</strong></p><ul><li>n=1：内层只试 1²，dp[1]=dp[0]+1=1。</li><li>n 本身是平方数：如 4，试到 2² 时 dp[0]+1=1。</li><li>上限大数：n=10000=100²，答案 1；O(n·√n) 约 10^6 次操作，很快。</li><li>溢出安全：dp[i−j²] 下标更小、必已算好，不会拿 MAX_VALUE 参与加法。</li><li>推演 case：n=13。</li></ul><ol><li>dp[0]=0；i=1：j=1 → dp[0]+1=1。</li><li>i=4：j=1 → dp[3]+1=4；j=2 → dp[0]+1=1 → dp[4]=1。</li><li>i=8：j=1 → dp[7]+1=4；j=2 → dp[4]+1=2 → dp[8]=2（4+4）。</li><li>i=13：j=1 → dp[12]+1=4；j=2 → dp[9]+1=2；j=3 → dp[4]+1=2 → dp[13]=2（4+9 或 9+4）✓。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n·√n)：外层 n 个 i，内层最多 ⌊√i⌋ 个候选，Σ√i = O(n·√n)；n≤10^4 时约百万次，可接受。</li><li>空间 O(n)：dp 数组长度 n+1。</li><li>为什么可接受/下限：每个 i 必须比较其全部可用平方数候选才能保证不漏最优（贪心取最大块会错，如 12 取 9 得 4 个而最优 3 个），「枚举最后一块取 min」是这类拆分数 DP 的自然复杂度；另有四平方和定理的数学解法可常数级判定（答案为 1/2/4 的判断），属于特例延伸，DP 是通用可迁移的做法。</li></ul></div></section>

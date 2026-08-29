@@ -37,31 +37,31 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 对顶堆（大顶堆存较小一半 + 小顶堆存较大一半）</h3>
     <p><span class="chip">时间 O(log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 107.4 MB</span><span class="chip">用例 22/22</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0295_FindMedianFromDataStream.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>static class MedianFinder {
-        PriorityQueue&lt;Integer&gt; firstHeap;
-        PriorityQueue&lt;Integer&gt; secondHeap;
-        public MedianFinder() {
-            secondHeap = new PriorityQueue&lt;&gt;();
-            firstHeap = new PriorityQueue&lt;&gt;(Comparator.reverseOrder());
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0295_FindMedianFromDataStream.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">MedianFinder</span> {
+        <span class="tk-t">PriorityQueue</span>&lt;<span class="tk-t">Integer</span>&gt; firstHeap;
+        <span class="tk-t">PriorityQueue</span>&lt;<span class="tk-t">Integer</span>&gt; secondHeap;
+        <span class="tk-k">public</span> <span class="tk-t">MedianFinder</span>() {
+            secondHeap = <span class="tk-k">new</span> <span class="tk-t">PriorityQueue</span>&lt;&gt;();
+            firstHeap = <span class="tk-k">new</span> <span class="tk-t">PriorityQueue</span>&lt;&gt;(<span class="tk-t">Comparator</span>.<span class="tk-f">reverseOrder</span>());
         }
-        public void addNum(int num) {
-            if (firstHeap.isEmpty() || num &lt; firstHeap.peek()) {
-                firstHeap.offer(num);
-                if (secondHeap.size() + 1 &lt; firstHeap.size()) {
-                    secondHeap.offer(firstHeap.poll());
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">addNum</span>(<span class="tk-k">int</span> num) {
+            <span class="tk-k">if</span> (firstHeap.<span class="tk-f">isEmpty</span>() || num &lt; firstHeap.<span class="tk-f">peek</span>()) {
+                firstHeap.<span class="tk-f">offer</span>(num);
+                <span class="tk-k">if</span> (secondHeap.<span class="tk-f">size</span>() + <span class="tk-n">1</span> &lt; firstHeap.<span class="tk-f">size</span>()) {
+                    secondHeap.<span class="tk-f">offer</span>(firstHeap.<span class="tk-f">poll</span>());
                 }
-            } else {
-                secondHeap.offer(num);
-                if (firstHeap.size() &lt; secondHeap.size()) {
-                    firstHeap.offer(secondHeap.poll());
+            } <span class="tk-k">else</span> {
+                secondHeap.<span class="tk-f">offer</span>(num);
+                <span class="tk-k">if</span> (firstHeap.<span class="tk-f">size</span>() &lt; secondHeap.<span class="tk-f">size</span>()) {
+                    firstHeap.<span class="tk-f">offer</span>(secondHeap.<span class="tk-f">poll</span>());
                 }
             }
         }
-        public double findMedian() {
-            if (firstHeap.size() &gt; secondHeap.size()) {
-                return firstHeap.peek();
+        <span class="tk-k">public</span> <span class="tk-k">double</span> <span class="tk-f">findMedian</span>() {
+            <span class="tk-k">if</span> (firstHeap.<span class="tk-f">size</span>() &gt; secondHeap.<span class="tk-f">size</span>()) {
+                <span class="tk-k">return</span> firstHeap.<span class="tk-f">peek</span>();
             }
-            return (firstHeap.peek() + secondHeap.peek()) / 2.0;
+            <span class="tk-k">return</span> (firstHeap.<span class="tk-f">peek</span>() + secondHeap.<span class="tk-f">peek</span>()) / <span class="tk-n">2.0</span>;
         }
     }</pre></div>
   </div></section>

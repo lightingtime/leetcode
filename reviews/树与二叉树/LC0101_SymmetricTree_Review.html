@@ -37,59 +37,59 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归镜像比较</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树高)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 201/201</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0101_SymmetricTree.java · 递归镜像比较</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isSymmetric(TreeNode root) {
-    return isSymmetricHelper(root, root);
+    <div class="code-wrap"><div class="code-head"><span>LC0101_SymmetricTree.java · 递归镜像比较</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetric</span>(<span class="tk-t">TreeNode</span> root) {
+    <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(root, root);
 }
 
-private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
-    if (left == null &amp;&amp; right == null) {
-        return true;
+<span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetricHelper</span>(<span class="tk-t">TreeNode</span> left, <span class="tk-t">TreeNode</span> right) {
+    <span class="tk-k">if</span> (left == <span class="tk-k">null</span> &amp;&amp; right == <span class="tk-k">null</span>) {
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }
-    if (left == null || right == null) {
-        return false;
+    <span class="tk-k">if</span> (left == <span class="tk-k">null</span> || right == <span class="tk-k">null</span>) {
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }
-    if (left.val != right.val) {
-        return false;
+    <span class="tk-k">if</span> (left.val != right.val) {
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }
-    return isSymmetricHelper(left.left, right.right) &amp;&amp; isSymmetricHelper(left.right, right.left);
+    <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(left.left, right.right) &amp;&amp; <span class="tk-f">isSymmetricHelper</span>(left.right, right.left);
 }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈成对比较</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树宽)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 201/201</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0101_SymmetricTree.java · 迭代栈成对比较</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public boolean isSymmetric(TreeNode root) {
-        Deque&lt;TreeNode&gt; stack = new LinkedList&lt;&gt;();
-        stack.push(root);
-        stack.push(root);
-        while (!stack.isEmpty()) {
-            TreeNode left = stack.pop(), right = stack.pop();
-            if (left == null &amp;&amp; right == null) {
-                continue;
+    <div class="code-wrap"><div class="code-head"><span>LC0101_SymmetricTree.java · 迭代栈成对比较</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetric</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+        stack.<span class="tk-f">push</span>(root);
+        stack.<span class="tk-f">push</span>(root);
+        <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-t">TreeNode</span> left = stack.<span class="tk-f">pop</span>(), right = stack.<span class="tk-f">pop</span>();
+            <span class="tk-k">if</span> (left == <span class="tk-k">null</span> &amp;&amp; right == <span class="tk-k">null</span>) {
+                <span class="tk-k">continue</span>;
             }
-            if (left == null || right == null) {
-                return false;
+            <span class="tk-k">if</span> (left == <span class="tk-k">null</span> || right == <span class="tk-k">null</span>) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            if (left.val != right.val) {
-                return false;
+            <span class="tk-k">if</span> (left.val != right.val) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            stack.push(left.left);
-            stack.push(right.right);
-            stack.push(left.right);
-            stack.push(right.left);
+            stack.<span class="tk-f">push</span>(left.left);
+            stack.<span class="tk-f">push</span>(right.right);
+            stack.<span class="tk-f">push</span>(left.right);
+            stack.<span class="tk-f">push</span>(right.left);
         }
-        return stack.isEmpty();
+        <span class="tk-k">return</span> stack.<span class="tk-f">isEmpty</span>();
     }
 
-    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {
-        if (left == null &amp;&amp; right == null) {
-            return true;
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetricHelper</span>(<span class="tk-t">TreeNode</span> left, <span class="tk-t">TreeNode</span> right) {
+        <span class="tk-k">if</span> (left == <span class="tk-k">null</span> &amp;&amp; right == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
-        if (left == null || right == null) {
-            return false;
+        <span class="tk-k">if</span> (left == <span class="tk-k">null</span> || right == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        if (left.val != right.val) {
-            return false;
+        <span class="tk-k">if</span> (left.val != right.val) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        return isSymmetricHelper(left.left, right.right) &amp;&amp; isSymmetricHelper(left.right, right.left);
+        <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(left.left, right.right) &amp;&amp; <span class="tk-f">isSymmetricHelper</span>(left.right, right.left);
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：树关于根镜像对称 ⟺ 左子树与右子树互为镜像。比较两棵子树时要交叉：p 的左对 q 的右、p 的右对 q 的左。</p><p>关键设计：递归 helper(left, right)：都空返回 true、一空返回 false、值不等返回 false，否则递归 (left.left, right.right) &amp;&amp; (left.right, right.left)；入口调用 isSymmetricHelper(root, root)。代码里同时有迭代栈版本（成对压入再成对弹出比较）和递归版本，思路一致。</p><p>边界：空树 true；单节点 true；结构对称但值不对称；值对称但结构不对称（null 位置不同）——必须同时检查空与值。</p><p>复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（h 为树高），最优。</p></div></section>

@@ -37,55 +37,55 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 哈希表+快速选择</h3>
     <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(m)</span><span class="chip">内存 ≈ 45.8 MB</span><span class="chip">用例 25/25</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0347_TopKFrequentElements.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[] topKFrequent(int[] nums, int k) {
-        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
-        for (int num : nums) {
-            map.merge(num, 1, Integer::sum);
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0347_TopKFrequentElements.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+            map.<span class="tk-f">merge</span>(num, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
         }
-        List&lt;Node&gt; list = new ArrayList&lt;&gt;();
-        map.forEach((value, freq) -&gt; {
-            list.add(new Node(value, freq));
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Node</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        map.<span class="tk-f">forEach</span>((value, freq) -&gt; {
+            list.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">Node</span>(value, freq));
         });
-        quickSelect(list, 0, list.size() - 1, list.size() - k);
-        int[] ans = new int[k];
-        for (int i = 0; i &lt; k; i++) {
-            ans[i] = list.get(list.size() - k + i).value;
+        <span class="tk-f">quickSelect</span>(list, <span class="tk-n">0</span>, list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>, list.<span class="tk-f">size</span>() - k);
+        <span class="tk-k">int</span>[] ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[k];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; k; i++) {
+            ans[i] = list.<span class="tk-f">get</span>(list.<span class="tk-f">size</span>() - k + i).value;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }
 
-    private void quickSelect(List&lt;Node&gt; list, int l, int r, int k) {
-        if (l == r) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">quickSelect</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">Node</span>&gt; list, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span>;
         }
-        int x = list.get(l).freq, i = l - 1, j = r + 1;
-        while (i &lt; j) {
-            do {
+        <span class="tk-k">int</span> x = list.<span class="tk-f">get</span>(l).freq, i = l - <span class="tk-n">1</span>, j = r + <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt; j) {
+            <span class="tk-k">do</span> {
                 i++;
-            } while (x &gt; list.get(i).freq);
-            do {
+            } <span class="tk-k">while</span> (x &gt; list.<span class="tk-f">get</span>(i).freq);
+            <span class="tk-k">do</span> {
                 j--;
-            } while (x &lt; list.get(j).freq);
-            if (i &lt; j) {
-                Node temp = list.get(i);
-                list.set(i, list.get(j));
-                list.set(j, temp);
+            } <span class="tk-k">while</span> (x &lt; list.<span class="tk-f">get</span>(j).freq);
+            <span class="tk-k">if</span> (i &lt; j) {
+                <span class="tk-t">Node</span> temp = list.<span class="tk-f">get</span>(i);
+                list.<span class="tk-f">set</span>(i, list.<span class="tk-f">get</span>(j));
+                list.<span class="tk-f">set</span>(j, temp);
             }
         }
-        if (k &lt;= j) {
-            quickSelect(list, l, j, k);
-        } else {
-            quickSelect(list, j + 1, r, k);
+        <span class="tk-k">if</span> (k &lt;= j) {
+            <span class="tk-f">quickSelect</span>(list, l, j, k);
+        } <span class="tk-k">else</span> {
+            <span class="tk-f">quickSelect</span>(list, j + <span class="tk-n">1</span>, r, k);
         }
     }
 
-    class Node {
-        Integer value;
-        Integer freq;
+    <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+        <span class="tk-t">Integer</span> value;
+        <span class="tk-t">Integer</span> freq;
 
-        public Node(Integer value, Integer freq) {
-            this.value = value;
-            this.freq = freq;
+        <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-t">Integer</span> value, <span class="tk-t">Integer</span> freq) {
+            <span class="tk-k">this</span>.value = value;
+            <span class="tk-k">this</span>.freq = freq;
         }
     }</pre></div>
   </div></section>

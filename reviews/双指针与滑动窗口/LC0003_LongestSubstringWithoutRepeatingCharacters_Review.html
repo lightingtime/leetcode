@@ -37,22 +37,22 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 滑动窗口+哈希表</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.1 MB</span><span class="chip">用例 1036/1036</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int lengthOfLongestSubstring(String s) {
-        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
-        int max = 0;
-        int start = 0;
-        for (int i = 0; i &lt; s.length(); i++) {
-            char c = s.charAt(i);
-            if (!map.containsKey(c) || map.get(c) &lt; start) {
-                map.put(c, i);
-            } else {
-                max = Math.max(max, i - start);
-                start = map.get(c) + 1;
-                map.put(c, i);
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Character</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
+            <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(c) || map.<span class="tk-f">get</span>(c) &lt; start) {
+                map.<span class="tk-f">put</span>(c, i);
+            } <span class="tk-k">else</span> {
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, i - start);
+                start = map.<span class="tk-f">get</span>(c) + <span class="tk-n">1</span>;
+                map.<span class="tk-f">put</span>(c, i);
             }
         }
-        max = Math.max(max, s.length() - start);
-        return max;
+        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, s.<span class="tk-f">length</span>() - start);
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找不含重复字符的最长连续子串长度。滑动窗口：窗口 [start, i] 内保持无重复，右端逐个扩张，遇重复就把左端跳到重复位置之后。</p><p>关键设计：HashMap 记录每个字符最近一次出现的下标。遇到 c 时若 c 出现过且位置 ≥ start（即在当前窗口内），窗口左端 start 跳到上次出现位置 +1；若旧位置 &lt; start，说明在窗口外，不构成重复。每次更新 max = max(max, i-start+1)。</p><p>边界：空串返回 0；整个串无重复时最后一次比较 s.length()-start 不能漏；重复字符恰在窗口左边界（如 abca）时 start 正确右移；「出现过」和「位置在窗口内」两个条件缺一不可。</p><p>复杂度：O(n) 时间（每个字符至多进出窗口一次）、O(字符集大小) 空间，最优。</p></div></section>

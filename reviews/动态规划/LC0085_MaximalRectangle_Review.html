@@ -37,31 +37,31 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单调栈 + 逐行高度</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 48.7 MB</span><span class="chip">用例 76/76</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0085_MaximalRectangle.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maximalRectangle(char[][] matrix) {
-        int m = matrix.length;
-        int n = matrix[0].length;
-        int[] heights = new int[n + 2];
-        int max = 0;
-        for (int i = 0; i &lt; m; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                if (i == 0) {
-                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;
-                } else {
-                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0085_MaximalRectangle.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maximalRectangle</span>(<span class="tk-k">char</span>[][] matrix) {
+        <span class="tk-k">int</span> m = matrix.length;
+        <span class="tk-k">int</span> n = matrix[<span class="tk-n">0</span>].length;
+        <span class="tk-k">int</span>[] heights = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>];
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (i == <span class="tk-n">0</span>) {
+                    heights[j + <span class="tk-n">1</span>] = matrix[i][j] == <span class="tk-s">'1'</span> ? <span class="tk-n">1</span> : <span class="tk-n">0</span>;
+                } <span class="tk-k">else</span> {
+                    heights[j + <span class="tk-n">1</span>] = matrix[i][j] == <span class="tk-s">'1'</span> ? (<span class="tk-n">1</span> + heights[j + <span class="tk-n">1</span>]): <span class="tk-n">0</span>;
                 }
             }
-            Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
-            for (int j = 0; j &lt; heights.length; j++) {
-                while (!stack.isEmpty() &amp;&amp; heights[stack.peekLast()] &gt; heights[j]) {
-                    int height = heights[stack.pollLast()];
-                    int width = j - stack.peekLast() - 1;
-                    int area = height * width;
-                    max = Math.max(max, area);
+            <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; heights.length; j++) {
+                <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; heights[stack.<span class="tk-f">peekLast</span>()] &gt; heights[j]) {
+                    <span class="tk-k">int</span> height = heights[stack.<span class="tk-f">pollLast</span>()];
+                    <span class="tk-k">int</span> width = j - stack.<span class="tk-f">peekLast</span>() - <span class="tk-n">1</span>;
+                    <span class="tk-k">int</span> area = height * width;
+                    max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, area);
                 }
-                stack.offerLast(j);
+                stack.<span class="tk-f">offerLast</span>(j);
             }
         }
-        return max;
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在 0/1 矩阵中找只含 1 的最大矩形面积。直接枚举矩形四个边界再验证是 O(R^3*C) 不可行；关键转化是把它拆成「逐行维护高度 + 一维直方图最大矩形」两个子问题。</p><p>解法选择理由：</p><ul><li>固定某一行作为矩形的底边时，每一列能向上延伸的连续 1 的个数就是该列的高度，所有列拼成一个直方图；原问题变成「这个直方图里面积最大的矩形」。</li><li>直方图最大矩形用单调栈可在 O(C) 内求出：每个柱子作为高度时，向左右第一个比它矮的柱子之间就是它能撑起的最大宽度。</li><li>逐行扫描时高度可以 O(1) 递推：当前格是 '1' 则高度 = 上一行高度 + 1，是 '0' 则清零，不需要重新扫描整列。</li></ul><p>关键设计：</p><ol><li><code>heights[j+1]</code> 表示第 j 列当前行的高度，数组开 <code>n+2</code> 长度，<code>heights[0]</code> 与 <code>heights[n+1]</code> 都是 0 哨兵，避免弹栈后空栈特判。</li><li>每行结束后对 <code>heights</code> 跑一次单调栈：栈存<strong>列下标</strong>，遇到比栈顶矮的柱子就弹出，弹出时高度 = 该柱子高度，宽度 = 当前下标 - 新栈顶 - 1。</li><li>每行都新建栈；全程用 <code>max</code> 累计全局最大值。</li></ol><p>具体 case 推演（示例 1 矩阵）：</p><div class="table-wrap"><table><thead><tr><th>行</th><th>处理后 heights</th><th>该行直方图最大</th></tr></thead><tbody><tr><td>0</td><td>[0,1,0,1,0,0,0]</td><td>1</td></tr><tr><td>1</td><td>[0,2,0,2,1,1,0]</td><td>2（高 2 宽 1 或高 1 宽 2）</td></tr><tr><td>2</td><td>[0,3,1,3,2,2,0]</td><td>6（高 2 宽 3，列 2~4）</td></tr><tr><td>3</td><td>[0,4,0,0,3,0,0]</td><td>3</td></tr></tbody></table></div><p>最大面积 = 6。</p><p>再推演单行直方图 <code>[2,1,2]</code>（单调栈过程）：</p><ul><li>下标 0（高 2）入栈；下标 1（高 1）比栈顶矮，弹出下标 0：宽度 = 1-(-1)-1 = 1，面积 2×1 = 2。</li><li>下标 1 入栈；下标 2（高 2）不入栈？高度相等用 <code>&gt;</code> 不弹，先入栈。</li><li>右哨兵 0 到达：弹出下标 2（宽度 1，面积 2），再弹下标 1（宽度 3，面积 3）。</li><li>最大 3，对应整个直方图横跨。</li></ul><p>边界与细节：</p><ul><li>全 0 矩阵：高度全 0，单调栈不产生任何面积，返回 0。</li><li>单行/单列：高度递推与哨兵同样生效。</li><li>全 1 大矩阵（如 30x30）：每行直方图都是 [0,30,...,30,0]，单调栈一次弹出算出 900。</li><li>上下两段被全 0 行隔开：0 行会把高度清零，两段不会错误合并。</li><li>栈内必须存列下标 j，存行号会导致 heights 错位访问与空栈 NPE（本地测试曾暴露）。</li></ul><p>复杂度分析：</p><ul><li>时间 O(R*C)：每格 O(1) 更新高度，每行单调栈 O(C)，总 O(R*C)，已达下界（每个格子至少要看一次）。</li><li>空间 O(C)：heights 数组 + 栈，与行数无关。</li><li>这是本题最优解；相比 DP 记录每行左/右边界再 O(C) 扫描的写法，单调栈思路更统一且常数更小。</li></ul></div></section>

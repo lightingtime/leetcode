@@ -37,21 +37,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单调递增栈+哨兵</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 85.4 MB</span><span class="chip">用例 99/99</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0084_LargestRectangleInHistogram.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int largestRectangleArea(int[] heights) {
-        int[] newHeights = new int[heights.length + 2];
-        System.arraycopy(heights, 0, newHeights, 1, heights.length);
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0084_LargestRectangleInHistogram.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">largestRectangleArea</span>(<span class="tk-k">int</span>[] heights) {
+        <span class="tk-k">int</span>[] newHeights = <span class="tk-k">new</span> <span class="tk-k">int</span>[heights.length + <span class="tk-n">2</span>];
+        <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(heights, <span class="tk-n">0</span>, newHeights, <span class="tk-n">1</span>, heights.length);
         heights = newHeights;
-        int max = 0;
-        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
-        for (int i = 0; i &lt; heights.length; i++) {
-            while (!stack.isEmpty() &amp;&amp; heights[stack.peekLast()] &gt; heights[i]) {
-                int height = heights[stack.pollLast()];
-                int width = i - stack.peekLast() - 1;
-                max = Math.max(max, height * width);
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; heights.length; i++) {
+            <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; heights[stack.<span class="tk-f">peekLast</span>()] &gt; heights[i]) {
+                <span class="tk-k">int</span> height = heights[stack.<span class="tk-f">pollLast</span>()];
+                <span class="tk-k">int</span> width = i - stack.<span class="tk-f">peekLast</span>() - <span class="tk-n">1</span>;
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, height * width);
             }
-            stack.offerLast(i);
+            stack.<span class="tk-f">offerLast</span>(i);
         }
-        return max;
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：每个柱子能形成的最大矩形 = 柱高 × 左右第一个更矮柱子之间的宽度。暴力枚举每对边界 O(n²)；单调栈让每个柱子只结算一次。</p><p>关键设计：单调递增栈存下标。遇到比栈顶矮的柱子时，栈顶柱子作为高被弹出结算：其左边界是栈内前一个下标、右边界是当前 i，宽度 = i - 栈内前一个 - 1。在数组两端补高度 0 的哨兵，保证所有柱子最终必然出栈、且结算时栈不为空。</p><p>边界：全部递增时靠末尾哨兵逐个结算；全部相等（用 &gt; 弹出，相等延后结算但宽度照样覆盖整个区间）；单柱；连续多个可弹出的柱子依次结算。</p><p>复杂度：O(n) 时间（每个下标入栈出栈各一次）、O(n) 空间，最优。</p></div></section>

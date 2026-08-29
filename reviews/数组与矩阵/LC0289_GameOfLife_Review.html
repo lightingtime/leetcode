@@ -37,42 +37,42 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双状态编码(-1/-2)两阶段原地模拟</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 23/23</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0289_GameOfLife.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void gameOfLife(int[][] board) {
-        for (int i = 0; i &lt; board.length; i++) {
-            for (int j = 0; j &lt; board[0].length; j++) {
-                judge(board, i, j);
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0289_GameOfLife.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">gameOfLife</span>(<span class="tk-k">int</span>[][] board) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; board.length; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; board[<span class="tk-n">0</span>].length; j++) {
+                <span class="tk-f">judge</span>(board, i, j);
             }
         }
-        for (int i = 0; i &lt; board.length; i++) {
-            for (int j = 0; j &lt; board[0].length; j++) {
-                if (board[i][j] == -1) {
-                    board[i][j] = 0;
-                } else if (board[i][j] == -2) {
-                    board[i][j] = 1;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; board.length; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; board[<span class="tk-n">0</span>].length; j++) {
+                <span class="tk-k">if</span> (board[i][j] == -<span class="tk-n">1</span>) {
+                    board[i][j] = <span class="tk-n">0</span>;
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (board[i][j] == -<span class="tk-n">2</span>) {
+                    board[i][j] = <span class="tk-n">1</span>;
                 }
             }
         }
     }
 
-    private void judge(int[][] board, int i, int j) {
-        int[][] dirs = new int[][]{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
-        int live = 0;
-        for (int[] dir : dirs) {
-            int x = i + dir[0];
-            int y = j + dir[1];
-            if (x &gt;= 0 &amp;&amp; x &lt; board.length &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; board[0].length) {
-                if (board[x][y] == 1 || board[x][y] == -1) {
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">judge</span>(<span class="tk-k">int</span>[][] board, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">int</span>[][] dirs = <span class="tk-k">new</span> <span class="tk-k">int</span>[][]{{-<span class="tk-n">1</span>, -<span class="tk-n">1</span>}, {-<span class="tk-n">1</span>, <span class="tk-n">0</span>}, {-<span class="tk-n">1</span>, <span class="tk-n">1</span>}, {<span class="tk-n">0</span>, -<span class="tk-n">1</span>}, {<span class="tk-n">0</span>, <span class="tk-n">1</span>}, {<span class="tk-n">1</span>, -<span class="tk-n">1</span>}, {<span class="tk-n">1</span>, <span class="tk-n">0</span>}, {<span class="tk-n">1</span>, <span class="tk-n">1</span>}};
+        <span class="tk-k">int</span> live = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span>[] dir : dirs) {
+            <span class="tk-k">int</span> x = i + dir[<span class="tk-n">0</span>];
+            <span class="tk-k">int</span> y = j + dir[<span class="tk-n">1</span>];
+            <span class="tk-k">if</span> (x &gt;= <span class="tk-n">0</span> &amp;&amp; x &lt; board.length &amp;&amp; y &gt;= <span class="tk-n">0</span> &amp;&amp; y &lt; board[<span class="tk-n">0</span>].length) {
+                <span class="tk-k">if</span> (board[x][y] == <span class="tk-n">1</span> || board[x][y] == -<span class="tk-n">1</span>) {
                     live++;
                 }
             }
         }
-        if (board[i][j] == 1) {
-            if (live &lt; 2 || live &gt; 3) {
-                board[i][j] = -1;
+        <span class="tk-k">if</span> (board[i][j] == <span class="tk-n">1</span>) {
+            <span class="tk-k">if</span> (live &lt; <span class="tk-n">2</span> || live &gt; <span class="tk-n">3</span>) {
+                board[i][j] = -<span class="tk-n">1</span>;
             }
-        } else if (board[i][j] == 0) {
-            if (live == 3) {
-                board[i][j] = -2;
+        } <span class="tk-k">else</span> <span class="tk-k">if</span> (board[i][j] == <span class="tk-n">0</span>) {
+            <span class="tk-k">if</span> (live == <span class="tk-n">3</span>) {
+                board[i][j] = -<span class="tk-n">2</span>;
             }
         }
     }</pre></div>

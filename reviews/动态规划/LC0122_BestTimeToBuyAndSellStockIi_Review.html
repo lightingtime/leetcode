@@ -37,26 +37,26 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 状态机DP</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)可滚动O(1)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 203/203</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0122_BestTimeToBuyAndSellStockIi.java · 状态机DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxProfit(int[] prices) {
-    int[][] dp = new int[prices.length][2];
-    dp[0][1] = -prices[0];
-    for (int i = 1; i &lt; prices.length; i++) {
-        dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
-        dp[i][1] = Math.max(dp[i - 1][0] - prices[i], dp[i - 1][1]);
+    <div class="code-wrap"><div class="code-head"><span>LC0122_BestTimeToBuyAndSellStockIi.java · 状态机DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProfit</span>(<span class="tk-k">int</span>[] prices) {
+    <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[prices.length][<span class="tk-n">2</span>];
+    dp[<span class="tk-n">0</span>][<span class="tk-n">1</span>] = -prices[<span class="tk-n">0</span>];
+    <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; prices.length; i++) {
+        dp[i][<span class="tk-n">0</span>] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i - <span class="tk-n">1</span>][<span class="tk-n">0</span>], dp[i - <span class="tk-n">1</span>][<span class="tk-n">1</span>] + prices[i]);
+        dp[i][<span class="tk-n">1</span>] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i - <span class="tk-n">1</span>][<span class="tk-n">0</span>] - prices[i], dp[i - <span class="tk-n">1</span>][<span class="tk-n">1</span>]);
     }
-    return dp[prices.length - 1][0];
+    <span class="tk-k">return</span> dp[prices.length - <span class="tk-n">1</span>][<span class="tk-n">0</span>];
 }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 贪心累加正差价</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.4 MB</span><span class="chip">用例 203/203</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0122_BestTimeToBuyAndSellStockIi.java · 贪心累加正差价</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxProfit(int[] prices) {
-    int max = 0;
-    for (int i = 1; i &lt; prices.length; i++) {
-        if (prices[i] &gt; prices[i - 1]) {
-            max += (prices[i] - prices[i - 1]);
+    <div class="code-wrap"><div class="code-head"><span>LC0122_BestTimeToBuyAndSellStockIi.java · 贪心累加正差价</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProfit</span>(<span class="tk-k">int</span>[] prices) {
+    <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+    <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; prices.length; i++) {
+        <span class="tk-k">if</span> (prices[i] &gt; prices[i - <span class="tk-n">1</span>]) {
+            max += (prices[i] - prices[i - <span class="tk-n">1</span>]);
         }
     }
-    return max;
+    <span class="tk-k">return</span> max;
 }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><h2>① 问题本质与解法选择</h2><ul><li>本质：交易次数不限、每次至多持有一股，最大化累计利润。两个等价建模视角：状态机 DP（空仓/持有两状态逐天转移）与贪心（累加所有正相邻差价）。</li><li>关系：贪心是状态机的极限简化——不限次数时，「每个上涨相邻差值都兑现」等价于「每个局部低点买入、高点卖出」，两者利润一致。</li></ul><h2>② 关键设计决策（两写法对照）</h2><div class="table-wrap"><table><thead><tr><th>写法</th><th>状态机 DP</th><th>贪心</th></tr></thead><tbody><tr><td>状态</td><td>dp[i][0] 空仓 / dp[i][1] 持有</td><td>无状态，单变量累加</td></tr><tr><td>转移</td><td>空仓=max(昨空, 昨持+今天价)；持有=max(昨空-今天价, 昨持)</td><td>profit += max(0, prices[i]-prices[i-1])</td></tr><tr><td>初值</td><td>dp[0][1]=-prices[0]（第 0 天买入）</td><td>profit=0</td></tr><tr><td>答案</td><td>dp[n-1][0]</td><td>profit</td></tr><tr><td>复杂度</td><td>O(n)/O(n)</td><td>O(n)/O(1)</td></tr></tbody></table></div><h2>③ 具体 case 推演</h2><p>边界4 [1,2,1,2] 贪心逐差：</p><div class="table-wrap"><table><thead><tr><th>i</th><th>prices[i]</th><th>差价</th><th>累计 profit</th></tr></thead><tbody><tr><td>1</td><td>2</td><td>2-1=1&gt;0 → +1</td><td>1</td></tr><tr><td>2</td><td>1</td><td>1-2=-1&lt;0 → +0</td><td>1</td></tr><tr><td>3</td><td>2</td><td>2-1=1&gt;0 → +1</td><td>2</td></tr></tbody></table></div><p>结果 2 ✓（买1卖2 + 买1卖2）。单调增 [1,2,3,4,5]：1+1+1+1=4，等于第 1 天买第 5 天卖——证明逐差相加与整段持有等价。单调减 [7,6,4,3,1]：无正差价 → 0 ✓。</p><h2>④ 边界与细节</h2><ul><li>单日：循环不执行 → 0</li><li>全相同：差价全 0 → 0</li><li>含 0 价（约束允许）：0 买 1 卖赚 1</li><li>长度 30000 上限交替 1,2：15000 个 +1 → 15000</li><li>溢出：答案上界约 1.5×10^8 &lt; 2^31-1，int 安全（题目亦保证）</li></ul><h2>⑤ 复杂度与下限论证</h2><ul><li>时间 O(n)：必须读一遍所有差价，Ω(n) 是下限</li><li>空间 O(1)：贪心无额外数组，已达下限；状态机 DP 的 O(n) 可滚动到 O(1)</li><li>贪心正确性：任意交易收益 = Σ(卖出-买入)，可展开为一串相邻差值的带符号和；正差价互不重叠地对应各段上涨，负差价（下跌段）跳过即等价于不参与。取每个正差价构成全局最优。</li></ul></div></section>

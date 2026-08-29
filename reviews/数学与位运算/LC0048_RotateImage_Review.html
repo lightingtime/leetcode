@@ -37,19 +37,19 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 对称变换（上下翻转+转置）</h3>
     <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.0 MB</span><span class="chip">用例 21/21</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0048_RotateImage.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void rotate(int[][] matrix) {
-        int n = matrix.length;
-        for (int i = 0; i &lt; n / 2; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[n - i - 1][j];
-                matrix[n - i - 1][j] = temp;
+    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0048_RotateImage.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">rotate</span>(<span class="tk-k">int</span>[][] matrix) {
+        <span class="tk-k">int</span> n = matrix.length;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n / <span class="tk-n">2</span>; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                <span class="tk-k">int</span> temp = matrix[i][j];
+                matrix[i][j] = matrix[n - i - <span class="tk-n">1</span>][j];
+                matrix[n - i - <span class="tk-n">1</span>][j] = temp;
             }
         }
 
-        for (int i = 0; i &lt; n; i++) {
-            for (int j = 0; j &lt;= i; j++) {
-                int temp = matrix[i][j];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt;= i; j++) {
+                <span class="tk-k">int</span> temp = matrix[i][j];
                 matrix[i][j] = matrix[j][i];
                 matrix[j][i] = temp;
             }

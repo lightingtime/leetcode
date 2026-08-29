@@ -37,45 +37,45 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DFS 回溯 + visited 剪枝</h3>
     <p><span class="chip">时间 O(m*n*3^L)</span><span class="chip">空间 O(L+m*n)</span><span class="chip">内存 ≈ 45.0 MB</span><span class="chip">用例 88/88</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0079_WordSearch.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>boolean[][] visited;
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0079_WordSearch.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[][] visited;
 
-    public boolean exist(char[][] board, String word) {
-        int m = board.length;
-        int n = board[0].length;
-        visited = new boolean[m][n];
-        boolean ans = false;
-        int index = 0;
-        for (int i = 0; i &lt; m; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                ans = ans || dfs(board, i, j, index, word);
+    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">exist</span>(<span class="tk-k">char</span>[][] board, <span class="tk-t">String</span> word) {
+        <span class="tk-k">int</span> m = board.length;
+        <span class="tk-k">int</span> n = board[<span class="tk-n">0</span>].length;
+        visited = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[m][n];
+        <span class="tk-k">boolean</span> ans = <span class="tk-k">false</span>;
+        <span class="tk-k">int</span> index = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                ans = ans || <span class="tk-f">dfs</span>(board, i, j, index, word);
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }
 
-    private boolean dfs(char[][] board, int i, int j, int index, String word) {
-        if (index == word.length()) {
-            return true;
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] board, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j, <span class="tk-k">int</span> index, <span class="tk-t">String</span> word) {
+        <span class="tk-k">if</span> (index == word.<span class="tk-f">length</span>()) {
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
-        if (i &lt; 0 || i &gt;= board.length || j &lt; 0 || j &gt;= board[0].length) {
-            return false;
+        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || i &gt;= board.length || j &lt; <span class="tk-n">0</span> || j &gt;= board[<span class="tk-n">0</span>].length) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        if (visited[i][j]) {
-            return false;
+        <span class="tk-k">if</span> (visited[i][j]) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        if (board[i][j] != word.charAt(index)) {
-            return false;
+        <span class="tk-k">if</span> (board[i][j] != word.<span class="tk-f">charAt</span>(index)) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        visited[i][j] = true;
-        int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        boolean ans = false;
-        for (int[] dir : dirs) {
-            int x = i + dir[0];
-            int y = j + dir[1];
-            ans = ans || dfs(board, x, y, index + 1, word);
+        visited[i][j] = <span class="tk-k">true</span>;
+        <span class="tk-k">int</span>[][] dirs = <span class="tk-k">new</span> <span class="tk-k">int</span>[][]{{-<span class="tk-n">1</span>, <span class="tk-n">0</span>}, {<span class="tk-n">1</span>, <span class="tk-n">0</span>}, {<span class="tk-n">0</span>, -<span class="tk-n">1</span>}, {<span class="tk-n">0</span>, <span class="tk-n">1</span>}};
+        <span class="tk-k">boolean</span> ans = <span class="tk-k">false</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span>[] dir : dirs) {
+            <span class="tk-k">int</span> x = i + dir[<span class="tk-n">0</span>];
+            <span class="tk-k">int</span> y = j + dir[<span class="tk-n">1</span>];
+            ans = ans || <span class="tk-f">dfs</span>(board, x, y, index + <span class="tk-n">1</span>, word);
         }
-        visited[i][j] = false;
-        return ans;
+        visited[i][j] = <span class="tk-k">false</span>;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在 m×n 网格中判断单词是否存在——按字母顺序走水平/垂直相邻格，同一格不能重复使用。这是网格上的路径搜索，DFS（回溯）天然适配：沿一条路径深入匹配，走不通就撤销回退换方向。</p><p>关键设计：</p><ol><li>状态：dfs(i, j, index) 表示当前站在 (i,j)、要匹配 word 的第 index 个字母；visited[i][j] 记录当前路径是否占用过该格；</li><li>终止条件：index == word.length() 时所有字母已匹配，返回 true——这个判断必须在访问 board 之前做，否则匹配完还会越界访问；</li><li>剪枝顺序：越界 → visited → 字母不相等，任一不满足直接返回 false；只有字母相等才继续深入；</li><li>主循环：word 第一个字母可能出现在任意格，遍历全部格子作为起点；</li><li>选择/撤销对称：匹配当前格后 visited[i][j]=true，向四个方向递归 index+1，全部方向结束后 visited[i][j]=false。</li></ol><p>具体 case 推演：</p><ul><li>命中：board=[[A,B],[C,D]]，word=「AC」：从 (0,0) 的 A 匹配 index=0 → 标记 visited → 向下到 (1,0) 的 C 匹配 index=1 → 进入下一层时 index==2 返回 true；</li><li>撤销的必要性：board=[[A,A]]，word=「AAA」：从 (0,0) 匹配后向右到 (0,1)，index=2 时已无路可走返回 false；若返回时未把 (0,1) 还原，其他起点的搜索会误以为该格被占用；</li><li>成功路径依赖逐层还原：2×2 全 A 网格找「AAA」，(0,0)→(0,1)→(1,1) 能走通，前提是每层返回时都把上一格释放；</li><li>同一格不可重复用（示例 3）：word=「ABCB」走 A(0,0)→B(0,1)→C(0,2) 后想再找 B 只能回到 (0,1)，但 visited 已标记 → false。</li></ul><p>边界与细节：</p><ul><li>单词长度为 1：任意格字母相等即 true；</li><li>词比格子总数还长时必然 false（路径长度上限 = 格子数）；</li><li>斜对角不算相邻，只能上下左右；单行/单列网格由越界判断自然处理。</li></ul><p>复杂度分析：</p><ul><li>时间 O(m·n·3^L)：m·n 个起点，每个起点最多探索 3^L 条路径（除回头方向外每步 3 个选择），L 为单词长度；</li><li>空间 O(L + m·n)：递归栈深度 L + visited 数组。</li></ul><p>为什么是可接受/最优：单词搜索没有多项式优化的一般算法（网格字符可任意重复），标准做法就是 DFS + 剪枝；O(m·n·3^L) 是本题标准复杂度，visited 与字母不匹配两层剪枝把实际搜索量压得很低。</p></div></section>

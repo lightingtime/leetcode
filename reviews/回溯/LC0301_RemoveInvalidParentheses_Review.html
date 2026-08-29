@@ -37,62 +37,62 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 预扫描预算 + 每层删一个位置的回溯（连续相同去重）</h3>
     <p><span class="chip">时间 O(2^n)</span><span class="chip">空间 O(n²)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 129/129</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0301_RemoveInvalidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;String&gt; ans;
-    public List&lt;String&gt; removeInvalidParentheses(String s) {
-        ans = new ArrayList&lt;&gt;();
-        int balance = 0;
-        int needR = 0, needL;
-        for (char c : s.toCharArray()) {
-            if (c == '(') {
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0301_RemoveInvalidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">removeInvalidParentheses</span>(<span class="tk-t">String</span> s) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">int</span> balance = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> needR = <span class="tk-n">0</span>, needL;
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : s.<span class="tk-f">toCharArray</span>()) {
+            <span class="tk-k">if</span> (c == <span class="tk-s">'('</span>) {
                 balance++;
-            } else if (c == ')') {
-                if (balance == 0) {
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">')'</span>) {
+                <span class="tk-k">if</span> (balance == <span class="tk-n">0</span>) {
                     needR++;
-                } else {
+                } <span class="tk-k">else</span> {
                     balance--;
                 }
             }
         }
         needL = balance;
-        dfs(s, 0, needL, needR);
-        return ans;
+        <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, needL, needR);
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(String cur, int index, int needL, int needR) {
-        if (needL == 0 &amp;&amp; needR == 0) {
-            if (isValid(cur)) {
-                ans.add(cur);
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> cur, <span class="tk-k">int</span> index, <span class="tk-k">int</span> needL, <span class="tk-k">int</span> needR) {
+        <span class="tk-k">if</span> (needL == <span class="tk-n">0</span> &amp;&amp; needR == <span class="tk-n">0</span>) {
+            <span class="tk-k">if</span> (<span class="tk-f">isValid</span>(cur)) {
+                ans.<span class="tk-f">add</span>(cur);
             }
-            return;
+            <span class="tk-k">return</span>;
         }
 
-        for (int i = index; i &lt; cur.length(); i++) {
-            if (i &gt; index &amp;&amp; cur.charAt(i) == cur.charAt(i - 1)) {
-                continue;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = index; i &lt; cur.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">if</span> (i &gt; index &amp;&amp; cur.<span class="tk-f">charAt</span>(i) == cur.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>)) {
+                <span class="tk-k">continue</span>;
             }
-            String newStr = cur.substring(0, i) + cur.substring(i + 1);
-            if (cur.charAt(i) == '(' &amp;&amp; needL &gt; 0) {
-                dfs(newStr, i, needL - 1, needR);
+            <span class="tk-t">String</span> newStr = cur.<span class="tk-f">substring</span>(<span class="tk-n">0</span>, i) + cur.<span class="tk-f">substring</span>(i + <span class="tk-n">1</span>);
+            <span class="tk-k">if</span> (cur.<span class="tk-f">charAt</span>(i) == <span class="tk-s">'('</span> &amp;&amp; needL &gt; <span class="tk-n">0</span>) {
+                <span class="tk-f">dfs</span>(newStr, i, needL - <span class="tk-n">1</span>, needR);
             }
-            if (cur.charAt(i) == ')' &amp;&amp; needR &gt; 0) {
-                dfs(newStr, i, needL, needR - 1);
+            <span class="tk-k">if</span> (cur.<span class="tk-f">charAt</span>(i) == <span class="tk-s">')'</span> &amp;&amp; needR &gt; <span class="tk-n">0</span>) {
+                <span class="tk-f">dfs</span>(newStr, i, needL, needR - <span class="tk-n">1</span>);
             }
         }
     }
 
-    private boolean isValid(String cur) {
-        int remain = 0;
-        for (char c : cur.toCharArray()) {
-            if (c == '(') {
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">isValid</span>(<span class="tk-t">String</span> cur) {
+        <span class="tk-k">int</span> remain = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : cur.<span class="tk-f">toCharArray</span>()) {
+            <span class="tk-k">if</span> (c == <span class="tk-s">'('</span>) {
                 remain++;
-            } else if (c == ')') {
-                if (remain == 0) {
-                    return false;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">')'</span>) {
+                <span class="tk-k">if</span> (remain == <span class="tk-n">0</span>) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
                 }
                 remain--;
             }
         }
-        return remain == 0;
+        <span class="tk-k">return</span> remain == <span class="tk-n">0</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><p>最少删除使括号串合法，返回所有结果 = 在「多余括号」的候选位置里选择删哪些；合法性 = 一遍扫描 balance 不为负且结尾为 0。</p><p><strong>为什么用 预扫描预算 + 每层删一个位置的回溯</strong></p><ul><li>预扫描一遍算出必须删的 <code>needL</code>（多余左）/<code>needR</code>（多余右），保证「最小删除」；<code>")("</code> 计数相等但必须删 2 个，预算不是 max-min。</li><li>框架选「每层只删一个位置」而非「逐字符保留/删除」：参数更少（cur/start/l/r）、无 StringBuilder 撤销问题、去重一行搞定。</li><li>去重规则 <code>i &gt; start &amp;&amp; cur[i] == cur[i-1]</code> 跳过：本层只删一个，删 s[i] 与删 s[i-1]（同字符）得到同一串，后者已在上一轮循环试过；连删同字符靠「删完从同一位置继续递归」实现，不漏解。</li></ul><p><strong>关键设计决策</strong></p><ul><li>预算扫描：遇 <code>(</code> balance+1；遇 <code>)</code> 若 balance&gt;0 则 -1，否则 needR+1；扫完 needL=balance。</li><li><code>dfs(cur, start, needL, needR)</code>：删除候选从 start 开始；<code>cur.charAt(i)=='(' &amp;&amp; needL&gt;0</code> 或 <code>==')' &amp;&amp; needR&gt;0</code> 才删，删后新串从同一 i 继续。</li><li>叶子：<code>needL==0 &amp;&amp; needR==0</code> 时 isValid 过滤（删够数量 ≠ 删对位置），合法才加入答案。</li></ul><p><strong>小 case 推演</strong></p><p><code>)("</code> → 预算 needL=1, needR=1：</p><ol><li>start=0，i=0 是 <code>)</code>：删 → <code>"("</code>，递归 needR=0</li></ol><ul><li>继续删 <code>(</code> → <code>""</code>，needL=0,needR=0，isValid=true → 加入 <code>""</code></li></ul><ol><li>i=1 是 <code>(</code>：删 → <code>")"</code>，递归 needL=0 → 预算耗尽 isValid(<code>")"</code>)=false，不加入</li><li>结果 <code>[""]</code> ✅</li></ol><p><strong>边界与细节</strong></p><ul><li>无括号字母串：预算 0，isValid 直接过 → 原串。</li><li>已合法串：预算 0 → 只返回原串，不会输出删多了的串。</li><li>全左/全右括号：预算 = 全部，必须删光 → <code>[""]</code>。</li><li>连续相同去重：<code>"((("</code> 连删三个靠「删完从同 i 继续」不漏 <code>""</code>；<code>"()(()"</code> 相邻两个 <code>(</code> 只保留第一个删法，<code>"()()"</code> 只出现一次。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间：最坏指数级，节点数上界 O(2^n) 量级（从预算中选删除位置的组合），每节点 O(n) 造串、叶子 O(n) 校验。这是<strong>固有下界</strong>：输出本身最坏指数多个，任何解法必须枚举全部结果；题目约束（括号 ≤ 20、结果 &lt;150）下实际远小于上界。</li><li>空间：递归深度 O(n)，每层持一份 O(n) 字符串 → 栈上最坏 O(n²)；用 StringBuilder+回溯框架可降为 O(n)，但时间同为指数下界。</li><li>结论：预扫描预算 + 去重 DFS 是本题标准最优解，复杂度已达问题下界。</li></ul><p><strong>复盘优化（Accepted 后精简）</strong></p><ul><li>剪枝 A（必做）：<code>needL==0 &amp;&amp; needR==0</code> 时无论 <code>isValid</code> 结果如何都直接 <code>return</code>——预算已耗尽，for 循环里的删除条件全不成立，继续跑等于空转扫描整个串。改动：把 <code>return;</code> 从 <code>if (isValid)</code> 内移到外面。</li><li>剪枝 B（可选）：<code>newStr</code> 的 substring 构造从「每个字符都先拼」改为「满足删除条件才拼」，避免为字母、或预算不足的字符做 O(n) 白拼。</li><li>剪枝 C（可选）：进入循环前统计 <code>cur</code> 从 <code>index</code> 起剩余的 <code>(</code>/<code>)</code> 数量，若 <code>needL</code> &gt; 剩余左括号数或 <code>needR</code> &gt; 剩余右括号数则直接 return——预算凑不满，该分支必无解。</li><li>通用原则：循环体里的重操作（O(n) 拼串）要放在所有能拦截它的轻判断（字符类型、预算 &gt; 0）之后——先判断、后付出（延迟求值）。</li></ul></div></section>

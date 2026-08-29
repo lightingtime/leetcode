@@ -1254,3 +1254,20 @@ details.review-problem .md h2 { font-size:16px; margin-top:16px; }
 .markdown-body ul li::marker, .markdown-body ol li::marker { color:#0969da; } /* 列表标记：主题蓝 */
 .markdown-body blockquote { color:#57606a; border-left-color:#0969da; }
 .markdown-body .review-note { border-left-color:#0969da; }
+
+/* ============ 代码语法高亮（GitHub 浅色主题配色） ============ */
+.tk-c { color:#6e7781; font-style:italic; }              /* 注释：灰 */
+.tk-s { color:#0a3069; }                                  /* 字符串：深蓝 */
+.tk-k { color:#cf222e; font-weight:600; }                 /* 关键字：深红 */
+.tk-n { color:#0550ae; }                                  /* 数字：蓝 */
+.tk-a { color:#953800; }                                  /* 注解：橙棕 */
+.tk-t { color:#0550ae; }                                  /* 类型：蓝 */
+.tk-f { color:#8250df; }                                  /* 方法名：紫 */
+
+/* ============ Markdown 内容多色系增强（蓝/紫/绿/橙/红） ============ */
+.markdown-body h2 { color:#0a3069; }                      /* 小节标题：深蓝 */
+.markdown-body h3 { color:#8250df; }                      /* 子标题：紫 */
+.markdown-body strong { color:#1a7f37; }                  /* 加粗/小标题强调：墨绿 */
+.markdown-body code { background:#fff8c5; color:#9a6700; } /* 行内代码：浅黄底深黄字 */
+.markdown-body table th { background:#dafbe1; color:#116329; } /* 表头：浅绿底深绿字 */
+.markdown-body ul li::marker, .markdown-body ol li::marker { color:#1a7f37; } /* 列表标记：墨绿 */

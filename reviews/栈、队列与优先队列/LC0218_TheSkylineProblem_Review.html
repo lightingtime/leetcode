@@ -37,62 +37,62 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 扫描线 + 最大堆（惰性删除）</h3>
     <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 51.9 MB</span><span class="chip">用例 44/44</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0218_TheSkylineProblem.java · 扫描线 + 最大堆（惰性删除）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public List&lt;List&lt;Integer&gt;&gt; getSkyline(int[][] buildings) {
-        // 1. 生成事件：每栋建筑 = 左边缘“开始” + 右边缘“结束”，按 x 升序（同 x 时结束排在开始前）
-        PriorityQueue&lt;Event&gt; queue = new PriorityQueue&lt;&gt;((a, b) -&gt; {
-            if (a.x == b.x) {
-                return a.isStart - b.isStart; // isStart 0=结束 先于 1=开始，保证同 x 先移除再加入
+    <div class="code-wrap"><div class="code-head"><span>LC0218_TheSkylineProblem.java · 扫描线 + 最大堆（惰性删除）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">getSkyline</span>(<span class="tk-k">int</span>[][] buildings) {
+        <span class="tk-c">// 1. 生成事件：每栋建筑 = 左边缘“开始” + 右边缘“结束”，按 x 升序（同 x 时结束排在开始前）</span>
+        <span class="tk-t">PriorityQueue</span>&lt;<span class="tk-t">Event</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">PriorityQueue</span>&lt;&gt;((a, b) -&gt; {
+            <span class="tk-k">if</span> (a.x == b.x) {
+                <span class="tk-k">return</span> a.isStart - b.isStart; <span class="tk-c">// isStart 0=结束 先于 1=开始，保证同 x 先移除再加入</span>
             }
-            return a.x - b.x;
+            <span class="tk-k">return</span> a.x - b.x;
         });
-        for (int[] building : buildings) {
-            queue.offer(new Event(building[0], building[1], building[2], 1)); // 左边缘：开始
-            queue.offer(new Event(building[1], building[1], building[2], 0)); // 右边缘：结束
+        <span class="tk-k">for</span> (<span class="tk-k">int</span>[] building : buildings) {
+            queue.<span class="tk-f">offer</span>(<span class="tk-k">new</span> <span class="tk-t">Event</span>(building[<span class="tk-n">0</span>], building[<span class="tk-n">1</span>], building[<span class="tk-n">2</span>], <span class="tk-n">1</span>)); <span class="tk-c">// 左边缘：开始</span>
+            queue.<span class="tk-f">offer</span>(<span class="tk-k">new</span> <span class="tk-t">Event</span>(building[<span class="tk-n">1</span>], building[<span class="tk-n">1</span>], building[<span class="tk-n">2</span>], <span class="tk-n">0</span>)); <span class="tk-c">// 右边缘：结束</span>
         }
 
-        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
-        // 2. 活跃建筑最大堆（惰性删除）：元素 = {right, height}，按 height 降序
-        PriorityQueue&lt;int[]&gt; heap = new PriorityQueue&lt;&gt;((a, b) -&gt; b[1] - a[1]);
-        int h = 0; // 上一个已记录的天际线高度，初始为地面高度 0
+        <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-c">// 2. 活跃建筑最大堆（惰性删除）：元素 = {right, height}，按 height 降序</span>
+        <span class="tk-t">PriorityQueue</span>&lt;<span class="tk-k">int</span>[]&gt; heap = <span class="tk-k">new</span> <span class="tk-t">PriorityQueue</span>&lt;&gt;((a, b) -&gt; b[<span class="tk-n">1</span>] - a[<span class="tk-n">1</span>]);
+        <span class="tk-k">int</span> h = <span class="tk-n">0</span>; <span class="tk-c">// 上一个已记录的天际线高度，初始为地面高度 0</span>
 
-        // 3. 按 x 分组扫描：同一 x 的所有事件处理完，再查询一次当前最高高度
-        while (!queue.isEmpty()) {
-            int x = queue.peek().x; // 本组事件共同的 x
-            while (!queue.isEmpty() &amp;&amp; queue.peek().x == x) {
-                Event top = queue.poll();
-                if (top.isStart == 1) {
-                    heap.offer(new int[]{top.right, top.h}); // 开始事件：加入活跃集合
+        <span class="tk-c">// 3. 按 x 分组扫描：同一 x 的所有事件处理完，再查询一次当前最高高度</span>
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> x = queue.<span class="tk-f">peek</span>().x; <span class="tk-c">// 本组事件共同的 x</span>
+            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>() &amp;&amp; queue.<span class="tk-f">peek</span>().x == x) {
+                <span class="tk-t">Event</span> top = queue.<span class="tk-f">poll</span>();
+                <span class="tk-k">if</span> (top.isStart == <span class="tk-n">1</span>) {
+                    heap.<span class="tk-f">offer</span>(<span class="tk-k">new</span> <span class="tk-k">int</span>[]{top.right, top.h}); <span class="tk-c">// 开始事件：加入活跃集合</span>
                 }
-                // 结束事件无需显式处理，由下面的惰性删除统一清理
+                <span class="tk-c">// 结束事件无需显式处理，由下面的惰性删除统一清理</span>
             }
-            // 惰性删除：right &lt;= x 的建筑已经结束，从堆顶弹出
-            while (!heap.isEmpty() &amp;&amp; heap.peek()[0] &lt;= x) {
-                heap.poll();
+            <span class="tk-c">// 惰性删除：right &lt;= x 的建筑已经结束，从堆顶弹出</span>
+            <span class="tk-k">while</span> (!heap.<span class="tk-f">isEmpty</span>() &amp;&amp; heap.<span class="tk-f">peek</span>()[<span class="tk-n">0</span>] &lt;= x) {
+                heap.<span class="tk-f">poll</span>();
             }
-            // 当前最高高度变化处输出关键点 (x, cur)
-            int cur = heap.isEmpty() ? 0 : heap.peek()[1];
-            if (cur != h) {
-                List&lt;Integer&gt; node = new ArrayList&lt;&gt;();
-                node.add(x);
-                node.add(cur);
-                ans.add(node);
+            <span class="tk-c">// 当前最高高度变化处输出关键点 (x, cur)</span>
+            <span class="tk-k">int</span> cur = heap.<span class="tk-f">isEmpty</span>() ? <span class="tk-n">0</span> : heap.<span class="tk-f">peek</span>()[<span class="tk-n">1</span>];
+            <span class="tk-k">if</span> (cur != h) {
+                <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; node = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+                node.<span class="tk-f">add</span>(x);
+                node.<span class="tk-f">add</span>(cur);
+                ans.<span class="tk-f">add</span>(node);
                 h = cur;
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }
 
-    static class Event {
-        int x;       // 事件发生的横坐标（左边缘或右边缘）
-        int right;   // 该建筑的右边缘（开始事件用它判断何时过期；结束事件时等于 x）
-        int h;       // 该建筑高度
-        int isStart; // 1=开始（左边缘，入堆），0=结束（右边缘）
+    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Event</span> {
+        <span class="tk-k">int</span> x;       <span class="tk-c">// 事件发生的横坐标（左边缘或右边缘）</span>
+        <span class="tk-k">int</span> right;   <span class="tk-c">// 该建筑的右边缘（开始事件用它判断何时过期；结束事件时等于 x）</span>
+        <span class="tk-k">int</span> h;       <span class="tk-c">// 该建筑高度</span>
+        <span class="tk-k">int</span> isStart; <span class="tk-c">// 1=开始（左边缘，入堆），0=结束（右边缘）</span>
 
-        public Event(int x, int right, int h, int isStart) {
-            this.x = x;
-            this.right = right;
-            this.h = h;
-            this.isStart = isStart;
+        <span class="tk-k">public</span> <span class="tk-t">Event</span>(<span class="tk-k">int</span> x, <span class="tk-k">int</span> right, <span class="tk-k">int</span> h, <span class="tk-k">int</span> isStart) {
+            <span class="tk-k">this</span>.x = x;
+            <span class="tk-k">this</span>.right = right;
+            <span class="tk-k">this</span>.h = h;
+            <span class="tk-k">this</span>.isStart = isStart;
         }
     }</pre></div>
   </div></section>

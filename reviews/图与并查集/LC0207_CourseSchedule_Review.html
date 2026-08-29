@@ -37,35 +37,35 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Kahn 拓扑排序</h3>
     <p><span class="chip">时间 O(V+E)</span><span class="chip">空间 O(V+E)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 54/54</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0207_CourseSchedule.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List&lt;List&lt;Integer&gt;&gt; graph = new ArrayList&lt;&gt;();
-        int[] inDegree = new int[numCourses];
-        for (int i = 0; i &lt; numCourses; i++) {
-            graph.add(new ArrayList&lt;&gt;());
+    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0207_CourseSchedule.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">canFinish</span>(<span class="tk-k">int</span> numCourses, <span class="tk-k">int</span>[][] prerequisites) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; graph = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">int</span>[] inDegree = <span class="tk-k">new</span> <span class="tk-k">int</span>[numCourses];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; numCourses; i++) {
+            graph.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
         }
 
-        for (int[] prereq : prerequisites) {
-            graph.get(prereq[1]).add(prereq[0]);
-            inDegree[prereq[0]]++;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span>[] prereq : prerequisites) {
+            graph.<span class="tk-f">get</span>(prereq[<span class="tk-n">1</span>]).<span class="tk-f">add</span>(prereq[<span class="tk-n">0</span>]);
+            inDegree[prereq[<span class="tk-n">0</span>]]++;
         }
-        int processed = 0;
-        Queue&lt;Integer&gt; queue = new ArrayDeque&lt;&gt;();
-        for (int i = 0; i &lt; numCourses; i++) {
-            if (inDegree[i] == 0) {
-                queue.offer(i);
+        <span class="tk-k">int</span> processed = <span class="tk-n">0</span>;
+        <span class="tk-t">Queue</span>&lt;<span class="tk-t">Integer</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; numCourses; i++) {
+            <span class="tk-k">if</span> (inDegree[i] == <span class="tk-n">0</span>) {
+                queue.<span class="tk-f">offer</span>(i);
             }
         }
-        while (!queue.isEmpty()) {
-            int course = queue.poll();
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> course = queue.<span class="tk-f">poll</span>();
             processed++;
-            for (int nextCourse : graph.get(course)) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> nextCourse : graph.<span class="tk-f">get</span>(course)) {
                 inDegree[nextCourse]--;
-                if (inDegree[nextCourse] == 0) {
-                    queue.offer(nextCourse);
+                <span class="tk-k">if</span> (inDegree[nextCourse] == <span class="tk-n">0</span>) {
+                    queue.<span class="tk-f">offer</span>(nextCourse);
                 }
             }
         }
-        return processed == numCourses;
+        <span class="tk-k">return</span> processed == numCourses;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：能否学完全部课程 ⟺ 依赖图无环 ⟺ 存在覆盖全部节点的拓扑序。Kahn 拓扑排序（BFS 版）。</p><p>关键设计：邻接表建图（prereq[1] → prereq[0]）+ 入度数组；把所有入度为 0 的课入队；出队时 processed++，并把它的后继入度 -1，减到 0 就入队；最后 processed==numCourses 说明拓扑序覆盖全部节点，无环可完成。</p><p>边界：无依赖时所有课初始入度 0，一趟全处理；自环（一课依赖自己）永远无法入队，processed&lt;numCourses 返回 false；多个独立连通分量各自处理；空 prerequisites 直接 true。</p><p>复杂度：O(V+E) 时间（每个节点每条边各访问一次）、O(V+E) 空间（图 + 入度 + 队列），最优。</p></div></section>

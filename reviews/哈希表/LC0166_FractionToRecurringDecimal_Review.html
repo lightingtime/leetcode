@@ -37,31 +37,31 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 长除法 + HashMap 余数定位循环节</h3>
     <p><span class="chip">时间 O(len)</span><span class="chip">空间 O(len)</span><span class="chip">内存 ≈ 41.0 MB</span><span class="chip">用例 42/42</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0166_FractionToRecurringDecimal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public String fractionToDecimal(int numerator, int denominator) {
-        long a = numerator, b = denominator;
-        if (a % b == 0) {
-            return String.valueOf(a / b);
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0166_FractionToRecurringDecimal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">fractionToDecimal</span>(<span class="tk-k">int</span> numerator, <span class="tk-k">int</span> denominator) {
+        <span class="tk-k">long</span> a = numerator, b = denominator;
+        <span class="tk-k">if</span> (a % b == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> <span class="tk-t">String</span>.<span class="tk-f">valueOf</span>(a / b);
         }
-        StringBuilder sb = new StringBuilder();
-        if (a * b &lt; 0) {
-            sb.append("-");
+        <span class="tk-t">StringBuilder</span> sb = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+        <span class="tk-k">if</span> (a * b &lt; <span class="tk-n">0</span>) {
+            sb.<span class="tk-f">append</span>(<span class="tk-s">"-"</span>);
         }
-        a = Math.abs(a);
-        b = Math.abs(b);
-        sb.append(a / b).append(".");
+        a = <span class="tk-t">Math</span>.<span class="tk-f">abs</span>(a);
+        b = <span class="tk-t">Math</span>.<span class="tk-f">abs</span>(b);
+        sb.<span class="tk-f">append</span>(a / b).<span class="tk-f">append</span>(<span class="tk-s">"."</span>);
         a %= b;
-        Map&lt;Long, Integer&gt; map = new HashMap&lt;&gt;();
-        while (a != 0) {
-            map.put(a, sb.length());
-            a *= 10;
-            sb.append(a / b);
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">while</span> (a != <span class="tk-n">0</span>) {
+            map.<span class="tk-f">put</span>(a, sb.<span class="tk-f">length</span>());
+            a *= <span class="tk-n">10</span>;
+            sb.<span class="tk-f">append</span>(a / b);
             a %= b;
-            if (map.containsKey(a)) {
-                int u = map.get(a);
-                return String.format("%s(%s)", sb.substring(0, u), sb.substring(u));
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(a)) {
+                <span class="tk-k">int</span> u = map.<span class="tk-f">get</span>(a);
+                <span class="tk-k">return</span> <span class="tk-t">String</span>.<span class="tk-f">format</span>(<span class="tk-s">"%s(%s)"</span>, sb.<span class="tk-f">substring</span>(<span class="tk-n">0</span>, u), sb.<span class="tk-f">substring</span>(u));
             }
         }
-        return sb.toString();
+        <span class="tk-k">return</span> sb.<span class="tk-f">toString</span>();
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：把分数 numerator/denominator 转成十进制小数字符串，循环节用括号标出。核心难点不是「算小数」，而是「检测循环节从哪开始、到哪里结束」——浮点数直接算会丢精度、也看不出循环。</p><p>解法选择理由（长除法 + HashMap）：</p><ul><li>长除法天然逐位产生十进制数字：每次 余数×10 ÷ 分母 得一位商、一个新余数。</li><li>关键数学事实：一旦某个余数重复出现，之后的商序列必然完全重复——所以循环节检测 = 检测余数是否重复。</li><li>HashMap 记录「余数 → 它第一次出现时的小数位下标」，余数重复时，第一次出现的位置就是循环节起点，当前末尾就是终点，插入括号即可。</li><li>全程整数运算（long），无精度丢失，还能覆盖 int 溢出。</li></ul><p>关键设计决策：</p><ol><li>long 防溢出：numerator/denominator 先转 long。经典反例 -2^31 / -1 = 2^31 超出 int；Math.abs(Integer.MIN_VALUE) 在 int 下仍是负数，必须 long。</li><li>整除提前返回：a % b == 0 时结果是整数，不加小数点，直接返回 String.valueOf(a / b)（如 2/1="2"、0/5="0"）。</li><li>符号处理：先判 a * b &lt; 0（异号）就在最前面加 "-"，再对 a、b 取绝对值；这样负号只出现一次。</li><li>整数部分 + "."：sb.append(a/b + ".")，然后 a %= b 进入小数部分模拟。</li><li>长除法循环：map.put(a, sb.length()) 存余数与当前小数位起点（直接用字符串长度当位置，正好是循环节插入点）；a *= 10 放大 10 倍；sb.append(a / b)；a %= b；若新余数已在 map 中，u=map.get(a)，返回 sb[0..u) + "(" + sb[u..] + ")"。</li><li>退出条件：a == 0 表示除尽（有限小数）；余数重复表示循环（提前 return）。</li></ol><p>具体 case 推演：</p><p>4/333（期望 0.(012)，纯循环）：</p><div class="table-wrap"><table><thead><tr><th>轮</th><th>余数 a（进入时）</th><th>map 记录</th><th>a×10</th><th>商</th><th>新余数</th><th>命中?</th></tr></thead><tbody><tr><td>1</td><td>4</td><td>4→2</td><td>40</td><td>0</td><td>40</td><td>否</td></tr><tr><td>2</td><td>40</td><td>40→3</td><td>400</td><td>1</td><td>67</td><td>否</td></tr><tr><td>3</td><td>67</td><td>67→4</td><td>670</td><td>2</td><td>4</td><td>是！u=2</td></tr></tbody></table></div><p>sb="0.012"，u=2 → "0." + "(" + "012" + ")" = "0.(012)" ✓</p><p>1/6（期望 0.1(6)，混循环）：</p><div class="table-wrap"><table><thead><tr><th>轮</th><th>余数 a</th><th>map 记录</th><th>a×10</th><th>商</th><th>新余数</th><th>命中?</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>1→2</td><td>10</td><td>1</td><td>4</td><td>否</td></tr><tr><td>2</td><td>4</td><td>4→3</td><td>40</td><td>6</td><td>4</td><td>是！u=3</td></tr></tbody></table></div><p>sb="0.16"，u=3 → "0.1" + "(" + "6" + ")" = "0.1(6)" ✓（循环节不是从第一位开始，map 精确记录了起点）</p><p>1/8（期望 0.125，有限小数）：a=1 → 商0 余1；×10=10 商1 余2；×10=20 商2 余4；×10=40 商5 余0 → a==0 退出，返回 "0.125" ✓</p><p>-4/333（期望 -0.(012)）：a*b&lt;0 → 先 append "-"，abs 后同 4/333 → "-0.(012)" ✓</p><p>-2147483648 / -1（期望 2147483648）：a%b==0 → String.valueOf(2147483648L) → "2147483648" ✓（int 会溢出，long 不会）</p><p>边界与细节：</p><ul><li>0/5：整除分支返回 "0"，不会输出 "0.0"。</li><li>分母为 MIN_VALUE：abs 后 2147483648L，long 安全；MIN/MIN=1。</li><li>a *= 10 后最大约 2^34（abs 后的 a &lt; 2^31），long 无溢出。</li><li>map value 直接用 sb.length() 而非单独计数器——省一个变量，且正好是插入括号的位置。</li><li>题目保证答案长度 &lt; 10^4，循环不会无限跑。</li></ul><p>复杂度分析：</p><ul><li>时间 O(L)：L 为结果字符串长度，每位小数一次常数操作；L &lt; 10^4。</li><li>空间 O(L)：HashMap 存不同余数（最多 L 个）+ StringBuilder。</li><li>最优性：每个小数位至少产生一次，O(L) 时间/空间都是下限；长除法是十进制展开的标准最优做法。</li></ul></div></section>

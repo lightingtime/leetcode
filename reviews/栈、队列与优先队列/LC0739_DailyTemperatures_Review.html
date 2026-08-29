@@ -37,20 +37,20 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单调栈（单调递减，存下标）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 98.9 MB</span><span class="chip">用例 48/48</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0739_DailyTemperatures.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[] dailyTemperatures(int[] temperatures) {
-        // TODO: 在这里实现你的解法
-        int[] ans = new int[temperatures.length];
-        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
-        for (int i = 0; i &lt; temperatures.length; i++) {
-            while (!stack.isEmpty() &amp;&amp; temperatures[i] &gt; temperatures[stack.peekLast()]) {
-                Integer topIndex = stack.removeLast();
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0739_DailyTemperatures.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">dailyTemperatures</span>(<span class="tk-k">int</span>[] temperatures) {
+        <span class="tk-c">// TODO: 在这里实现你的解法</span>
+        <span class="tk-k">int</span>[] ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[temperatures.length];
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; temperatures.length; i++) {
+            <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; temperatures[i] &gt; temperatures[stack.<span class="tk-f">peekLast</span>()]) {
+                <span class="tk-t">Integer</span> topIndex = stack.<span class="tk-f">removeLast</span>();
                 ans[topIndex] = i - topIndex;
             }
-            if (stack.isEmpty() || temperatures[stack.peekLast()] &gt;= temperatures[i]) {
-                stack.offerLast(i);
+            <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>() || temperatures[stack.<span class="tk-f">peekLast</span>()] &gt;= temperatures[i]) {
+                stack.<span class="tk-f">offerLast</span>(i);
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>题目：对每个 i，求第一个比 temperatures[i] 更大的温度出现在几天后（下标差），找不到则为 0。</li><li>朴素做法：对每个 i 向后扫描找第一个更大，O(n²)；数据量 10^5 会超时。</li><li>观察：每个下标只需要知道「右边第一个更大的下标」，符合「下一个更大元素」的经典模式，用单调栈从后往前或从前往后一次遍历即可，均摊 O(n)。</li><li>解法选择：单调递减栈（从栈底到栈顶温度严格递减），栈内存下标而非温度，因为答案要下标差。</li></ul><p><strong>关键设计决策</strong></p><ul><li>栈里存下标：出栈填答案时 answer[top] = i - top，直接得到「几天后」。</li><li>处理当前温度时：while 栈非空 &amp;&amp; 当前温度 &gt; 栈顶温度 → 栈顶终于等到第一个更高温度，出栈并填答案；处理完把当前下标无条件入栈（出栈循环结束后栈顶要么为空、要么 &gt;= 当前温度，入栈后仍保持非递增，单调性成立）。</li><li>关键细节：温度相等不算「更高」，所以相等时必须也入栈继续等待（曾用 &gt; 才入栈导致 [73,73,74] 输出 [2,0,0]，正确应为 [2,1,0]）。</li><li>留在栈里直到结束的下标：后面没有更高温度，answer 保持初始 0。</li></ul><p><strong>具体 case 推演</strong></p><ul><li>示例1：73,74,75,71,69,72,76,73 → i=0 入栈；i=1 的 74&gt;73 弹 0 填 1；i=2 的 75&gt;74 弹 1 填 1；i=3,4 的 71,69 依次入栈；i=5 的 72&gt;69 弹 4 填 1，72&gt;71 弹 3 填 2，72 入栈；i=6 的 76&gt;72 弹 5 填 1，76&gt;75 弹 2 填 4，76 入栈；i=7 的 73 入栈。结果 [1,1,4,2,1,1,0,0] ✓</li><li>相等温度：73,73,74 → i=1 的 73 与栈顶 73 相等不弹、入栈；i=2 的 74 依次弹出 i=1 填 1、i=0 填 2 → [2,1,0] ✓（若相等不入栈则 [2,0,0] 错）</li><li>递减序列：5,4,3,2,1 → 全部入栈，无人出栈，答案全 0 ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>单元素：栈空直接入栈，答案 [0] ✓</li><li>严格递减：所有下标留在栈里，answer 全 0 ✓</li><li>栈用 ArrayDeque，peekLast/removeLast/offerLast 作为栈顶操作。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个下标最多入栈一次、出栈一次，总操作 O(n)。</li><li>空间 O(n)：栈最多存 n 个下标（严格递减时全部在栈里）+ answer 数组 O(n)。</li><li>下界论证：答案数组本身要填 n 个值，输出空间就是 O(n)；每个元素至少要读一次，时间下界 O(n)，单调栈达到该下界。</li></ul></div></section>

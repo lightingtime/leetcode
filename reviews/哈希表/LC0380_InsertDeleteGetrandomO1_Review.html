@@ -37,37 +37,37 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap + ArrayList（换位删除）</h3>
     <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.3 MB</span><span class="chip">用例 21/21</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0380_InsertDeleteGetrandomO1.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>static class RandomizedSet {
-        List&lt;Integer&gt; nums;
-        Map&lt;Integer, Integer&gt; indices;
-        Random random;
-        public RandomizedSet() {
-            nums = new ArrayList&lt;&gt;();
-            indices = new HashMap&lt;&gt;();
-            random = new Random();
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0380_InsertDeleteGetrandomO1.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">RandomizedSet</span> {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; nums;
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; indices;
+        <span class="tk-t">Random</span> random;
+        <span class="tk-k">public</span> <span class="tk-t">RandomizedSet</span>() {
+            nums = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            indices = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            random = <span class="tk-k">new</span> <span class="tk-t">Random</span>();
         }
-        public boolean insert(int val) {
-            if (indices.containsKey(val)) {
-                return false;
+        <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">insert</span>(<span class="tk-k">int</span> val) {
+            <span class="tk-k">if</span> (indices.<span class="tk-f">containsKey</span>(val)) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            indices.put(val, nums.size());
-            nums.add(val);
-            return true;
+            indices.<span class="tk-f">put</span>(val, nums.<span class="tk-f">size</span>());
+            nums.<span class="tk-f">add</span>(val);
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
-        public boolean remove(int val) {
-            if (!indices.containsKey(val)) {
-                return false;
+        <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">remove</span>(<span class="tk-k">int</span> val) {
+            <span class="tk-k">if</span> (!indices.<span class="tk-f">containsKey</span>(val)) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            int index = indices.get(val);
-            int lastVal = nums.get(nums.size() - 1);
-            nums.set(index, lastVal);
-            indices.put(lastVal, index);
-            nums.remove(nums.size() - 1);
-            indices.remove(val);
-            return true;
+            <span class="tk-k">int</span> index = indices.<span class="tk-f">get</span>(val);
+            <span class="tk-k">int</span> lastVal = nums.<span class="tk-f">get</span>(nums.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            nums.<span class="tk-f">set</span>(index, lastVal);
+            indices.<span class="tk-f">put</span>(lastVal, index);
+            nums.<span class="tk-f">remove</span>(nums.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            indices.<span class="tk-f">remove</span>(val);
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
-        public int getRandom() {
-            return nums.get(random.nextInt(nums.size()));
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">getRandom</span>() {
+            <span class="tk-k">return</span> nums.<span class="tk-f">get</span>(random.<span class="tk-f">nextInt</span>(nums.<span class="tk-f">size</span>()));
         }
     }</pre></div>
   </div></section>

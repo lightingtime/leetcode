@@ -37,53 +37,53 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 层序 BFS + 占位符</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.4 MB</span><span class="chip">用例 53/53</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0297_SerializeAndDeserializeBinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>static class Codec {
-        public String serialize(TreeNode root) {
-            StringBuilder sb = new StringBuilder();
-            if (root == null) {
-                return sb.toString();
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0297_SerializeAndDeserializeBinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Codec</span> {
+        <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">serialize</span>(<span class="tk-t">TreeNode</span> root) {
+            <span class="tk-t">StringBuilder</span> sb = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+            <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+                <span class="tk-k">return</span> sb.<span class="tk-f">toString</span>();
             }
-            Deque&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
-            queue.offerLast(root);
-            while (!queue.isEmpty()) {
-                TreeNode cur = queue.pollFirst();
-                if (cur != null) {
-                    sb.append(cur.val + ",");
-                    queue.offerLast(cur.left);
-                    queue.offerLast(cur.right);
-                } else {
-                    sb.append("#,");
+            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+            queue.<span class="tk-f">offerLast</span>(root);
+            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">pollFirst</span>();
+                <span class="tk-k">if</span> (cur != <span class="tk-k">null</span>) {
+                    sb.<span class="tk-f">append</span>(cur.val + <span class="tk-s">","</span>);
+                    queue.<span class="tk-f">offerLast</span>(cur.left);
+                    queue.<span class="tk-f">offerLast</span>(cur.right);
+                } <span class="tk-k">else</span> {
+                    sb.<span class="tk-f">append</span>(<span class="tk-s">"#,"</span>);
                 }
             }
-            sb.deleteCharAt(sb.length() - 1);
-            return sb.toString();
+            sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
+            <span class="tk-k">return</span> sb.<span class="tk-f">toString</span>();
         }
 
-        public TreeNode deserialize(String data) {
-            if (data == null || data.isEmpty()) {
-                return null;
+        <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">deserialize</span>(<span class="tk-t">String</span> data) {
+            <span class="tk-k">if</span> (data == <span class="tk-k">null</span> || data.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">null</span>;
             }
-            String[] vals = data.split(",");
-            TreeNode root = new TreeNode(Integer.parseInt(vals[0]));
-            Deque&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
-            queue.offerLast(root);
-            int i = 1;
-            while (!queue.isEmpty()) {
-                TreeNode cur = queue.pollFirst();
-                if (!vals[i].equals("#")) {
-                    TreeNode node = new TreeNode(Integer.parseInt(vals[i]));
+            <span class="tk-t">String</span>[] vals = data.<span class="tk-f">split</span>(<span class="tk-s">","</span>);
+            <span class="tk-t">TreeNode</span> root = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(vals[<span class="tk-n">0</span>]));
+            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+            queue.<span class="tk-f">offerLast</span>(root);
+            <span class="tk-k">int</span> i = <span class="tk-n">1</span>;
+            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">pollFirst</span>();
+                <span class="tk-k">if</span> (!vals[i].<span class="tk-f">equals</span>(<span class="tk-s">"#"</span>)) {
+                    <span class="tk-t">TreeNode</span> node = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(vals[i]));
                     cur.left = node;
-                    queue.offerLast(node);
+                    queue.<span class="tk-f">offerLast</span>(node);
                 }
                 i++;
-                if (!vals[i].equals("#")) {
-                    TreeNode node = new TreeNode(Integer.parseInt(vals[i]));
+                <span class="tk-k">if</span> (!vals[i].<span class="tk-f">equals</span>(<span class="tk-s">"#"</span>)) {
+                    <span class="tk-t">TreeNode</span> node = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(vals[i]));
                     cur.right = node;
-                    queue.offerLast(node);
+                    queue.<span class="tk-f">offerLast</span>(node);
                 }
                 i++;
             }
-            return root;
+            <span class="tk-k">return</span> root;
         }
     }</pre></div>
   </div></section>

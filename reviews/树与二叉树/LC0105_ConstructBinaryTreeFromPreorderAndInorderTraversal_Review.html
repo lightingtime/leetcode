@@ -37,25 +37,25 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前序定根+哈希定位+递归分治</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.9 MB</span><span class="chip">用例 203/203</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>Map&lt;Integer, Integer&gt; map;
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        map = new HashMap&lt;&gt;();
-        for (int i = 0; i &lt; inorder.length; i++) {
-            map.put(inorder[i], i);
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map;
+    <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">buildTree</span>(<span class="tk-k">int</span>[] preorder, <span class="tk-k">int</span>[] inorder) {
+        map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; inorder.length; i++) {
+            map.<span class="tk-f">put</span>(inorder[i], i);
         }
-        return buildTreeHelper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length);
+        <span class="tk-k">return</span> <span class="tk-f">buildTreeHelper</span>(preorder, <span class="tk-n">0</span>, preorder.length - <span class="tk-n">1</span>, inorder, <span class="tk-n">0</span>, inorder.length);
     }
 
-    private TreeNode buildTreeHelper(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
-        if (preStart &gt; preEnd) {
-            return null;
+    <span class="tk-k">private</span> <span class="tk-t">TreeNode</span> <span class="tk-f">buildTreeHelper</span>(<span class="tk-k">int</span>[] preorder, <span class="tk-k">int</span> preStart, <span class="tk-k">int</span> preEnd, <span class="tk-k">int</span>[] inorder, <span class="tk-k">int</span> inStart, <span class="tk-k">int</span> inEnd) {
+        <span class="tk-k">if</span> (preStart &gt; preEnd) {
+            <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
-        TreeNode root = new TreeNode(preorder[preStart]);
-        int index = map.get(preorder[preStart]);
-        int leftLength = index - inStart;
-        root.left = buildTreeHelper(preorder, preStart + 1, preStart + leftLength, inorder, inStart, index - 1);
-        root.right = buildTreeHelper(preorder, preStart + leftLength + 1, preEnd, inorder, index + 1, inEnd);
-        return root;
+        <span class="tk-t">TreeNode</span> root = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(preorder[preStart]);
+        <span class="tk-k">int</span> index = map.<span class="tk-f">get</span>(preorder[preStart]);
+        <span class="tk-k">int</span> leftLength = index - inStart;
+        root.left = <span class="tk-f">buildTreeHelper</span>(preorder, preStart + <span class="tk-n">1</span>, preStart + leftLength, inorder, inStart, index - <span class="tk-n">1</span>);
+        root.right = <span class="tk-f">buildTreeHelper</span>(preorder, preStart + leftLength + <span class="tk-n">1</span>, preEnd, inorder, index + <span class="tk-n">1</span>, inEnd);
+        <span class="tk-k">return</span> root;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：前序第一个元素是根，中序中根的位置把左右子树区间一分为二 → 递归分治重建整棵树。</p><p>关键设计：先用 HashMap 存中序值→下标，实现 O(1) 查根位置；递归参数是前序区间 [preStart, preEnd] 与中序区间 [inStart, inEnd)：根 = preorder[preStart]，rootIndex = map.get(根)，左子树长度 leftLength = rootIndex - inStart；左子树前序区间 [preStart+1, preStart+leftLength]，右子树 [preStart+leftLength+1, preEnd]。</p><p>边界：区间为空（preStart&gt;preEnd）返回 null；单节点；只有左子树或只有右子树的斜树；题目保证节点值互异，map 不会冲突。</p><p>复杂度：O(n) 时间（每个节点一次、map 查询 O(1)）、O(n) 空间（map + 递归栈），最优。</p></div></section>

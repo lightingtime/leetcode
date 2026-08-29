@@ -37,43 +37,43 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 区间DP预判+回溯</h3>
     <p><span class="chip">时间 O(n²预判 + 方案数×n)</span><span class="chip">空间 O(n²)表 + O(n)栈</span><span class="chip">内存 ≈ 62.8 MB</span><span class="chip">用例 32/32</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0131_PalindromePartitioning.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;List&lt;String&gt;&gt; ans;
-    boolean[][] isPal;
-    public List&lt;List&lt;String&gt;&gt; partition(String s) {
-        ans = new ArrayList&lt;&gt;();
-        if (s.isEmpty()) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0131_PalindromePartitioning.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; ans;
+    <span class="tk-k">boolean</span>[][] isPal;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; <span class="tk-f">partition</span>(<span class="tk-t">String</span> s) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (s.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">return</span> ans;
         }
-        isPal = new boolean[s.length()][s.length()];
-        for (int i = 0; i &lt; s.length(); i++) {
-            isPal[i][i] = true;
+        isPal = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>()][s.<span class="tk-f">length</span>()];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            isPal[i][i] = <span class="tk-k">true</span>;
         }
-        for (int len = 1; len &lt; s.length(); len++) {
-            for (int i = 0; i &lt; s.length() - len; i++) {
-                int j = i + len;
-                if (len == 1) {
-                    isPal[i][j] = s.charAt(i) == s.charAt(j);
-                } else {
-                    isPal[i][j] = s.charAt(i) == s.charAt(j) &amp;&amp; isPal[i + 1][j - 1];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> len = <span class="tk-n">1</span>; len &lt; s.<span class="tk-f">length</span>(); len++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>() - len; i++) {
+                <span class="tk-k">int</span> j = i + len;
+                <span class="tk-k">if</span> (len == <span class="tk-n">1</span>) {
+                    isPal[i][j] = s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(j);
+                } <span class="tk-k">else</span> {
+                    isPal[i][j] = s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(j) &amp;&amp; isPal[i + <span class="tk-n">1</span>][j - <span class="tk-n">1</span>];
                 }
             }
         }
-        dfs(s, 0, new ArrayList&lt;&gt;());
-        return ans;
+        <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(String s, int start, ArrayList&lt;String&gt; list) {
-        if (start == isPal.length) {
-            ans.add(new ArrayList&lt;&gt;(list));
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> start, <span class="tk-t">ArrayList</span>&lt;<span class="tk-t">String</span>&gt; list) {
+        <span class="tk-k">if</span> (start == isPal.length) {
+            ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(list));
+            <span class="tk-k">return</span>;
         }
-        for (int i = start; i &lt; s.length(); i++) {
-            if (!isPal[start][i]) {
-                continue;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = start; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">if</span> (!isPal[start][i]) {
+                <span class="tk-k">continue</span>;
             }
-            list.add(s.substring(start, i + 1));
-            dfs(s, i + 1, list);
-            list.remove(list.size() - 1);
+            list.<span class="tk-f">add</span>(s.<span class="tk-f">substring</span>(start, i + <span class="tk-n">1</span>));
+            <span class="tk-f">dfs</span>(s, i + <span class="tk-n">1</span>, list);
+            list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
         }
     }</pre></div>
   </div></section>

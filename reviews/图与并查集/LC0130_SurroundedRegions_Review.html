@@ -37,49 +37,49 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 边缘O反向DFS标记安全区，再全棋盘翻转</h3>
     <p><span class="chip">时间 O(m·n)</span><span class="chip">空间 O(m·n)（递归栈最坏）</span><span class="chip">内存 ≈ 45.9 MB</span><span class="chip">用例 59/59</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0130_SurroundedRegions.java · 边缘O反向DFS标记安全区，再全棋盘翻转</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public void solve(char[][] board) {
-        int m = board.length;
-        if (m == 0) {
-            return;
+    <div class="code-wrap"><div class="code-head"><span>LC0130_SurroundedRegions.java · 边缘O反向DFS标记安全区，再全棋盘翻转</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">solve</span>(<span class="tk-k">char</span>[][] board) {
+        <span class="tk-k">int</span> m = board.length;
+        <span class="tk-k">if</span> (m == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span>;
         }
-        int n = board[0].length;
-        for (int i = 0; i &lt; m; i++) {
-            dfs(board, i, 0);
-            dfs(board, i, n - 1);
-        }
-
-        for (int j = 0; j &lt; n; j++) {
-            dfs(board, 0, j);
-            dfs(board, m - 1, j);
+        <span class="tk-k">int</span> n = board[<span class="tk-n">0</span>].length;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-f">dfs</span>(board, i, <span class="tk-n">0</span>);
+            <span class="tk-f">dfs</span>(board, i, n - <span class="tk-n">1</span>);
         }
 
-        for (int i = 0; i &lt; m; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                if (board[i][j] == 'A') {
-                    board[i][j] = 'O';
-                } else if (board[i][j] == 'O') {
-                    board[i][j] = 'X';
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+            <span class="tk-f">dfs</span>(board, <span class="tk-n">0</span>, j);
+            <span class="tk-f">dfs</span>(board, m - <span class="tk-n">1</span>, j);
+        }
+
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (board[i][j] == <span class="tk-s">'A'</span>) {
+                    board[i][j] = <span class="tk-s">'O'</span>;
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (board[i][j] == <span class="tk-s">'O'</span>) {
+                    board[i][j] = <span class="tk-s">'X'</span>;
                 }
             }
         }
     }
 
-    private void dfs(char[][] board, int i, int j) {
-        if (i &lt; 0 || i &gt;= board.length || j &lt; 0 || j &gt;= board[0].length || board[i][j] != 'O') {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] board, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || i &gt;= board.length || j &lt; <span class="tk-n">0</span> || j &gt;= board[<span class="tk-n">0</span>].length || board[i][j] != <span class="tk-s">'O'</span>) {
+            <span class="tk-k">return</span>;
         }
-        board[i][j] = 'A';
-        dfs(board, i - 1, j);
-        dfs(board, i + 1, j);
-        dfs(board, i, j - 1);
-        dfs(board, i, j + 1);
+        board[i][j] = <span class="tk-s">'A'</span>;
+        <span class="tk-f">dfs</span>(board, i - <span class="tk-n">1</span>, j);
+        <span class="tk-f">dfs</span>(board, i + <span class="tk-n">1</span>, j);
+        <span class="tk-f">dfs</span>(board, i, j - <span class="tk-n">1</span>);
+        <span class="tk-f">dfs</span>(board, i, j + <span class="tk-n">1</span>);
     }</pre></div>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：判断每个 O 区域是否「被 X 完全包围」（即不接触棋盘边缘），被包围的改成 X。难点是「被围」的判断——直接找被围区域要检查四周，很绕。</p><p><strong>解法选择理由（反向思维）</strong>：与其找「被包围的 O」，不如找「不会被包围的 O」——<strong>从棋盘边缘的 O 出发，能连到的所有 O 都接触边缘，一定安全</strong>。用 DFS/BFS 把这些安全 O 标记出来，剩下的 O 就是要改成 X 的。复杂度 O(m·n)，达到下界（每个格子至少要看一次）。</p><p><strong>关键设计决策</strong>：</p><ol><li>反向标记：从四条边的 O 出发 DFS，把连通的 O 标成临时字符 'A'（安全区），同时天然防重复访问（'A' 不再是 'O'，不会再被递归）。</li><li>临时标记用 'A' 而不是直接保留：因为后面要区分「安全 O（保留）」和「被围 O（改 X）」，分两轮处理。</li><li>翻转扫描必须覆盖<strong>整个棋盘</strong>（含边缘）：'A'→'O'、'O'→'X'。边缘的 'A' 同样是安全区，必须还原（这是本题最容易漏的坑）。</li></ol><p><strong>具体 case 推演</strong>（3×3，中心被围）：</p><div class="md-code"><pre>X X X      X X X
-X O X  →   X X X     中心 O 到不了边缘 → 捕获
-X X X      X X X</pre></div><p>边缘全是 X，DFS 无起点；翻转时中心 'O' → 'X' ✓</p><p>反向案例（连通到边缘不捕获）：</p><div class="md-code"><pre>X X X      X X X
-X O X  →   X O X     (2,0) 是边缘 O，DFS 标 'A' 把 (2,1) 也标 'A'
-O O X      O O X     → 全棋盘扫描：A→O，保持不变 ✓</pre></div><p><strong>边界与细节</strong>：</p><ul><li>边缘 O 一定安全（示例1 的 (3,1)）。</li><li>单行/单列：整行/整列都是边缘，所有 O 都安全。</li><li>全 X：无 O，不变；全 O：全在边缘/连通边缘，不变。</li><li>大输入 200×200：DFS 最坏递归深度 O(m·n)（蛇形连通区），本解在力扣 59 用例通过；但极端全 O 棋盘在栈较小的环境可能栈溢出，更稳的是迭代 DFS/BFS 或并查集（已记入错误习惯）。</li></ul><p><strong>复杂度与下限论证</strong>：每个格子最多访问常数次 → O(m·n) 时间；递归栈最坏 O(m·n) 空间。下界 Ω(m·n)（每个格子至少判断一次），此解达到最优量级。</p><p><strong>踩坑记录</strong>：① 翻转循环只扫内部 [1,m-2]×[1,n-2] 导致边缘 'A' 未还原（已修复）；② 递归 DFS 在 200×200 全 O 时 StackOverflowError（本地边界已改为深度有界的大输入用例）。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：判断每个 O 区域是否「被 X 完全包围」（即不接触棋盘边缘），被包围的改成 X。难点是「被围」的判断——直接找被围区域要检查四周，很绕。</p><p><strong>解法选择理由（反向思维）</strong>：与其找「被包围的 O」，不如找「不会被包围的 O」——<strong>从棋盘边缘的 O 出发，能连到的所有 O 都接触边缘，一定安全</strong>。用 DFS/BFS 把这些安全 O 标记出来，剩下的 O 就是要改成 X 的。复杂度 O(m·n)，达到下界（每个格子至少要看一次）。</p><p><strong>关键设计决策</strong>：</p><ol><li>反向标记：从四条边的 O 出发 DFS，把连通的 O 标成临时字符 'A'（安全区），同时天然防重复访问（'A' 不再是 'O'，不会再被递归）。</li><li>临时标记用 'A' 而不是直接保留：因为后面要区分「安全 O（保留）」和「被围 O（改 X）」，分两轮处理。</li><li>翻转扫描必须覆盖<strong>整个棋盘</strong>（含边缘）：'A'→'O'、'O'→'X'。边缘的 'A' 同样是安全区，必须还原（这是本题最容易漏的坑）。</li></ol><p><strong>具体 case 推演</strong>（3×3，中心被围）：</p><div class="md-code"><pre><span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span>      <span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span>
+<span class="tk-t">X</span> <span class="tk-t">O</span> <span class="tk-t">X</span>  →   <span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span>     中心 <span class="tk-t">O</span> 到不了边缘 → 捕获
+<span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span>      <span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span></pre></div><p>边缘全是 X，DFS 无起点；翻转时中心 'O' → 'X' ✓</p><p>反向案例（连通到边缘不捕获）：</p><div class="md-code"><pre><span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span>      <span class="tk-t">X</span> <span class="tk-t">X</span> <span class="tk-t">X</span>
+<span class="tk-t">X</span> <span class="tk-t">O</span> <span class="tk-t">X</span>  →   <span class="tk-t">X</span> <span class="tk-t">O</span> <span class="tk-t">X</span>     (<span class="tk-n">2</span>,<span class="tk-n">0</span>) 是边缘 <span class="tk-t">O</span>，<span class="tk-t">DFS</span> 标 <span class="tk-s">'A'</span> 把 (<span class="tk-n">2</span>,<span class="tk-n">1</span>) 也标 <span class="tk-s">'A'</span>
+<span class="tk-t">O</span> <span class="tk-t">O</span> <span class="tk-t">X</span>      <span class="tk-t">O</span> <span class="tk-t">O</span> <span class="tk-t">X</span>     → 全棋盘扫描：<span class="tk-t">A</span>→<span class="tk-t">O</span>，保持不变 ✓</pre></div><p><strong>边界与细节</strong>：</p><ul><li>边缘 O 一定安全（示例1 的 (3,1)）。</li><li>单行/单列：整行/整列都是边缘，所有 O 都安全。</li><li>全 X：无 O，不变；全 O：全在边缘/连通边缘，不变。</li><li>大输入 200×200：DFS 最坏递归深度 O(m·n)（蛇形连通区），本解在力扣 59 用例通过；但极端全 O 棋盘在栈较小的环境可能栈溢出，更稳的是迭代 DFS/BFS 或并查集（已记入错误习惯）。</li></ul><p><strong>复杂度与下限论证</strong>：每个格子最多访问常数次 → O(m·n) 时间；递归栈最坏 O(m·n) 空间。下界 Ω(m·n)（每个格子至少判断一次），此解达到最优量级。</p><p><strong>踩坑记录</strong>：① 翻转循环只扫内部 [1,m-2]×[1,n-2] 导致边缘 'A' 未还原（已修复）；② 递归 DFS 在 200×200 全 O 时 StackOverflowError（本地边界已改为深度有界的大输入用例）。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>标记后翻转漏边缘：从边缘出发标临时字符（如 'A'）后，翻转循环只扫内部区域 [1,m-2]x[1,n-2]，导致边缘标记未还原</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>递归 DFS 栈溢出：网格/棋盘类 O(m·n) 深度的连通区（如 200x200 全 O）用递归 DFS 会 StackOverflowError，应改迭代栈/队列或并查集</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>59/59 用例一次通过。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>

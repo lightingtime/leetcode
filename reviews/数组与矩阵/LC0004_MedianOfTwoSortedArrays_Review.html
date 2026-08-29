@@ -37,46 +37,46 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 两数组第k小（每轮排除较小侧k/2）</h3>
     <p><span class="chip">时间 O(log(m+n))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.7 MB</span><span class="chip">用例 2099/2099</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0004_MedianOfTwoSortedArrays.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int len1 = nums1.length, len2 = nums2.length;
-        int totLen = len1 + len2;
-        // 中位数换算成「第 k 小」（1 基排名，不是数组下标）：
-        // 奇数总长 → 第 totLen/2 + 1 小；偶数总长 → 第 totLen/2 小与第 totLen/2 + 1 小取平均。
-        if (totLen % 2 == 1) {
-            return kthSmallest(nums1, nums2, totLen / 2 + 1);
+    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0004_MedianOfTwoSortedArrays.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">double</span> <span class="tk-f">findMedianSortedArrays</span>(<span class="tk-k">int</span>[] nums1, <span class="tk-k">int</span>[] nums2) {
+        <span class="tk-k">int</span> len1 = nums1.length, len2 = nums2.length;
+        <span class="tk-k">int</span> totLen = len1 + len2;
+        <span class="tk-c">// 中位数换算成「第 k 小」（1 基排名，不是数组下标）：</span>
+        <span class="tk-c">// 奇数总长 → 第 totLen/2 + 1 小；偶数总长 → 第 totLen/2 小与第 totLen/2 + 1 小取平均。</span>
+        <span class="tk-k">if</span> (totLen % <span class="tk-n">2</span> == <span class="tk-n">1</span>) {
+            <span class="tk-k">return</span> <span class="tk-f">kthSmallest</span>(nums1, nums2, totLen / <span class="tk-n">2</span> + <span class="tk-n">1</span>);
         }
-        int k1 = totLen / 2, k2 = totLen / 2 + 1;
-        return (kthSmallest(nums1, nums2, k1) + kthSmallest(nums1, nums2, k2)) / 2.0;
+        <span class="tk-k">int</span> k1 = totLen / <span class="tk-n">2</span>, k2 = totLen / <span class="tk-n">2</span> + <span class="tk-n">1</span>;
+        <span class="tk-k">return</span> (<span class="tk-f">kthSmallest</span>(nums1, nums2, k1) + <span class="tk-f">kthSmallest</span>(nums1, nums2, k2)) / <span class="tk-n">2.0</span>;
     }
 
-    /**
+    <span class="tk-c">/**
      * 返回两数组「剩余有效部分」合并后第 k 小的元素值。
      * 约定：k 是 1 基排名（k=1 表示最小元素），不是数组下标。
      * p1/p2 是两个数组当前的有效起点（0 基下标），下标小于 p1/p2 的元素已被排除。
-     */
-    private int kthSmallest(int[] nums1, int[] nums2, int k) {
-        int len1 = nums1.length, len2 = nums2.length;
-        int p1 = 0, p2 = 0; // 有效起点，只会向右移动，表示「前面有多少元素已被跳过」
-        while (true) {
-            // 出口：某一边已排空，答案在另一边的当前有效部分里
-            if (p1 &gt;= len1) {
-                return nums2[p2 + k - 1];
-            } else if (p2 &gt;= len2) {
-                return nums1[p1 + k - 1];
-            } else if (k == 1) {
-                return Math.min(nums1[p1], nums2[p2]);
+     */</span>
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">kthSmallest</span>(<span class="tk-k">int</span>[] nums1, <span class="tk-k">int</span>[] nums2, <span class="tk-k">int</span> k) {
+        <span class="tk-k">int</span> len1 = nums1.length, len2 = nums2.length;
+        <span class="tk-k">int</span> p1 = <span class="tk-n">0</span>, p2 = <span class="tk-n">0</span>; <span class="tk-c">// 有效起点，只会向右移动，表示「前面有多少元素已被跳过」</span>
+        <span class="tk-k">while</span> (<span class="tk-k">true</span>) {
+            <span class="tk-c">// 出口：某一边已排空，答案在另一边的当前有效部分里</span>
+            <span class="tk-k">if</span> (p1 &gt;= len1) {
+                <span class="tk-k">return</span> nums2[p2 + k - <span class="tk-n">1</span>];
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (p2 &gt;= len2) {
+                <span class="tk-k">return</span> nums1[p1 + k - <span class="tk-n">1</span>];
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (k == <span class="tk-n">1</span>) {
+                <span class="tk-k">return</span> <span class="tk-t">Math</span>.<span class="tk-f">min</span>(nums1[p1], nums2[p2]);
             }
-            // 候选下标 = 各自有效部分里第 k/2 个元素的下标；数组不够长时封顶到最后一个
-            int cand1 = Math.min(len1 - 1, p1 + k / 2 - 1);
-            int cand2 = Math.min(len2 - 1, p2 + k / 2 - 1);
-            if (nums1[cand1] &lt;= nums2[cand2]) {
-                // 排除 nums1 从 p1 到 cand1（含候选），数量 = 候选下标 - 旧起点 + 1
-                int removed = cand1 - p1 + 1;
-                p1 = cand1 + 1;
+            <span class="tk-c">// 候选下标 = 各自有效部分里第 k/2 个元素的下标；数组不够长时封顶到最后一个</span>
+            <span class="tk-k">int</span> cand1 = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(len1 - <span class="tk-n">1</span>, p1 + k / <span class="tk-n">2</span> - <span class="tk-n">1</span>);
+            <span class="tk-k">int</span> cand2 = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(len2 - <span class="tk-n">1</span>, p2 + k / <span class="tk-n">2</span> - <span class="tk-n">1</span>);
+            <span class="tk-k">if</span> (nums1[cand1] &lt;= nums2[cand2]) {
+                <span class="tk-c">// 排除 nums1 从 p1 到 cand1（含候选），数量 = 候选下标 - 旧起点 + 1</span>
+                <span class="tk-k">int</span> removed = cand1 - p1 + <span class="tk-n">1</span>;
+                p1 = cand1 + <span class="tk-n">1</span>;
                 k -= removed;
-            } else {
-                int removed = cand2 - p2 + 1;
-                p2 = cand2 + 1;
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">int</span> removed = cand2 - p2 + <span class="tk-n">1</span>;
+                p2 = cand2 + <span class="tk-n">1</span>;
                 k -= removed;
             }
         }

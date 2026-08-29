@@ -37,18 +37,18 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 贪心（最远可达）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.2 MB</span><span class="chip">用例 178/178</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0055_JumpGame.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean canJump(int[] nums) {
-        int farthest = 0;
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (farthest &gt;= nums.length - 1) {
-                return true;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0055_JumpGame.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">canJump</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> farthest = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (farthest &gt;= nums.length - <span class="tk-n">1</span>) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
             }
-            if (i &gt; farthest) {
-                return false;
+            <span class="tk-k">if</span> (i &gt; farthest) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            farthest = Math.max(farthest, i + nums[i]);
+            farthest = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(farthest, i + nums[i]);
         }
-        return false;
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断能否从下标 0 到达最后一个下标。每个位置能跳的最大长度是 nums[i]，只需要关心「当前已经能覆盖到的最远位置」，不需要具体路径——贪心天然适配。</p><p>为什么用贪心：</p><ul><li>farthest 表示已扫描区间内能到达的最远下标，单调不减；</li><li>只要位置 i 被覆盖（i &lt;= farthest），它的跳跃就能把 farthest 继续往右推；若 i &gt; farthest，说明前面所有跳跃都够不着这里，后面更够不着，直接判负；</li><li>一旦 farthest &gt;= n-1 即成功，不需要回溯或枚举路径。</li></ul><p>关键设计（顺序决定正确性）：</p><ol><li>遍历每个位置 i：先检查 farthest &gt;= n-1 提前返回 true；</li><li>再检查 i &gt; farthest 直接返回 false（可达性守卫，防止不可达位置的大跳跃污染 farthest）；</li><li>最后更新 farthest = max(farthest, i + nums[i])。</li></ol><p>具体 case 推演：</p><ul><li>[2,3,1,1,4]：i=0 → f=2；i=1 → f=4 &gt;= 4 → true；</li><li>[3,2,1,0,4]：i=0 → f=3；i=1、2、3 都保持 f=3；i=4 时 4 &gt; 3 → false；</li><li>[1,1,1,0,5,0]（本轮的坑）：真实可达只到下标 3；若缺少 i &gt; farthest 守卫，i=4 会把 f 更新成 9，下一轮误判 true——正确结果是 false。</li></ul><p>边界与细节：</p><ul><li>单元素数组：farthest=0 &gt;= 0，直接 true（已经站在终点）；</li><li>开头为 0 且 n&gt;1：[0,1] 在 i=1 被守卫拦下；</li><li>大跳跃（[10,0,0,0]）一步到终点；10000 长度数组一趟通过（O(n) 而非 O(n²)）。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：一趟扫描；</li><li>空间 O(1)：一个变量。</li></ul><p>为什么是最优：每个位置至少要读一次，O(n) 是下限；只维护一个最远下标，O(1) 空间也是下限。</p></div></section>

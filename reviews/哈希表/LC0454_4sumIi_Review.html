@@ -37,21 +37,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 两两分组哈希计数</h3>
     <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(n²)</span><span class="chip">内存 ≈ 45.2 MB</span><span class="chip">用例 133/133</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0454_4sumIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
-        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
-        int ans = 0;
-        for (int i = 0; i &lt; nums1.length; i++) {
-            for (int j = 0; j &lt; nums2.length; j++) {
-                map.merge(nums1[i] + nums2[j], 1, Integer::sum);
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0454_4sumIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">fourSumCount</span>(<span class="tk-k">int</span>[] nums1, <span class="tk-k">int</span>[] nums2, <span class="tk-k">int</span>[] nums3, <span class="tk-k">int</span>[] nums4) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums1.length; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; nums2.length; j++) {
+                map.<span class="tk-f">merge</span>(nums1[i] + nums2[j], <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
             }
         }
-        for (int i = 0; i &lt; nums3.length; i++) {
-            for (int j = 0; j &lt; nums4.length; j++) {
-                int a = -(nums3[i] + nums4[j]);
-                ans += map.getOrDefault(a, 0);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums3.length; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; nums4.length; j++) {
+                <span class="tk-k">int</span> a = -(nums3[i] + nums4[j]);
+                ans += map.<span class="tk-f">getOrDefault</span>(a, <span class="tk-n">0</span>);
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：统计四个数组中满足 a+b+c+d==0 的下标组合数。朴素四层循环是 O(n⁴)，n=200 时约 16 亿次，不可接受。</p><p>解法选择理由（两两分组 + 哈希计数）：</p><ul><li>把四个数组拆成两组：A=nums1+nums2 的所有两两和，B=nums3+nums4 的所有两两和。原条件 a+b+c+d==0 等价于 (a+b) == -(c+d)。</li><li>第一遍：把 A 中每个和出现的次数登记进 HashMap（值 → 次数）。</li><li>第二遍：对 B 中每个和，查询 map 里 -(c+d) 的计数并累加——每个匹配的 B 和对应多少个 A 和，就贡献多少个四元组。</li><li>复杂度从 O(n⁴) 降到 O(n²)：每遍都是 n² 个和，哈希查询平均 O(1)。</li></ul><p>关键设计决策：</p><ol><li>第一遍用 map.merge(a+b, 1, Integer::sum) 统计每个两两和的出现次数（重复和要累计，因为不同下标组合是不同四元组）。</li><li>第二遍对每个 c+d，用 map.getOrDefault(-(c+d), 0) 累加 ans——不存在时按 0，不用判空。</li><li>顺序：先把 A 全量登记完再查 B，两组独立，不存在「先查后登记」顺序问题（与单数组前缀和不同）。</li><li>溢出安全：a+b 最大 2^28+2^28=2^29，-(c+d) 最小 -(2^29)，都在 int 范围内；答案最大 n⁴=1.6×10⁹ &lt; 2^31-1，int 可容纳。</li></ol><p>具体 case 推演：</p><p>示例1：nums1=[1,2], nums2=[-2,-1], nums3=[-1,2], nums4=[0,2]（期望 2）</p><p>第一遍（登记 nums1+nums2）：</p><div class="table-wrap"><table><thead><tr><th>i</th><th>j</th><th>和</th><th>map</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>1+(-2)=-1</td><td>{-1:1}</td></tr><tr><td>0</td><td>1</td><td>1+(-1)=0</td><td>{-1:1, 0:1}</td></tr><tr><td>1</td><td>0</td><td>2+(-2)=0</td><td>{-1:1, 0:2}</td></tr><tr><td>1</td><td>1</td><td>2+(-1)=1</td><td>{-1:1, 0:2, 1:1}</td></tr></tbody></table></div><p>第二遍（查询 -(c+d)）：</p><div class="table-wrap"><table><thead><tr><th>k</th><th>l</th><th>c+d</th><th>查询 -(c+d)</th><th>ans</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>-1+0=-1</td><td>1 → 1</td><td>1</td></tr><tr><td>0</td><td>1</td><td>-1+2=1</td><td>-1 → 1</td><td>2</td></tr><tr><td>1</td><td>0</td><td>2+0=2</td><td>-2 → 0</td><td>2</td></tr><tr><td>1</td><td>1</td><td>2+2=4</td><td>-4 → 0</td><td>2 ✓</td></tr></tbody></table></div><p>边界5（全 0，n=200）：A 里所有和都是 0，map={0:40000}；B 里 40000 个和都是 0，查询 -0 → 40000，ans = 40000×40000 = 1,600,000,000 ✓（int 不溢出）</p><p>边界4（重复组合）：nums1=[1,1], nums2=[-1,-1] → A 中 -... 计算：4 个和都是 0，map={0:4}；B=nums3+nums4=[0] 和 0，查询 4 → ans=4 ✓</p><p>边界与细节：</p><ul><li>n=1：A/B 各 1 个和，直接配对。</li><li>无解：map 查询全是 0。</li><li>端点值：2^28+2^28 与 -(2^28+2^28) 都在 int 范围。</li><li>全 0 上限：答案 16 亿不溢出，但要求用 int 累加即可。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n²)：两遍各 n² 个和，每步 map 操作均摊 O(1)。</li><li>空间 O(n²)：map 最多存 n² 个不同的两两和。</li><li>最优性：把 4 个数组分成 2+2 是信息论上的标准分治；O(n²) 时间是最优（任何算法至少要枚举一组两两和才能覆盖所有组合），O(n²) 空间与时间同级，可接受。</li></ul></div></section>

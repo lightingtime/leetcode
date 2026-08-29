@@ -37,18 +37,18 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 相向双指针</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 74.0 MB</span><span class="chip">用例 65/65</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0011_ContainerWithMostWater.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxArea(int[] height) {
-        int left = 0, right = height.length - 1;
-        int max = 0;
-        while (left &lt; right) {
-            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));
-            if (height[left] &lt; height[right]) {
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0011_ContainerWithMostWater.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxArea</span>(<span class="tk-k">int</span>[] height) {
+        <span class="tk-k">int</span> left = <span class="tk-n">0</span>, right = height.length - <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (left &lt; right) {
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, <span class="tk-t">Math</span>.<span class="tk-f">min</span>(height[left], height[right]) * (right - left));
+            <span class="tk-k">if</span> (height[left] &lt; height[right]) {
                 left++;
-            } else {
+            } <span class="tk-k">else</span> {
                 right--;
             }
         }
-        return max;
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：选两条竖线使面积 min(h[l],h[r])×(r-l) 最大。暴力枚举 O(n²)；双指针从两端向中间收拢 O(n)。</p><p>关键设计：每步计算当前左右两线的面积并更新最大值，然后移动较矮的那条。理由：移动较矮的一侧可能遇到更高边从而增大面积；移动较高的一侧，宽度一定变小、高度又被较矮的钳制，面积不可能变大，所以可以安全排除以矮边为界的全部候选。</p><p>边界：只有两根线时即唯一候选；高度相等时移动任一侧都不漏最优（代码里 &lt;= 时动右指针）；数组长度至少为 2。</p><p>复杂度：O(n) 时间、O(1) 空间；正确性来自每步排除的候选不可能超过当前最优，最优。</p></div></section>

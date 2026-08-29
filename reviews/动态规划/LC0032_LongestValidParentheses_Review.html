@@ -37,34 +37,34 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维 DP</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 235/235</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0032_LongestValidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int longestValidParentheses(String s) {
-        int n = s.length();
-        int[] dp = new int[n];
-        int max = 0;
-        for (int i = 0; i &lt; n; i++) {
-            if (s.charAt(i) == ')') {
-                if (i &gt; 0 &amp;&amp; s.charAt(i - 1) == '(') {
-                    if (i - 2 &gt;= 0) {
-                        dp[i] = dp[i - 2] + 2;
-                    } else {
-                        dp[i] = 2;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0032_LongestValidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestValidParentheses</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n];
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n; i++) {
+            <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(i) == <span class="tk-s">')'</span>) {
+                <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == <span class="tk-s">'('</span>) {
+                    <span class="tk-k">if</span> (i - <span class="tk-n">2</span> &gt;= <span class="tk-n">0</span>) {
+                        dp[i] = dp[i - <span class="tk-n">2</span>] + <span class="tk-n">2</span>;
+                    } <span class="tk-k">else</span> {
+                        dp[i] = <span class="tk-n">2</span>;
                     }
-                } else if (i &gt; 0 &amp;&amp; s.charAt(i - 1) == ')') {
-                    int j = i - dp[i-1] - 1;
-                    if (j &gt;= 0) {
-                        if (s.charAt(j) == '(') {
-                            if (j - 1 &gt;= 0) {
-                                dp[i] = dp[i - 1] + 2 + dp[j - 1];
-                            } else {
-                                dp[i] = dp[i - 1] + 2;
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == <span class="tk-s">')'</span>) {
+                    <span class="tk-k">int</span> j = i - dp[i-<span class="tk-n">1</span>] - <span class="tk-n">1</span>;
+                    <span class="tk-k">if</span> (j &gt;= <span class="tk-n">0</span>) {
+                        <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'('</span>) {
+                            <span class="tk-k">if</span> (j - <span class="tk-n">1</span> &gt;= <span class="tk-n">0</span>) {
+                                dp[i] = dp[i - <span class="tk-n">1</span>] + <span class="tk-n">2</span> + dp[j - <span class="tk-n">1</span>];
+                            } <span class="tk-k">else</span> {
+                                dp[i] = dp[i - <span class="tk-n">1</span>] + <span class="tk-n">2</span>;
                             }
                         }
                     }
                 }
-                max = Math.max(max, dp[i]);
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[i]);
             }
         }
-        return max;
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：求字符串中最长连续有效括号子串长度。暴力枚举每个子串再校验是 O(n^3)，不可行；观察到一个关键性质：有效串必须以 <code>)</code> 闭合，且当前 <code>)</code> 只能闭合「最近的未配对左括号」，因此可以定义「以当前位置结尾」的一维状态递推。</p><p>解法选择理由：</p><ul><li>定义 <code>dp[i]</code> = 以 <code>s[i]</code> 结尾的最长有效括号子串长度；<code>s[i] == '('</code> 时它不可能结尾，<code>dp[i] = 0</code>。</li><li>只有遇到 <code>)</code> 才可能让 <code>dp[i] &gt; 0</code>，按前一个字符分成两类：直接配对 <code>()</code> 和跳段配对 <code>...))</code>。</li></ul><p>关键设计：</p><ol><li>情况一：<code>s[i-1] == '('</code>，末尾形成 <code>()</code>，长度为 2，前面 <code>s[i-2]</code> 结尾的有效段可以拼接，所以 <code>dp[i] = dp[i-2] + 2</code>（<code>i-2 &lt; 0</code> 时就是 2）。</li><li>情况二：<code>s[i-1] == ')'</code>，以 <code>i-1</code> 结尾有一段长度 <code>dp[i-1]</code> 的已闭合有效串，配对的左括号在 <code>j = i - dp[i-1] - 1</code>；只有 <code>j &gt;= 0</code> 且 <code>s[j] == '('</code> 时配对成立，<code>dp[i] = dp[i-1] + 2</code>，并且 <code>j-1 &gt;= 0</code> 时还能再拼接前面的 <code>dp[j-1]</code>。</li><li>全程用 <code>max</code> 记录最大值，答案不是 <code>dp[n-1]</code>（最优段不一定以末尾结尾）。</li></ol><p>具体 case 推演（<code>s = "()(())"</code>，期望 6）：</p><div class="table-wrap"><table><thead><tr><th><code>i</code></th><th>字符</th><th><code>dp[i]</code></th><th>说明</th></tr></thead><tbody><tr><td>0</td><td><code>(</code></td><td>0</td><td>左括号不能结尾</td></tr><tr><td>1</td><td><code>)</code></td><td>2</td><td><code>s[0] == '('</code> 直接配对</td></tr><tr><td>2</td><td><code>(</code></td><td>0</td><td>左括号不能结尾</td></tr><tr><td>3</td><td><code>(</code></td><td>0</td><td>左括号不能结尾</td></tr><tr><td>4</td><td><code>)</code></td><td>2</td><td><code>s[3] == '('</code> 直接配对，<code>dp[2]+2 = 2</code></td></tr><tr><td>5</td><td><code>)</code></td><td>6</td><td><code>j = 5-2-1 = 2</code>，<code>s[2] == '('</code> 配对；<code>dp[5] = dp[4]+2+dp[1] = 2+2+2 = 6</code></td></tr></tbody></table></div><p>再推演 <code>s = "())"</code>（下标 2 的 <code>)</code> 无配对）：</p><ul><li><code>i = 2</code>，<code>dp[1] = 2</code>，<code>j = 2-2-1 = -1 &lt; 0</code>，不配对，<code>dp[2]</code> 保持 0，而不是 <code>dp[1]+2 = 4</code>。</li></ul><p>边界与细节：</p><ul><li>空串、全左括号、全右括号、<code>")("</code> 都返回 0。</li><li><code>"())(()"</code> 中间断开：<code>i=2</code> 时 <code>j&lt;0</code> 不能错误延长。</li><li><code>"(())"</code>：<code>i=3</code> 时 <code>j=0</code> 配对成立，但前面没有可拼接段，<code>dp[j-1]</code> 越界按 0 处理，结果为 4。</li><li><code>"()(())"</code> 验证配对后必须拼接 <code>dp[j-1]</code> 而不是 <code>dp[j]</code>。</li></ul><p>复杂度分析：</p><ul><li>时间复杂度 <code>O(n)</code>：单次遍历，每步 O(1)，已达下界（每个字符至少要检查一次）。</li><li>空间复杂度 <code>O(n)</code>：dp 数组；可进一步用双指针/计数法做到 O(1)，所以本题标记为可进阶。</li></ul></div></section>

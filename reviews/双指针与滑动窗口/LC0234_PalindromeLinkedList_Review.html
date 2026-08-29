@@ -37,80 +37,80 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快慢指针+栈</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 88.0 MB</span><span class="chip">用例 93/93</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0234_PalindromeLinkedList.java · 快慢指针+栈</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isPalindrome(ListNode head) {
-        if (head == null) {
-            return false;
+    <div class="code-wrap"><div class="code-head"><span>LC0234_PalindromeLinkedList.java · 快慢指针+栈</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isPalindrome</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        ListNode fast = head, slow = head;
-        while (fast != null &amp;&amp; fast.next != null) {
-            // 偶数情况slow 在第二部分的开头
-            // 奇数情况slow 在正中间
+        <span class="tk-t">ListNode</span> fast = head, slow = head;
+        <span class="tk-k">while</span> (fast != <span class="tk-k">null</span> &amp;&amp; fast.next != <span class="tk-k">null</span>) {
+            <span class="tk-c">// 偶数情况slow 在第二部分的开头</span>
+            <span class="tk-c">// 奇数情况slow 在正中间</span>
             fast = fast.next.next;
             slow = slow.next;
         }
-        ListNode p1 = slow;
-        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
-        // 奇数情况 fast不会为空
-        if (fast != null) {
+        <span class="tk-t">ListNode</span> p1 = slow;
+        <span class="tk-t">Stack</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">Stack</span>&lt;&gt;();
+        <span class="tk-c">// 奇数情况 fast不会为空</span>
+        <span class="tk-k">if</span> (fast != <span class="tk-k">null</span>) {
             slow = slow.next;
         }
-        while (slow != null) {
-            stack.push(slow.val);
+        <span class="tk-k">while</span> (slow != <span class="tk-k">null</span>) {
+            stack.<span class="tk-f">push</span>(slow.val);
             slow = slow.next;
         }
         fast = head;
-        while (fast != p1 &amp;&amp; !stack.isEmpty()) {
-            if (fast.val != stack.peek()) {
-                return false;
+        <span class="tk-k">while</span> (fast != p1 &amp;&amp; !stack.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">if</span> (fast.val != stack.<span class="tk-f">peek</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            stack.pop();
+            stack.<span class="tk-f">pop</span>();
             fast = fast.next;
         }
-        return stack.isEmpty();
+        <span class="tk-k">return</span> stack.<span class="tk-f">isEmpty</span>();
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 快慢指针+原地反转</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.2 MB</span><span class="chip">用例 93/93</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0234_PalindromeLinkedList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isPalindrome(ListNode head) {
-        if (head == null) {
-            return true;
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0234_PalindromeLinkedList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isPalindrome</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
 
-        ListNode firstEnd = fastSlow(head);
-        ListNode secondStart = reverseLinkList(firstEnd.next);
+        <span class="tk-t">ListNode</span> firstEnd = <span class="tk-f">fastSlow</span>(head);
+        <span class="tk-t">ListNode</span> secondStart = <span class="tk-f">reverseLinkList</span>(firstEnd.next);
 
-        ListNode p1 = head;
-        ListNode p2 = secondStart;
-        while (p2 != null) {
-            if (p1.val != p2.val) {
-                return false;
+        <span class="tk-t">ListNode</span> p1 = head;
+        <span class="tk-t">ListNode</span> p2 = secondStart;
+        <span class="tk-k">while</span> (p2 != <span class="tk-k">null</span>) {
+            <span class="tk-k">if</span> (p1.val != p2.val) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
             p1 = p1.next;
             p2 = p2.next;
         }
-        return true;
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }
 
-	private ListNode reverseLinkList(ListNode head) {
-        ListNode pre = null;
-        ListNode cur = head;
-        while (cur != null) {
-            ListNode next = cur.next;
+	<span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">reverseLinkList</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-t">ListNode</span> pre = <span class="tk-k">null</span>;
+        <span class="tk-t">ListNode</span> cur = head;
+        <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
+            <span class="tk-t">ListNode</span> next = cur.next;
             cur.next = pre;
             pre = cur;
             cur = next;
         }
-		return pre;
+		<span class="tk-k">return</span> pre;
 	}
 
-    private ListNode fastSlow(ListNode head) {
-        ListNode fast = head;
-        ListNode slow = head;
-        while (fast.next != null &amp;&amp; fast.next.next != null) {
+    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">fastSlow</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-t">ListNode</span> fast = head;
+        <span class="tk-t">ListNode</span> slow = head;
+        <span class="tk-k">while</span> (fast.next != <span class="tk-k">null</span> &amp;&amp; fast.next.next != <span class="tk-k">null</span>) {
             fast = fast.next.next;
             slow = slow.next;
         }
-        return slow;
+        <span class="tk-k">return</span> slow;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断链表是否回文。复制到数组比较是 O(n) 空间；O(1) 空间做法：快慢指针找中点 → 反转后半段 → 逐节点对称比较。</p><p>关键设计：fastSlow 让 fast 走 2 步、slow 走 1 步，结束时 slow 停在（前半段的）末尾 firstEnd；反转 firstEnd.next 得到后半段头 secondStart；然后 p1 从头、p2 从 secondStart 同步比较。比较循环以 p2!=null 为条件，奇数长度时中间节点自然被跳过。</p><p>边界：空链表返回 true；偶数长度 slow 恰在中点前、奇数长度 slow 在前半段末尾，反转后半段长度 ≤ 前半段，比较不会越界；比较完不要求恢复链表结构。</p><p>复杂度：O(n) 时间、O(1) 额外空间（反转用迭代），最优。</p></div></section>

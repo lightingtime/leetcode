@@ -37,14 +37,14 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 分层计数因子5</h3>
     <p><span class="chip">时间 O(log_5 n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 40.6 MB</span><span class="chip">用例 500/500</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0172_FactorialTrailingZeroes.java · 分层计数因子5</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public int trailingZeroes(int n) {
-        int ans = 0;
-        int i = 5;
-        while (i &lt;= n) {
+    <div class="code-wrap"><div class="code-head"><span>LC0172_FactorialTrailingZeroes.java · 分层计数因子5</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">trailingZeroes</span>(<span class="tk-k">int</span> n) {
+        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> i = <span class="tk-n">5</span>;
+        <span class="tk-k">while</span> (i &lt;= n) {
             ans += n / i;
-            i *= 5;
+            i *= <span class="tk-n">5</span>;
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>1. 问题本质与解法选择</strong></p><p><code>n!</code> 尾随零 = 因子 10 的个数 = min(因子 2 的个数, 因子 5 的个数)。2 的倍数远多于 5 的倍数，2 永远够用，所以答案 = <code>n!</code> 里因子 5 的个数。绝不能真算 <code>n!</code>（爆炸），要用数论计数：每个数含几个 5，等价于它能被 5、25、125…整除几次；把 1..n 里「5 的倍数个数 + 25 的倍数个数 + 125 的倍数个数 + …」加起来即得 5 的总数。层数每轮除 5，满足进阶要求的 O(log n)。</p><p><strong>2. 关键设计决策</strong></p><ul><li>状态：<code>ans</code> 累计 5 的个数；<code>i</code> 从 5 开始，每轮 <code>i *= 5</code> 推进到下一层（5、25、125…）。</li><li>每层 <code>ans += n / i</code>：<code>n/i</code> 是 1..n 里 i 的倍数个数，每层补记「该层新增的那个 5」。</li><li>终止：<code>i &gt; n</code> 时没有 i 的倍数，停。</li><li>数学依据：<code>n!</code> 含 5 个数 = Σ_{k≥1} floor(n / 5^k)。</li></ul><p><strong>3. 边界与细节</strong></p><ul><li><code>n &lt; 5</code>（0..4）：循环不进入，ans=0 ✓。</li><li>25/125/625 倍数：多层贡献，靠多层 <code>n/i</code> 逐层补记（如 25 在 5 层记 1、25 层再记 1）。</li><li>循环次数：n=10⁴ 时 i 序列 5,25,125,625,3125,15625，共 5 层，不会溢出 int（i 远小于 2³¹）。</li><li>整除细节：<code>n/i</code> 是整数除法，天然向下取整。</li></ul><p><strong>4. 具体 case 推演</strong></p><p>Case A：<code>n = 25</code></p><div class="table-wrap"><table><thead><tr><th>层 i</th><th>n/i</th><th>含义</th><th>ans 累计</th></tr></thead><tbody><tr><td>5</td><td>5</td><td>5,10,15,20,25 各 1 个 5</td><td>5</td></tr><tr><td>25</td><td>1</td><td>25 额外 1 个 5</td><td>6</td></tr></tbody></table></div><p><code>25! = 15511210043330985984000000</code>，尾随 6 个 0 ✓</p><p>Case B：<code>n = 50</code></p><div class="table-wrap"><table><thead><tr><th>层 i</th><th>n/i</th><th>ans 累计</th></tr></thead><tbody><tr><td>5</td><td>10</td><td>10</td></tr><tr><td>25</td><td>2</td><td>12</td></tr></tbody></table></div><p><code>50!</code> 尾随 12 个 0 ✓（边界测试验证）</p><p>Case C：<code>n = 3</code></p><p>第一层 <code>3/5 = 0</code>，循环不进入，返回 0 ✓</p><p><strong>5. 复杂度与最优性</strong></p><ul><li>时间 O(log₅ n)：每层 n 缩小 5 倍，层数 O(log₅ n)，达到进阶「对数时间」要求。</li><li>空间 O(1)：只有一个计数器，最优。</li><li>下界论证：需要统计 n 中所有 5 的幂次贡献，至少遍历到 <code>5^k ≤ n</code> 的最大 k，层数 Ω(log₅ n)；本解每层常数时间，达到该下界，最优。</li></ul></div></section>

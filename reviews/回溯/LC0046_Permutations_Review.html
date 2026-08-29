@@ -37,32 +37,32 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯（used 标记）</h3>
     <p><span class="chip">时间 O(n*n!)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.8 MB</span><span class="chip">用例 26/26</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0046_Permutations.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>boolean[] used;
-    List&lt;List&lt;Integer&gt;&gt; ans;
-    public List&lt;List&lt;Integer&gt;&gt; permute(int[] nums) {
-        ans = new ArrayList&lt;&gt;();
-        if (nums.length == 0) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0046_Permutations.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[] used;
+    <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">permute</span>(<span class="tk-k">int</span>[] nums) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (nums.length == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> ans;
         }
-        used = new boolean[nums.length];
-        dfs(nums, new ArrayList&lt;&gt;());
-        return ans;
+        used = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[nums.length];
+        <span class="tk-f">dfs</span>(nums, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(int[] nums, ArrayList&lt;Integer&gt; list) {
-        if (list.size() == nums.length) {
-            ans.add(new ArrayList&lt;&gt;(list));
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[] nums, <span class="tk-t">ArrayList</span>&lt;<span class="tk-t">Integer</span>&gt; list) {
+        <span class="tk-k">if</span> (list.<span class="tk-f">size</span>() == nums.length) {
+            ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(list));
+            <span class="tk-k">return</span>;
         }
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (used[i]) {
-                continue;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (used[i]) {
+                <span class="tk-k">continue</span>;
             }
-            used[i] = true;
-            list.add(nums[i]);
-            dfs(nums, list);
-            list.remove(list.size() - 1);
-            used[i] = false;
+            used[i] = <span class="tk-k">true</span>;
+            list.<span class="tk-f">add</span>(nums[i]);
+            <span class="tk-f">dfs</span>(nums, list);
+            list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            used[i] = <span class="tk-k">false</span>;
         }
     }</pre></div>
   </div></section>

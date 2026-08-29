@@ -37,15 +37,15 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二维交替链DP</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 70/70</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0198_HouseRobber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int rob(int[] nums) {
-        if (nums.length &lt; 2) return nums[0];
-        int[] dp = new int[nums.length];
-        dp[0] = nums[0];
-        dp[1] = Math.max(nums[0], nums[1]);
-        for (int i = 2; i &lt; nums.length; i++) {
-            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0198_HouseRobber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">rob</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">if</span> (nums.length &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> nums[<span class="tk-n">0</span>];
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        dp[<span class="tk-n">0</span>] = nums[<span class="tk-n">0</span>];
+        dp[<span class="tk-n">1</span>] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(nums[<span class="tk-n">0</span>], nums[<span class="tk-n">1</span>]);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">2</span>; i &lt; nums.length; i++) {
+            dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i - <span class="tk-n">1</span>], dp[i - <span class="tk-n">2</span>] + nums[i]);
         }
-        return dp[nums.length - 1];
+        <span class="tk-k">return</span> dp[nums.length - <span class="tk-n">1</span>];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>在「相邻房屋不能同时偷」的约束下选择若干下标，使金额和最大。每间房子只有偷/不偷两种决策，且合法方案存在明显的重叠子结构（前缀最优可复用到更长前缀），适合 DP；贪心不可行，因为局部金额大不代表全局最优，例如 [2,1,1,2] 先偷金额 2 会丢掉「偷 0 号和 3 号得 4」的全局最优。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>状态：dp[i][0] 与 dp[i][1] 是两条交替推进的链——列 0 只能由列 1 的旧值推进，列 1 只能由列 0 的旧值推进，把「相邻不可同偷」编码进交替结构。</li><li>转移：dp[i][0] = max(dp[i-2][1] + nums[i], dp[i-1][1])：偷第 i 间从两行前的另一列跳接（直接跳过 i-1，天然保证不触发警报），不偷则从上一行另一列继承；dp[i][1] 对称地由列 0 推进。</li><li>初始化：dp[0][0]=nums[0]（只偷 0 号）、dp[0][1]=0（默认，不偷）、dp[1][0]=nums[1]、dp[1][1]=nums[0]；n&lt;2 直接返回 nums[0] 避免越界。</li><li>答案：最后一行的两列取大，覆盖「最后偷在奇/偶相位」两种模式。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：n&lt;2 提前返回，dp[1] 不存在。</li><li>两元素：初始化即答案 max(nums[0], nums[1])。</li><li>含 0：金额非负，继承不偷的候选不会变差。</li><li>全相同：如 [3,3,3,3]，交替结构只能隔间取，得 3+3=6。</li><li>推演 case：nums=[2,1,1,2]。</li></ul><ol><li>初始化：dp[0][0]=2，dp[0][1]=0，dp[1][0]=1，dp[1][1]=2。</li><li>i=2：dp[2][0]=max(dp[0][1]+1=1, dp[1][1]=2)=2（不偷 2 号，继承偷 0 号的 2）；dp[2][1]=max(dp[0][0]+1=3, dp[1][0]=1)=3（偷 2 号：2+1，跳过 1 号）。</li><li>i=3：dp[3][0]=max(dp[1][1]+2=4, dp[2][1]=3)=4（偷 3 号：偷 0 号的 2 再 +2）；dp[3][1]=max(dp[1][0]+2=3, dp[2][0]=2)=3。</li><li>答案 = max(4,3) = 4 ✓（偷 0 号和 3 号）。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个下标常数次比较与加法，单遍扫描；任何解法都必须读一遍所有房屋（Ω(n)），已达下限。</li><li>空间 O(n)：dp 数组两列；转移只依赖前两行的两列，可滚动为 4 个变量降到 O(1)。</li><li>信息量下限：相邻约束下每间房子只需知道「前两间的最优」，本结构与标准一维 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 等价，没有引入多余维度。</li></ul></div></section>

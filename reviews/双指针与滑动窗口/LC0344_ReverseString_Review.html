@@ -37,10 +37,10 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 首尾双下标原地交换</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.5 MB</span><span class="chip">用例 477/477</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0344_ReverseString.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void reverseString(char[] s) {
-        for (int i = 0; i &lt; s.length /2; i++) {
-            char c = s[s.length - i - 1];
-            s[s.length - i - 1] = s[i];
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0344_ReverseString.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">reverseString</span>(<span class="tk-k">char</span>[] s) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.length /<span class="tk-n">2</span>; i++) {
+            <span class="tk-k">char</span> c = s[s.length - i - <span class="tk-n">1</span>];
+            s[s.length - i - <span class="tk-n">1</span>] = s[i];
             s[i] = c;
         }
     }</pre></div>

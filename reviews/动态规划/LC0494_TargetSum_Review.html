@@ -37,27 +37,27 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 0-1 背包计数 DP（P/N 转化）</h3>
     <p><span class="chip">时间 O(n·total)</span><span class="chip">空间 O(total)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 145/145</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0494_TargetSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int findTargetSumWays(int[] nums, int target) {
-        int sum = 0;
-        for (int num : nums) {
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0494_TargetSum.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findTargetSumWays</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
+        <span class="tk-k">int</span> sum = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
             sum += num;
         }
-        if (sum &lt; target || sum + target &lt; 0) {
-            return 0;
+        <span class="tk-k">if</span> (sum &lt; target || sum + target &lt; <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
         }
-        if (((sum + target) &amp; 1) == 1) {
-            return 0;
+        <span class="tk-k">if</span> (((sum + target) &amp; <span class="tk-n">1</span>) == <span class="tk-n">1</span>) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
         }
-        sum = (sum + target) / 2;
-        int[] dp = new int[sum + 1];
-        dp[0] = 1;
+        sum = (sum + target) / <span class="tk-n">2</span>;
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[sum + <span class="tk-n">1</span>];
+        dp[<span class="tk-n">0</span>] = <span class="tk-n">1</span>;
 
-        for (int num : nums) {
-            for (int i = sum; i &gt;= num; i--) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = sum; i &gt;= num; i--) {
                 dp[i] = dp[i] + dp[i - num];
             }
         }
-        return dp[sum];
+        <span class="tk-k">return</span> dp[sum];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><ul><li>本质：给每个数分配 + 或 -，求表达式结果等于 target 的个数。二选一分配 + 计数 → 0-1 背包的计数版。</li><li>转化：P=加号集合、N=减号集合。sum(P)-sum(N)=target，sum(P)+sum(N)=total，相加得 sum(P)=(total+target)/2——问题变成「选一个子集和等于 sum(P) 有几种方式」，直接复用 416 的子集和思路，只把 boolean 换成计数。</li></ul><p><strong>关键设计决策</strong></p><ul><li>前置剪枝：① total+target 为奇数 → 0；② sum(P) 越界（target&gt;total 或 target&lt;-total）→ 0（第二个防数组长度变负）。</li><li>状态：dp[s] = 用已处理元素凑出和 s 的方式数；dp[0]=1（空子集 1 种）。</li><li>转移：每处理 num，dp[s] += dp[s-num]，s 从 target 倒序到 num——倒序保证 dp[s-num] 读的是上一轮旧值，每个元素只用一次；正序会让一个元素被重复使用（1 个当 2 个用）。</li><li>答案：dp[sum(P)]。</li></ul><p><strong>具体 case 推演：[1,1,1]，target=1（期望 3）</strong></p><ul><li>total=3，sum(P)=(3+1)/2=2；dp=[1,0,0]</li><li>num=1：s=2→1：dp[2]+=dp[1]=0；dp[1]+=dp[0]=1 → [1,1,0]</li><li>num=1：dp[2]+=dp[1]=1；dp[1]+=dp[0]=2 → [1,2,1]</li><li>num=1：dp[2]+=dp[1]=3；dp[1]+=dp[0]=3 → [1,3,3]</li><li>dp[2]=3 ✓（对应 +-+、-++、++- 三种符号组合）</li></ul><p><strong>具体 case 推演：[0,0]，target=0（期望 4）</strong></p><ul><li>total=0，sum(P)=0，dp[0]=1</li><li>每个 0 处理时 s=0：dp[0] += dp[0] → 每轮翻倍：1→2→4 ✓（每个 0 可 +0 或 -0，共 2² 种）</li></ul><p><strong>边界与细节</strong></p><ul><li>单零/双零：0 的 + 与 - 是不同表达式，dp[0] 累加正确处理。</li><li>负 target：target&lt;-total 时 sum(P)&lt;0，必须先返回 0 否则数组越界。</li><li>大数组 20×1000 target=0：sum(P)=10000，dp 长度 10001，C(20,10)=184756 验证计数。</li><li>倒序是 0-1 背包防元素复用的关键，不可省。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n·sum(P)) ≤ O(n·total)：每元素倒序遍历 dp 数组。n≤20、total≤20000，完全可行。这是子集和计数（NP 完全问题的计数版）的标准伪多项式 DP，本约束下即最优。</li><li>空间 O(sum(P)) ≤ O(total)。</li></ul></div></section>

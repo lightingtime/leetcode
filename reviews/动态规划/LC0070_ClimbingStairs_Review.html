@@ -37,17 +37,17 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 滚动变量斐波那契</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 40.6 MB</span><span class="chip">用例 45/45</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0070_ClimbingStairs.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int climbStairs(int n) {
-        if (n &lt;= 2) {
-            return n;
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0070_ClimbingStairs.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">climbStairs</span>(<span class="tk-k">int</span> n) {
+        <span class="tk-k">if</span> (n &lt;= <span class="tk-n">2</span>) {
+            <span class="tk-k">return</span> n;
         }
-        int f1 = 1, f2 = 2, fn = 2;
-        for (int i = 2; i &lt; n; i++) {
+        <span class="tk-k">int</span> f1 = <span class="tk-n">1</span>, f2 = <span class="tk-n">2</span>, fn = <span class="tk-n">2</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">2</span>; i &lt; n; i++) {
             fn = f1 + f2;
             f1 = f2;
             f2 = fn;
         }
-        return fn;
+        <span class="tk-k">return</span> fn;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：到第 n 阶的方法数 = 最后一步从第 n-1 阶跨 1 阶 + 从第 n-2 阶跨 2 阶，所以 f(n) = f(n-1) + f(n-2)，就是斐波那契数列（f(1)=1, f(2)=2）。</p><p>为什么用 DP/滚动变量：</p><ul><li>状态定义：f(i) = 爬到第 i 阶的方法数；</li><li>转移方程：f(i) = f(i-1) + f(i-2)，只依赖前两个状态；</li><li>因此不需要存整个数组，两个滚动变量即可，空间 O(1)。</li></ul><p>具体 case 推演（n=4）：</p><ul><li>f(1)=1：只能走 1 阶，方法 [1]；</li><li>f(2)=2：方法 [1,1]、[2]；</li><li>f(3)=f(1)+f(2)=3：方法 [1,1,1]、[1,2]、[2,1]；</li><li>f(4)=f(2)+f(3)=5：方法 [1,1,1,1]、[1,1,2]、[1,2,1]、[2,1,1]、[2,2]。</li></ul><p>关键设计：</p><ol><li>循环从 i=2 到 n-1 共 n-2 轮，每轮 fn=f1+f2 后滚动 f1=f2、f2=fn；</li><li>n&lt;=2 提前返回，避免 f1/f2 的初值问题。</li></ol><p>边界与细节：</p><ul><li>n=1 → 1、n=2 → 2 直接返回；</li><li>题目约束 1 &lt;= n &lt;= 45，f(45)=1836311903 不溢出 int（再大一位 F47 就会溢出，约束恰好卡在安全范围内），本地边界测试已覆盖 n=45。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：n-2 轮转移；</li><li>空间 O(1)：只保留前两个状态。</li></ul><p>为什么是最优：状态转移只依赖前两项，常规做法 O(n)/O(1) 已到 DP 最优；进阶可用矩阵快速幂做到 O(log n)，但对 n&lt;=45 没有实际收益，面试/刷题场景滚动变量就是标准答案。</p></div></section>

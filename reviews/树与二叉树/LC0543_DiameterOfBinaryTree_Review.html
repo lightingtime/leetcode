@@ -37,21 +37,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 后序递归（返回子树高度，全局更新直径）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(h)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 106/106</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0543_DiameterOfBinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>int max = 0;
-    public int diameterOfBinaryTree(TreeNode root) {
-        max = 0; // 重置：成员变量在多次调用间会残留上一次的答案
-        dfs(root);
-        return max;
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0543_DiameterOfBinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">diameterOfBinaryTree</span>(<span class="tk-t">TreeNode</span> root) {
+        max = <span class="tk-n">0</span>; <span class="tk-c">// 重置：成员变量在多次调用间会残留上一次的答案</span>
+        <span class="tk-f">dfs</span>(root);
+        <span class="tk-k">return</span> max;
     }
 
-    private int dfs(TreeNode root) {
-        if (root == null) {
-            return 0;
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
         }
-        int left = dfs(root.left);
-        int right = dfs(root.right);
-        max = Math.max(max, left + right);
-        return 1 + Math.max(left, right);
+        <span class="tk-k">int</span> left = <span class="tk-f">dfs</span>(root.left);
+        <span class="tk-k">int</span> right = <span class="tk-f">dfs</span>(root.right);
+        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, left + right);
+        <span class="tk-k">return</span> <span class="tk-n">1</span> + <span class="tk-t">Math</span>.<span class="tk-f">max</span>(left, right);
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>题目：任意两个节点间最长路径的边数，路径可能不经过根。</li><li>观察：任何一条路径都「向上走到某个最高点 LCA 再向下」，所以最长路径一定等于某个节点的 左子树高度 + 右子树高度（经过该节点的最深左叶子→该节点→最深右叶子）。</li><li>解法选择：后序递归。每个节点返回自己的子树高度给父节点（max(左,右)+1），同时用左高+右高更新全局答案；这样一趟遍历同时算完所有候选。</li></ul><p><strong>关键设计决策</strong></p><ul><li>递归函数 dfs(node) 返回以 node 为根的子树高度（边数口径：叶子返回 1，空返回 0）。</li><li>全局答案 max 在每层更新：max(max, left + right)——left+right 恰为「经过当前节点的最长路径边数」。</li><li>必须用成员变量/数组累计答案，不能用递归的局部变量（会随栈帧消失）。</li><li>坑：成员变量多次调用同一实例时会残留上次答案，入口需重置为 0（本地多用例测试暴露；力扣虽单用例也建议重置）。</li></ul><p><strong>具体 case 推演</strong></p><ul><li>示例1：[1,2,3,4,5] → 4、5 叶子各返回 1；节点2 左=1 右=1，max=2，返回 2；节点3 返回 1；根1 左=2 右=1，max=max(2,3)=3，返回 3 → 答案 3 ✓</li><li>示例2：[1,2] → 节点2 返回 1；根1 左=1 右=0，max=1 → 答案 1 ✓</li><li>链状 [1,2,3]（1-2-3）：节点3 返回1；节点2 左=1 右=0，max=1，返回2；根1 左=2 右=0，max=2 → 答案 2 ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>空节点返回 0；单节点：左=右=0，max=0 ✓</li><li>只有一条链的树：答案 = 链长 - 1（边数）</li><li>递归深度 = 树高 h，最坏 O(n)。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个节点恰好访问一次。</li><li>空间 O(h)：递归栈深度为树高。</li><li>下界论证：必须访问每个节点才能算出所有可能的路径候选，O(n) 达到下界。</li></ul></div></section>

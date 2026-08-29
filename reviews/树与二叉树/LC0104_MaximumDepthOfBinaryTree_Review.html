@@ -37,11 +37,11 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归 DFS</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树高)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 40/40</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0104_MaximumDepthOfBinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxDepth(TreeNode root) {
-        if (root == null) {
-            return 0;
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0104_MaximumDepthOfBinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxDepth</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
         }
-        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+        <span class="tk-k">return</span> <span class="tk-n">1</span> + <span class="tk-t">Math</span>.<span class="tk-f">max</span>(<span class="tk-f">maxDepth</span>(root.left), <span class="tk-f">maxDepth</span>(root.right));
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：二叉树最大深度 = 1 + max(左子树深度, 右子树深度)。树的分治结构让递归成为最自然的表达。</p><p>关键设计：递归终止条件为空节点返回 0；每深入一层加 1；取左右子树的较大者。也可以层序遍历计数，但递归最简洁。</p><p>边界：空树深度 0；单节点 1；斜树（退化成链）深度为 n，递归栈深度 O(n)，注意不要爆栈。</p><p>复杂度：O(n) 时间、O(h) 空间（h 为树高，最坏 O(n)），最优。</p></div></section>

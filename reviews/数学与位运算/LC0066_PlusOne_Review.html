@@ -37,18 +37,18 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 反向进位模拟</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 114/114</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0066_PlusOne.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int[] plusOne(int[] digits) {
-        for (int i = digits.length - 1; i &gt;= 0; i--) {
-            if (digits[i] == 9) {
-                digits[i] = 0;
-            } else {
-                digits[i] += 1;
-                return digits;
+    <div class="code-wrap"><div class="code-head"><span>src/数学与位运算/LC0066_PlusOne.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">plusOne</span>(<span class="tk-k">int</span>[] digits) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = digits.length - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">if</span> (digits[i] == <span class="tk-n">9</span>) {
+                digits[i] = <span class="tk-n">0</span>;
+            } <span class="tk-k">else</span> {
+                digits[i] += <span class="tk-n">1</span>;
+                <span class="tk-k">return</span> digits;
             }
         }
-        int[] ans = new int[digits.length + 1];
-        ans[0] = 1;
-        return ans;
+        <span class="tk-k">int</span>[] ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[digits.length + <span class="tk-n">1</span>];
+        ans[<span class="tk-n">0</span>] = <span class="tk-n">1</span>;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>大整数以高位到低位数组表示，加 1 本质是最低位的手算加法 + 进位传播。不能把整个数组转成整数相加（长度可达 100，远超 long 范围），必须逐位模拟进位。从最低位（数组末尾）向前处理，遇 9 会进位（9+1=10 → 本位 0、进 1），遇非 9 加 1 后进位终止，可提前返回。</p><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>写法</th><th>理由</th></tr></thead><tbody><tr><td>反向遍历</td><td><code>for (i = len-1; i &gt;= 0; i--)</code></td><td>低位在数组末尾，模拟手算从个位开始</td></tr><tr><td>遇 9 置 0 继续</td><td><code>digits[i] = 0</code></td><td>9+1=10，本位归 0 且进位继续向左传播</td></tr><tr><td>遇非 9 +1 返回</td><td><code>digits[i] += 1; return digits</code></td><td>进位链在此终止，剩余高位不变，原地返回</td></tr><tr><td>全 9 扩容</td><td>循环走完未返回 → <code>new int[len+1]</code>，首位 1</td><td>全部进位后最高位溢出（999→1000）</td></tr></tbody></table></div><p><strong>边界与细节</strong></p><ul><li>单元素非 9：<code>[4]→[5]</code>，第一步就返回。</li><li>部分 9 进位：<code>[1,9,9]</code> → 末位 9→0，中位 9→0，首位 1→2 返回 <code>[2,0,0]</code>。</li><li>全 9 扩容：<code>[9,9,9]</code> 全部置 0，循环走完，扩容 <code>[1,0,0,0]</code>；100 位全 9 扩到 101 位。</li><li>含 0 数字：<code>[1,0,0]→[1,0,1]</code>，末位 0 非 9 直接 +1。</li><li>无前导 0 约束下，扩容只可能发生在「全 9」，首位必为 1。</li></ul><p><strong>具体 case 逐层推演</strong></p><p><code>[1,9,9]</code>：</p><ul><li>i=2：digits[2]=9 → 置 0，数组 <code>[1,9,0]</code></li><li>i=1：digits[1]=9 → 置 0，数组 <code>[1,0,0]</code></li><li>i=0：digits[0]=1 非 9 → +1=2，返回 <code>[2,0,0]</code> ✓</li></ul><p><code>[9,9]</code>：</p><ul><li>i=1：9 → 0，<code>[9,0]</code></li><li>i=0：9 → 0，<code>[0,0]</code></li><li>循环结束，扩容 <code>new int[3]</code> 首位 1 → <code>[1,0,0]</code> ✓</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：最坏全 9 需遍历整个数组（n 次置 0）+ O(n) 扩容；平均提前返回更快。任何解法至少要处理从末尾开始的连续 9 段才能确定结果，Ω(n) 即下限。</li><li>空间 O(1)：非全 9 原地修改，无额外存储；仅全 9 时需要新数组（结果本身就要多一位），这是必要开销。</li></ul></div></section>

@@ -37,17 +37,17 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三段反转</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 256.9 MB</span><span class="chip">用例 695/695</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0189_RotateArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void rotate(int[] nums, int k) {
-        int n = nums.length;
+    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0189_RotateArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">rotate</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-k">int</span> n = nums.length;
         k %= n;
-        swap(nums, 0, n - 1);
-        swap(nums, 0, k - 1);
-        swap(nums, k, n - 1);
+        <span class="tk-f">swap</span>(nums, <span class="tk-n">0</span>, n - <span class="tk-n">1</span>);
+        <span class="tk-f">swap</span>(nums, <span class="tk-n">0</span>, k - <span class="tk-n">1</span>);
+        <span class="tk-f">swap</span>(nums, k, n - <span class="tk-n">1</span>);
     }
 
-    private void swap(int[] nums, int l, int r) {
-        while (l &lt; r) {
-            int temp = nums[r];
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r) {
+        <span class="tk-k">while</span> (l &lt; r) {
+            <span class="tk-k">int</span> temp = nums[r];
             nums[r] = nums[l];
             nums[l] = temp;
             l++;

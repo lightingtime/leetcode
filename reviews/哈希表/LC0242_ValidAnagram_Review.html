@@ -37,21 +37,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap 双向计数</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(k)</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 55/55</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0242_ValidAnagram.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isAnagram(String s, String t) {
-        if (s.length() != t.length()) {
-            return false;
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0242_ValidAnagram.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isAnagram</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
+        <span class="tk-k">if</span> (s.<span class="tk-f">length</span>() != t.<span class="tk-f">length</span>()) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
-        for (int i = 0; i &lt; s.length(); i++) {
-            map.merge(s.charAt(i), 1, Integer::sum);
-            map.merge(t.charAt(i), -1, Integer::sum);
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Character</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            map.<span class="tk-f">merge</span>(s.<span class="tk-f">charAt</span>(i), <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+            map.<span class="tk-f">merge</span>(t.<span class="tk-f">charAt</span>(i), -<span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
         }
-        for (Map.Entry&lt;Character, Integer&gt; entry : map.entrySet()) {
-            if (entry.getValue() != 0) {
-                return false;
+        <span class="tk-k">for</span> (<span class="tk-t">Map</span>.<span class="tk-t">Entry</span>&lt;<span class="tk-t">Character</span>, <span class="tk-t">Integer</span>&gt; entry : map.<span class="tk-f">entrySet</span>()) {
+            <span class="tk-k">if</span> (entry.<span class="tk-f">getValue</span>() != <span class="tk-n">0</span>) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
         }
-        return true;
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断 t 是否是 s 的字母异位词，即两个字符串的「字符多重集」是否相等——每个字符在 s 和 t 中出现次数必须完全一致，顺序无关。</p><p>解法选择理由：</p><ul><li>排序后逐位比较是 O(n log n)，能解但不是最优。</li><li>哈希表计数把「两个串字符次数是否相同」化成「同一个计数器上 +1 / -1 能否互相抵消」：s 贡献 +1、t 贡献 -1，全部抵消说明次数相同。每步平均 O(1)，整体 O(n)。</li><li>用户的思路用单个 map 双向计数，比「两个 map 分别统计再比较」少一半空间与一次遍历。</li></ul><p>关键设计决策：</p><ol><li>长度不等直接 return false：异位词的必要条件是长度相同，先剪枝省事。</li><li>单 map 双向计数：一个循环里同时对 s 的字符 merge +1、对 t 的字符 merge -1，利用 map.merge 处理「键不存在时按 0 起步」。</li><li>最后遍历 map 的 values()，只要有非 0 就 false；全部为 0 才 true。</li><li>可选的提前返回：减到负数时 t 中该字符已比 s 多，可立即 false（用户没做，不影响正确性，只是少遍历）。</li></ol><p>具体 case 推演：</p><p>s = "aab", t = "aba"（期望 true，长度 3 相等）：</p><div class="table-wrap"><table><thead><tr><th>步骤 i</th><th>s.charAt(i)</th><th>动作</th><th>t.charAt(i)</th><th>动作</th><th>map</th></tr></thead><tbody><tr><td>0</td><td>a</td><td>+1</td><td>a</td><td>-1</td><td>{a:0}</td></tr><tr><td>1</td><td>a</td><td>+1</td><td>b</td><td>-1</td><td>{a:1, b:-1}</td></tr><tr><td>2</td><td>b</td><td>+1</td><td>a</td><td>-1</td><td>{a:0, b:0}</td></tr></tbody></table></div><p>最终 values 全 0 → true ✓</p><p>s = "rat", t = "car"（期望 false）：</p><div class="table-wrap"><table><thead><tr><th>步骤 i</th><th>s 字符/动作</th><th>t 字符/动作</th><th>map</th></tr></thead><tbody><tr><td>0</td><td>r +1</td><td>c -1</td><td>{r:1, c:-1}</td></tr><tr><td>1</td><td>a +1</td><td>a -1</td><td>{r:1, c:-1, a:0}</td></tr><tr><td>2</td><td>t +1</td><td>r -1</td><td>{r:0, c:-1, a:0, t:1}</td></tr></tbody></table></div><p>最终 c=-1、t=1 非 0 → false ✓</p><p>s = "aaab", t = "aab"（期望 false）：长度 4 != 3，直接 false ✓</p><p>边界与细节：</p><ul><li>单字符：相同返回 true，不同 map 非 0 返回 false。</li><li>长度不同：即使字符集合相同（如 "ab" vs "a"）也先剪枝。</li><li>次数不同：a 多一个时 map 中 a 的计数非 0，不会被「只比字符集合」的写法误判。</li><li>5*10^4 上限：merge 平均 O(1)，无性能问题。</li><li>进阶 Unicode：Java 的 char 是 UTF-16 code unit，补充平面字符（如 emoji）会拆成代理对；真要支持 Unicode 应按码点（codePoints）计数。本题约束仅小写字母，char 计数正确。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：n = s.length + t.length，每个字符一次 merge（平均 O(1)），最后遍历 map 一次。</li><li>空间 O(k)：k 为出现的不同字符数；本题仅小写字母，k ≤ 26，可视为 O(1)。</li><li>下限论证：判异位词至少要读完两个串的每个字符（Ω(n)），O(n) 已达时间下限；字符集固定时空间也是常数。唯一可精简的是用 int[26] 数组代替 HashMap（省去装箱与哈希开销），属于实现层面的小优化，不是复杂度提升。</li></ul></div></section>

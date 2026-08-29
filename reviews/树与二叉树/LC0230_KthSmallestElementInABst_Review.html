@@ -37,25 +37,25 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归中序 DFS（实例字段计数）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.2 MB</span><span class="chip">用例 93/93</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0230_KthSmallestElementInABst.java · 递归中序 DFS（实例字段计数）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    TreeNode cur;
-    int count;
-    public int kthSmallest(TreeNode root, int k) {
-        count = 0;
-        cur = null;
-        dfs(root, k);
-        return cur.val;
+    <div class="code-wrap"><div class="code-head"><span>LC0230_KthSmallestElementInABst.java · 递归中序 DFS（实例字段计数）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-t">TreeNode</span> cur;
+    <span class="tk-k">int</span> count;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">kthSmallest</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">int</span> k) {
+        count = <span class="tk-n">0</span>;
+        cur = <span class="tk-k">null</span>;
+        <span class="tk-f">dfs</span>(root, k);
+        <span class="tk-k">return</span> cur.val;
     }
 
-    private void dfs(TreeNode node, int k) {
-        if (node == null) {
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> node, <span class="tk-k">int</span> k) {
+        <span class="tk-k">if</span> (node == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span>;
         }
-        dfs(node.left, k);
+        <span class="tk-f">dfs</span>(node.left, k);
         count++;
-        if (count == k) {
+        <span class="tk-k">if</span> (count == k) {
             cur = node;
         }
-        dfs(node.right, k);
+        <span class="tk-f">dfs</span>(node.right, k);
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：BST 的关键性质——中序遍历结果就是升序序列。因此「第 k 小」等价于「中序遍历的第 k 个节点」，k 从 1 计数。</p><p><strong>解法选择理由</strong>：递归中序 DFS，配合实例字段计数器。每次查询重置 count 和 cur，完整中序遍历，当 count 数到 k 时把当前节点记到 cur。单次查询下界 O(n)（最坏需访问全部节点才能确定第 k 小，如 k=n 且退化成链），此解达到。</p><p><strong>关键设计决策</strong>：</p><ol><li>中序顺序 = 左 → 中 → 右：先递归左子树，再 count++ 访问当前节点，再递归右子树。</li><li>用实例字段 count/cur 传递状态：递归里不需要返回值传来传去，找到后记到 cur。</li><li>每次查询前重置 count=0、cur=null，保证同一个实例多次调用互不污染（这是容易漏的细节）。</li><li>完整遍历、不提前停：逻辑最简；提前停需要额外的 found 标志，收益只在 k 很小时明显。</li></ol><p><strong>具体 case 推演</strong>（示例2：[5,3,6,2,4,null,null,1]，k=3，中序应为 1,2,3,4,5,6）：</p><ol><li>dfs 沿左走到最左 1（count=1）</li><li>回溯到 2（count=2）</li><li>回溯到 3（count=3 == k → cur=3）</li><li>继续遍历完剩余节点（count 继续增大，但 count==k 只触发一次，cur 不被覆盖）</li></ol><p>返回 3 ✓</p><p><strong>边界与细节</strong>：</p><ul><li>k=1：第一个中序节点即最小值（沿左走到最底）。</li><li>k=n：最后访问的节点即最大值。</li><li>单节点：count 直接到 1 → 返回自身。</li><li>退化链（左链/右链）：递归深度 = 链长，n ≤ 10^4 在栈深度安全范围内；迭代版可彻底规避。</li><li>值域端点 0 / 10^4：只比较大小关系，无溢出。</li></ul><p><strong>复杂度与下限论证</strong>：每个节点访问一次 → O(n) 时间；递归栈深度 O(h)，最坏（链）O(n) → 空间 O(n)。单次查询在无额外数据结构时，最坏必须访问 O(n) 个节点，此解达到该下界。</p><p><strong>进阶问法（频繁查询 + 频繁修改）</strong>：基础解每次查询 O(n) 不满足。标准优化是在每个节点维护「子树大小 size」，查询时比较 k 与左子树大小决定走向，O(h)；插入/删除同步维护 size；配合平衡树（AVL/红黑）可到 O(log n)。</p></div></section>

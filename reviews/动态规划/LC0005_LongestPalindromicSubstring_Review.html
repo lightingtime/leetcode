@@ -37,54 +37,54 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 区间 DP（boolean 表）</h3>
     <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(n^2)</span><span class="chip">内存 ≈ 46.9 MB</span><span class="chip">用例 144/144</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 区间 DP（boolean 表）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public String longestPalindrome(String s) {
-        int n = s.length();
-        boolean[][] dp = new boolean[n][n];
-        for (int i = 0; i &lt; n; i++) {
-            dp[i][i] = true;
-            if (i &lt; n - 1 &amp;&amp; s.charAt(i) == s.charAt(i + 1)) {
-                dp[i][i + 1] = true;
+    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 区间 DP（boolean 表）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
+        <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[n][n];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n; i++) {
+            dp[i][i] = <span class="tk-k">true</span>;
+            <span class="tk-k">if</span> (i &lt; n - <span class="tk-n">1</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(i + <span class="tk-n">1</span>)) {
+                dp[i][i + <span class="tk-n">1</span>] = <span class="tk-k">true</span>;
             }
         }
-        String ans = "";
-        for (int i = n - 1; i &gt;= 0; i--) {
-            for (int j = 0; j &lt; n; j++) {
-                if (j - i &gt;= 2 &amp;&amp; s.charAt(i) == s.charAt(j)) {
-                    dp[i][j] = dp[i + 1][j - 1];
+        <span class="tk-t">String</span> ans = <span class="tk-s">""</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = n - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                <span class="tk-k">if</span> (j - i &gt;= <span class="tk-n">2</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(j)) {
+                    dp[i][j] = dp[i + <span class="tk-n">1</span>][j - <span class="tk-n">1</span>];
                 }
-                if (dp[i][j] &amp;&amp; j - i &gt;= ans.length()) {
-                    ans = s.substring(i, j + 1);
+                <span class="tk-k">if</span> (dp[i][j] &amp;&amp; j - i &gt;= ans.<span class="tk-f">length</span>()) {
+                    ans = s.<span class="tk-f">substring</span>(i, j + <span class="tk-n">1</span>);
                 }
             }
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 中心扩散</h3>
     <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 144/144</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public String longestPalindrome(String s) {
-        int n = s.length();
-        if (n &lt; 2) return s;
-        int maxLen = 0;
-        int start = -1;
-        for (int i = 0; i &lt; n; i++) {
-            int len1 = getLen(s, i, i);
-            int len2 = getLen(s, i, i + 1);
-            int len = Math.max(len1, len2);
-            if (len &gt; maxLen) {
+    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
+        <span class="tk-k">if</span> (n &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> s;
+        <span class="tk-k">int</span> maxLen = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> start = -<span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n; i++) {
+            <span class="tk-k">int</span> len1 = <span class="tk-f">getLen</span>(s, i, i);
+            <span class="tk-k">int</span> len2 = <span class="tk-f">getLen</span>(s, i, i + <span class="tk-n">1</span>);
+            <span class="tk-k">int</span> len = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(len1, len2);
+            <span class="tk-k">if</span> (len &gt; maxLen) {
                 maxLen = len;
-                start = i - (maxLen - 1) / 2;
+                start = i - (maxLen - <span class="tk-n">1</span>) / <span class="tk-n">2</span>;
             }
         }
-        return s.substring(start, start + maxLen);
+        <span class="tk-k">return</span> s.<span class="tk-f">substring</span>(start, start + maxLen);
     }
 
-    private int getLen(String s, int l, int r) {
-        while (l &gt;= 0 &amp;&amp; r &lt; s.length() &amp;&amp; s.charAt(l) == s.charAt(r)) {
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">getLen</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r) {
+        <span class="tk-k">while</span> (l &gt;= <span class="tk-n">0</span> &amp;&amp; r &lt; s.<span class="tk-f">length</span>() &amp;&amp; s.<span class="tk-f">charAt</span>(l) == s.<span class="tk-f">charAt</span>(r)) {
             l--;
             r++;
         }
-        return r - l - 1;
+        <span class="tk-k">return</span> r - l - <span class="tk-n">1</span>;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找最长回文子串。本题有 DP 与中心扩散两种常规解法，均已提交记录。</p><p>写法 1 · 区间 DP（已提交）：</p><ul><li>dp[i][j] = s[i..j] 是否为回文，转移 dp[i][j] = (s[i]==s[j]) &amp;&amp; dp[i+1][j-1]（j-i &gt;= 2）；</li><li>base：长度 1 恒真、长度 2 两端相等；填表用 i 倒序满足依赖方向；答案更新必须校验 dp[i][j]==true；</li><li>复杂度 O(n^2) 时间、O(n^2) 空间。</li></ul><p>写法 2 · 中心扩散（已提交）：</p><ul><li>每个回文有唯一中心：奇数长度中心是字符本身，偶数长度中心是两个字符之间，共 2n-1 个中心；</li><li>对每个中心向两边扩散直到两端不等，返回半径长度；</li><li>主循环对每个 i 分别以 (i,i) 和 (i,i+1) 为起点扩散，取更长者更新答案；</li><li>起点换算：start = i - (maxLen-1)/2；</li><li>复杂度 O(n^2) 时间（每个中心最多扩 O(n)）、O(1) 空间。</li></ul><p>具体 case 推演（s=babad）：</p><ul><li>中心 = 下标 1 的 a：b==b → bab（长 3），越界停；</li><li>中心 = 下标 2 的 b：a==a → aba（长 3），再外 b!=d 停；</li><li>空隙中心（a 与 b 之间）：a!=b，长 0；</li><li>最长 3，bab / aba 任取。</li></ul><p>两种写法对比：</p><ul><li>DP 状态定义更「正统」，方便扩展（如回文子序列）；中心扩散代码更简洁、空间 O(1)；</li><li>时间同为 O(n^2)；Manacher 可到 O(n) 是进阶。</li></ul><p>为什么是最优/可接受：O(n^2) 是本题常规最优解（暴力 O(n^3) 不可接受）；中心扩散的空间 O(1) 是两种常规解法里最优的。</p></div></section>

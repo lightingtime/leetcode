@@ -37,69 +37,69 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 59/59</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public Node connect(Node root) {
-            if (root == null) {
-                return root;
+    <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · BFS 层序遍历，size 控制每层边界，pre 串联同层 next，null 子节点不入队</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">connect</span>(<span class="tk-t">Node</span> root) {
+            <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+                <span class="tk-k">return</span> root;
             }
-            Deque&lt;Node&gt; queue = new ArrayDeque&lt;&gt;();
-            queue.offerLast(root);
-            while (!queue.isEmpty()) {
-                int size = queue.size();
-                Node pre = null;
-                for (int i = 0; i &lt; size; i++) {
-                    Node node = queue.pollFirst();
-                    if (pre != null) {
+            <span class="tk-t">Deque</span>&lt;<span class="tk-t">Node</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+            queue.<span class="tk-f">offerLast</span>(root);
+            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
+                <span class="tk-t">Node</span> pre = <span class="tk-k">null</span>;
+                <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
+                    <span class="tk-t">Node</span> node = queue.<span class="tk-f">pollFirst</span>();
+                    <span class="tk-k">if</span> (pre != <span class="tk-k">null</span>) {
                         pre.next = node;
                     }
-                    if (node.left != null) {
-                        queue.offerLast(node.left);
+                    <span class="tk-k">if</span> (node.left != <span class="tk-k">null</span>) {
+                        queue.<span class="tk-f">offerLast</span>(node.left);
                     }
-                    if (node.right != null) {
-                        queue.offerLast(node.right);
+                    <span class="tk-k">if</span> (node.right != <span class="tk-k">null</span>) {
+                        queue.<span class="tk-f">offerLast</span>(node.right);
                     }
                     pre = node;
                 }
             }
-            return root;
+            <span class="tk-k">return</span> root;
         }
 </pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 59/59</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
-    public Node connect(Node root) {
-        if (root == null) {
-            return root;
+    <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">connect</span>(<span class="tk-t">Node</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> root;
         }
-        Node mostLeft = root;
-        while (mostLeft.left != null) {
-            Node cur = mostLeft;
-            while (cur != null) {
+        <span class="tk-t">Node</span> mostLeft = root;
+        <span class="tk-k">while</span> (mostLeft.left != <span class="tk-k">null</span>) {
+            <span class="tk-t">Node</span> cur = mostLeft;
+            <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
                 cur.left.next = cur.right;
-                if (cur.next != null) {
+                <span class="tk-k">if</span> (cur.next != <span class="tk-k">null</span>) {
                     cur.right.next = cur.next.left;
                 }
                 cur = cur.next;
             }
             mostLeft = mostLeft.left;
         }
-        return root;
+        <span class="tk-k">return</span> root;
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 3 · 递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)（递归栈不计额外空间）</span><span class="chip">内存 ≈ 44.9 MB</span><span class="chip">用例 59/59</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · 递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
-    public Node connect(Node root) {
-        if (root == null) {
-            return root;
+    <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">connect</span>(<span class="tk-t">Node</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> root;
         }
-        if (root.left != null) {
+        <span class="tk-k">if</span> (root.left != <span class="tk-k">null</span>) {
             root.left.next = root.right;
-            root.right.next = root.next != null ? root.next.left : null;
-            connect(root.left);
-            connect(root.right);
+            root.right.next = root.next != <span class="tk-k">null</span> ? root.next.left : <span class="tk-k">null</span>;
+            <span class="tk-f">connect</span>(root.left);
+            <span class="tk-f">connect</span>(root.right);
         }
-        return root;
+        <span class="tk-k">return</span> root;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><ul><li>完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，处理这一层时能借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列。这一观察对迭代与递归都成立。</li></ul><p><strong>写法 1（BFS + 队列）</strong></p><ul><li>每轮 while 前记 <code>size = queue.size()</code> 划出本层，只处理 size 个节点，<code>pre.next = node</code> 串联同层，层首 next 保持 null。</li><li>空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 <code>node.left</code> 抛 NPE（真实踩过）。</li><li>时间 O(n)、空间 O(n)。正确但未达进阶空间要求。</li></ul><p><strong>写法 2（O(1) 空间迭代，利用上一层 next）</strong></p><ul><li><code>mostLeft</code> 指向每层最左节点，外层 <code>while (mostLeft.left != null)</code> 按层向下；<code>cur</code> 遍历当前层（该层 next 已连好）。</li><li>对每个 cur：<code>cur.left.next = cur.right</code>（同父相连）；若 <code>cur.next != null</code> 则 <code>cur.right.next = cur.next.left</code>（跨父连接，依赖当前层 next 就绪）。</li><li>一层处理完 <code>mostLeft = mostLeft.left</code> 下移；初始化第 1 层只有 root 天然就绪。空间 O(1)。</li></ul><p><strong>写法 3（递归 / 前序 DFS）</strong></p><ul><li>递归语义：处理当前节点的两个子节点——<code>root.left.next = root.right</code>（同父相连）；<code>root.right.next = root.next != null ? root.next.left : null</code>（跨父，依赖「当前节点所在层的 next 已连好」）。</li><li>处理完当前节点后递归 <code>connect(root.left)</code>、<code>connect(root.right)</code>：前序保证进入下一层前，其父层 next 已由上层处理完毕；先左后右保持同层从左到右。</li><li>完美二叉树保证 <code>root.left</code> 非空时 <code>root.right</code> 也非空（<code>root.left != null</code> 一个判断覆盖两者）。</li><li>空间：递归栈 O(log n)（完美二叉树高度=层数），题目声明递归栈不算额外空间，因此同样满足进阶 O(1) 额外空间。</li></ul><p><strong>具体 case 推演（写法 3）：7 节点树 [1,2,3,4,5,6,7]</strong></p><ul><li>connect(1)：2.next=3；3.next = 1.next(null) → null；递归 connect(2)、connect(3)。</li><li>connect(2)：4.next=5；5.next = 2.next(3).left = 6；递归 connect(4)、connect(5)。</li><li>connect(3)：6.next=7；7.next = 3.next(null) → null；递归 connect(6)、connect(7)。</li><li>结果：2→3、4→5→6→7，与示例一致。</li></ul><p><strong>复杂度与最优性（三写法对比）</strong></p><p>| 写法 | 时间 | 额外空间 | 满足进阶 O(1) |</p><p>| BFS 队列 | O(n) | O(n) | 否 |</p><p>| 迭代利用 next | O(n) | O(1) | 是 |</p><p>| 递归 DFS | O(n) | O(1)（递归栈不计） | 是 |</p><ul><li>时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，三种写法都达到。</li><li>空间下限：除返回值外无需额外存储，写法 2/3 的 O(1) 即最优；写法 2 与写法 3 为该题并列最优解。</li></ul></div></section>

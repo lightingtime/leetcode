@@ -37,27 +37,27 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯 DFS</h3>
     <p><span class="chip">时间 O(4^n·n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 24/24</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0017_LetterCombinationsOfAPhoneNumber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;String&gt; ans;
-    String[] map = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-    public List&lt;String&gt; letterCombinations(String digits) {
-        ans = new ArrayList&lt;&gt;();
-        if (digits.length() == 0) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>src/回溯/LC0017_LetterCombinationsOfAPhoneNumber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-t">String</span>[] map = {<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (digits.<span class="tk-f">length</span>() == <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> ans;
         }
-        dfs(digits, new StringBuilder(), 0);
-        return ans;
+        <span class="tk-f">dfs</span>(digits, <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>(), <span class="tk-n">0</span>);
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(String digits, StringBuilder sb, int len) {
-        if (len == digits.length()) {
-            ans.add(sb.toString());
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> digits, <span class="tk-t">StringBuilder</span> sb, <span class="tk-k">int</span> len) {
+        <span class="tk-k">if</span> (len == digits.<span class="tk-f">length</span>()) {
+            ans.<span class="tk-f">add</span>(sb.<span class="tk-f">toString</span>());
+            <span class="tk-k">return</span>;
         }
 
-        for (char c : map[digits.charAt(len) - '0'].toCharArray()) {
-            sb.append(c);
-            dfs(digits, sb, len + 1);
-            sb.deleteCharAt(sb.length() - 1);
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : map[digits.<span class="tk-f">charAt</span>(len) - <span class="tk-s">'0'</span>].<span class="tk-f">toCharArray</span>()) {
+            sb.<span class="tk-f">append</span>(c);
+            <span class="tk-f">dfs</span>(digits, sb, len + <span class="tk-n">1</span>);
+            sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
         }
 
     }</pre></div>

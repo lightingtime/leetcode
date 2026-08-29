@@ -37,14 +37,14 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单趟扫描维护历史最低</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.5 MB</span><span class="chip">用例 212/212</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0121_BestTimeToBuyAndSellStock.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxProfit(int[] prices) {
-        int max = 0;
-        int minPrice = prices[0];
-        for (int i = 0; i &lt; prices.length; i++) {
-            max = Math.max(max, prices[i] - minPrice);
-            minPrice = Math.min(prices[i], minPrice);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0121_BestTimeToBuyAndSellStock.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProfit</span>(<span class="tk-k">int</span>[] prices) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> minPrice = prices[<span class="tk-n">0</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; prices.length; i++) {
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, prices[i] - minPrice);
+            minPrice = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(prices[i], minPrice);
         }
-        return max;
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：只能买卖一次，最大利润 = max(某天卖出价 − 之前某天买入价)。暴力枚举所有买卖日组合是 O(n²)；因为「买入必须在卖出前」，一趟扫描维护历史最低买入价即可 O(n) 解决。</p><p>为什么用单趟扫描：</p><ul><li>对第 i 天，最优卖出策略一定是「在 0..i-1 天里的最低价买入、第 i 天卖出」；</li><li>更高的旧买入价永远不会比历史最低更好，可以放心丢弃，所以只需滚动维护一个 minPrice。</li></ul><p>具体 case 推演（prices = [7,1,5,3,6,4]）：</p><ul><li>第 1 天 7：历史最低 7，利润 7-7=0，max=0；</li><li>第 2 天 1：历史最低更新为 1，利润 0，max=0；</li><li>第 3 天 5：利润 5-1=4，max=4；</li><li>第 4 天 3：利润 3-1=2，max=4；</li><li>第 5 天 6：利润 6-1=5，max=5；</li><li>第 6 天 4：利润 4-1=3，max=5，答案 5。</li></ul><p>关键设计：</p><ol><li>两个滚动变量：minPrice 记录到当前为止的最低买入价，max 记录到当前为止的最大利润；</li><li>每步先算「今天卖出」的利润更新 max，再考虑是否把今天更新为新的历史最低；</li><li>max 初始 0：全程下跌时不允许亏损，返回 0。</li></ol><p>边界与细节：</p><ul><li>单元素数组：无法完成买卖，返回 0；</li><li>全递增：最低点买入、最高点卖出；全递减/全相同：返回 0；</li><li>10 万元素长数组也要一趟通过（本地边界测试已覆盖）。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：一趟扫描；</li><li>空间 O(1)：两个变量。</li></ul><p>为什么是最优：每个价格至少要读一次才能确定答案，O(n) 是下限；只需要历史最低这一个信息，O(1) 空间也是下限。</p></div></section>

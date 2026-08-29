@@ -37,36 +37,36 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</h3>
     <p><span class="chip">时间 O(n)（构造+均摊 O(1)/元素）</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.3 MB</span><span class="chip">用例 43/43</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0341_FlattenNestedListIterator.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>static class NestedIterator implements Iterator&lt;Integer&gt; {
-        Deque&lt;NestedInteger&gt; stack;
-        public NestedIterator(List&lt;NestedInteger&gt; nestedList) {
-            stack = new ArrayDeque&lt;&gt;();
-            for (int i = nestedList.size() - 1; i &gt;= 0; i--) {
-                stack.push(nestedList.get(i));
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0341_FlattenNestedListIterator.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">NestedIterator</span> <span class="tk-k">implements</span> <span class="tk-t">Iterator</span>&lt;<span class="tk-t">Integer</span>&gt; {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">NestedInteger</span>&gt; stack;
+        <span class="tk-k">public</span> <span class="tk-t">NestedIterator</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">NestedInteger</span>&gt; nestedList) {
+            stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = nestedList.<span class="tk-f">size</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+                stack.<span class="tk-f">push</span>(nestedList.<span class="tk-f">get</span>(i));
             }
         }
 
-        @Override
-        public Integer next() {
-            return stack.pop().getInteger();
+        <span class="tk-a">@Override</span>
+        <span class="tk-k">public</span> <span class="tk-t">Integer</span> <span class="tk-f">next</span>() {
+            <span class="tk-k">return</span> stack.<span class="tk-f">pop</span>().<span class="tk-f">getInteger</span>();
         }
 
-        @Override
-        public boolean hasNext() {
-            if (stack.isEmpty()) {
-                return false;
+        <span class="tk-a">@Override</span>
+        <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasNext</span>() {
+            <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
-            if (stack.peek().isInteger()) {
-                return true;
-            } else {
-                while (!stack.isEmpty() &amp;&amp; !stack.peek().isInteger()) {
-                    NestedInteger pop = stack.pop();
-                    for (int i = pop.getList().size() - 1; i &gt;= 0; i--) {
-                        stack.push(pop.getList().get(i));
+            <span class="tk-k">if</span> (stack.<span class="tk-f">peek</span>().<span class="tk-f">isInteger</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; !stack.<span class="tk-f">peek</span>().<span class="tk-f">isInteger</span>()) {
+                    <span class="tk-t">NestedInteger</span> pop = stack.<span class="tk-f">pop</span>();
+                    <span class="tk-k">for</span> (<span class="tk-k">int</span> i = pop.<span class="tk-f">getList</span>().<span class="tk-f">size</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+                        stack.<span class="tk-f">push</span>(pop.<span class="tk-f">getList</span>().<span class="tk-f">get</span>(i));
                     }
                 }
             }
-            return !stack.isEmpty();
+            <span class="tk-k">return</span> !stack.<span class="tk-f">isEmpty</span>();
         }
     }</pre></div>
   </div></section>

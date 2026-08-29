@@ -37,21 +37,21 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 区间 DP</h3>
     <p><span class="chip">时间 O(n^3)</span><span class="chip">空间 O(n^2)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 73/73</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0312_BurstBalloons.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maxCoins(int[] nums) {
-        int n = nums.length;
-        int[][] dp = new int[n + 2][n + 2];
-        int[] array = new int[n + 2];
-        System.arraycopy(nums, 0, array, 1, nums.length);
-        array[0] = array[n + 1] = 1;
-        for (int len = 2; len &lt;= n + 1; len++) {
-            for (int i = 0; i + len &lt;= n + 1; i++) {
-                int j = i + len;
-                for (int k = i + 1; k &lt; j; k++) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0312_BurstBalloons.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxCoins</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> n = nums.length;
+        <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>][n + <span class="tk-n">2</span>];
+        <span class="tk-k">int</span>[] array = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>];
+        <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(nums, <span class="tk-n">0</span>, array, <span class="tk-n">1</span>, nums.length);
+        array[<span class="tk-n">0</span>] = array[n + <span class="tk-n">1</span>] = <span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> len = <span class="tk-n">2</span>; len &lt;= n + <span class="tk-n">1</span>; len++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i + len &lt;= n + <span class="tk-n">1</span>; i++) {
+                <span class="tk-k">int</span> j = i + len;
+                <span class="tk-k">for</span> (<span class="tk-k">int</span> k = i + <span class="tk-n">1</span>; k &lt; j; k++) {
+                    dp[i][j] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);
                 }
             }
         }
-        return dp[0][n+ 1];
+        <span class="tk-k">return</span> dp[<span class="tk-n">0</span>][n+ <span class="tk-n">1</span>];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n 个气球按某个顺序全部戳破，每次得分依赖「当前相邻气球」，求最大总得分。直接枚举顺序是 O(n!)，不可行；正着做会不断改变相邻关系，所以倒过来想「最后一个戳谁」——最后一个被戳的气球左右邻居固定，且把问题切成两个互不影响的子区间。</p><p>解法选择理由（区间 DP）：</p><ul><li>在数组两端补 1 哨兵，<code>val = [1] + nums + [1]</code>，下标 0..n+1。</li><li>定义 <code>dp[i][j]</code> = 戳破开区间 <code>(i, j)</code> 内所有气球（端点 i、j 不戳，只当边界）能拿到的最大硬币。</li><li>最后戳 <code>k</code>（i &lt; k &lt; j）时，<code>(i,k)</code> 和 <code>(k,j)</code> 已戳完，k 的左右邻居就是 i 和 j，得分 = <code>val[i] * val[k] * val[j]</code>；左右子区间互不影响。</li><li>答案 = <code>dp[0][n+1]</code>（0 和 n+1 是哨兵，戳完中间全部真实气球）。</li></ul><p>关键设计：</p><ol><li>转移：<code>dp[i][j] = max(dp[i][k] + val[i]*val[k]*val[j] + dp[k][j])</code>，枚举所有 <code>i &lt; k &lt; j</code>。</li><li>填表顺序：三层循环，外层按区间长度 <code>len</code> 从小到大（2..n+1），中层左端点 <code>i</code>（<code>j = i+len</code>），内层枚举 <code>k</code>。长度小的区间先算完，<code>dp[i][k]</code>、<code>dp[k][j]</code> 才可用。</li><li>哨兵数组创建后必须把 <code>val[0]</code>、<code>val[n+1]</code> 设为 1；转移里所有取值都用 <code>val</code>，不能用原 <code>nums</code>（否则越界且边界不是 1）。</li></ol><p>具体 case 推演（<code>nums = [3,1,5]</code>，<code>val = [1,3,1,5,1]</code>，期望 35）：</p><div class="table-wrap"><table><thead><tr><th>len</th><th>i</th><th>j</th><th>k 候选</th><th>dp</th></tr></thead><tbody><tr><td>2</td><td>0</td><td>2</td><td>k=1: <code>0+1×3×1+0</code></td><td>3</td></tr><tr><td>2</td><td>1</td><td>3</td><td>k=2: <code>0+3×1×5+0</code></td><td>15</td></tr><tr><td>2</td><td>2</td><td>4</td><td>k=3: <code>0+1×5×1+0</code></td><td>5</td></tr><tr><td>3</td><td>0</td><td>3</td><td>k=1: <code>0+1×3×5+15=30</code>；k=2: <code>3+1×1×5+0=8</code></td><td>30</td></tr><tr><td>3</td><td>1</td><td>4</td><td>k=2: <code>0+3×1×1+5=8</code>；k=3: <code>15+3×5×1+0=30</code></td><td>30</td></tr><tr><td>4</td><td>0</td><td>4</td><td>k=1: <code>0+1×3×1+30=33</code>；k=2: <code>3+1×1×1+5=9</code>；k=3: <code>30+1×5×1+0=35</code></td><td>35</td></tr></tbody></table></div><p>答案 = <code>dp[0][4] = 35</code>。</p><p>边界与细节：</p><ul><li>单元素 <code>[5]</code>：<code>val=[1,5,1]</code>，<code>dp[0][2] = 1×5×1 = 5</code>。</li><li>全 0：所有乘积为 0，返回 0。</li><li>全 1：每个气球得分 1，n 个气球共 n。</li><li>0 在中间（<code>[1,0,1]</code>）：0 只会在某次乘积中贡献 0，最优把 1 的气球各拿 1 分，共 2。</li><li>300 个全 1：int 范围内 300，验证大输入不溢出。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n^3)：len 有 n 种、i 有 O(n) 种、k 有 O(n) 种。</li><li>空间 O(n^2)：dp 表。</li><li>这是本题的标准最优解：每个子区间都要枚举分界点，O(n^3) 是区间 DP 的下限形态；n&lt;=300 时完全可接受。</li></ul></div></section>

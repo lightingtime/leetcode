@@ -37,45 +37,45 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 原地归位（cyclic sort）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 64.2 MB</span><span class="chip">用例 35/35</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0448_FindAllNumbersDisappearedInAnArray.java · 原地归位（cyclic sort）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    public List&lt;Integer&gt; findDisappearedNumbers(int[] nums) {
-        int index = 0;
-        while (index &lt; nums.length) {
-            if (nums[index] != index + 1) {
-                if (nums[index] == nums[nums[index] - 1]) {
+    <div class="code-wrap"><div class="code-head"><span>LC0448_FindAllNumbersDisappearedInAnArray.java · 原地归位（cyclic sort）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">findDisappearedNumbers</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> index = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (index &lt; nums.length) {
+            <span class="tk-k">if</span> (nums[index] != index + <span class="tk-n">1</span>) {
+                <span class="tk-k">if</span> (nums[index] == nums[nums[index] - <span class="tk-n">1</span>]) {
                     index++;
-                    continue;
+                    <span class="tk-k">continue</span>;
                 }
-                int temp = nums[nums[index] - 1];
-                nums[nums[index] - 1] = nums[index];
+                <span class="tk-k">int</span> temp = nums[nums[index] - <span class="tk-n">1</span>];
+                nums[nums[index] - <span class="tk-n">1</span>] = nums[index];
                 nums[index] = temp;
-            } else {
+            } <span class="tk-k">else</span> {
                 index++;
             }
         }
-        List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (nums[i] != i + 1) {
-                list.add(i + 1);
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (nums[i] != i + <span class="tk-n">1</span>) {
+                list.<span class="tk-f">add</span>(i + <span class="tk-n">1</span>);
             }
         }
-        return list;
+        <span class="tk-k">return</span> list;
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 负数标记法</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 64.2 MB</span><span class="chip">用例 35/35</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0448_FindAllNumbersDisappearedInAnArray.java · 负数标记法</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>int index = 0;
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (nums[Math.abs(nums[i]) - 1] &gt; 0) {
-                nums[Math.abs(nums[i]) - 1] *= -1;
+    <div class="code-wrap"><div class="code-head"><span>LC0448_FindAllNumbersDisappearedInAnArray.java · 负数标记法</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> index = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (nums[<span class="tk-t">Math</span>.<span class="tk-f">abs</span>(nums[i]) - <span class="tk-n">1</span>] &gt; <span class="tk-n">0</span>) {
+                nums[<span class="tk-t">Math</span>.<span class="tk-f">abs</span>(nums[i]) - <span class="tk-n">1</span>] *= -<span class="tk-n">1</span>;
             }
         }
-        List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-        for (int i = 0; i &lt; nums.length; i++) {
-            if (nums[i] &gt; 0) {
-                list.add(i + 1);
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (nums[i] &gt; <span class="tk-n">0</span>) {
+                list.<span class="tk-f">add</span>(i + <span class="tk-n">1</span>);
             }
         }
-        return list;</pre></div>
+        <span class="tk-k">return</span> list;</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><h3>写法 1：原地归位（cyclic sort）</h3><ul><li>值域 [1,n] 与下标 [0,n-1] 一一对应：值 x 的家在下标 x-1，下标 i 的正确住户是 i+1。</li><li>把每个值送回自己的家；重复值换不进去就留在原位；归位后扫描 <code>nums[i] != i+1</code> 的位置，i+1 即缺失。</li><li>关键决策：</li><li>就位判断 <code>nums[i] == i+1</code>（下标→值，用 +1）；目标下标 <code>nums[i]-1</code>（值→下标，用 -1）；</li><li>重复守卫：目标位已住同值时跳过；</li><li>指针推进规则：只有就位或重复两种情形前进，交换后停留原地，保证每轮有进展。</li><li>推演 <code>[2,2,1]</code>：i=0 目标位 nums[1] 已有 2 → 重复跳过；i=1 就位；i=2 把 1 换到下标 0 得 [1,2,2]，随后 i=2 处 2 重复跳过；扫描得缺失 3。</li><li>复杂度 O(n)/O(1)：每次交换至少让一个值永久归位，交换总数 ≤ n；空间仅一个临时变量。</li></ul><h3>写法 2：负数标记法</h3><ul><li>思路：借用数组自身的符号位记录「哪个值出现过」——值 x 出现一次，就把下标 x-1 处取负；扫描时仍为正的下标 i，说明 i+1 从未出现，即缺失数字。</li><li>关键决策：</li><li>读每个数时其值可能已被改负，必须先用 <code>Math.abs</code> 还原成原始值再定位下标；</li><li>标记前判断目标位 <code>&gt; 0</code> 才取负：重复出现的值不反复取负，否则符号翻回正号、被误判为缺失。</li><li>推演 <code>[4,3,2,7,8,2,3,1]</code>：</li></ul><ol><li>i=0 值 4 → 下标 3 处 7 取负为 -7；</li><li>i=1 值 3 → 下标 2 处 2 取负为 -2；</li><li>i=2 值 -2 → abs=2 → 下标 1 处 3 取负为 -3；</li><li>i=3 值 -7 → abs=7 → 下标 6 处 3 取负为 -3；</li><li>i=4 值 8 → 下标 7 处 1 取负为 -1；</li><li>i=5 值 2 → 下标 1 已是 -3，跳过；i=6 值 -3 → 下标 2 已是 -2，跳过；</li><li>i=7 值 -1 → 下标 0 处 4 取负为 -4；</li><li>扫描：下标 4、5 仍为正 → 缺失 5、6。答案 [5,6]。</li></ol><ul><li>边界：<code>[1]</code> 标记后全负，返回空；<code>[1,1,1]</code> 只标记一次，下标 1、2 为正 → [2,3]；值域 [1,n] 保证原始值无负数，但标记后数组会出现负数，这正是需要 abs 的原因。</li><li>复杂度 O(n)/O(1)：一趟标记 + 一趟扫描；只用几个变量与结果列表（结果列表不算额外空间）。</li></ul><h3>两写法对比</h3><ul><li>都是 O(n)/O(1)，同时达到时间 Ω(n) 与空间 O(1) 下界，均为最优解。</li><li>写法 1 无符号处理，但要维护「指针推进不变量」（就位/重复才前进），写错容易死循环；</li><li>写法 2 常数略小、无交换无死循环风险，但需要 abs 还原与重复不取负两个细节。</li><li>本题曾因写法 1 的 <code>+1/-1</code> 方向混用与指针推进结构反复死循环，已沉淀为套路 #37（值域 [1,n] 数组原地归位）。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>原地置换归位判断与重复守卫缺失：值 x 应在下标 x-1（就位判断误写为 nums[i]==i-1），且目标位置已有同值时应跳过而不是继续交换，否则交换无变化、index 不前进导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>原地归位目标下标与指针推进结构错误：目标下标写成 x+1（应为 x-1，x=n 时直接越界）；已就位时无分支推进、交换后错误 index++、重复守卫用 continue 不推进，导致指针不前进死循环；只有就位或目标位已有同值两种情形才前进</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>35/35 用例一次通过。</p></div></div></div></section>

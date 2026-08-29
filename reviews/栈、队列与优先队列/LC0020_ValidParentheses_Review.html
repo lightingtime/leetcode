@@ -37,25 +37,25 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 栈（Deque）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 103/103</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0020_ValidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public boolean isValid(String s) {
-        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
-        for (char c : s.toCharArray()) {
-            if (c == '(') {
-                stack.offer(')');
-            } else if (c == '{') {
-                stack.offer('}');
-            } else if (c == '[') {
-                stack.offer(']');
-            } else {
-                if (stack.isEmpty()) {
-                    return false;
+    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0020_ValidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValid</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Character</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : s.<span class="tk-f">toCharArray</span>()) {
+            <span class="tk-k">if</span> (c == <span class="tk-s">'('</span>) {
+                stack.<span class="tk-f">offer</span>(<span class="tk-s">')'</span>);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">'{'</span>) {
+                stack.<span class="tk-f">offer</span>(<span class="tk-s">'}'</span>);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">'['</span>) {
+                stack.<span class="tk-f">offer</span>(<span class="tk-s">']'</span>);
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>()) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
                 }
-                if (stack.pollLast() != c) {
-                    return false;
+                <span class="tk-k">if</span> (stack.<span class="tk-f">pollLast</span>() != c) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
                 }
             }
         }
-        return stack.isEmpty();
+        <span class="tk-k">return</span> stack.<span class="tk-f">isEmpty</span>();
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：括号匹配是「后出现的先闭合」，天然用栈：左括号入栈，右括号与栈顶配对。</p><p>关键设计：优化写法是左括号入栈时直接压入对应的右括号，这样遇到右括号只需比较是否等于栈顶，省去配对的 switch/if；不匹配或栈空直接 false；遍历结束栈空才是合法串。</p><p>边界：空串返回 true；只有左括号（结束栈非空 false）；只有右括号（栈空即 false）；多层嵌套；右括号多余与左括号多余要分别拦截。</p><p>复杂度：O(n) 时间、O(n) 空间（栈），最优。</p></div></section>

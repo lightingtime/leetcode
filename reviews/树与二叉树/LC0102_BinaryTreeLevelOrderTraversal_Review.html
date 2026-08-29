@@ -37,29 +37,29 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 层序 BFS</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 35/35</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0102_BinaryTreeLevelOrderTraversal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
-        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();
-        if (root == null) {
-            return ans;
+    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0102_BinaryTreeLevelOrderTraversal.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">levelOrder</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> ans;
         }
-        Deque&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
-        queue.offerLast(root);
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-            for (int i = 0; i &lt; size; i++) {
-                TreeNode cur = queue.pollFirst();
-                list.add(cur.val);
-                if (cur.left != null) {
-                    queue.offerLast(cur.left);
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+        queue.<span class="tk-f">offerLast</span>(root);
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
+            <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
+                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">pollFirst</span>();
+                list.<span class="tk-f">add</span>(cur.val);
+                <span class="tk-k">if</span> (cur.left != <span class="tk-k">null</span>) {
+                    queue.<span class="tk-f">offerLast</span>(cur.left);
                 }
-                if (cur.right != null) {
-                    queue.offerLast(cur.right);
+                <span class="tk-k">if</span> (cur.right != <span class="tk-k">null</span>) {
+                    queue.<span class="tk-f">offerLast</span>(cur.right);
                 }
             }
-            ans.add(list);
+            ans.<span class="tk-f">add</span>(list);
         }
-        return ans;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：按层输出二叉树 = BFS。关键是不能让层与层混在一起，所以每层先记录队列大小再一次性处理。</p><p>关键设计：while 队列非空：size=queue.size()，for size 次出队收集本层节点值、同时把下一层子节点入队；这样一轮恰好处理一层，ans 按层追加。空树直接返回空列表。</p><p>边界：空树；单节点一层；斜树每层一个节点；节点值重复不影响（按结构输出）；宽层（满二叉树最后一层 n/2 个节点）考验队列容量。</p><p>复杂度：O(n) 时间、O(w) 空间（w 为最大层宽，最坏 O(n)），最优。</p></div></section>

@@ -37,41 +37,41 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯（选/不选）</h3>
     <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 10/10</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（选/不选）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;List&lt;Integer&gt;&gt; ans;
-    public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
-        ans = new ArrayList&lt;&gt;();
-        dfs(nums, 0, new ArrayList&lt;&gt;());
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（选/不选）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">subsets</span>(<span class="tk-k">int</span>[] nums) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-f">dfs</span>(nums, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(int[] nums, int index, List&lt;Integer&gt; list) {
-        if (index &gt;= nums.length) {
-            ans.add(new ArrayList&lt;&gt;(list));
-            return;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> index, <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list) {
+        <span class="tk-k">if</span> (index &gt;= nums.length) {
+            ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(list));
+            <span class="tk-k">return</span>;
         }
 
-            list.add(nums[index]);
-            dfs(nums, index + 1, list);
+            list.<span class="tk-f">add</span>(nums[index]);
+            <span class="tk-f">dfs</span>(nums, index + <span class="tk-n">1</span>, list);
 
-            list.remove(list.size() - 1);
-            dfs(nums, index + 1, list);
+            list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            <span class="tk-f">dfs</span>(nums, index + <span class="tk-n">1</span>, list);
     }</pre></div>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 回溯（起点推进）</h3>
     <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 10/10</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（起点推进）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>List&lt;List&lt;Integer&gt;&gt; ans;
-    public List&lt;List&lt;Integer&gt;&gt; subsets(int[] nums) {
-        ans = new ArrayList&lt;&gt;();
-        dfs(nums, 0, new ArrayList&lt;&gt;());
-        return ans;
+    <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（起点推进）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">subsets</span>(<span class="tk-k">int</span>[] nums) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-f">dfs</span>(nums, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
     }
 
-    private void dfs(int[] nums, int start, List&lt;Integer&gt; list) {
-        ans.add(new ArrayList&lt;&gt;(list));
-        for (int i = start; i &lt; nums.length; i++) {
-            list.add(nums[i]);
-            dfs(nums, i + 1, list);
-            list.remove(list.size() - 1);
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> start, <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list) {
+        ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(list));
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = start; i &lt; nums.length; i++) {
+            list.<span class="tk-f">add</span>(nums[i]);
+            <span class="tk-f">dfs</span>(nums, i + <span class="tk-n">1</span>, list);
+            list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
         }
     }</pre></div>
   </div></section>

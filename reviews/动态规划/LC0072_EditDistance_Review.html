@@ -37,30 +37,30 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DP 二维表格</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(mn)</span><span class="chip">内存 ≈ 45.5 MB</span><span class="chip">用例 1149/1149</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0072_EditDistance.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int minDistance(String word1, String word2) {
-        int m = word1.length();
-        int n = word2.length();
-        if (m == 0) return n;
-        if (n == 0) return m;
-        // 滚动数组：dp[j] 存当前行 dp[i][j]，覆盖前先取旧值当 dp[i-1][j]；diag 存斜对角 dp[i-1][j-1]
-        int[] dp = new int[n + 1];
-        for (int j = 0; j &lt;= n; j++) {
-            dp[j] = j; // 第 0 行：dp[0][j] = j
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0072_EditDistance.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">minDistance</span>(<span class="tk-t">String</span> word1, <span class="tk-t">String</span> word2) {
+        <span class="tk-k">int</span> m = word1.<span class="tk-f">length</span>();
+        <span class="tk-k">int</span> n = word2.<span class="tk-f">length</span>();
+        <span class="tk-k">if</span> (m == <span class="tk-n">0</span>) <span class="tk-k">return</span> n;
+        <span class="tk-k">if</span> (n == <span class="tk-n">0</span>) <span class="tk-k">return</span> m;
+        <span class="tk-c">// 滚动数组：dp[j] 存当前行 dp[i][j]，覆盖前先取旧值当 dp[i-1][j]；diag 存斜对角 dp[i-1][j-1]</span>
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt;= n; j++) {
+            dp[j] = j; <span class="tk-c">// 第 0 行：dp[0][j] = j</span>
         }
-        for (int i = 1; i &lt;= m; i++) {
-            int diag = dp[0]; // 进第 1 列前，diag = dp[i-1][0]
-            dp[0] = i;        // 第 0 列：dp[i][0] = i
-            for (int j = 1; j &lt;= n; j++) {
-                int prevRowSame = dp[j]; // 覆盖前保存 dp[i-1][j]
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= m; i++) {
+            <span class="tk-k">int</span> diag = dp[<span class="tk-n">0</span>]; <span class="tk-c">// 进第 1 列前，diag = dp[i-1][0]</span>
+            dp[<span class="tk-n">0</span>] = i;        <span class="tk-c">// 第 0 列：dp[i][0] = i</span>
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= n; j++) {
+                <span class="tk-k">int</span> prevRowSame = dp[j]; <span class="tk-c">// 覆盖前保存 dp[i-1][j]</span>
+                <span class="tk-k">if</span> (word1.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == word2.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>)) {
                     dp[j] = diag;
-                } else {
-                    dp[j] = Math.min(Math.min(prevRowSame, dp[j - 1]), diag) + 1;
+                } <span class="tk-k">else</span> {
+                    dp[j] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(<span class="tk-t">Math</span>.<span class="tk-f">min</span>(prevRowSame, dp[j - <span class="tk-n">1</span>]), diag) + <span class="tk-n">1</span>;
                 }
-                diag = prevRowSame; // 下一列的斜对角 = dp[i-1][j]
+                diag = prevRowSame; <span class="tk-c">// 下一列的斜对角 = dp[i-1][j]</span>
             }
         }
-        return dp[n];
+        <span class="tk-k">return</span> dp[n];
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><ul><li>本质：求两个字符串的最小编辑距离，是典型的最优化问题；word1 前缀转 word2 前缀的过程有大量重叠子问题（如转 "abc" 时反复用到 "ab"、"a" 等更短前缀的结果），因此用动态规划。</li><li>为什么不暴力：每次操作有插入/删除/替换 3 种选择，递归枚举是指数级；DP 把每个 (i,j) 前缀对的结果只算一次，共 O(mn) 个状态。</li></ul><p><strong>关键设计决策</strong></p><ul><li>状态定义：dp[i][j] = word1 前 i 个字符转成 word2 前 j 个字符所需的最小操作数（i、j 是前缀长度，不是下标，所以表是 (m+1)x(n+1)）。</li><li>转移（看末尾字符 word1[i-1] 与 word2[j-1]）：</li><li>相等：dp[i][j] = dp[i-1][j-1]（末尾天然匹配，无需操作）</li><li>不等：三种操作取最小再 +1</li></ul><ol><li>删除 word1 末尾字符：dp[i-1][j] + 1</li><li>word1 末尾插入 word2[j-1]：dp[i][j-1] + 1</li><li>替换末尾为 word2[j-1]：dp[i-1][j-1] + 1</li></ol><ul><li>初始化：dp[0][j]=j（空串转非空只能靠插入），dp[i][0]=i（非空转空只能靠删除）。</li><li>返回 dp[m][n]。</li></ul><p><strong>具体 case 推演：word1="ab"，word2="abc"（期望答案 1）</strong></p><ul><li>初始化后：dp[0][0..3] = 0,1,2,3；dp[0..2][0] = 0,1,2</li><li>i=1, j=1：a==a → dp[1][1]=dp[0][0]=0</li><li>i=1, j=2：a vs b 不等 → min(dp[0][2]=2, dp[1][1]=0, dp[0][1]=1)+1 = 1（插入 b，"a"→"ab"）</li><li>i=1, j=3：a vs c 不等 → min(dp[0][3]=3, dp[1][2]=1, dp[0][2]=2)+1 = 2</li><li>i=2, j=1：b vs a 不等 → min(dp[1][1]=0, dp[2][0]=2, dp[1][0]=1)+1 = 1（替换 b→a）</li><li>i=2, j=2：b==b → dp[2][2]=dp[1][1]=0</li><li>i=2, j=3：b vs c 不等 → min(dp[1][3]=2, dp[2][2]=0, dp[1][2]=1)+1 = 1（插入 c）</li><li>答案 dp[2][3]=1 ✓</li></ul><p><strong>边界与细节</strong></p><ul><li>双空：dp[0][0]=0。</li><li>一边为空：全插入 / 全删除，直接被初始化行/列覆盖。</li><li>单字符相同 / 不同、全相同、等长全替换（结果=长度）、交换两字符（2 步，替换或删+插）均已在本地测试覆盖。</li><li>下标对齐：charAt(i-1) / charAt(j-1) 对应前缀长度 i / j，避免越界。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(mn)：两层循环填表，每格 O(1) 转移；两个串的所有前缀组合都要比较，O(mn) 是问题本身的下限。</li><li>空间 O(mn)：完整二维表；每格只依赖上一行同列、当前行左邻、上一行左邻，可滚动压缩到 O(n)。</li></ul></div></section>

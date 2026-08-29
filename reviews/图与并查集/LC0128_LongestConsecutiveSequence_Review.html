@@ -37,20 +37,20 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashSet + 从段起点向上延展</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.7 MB</span><span class="chip">用例 85/85</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0128_LongestConsecutiveSequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int longestConsecutive(int[] nums) {
-        int max = 0;
-        Set&lt;Integer&gt; set = Arrays.stream(nums).boxed().collect(Collectors.toSet());
-        for (Integer num : set) {
-            int x = num;
-            if (set.contains(x - 1)) {
-                continue;
+    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0128_LongestConsecutiveSequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-t">Arrays</span>.<span class="tk-f">stream</span>(nums).<span class="tk-f">boxed</span>().<span class="tk-f">collect</span>(<span class="tk-t">Collectors</span>.<span class="tk-f">toSet</span>());
+        <span class="tk-k">for</span> (<span class="tk-t">Integer</span> num : set) {
+            <span class="tk-k">int</span> x = num;
+            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(x - <span class="tk-n">1</span>)) {
+                <span class="tk-k">continue</span>;
             }
-            while (set.contains(x + 1)) {
+            <span class="tk-k">while</span> (set.<span class="tk-f">contains</span>(x + <span class="tk-n">1</span>)) {
                 x++;
             }
-            max = Math.max(max, x - num + 1);
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
         }
-        return max;
+        <span class="tk-k">return</span> max;
     }</pre></div>
   </div></section>
   

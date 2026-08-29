@@ -48,26 +48,26 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 计数编码键 + 哈希表</h3>
     <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(L)</span><span class="chip">内存 ≈ 48.0 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0049_GroupAnagrams.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
-        Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;&gt;();
-        for (String str : strs) {
-            map.computeIfAbsent(getKey(str), k -&gt; new ArrayList&lt;&gt;()).add(str);
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0049_GroupAnagrams.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; <span class="tk-f">groupAnagrams</span>(<span class="tk-t">String</span>[] strs) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">String</span>, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-t">String</span> str : strs) {
+            map.<span class="tk-f">computeIfAbsent</span>(<span class="tk-f">getKey</span>(str), k -&gt; <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;()).<span class="tk-f">add</span>(str);
         }
-        return map.values().stream().toList();
+        <span class="tk-k">return</span> map.<span class="tk-f">values</span>().<span class="tk-f">stream</span>().<span class="tk-f">toList</span>();
     }
 
-    private String getKey(String str) {
-        int[] count = new int[26];
-        for (char c : str.toCharArray()) {
-            count[c - 'a']++;
+    <span class="tk-k">private</span> <span class="tk-t">String</span> <span class="tk-f">getKey</span>(<span class="tk-t">String</span> str) {
+        <span class="tk-k">int</span>[] count = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">26</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : str.<span class="tk-f">toCharArray</span>()) {
+            count[c - <span class="tk-s">'a'</span>]++;
         }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i &lt; 26; i++) {
-            if (count[i] &gt; 0) {
-                sb.append(i + 'a').append(count[i]);
+        <span class="tk-t">StringBuilder</span> sb = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; <span class="tk-n">26</span>; i++) {
+            <span class="tk-k">if</span> (count[i] &gt; <span class="tk-n">0</span>) {
+                sb.<span class="tk-f">append</span>(i + <span class="tk-s">'a'</span>).<span class="tk-f">append</span>(count[i]);
             }
         }
-        return sb.toString();
+        <span class="tk-k">return</span> sb.<span class="tk-f">toString</span>();
     }</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：把「互为字母异位词」的字符串归到同一组。异位词 = 相同字符多重集合（与排列顺序无关），所以核心是把「等价关系」转成「相同键」。</p><p><strong>解法选择理由</strong>：归组需要 O(1) 查找，用哈希表；键有两条路线——① 排序后的字符串（每串 O(k log k)）；② 字符计数编码（每串 O(k)）。计数编码把 26 个字母计数拼成固定格式，达到线性最优。</p><p><strong>关键设计决策</strong>：</p><ul><li>键 = 逐字符统计次数后拼接「字母+次数」，如 <code>aabbbc</code> → <code>a2b3c1</code>；同字符多重集合必得同键，异位词必然同组。</li><li>编码<strong>必须带次数</strong>：只拼字母会漏次数（<code>aab</code> 与 <code>ab</code> 都变 <code>ab</code> 而撞键）——一刷正是栽在「编码键遗漏次数」。</li><li>用 <code>computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(str)</code> 一步完成「取组/建组」，避免 containsKey 双查。</li></ul><p><strong>具体 case 推演</strong>（输入 <code>["eat","tea","tan","ate","nat","bat"]</code>）：</p><div class="table-wrap"><table><thead><tr><th>字符串</th><th>计数</th><th>编码 key</th><th>分组</th></tr></thead><tbody><tr><td>eat</td><td>a1 e1 t1</td><td>a1e1t1</td><td>[eat, tea, ate]</td></tr><tr><td>tea</td><td>a1 e1 t1</td><td>a1e1t1</td><td>↑</td></tr><tr><td>tan</td><td>a1 n1 t1</td><td>a1n1t1</td><td>[tan, nat]</td></tr><tr><td>ate</td><td>a1 e1 t1</td><td>a1e1t1</td><td>↑</td></tr><tr><td>nat</td><td>a1 n1 t1</td><td>a1n1t1</td><td>↑</td></tr><tr><td>bat</td><td>a1 b1 t1</td><td>a1b1t1</td><td>[bat]</td></tr></tbody></table></div><p><strong>边界与细节</strong>：空串 <code>""</code> 计数全 0、编码为空串，仍独立成组（示例2）；全相同字符串同键同组；单字符、长度上限 100、数组上限 10^4 均只需线性时间，编码串长度 ≤ 26×4，不会膨胀。</p><p><strong>复杂度下限论证</strong>：输出必须包含全部字符串（每个至少写一次），时间下界 Ω(L)；空间上所有分组必须存下所有字符串，Ω(L)。计数编码实现 O(L) 时间 + O(L) 空间，已达到下限，最优。</p></div></section>
