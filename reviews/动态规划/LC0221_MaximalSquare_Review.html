@@ -4,78 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LC221 最大正方形 · 刷题复盘</title>
-<style>
-  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
-  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
-  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
-  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
-  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
-  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
-  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
-  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
-  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
-  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
-  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
-  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
-  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
-  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
-  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
-  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
-  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
-  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
-  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
-  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
-  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
-  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
-  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
-  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
-  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
-  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
-  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
-  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
-  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
-  .code-actions{display:flex;align-items:center;gap:8px}
-  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
-  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
-  .copy-btn:hover{background:rgba(255,255,255,.22)}
-  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
-  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
-  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
-</style>
+<link rel="stylesheet" href="../review.css">
 </head>
 <body>
-<div class="hero"><div class="wrap">
-  <div class="kicker">LEETCODE 刷题复盘 · SEQ 91</div>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 90</div>
   <h1>LC221 · 最大正方形</h1>
   <div class="sub">DP 三邻居min+1 · Accepted</div>
   <div class="badges">
     <span class="badge ok">✓ Accepted 81/81</span>
     <span class="badge medium">难度 MEDIUM</span>
     <span class="badge tag">分类 动态规划</span>
+    <span class="badge tag">子类型 线性DP</span>
     <span class="badge plain">多次通过</span>
     <span class="badge plain">已满足题意·可进阶</span>
     
+    
     <span class="badge">2026-08-19</span>
   </div>
-</div></div>
-<div class="wrap">
+</div>
+  
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DP 三邻居min+1</h3>
     <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(mn)</span><span class="chip">内存 ≈ 68.0 MB</span><span class="chip">用例 81/81</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/LC0221_MaximalSquare.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maximalSquare(char[][] matrix) {
+    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0221_MaximalSquare.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public int maximalSquare(char[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
         int[][] dp = new int[m][n];
         int max = 0;
         for (int i = 0; i &lt; m; i++) {
             dp[i][0] = matrix[i][0] == '1' ? 1 : 0;
-            max = Math.max(max, dp[i][0] * dp[i][0]);
+            max = Math.max(max, dp[i][0]);
         }
         for (int j = 0; j &lt; n; j++) {
             dp[0][j] = matrix[0][j] == '1' ? 1 : 0;
-            max = Math.max(max, dp[0][j] * dp[0][j]);
+            max = Math.max(max, dp[0][j]);
         }
         for (int i = 1; i &lt; m; i++) {
             for (int j = 1; j &lt; n; j++) {
@@ -84,10 +48,10 @@
                 } else {
                     dp[i][j] = 0;
                 }
-                max = Math.max(max, dp[i][j] * dp[i][j]);
+                max = Math.max(max, dp[i][j]);
             }
         }
-        return max;
+        return max * max;
     }</pre></div>
     <p class="muted">第2次提交AC（首WA：'0'格未清零继承邻居正数）；DP O(mn)/O(mn) 空间可滚动优化</p>
   </div></section>
@@ -105,11 +69,11 @@
     <div class="card">
       <h3>算法判定</h3>
       <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
-      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。</div>
+      <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
       <h3>错误习惯复盘</h3><p><b>基础情况字符判断写反：'0' 格给了边长 1、'1' 格给了 0，导致单元素/全零用例结果反转；应先明确 '1'→1、'0'→0 再写三元</b>（累计 1 次）</p><p><b>DP 答案只返回右下角格子的值，未取全程最大值且未平方成面积；最优解可能出现在任意位置</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
-      <p><span class="chip">seq 91 · maximal-square</span><span class="chip">firstPass: false</span><span class="chip">optimal: false</span></p>
+      <p><span class="chip">seq 90 · maximal-square</span><span class="chip">firstPass: false</span><span class="chip">optimal: false</span></p>
       <div class="quote">第2次提交AC（首WA：'0'格未清零继承邻居正数）；DP O(mn)/O(mn) 空间可滚动优化</div>
     </div>
   </section>

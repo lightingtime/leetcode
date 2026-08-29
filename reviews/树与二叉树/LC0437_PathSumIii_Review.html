@@ -4,63 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LC437 路径总和 III · 刷题复盘</title>
-<style>
-  :root{--bg:#f6f7f9;--card:#fff;--ink:#1f2329;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--good:#16a34a;--bad:#dc2626;--code-bg:#0f172a;--code-ink:#e2e8f0}
-  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
-  .wrap{max-width:920px;margin:0 auto;padding:0 22px 64px}
-  .hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);color:#fff;padding:52px 22px 46px;margin-bottom:34px}
-  .hero .wrap{padding:0}.hero .kicker{font-size:13px;letter-spacing:2px;color:#93c5fd;font-weight:600}
-  .hero h1{margin:8px 0 6px;font-size:34px;line-height:1.25}.hero .sub{color:#cbd5e1;font-size:15px}
-  .hero .badges{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
-  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.14);color:#e2e8f0}
-  .badge.ok,.badge.easy{background:#dcfce7;color:#166534}.badge.hard{background:#fee2e2;color:#991b1b}
-  .badge.medium{background:#fef3c7;color:#92400e}.badge.tag{background:#e0e7ff;color:#3730a3}.badge.plain{background:#e5e7eb;color:#374151}
-  section{margin-top:40px}h2{font-size:21px;margin:0 0 14px;padding-left:12px;border-left:4px solid var(--accent)}h3{font-size:16px;margin:22px 0 8px}p{margin:8px 0}
-  .muted{color:var(--muted);font-size:13.5px}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
-  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center}
-  .metric .v{font-size:25px;font-weight:800}.metric .l{font-size:12.5px;color:var(--muted);margin-top:4px}.metric.ok .v{color:var(--good)}
-  .chip{display:inline-block;padding:2px 10px;border-radius:6px;background:#eef2ff;color:#3730a3;font-size:12.5px;font-weight:600;margin:2px 4px 2px 0}
-  .tl{display:flex;flex-direction:column}.tl-item{display:grid;grid-template-columns:34px 1fr;gap:16px}
-  .tl-marker{position:relative}.tl-marker::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px #dbeafe}
-  .tl-marker::after{content:"";position:absolute;top:25px;bottom:-12px;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
-  .tl-item:last-child .tl-marker::after{display:none}.tl-body{padding-bottom:26px}.tl-title{font-weight:700;font-size:15.5px}
-  .tl-badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:8px;vertical-align:2px}
-  .tl-badge.ok{background:#dcfce7;color:#166534}.tl-badge.bug{background:#fee2e2;color:#991b1b}
-  .ok-list{margin:10px 0;padding:0;list-style:none}.ok-list li{padding:6px 0 6px 26px;position:relative}
-  .ok-list li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-weight:800}
-  .quote{border-left:3px solid var(--accent);background:#f8fafc;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14.5px}
-  .md ul,.md ol{margin:8px 0;padding-left:24px}.md li{margin:5px 0}
-  .md code{background:#eef2ff;color:#3730a3;padding:1px 6px;border-radius:4px;font-size:12.5px;font-family:Consolas,"Cascadia Code",monospace}
-  .code-wrap{background:var(--code-bg);border-radius:12px;overflow:hidden;margin:12px 0}
-  .code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:12px;font-family:Consolas,"Cascadia Code",monospace}
-  .code-wrap pre{margin:0;padding:16px 18px;overflow-x:auto;color:var(--code-ink);font:13px/1.75 Consolas,"Cascadia Code",monospace;tab-size:4}
-  .code-actions{display:flex;align-items:center;gap:8px}
-  .code-tag{font-size:11px;color:#64748b;letter-spacing:.5px}
-  .copy-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e2e8f0;font-size:11.5px;font-family:inherit;line-height:1.4;padding:3px 10px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
-  .copy-btn:hover{background:rgba(255,255,255,.22)}
-  .copy-btn.copied{background:#16a34a;border-color:#16a34a;color:#fff}
-  .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;text-align:center}
-  @media(max-width:600px){.hero h1{font-size:26px}.metrics{grid-template-columns:repeat(2,1fr)}}
-</style>
+<link rel="stylesheet" href="../review.css">
 </head>
 <body>
-<div class="hero"><div class="wrap">
-  <div class="kicker">LEETCODE 刷题复盘 · SEQ 82</div>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 81</div>
   <h1>LC437 · 路径总和 III</h1>
   <div class="sub">前缀和+回溯哈希 · Accepted</div>
   <div class="badges">
     <span class="badge ok">✓ Accepted 130/130</span>
     <span class="badge medium">难度 MEDIUM</span>
     <span class="badge tag">分类 树与二叉树</span>
+    
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
+    
     <span class="badge">2026-08-18</span>
   </div>
-</div></div>
-<div class="wrap">
+</div>
+  
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双重DFS</h3>
     <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 130/130</span></p>
@@ -117,7 +81,10 @@
         dfs(root.left, targetSum, sum, map);
         dfs(root.right, targetSum, sum, map);
 
-        map.merge(sum, -1, Integer::sum);
+        Integer cnt = map.merge(sum, -1, Integer::sum);
+        if (cnt == 0) {
+            map.remove(sum);
+        }
     }</pre></div>
     <p class="muted">前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。</p>
   </div></section>
@@ -139,7 +106,7 @@
       <h3>错误习惯复盘</h3><p><b>路径终点计数挂在子递归入口：把「cur+val==target」放到进入左右孩子时各判断一次，每条路径被重复计数（示例 3→6）；且入口处 cur=0 在 target=0 时把空路径误算为命中（空树 target=0 得 1）。计数应绑定在「当前节点值已计入路径」这一时刻、每条路径只数一次</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
-      <p><span class="chip">seq 82 · path-sum-iii</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
+      <p><span class="chip">seq 81 · path-sum-iii</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
       <div class="quote">前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。</div>
     </div>
   </section>

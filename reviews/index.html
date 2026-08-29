@@ -4,57 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>力扣训练主页</title>
-<style>
-  :root { --bg:#f6f7f9; --card:#fff; --ink:#1f2329; --muted:#6b7280; --line:#e5e7eb; --accent:#2563eb; --good:#16a34a; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif; line-height:1.7; }
-  .wrap { max-width:920px; margin:0 auto; padding:0 22px 60px; }
-  .hero { background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%); color:#fff; padding:48px 22px 42px; margin-bottom:30px; }
-  .hero .wrap { padding:0; }
-  .hero .kicker { font-size:13px; letter-spacing:2px; color:#93c5fd; font-weight:600; }
-  .hero h1 { margin:8px 0 6px; font-size:32px; }
-  .hero .sub { color:#cbd5e1; font-size:15px; }
-  .hero .badges { margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; }
-  .badge { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:999px; font-size:12.5px; font-weight:600; background:rgba(255,255,255,.14); color:#e2e8f0; }
-  .badge.ok { background:#dcfce7; color:#166534; }
-  .badge.plain { background:#e5e7eb; color:#374151; }
-  section { margin-top:40px; }
-  h2 { font-size:21px; margin:0 0 14px; padding-left:12px; border-left:4px solid var(--accent); }
-  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; }
-  .metric { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 12px; text-align:center; }
-  .metric .v { font-size:25px; font-weight:800; }
-  .metric.ok .v { color:var(--good); }
-  .metric .l { font-size:12.5px; color:var(--muted); margin-top:4px; }
-  .bar { height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin-top:10px; }
-  .bar i { display:block; height:100%; background:linear-gradient(90deg,#2563eb,#22c55e); width:100%; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-top:14px; box-shadow:0 1px 3px rgba(15,23,42,.05); }
-  .rv-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-  .cat-head { font-size:17px; font-weight:700; margin:28px 0 2px; padding-left:10px; border-left:3px solid var(--accent); }
-  .muted { color:var(--muted); font-size:13.5px; }
-  a { color:var(--accent); text-decoration:none; }
-  a:hover { text-decoration:underline; }
-  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:14px; }
-  th,td { padding:10px 12px; text-align:left; font-size:14px; border-bottom:1px solid var(--line); }
-  th { background:#f1f5f9; font-weight:600; }
-  tr:last-child td { border-bottom:none; }
-  .foot { margin-top:56px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; text-align:center; }
-  .rv-toolbar { display:flex; justify-content:flex-end; margin-top:14px; }
-  .rv-toolbar button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:6px 14px; font-size:13px; cursor:pointer; }
-  .rv-toolbar button:hover { filter:brightness(1.08); }
-  details.rv-group { margin-top:14px; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,.05); }
-  details.rv-group summary { cursor:pointer; padding:14px 20px; font-weight:700; font-size:16px; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-  details.rv-group summary::-webkit-details-marker { display:none; }
-  details.rv-group summary::after { content:'▾'; transition:transform .15s; color:var(--muted); }
-  details.rv-group[open] summary::after { transform:rotate(180deg); }
-  details.rv-group .card { border:none; box-shadow:none; border-top:1px solid var(--line); border-radius:0; margin-top:0; }
-  details.rv-group .card:last-child { border-bottom-left-radius:14px; border-bottom-right-radius:14px; }
-  @media (max-width:600px) { .metrics { grid-template-columns:repeat(2,1fr); } }
-</style>
+<link rel="stylesheet" href="review.css">
 </head>
 <body>
 
-<div class="hero">
-  <div class="wrap">
+<div class="markdown-body">
+  <div class="page-head">
     <div class="kicker">LEETCODE 训练主页</div>
     <h1>力扣刷题 · 打卡与复盘</h1>
     <div class="sub">第一遍 170 题 2026-08-30 前刷完 · 第二遍 2026-09-15 前完成</div>
@@ -65,10 +20,7 @@
       <span class="badge">开始：2026-08-01</span>
       <span class="badge ok">模式：复习</span>
     </div>
-  </div>
 </div>
-
-<div class="wrap">
 
   <section>
     <h2>训练进度</h2>
