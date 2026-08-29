@@ -70,7 +70,8 @@
       "optimal": false,
       "notes": "**与一刷对比**：思路一致（自顶向下归并：快慢指针找中点切分 + 递归排序 + merge）；本次实现从一刷的 sortList(head, tail) 带尾参数改为「返回左半最后一个」写法，merge 去掉了多余断链。\n\n**为什么这次没想起来**：两次卡点——① 分治结构缺失（切完直接 merge，两半未排序）；② 快慢指针找中点偶数长度偏后（[1,2] 返回节点 2）→ second=null → sortList 无限递归栈溢出；经提示后在 getMid 用 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」修正。\n\n**掌握度依据**：测试多次失败、经两轮提示定位后改对 → 较弱，间隔重置 1 天。\n\n**下一步提醒**：递归栈 O(log n) 未达进阶，可尝试自底向上迭代归并（1→2→4 逐段合并）达 O(1) 空间。",
       "mastery": "weak",
-      "pass": 1
+      "pass": 1,
+      "code": "public ListNode sortList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        // 两半必须各自递归排序后再合并（此前漏掉分治，直接 merge 两个乱序序列）\n        ListNode mid = getMid(head);\n        ListNode second = mid.next;\n        mid.next = null;\n        ListNode newHead = sortList(head);\n        second = sortList(second);\n        return mergeList(newHead, second);\n    }\n\n    private ListNode mergeList(ListNode head, ListNode second) {\n        ListNode newHead = new ListNode();\n        ListNode p1 = head, p2 = second, p = newHead;\n        // 只把 p 指向较小节点、p 前移，不断任何链（断链会拆碎链表并让 p 变 null 触发 NPE）\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                p.next = p1;\n                p1 = p1.next;\n            } else {\n                p.next = p2;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) p.next = p1;\n        if (p2 != null) p.next = p2;\n        return newHead.next;\n    }\n\n    private ListNode getMid(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        // fast 每轮完整走 2 步、slow 走 1 步，fast 到尾时 slow 恰在中点\n        // 条件 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」（此前偶数长度 slow 多走，[1,2] 返回节点 2 致无限递归）\n        ListNode fast = head, slow = head;\n        while (fast.next != null && fast.next.next != null) {\n            fast = fast.next.next;\n            slow = slow.next;\n        }\n        return slow;\n    }"
     },
     {
       "date": "2026-08-30",
@@ -99,20 +100,7 @@
       "time_complexity": "O(n log n)",
       "space_complexity": "O(log n)",
       "optimal": false,
-      "notes": "**与一刷对比**：思路一致（自顶向下归并：快慢指针找中点切分 + 递归排序 + merge）；本次实现从一刷的 sortList(head, tail) 带尾参数改为「返回左半最后一个」写法，merge 去掉了多余断链。\n\n**为什么这次没想起来**：两次卡点——① 分治结构缺失（切完直接 merge，两半未排序）；② 快慢指针找中点偶数长度偏后（[1,2] 返回节点 2）→ second=null → sortList 无限递归栈溢出；经提示后在 getMid 用 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」修正。\n\n**掌握度依据**：测试多次失败、经两轮提示定位后改对 → 较弱，间隔重置 1 天。\n\n**下一步提醒**：递归栈 O(log n) 未达进阶，可尝试自底向上迭代归并（1→2→4 逐段合并）达 O(1) 空间。"
-    },
-    {
-      "pass": 2,
-      "date": "2026-08-30",
-      "mastery": "weak",
-      "firstTry": true,
-      "verdict": "Accepted",
-      "testcases": "",
-      "approach": "自底向上归并（迭代）",
-      "time_complexity": "O(n log n)",
-      "space_complexity": "O(1)",
-      "optimal": true,
-      "notes": "**与之前对比**：自顶向下（递归栈 O(log n)）→ 自底向上（迭代 O(1) 空间），mergeList 复用；空间达成进阶。\n\n**关键点（讨论过的）**：\n- 取段走 k 步：first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数；i 从 0 会多走 1 步吞掉下一段。\n- 断链刻意且临时：左段尾、右段尾各断一次，段独立 merge 才能正确终止；当前合并段尾先保持 null，跨段衔接由下一轮 pre.next = mergeList(...) 完成，不能 pre.next = cur（会接上未排序原始段）。\n\n**掌握度依据**：思路框架提示 + 两轮理解问答后独立写出正确实现，力扣一次 Accepted（30/30）→ 较弱，间隔重置 1 天。\n\n**下一步**：已达成 O(1) 空间进阶，本题闭环。"
+      "notes": "**与一刷对比**：思路一致（自顶向下归并：快慢指针找中点切分 + 递归排序 + merge）；本次实现从一刷的 sortList(head, tail) 带尾参数改为「返回左半最后一个」写法，merge 去掉了多余断链。\n\n**为什么这次没想起来**：两次卡点——① 分治结构缺失（切完直接 merge，两半未排序）；② 快慢指针找中点偶数长度偏后（[1,2] 返回节点 2）→ second=null → sortList 无限递归栈溢出；经提示后在 getMid 用 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」修正。\n\n**掌握度依据**：测试多次失败、经两轮提示定位后改对 → 较弱，间隔重置 1 天。\n\n**下一步提醒**：递归栈 O(log n) 未达进阶，可尝试自底向上迭代归并（1→2→4 逐段合并）达 O(1) 空间。\n\n**与之前对比**：自顶向下（递归栈 O(log n)）→ 自底向上（迭代 O(1) 空间），mergeList 复用；空间达成进阶。\n\n**关键点（讨论过的）**：\n- 取段走 k 步：first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数；i 从 0 会多走 1 步吞掉下一段。\n- 断链刻意且临时：左段尾、右段尾各断一次，段独立 merge 才能正确终止；当前合并段尾先保持 null，跨段衔接由下一轮 pre.next = mergeList(...) 完成，不能 pre.next = cur（会接上未排序原始段）。\n\n**掌握度依据**：思路框架提示 + 两轮理解问答后独立写出正确实现，力扣一次 Accepted（30/30）→ 较弱，间隔重置 1 天。\n\n**下一步**：已达成 O(1) 空间进阶，本题闭环。"
     }
   ]
 }

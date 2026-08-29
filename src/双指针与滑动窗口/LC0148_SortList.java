@@ -23,10 +23,12 @@ public class LC0148_SortList {
             ListNode pre = dummy, cur = dummy.next;
             while (cur != null) {
                 ListNode first = cur;
+                // first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数
                 for (int i = 1; i < subLen && cur.next != null; i++) {
                     cur = cur.next;
                 }
                 ListNode second = cur.next;
+                // 断左段尾：让左段独立，merge 才能正确终止
                 cur.next = null;
                 cur = second;
                 for (int i = 1; i < subLen && cur != null && cur.next != null; i++) {
@@ -35,8 +37,10 @@ public class LC0148_SortList {
                 ListNode next = null;
                 if (cur != null) {
                     next = cur.next;
+                    // 断右段尾：不让右段串到后续未处理段
                     cur.next = null;
                 }
+                // 衔接合并段：不能 pre.next = cur（cur 还是未排序的原始段），须等 merge 后由本行接上
                 pre.next = mergeList(first, second);
                 while (pre.next != null) {
                     pre = pre.next;
