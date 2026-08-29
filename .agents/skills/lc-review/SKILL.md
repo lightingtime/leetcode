@@ -38,6 +38,7 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
 3. 用户重写并本地测试通过后，走 `lc-submit` 提交力扣（复习提交由 lc-submit 自动识别）。
 4. 记录掌握度：Accepted 后由 lc-submit 调用 `node ".agents/skills/lc-review/scripts/review.js" done --seq <seq> --mastery strong|weak ...`（含 approach/time/space/optimal/firstTry），写入 analysis.json reviews + 更新调度。
    - **掌握度判定**：提交一次 Accepted 且全程无探讨 = strong；探讨过/提示过/非一次 AC = weak。本地自己调试改对、提交一次 AC 算 strong。
+   - **notes 必写深度分析（禁止一句话敷衍）**：`--notes` 用多行 Markdown，至少含 ① 与上一轮对比（思路/写法/复杂度差异）；② 这次为什么想起来/没想起来（一刷犯的错这次如何规避）；③ 掌握度判定依据（是否一次 AC、有无探讨）；④ 下一步提醒（未尝试的更优写法、可顺带复习的相关题）。复盘页「复习记录 / 历轮表现」按 md 渲染，写浅了等于没复盘。
 5. 复盘与收尾（lc-submit 复习分支）：生成复盘页（复习记录区块置前）→ checkin 打卡 → build_site → 归档覆盖一刷源码 → commit。
 
 ## 与现有 skill 的分工

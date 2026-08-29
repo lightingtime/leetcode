@@ -61,7 +61,15 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 // 轻量 Markdown 渲染（逐行状态机）：列表、简单表格、段落；支持 `行内代码`、**加粗**
 const md = raw => {
   const lines = esc(String(raw)).replace(/\\n/g, '\n').split('\n').map(l => l.replace(/\s+$/, ''));
-  const fmt = s => s.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // 先保护行内代码，再处理加粗与链接（[text](url) 与裸 URL 均可点击），最后还原代码
+  const fmt = s => {
+    const codes = [];
+    let t = s.replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return '\u0000' + (codes.length - 1) + '\u0000'; });
+    t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s<]+)/g,
+        (m, tx, u, bare) => { const url = u || bare; const text = tx || url; return `<a href="${url}" rel="noopener">${text}</a>`; });
+    return t.replace(/\u0000(\d+)\u0000/g, (m, i) => `<code>${codes[+i]}</code>`);
+  };
   const splitCells = line => line.replace(/^\||\|$/g, '').split('|').map(cell => fmt(cell.trim()));
   const isTableSeparator = line => /^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?$/.test(line);
   const out = [];
@@ -136,8 +144,8 @@ function renderReviews() {
     const verdict = r.verdict || 'Accepted';
     return `<div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 ${esc(r.pass)} 次复习 · ${esc(r.date)} ${m}</span>
-      <p>${verdict}（${esc(r.testcases || '—')}）｜ ${fp} ｜ ${esc(r.approach || '—')}${ts ? ' ｜ ' + esc(ts) : ''} ｜ 掌握：${r.mastery === 'strong' ? '较强（间隔拉长）' : '较弱（间隔重置）'}</p>
-      ${r.notes ? `<p class="muted">${esc(r.notes)}</p>` : ''}
+      <p class="muted">${verdict}（${esc(r.testcases || '—')}）｜ ${fp} ｜ ${esc(r.approach || '—')}${ts ? ' ｜ ' + esc(ts) : ''}</p>
+      ${r.notes ? `<div class="review-note md">${md(r.notes)}</div>` : ''}
     </div></div>`;
   }).join('');
   return `<section><h2>复习记录</h2><div class="tl">${items}</div></section>`;
@@ -166,25 +174,44 @@ function renderSolutions() {
 // 题目回顾：渲染 problem.md（描述 / 示例 / 提示）
 function renderProblem() {
   if (!probMd) return '';
-  return `<section><h2>题目回顾</h2><div class="card md">${md(probMd)}</div></section>`;
+  return `<details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md">${md(probMd)}</div></details>`;
 }
 
-// 一刷 vs 二刷对比表（有复习记录时）
-function renderCompare() {
-  if (!reviews.length) return '';
-  const last = reviews[reviews.length - 1];
-  const rows = [
-    ['一刷日期', date || '—'],
-    ['二刷日期', last.date || '—'],
-    ['一刷提交', done.firstPass ? '一次 AC' : '多次提交'],
-    ['二刷提交', last.firstTry ? '一次 AC' : '多次提交'],
-    ['二刷思路', last.approach || '—'],
-    ['二刷复杂度', [last.time_complexity, last.space_complexity].filter(Boolean).join(' · ') || '—'],
-    ['掌握度', last.mastery === 'strong' ? '较强（间隔拉长 ×2.5）' : '较弱（间隔重置 1 天）'],
-    ['二刷备注', last.notes || '—'],
-  ];
-  const trs = rows.map(r => `<tr><th style="width:120px">${r[0]}</th><td>${esc(r[1])}</td></tr>`).join('');
-  return `<section><h2>一刷 vs 二刷</h2><div class="table-wrap"><table><tbody>${trs}</tbody></table></div></section>`;
+// 历轮表现：每轮一张卡片并排（一轮=一刷，之后每轮一次复习）
+function renderRounds() {
+  const rounds = [];
+  rounds.push({
+    label: '第一轮（一刷）',
+    date: date || '—',
+    submit: done.firstPass ? '一次 AC' : '多次提交',
+    approach: a.approach || '—',
+    ts: [a.time_complexity, a.space_complexity].filter(Boolean).join(' · ') || '—',
+    note: a.notes || ''
+  });
+  if (reviews.length) {
+    const last = reviews[reviews.length - 1];
+    rounds.push({
+      label: `第 ${esc(last.pass)} 轮（二刷）`,
+      date: last.date || '—',
+      submit: last.firstTry ? '一次 AC' : '多次提交',
+      approach: last.approach || '—',
+      ts: [last.time_complexity, last.space_complexity].filter(Boolean).join(' · ') || '—',
+      note: last.notes || '',
+      mastery: last.mastery
+    });
+  }
+  const cards = rounds.map((r, i) => `<div class="round-card${r.mastery === 'strong' ? ' strong' : r.mastery === 'weak' ? ' weak' : ''}">
+      <h3>${i + 1}. ${esc(r.label)}</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>${esc(r.date)}</b></li>
+        <li><span>提交</span><b>${esc(r.submit)}</b></li>
+        <li><span>思路</span><b>${esc(r.approach)}</b></li>
+        <li><span>复杂度</span><b>${esc(r.ts)}</b></li>
+        ${r.mastery ? `<li><span>掌握度</span><b><span class="badge ${r.mastery === 'strong' ? 'ok' : 'hard'}">${r.mastery === 'strong' ? '较强 · 间隔 ×2.5' : '较弱 · 间隔重置'}</span></b></li>` : ''}
+      </ul>
+      ${r.note ? `<div class="round-note md">${md(r.note)}</div>` : ''}
+    </div>`).join('');
+  return `<section><h2>历轮表现</h2><div class="rounds">${cards}</div></section>`;
 }
 
 // 同类题导航：同分类下其他已复盘题目
@@ -232,7 +259,7 @@ const html = `<!DOCTYPE html>
 </div>
   ${renderProblem()}
   ${renderReviews()}
-  ${renderCompare()}
+  ${renderRounds()}
   <section><h2>我的解法</h2>${renderSolutions()}</section>
   ${approachDetail ? `<section><h2>思路拆解</h2><div class="card md">${md(approachDetail)}</div></section>` : ''}
   <section><h2>解题过程</h2><div class="tl">${tlItems.join('')}</div></section>

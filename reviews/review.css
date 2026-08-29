@@ -1212,3 +1212,34 @@ details.rv-group .card:last-child { border-bottom-left-radius:8px; border-bottom
 .similar-list a { color:#0969da; text-decoration:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .similar-list a:hover { text-decoration:underline; }
 .similar-list .chip { margin:0; flex:none; }
+
+/* 题目回顾（折叠） */
+details.review-problem { border:1px solid #d0d7de; border-radius:8px; background:#fff; }
+details.review-problem summary { cursor:pointer; padding:12px 18px; font-weight:600; font-size:15px; list-style:none; }
+details.review-problem summary::-webkit-details-marker { display:none; }
+details.review-problem summary .muted { font-weight:400; margin-left:8px; font-size:12.5px; }
+details.review-problem[open] summary { border-bottom:1px solid #d0d7de; }
+details.review-problem .card { border:none; border-radius:0; margin:0; }
+details.review-problem .md h1 { font-size:20px; }
+details.review-problem .md h2 { font-size:16px; margin-top:16px; }
+
+/* 历轮表现（并排卡片） */
+.rounds { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:12px; margin-top:14px; }
+.round-card { border:1px solid #d0d7de; border-radius:8px; padding:14px 18px; background:#fff; }
+.round-card.strong { border-top:3px solid #1a7f37; }
+.round-card.weak { border-top:3px solid #cf222e; }
+.round-card h3 { margin:0 0 8px; font-size:15px; }
+.round-meta { list-style:none; padding:0; margin:0 0 8px; font-size:13.5px; }
+.round-meta li { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:5px 0; border-bottom:1px dashed #d0d7de; }
+.round-meta li:last-child { border-bottom:none; }
+.round-meta li span { color:#57606a; }
+.round-meta li b { font-weight:600; text-align:right; }
+.round-note { font-size:13.5px; color:#1f2328; background:#f6f8fa; border-radius:6px; padding:8px 12px; margin-top:8px; }
+.round-note p { margin:4px 0; }
+.round-note ul { margin:4px 0; padding-left:18px; }
+
+/* 复习记录笔记 */
+.review-note { font-size:13.5px; background:#f6f8fa; border-left:3px solid #0969da; border-radius:0 6px 6px 0; padding:8px 12px; margin-top:8px; }
+.review-note p { margin:4px 0; }
+.review-note ul { margin:4px 0; padding-left:18px; }
+.review-note li { margin:2px 0; }

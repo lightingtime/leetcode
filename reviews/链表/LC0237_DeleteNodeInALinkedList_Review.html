@@ -24,9 +24,19 @@
     <span class="badge">2026-08-24</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>237. 删除链表中的节点 (Delete Node in a Linked List)</h1><p>&gt; https://leetcode.cn/problems/delete-node-in-a-linked-list/</p><p>难度：Medium ｜ 分类：链表</p><p>标签：链表</p><h2>题目描述</h2><p>有一个单链表的 head，我们想删除它其中的一个节点 node。</p><p>给你一个需要删除的节点 node 。你将 无法访问 第一个节点 head。</p><p>链表的所有值都是 唯一的，并且保证给定的节点 node 不是链表中的最后一个节点。</p><p>删除给定的节点。注意，删除节点并不是指从内存中删除它。这里的意思是：</p><p>给定节点的值不应该存在于链表中。</p><p>链表中的节点数应该减少 1。</p><p>node 前面的所有值顺序相同。</p><p>node 后面的所有值顺序相同。</p><p>自定义测试：</p><p>对于输入，你应该提供整个链表 head 和要给出的节点 node。node 不应该是链表的最后一个节点，而应该是链表中的一个实际节点。</p><p>我们将构建链表，并将节点传递给你的函数。</p><p>输出将是调用你函数后的整个链表。</p><p>示例 1：</p><p>输入：head = [4,5,1,9], node = 5</p><p>输出：[4,1,9]</p><p>解释：指定链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 1 -&gt; 9</p><p>示例 2：</p><p>输入：head = [4,5,1,9], node = 1</p><p>输出：[4,5,9]</p><p>解释：指定链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 5 -&gt; 9</p><p>提示：</p><p>链表中节点的数目范围是 [2, 1000]</p><p>-1000</p><p>链表中每个节点的值都是 唯一 的</p><p>需要删除的节点 node 是 链表中的节点 ，且 不是末尾节点</p><h2>示例</h2><ol><li>输入：head = [4,5,1,9]，node = 5</li></ol><p>输出：[4,1,9]</p><p>解释：指定链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 1 -&gt; 9</p><ol><li>输入：head = [4,5,1,9]，node = 1</li></ol><p>输出：[4,5,9]</p><p>解释：指定链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 5 -&gt; 9</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>237. 删除链表中的节点 (Delete Node in a Linked List)</h1><p>&gt; <a href="https://leetcode.cn/problems/delete-node-in-a-linked-list/" rel="noopener">https://leetcode.cn/problems/delete-node-in-a-linked-list/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：链表</p><h2>题目描述</h2><p>有一个单链表的 head，我们想删除它其中的一个节点 node。</p><p>给你一个需要删除的节点 node 。你将 无法访问 第一个节点 head。</p><p>链表的所有值都是 唯一的，并且保证给定的节点 node 不是链表中的最后一个节点。</p><p>删除给定的节点。注意，删除节点并不是指从内存中删除它。这里的意思是：</p><p>给定节点的值不应该存在于链表中。</p><p>链表中的节点数应该减少 1。</p><p>node 前面的所有值顺序相同。</p><p>node 后面的所有值顺序相同。</p><p>自定义测试：</p><p>对于输入，你应该提供整个链表 head 和要给出的节点 node。node 不应该是链表的最后一个节点，而应该是链表中的一个实际节点。</p><p>我们将构建链表，并将节点传递给你的函数。</p><p>输出将是调用你函数后的整个链表。</p><p>示例 1：</p><p>输入：head = [4,5,1,9], node = 5</p><p>输出：[4,1,9]</p><p>解释：指定链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 1 -&gt; 9</p><p>示例 2：</p><p>输入：head = [4,5,1,9], node = 1</p><p>输出：[4,5,9]</p><p>解释：指定链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 5 -&gt; 9</p><p>提示：</p><p>链表中节点的数目范围是 [2, 1000]</p><p>-1000</p><p>链表中每个节点的值都是 唯一 的</p><p>需要删除的节点 node 是 链表中的节点 ，且 不是末尾节点</p><h2>示例</h2><ol><li>输入：head = [4,5,1,9]，node = 5</li></ol><p>输出：[4,1,9]</p><p>解释：指定链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 1 -&gt; 9</p><ol><li>输入：head = [4,5,1,9]，node = 1</li></ol><p>输出：[4,5,9]</p><p>解释：指定链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -&gt; 5 -&gt; 9</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-24</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>无前驱删除：后继值覆盖当前节点，再跳过后继</b></li>
+        <li><span>复杂度</span><b>O(1) · O(1)</b></li>
+        
+      </ul>
+      
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 无前驱删除：后继值覆盖当前节点，再跳过后继</h3>
     <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 43.5 MB</span><span class="chip">用例 41/41</span></p>

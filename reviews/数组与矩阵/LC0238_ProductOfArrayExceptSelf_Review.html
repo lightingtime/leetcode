@@ -24,9 +24,19 @@
     <span class="badge">2026-08-06</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>238. 除了自身以外数组的乘积 (Product of Array Except Self)</h1><p>&gt; https://leetcode.cn/problems/product-of-array-except-self/</p><p>难度：Medium ｜ 分类：数组与矩阵</p><p>标签：数组、前缀和</p><h2>题目描述</h2><p>给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除了 nums[i] 之外其余各元素的乘积 。</p><p>题目数据 保证 数组 nums之中任意元素的全部前缀元素和后缀的乘积都在 32 位 整数范围内。</p><p>请 不要使用除法，且在 O(n) 时间复杂度内完成此题。</p><p>示例 1:</p><p>输入: nums = [1,2,3,4]</p><p>输出: [24,12,8,6]</p><p>示例 2:</p><p>输入: nums = [-1,1,0,-3,3]</p><p>输出: [0,0,9,0,0]</p><p>提示：</p><p>2 5</p><p>-30</p><p>输入 保证 数组 answer[i] 在 32 位 整数范围内</p><p>进阶：你可以在 O(1) 的额外空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组 不被视为 额外空间。）</p><h2>示例</h2><ol><li>输入：nums = [1,2,3,4]</li></ol><p>输出：[24,12,8,6]</p><ol><li>输入：nums = [-1,1,0,-3,3]</li></ol><p>输出：[0,0,9,0,0]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>238. 除了自身以外数组的乘积 (Product of Array Except Self)</h1><p>&gt; <a href="https://leetcode.cn/problems/product-of-array-except-self/" rel="noopener">https://leetcode.cn/problems/product-of-array-except-self/</a></p><p>难度：Medium ｜ 分类：数组与矩阵</p><p>标签：数组、前缀和</p><h2>题目描述</h2><p>给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除了 nums[i] 之外其余各元素的乘积 。</p><p>题目数据 保证 数组 nums之中任意元素的全部前缀元素和后缀的乘积都在 32 位 整数范围内。</p><p>请 不要使用除法，且在 O(n) 时间复杂度内完成此题。</p><p>示例 1:</p><p>输入: nums = [1,2,3,4]</p><p>输出: [24,12,8,6]</p><p>示例 2:</p><p>输入: nums = [-1,1,0,-3,3]</p><p>输出: [0,0,9,0,0]</p><p>提示：</p><p>2 5</p><p>-30</p><p>输入 保证 数组 answer[i] 在 32 位 整数范围内</p><p>进阶：你可以在 O(1) 的额外空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组 不被视为 额外空间。）</p><h2>示例</h2><ol><li>输入：nums = [1,2,3,4]</li></ol><p>输出：[24,12,8,6]</p><ol><li>输入：nums = [-1,1,0,-3,3]</li></ol><p>输出：[0,0,9,0,0]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-06</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>答案数组前缀积+滚动后缀</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>答案数组存左前缀积+滚动变量累乘右侧，额外空间 O(1)；二次提交均 AC</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前缀积×后缀积</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 60.9 MB</span><span class="chip">用例 24/24</span></p>

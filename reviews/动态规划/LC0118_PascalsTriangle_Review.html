@@ -24,9 +24,19 @@
     <span class="badge">2026-08-26</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>118. 杨辉三角 (Pascal's Triangle)</h1><p>&gt; https://leetcode.cn/problems/pascals-triangle/</p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。</p><p>在「杨辉三角」中，每个数是它左上方和右上方的数的和。</p><p>示例 1:</p><p>输入: numRows = 5</p><p>输出: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]</p><p>示例 2:</p><p>输入: numRows = 1</p><p>输出: [[1]]</p><p>提示:</p><p>1</p><h2>示例</h2><ol><li>输入：numRows = 5</li></ol><p>输出：[[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]</p><ol><li>输入：numRows = 1</li></ol><p>输出：[[1]]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>118. 杨辉三角 (Pascal's Triangle)</h1><p>&gt; <a href="https://leetcode.cn/problems/pascals-triangle/" rel="noopener">https://leetcode.cn/problems/pascals-triangle/</a></p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。</p><p>在「杨辉三角」中，每个数是它左上方和右上方的数的和。</p><p>示例 1:</p><p>输入: numRows = 5</p><p>输出: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]</p><p>示例 2:</p><p>输入: numRows = 1</p><p>输出: [[1]]</p><p>提示:</p><p>1</p><h2>示例</h2><ol><li>输入：numRows = 5</li></ol><p>输出：[[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]</p><ol><li>输入：numRows = 1</li></ol><p>输出：[[1]]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-26</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>线性DP逐行递推</b></li>
+        <li><span>复杂度</span><b>O(n²) · 输出O(n²)，辅助O(行长)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>线性递推逐行生成：ans[i][j]=ans[i-1][j-1]+ans[i-1][j]，首尾置 1，从 [1] 滚动推进</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 线性DP逐行递推</h3>
     <p><span class="chip">时间 O(n²)</span><span class="chip">空间 输出O(n²)，辅助O(行长)</span><span class="chip">内存 ≈ 42.3 MB</span><span class="chip">用例 30/30</span></p>

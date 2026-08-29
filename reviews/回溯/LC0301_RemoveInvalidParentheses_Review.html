@@ -24,9 +24,19 @@
     <span class="badge">2026-08-18</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>301. 删除无效的括号 (Remove Invalid Parentheses)</h1><p>&gt; https://leetcode.cn/problems/remove-invalid-parentheses/</p><p>难度：Hard ｜ 分类：回溯</p><p>标签：广度优先搜索、字符串、回溯</p><h2>题目描述</h2><p>给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。</p><p>返回所有可能的结果。答案可以按 任意顺序 返回。</p><p>示例 1：</p><p>输入：s = "()())()"</p><p>输出：["(())()","()()()"]</p><p>示例 2：</p><p>输入：s = "(a)())()"</p><p>输出：["(a())()","(a)()()"]</p><p>示例 3：</p><p>输入：s = ")("</p><p>输出：[""]</p><p>提示：</p><p>1</p><p>s 由小写英文字母以及括号 '(' 和 ')' 组成</p><p>s 中至多含 20 个括号</p><h2>示例</h2><ol><li>输入：s = "()())()"</li></ol><p>输出：["(())()","()()()"]</p><ol><li>输入：s = "(a)())()"</li></ol><p>输出：["(a())()","(a)()()"]</p><ol><li>输入：s = ")("</li></ol><p>输出：[""]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>301. 删除无效的括号 (Remove Invalid Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/remove-invalid-parentheses/" rel="noopener">https://leetcode.cn/problems/remove-invalid-parentheses/</a></p><p>难度：Hard ｜ 分类：回溯</p><p>标签：广度优先搜索、字符串、回溯</p><h2>题目描述</h2><p>给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。</p><p>返回所有可能的结果。答案可以按 任意顺序 返回。</p><p>示例 1：</p><p>输入：s = "()())()"</p><p>输出：["(())()","()()()"]</p><p>示例 2：</p><p>输入：s = "(a)())()"</p><p>输出：["(a())()","(a)()()"]</p><p>示例 3：</p><p>输入：s = ")("</p><p>输出：[""]</p><p>提示：</p><p>1</p><p>s 由小写英文字母以及括号 '(' 和 ')' 组成</p><p>s 中至多含 20 个括号</p><h2>示例</h2><ol><li>输入：s = "()())()"</li></ol><p>输出：["(())()","()()()"]</p><ol><li>输入：s = "(a)())()"</li></ol><p>输出：["(a())()","(a)()()"]</p><ol><li>输入：s = ")("</li></ol><p>输出：[""]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-18</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>预扫描预算 + 每层删一个位置的回溯（连续相同去重）</b></li>
+        <li><span>复杂度</span><b>O(2^n) · O(n²)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>一遍扫描算最小删除预算 needL/needR；DFS 每层删一个括号、删完从同位置继续，i&gt;start 且与前一个相同则跳过删除位置去重；预算用完 isValid 过滤；129/129 一次 Accepted</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 预扫描预算 + 每层删一个位置的回溯（连续相同去重）</h3>
     <p><span class="chip">时间 O(2^n)</span><span class="chip">空间 O(n²)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 129/129</span></p>

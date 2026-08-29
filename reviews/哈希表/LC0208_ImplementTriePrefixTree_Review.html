@@ -24,9 +24,19 @@
     <span class="badge">2026-08-03</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>208. 实现 Trie (前缀树) (Implement Trie (Prefix Tree))</h1><p>&gt; https://leetcode.cn/problems/implement-trie-prefix-tree/</p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：设计、字典树、哈希表、字符串</p><h2>题目描述</h2><p>Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补全和拼写检查。</p><p>请你实现 Trie 类：</p><p>Trie() 初始化前缀树对象。</p><p>void insert(String word) 向前缀树中插入字符串 word 。</p><p>boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。</p><p>boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。</p><p>示例：</p><p>输入</p><p>["Trie", "insert", "search", "search", "startsWith", "insert", "search"]</p><p>[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]</p><p>输出</p><p>[null, null, true, false, true, null, true]</p><p>解释</p><p>Trie trie = new Trie();</p><p>trie.insert("apple");</p><p>trie.search("apple"); // 返回 True</p><p>trie.search("app"); // 返回 False</p><p>trie.startsWith("app"); // 返回 True</p><p>trie.insert("app");</p><p>trie.search("app"); // 返回 True</p><p>提示：</p><p>1</p><p>word 和 prefix 仅由小写英文字母组成</p><p>insert、search 和 startsWith 调用次数 总计 不超过 3 * 104 次</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>208. 实现 Trie (前缀树) (Implement Trie (Prefix Tree))</h1><p>&gt; <a href="https://leetcode.cn/problems/implement-trie-prefix-tree/" rel="noopener">https://leetcode.cn/problems/implement-trie-prefix-tree/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：设计、字典树、哈希表、字符串</p><h2>题目描述</h2><p>Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补全和拼写检查。</p><p>请你实现 Trie 类：</p><p>Trie() 初始化前缀树对象。</p><p>void insert(String word) 向前缀树中插入字符串 word 。</p><p>boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。</p><p>boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。</p><p>示例：</p><p>输入</p><p>["Trie", "insert", "search", "search", "startsWith", "insert", "search"]</p><p>[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]</p><p>输出</p><p>[null, null, true, false, true, null, true]</p><p>解释</p><p>Trie trie = new Trie();</p><p>trie.insert("apple");</p><p>trie.search("apple"); // 返回 True</p><p>trie.search("app"); // 返回 False</p><p>trie.startsWith("app"); // 返回 True</p><p>trie.insert("app");</p><p>trie.search("app"); // 返回 True</p><p>提示：</p><p>1</p><p>word 和 prefix 仅由小写英文字母组成</p><p>insert、search 和 startsWith 调用次数 总计 不超过 3 * 104 次</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-03</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>Trie（数组子节点 + 结束标记）</b></li>
+        <li><span>复杂度</span><b>O(L) · O(N*26)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>Trie（数组子节点 + 结束标记）</p>
     <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(N*26)</span></p>

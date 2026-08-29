@@ -24,9 +24,19 @@
     <span class="badge">2026-08-25</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>378. 有序矩阵中第 K 小的元素 (Kth Smallest Element in a Sorted Matrix)</h1><p>&gt; https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/</p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：数组、二分查找、矩阵、排序、堆（优先队列）</p><h2>题目描述</h2><p>给你一个 n x n 矩阵 matrix ，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。</p><p>请注意，它是 排序后 的第 k 小元素，而不是第 k 个 不同 的元素。</p><p>你必须找到一个内存复杂度优于 O(n2) 的解决方案。</p><p>示例 1：</p><p>输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8</p><p>输出：13</p><p>解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15]，第 8 小元素是 13</p><p>示例 2：</p><p>输入：matrix = [[-5]], k = 1</p><p>输出：-5</p><p>提示：</p><p>n == matrix.length</p><p>n == matrix[i].length</p><p>1</p><p>-109 9</p><p>题目数据 保证 matrix 中的所有行和列都按 非递减顺序 排列</p><p>1 2</p><p>进阶：</p><p>你能否用一个恒定的内存(即 O(1) 内存复杂度)来解决这个问题?</p><p>你能在 O(n) 的时间复杂度下解决这个问题吗?这个方法对于面试来说可能太超前了，但是你会发现阅读这篇文章（ this paper ）很有趣。</p><h2>示例</h2><ol><li>输入：matrix = [[1,5,9],[10,11,13],[12,13,15]]，k = 8</li></ol><p>输出：13</p><p>解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15]，第 8 小元素是 13</p><ol><li>输入：matrix = [[-5]]，k = 1</li></ol><p>输出：-5</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>378. 有序矩阵中第 K 小的元素 (Kth Smallest Element in a Sorted Matrix)</h1><p>&gt; <a href="https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/" rel="noopener">https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：数组、二分查找、矩阵、排序、堆（优先队列）</p><h2>题目描述</h2><p>给你一个 n x n 矩阵 matrix ，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。</p><p>请注意，它是 排序后 的第 k 小元素，而不是第 k 个 不同 的元素。</p><p>你必须找到一个内存复杂度优于 O(n2) 的解决方案。</p><p>示例 1：</p><p>输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8</p><p>输出：13</p><p>解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15]，第 8 小元素是 13</p><p>示例 2：</p><p>输入：matrix = [[-5]], k = 1</p><p>输出：-5</p><p>提示：</p><p>n == matrix.length</p><p>n == matrix[i].length</p><p>1</p><p>-109 9</p><p>题目数据 保证 matrix 中的所有行和列都按 非递减顺序 排列</p><p>1 2</p><p>进阶：</p><p>你能否用一个恒定的内存(即 O(1) 内存复杂度)来解决这个问题?</p><p>你能在 O(n) 的时间复杂度下解决这个问题吗?这个方法对于面试来说可能太超前了，但是你会发现阅读这篇文章（ this paper ）很有趣。</p><h2>示例</h2><ol><li>输入：matrix = [[1,5,9],[10,11,13],[12,13,15]]，k = 8</li></ol><p>输出：13</p><p>解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15]，第 8 小元素是 13</p><ol><li>输入：matrix = [[-5]]，k = 1</li></ol><p>输出：-5</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-25</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>二分答案（值域二分）</b></li>
+        <li><span>复杂度</span><b>O(n·log(值域)) · O(1)</b></li>
+        
+      </ul>
+      
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 最小堆 k 路归并</h3>
     <p><span class="chip">时间 O(k log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 49.4 MB</span><span class="chip">用例 87/87</span></p>

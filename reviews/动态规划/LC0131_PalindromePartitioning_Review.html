@@ -24,9 +24,19 @@
     <span class="badge">2026-08-26</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>131. 分割回文串 (Palindrome Partitioning)</h1><p>&gt; https://leetcode.cn/problems/palindrome-partitioning/</p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：字符串、动态规划、回溯</p><h2>题目描述</h2><p>给你一个字符串 s，请你将 s 分割成一些 子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。</p><p>示例 1：</p><p>输入：s = "aab"</p><p>输出：[["a","a","b"],["aa","b"]]</p><p>示例 2：</p><p>输入：s = "a"</p><p>输出：[["a"]]</p><p>提示：</p><p>1</p><p>s 仅由小写英文字母组成</p><h2>示例</h2><ol><li>输入：s = "aab"</li></ol><p>输出：[["a","a","b"],["aa","b"]]</p><ol><li>输入：s = "a"</li></ol><p>输出：[["a"]]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>131. 分割回文串 (Palindrome Partitioning)</h1><p>&gt; <a href="https://leetcode.cn/problems/palindrome-partitioning/" rel="noopener">https://leetcode.cn/problems/palindrome-partitioning/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：字符串、动态规划、回溯</p><h2>题目描述</h2><p>给你一个字符串 s，请你将 s 分割成一些 子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。</p><p>示例 1：</p><p>输入：s = "aab"</p><p>输出：[["a","a","b"],["aa","b"]]</p><p>示例 2：</p><p>输入：s = "a"</p><p>输出：[["a"]]</p><p>提示：</p><p>1</p><p>s 仅由小写英文字母组成</p><h2>示例</h2><ol><li>输入：s = "aab"</li></ol><p>输出：[["a","a","b"],["aa","b"]]</p><ol><li>输入：s = "a"</li></ol><p>输出：[["a"]]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-26</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>区间DP预判+回溯</b></li>
+        <li><span>复杂度</span><b>O(n²预判 + 方案数×n) · O(n²)表 + O(n)栈</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>区间DP回文预判表+回溯枚举：按长度填 isPal（len==1 特判双字符），回溯查表 O(1) 判段、切段递归、返回撤销</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 区间DP预判+回溯</h3>
     <p><span class="chip">时间 O(n²预判 + 方案数×n)</span><span class="chip">空间 O(n²)表 + O(n)栈</span><span class="chip">内存 ≈ 62.8 MB</span><span class="chip">用例 32/32</span></p>

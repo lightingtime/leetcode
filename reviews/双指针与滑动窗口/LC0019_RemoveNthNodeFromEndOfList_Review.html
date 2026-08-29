@@ -24,9 +24,19 @@
     <span class="badge">2026-08-05</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>19. 删除链表的倒数第 N 个结点 (Remove Nth Node From End of List)</h1><p>&gt; https://leetcode.cn/problems/remove-nth-node-from-end-of-list/</p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：链表、双指针</p><h2>题目描述</h2><p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。</p><p>示例 1：</p><p>输入：head = [1,2,3,4,5], n = 2</p><p>输出：[1,2,3,5]</p><p>示例 2：</p><p>输入：head = [1], n = 1</p><p>输出：[]</p><p>示例 3：</p><p>输入：head = [1,2], n = 1</p><p>输出：[1]</p><p>提示：</p><p>链表中结点的数目为 sz</p><p>1</p><p>0</p><p>1</p><p>进阶：你能尝试使用一趟扫描实现吗？</p><h2>示例</h2><ol><li>输入：head = [1,2,3,4,5]，n = 2</li></ol><p>输出：[1,2,3,5]</p><ol><li>输入：head = [1]，n = 1</li></ol><p>输出：[]</p><ol><li>输入：head = [1,2]，n = 1</li></ol><p>输出：[1]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>19. 删除链表的倒数第 N 个结点 (Remove Nth Node From End of List)</h1><p>&gt; <a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/" rel="noopener">https://leetcode.cn/problems/remove-nth-node-from-end-of-list/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：链表、双指针</p><h2>题目描述</h2><p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。</p><p>示例 1：</p><p>输入：head = [1,2,3,4,5], n = 2</p><p>输出：[1,2,3,5]</p><p>示例 2：</p><p>输入：head = [1], n = 1</p><p>输出：[]</p><p>示例 3：</p><p>输入：head = [1,2], n = 1</p><p>输出：[1]</p><p>提示：</p><p>链表中结点的数目为 sz</p><p>1</p><p>0</p><p>1</p><p>进阶：你能尝试使用一趟扫描实现吗？</p><h2>示例</h2><ol><li>输入：head = [1,2,3,4,5]，n = 2</li></ol><p>输出：[1,2,3,5]</p><ol><li>输入：head = [1]，n = 1</li></ol><p>输出：[]</p><ol><li>输入：head = [1,2]，n = 1</li></ol><p>输出：[1]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-05</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>哨兵+快慢指针</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>哨兵节点统一删头边界，快慢指针拉开 N 步一趟删除，O(n)/O(1)，一次 Accepted（208/208）</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 哨兵+快慢指针</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 208/208</span></p>

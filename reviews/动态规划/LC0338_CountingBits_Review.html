@@ -24,9 +24,19 @@
     <span class="badge">2026-08-18</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>338. 比特位计数 (Counting Bits)</h1><p>&gt; https://leetcode.cn/problems/counting-bits/</p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：位运算、动态规划</p><h2>题目描述</h2><p>给你一个整数 n ，对于 0 中的每个 i ，计算其二进制表示中 1 的个数 ，返回一个长度为 n + 1 的数组 ans 作为答案。</p><p>不要使用内置函数来解决（例如，C++ 中的 __builtin_popcount）。</p><p>示例 1：</p><p>输入：n = 2</p><p>输出：[0,1,1]</p><p>解释：</p><p>0 --&gt; 0</p><p>1 --&gt; 1</p><p>2 --&gt; 10</p><p>示例 2：</p><p>输入：n = 5</p><p>输出：[0,1,1,2,1,2]</p><p>解释：</p><p>0 --&gt; 0</p><p>1 --&gt; 1</p><p>2 --&gt; 10</p><p>3 --&gt; 11</p><p>4 --&gt; 100</p><p>5 --&gt; 101</p><p>提示：</p><p>0 5</p><p>进阶：</p><p>很容易就能实现时间复杂度为 O(n log n) 的解决方案，你可以在线性时间复杂度 O(n) 内用一趟扫描解决此问题吗？</p><h2>示例</h2><ol><li>输入：n = 2</li></ol><p>输出：[0,1,1]</p><ol><li>输入：n = 5</li></ol><p>输出：[0,1,1,2,1,2]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>338. 比特位计数 (Counting Bits)</h1><p>&gt; <a href="https://leetcode.cn/problems/counting-bits/" rel="noopener">https://leetcode.cn/problems/counting-bits/</a></p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：位运算、动态规划</p><h2>题目描述</h2><p>给你一个整数 n ，对于 0 中的每个 i ，计算其二进制表示中 1 的个数 ，返回一个长度为 n + 1 的数组 ans 作为答案。</p><p>不要使用内置函数来解决（例如，C++ 中的 __builtin_popcount）。</p><p>示例 1：</p><p>输入：n = 2</p><p>输出：[0,1,1]</p><p>解释：</p><p>0 --&gt; 0</p><p>1 --&gt; 1</p><p>2 --&gt; 10</p><p>示例 2：</p><p>输入：n = 5</p><p>输出：[0,1,1,2,1,2]</p><p>解释：</p><p>0 --&gt; 0</p><p>1 --&gt; 1</p><p>2 --&gt; 10</p><p>3 --&gt; 11</p><p>4 --&gt; 100</p><p>5 --&gt; 101</p><p>提示：</p><p>0 5</p><p>进阶：</p><p>很容易就能实现时间复杂度为 O(n log n) 的解决方案，你可以在线性时间复杂度 O(n) 内用一趟扫描解决此问题吗？</p><h2>示例</h2><ol><li>输入：n = 2</li></ol><p>输出：[0,1,1]</p><ol><li>输入：n = 5</li></ol><p>输出：[0,1,1,2,1,2]</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-18</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>DP：dp[i]=dp[i&gt;&gt;1]+(i&amp;1)</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>最低位+右移递推：偶数 dp[i]=dp[i&gt;&gt;1]，奇数再加 1，合并为 dp[i]=dp[i&gt;&gt;1]+(i&amp;1)，一趟 O(n) 填表；15/15 一次 Accepted</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DP：dp[i]=dp[i&gt;&gt;1]+(i&amp;1)</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.7 MB</span><span class="chip">用例 15/15</span></p>

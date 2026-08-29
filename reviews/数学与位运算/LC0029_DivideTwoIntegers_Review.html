@@ -24,9 +24,19 @@
     <span class="badge">2026-08-28</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>29. 两数相除 (Divide Two Integers)</h1><p>&gt; https://leetcode.cn/problems/divide-two-integers/</p><p>难度：Medium ｜ 分类：数学与位运算</p><p>标签：位运算、数学</p><h2>题目描述</h2><p>给你两个整数，被除数 dividend 和除数 divisor。将两数相除，要求 不使用 乘法、除法和取余运算。</p><p>整数除法应该向零截断，也就是截去（truncate）其小数部分。例如，8.345 将被截断为 8 ，-2.7335 将被截断至 -2 。</p><p>返回被除数 dividend 除以除数 divisor 得到的 商 。</p><p>注意：假设我们的环境只能存储 32 位 有符号整数，其数值范围是 [−231, 231 − 1] 。本题中，如果商 严格大于 231 − 1 ，则返回 231 − 1 ；如果商 严格小于 -231 ，则返回 -231 。</p><p>示例 1:</p><p>输入: dividend = 10, divisor = 3</p><p>输出: 3</p><p>解释: 10/3 = 3.33333.. ，向零截断后得到 3 。</p><p>示例 2:</p><p>输入: dividend = 7, divisor = -3</p><p>输出: -2</p><p>解释: 7/-3 = -2.33333.. ，向零截断后得到 -2 。</p><p>提示：</p><p>-231 31 - 1</p><p>divisor != 0</p><h2>示例</h2><ol><li>输入：dividend = 10，divisor = 3</li></ol><p>输出：3</p><p>解释：10/3 = 3.33333.. ，向零截断后得到 3 。</p><ol><li>输入：dividend = 7，divisor = -3</li></ol><p>输出：-2</p><p>解释：7/-3 = -2.33333.. ，向零截断后得到 -2 。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>29. 两数相除 (Divide Two Integers)</h1><p>&gt; <a href="https://leetcode.cn/problems/divide-two-integers/" rel="noopener">https://leetcode.cn/problems/divide-two-integers/</a></p><p>难度：Medium ｜ 分类：数学与位运算</p><p>标签：位运算、数学</p><h2>题目描述</h2><p>给你两个整数，被除数 dividend 和除数 divisor。将两数相除，要求 不使用 乘法、除法和取余运算。</p><p>整数除法应该向零截断，也就是截去（truncate）其小数部分。例如，8.345 将被截断为 8 ，-2.7335 将被截断至 -2 。</p><p>返回被除数 dividend 除以除数 divisor 得到的 商 。</p><p>注意：假设我们的环境只能存储 32 位 有符号整数，其数值范围是 [−231, 231 − 1] 。本题中，如果商 严格大于 231 − 1 ，则返回 231 − 1 ；如果商 严格小于 -231 ，则返回 -231 。</p><p>示例 1:</p><p>输入: dividend = 10, divisor = 3</p><p>输出: 3</p><p>解释: 10/3 = 3.33333.. ，向零截断后得到 3 。</p><p>示例 2:</p><p>输入: dividend = 7, divisor = -3</p><p>输出: -2</p><p>解释: 7/-3 = -2.33333.. ，向零截断后得到 -2 。</p><p>提示：</p><p>-231 31 - 1</p><p>divisor != 0</p><h2>示例</h2><ol><li>输入：dividend = 10，divisor = 3</li></ol><p>输出：3</p><p>解释：10/3 = 3.33333.. ，向零截断后得到 3 。</p><ol><li>输入：dividend = 7，divisor = -3</li></ol><p>输出：-2</p><p>解释：7/-3 = -2.33333.. ，向零截断后得到 -2 。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-28</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>预计算 2 幂表 + 从大到小试减</b></li>
+        <li><span>复杂度</span><b>O(log(x)) · O(log(x))</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>两数相除：写法1 负数域+翻倍减法 O(log^2)；写法2 预计算 2^k 倍除数表+从大到小试减 O(log)，力扣均一次 Accepted（994/994）</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 负数域统一+翻倍减法</h3>
     <p><span class="chip">时间 O(log^2(x))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 40.9 MB</span><span class="chip">用例 994/994</span></p>

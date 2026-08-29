@@ -24,9 +24,19 @@
     <span class="badge">2026-08-25</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>130. 被围绕的区域 (Surrounded Regions)</h1><p>&gt; https://leetcode.cn/problems/surrounded-regions/</p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、并查集、数组、矩阵</p><h2>题目描述</h2><p>给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' 组成，捕获 所有 被围绕的区域：</p><p>连接：一个单元格与水平或垂直方向上相邻的单元格连接。</p><p>区域：连接所有 'O' 的单元格来形成一个区域。</p><p>围绕：如果一个区域中的所有 'O' 单元格都不在棋盘的边缘，则该区域被包围。这样的区域 完全 被 'X' 单元格包围。</p><p>通过 原地 将输入矩阵中的所有 'O' 替换为 'X' 来 捕获被围绕的区域。你不需要返回任何值。</p><p>示例 1：</p><p>输入：board = [['X','X','X','X'],['X','O','O','X'],['X','X','O','X'],['X','O','X','X']]</p><p>输出：[['X','X','X','X'],['X','X','X','X'],['X','X','X','X'],['X','O','X','X']]</p><p>解释：</p><p>在上图中，底部的区域没有被捕获，因为它在 board 的边缘并且不能被围绕。</p><p>示例 2：</p><p>输入：board = [['X']]</p><p>输出：[['X']]</p><p>提示：</p><p>m == board.length</p><p>n == board[i].length</p><p>1</p><p>board[i][j] 为 'X' 或 'O'</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>130. 被围绕的区域 (Surrounded Regions)</h1><p>&gt; <a href="https://leetcode.cn/problems/surrounded-regions/" rel="noopener">https://leetcode.cn/problems/surrounded-regions/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、并查集、数组、矩阵</p><h2>题目描述</h2><p>给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' 组成，捕获 所有 被围绕的区域：</p><p>连接：一个单元格与水平或垂直方向上相邻的单元格连接。</p><p>区域：连接所有 'O' 的单元格来形成一个区域。</p><p>围绕：如果一个区域中的所有 'O' 单元格都不在棋盘的边缘，则该区域被包围。这样的区域 完全 被 'X' 单元格包围。</p><p>通过 原地 将输入矩阵中的所有 'O' 替换为 'X' 来 捕获被围绕的区域。你不需要返回任何值。</p><p>示例 1：</p><p>输入：board = [['X','X','X','X'],['X','O','O','X'],['X','X','O','X'],['X','O','X','X']]</p><p>输出：[['X','X','X','X'],['X','X','X','X'],['X','X','X','X'],['X','O','X','X']]</p><p>解释：</p><p>在上图中，底部的区域没有被捕获，因为它在 board 的边缘并且不能被围绕。</p><p>示例 2：</p><p>输入：board = [['X']]</p><p>输出：[['X']]</p><p>提示：</p><p>m == board.length</p><p>n == board[i].length</p><p>1</p><p>board[i][j] 为 'X' 或 'O'</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-25</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>边缘O反向DFS标记安全区，再全棋盘翻转</b></li>
+        <li><span>复杂度</span><b>O(m·n) · O(m·n)（递归栈最坏）</b></li>
+        
+      </ul>
+      
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 边缘O反向DFS标记安全区，再全棋盘翻转</h3>
     <p><span class="chip">时间 O(m·n)</span><span class="chip">空间 O(m·n)（递归栈最坏）</span><span class="chip">内存 ≈ 45.9 MB</span><span class="chip">用例 59/59</span></p>

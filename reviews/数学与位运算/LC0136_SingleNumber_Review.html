@@ -24,9 +24,19 @@
     <span class="badge">2026-08-11</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>136. 只出现一次的数字 (Single Number)</h1><p>&gt; https://leetcode.cn/problems/single-number/</p><p>难度：Easy ｜ 分类：数学与位运算</p><p>标签：位运算、数组</p><h2>题目描述</h2><p>给你一个 非空 整数数组 nums ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。</p><p>你必须设计并实现线性时间复杂度的算法来解决此问题，且该算法只使用常量额外空间。</p><p>示例 1 ：</p><p>输入：nums = [2,2,1]</p><p>输出：1</p><p>示例 2 ：</p><p>输入：nums = [4,1,2,1,2]</p><p>输出：4</p><p>示例 3 ：</p><p>输入：nums = [1]</p><p>输出：1</p><p>提示：</p><p>1 4</p><p>-3 * 104 4</p><p>除了某个元素只出现一次以外，其余每个元素均出现两次。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>136. 只出现一次的数字 (Single Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/single-number/" rel="noopener">https://leetcode.cn/problems/single-number/</a></p><p>难度：Easy ｜ 分类：数学与位运算</p><p>标签：位运算、数组</p><h2>题目描述</h2><p>给你一个 非空 整数数组 nums ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。</p><p>你必须设计并实现线性时间复杂度的算法来解决此问题，且该算法只使用常量额外空间。</p><p>示例 1 ：</p><p>输入：nums = [2,2,1]</p><p>输出：1</p><p>示例 2 ：</p><p>输入：nums = [4,1,2,1,2]</p><p>输出：4</p><p>示例 3 ：</p><p>输入：nums = [1]</p><p>输出：1</p><p>提示：</p><p>1 4</p><p>-3 * 104 4</p><p>除了某个元素只出现一次以外，其余每个元素均出现两次。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-11</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>位运算（XOR）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>只出现一次的数字：全员 XOR，成对抵消留唯一值，O(n)/O(1)，一次 Accepted（61/61）</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 位运算（XOR）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.0 MB</span><span class="chip">用例 61/61</span></p>

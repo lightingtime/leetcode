@@ -24,9 +24,19 @@
     <span class="badge">2026-08-22</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>28. 找出字符串中第一个匹配项的下标 (Find the Index of the First Occurrence in a String)</h1><p>&gt; https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/</p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：双指针、字符串、字符串匹配、KMP 算法、Boyer–Moore 算法、扩展 KMP</p><h2>题目描述</h2><p>给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。</p><p>示例 1：</p><p>输入：haystack = "sadbutsad", needle = "sad"</p><p>输出：0</p><p>解释："sad" 在下标 0 和 6 处匹配。</p><p>第一个匹配项的下标是 0 ，所以返回 0 。</p><p>示例 2：</p><p>输入：haystack = "leetcode", needle = "leeto"</p><p>输出：-1</p><p>解释："leeto" 没有在 "leetcode" 中出现，所以返回 -1 。</p><p>提示：</p><p>1 4</p><p>haystack 和 needle 仅由小写英文字符组成</p><h2>示例</h2><ol><li>输入：haystack = "sadbutsad"，needle = "sad"</li></ol><p>输出：0</p><p>解释："sad" 在下标 0 和 6 处匹配。</p><ol><li>输入：haystack = "leetcode"，needle = "leeto"</li></ol><p>输出：-1</p><p>解释："leeto" 没有在 "leetcode" 中出现，所以返回 -1 。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>28. 找出字符串中第一个匹配项的下标 (Find the Index of the First Occurrence in a String)</h1><p>&gt; <a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/" rel="noopener">https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：双指针、字符串、字符串匹配、KMP 算法、Boyer–Moore 算法、扩展 KMP</p><h2>题目描述</h2><p>给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1 。</p><p>示例 1：</p><p>输入：haystack = "sadbutsad", needle = "sad"</p><p>输出：0</p><p>解释："sad" 在下标 0 和 6 处匹配。</p><p>第一个匹配项的下标是 0 ，所以返回 0 。</p><p>示例 2：</p><p>输入：haystack = "leetcode", needle = "leeto"</p><p>输出：-1</p><p>解释："leeto" 没有在 "leetcode" 中出现，所以返回 -1 。</p><p>提示：</p><p>1 4</p><p>haystack 和 needle 仅由小写英文字符组成</p><h2>示例</h2><ol><li>输入：haystack = "sadbutsad"，needle = "sad"</li></ol><p>输出：0</p><p>解释："sad" 在下标 0 和 6 处匹配。</p><ol><li>输入：haystack = "leetcode"，needle = "leeto"</li></ol><p>输出：-1</p><p>解释："leeto" 没有在 "leetcode" 中出现，所以返回 -1 。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-22</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>KMP（前缀函数）</b></li>
+        <li><span>复杂度</span><b>O(n+m) · O(m)</b></li>
+        
+      </ul>
+      
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · KMP（前缀函数）</h3>
     <p><span class="chip">时间 O(n+m)</span><span class="chip">空间 O(m)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 86/86</span></p>

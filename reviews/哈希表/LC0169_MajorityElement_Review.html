@@ -24,9 +24,19 @@
     <span class="badge">2026-08-03</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>169. 多数元素 (Majority Element)</h1><p>&gt; https://leetcode.cn/problems/majority-element/</p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表、分治、计数、排序</p><h2>题目描述</h2><p>给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。</p><p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p><p>示例 1：</p><p>输入：nums = [3,2,3]</p><p>输出：3</p><p>示例 2：</p><p>输入：nums = [2,2,1,1,1,2,2]</p><p>输出：2</p><p>提示：</p><p>n == nums.length</p><p>1 4</p><p>-109 9</p><p>输入保证数组中一定有一个多数元素。</p><p>进阶：尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。</p><h2>示例</h2><ol><li>输入：nums = [3,2,3]</li></ol><p>输出：3</p><ol><li>输入：nums = [2,2,1,1,1,2,2]</li></ol><p>输出：2</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>169. 多数元素 (Majority Element)</h1><p>&gt; <a href="https://leetcode.cn/problems/majority-element/" rel="noopener">https://leetcode.cn/problems/majority-element/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表、分治、计数、排序</p><h2>题目描述</h2><p>给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。</p><p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p><p>示例 1：</p><p>输入：nums = [3,2,3]</p><p>输出：3</p><p>示例 2：</p><p>输入：nums = [2,2,1,1,1,2,2]</p><p>输出：2</p><p>提示：</p><p>n == nums.length</p><p>1 4</p><p>-109 9</p><p>输入保证数组中一定有一个多数元素。</p><p>进阶：尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。</p><h2>示例</h2><ol><li>输入：nums = [3,2,3]</li></ol><p>输出：3</p><ol><li>输入：nums = [2,2,1,1,1,2,2]</li></ol><p>输出：2</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-03</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>Boyer-Moore 投票</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>多数元素：Boyer-Moore 投票，一次 Accepted（54/54），已是最优 O(n)/O(1)</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card">
     <p><b>思路：</b>Boyer-Moore 投票</p>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span></p>

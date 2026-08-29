@@ -24,9 +24,19 @@
     <span class="badge">2026-08-28</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>204. 计数质数 (Count Primes)</h1><p>&gt; https://leetcode.cn/problems/count-primes/</p><p>难度：Medium ｜ 分类：数学与位运算</p><p>标签：数组、数学、枚举、数论、素性测试、筛法、素数筛法</p><h2>题目描述</h2><p>给定整数 n ，返回 所有小于非负整数 n 的质数的数量 。</p><p>示例 1：</p><p>输入：n = 10</p><p>输出：4</p><p>解释：小于 10 的质数一共有 4 个, 它们是 2, 3, 5, 7 。</p><p>示例 2：</p><p>输入：n = 0</p><p>输出：0</p><p>示例 3：</p><p>输入：n = 1</p><p>输出：0</p><p>提示：</p><p>0 6</p><h2>示例</h2><ol><li>输入：n = 10</li></ol><p>输出：4</p><p>解释：小于 10 的质数一共有 4 个, 它们是 2, 3, 5, 7 。</p><ol><li>输入：n = 0</li></ol><p>输出：0</p><ol><li>输入：n = 1</li></ol><p>输出：0</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>204. 计数质数 (Count Primes)</h1><p>&gt; <a href="https://leetcode.cn/problems/count-primes/" rel="noopener">https://leetcode.cn/problems/count-primes/</a></p><p>难度：Medium ｜ 分类：数学与位运算</p><p>标签：数组、数学、枚举、数论、素性测试、筛法、素数筛法</p><h2>题目描述</h2><p>给定整数 n ，返回 所有小于非负整数 n 的质数的数量 。</p><p>示例 1：</p><p>输入：n = 10</p><p>输出：4</p><p>解释：小于 10 的质数一共有 4 个, 它们是 2, 3, 5, 7 。</p><p>示例 2：</p><p>输入：n = 0</p><p>输出：0</p><p>示例 3：</p><p>输入：n = 1</p><p>输出：0</p><p>提示：</p><p>0 6</p><h2>示例</h2><ol><li>输入：n = 10</li></ol><p>输出：4</p><p>解释：小于 10 的质数一共有 4 个, 它们是 2, 3, 5, 7 。</p><ol><li>输入：n = 0</li></ol><p>输出：0</p><ol><li>输入：n = 1</li></ol><p>输出：0</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-28</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>线性筛（欧拉筛）+前缀和查表</b></li>
+        <li><span>复杂度</span><b>O(n) 预处理 / O(1) 查询 · O(n)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>计数质数：写法1 静态埃氏筛+前缀和（AC 385/385）；写法2 线性筛欧拉筛 O(n) 预处理，每合数仅被最小质因子筛一次，本地验证 17 个抽样全过</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 静态埃氏筛+前缀和查表</h3>
     <p><span class="chip">时间 O(N log log N) 预处理 / O(1) 查询</span><span class="chip">空间 O(N)</span><span class="chip">内存 ≈ 64.5 MB</span><span class="chip">用例 385/385</span></p>

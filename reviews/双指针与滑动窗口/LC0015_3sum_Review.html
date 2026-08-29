@@ -24,9 +24,19 @@
     <span class="badge">2026-08-04</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>15. 三数之和 (3Sum)</h1><p>&gt; https://leetcode.cn/problems/3sum/</p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针、排序</p><h2>题目描述</h2><p>给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请你返回所有和为 0 且不重复的三元组。</p><p>注意：答案中不可以包含重复的三元组。</p><p>示例 1：</p><p>输入：nums = [-1,0,1,2,-1,-4]</p><p>输出：[[-1,-1,2],[-1,0,1]]</p><p>解释：</p><p>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。</p><p>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。</p><p>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。</p><p>不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。</p><p>注意，输出的顺序和三元组的顺序并不重要。</p><p>示例 2：</p><p>输入：nums = [0,1,1]</p><p>输出：[]</p><p>解释：唯一可能的三元组和不为 0 。</p><p>示例 3：</p><p>输入：nums = [0,0,0]</p><p>输出：[[0,0,0]]</p><p>解释：唯一可能的三元组和为 0 。</p><p>提示：</p><p>3</p><p>-105 5</p><h2>示例</h2><ol><li>输入：nums = [-1,0,1,2,-1,-4]</li></ol><p>输出：[[-1,-1,2],[-1,0,1]]</p><ol><li>输入：nums = [0,1,1]</li></ol><p>输出：[]</p><p>解释：唯一可能的三元组和不为 0 。</p><ol><li>输入：nums = [0,0,0]</li></ol><p>输出：[[0,0,0]]</p><p>解释：唯一可能的三元组和为 0 。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>15. 三数之和 (3Sum)</h1><p>&gt; <a href="https://leetcode.cn/problems/3sum/" rel="noopener">https://leetcode.cn/problems/3sum/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针、排序</p><h2>题目描述</h2><p>给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请你返回所有和为 0 且不重复的三元组。</p><p>注意：答案中不可以包含重复的三元组。</p><p>示例 1：</p><p>输入：nums = [-1,0,1,2,-1,-4]</p><p>输出：[[-1,-1,2],[-1,0,1]]</p><p>解释：</p><p>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。</p><p>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。</p><p>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。</p><p>不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。</p><p>注意，输出的顺序和三元组的顺序并不重要。</p><p>示例 2：</p><p>输入：nums = [0,1,1]</p><p>输出：[]</p><p>解释：唯一可能的三元组和不为 0 。</p><p>示例 3：</p><p>输入：nums = [0,0,0]</p><p>输出：[[0,0,0]]</p><p>解释：唯一可能的三元组和为 0 。</p><p>提示：</p><p>3</p><p>-105 5</p><h2>示例</h2><ol><li>输入：nums = [-1,0,1,2,-1,-4]</li></ol><p>输出：[[-1,-1,2],[-1,0,1]]</p><ol><li>输入：nums = [0,1,1]</li></ol><p>输出：[]</p><p>解释：唯一可能的三元组和不为 0 。</p><ol><li>输入：nums = [0,0,0]</li></ol><p>输出：[[0,0,0]]</p><p>解释：唯一可能的三元组和为 0 。</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-04</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>排序+双指针夹逼</b></li>
+        <li><span>复杂度</span><b>O(n²) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 排序+双指针夹逼</h3>
     <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 57.8 MB</span><span class="chip">用例 316/316</span></p>

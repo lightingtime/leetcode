@@ -24,9 +24,19 @@
     <span class="badge">2026-08-19</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>337. 打家劫舍 III (House Robber III)</h1><p>&gt; https://leetcode.cn/problems/house-robber-iii/</p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：树、深度优先搜索、动态规划、二叉树、树形 DP</p><h2>题目描述</h2><p>小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 root 。</p><p>除了 root 之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果 两个直接相连的房子在同一天晚上被打劫 ，房屋将自动报警。</p><p>给定二叉树的 root 。返回 在不触动警报的情况下 ，小偷能够盗取的最高金额 。</p><p>示例 1:</p><p>输入: root = [3,2,3,null,3,null,1]</p><p>输出: 7</p><p>解释: 小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7</p><p>示例 2:</p><p>输入: root = [3,4,5,1,3,null,1]</p><p>输出: 9</p><p>解释: 小偷一晚能够盗取的最高金额 4 + 5 = 9</p><p>提示：</p><p>树的节点数在 [1, 104] 范围内</p><p>0 4</p><h2>示例</h2><ol><li>输入：root = [3,2,3,null,3,null,1]</li></ol><p>输出：7</p><p>解释：小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7</p><ol><li>输入：root = [3,4,5,1,3,null,1]</li></ol><p>输出：9</p><p>解释：小偷一晚能够盗取的最高金额 4 + 5 = 9</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>337. 打家劫舍 III (House Robber III)</h1><p>&gt; <a href="https://leetcode.cn/problems/house-robber-iii/" rel="noopener">https://leetcode.cn/problems/house-robber-iii/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：树、深度优先搜索、动态规划、二叉树、树形 DP</p><h2>题目描述</h2><p>小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 root 。</p><p>除了 root 之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果 两个直接相连的房子在同一天晚上被打劫 ，房屋将自动报警。</p><p>给定二叉树的 root 。返回 在不触动警报的情况下 ，小偷能够盗取的最高金额 。</p><p>示例 1:</p><p>输入: root = [3,2,3,null,3,null,1]</p><p>输出: 7</p><p>解释: 小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7</p><p>示例 2:</p><p>输入: root = [3,4,5,1,3,null,1]</p><p>输出: 9</p><p>解释: 小偷一晚能够盗取的最高金额 4 + 5 = 9</p><p>提示：</p><p>树的节点数在 [1, 104] 范围内</p><p>0 4</p><h2>示例</h2><ol><li>输入：root = [3,2,3,null,3,null,1]</li></ol><p>输出：7</p><p>解释：小偷一晚能够盗取的最高金额 3 + 3 + 1 = 7</p><ol><li>输入：root = [3,4,5,1,3,null,1]</li></ol><p>输出：9</p><p>解释：小偷一晚能够盗取的最高金额 4 + 5 = 9</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-19</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>树形 DP 自底向上双值</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>一次 AC；树形 DP 自底向上返回 [偷,不偷] 两值，每节点 O(1) 转移；O(n)/O(n) 已达下界</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 树形 DP 自底向上双值</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 124/124</span></p>

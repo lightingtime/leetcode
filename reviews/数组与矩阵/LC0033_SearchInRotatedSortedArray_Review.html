@@ -24,9 +24,19 @@
     <span class="badge">2026-08-05</span>
   </div>
 </div>
-  <section><h2>题目回顾</h2><div class="card md"><h1>33. 搜索旋转排序数组 (Search in Rotated Sorted Array)</h1><p>&gt; https://leetcode.cn/problems/search-in-rotated-sorted-array/</p><p>难度：Medium ｜ 分类：数组与矩阵</p><p>标签：数组、二分查找</p><h2>题目描述</h2><p>整数数组 nums 按升序排列，数组中的值 互不相同 。</p><p>在传递给函数之前，nums 在预先未知的某个下标 k（0 ）上进行了 向左旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 下标 3 上向左旋转后可能变为 [4,5,6,7,0,1,2] 。</p><p>给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。</p><p>你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。</p><p>示例 1：</p><p>输入：nums = [4,5,6,7,0,1,2], target = 0</p><p>输出：4</p><p>示例 2：</p><p>输入：nums = [4,5,6,7,0,1,2], target = 3</p><p>输出：-1</p><p>示例 3：</p><p>输入：nums = [1], target = 0</p><p>输出：-1</p><p>提示：</p><p>1</p><p>-104 4</p><p>nums 中的每个值都 独一无二</p><p>题目数据保证 nums 在预先未知的某个下标上进行了旋转</p><p>-104 4</p><h2>示例</h2><ol><li>输入：nums = [4,5,6,7,0,1,2]，target = 0</li></ol><p>输出：4</p><ol><li>输入：nums = [4,5,6,7,0,1,2]，target = 3</li></ol><p>输出：-1</p><ol><li>输入：nums = [1]，target = 0</li></ol><p>输出：-1</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></section>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>33. 搜索旋转排序数组 (Search in Rotated Sorted Array)</h1><p>&gt; <a href="https://leetcode.cn/problems/search-in-rotated-sorted-array/" rel="noopener">https://leetcode.cn/problems/search-in-rotated-sorted-array/</a></p><p>难度：Medium ｜ 分类：数组与矩阵</p><p>标签：数组、二分查找</p><h2>题目描述</h2><p>整数数组 nums 按升序排列，数组中的值 互不相同 。</p><p>在传递给函数之前，nums 在预先未知的某个下标 k（0 ）上进行了 向左旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 下标 3 上向左旋转后可能变为 [4,5,6,7,0,1,2] 。</p><p>给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。</p><p>你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。</p><p>示例 1：</p><p>输入：nums = [4,5,6,7,0,1,2], target = 0</p><p>输出：4</p><p>示例 2：</p><p>输入：nums = [4,5,6,7,0,1,2], target = 3</p><p>输出：-1</p><p>示例 3：</p><p>输入：nums = [1], target = 0</p><p>输出：-1</p><p>提示：</p><p>1</p><p>-104 4</p><p>nums 中的每个值都 独一无二</p><p>题目数据保证 nums 在预先未知的某个下标上进行了旋转</p><p>-104 4</p><h2>示例</h2><ol><li>输入：nums = [4,5,6,7,0,1,2]，target = 0</li></ol><p>输出：4</p><ol><li>输入：nums = [4,5,6,7,0,1,2]，target = 3</li></ol><p>输出：-1</p><ol><li>输入：nums = [1]，target = 0</li></ol><p>输出：-1</p><h2>约定</h2><ul><li>先独立思考，别急着看题解。</li><li>测试失败后可以让 lc-analyze 帮你分析思路。</li></ul></div></details>
   
-  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>日期</span><b>2026-08-05</b></li>
+        <li><span>提交</span><b>一次 AC</b></li>
+        <li><span>思路</span><b>旋转数组二分</b></li>
+        <li><span>复杂度</span><b>O(log n) · O(1)</b></li>
+        
+      </ul>
+      <div class="round-note md"><p>旋转数组二分：有序半段判定用 &gt;=、值域归属 target、mid 命中即返回，O(log n)/O(1) 一次 Accepted（196/196）</p></div>
+    </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 旋转数组二分</h3>
     <p><span class="chip">时间 O(log n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.3 MB</span><span class="chip">用例 196/196</span></p>
