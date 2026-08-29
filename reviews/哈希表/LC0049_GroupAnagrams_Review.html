@@ -28,13 +28,7 @@
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-08-29 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 计数编码键 + 哈希表 ｜ O(L) · O(L)</p>
-      <div class="review-note md"><p><strong>与一刷对比</strong>：思路未换（计数编码键 + 哈希表），改进在代码组织。一刷对每个 key 做「查 → 建 → 插」三步分支：</p><div class="md-code"><pre>if (map.containsKey(pre)) {
-    map.get(pre).add(str);
-} else {
-    List&lt;String&gt; list = new ArrayList&lt;&gt;();
-    list.add(str);
-    map.put(pre, list);
-}</pre></div><p>二刷用 <code>computeIfAbsent</code> 一步收敛「组不存在则初始化」：</p><div class="md-code"><pre>map.computeIfAbsent(getKey(str), k -&gt; new ArrayList&lt;&gt;()).add(str);</pre></div><p>差异实质：一刷把「取组」和「建组」拆成两条路径，改 key 逻辑时容易漏分支；<code>computeIfAbsent</code> 把初始化收敛为单一入口，逻辑等价但分支更少、不易错。</p><p><strong>一次 AC 归因</strong>：一刷编码键漏次数（<code>a</code>/<code>aa</code> 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。</p><p><strong>掌握度依据</strong>：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。</p></div>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路未换（计数编码键 + 哈希表）；写法从 <code>containsKey</code> 双查精简为 <code>computeIfAbsent</code> 单入口（当前代码见「我的解法」），分支更少、不易漏。</p><p><strong>一次 AC 归因</strong>：一刷编码键漏次数（<code>a</code>/<code>aa</code> 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。</p><p><strong>掌握度依据</strong>：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。</p></div>
     </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>

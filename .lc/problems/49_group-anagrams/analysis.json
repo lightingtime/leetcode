@@ -36,7 +36,7 @@
       "time_complexity": "O(L)",
       "space_complexity": "O(L)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路未换（计数编码键 + 哈希表），改进在代码组织。一刷对每个 key 做「查 → 建 → 插」三步分支：\n\n```java\nif (map.containsKey(pre)) {\n    map.get(pre).add(str);\n} else {\n    List<String> list = new ArrayList<>();\n    list.add(str);\n    map.put(pre, list);\n}\n```\n\n二刷用 `computeIfAbsent` 一步收敛「组不存在则初始化」：\n\n```java\nmap.computeIfAbsent(getKey(str), k -> new ArrayList<>()).add(str);\n```\n\n差异实质：一刷把「取组」和「建组」拆成两条路径，改 key 逻辑时容易漏分支；`computeIfAbsent` 把初始化收敛为单一入口，逻辑等价但分支更少、不易错。\n\n**一次 AC 归因**：一刷编码键漏次数（`a`/`aa` 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。\n\n**掌握度依据**：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。"
+      "notes": "**与一刷对比**：思路未换（计数编码键 + 哈希表）；写法从 `containsKey` 双查精简为 `computeIfAbsent` 单入口（当前代码见「我的解法」），分支更少、不易漏。\n\n**一次 AC 归因**：一刷编码键漏次数（`a`/`aa` 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。\n\n**掌握度依据**：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。"
     }
   ],
   "submissions": [
