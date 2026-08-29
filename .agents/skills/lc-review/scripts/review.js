@@ -54,6 +54,14 @@ const cmd = args[0];
 const order = JSON.parse(fs.readFileSync(ORDER, 'utf8'));
 const progress = JSON.parse(fs.readFileSync(PROGRESS, 'utf8'));
 const doneMap = new Map((progress.done || []).map(d => [d.seq, d]));
+// 题库中未完成一刷的题（可能随时新增）——有它们时复习模式不生效
+const pendingFirstPass = order.filter(o => !doneMap.has(o.seq) && !(progress.skipped || []).includes(o.seq));
+function warnPending() {
+  if (pendingFirstPass.length) {
+    console.log(`⚠ 题库有 ${pendingFirstPass.length} 道新题未完成一刷（如 ${pendingFirstPass[0].id}. ${pendingFirstPass[0].title} 等），建议先切回刷题模式：update_state.js mode practice`);
+    console.log('');
+  }
+}
 
 function seedEntry(q) {
   const d = doneMap.get(q.seq) || {};
@@ -106,6 +114,7 @@ if (cmd === 'init') {
   const state = ensureState();
   console.log(`review_state.json 就绪：${Object.keys(state.problems).length} 题（二刷 ${Object.values(state.problems).filter(p => p.review_count > 0).length} 题）`);
 } else if (cmd === 'next') {
+  warnPending();
   const state = ensureState();
   const today = todayStr();
   const daysLeft = Math.max(0, daysBetween(today, REVIEW_DEADLINE));
@@ -215,6 +224,7 @@ if (cmd === 'init') {
   console.log(`已记录二刷（第 ${review.pass} 次）：${q.id}. ${q.title} ｜ 掌握：${mastery === 'strong' ? '较强' : '较弱'} ｜ 下次复习 ${st.next_review_date}（间隔 ${interval} 天）`);
   if (st.mastered) console.log('该题连续较强且间隔达上限 → 已标记「掌握」，退出复习队列。');
 } else if (cmd === 'stats') {
+  warnPending();
   const state = ensureState();
   const problems = Object.values(state.problems);
   const today = todayStr();

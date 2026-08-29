@@ -18,6 +18,7 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 
 - 本 skill 服务 `practice` 模式（`.lc/mode.json`，一刷刷题）。「开始刷题 / 拉题」时先确保 `node ".agents/skills/lc-practice/scripts/update_state.js" mode practice`。
 - 若当前模式是 `review`（二刷复习），「下一题」改走 lc-review，不要走本 skill。
+- **题库新增题目会自动回到本 skill**：只要 `order.json` 出现未完成一刷的新题，`next` 自动切回刷题模式，无需手动切换。
 
 ## 流程
 

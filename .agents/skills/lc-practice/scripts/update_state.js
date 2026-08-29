@@ -81,12 +81,19 @@ if (cmd === 'next') {
   const MODE = path.join(LC_DIR, 'mode.json');
   let mode = 'practice';
   try { mode = (readJson(MODE).mode || 'practice'); } catch {}
+  const doneSeqs = new Set((progress.done || []).map(d => d.seq));
+  const skippedSeqs = new Set(progress.skipped || []);
+  const hasPending = order.some(o => !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq));
+  // 题库新增了未刷的题 → 复习模式失效，自动切回刷题模式（随时可能发生，不做死板绑定）
+  if (mode === 'review' && hasPending) {
+    writeJson(MODE, { mode: 'practice', updated: date });
+    console.log(`检测到题库有 ${order.length - doneSeqs.size - skippedSeqs.size} 道新题未刷，已自动切换为刷题模式（一刷）。`);
+    mode = 'practice';
+  }
   if (mode === 'review') {
     const r = spawnSync('node', [path.join(__dirname, '..', '..', 'lc-review', 'scripts', 'review.js'), 'next', ...args.slice(1)], { encoding: 'utf8', stdio: 'inherit' });
     process.exit(r.status || 0);
   }
-  const doneSeqs = new Set((progress.done || []).map(d => d.seq));
-  const skippedSeqs = new Set(progress.skipped || []);
   const next = order.find(o => !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq));
   console.log(`进度：已完成 ${doneSeqs.size}/${order.length}`);
   if (!next) {
@@ -351,7 +358,13 @@ if (cmd === 'next') {
   } else {
     let cur = 'practice';
     try { cur = (readJson(MODE).mode || 'practice'); } catch {}
-    console.log(`当前模式：${cur === 'review' ? '复习（二刷）' : '刷题（一刷）'}（.lc/mode.json）`);
+    const pending = order.filter(o => !(progress.done || []).some(d => d.seq === o.seq) && !(progress.skipped || []).includes(o.seq)).length;
+    const label = cur === 'review' ? '复习（二刷）' : '刷题（一刷）';
+    if (cur === 'review' && pending > 0) {
+      console.log(`当前模式：${label}，但题库有 ${pending} 道新题未刷（建议：mode practice 切回刷题）。`);
+    } else {
+      console.log(`当前模式：${label}（.lc/mode.json）`);
+    }
   }
 } else {
   console.log('用法: next | skip --seq N [--undo true] | done --seq N [--firstPass true] [--optimal true] [--notes "..."] [--approachDetail "完整思路拆解"] [--dpSubtype "区间DP"] [--codeNote "..."] [--verdict ... --testcases ... --memory ... --approach ... --time ... --space ...] | habit add|list | pattern add|list | analysis --slug <slug> | checkin --seq N | plan | hint --category <分类> | code-notes | review next|done|stats | mode [review|practice] | stats');

@@ -15,7 +15,7 @@
   - `config.json`：力扣 cookie（供 lc-submit 使用）
   - `problems/{题号}_{slug}/`：题目数据（problem.json / problem.md）+ 每题分析明细（analysis.json：判题结果、复杂度、错误习惯、reviews 复习事件流等）
   - `review_state.json`：复习调度状态（每题 last/next_review_date、间隔、掌握度、是否已掌握），由 lc-review 维护，供复习抽题与主页展示
-  - `mode.json`：当前模式（`practice` 刷题 / `review` 复习），「下一题」按此路由；切换：`update_state.js mode review|practice`，一刷完成自动切为 review
+  - `mode.json`：当前模式（`practice` 刷题 / `review` 复习），「下一题」按此路由；切换：`update_state.js mode review|practice`，一刷完成自动切为 review，**题库新增未刷题时自动切回 practice**
 
 ## 可用的 lc skill（按用户意图触发）
 
@@ -27,7 +27,7 @@
 | 「不懂」「不会写」「卡住了」「帮我看看思路」（尚未跑测试） | lc-guide | 名词先解释清楚、先规划变量及用途、分块推进，一次只讲一块，不直接给答案 |
 | 「开始复习」「二刷」「复习下一题」「开始第二轮」 | lc-review（mode=review 时） | 二刷 + 间隔复习调度（较强×2.5 / 较弱重置），重开题目重写并重提交，按掌握度更新复盘 |
 
-> 「下一题」按当前模式路由（`.lc/mode.json`）：`review` → lc-review 复习队列；`practice` → lc-practice 刷题。切换用 `update_state.js mode review|practice`；一刷全部完成时 `next` 自动切为 `review`。
+> 「下一题」按当前模式路由（`.lc/mode.json`）：`review` → lc-review 复习队列；`practice` → lc-practice 刷题。切换用 `update_state.js mode review|practice`；一刷全部完成时 `next` 自动切为 `review`；题库新增未刷题时 `next` / `mode` 会自动提示并切回 `practice`。
 
 ## 工作流约定
 

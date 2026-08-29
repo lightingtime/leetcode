@@ -25,6 +25,7 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
 
 - 本 skill 对应 `review` 模式（`.lc/mode.json`）。触发「开始复习 / 二刷」时先确保 `node ".agents/skills/lc-practice/scripts/update_state.js" mode review`；此后用户说「下一题」自动走本 skill 的 `review.js next`。
 - 想回到一刷刷题：`update_state.js mode practice`。
+- **题库新增题目时复习模式失效**：用户随时可能往 `order.json` 加新题；只要存在未完成一刷的题，`next` 会自动切回刷题模式，`review.js next/stats` 也会给出警告。复习前先跑 `next` 确认没有新题。
 
 ## 流程
 
