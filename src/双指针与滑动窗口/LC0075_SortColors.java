@@ -14,26 +14,17 @@ public class LC0075_SortColors {
 
     // ==== 提交代码开始 ====
     public void sortColors(int[] nums) {
-        // 不变量（分区含义）：
-        //   [0, lt)    已处理，全是 0
-        //   [lt, i)    已处理，全是 1
-        //   [i, gt]    未处理区（待扫描）
-        //   (gt, n-1]  已处理，全是 2
-        // lt：下一个 0 应放的位置（0 区右边界，不含）
-        // i ：当前扫描指针（未处理区左端点）
-        // gt：下一个 2 应放的位置（2 区左边界，不含）——gt 位置本身未处理，不代表已完成
+        // lt: [0,lt) 全 0；i: [lt,i) 全 1；(gt,n-1] 全 2；[i,gt] 未处理 → 循环条件 i<=gt（i==gt 时那一格未处理）
         int lt = 0, i = 0, gt = nums.length - 1;
-        // 未处理区是 [i, gt] 闭区间：i == gt 时还剩最后一个元素未处理；
-        // 交换 2 后 gt--，新 gt 处放着换回的未知值（可能 0/1），必须由 i 再扫一次，故条件写 i <= gt
         while (i <= gt) {
             if (nums[i] == 2) {
-                swap(nums, i, gt);   // 2 归位到 gt；换回的值未知，i 不前进，下一轮继续检查
+                swap(nums, i, gt);
                 gt--;
             } else if (nums[i] == 0) {
-                swap(nums, lt, i);   // 0 归位到 lt；换回的值来自已处理区（必为 1），可放心 i++
+                swap(nums, lt, i);
                 lt++;
                 i++;
-            } else {                 // nums[i] == 1
+            } else {
                 i++;
             }
         }

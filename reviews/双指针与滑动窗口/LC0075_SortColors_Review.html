@@ -48,32 +48,23 @@
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三指针分区</h3>
     <p><span class="chip">时间 O(n)~O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 89/89</span></p>
-    
+    <p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>
     <p class="muted">三指针分区修复推进逻辑后 Accepted（89/89）；但 0 分支 mid=start 重置使最坏 O(n²)，未严格满足一趟扫描，可改标准荷兰国旗严格 O(n)</p>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 三指针分区（荷兰国旗）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0075_SortColors.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>public void sortColors(int[] nums) {
-        // 不变量（分区含义）：
-        //   [0, lt)    已处理，全是 0
-        //   [lt, i)    已处理，全是 1
-        //   [i, gt]    未处理区（待扫描）
-        //   (gt, n-1]  已处理，全是 2
-        // lt：下一个 0 应放的位置（0 区右边界，不含）
-        // i ：当前扫描指针（未处理区左端点）
-        // gt：下一个 2 应放的位置（2 区左边界，不含）——gt 位置本身未处理，不代表已完成
+        // lt: [0,lt) 全 0；i: [lt,i) 全 1；(gt,n-1] 全 2；[i,gt] 未处理 → 循环条件 i&lt;=gt（i==gt 时那一格未处理）
         int lt = 0, i = 0, gt = nums.length - 1;
-        // 未处理区是 [i, gt] 闭区间：i == gt 时还剩最后一个元素未处理；
-        // 交换 2 后 gt--，新 gt 处放着换回的未知值（可能 0/1），必须由 i 再扫一次，故条件写 i &lt;= gt
         while (i &lt;= gt) {
             if (nums[i] == 2) {
-                swap(nums, i, gt);   // 2 归位到 gt；换回的值未知，i 不前进，下一轮继续检查
+                swap(nums, i, gt);
                 gt--;
             } else if (nums[i] == 0) {
-                swap(nums, lt, i);   // 0 归位到 lt；换回的值来自已处理区（必为 1），可放心 i++
+                swap(nums, lt, i);
                 lt++;
                 i++;
-            } else {                 // nums[i] == 1
+            } else {
                 i++;
             }
         }

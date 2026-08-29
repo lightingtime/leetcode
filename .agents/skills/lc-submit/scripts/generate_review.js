@@ -171,10 +171,11 @@ function renderSolutions() {
   return subs.map((s, i) => {
     const sCode = s.code || (i === subs.length - 1 ? code : '');
     const sLabel = s.code ? `${fileBase}.java · ${s.approach}` : path.relative(ROOT, srcFile).replace(/\\/g, '/');
+    const codeHtml = sCode ? codeBlock(sLabel, sCode) : '<p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>';
     return `<div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 ${i + 1} · ${esc(s.approach || '')}</h3>
     <p><span class="chip">时间 ${esc(s.time_complexity || '—')}</span><span class="chip">空间 ${esc(s.space_complexity || '—')}</span><span class="chip">内存 ${fmtMem(s.memory_bytes)}</span><span class="chip">用例 ${esc(s.testcases || '—')}</span></p>
-    ${codeBlock(sLabel, sCode)}
+    ${codeHtml}
     ${s.notes ? `<p class="muted">${esc(s.notes)}</p>` : ''}
   </div>`;
   }).join('');
