@@ -95,6 +95,10 @@ function ensureState() {
   for (const q of order) {
     if (!state.problems[q.slug]) { state.problems[q.slug] = seedEntry(q); changed = true; }
   }
+  // 清理已不在题库中的旧条目（题库可能删除/替换题目）
+  for (const slug of Object.keys(state.problems)) {
+    if (!order.some(o => o.slug === slug)) { delete state.problems[slug]; changed = true; }
+  }
   if (changed) { state.updated = todayStr(); writeJson(STATE, state); }
   return state;
 }

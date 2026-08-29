@@ -1,0 +1,20 @@
+{
+  "name": "leetcode-local",
+  "interface": {
+    "displayName": "LeetCode 本地插件"
+  },
+  "plugins": [
+    {
+      "name": "lc-dashboard",
+      "source": {
+        "source": "local",
+        "path": "./plugins/lc-dashboard"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

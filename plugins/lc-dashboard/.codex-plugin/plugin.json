@@ -1,0 +1,24 @@
+{
+  "name": "lc-dashboard",
+  "version": "1.0.0",
+  "description": "在力扣刷题项目里一键查看刷题/复习状态面板：模式、一刷/二刷进度、今日复习队列、掌握度分布。",
+  "author": {
+    "name": "daoxian"
+  },
+  "license": "MIT",
+  "keywords": ["leetcode", "lc", "review", "dashboard", "status"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "LC Dashboard",
+    "shortDescription": "力扣刷题/复习状态面板",
+    "longDescription": "在力扣刷题项目（.lc/ 状态目录）中显示当前模式（刷题/复习）、一刷与二刷进度、打卡天数、今日复习队列（薄弱优先）与掌握度分布。可作一次性面板，也可 --watch 实时刷新；配套 skill 让 Codex 在对话里直接展示。",
+    "developerName": "daoxian",
+    "category": "Productivity",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": [
+      "显示刷题状态",
+      "今天复习哪些题",
+      "当前是什么模式"
+    ]
+  }
+}
