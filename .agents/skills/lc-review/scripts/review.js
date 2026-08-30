@@ -136,14 +136,16 @@ if (cmd === 'init') {
   pending.sort((a, b) => (isWeak(b) - isWeak(a)) || String(a.first_pass_date || '').localeCompare(String(b.first_pass_date || '')));
   // 到期（间隔）：薄弱优先 → 到期日从早到晚
   due.sort((a, b) => (isWeak(b) - isWeak(a)) || String(a.next_review_date).localeCompare(String(b.next_review_date)));
-  const queue = [...pending, ...due];
+  // 到期题优先：due 全部置前（薄弱优先 → 到期日早到晚），再按配额补第一轮待刷
+  const queue = [...due, ...pending];
   const countArg = parseInt(arg('--count', '0'), 10) || 0;
   const quota = countArg > 0 ? countArg : (daysLeft > 0 ? Math.ceil(pending.length / daysLeft) : pending.length);
-  const n = quota > 0 ? quota : Math.min(10, queue.length);
+  const base = quota > 0 ? quota : Math.min(10, queue.length);
+  const n = base + due.length; // 今日推荐 = 全部到期 + 配额补足
   const todayList = queue.slice(0, n);
   console.log(`二刷进度：${order.length - pending.length}/${order.length} 题 ｜ 已掌握 ${mastered.length} 题`);
   console.log(`第一轮待刷 ${pending.length} 题，距 ${REVIEW_DEADLINE} 还有 ${daysLeft} 天 → 建议今日 ${quota || '—'} 题` +
-    (due.length ? `（另有间隔到期 ${due.length} 题）` : ''));
+    (due.length ? `（到期 ${due.length} 题优先，与配额一起推荐）` : ''));
   if (!todayList.length) { console.log('今日队列为空：全部已完成或未到期，进入间隔复习等待。'); process.exit(0); }
   console.log('今日推荐（按优先级）：');
   todayList.forEach((st, i) => console.log(`  ${i + 1}. ${fmt(st)}`));
