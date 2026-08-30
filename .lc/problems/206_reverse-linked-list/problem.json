@@ -48,5 +48,5 @@
   ],
   "exampleTestcases": "[1,2,3,4,5]\n[1,2]\n[]",
   "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode reverseList(ListNode head) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-05T23:05:34.971Z"
+  "fetchedAt": "2026-08-30T13:06:53.887Z"
 }

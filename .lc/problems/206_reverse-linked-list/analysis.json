@@ -43,10 +43,39 @@
       "space_complexity": "O(n)递归栈",
       "optimal": false,
       "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。"
+    },
+    {
+      "date": "2026-08-30",
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "迭代三指针（pre/cur/next）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "与一刷对比：同一思路（迭代三指针），O(n)/O(1) 不变；这次无提示独立写出，代码结构与一刷一致。\n\n为什么能想起来：链表反转是高频基础操作，三指针模式（先存 next → 指向前驱 → pre/cur 后移）已内化，属固定套路不易遗忘；相比 Hard 中位数题的推导型思路，这类机械套路二刷更容易直接写出。\n\n掌握度：strong——本地一次通过、力扣一次 AC、全程无探讨。\n\n下一步提醒：反转链表是多个中等题的基础（25 K个一组翻转 / 92 反转链表II / 143 重排链表 / 234 回文链表），后续复习可顺带串练。",
+      "mastery": "strong",
+      "pass": 1,
+      "memory_bytes": 44464000,
+      "code": "    public ListNode reverseList(ListNode head) {\n        // TODO: 在这里实现你的解法\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode pre = null;\n        ListNode cur = head;\n        while (cur != null) {\n            ListNode next = cur.next;\n            cur.next = pre;\n            pre = cur;\n            cur = next;\n        }\n        return pre;\n    }\n"
     }
   ],
   "hints": [
     "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
   ],
-  "approach_detail": "问题本质：单链表反转，让每个节点指向原前驱。递归版本非常简洁：先反转后半段，再把当前节点接到新链末尾。\n关键设计：reverseList(head.next) 返回反转后的新头；递归返回后 head.next 已经指向新链的尾节点（即原 head 的后继），于是 head.next.next=head 把 head 挂到末尾，head.next=null 断开旧指向。终止条件：空或单节点直接返回。\n边界：空链表/单节点；长度为 2；操作顺序敏感——必须先通过 head.next 访问新尾，再改 head.next.next，顺序写反会丢链。\n复杂度：O(n) 时间、O(n) 递归栈空间；若追求严格 O(1) 空间可改迭代三指针，两者时间同为最优。"
+  "approach_detail": "问题本质：单链表反转，让每个节点指向原前驱。递归版本非常简洁：先反转后半段，再把当前节点接到新链末尾。\n关键设计：reverseList(head.next) 返回反转后的新头；递归返回后 head.next 已经指向新链的尾节点（即原 head 的后继），于是 head.next.next=head 把 head 挂到末尾，head.next=null 断开旧指向。终止条件：空或单节点直接返回。\n边界：空链表/单节点；长度为 2；操作顺序敏感——必须先通过 head.next 访问新尾，再改 head.next.next，顺序写反会丢链。\n复杂度：O(n) 时间、O(n) 递归栈空间；若追求严格 O(1) 空间可改迭代三指针，两者时间同为最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-08-30",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "迭代三指针（pre/cur/next）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "与一刷对比：同一思路（迭代三指针），O(n)/O(1) 不变；这次无提示独立写出，代码结构与一刷一致。\n\n为什么能想起来：链表反转是高频基础操作，三指针模式（先存 next → 指向前驱 → pre/cur 后移）已内化，属固定套路不易遗忘；相比 Hard 中位数题的推导型思路，这类机械套路二刷更容易直接写出。\n\n掌握度：strong——本地一次通过、力扣一次 AC、全程无探讨。\n\n下一步提醒：反转链表是多个中等题的基础（25 K个一组翻转 / 92 反转链表II / 143 重排链表 / 234 回文链表），后续复习可顺带串练。"
+    }
+  ]
 }

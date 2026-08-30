@@ -18,14 +18,18 @@
     <span class="badge tag">分类 链表</span>
     
     <span class="badge plain">一次通过</span>
-    <span class="badge plain">已满足题意·可进阶</span>
+    <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-06</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>206. 反转链表 (Reverse Linked List)</h1><p>&gt; <a href="https://leetcode.cn/problems/reverse-linked-list/" rel="noopener">https://leetcode.cn/problems/reverse-linked-list/</a></p><p>难度：Easy ｜ 分类：链表</p><p>标签：递归、链表</p><h2>题目描述</h2><p>给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。</p><p>示例 1：</p><p>输入：head = [1,2,3,4,5]</p><p>输出：[5,4,3,2,1]</p><p>示例 2：</p><p>输入：head = [1,2]</p><p>输出：[2,1]</p><p>示例 3：</p><p>输入：head = []</p><p>输出：[]</p><p>提示：</p><p>链表中节点的数目范围是 [0, 5000]</p><p>-5000</p><p>进阶：链表可以选用迭代或递归方式完成反转。你能否用两种方法解决这道题？</p><h2>示例</h2><ol><li>输入：head = [1,2,3,4,5]</li></ol><p>输出：[5,4,3,2,1]</p><ol><li>输入：head = [1,2]</li></ol><p>输出：[2,1]</p><ol><li>输入：head = []</li></ol><p>输出：[]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-08-30 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 迭代三指针（pre/cur/next） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>与一刷对比：同一思路（迭代三指针），O(n)/O(1) 不变；这次无提示独立写出，代码结构与一刷一致。</p><p>为什么能想起来：链表反转是高频基础操作，三指针模式（先存 next → 指向前驱 → pre/cur 后移）已内化，属固定套路不易遗忘；相比 Hard 中位数题的推导型思路，这类机械套路二刷更容易直接写出。</p><p>掌握度：strong——本地一次通过、力扣一次 AC、全程无探讨。</p><p>下一步提醒：反转链表是多个中等题的基础（25 K个一组翻转 / 92 反转链表II / 143 重排链表 / 234 回文链表），后续复习可顺带串练。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,19 +37,37 @@
         <li><span>复杂度</span><b>O(n) · O(n)递归栈</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>迭代三指针（pre/cur/next）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归反转（head.next.next = head）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)递归栈</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 28/28</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0206_ReverseLinkedList.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">reverseList</span>(<span class="tk-t">ListNode</span> head) {
+    <p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 迭代三指针（pre/cur/next）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.4 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0206_ReverseLinkedList.java · 迭代三指针（pre/cur/next）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">reverseList</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-c">// TODO: 在这里实现你的解法</span>
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> head;
         }
-        <span class="tk-t">ListNode</span> newHead = <span class="tk-f">reverseList</span>(head.next);
-        head.next.next = head;
-        head.next = <span class="tk-k">null</span>;
-        <span class="tk-k">return</span> newHead;
-    }</pre></div>
+        <span class="tk-t">ListNode</span> pre = <span class="tk-k">null</span>;
+        <span class="tk-t">ListNode</span> cur = head;
+        <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
+            <span class="tk-t">ListNode</span> next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        <span class="tk-k">return</span> pre;
+    }
+</pre></div>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：单链表反转，让每个节点指向原前驱。递归版本非常简洁：先反转后半段，再把当前节点接到新链末尾。</p><p>关键设计：reverseList(head.next) 返回反转后的新头；递归返回后 head.next 已经指向新链的尾节点（即原 head 的后继），于是 head.next.next=head 把 head 挂到末尾，head.next=null 断开旧指向。终止条件：空或单节点直接返回。</p><p>边界：空链表/单节点；长度为 2；操作顺序敏感——必须先通过 head.next 访问新尾，再改 head.next.next，顺序写反会丢链。</p><p>复杂度：O(n) 时间、O(n) 递归栈空间；若追求严格 O(1) 空间可改迭代三指针，两者时间同为最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>递归反转链表接回错误：把递归返回的「新头」当作 head 的原后继去接（next.next = head），实际新头后面接的是原链表尾，head 被接到新头后面导致中间节点全部丢失；正确是让原后继（现在位于反转后子链表尾部）指回 head，即 head.next.next = head</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>28/28 用例一次通过。</p></div></div></div></section>
@@ -60,12 +82,12 @@
     </div>
     <div class="card">
       <h3>算法判定</h3>
-      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 链表</h3><div class="quote">看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。</div>
       <h3>错误习惯复盘</h3><p><b>递归反转链表接回错误：把递归返回的「新头」当作 head 的原后继去接（next.next = head），实际新头后面接的是原链表尾，head 被接到新头后面导致中间节点全部丢失；正确是让原后继（现在位于反转后子链表尾部）指回 head，即 head.next.next = head</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
-      <p><span class="chip">seq 25 · reverse-linked-list</span><span class="chip">firstPass: true</span><span class="chip">optimal: false</span></p>
+      <p><span class="chip">seq 25 · reverse-linked-list</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。</div>
     </div>
   </section>

@@ -274,7 +274,7 @@
       "category": "链表",
       "date": "2026-08-06",
       "firstPass": true,
-      "optimal": false,
+      "optimal": true,
       "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。"
     },
     {
