@@ -40,6 +40,7 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
 3. 用户重写并本地测试通过后，走 `lc-submit` 提交力扣（复习提交由 lc-submit 自动识别）。
 4. 记录掌握度：Accepted 后由 lc-submit 调用 `node ".agents/skills/lc-review/scripts/review.js" done --seq <seq> --mastery strong|weak ...`（含 approach/time/space/optimal/firstTry），写入 analysis.json reviews + 更新调度。
    - **同思路合并不丢旧代码（必做）**：`review.js done` 合并同 approach 的 submissions 时，若新代码覆盖旧 code，先把旧 code 存入 `prev_code` 字段（脚本已内置，禁止手工绕过）；复盘页「写法卡片」会以可折叠「上一版写法」展示。
+   - **同写法只留一条（必做）**：submissions 每一条 = 一种**写法**，不是一次提交。同一思路的复习（措辞微调、命名优化、变量更清晰）必须复用原 approach 字符串走合并，禁止拆成多条；确为不同思路才追加新条。
    - **掌握度判定**：提交一次 Accepted 且全程无探讨 = strong；探讨过/提示过/非一次 AC = weak。本地自己调试改对、提交一次 AC 算 strong。
    - **notes 必写深度分析（禁止一句话敷衍）**：`--notes` 用多行 Markdown，至少含 ① 与上一轮对比（思路/写法/复杂度差异）；② 这次为什么想起来/没想起来（一刷犯的错这次如何规避）；③ 掌握度判定依据（是否一次 AC、有无探讨）；④ 下一步提醒（未尝试的更优写法、可顺带复习的相关题）。复盘页「复习记录 / 历轮表现」按 md 渲染，写浅了等于没复盘。
    - **notes 宁缺毋滥（禁止凑字数）**：只写有实质信息的点；「下一步提醒」没有实质内容就整节省略，不要用「已达最优不必尝试」这类废话填充。

@@ -17,14 +17,13 @@ public class LC0146_LruCache {
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 LRUCache 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class LRUCache {
-        int size;
         Map<Integer, Node> map;
         Node head;
         Node tail;
+        int capacity;
 
         public LRUCache(int capacity) {
-            // TODO: 补全方法体
-            size = capacity;
+            this.capacity = capacity;
             map = new HashMap<>();
             head = new Node();
             tail = new Node();
@@ -33,7 +32,6 @@ public class LC0146_LruCache {
         }
 
         public int get(int key) {
-            // TODO: 补全方法体
             if (!map.containsKey(key)) {
                 return -1;
             }
@@ -44,7 +42,6 @@ public class LC0146_LruCache {
         }
 
         public void put(int key, int value) {
-            // TODO: 补全方法体
             Node node;
             if (map.containsKey(key)) {
                 node = map.get(key);
@@ -55,11 +52,10 @@ public class LC0146_LruCache {
                 map.put(key, node);
             }
             move2Head(node);
-            if (map.size() > size) {
-                Node pre = tail.pre;
-                unLinkNode(pre);
-                map.remove(pre.key);
-                pre = null;
+            if (map.size() > capacity) {
+                Node last = tail.pre;
+                unLinkNode(last);
+                map.remove(last.key);
             }
         }
 
@@ -75,24 +71,21 @@ public class LC0146_LruCache {
             head.next = node;
         }
 
+        static class Node {
+            Node next;
+            Node pre;
+            int val;
+            int key;
 
-    }
+            Node() {}
 
-    static class Node {
-        Node next;
-        Node pre;
-        int val;
-        int key;
-
-        public Node() {
-        }
-
-        public Node(int key, int val) {
-            this.key = key;
-            this.val = val;
+            Node(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
         }
     }
-    // ==== 提交代码结束 ====
+    // ==== 提交代码结束 ====    // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
         // 设计题：按题目示例手动构造调用序列

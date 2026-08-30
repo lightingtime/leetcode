@@ -217,7 +217,10 @@ if (cmd === 'init') {
     const codeNote = arg('--code', '');
     if (codeNote) sub.code = codeNote;
     a.submissions = Array.isArray(a.submissions) ? a.submissions : [];
-    const same = a.submissions.find(s => s.approach === sub.approach);
+    // 同写法合并判断：approach 忽略大小写/标点/空格后比较（措辞微调也能命中）；
+    // 调用方（lc-submit）对同一写法必须复用原 approach 字符串，从根上避免同写法拆成两条。
+    const normApproach = x => (x || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '');
+    const same = a.submissions.find(s => normApproach(s.approach) === normApproach(sub.approach));
     if (same) {
       const better = (sub.optimal && !same.optimal) ||
         (sub.optimal === same.optimal && sub.memory_bytes != null && (same.memory_bytes == null || sub.memory_bytes < same.memory_bytes));
@@ -226,6 +229,8 @@ if (cmd === 'init') {
         const oldCode = same.code;
         if (codeNote && oldCode && oldCode !== codeNote && !same.prev_code) same.prev_code = oldCode;
         Object.assign(same, sub);
+      } else if (same.approach !== sub.approach) {
+        same.approach = sub.approach; // 同写法措辞微调：只更新命名，不重复追加条目
       }
     } else {
       a.submissions.push(sub);

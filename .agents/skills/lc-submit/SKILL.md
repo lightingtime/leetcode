@@ -69,6 +69,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 - **自动检测（必做）**：提交前若 `progress.json` 的 `done` 已存在该 slug（一刷已完成、源码已归档），本次即为复习提交，走本分支；否则按一刷流程。
 - **Accepted 后掌握度判定**：一次提交即 Accepted 且全程无探讨 = `strong`（较强）；探讨过/提示过/非一次 AC = `weak`（较弱）。拿不准时向用户确认一句「这次有没有找过提示/探讨」再定。
 - **记录（必做）**：调用 `node ".agents/skills/lc-review/scripts/review.js" done --seq <seq> --mastery strong|weak --firstTry <true|false> --approach "<解法名>" --time <复杂度> --space <复杂度> --optimal <true|false> [--memory <字节>] [--notes "<一句话>"]`，写入 analysis.json 的 `reviews` 并更新 `review_state.json` 调度（较强 ×2.5 拉长 / 较弱重置 1 天）；不要再跑一刷的 `done` 覆盖一刷事实。
+- **同写法禁止拆成两条（必做）**：判定本次写法与一刷/最近 submission 是同一思路时，`--approach` 必须**复用该 submission 原有的 approach 字符串**（不要自造新措辞），`review.js` 才会走合并分支（保留最优 + 旧 code 存 prev_code）；确为不同写法（换思路/换数据结构）才用新 approach 追加。submissions 每一条 = 一种**写法**，不是一次提交。
 - **汇报（必体现二刷对比）**：输出「二刷第 N 次 · 距上次 X 天 · 较强/较弱 · 一次 AC/多次」，并对比一刷：思路是否更换、复杂度/内存是否更优、是否命中已沉淀套路（`pattern` 记录）；据此更新 `optimal`/`code_notes`。
 - **复盘页**：生成复盘页时复习记录区块自动置前（`generate_review.js` 已支持），submissions 由 review.js 合并（新思路追加、同思路保留最优）。
 - **归档覆盖（必做）**：复习文件在 `src/` 根，Accepted 后用其内容覆盖 `src/{分类}/LC{题号}_{题名}.java`（git 历史保留一刷版），删除根目录新文件与建题时产生的 `src/{分类}/LC{题号}_{题名}.java.bak`（若有）；analysis.json / 复盘页里指向旧位置结构的链接同步更新。

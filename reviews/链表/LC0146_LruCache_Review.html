@@ -46,100 +46,16 @@
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
-    <h3 style="margin:0 0 8px">写法 1 · 哈希表+双向链表</h3>
-    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 129.0 MB</span><span class="chip">用例 25/25</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0146_LruCache.java · 哈希表+双向链表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">LRUCache</span> {
-        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">DoubleLinkNode</span>&gt; map;
-        <span class="tk-t">DoubleLinkNode</span> head;
-        <span class="tk-t">DoubleLinkNode</span> tail;
-        <span class="tk-k">int</span> size;
-        <span class="tk-k">int</span> capacity;
-        <span class="tk-k">public</span> <span class="tk-t">LRUCache</span>(<span class="tk-k">int</span> capacity) {
-            <span class="tk-k">this</span>.capacity = capacity;
-            size = <span class="tk-n">0</span>;
-            map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
-            head = <span class="tk-k">new</span> <span class="tk-t">DoubleLinkNode</span>();
-            tail = <span class="tk-k">new</span> <span class="tk-t">DoubleLinkNode</span>();
-            head.next = tail;
-            tail.pre = head;
-        }
-        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">get</span>(<span class="tk-k">int</span> key) {
-            <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(key)) {
-                <span class="tk-k">return</span> -<span class="tk-n">1</span>;
-            }
-            <span class="tk-t">DoubleLinkNode</span> cur = map.<span class="tk-f">get</span>(key);
-            <span class="tk-f">cutNode</span>(cur);
-            <span class="tk-f">moveToHead</span>(cur);
-            <span class="tk-k">return</span> cur.value;
-        }
-
-        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">cutNode</span>(<span class="tk-t">DoubleLinkNode</span> cur) {
-            <span class="tk-k">if</span> (cur.value == <span class="tk-k">null</span>) {
-                <span class="tk-k">return</span>;
-            }
-            cur.pre.next = cur.next;
-            cur.next.pre = cur.pre;
-        }
-
-        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">moveToHead</span>(<span class="tk-t">DoubleLinkNode</span> cur) {
-            cur.pre = head;
-            cur.next = head.next;
-            head.next.pre = cur;
-            head.next = cur;
-        }
-
-        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">put</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> value) {
-            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(key)) {
-                <span class="tk-t">DoubleLinkNode</span> cur = map.<span class="tk-f">get</span>(key);
-                cur.key = key;
-                cur.value = value;
-                <span class="tk-f">cutNode</span>(cur);
-                <span class="tk-f">moveToHead</span>(cur);
-            } <span class="tk-k">else</span> {
-                <span class="tk-t">DoubleLinkNode</span> cur = <span class="tk-k">new</span> <span class="tk-t">DoubleLinkNode</span>();
-                <span class="tk-f">moveToHead</span>(cur);
-                cur.key = key;
-                cur.value = value;
-                map.<span class="tk-f">put</span>(key, cur);
-                size++;
-                <span class="tk-k">if</span> (<span class="tk-k">this</span>.size &gt; <span class="tk-k">this</span>.capacity) {
-                    map.<span class="tk-f">remove</span>(tail.pre.key);
-                    <span class="tk-f">cutNode</span>(tail.pre);
-                    size--;
-                }
-            }
-        }
-
-        <span class="tk-k">class</span> <span class="tk-t">DoubleLinkNode</span> {
-            <span class="tk-t">DoubleLinkNode</span> next;
-            <span class="tk-t">DoubleLinkNode</span> pre;
-            <span class="tk-t">Integer</span> key;
-            <span class="tk-t">Integer</span> value;
-
-            <span class="tk-k">public</span> <span class="tk-t">DoubleLinkNode</span>() {
-            }
-
-            <span class="tk-k">public</span> <span class="tk-t">DoubleLinkNode</span>(<span class="tk-t">DoubleLinkNode</span> next, <span class="tk-t">DoubleLinkNode</span> pre, <span class="tk-k">int</span> value) {
-                <span class="tk-k">this</span>.next = next;
-                <span class="tk-k">this</span>.pre = pre;
-                <span class="tk-k">this</span>.value = value;
-            }
-        }
-    }
-</pre></div>
-    
-  </div><div class="card" style="margin-top:12px">
-    <h3 style="margin:0 0 8px">写法 2 · HashMap+双向链表（哨兵头尾）</h3>
-    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(capacity)</span><span class="chip">内存 ≈ 56.3 MB</span><span class="chip">用例 —</span></p>
+    <h3 style="margin:0 0 8px">写法 1 · HashMap+双向链表（哨兵头尾）</h3>
+    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(capacity)</span><span class="chip">内存 ≈ 56.3 MB</span><span class="chip">用例 23/23</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0146_LruCache.java · HashMap+双向链表（哨兵头尾）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">LRUCache</span> {
-        <span class="tk-k">int</span> size;
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Node</span>&gt; map;
         <span class="tk-t">Node</span> head;
         <span class="tk-t">Node</span> tail;
+        <span class="tk-k">int</span> capacity;
 
         <span class="tk-k">public</span> <span class="tk-t">LRUCache</span>(<span class="tk-k">int</span> capacity) {
-            <span class="tk-c">// TODO: 补全方法体</span>
-            size = capacity;
+            <span class="tk-k">this</span>.capacity = capacity;
             map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
             head = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
             tail = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
@@ -148,7 +64,6 @@
         }
 
         <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">get</span>(<span class="tk-k">int</span> key) {
-            <span class="tk-c">// TODO: 补全方法体</span>
             <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(key)) {
                 <span class="tk-k">return</span> -<span class="tk-n">1</span>;
             }
@@ -159,7 +74,6 @@
         }
 
         <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">put</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> value) {
-            <span class="tk-c">// TODO: 补全方法体</span>
             <span class="tk-t">Node</span> node;
             <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(key)) {
                 node = map.<span class="tk-f">get</span>(key);
@@ -170,11 +84,10 @@
                 map.<span class="tk-f">put</span>(key, node);
             }
             <span class="tk-f">move2Head</span>(node);
-            <span class="tk-k">if</span> (map.<span class="tk-f">size</span>() &gt; size) {
-                <span class="tk-t">Node</span> pre = tail.pre;
-                <span class="tk-f">unLinkNode</span>(pre);
-                map.<span class="tk-f">remove</span>(pre.key);
-                pre = <span class="tk-k">null</span>;
+            <span class="tk-k">if</span> (map.<span class="tk-f">size</span>() &gt; capacity) {
+                <span class="tk-t">Node</span> last = tail.pre;
+                <span class="tk-f">unLinkNode</span>(last);
+                map.<span class="tk-f">remove</span>(last.key);
             }
         }
 
@@ -190,21 +103,18 @@
             head.next = node;
         }
 
+        <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+            <span class="tk-t">Node</span> next;
+            <span class="tk-t">Node</span> pre;
+            <span class="tk-k">int</span> val;
+            <span class="tk-k">int</span> key;
 
-    }
+            <span class="tk-t">Node</span>() {}
 
-    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
-        <span class="tk-t">Node</span> next;
-        <span class="tk-t">Node</span> pre;
-        <span class="tk-k">int</span> val;
-        <span class="tk-k">int</span> key;
-
-        <span class="tk-k">public</span> <span class="tk-t">Node</span>() {
-        }
-
-        <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> val) {
-            <span class="tk-k">this</span>.key = key;
-            <span class="tk-k">this</span>.val = val;
+            <span class="tk-t">Node</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> val) {
+                <span class="tk-k">this</span>.key = key;
+                <span class="tk-k">this</span>.val = val;
+            }
         }
     }
 </pre></div>
