@@ -2,7 +2,12 @@
 // LeetCode 146. LRU 缓存 (LRU Cache)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/lru-cache/
-// 刷题日期：2026-08-06
+// 二刷 · 一刷日期：2026-08-06（一刷思路：HashMap + 双向链表，get/put O(1)）
+// 测试用例与一刷归档保持一致
+// 刷题日期：2026-08-30
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -12,81 +17,79 @@ public class LC0146_LruCache {
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 LRUCache 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class LRUCache {
-        Map<Integer, DoubleLinkNode> map;
-        DoubleLinkNode head;
-        DoubleLinkNode tail;
         int size;
-        int capacity;
+        Map<Integer, Node> map;
+        Node head;
+        Node tail;
+
         public LRUCache(int capacity) {
-            this.capacity = capacity;
-            size = 0;
+            // TODO: 补全方法体
+            size = capacity;
             map = new HashMap<>();
-            head = new DoubleLinkNode();
-            tail = new DoubleLinkNode();
+            head = new Node();
+            tail = new Node();
             head.next = tail;
             tail.pre = head;
         }
+
         public int get(int key) {
+            // TODO: 补全方法体
             if (!map.containsKey(key)) {
                 return -1;
             }
-            DoubleLinkNode cur = map.get(key);
-            cutNode(cur);
-            moveToHead(cur);
-            return cur.value;
-        }
-
-        private void cutNode(DoubleLinkNode cur) {
-            if (cur.value == null) {
-                return;
-            }
-            cur.pre.next = cur.next;
-            cur.next.pre = cur.pre;
-        }
-
-        private void moveToHead(DoubleLinkNode cur) {
-            cur.pre = head;
-            cur.next = head.next;
-            head.next.pre = cur;
-            head.next = cur;
+            Node node = map.get(key);
+            unLinkNode(node);
+            move2Head(node);
+            return node.val;
         }
 
         public void put(int key, int value) {
+            // TODO: 补全方法体
+            Node node;
             if (map.containsKey(key)) {
-                DoubleLinkNode cur = map.get(key);
-                cur.key = key;
-                cur.value = value;
-                cutNode(cur);
-                moveToHead(cur);
+                node = map.get(key);
+                node.val = value;
+                unLinkNode(node);
             } else {
-                DoubleLinkNode cur = new DoubleLinkNode();
-                moveToHead(cur);
-                cur.key = key;
-                cur.value = value;
-                map.put(key, cur);
-                size++;
-                if (this.size > this.capacity) {
-                    map.remove(tail.pre.key);
-                    cutNode(tail.pre);
-                    size--;
-                }
+                node = new Node(key, value);
+                map.put(key, node);
+            }
+            move2Head(node);
+            if (map.size() > size) {
+                Node pre = tail.pre;
+                unLinkNode(pre);
+                map.remove(pre.key);
+                pre = null;
             }
         }
 
-        class DoubleLinkNode {
-            DoubleLinkNode next;
-            DoubleLinkNode pre;
-            Integer key;
-            Integer value;
+        private void unLinkNode(Node node) {
+            node.pre.next = node.next;
+            node.next.pre = node.pre;
+        }
 
-            public DoubleLinkNode() {
-            }
+        private void move2Head(Node node) {
+            node.next = head.next;
+            node.pre = head;
+            head.next.pre = node;
+            head.next = node;
+        }
 
-            public DoubleLinkNode(DoubleLinkNode next, DoubleLinkNode pre, int value) {
-                this.next = next;
-                this.pre = pre;
-                this.value = value;
-            }
+
+    }
+
+    static class Node {
+        Node next;
+        Node pre;
+        int val;
+        int key;
+
+        public Node() {
+        }
+
+        public Node(int key, int val) {
+            this.key = key;
+            this.val = val;
         }
     }
     // ==== 提交代码结束 ====

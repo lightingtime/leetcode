@@ -41,6 +41,23 @@ function helperClasses(fragment, provided) {
   return parts.join('\n\n');
 }
 
+// 设计题解包：把「static class 主类(可能带其余平级 static class)」恢复为顶层类。
+// 返回 null 表示 fragment 不是 static class 开头（交给其他分支处理）。
+function unwrapDesignClass(fragment) {
+  const m = fragment.match(/^static\s+class\s+(\w+)([^{]*)\{/);
+  if (!m) return null;
+  const name = m[1], decl = m[2];
+  const start = m[0].lastIndexOf('{');
+  let depth = 0, i = start;
+  for (; i < fragment.length; i++) {
+    if (fragment[i] === '{') depth++;
+    else if (fragment[i] === '}') { depth--; if (depth === 0) { i++; break; } }
+  }
+  const inner = fragment.slice(start + 1, i - 1); // 主类内部
+  const rest = fragment.slice(i).trim();          // 主类闭合后的其余顶层类声明
+  return `class ${name}${decl} {\n${inner.trim()}\n${rest ? '\n' + rest + '\n' : ''}}\n`;
+}
+
 async function gql(query, variables) {
   const resp = await fetch(GRAPHQL, {
     method: 'POST',
@@ -105,10 +122,12 @@ async function main() {
   };
 
   let submission;
-  const staticClass = fragment.match(/^static\s+class\s+(\w+)([^{]*)\{([\s\S]*)\}$/);
-  if (staticClass) {
-    // 设计题：解包嵌套类，恢复为顶层类（保留 implements/extends 声明）
-    submission = `class ${staticClass[1]}${staticClass[2]} {\n${staticClass[3].trim()}\n}\n${helperClasses(fragment, providedHelpers)}`;
+  // 设计题解包：提交区可能是「单个 static class」或「主 static class + 多个平级 static class
+  // （如 Node）」。用括号配对取第一个 static class 作为顶层类，其余 static class 作为其嵌套类
+  // 插入类内（保持缩进），避免「static 出现在顶层」编译错误（LC0146 复现）。
+  const unwrapped = unwrapDesignClass(fragment);
+  if (unwrapped) {
+    submission = unwrapped + helperClasses(fragment, providedHelpers);
   } else if (/^\s*(public\s+)?class\s+\w+/.test(fragment)) {
     submission = fragment;
   } else {
