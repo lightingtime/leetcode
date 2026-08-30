@@ -1,8 +1,13 @@
 // ============================================================
 // LeetCode 94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)
-// 难度：Easy | 分类：栈、队列与优先队列
+// 难度：简单 | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/binary-tree-inorder-traversal/
-// 刷题日期：2026-08-07
+// 二刷 · 一刷日期：2026-08-07（一刷思路：TODO 从归档 analysis.json 查看，中序遍历）
+// 测试用例与一刷归档保持一致
+// 刷题日期：2026-08-30
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -11,20 +16,18 @@ public class LC0094_BinaryTreeInorderTraversal {
 
     // ==== 提交代码开始 ====
     public List<Integer> inorderTraversal(TreeNode root) {
+        // TODO: 在这里实现你的解法
         List<Integer> ans = new ArrayList<>();
-        if (root == null) {
-            return ans;
-        }
-        Deque<TreeNode> stack = new ArrayDeque<>();
         TreeNode cur = root;
-        while (!stack.isEmpty() || cur != null) {
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        while (!queue.isEmpty() || cur != null) {
             while (cur != null) {
-                stack.push(cur);
+                queue.offerLast(cur);
                 cur = cur.left;
             }
-            cur = stack.poll();
+            cur = queue.pollLast();
             ans.add(cur.val);
-                cur = cur.right;
+            cur = cur.right;
         }
         return ans;
     }
@@ -71,6 +74,7 @@ public class LC0094_BinaryTreeInorderTraversal {
         }
         System.out.println("全部测试通过");
     }
+
 
     // ---- 本地测试辅助（节点格式化依赖本题的 ListNode/TreeNode，其余逻辑见 TestUtil）----
     static boolean checkEq(Object expected, Object actual, String label) {

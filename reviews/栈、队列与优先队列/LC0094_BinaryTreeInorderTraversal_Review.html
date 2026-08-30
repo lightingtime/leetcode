@@ -20,18 +20,29 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)</h1><p>&gt; <a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/" rel="noopener">https://leetcode.cn/problems/binary-tree-inorder-traversal/</a></p><p>难度：Easy ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、二叉树</p><h2>题目描述</h2><p>给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。</p><p>示例 1：</p><p>输入：root = [1,null,2,3]</p><p>输出：[1,3,2]</p><p>示例 2：</p><p>输入：root = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：root = [1]</p><p>输出：[1]</p><p>提示：</p><p>树中节点数目在范围 [0, 100] 内</p><p>-100</p><p>进阶: 递归算法很简单，你可以通过迭代算法完成吗？</p><h2>示例</h2><ol><li>输入：root = [1,null,2,3]</li></ol><p>输出：[1,3,2]</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><ol><li>输入：root = [1]</li></ol><p>输出：[1]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-08-30 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 迭代栈（cur指针） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p>与一刷对比：一刷写了递归 DFS + 迭代栈两种，这次只重写迭代栈（一刷的薄弱点），思路/复杂度一致 O(n)/O(n)，代码结构与一刷迭代版基本一致（Deque + cur 指针）。</p><p>为什么能想起来：中序顺序（左-根-右）固定，迭代栈'一路向左压栈 → 弹出访问 → 转右子树'是标准套路；展示时我给了机制方向提示，但用户直接独立写出、未再追问，本地一次通过。</p><p>掌握度：strong——本地一次通过、力扣一次 AC、无实质探讨。本次 approach 复用一刷'迭代栈（cur指针）'字符串，验证 review.js 同写法合并（normalized 匹配命中，未拆成两条）。</p><p>下一步提醒：递归版一刷已有未重写；可顺带串练前序/后序迭代版（144/145）与 Morris 中序遍历（O(1) 空间）进阶。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>迭代栈（cur指针）</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
+      </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>迭代栈（cur指针）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -52,10 +63,28 @@
         ans.<span class="tk-f">add</span>(root.val);
         <span class="tk-f">dfs</span>(root.right);
     }</pre></div>
+    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈（cur指针）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 71/71</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.6 MB</span><span class="chip">用例 71/71</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-c">// TODO: 在这里实现你的解法</span>
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-t">TreeNode</span> cur = root;
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>() || cur != <span class="tk-k">null</span>) {
+            <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
+                queue.<span class="tk-f">offerLast</span>(cur);
+                cur = cur.left;
+            }
+            cur = queue.<span class="tk-f">pollLast</span>();
+            ans.<span class="tk-f">add</span>(cur.val);
+            cur = cur.right;
+        }
+        <span class="tk-k">return</span> ans;
+    }
+</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
         <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
         <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> ans;
@@ -72,7 +101,7 @@
                 cur = cur.right;
         }
         <span class="tk-k">return</span> ans;
-    }</pre></div>
+    }</pre></div></details>
   </div></section>
   
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序遍历重复压栈死循环：弹栈访问后只处理右孩子，下一轮从栈顶重新把该节点左链再压一遍（left 指针未变），无限循环 OOM；且空 root 直接 push(null) 导致 NPE</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序：内层只压左孩子、当前节点 cur 自己未入栈，首次弹栈取到 null 直接 NPE；访问后未把 cur 移到右孩子（只 push 右孩子），会再次重复压栈</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序：内层 while (cur.left) 未把 cur==null 当正常状态（栈非空时访问完右空节点后 cur 为 null），直接解引用 NPE；内层应以 cur!=null 为条件</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>71/71 用例。</p></div></div></div></section>

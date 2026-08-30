@@ -389,9 +389,12 @@ function saveArchiveCode(archiveFile, className) {
   const hole = a.submissions.find(s => !s.code);
   if (hole) {
     hole.code = code;
-  } else {
+  } else if (a.submissions.length === 0) {
+    // 该题从未有过 submissions 记录才追加（避免与已有写法条目重复，同写法只留一条）
     const dateMatch = content.match(/刷题日期：(\d{4}-\d{2}-\d{2})/);
     a.submissions.push({ date: dateMatch ? dateMatch[1] : todayStr(), verdict: 'Accepted', approach: '一刷原写法（二刷建题时自动归档）', code });
+  } else {
+    console.log('该题 submissions 均已保存 code，跳过追加（同写法只留一条）');
   }
   fs.writeFileSync(ap, JSON.stringify(a, null, 2));
   console.log(`一刷原写法已固化到 analysis.json（${path.basename(ap)}）`);

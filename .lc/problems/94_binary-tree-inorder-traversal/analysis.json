@@ -69,16 +69,32 @@
       "verdict": "Accepted",
       "testcases": "71/71",
       "runtime_ms": null,
-      "memory_bytes": 43420000,
+      "memory_bytes": 43584000,
       "approach": "迭代栈（cur指针）",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "两种写法均 AC：递归 DFS 中序（71/71）+ 迭代栈 cur 指针版（71/71，内存≈41.4MB）。迭代版历经 4 轮修正（重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）后通过；analysis.json submissions 含两条不同解法",
-      "code": "    public List<Integer> inorderTraversal(TreeNode root) {\n        List<Integer> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> stack = new ArrayDeque<>();\n        TreeNode cur = root;\n        while (!stack.isEmpty() || cur != null) {\n            while (cur != null) {\n                stack.push(cur);\n                cur = cur.left;\n            }\n            cur = stack.poll();\n            ans.add(cur.val);\n                cur = cur.right;\n        }\n        return ans;\n    }"
+      "code": "    public List<Integer> inorderTraversal(TreeNode root) {\n        // TODO: 在这里实现你的解法\n        List<Integer> ans = new ArrayList<>();\n        TreeNode cur = root;\n        Deque<TreeNode> queue = new ArrayDeque<>();\n        while (!queue.isEmpty() || cur != null) {\n            while (cur != null) {\n                queue.offerLast(cur);\n                cur = cur.left;\n            }\n            cur = queue.pollLast();\n            ans.add(cur.val);\n            cur = cur.right;\n        }\n        return ans;\n    }\n",
+      "prev_code": "    public List<Integer> inorderTraversal(TreeNode root) {\n        List<Integer> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> stack = new ArrayDeque<>();\n        TreeNode cur = root;\n        while (!stack.isEmpty() || cur != null) {\n            while (cur != null) {\n                stack.push(cur);\n                cur = cur.left;\n            }\n            cur = stack.poll();\n            ans.add(cur.val);\n                cur = cur.right;\n        }\n        return ans;\n    }"
     }
   ],
   "hints": [
     "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-08-30",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "迭代栈（cur指针）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "与一刷对比：一刷写了递归 DFS + 迭代栈两种，这次只重写迭代栈（一刷的薄弱点），思路/复杂度一致 O(n)/O(n)，代码结构与一刷迭代版基本一致（Deque + cur 指针）。\n\n为什么能想起来：中序顺序（左-根-右）固定，迭代栈'一路向左压栈 → 弹出访问 → 转右子树'是标准套路；展示时我给了机制方向提示，但用户直接独立写出、未再追问，本地一次通过。\n\n掌握度：strong——本地一次通过、力扣一次 AC、无实质探讨。本次 approach 复用一刷'迭代栈（cur指针）'字符串，验证 review.js 同写法合并（normalized 匹配命中，未拆成两条）。\n\n下一步提醒：递归版一刷已有未重写；可顺带串练前序/后序迭代版（144/145）与 Morris 中序遍历（O(1) 空间）进阶。"
+    }
   ]
 }
