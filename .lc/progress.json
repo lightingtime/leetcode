@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-30",
+  "updated": "2026-08-31",
   "current_seq": 170,
   "done": [
     {
@@ -3050,6 +3050,17 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-08-30"
+    },
+    {
+      "habit": "快速选择：递归时 k 语义混用（全局下标 vs 相对第k小）、分区后分界点位置未定（Hoare双指针+Lomuto交换混搭）致递归区间不缩小 → StackOverflow/越界；应固定 k=当前区间第k小 + 确定分界点语义并保证左右区间严格缩小",
+      "count": 1,
+      "examples": [
+        "kth-largest-element-in-an-array"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-08-31"
     }
   ],
   "category_hints": {

@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>215. 数组中的第K个最大元素 (Kth Largest Element in an Array)</h1><p>&gt; <a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/" rel="noopener">https://leetcode.cn/problems/kth-largest-element-in-an-array/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：数组、分治、快速选择、排序、堆（优先队列）</p><h2>题目描述</h2><p>给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。</p><p>请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。</p><p>你必须设计并实现时间复杂度为 O(n) 的算法解决此问题。</p><p>示例 1:</p><p>输入: [3,2,1,5,6,4], k = 2</p><p>输出: 5</p><p>示例 2:</p><p>输入: [3,2,3,1,2,4,5,5,6], k = 4</p><p>输出: 4</p><p>提示：</p><p>1 5</p><p>-104 4</p><h2>示例</h2><ol><li>输入：k = 2</li></ol><p>输出：5</p><ol><li>输入：k = 4</li></ol><p>输出：4</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-08-31 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 多次提交 ｜ 快速选择（Lomuto 分区） ｜ O(n) 平均 · O(log n)</p>
+      <div class="review-note md"><p>与一刷对比：一刷为 Hoare 分区，这次换成 Lomuto 分区（分区方案不同，属不同写法），复杂度一致 O(n) 平均 / O(log n) 递归栈。</p><p>卡点复盘：这题二刷卡在快速选择实现细节——第一次 Hoare 双指针 + Lomuto 归位混搭（swap(l,i) 把大元素换到最左，破坏分区序；k 语义全局/相对混用致递归不缩 → StackOverflow/越界）；第二次改 Lomuto 但漏 k==i 分支、左递归含已归位的 pivot 位（(l,i) 而非 (l,i-1)），pivot 归位到 r 时区间不缩 → 死循环。第三次补 k==i 直接返回 + 左边界 i-1 后一次通过。</p><p>掌握度：weak——三次本地失败（StackOverflow 2 次 + WA 3 次）+ 多轮分析后才 AC，非一次提交。</p><p>下一步提醒：快速选择要一次想清两件事——k 用全局 0 基下标则递归不改 k 只缩区间；分区方案定死（Lomuto 归位返回 pivot 下标 / Hoare 返回分界 j），不混搭。可顺带复习 347 前 K 高频（快选/桶排序）与快排完整实现。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(n) 平均 · O(log n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>快速选择（Lomuto 分区）</b></li>
+        <li><span>复杂度</span><b>O(n) 平均 · O(log n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快速选择（Hoare 分区）</h3>
     <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(log n)</span><span class="chip">内存 ≈ 73.0 MB</span><span class="chip">用例 46/46</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0215_KthLargestElementInAnArray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findKthLargest</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+    <div class="code-wrap"><div class="code-head"><span>LC0215_KthLargestElementInAnArray.java · 快速选择（Hoare 分区）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findKthLargest</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
         <span class="tk-k">int</span> n = nums.length;
         <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, n - <span class="tk-n">1</span>, n - k);
     }
@@ -64,10 +75,50 @@
             <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, l, j, k);
         }
         <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, j + <span class="tk-n">1</span>, r, k);
-    }</pre></div>
+    }
+</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 快速选择（Lomuto 分区）</h3>
+    <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(log n)</span><span class="chip">内存 ≈ 77.2 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0215_KthLargestElementInAnArray.java · 快速选择（Lomuto 分区）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findKthLargest</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-c">// TODO: 在这里实现你的解法</span>
+        <span class="tk-k">return</span> <span class="tk-f">quickSelect</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>, nums.length - k);
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSelect</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span> nums[l];
+        }
+        <span class="tk-k">int</span> p = nums[r];
+        <span class="tk-k">int</span> i = l, j = l;
+        <span class="tk-k">while</span> (j &lt; r) {
+            <span class="tk-k">if</span> (nums[j] &lt; p) {
+                <span class="tk-f">swap</span>(nums, i, j);
+                i++;
+            }
+            j++;
+        }
+        <span class="tk-f">swap</span>(nums, i, r);
+        <span class="tk-k">if</span> (k == i) {
+            <span class="tk-k">return</span> nums[i];
+        } <span class="tk-k">else</span> <span class="tk-k">if</span> (k &lt; i) {
+            <span class="tk-k">return</span> <span class="tk-f">quickSelect</span>(nums, l, i - <span class="tk-n">1</span>, k);
+        } <span class="tk-k">else</span> {
+            <span class="tk-k">return</span> <span class="tk-f">quickSelect</span>(nums, i + <span class="tk-n">1</span>, r, k);
+        }
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">int</span> temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+</pre></div>
+    
   </div></section>
   
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>46/46 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择：递归时 k 语义混用（全局下标 vs 相对第k小）、分区后分界点位置未定（Hoare双指针+Lomuto交换混搭）致递归区间不缩小 → StackOverflow/越界；应固定 k=当前区间第k小 + 确定分界点语义并保证左右区间严格缩小</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>46/46 用例。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -81,7 +132,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>快速选择：递归时 k 语义混用（全局下标 vs 相对第k小）、分区后分界点位置未定（Hoare双指针+Lomuto交换混搭）致递归区间不缩小 → StackOverflow/越界；应固定 k=当前区间第k小 + 确定分界点语义并保证左右区间严格缩小</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 32 · kth-largest-element-in-an-array</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>

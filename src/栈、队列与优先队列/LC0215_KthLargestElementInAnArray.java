@@ -2,41 +2,52 @@
 // LeetCode 215. 数组中的第K个最大元素 (Kth Largest Element in an Array)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/kth-largest-element-in-an-array/
-// 刷题日期：2026-08-07
+// 二刷 · 一刷日期：2026-08-07（一刷思路：快速选择 Hoare 分区，O(n) 平均）
+// 测试用例与一刷归档保持一致
+// 刷题日期：2026-08-30
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
+
+import java.util.*;
 
 public class LC0215_KthLargestElementInAnArray {
 
     // ==== 提交代码开始 ====
     public int findKthLargest(int[] nums, int k) {
-        int n = nums.length;
-        return quickSort(nums, 0, n - 1, n - k);
+        // TODO: 在这里实现你的解法
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    private int quickSort(int[] nums, int l, int r, int k) {
+    private int quickSelect(int[] nums, int l, int r, int k) {
         if (l == r) {
-            return nums[k];
+            return nums[l];
         }
-        int x = nums[l], i = l - 1, j = r + 1;
-        while (i < j) {
-            do {
+        int p = nums[r];
+        int i = l, j = l;
+        while (j < r) {
+            if (nums[j] < p) {
+                swap(nums, i, j);
                 i++;
-            } while (nums[i] < x);
-            do {
-                j--;
-            } while ( nums[j] > x);
-            if (i < j) {
-                int temp = nums[j];
-                nums[j] = nums[i];
-                nums[i] = temp;
             }
+            j++;
         }
-        if (k <= j) {
-            return quickSort(nums, l, j, k);
+        swap(nums, i, r);
+        if (k == i) {
+            return nums[i];
+        } else if (k < i) {
+            return quickSelect(nums, l, i - 1, k);
+        } else {
+            return quickSelect(nums, i + 1, r, k);
         }
-        return quickSort(nums, j + 1, r, k);
     }
 
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -80,5 +91,6 @@ public class LC0215_KthLargestElementInAnArray {
         }
         System.out.println("全部测试通过");
     }
+
 
 }
