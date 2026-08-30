@@ -364,6 +364,26 @@ function buildTemplate(problem, method, snippetClsName) {
   return { className, content: L.join('\n') };
 }
 
+// 二刷保护：src 下已有同名类（一刷归档在分类子目录）时，临时改名为 .java.bak，
+// 避免与 src 根目录的二刷文件在 IDEA 全项目编译时“类重复”；lc-submit 收尾归档覆盖时恢复。
+function backupDuplicateArchive(file, className) {
+  const root = path.join(__dirname, '..', '..', '..', '..', 'src');
+  const dups = [];
+  (function walk(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'TestUtil.java' || e.name === 'ListNode.java' || e.name === 'TreeNode.java') continue;
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (e.name === className + '.java' && path.resolve(full) !== path.resolve(file)) dups.push(full);
+    }
+  })(root);
+  for (const dup of dups) {
+    const bak = dup + '.bak';
+    fs.renameSync(dup, bak);
+    console.log(`检测到同名归档 ${dup}，二刷期间已临时改名为 ${path.basename(bak)}（避免 IDEA 重复类）；提交归档覆盖时恢复。`);
+  }
+}
+
 function main() {
   const problem = JSON.parse(fs.readFileSync(resolveProblem(), 'utf8'));
   const info = extractSnippetInfo(problem.javaSnippet || '');
@@ -383,6 +403,7 @@ function main() {
     }
   }
   fs.writeFileSync(file, content, 'utf8');
+  backupDuplicateArchive(file, className);
   console.log(`已生成：${file}`);
   console.log(`类名：${className}${method ? ` | 方法：${method.ret} ${method.name}(...)` : ' | 设计题'}`);
   console.log('请在 IntelliJ IDEA 中打开该文件，补全方法体，运行 main 测试。');

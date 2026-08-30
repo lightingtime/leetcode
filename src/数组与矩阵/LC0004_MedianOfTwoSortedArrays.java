@@ -2,59 +2,49 @@
 // LeetCode 4. 寻找两个正序数组的中位数 (Median of Two Sorted Arrays)
 // 难度：Hard | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/median-of-two-sorted-arrays/
-// 刷题日期：2026-08-06
+// 二刷 · 一刷日期：2026-08-06（一刷思路：两数组找第 k 小，O(log(m+n))）
+// 测试用例与一刷归档保持一致
+// 刷题日期：2026-08-30
 //
-// 思路：两数组找第 k 小——每轮各取有效部分第 k/2 个候选比较，排除较小一侧
-//       （候选及其前面的元素），k 减去实际排除数量；出口：一边排空或 k==1。
-// 复杂度：时间 O(log(m+n))，空间 O(1)
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
-import java.util.*;
 
 public class LC0004_MedianOfTwoSortedArrays {
 
     // ==== 提交代码开始 ====
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int len1 = nums1.length, len2 = nums2.length;
-        int totLen = len1 + len2;
-        // 中位数换算成「第 k 小」（1 基排名，不是数组下标）：
-        // 奇数总长 → 第 totLen/2 + 1 小；偶数总长 → 第 totLen/2 小与第 totLen/2 + 1 小取平均。
-        if (totLen % 2 == 1) {
-            return kthSmallest(nums1, nums2, totLen / 2 + 1);
+        // TODO: 在这里实现你的解法
+        int len = nums1.length + nums2.length;
+        if ((len & 1) == 1) {
+            return getKth(nums1, nums2, len / 2 + 1);
         }
-        int k1 = totLen / 2, k2 = totLen / 2 + 1;
-        return (kthSmallest(nums1, nums2, k1) + kthSmallest(nums1, nums2, k2)) / 2.0;
+        return (getKth(nums1, nums2, len / 2 + 1) + getKth(nums1, nums2, len / 2)) / 2.0;
     }
 
-    /**
-     * 返回两数组「剩余有效部分」合并后第 k 小的元素值。
-     * 约定：k 是 1 基排名（k=1 表示最小元素），不是数组下标。
-     * p1/p2 是两个数组当前的有效起点（0 基下标），下标小于 p1/p2 的元素已被排除。
-     */
-    private int kthSmallest(int[] nums1, int[] nums2, int k) {
-        int len1 = nums1.length, len2 = nums2.length;
-        int p1 = 0, p2 = 0; // 有效起点，只会向右移动，表示「前面有多少元素已被跳过」
+    private int getKth(int[] nums1, int[] nums2, int k) {
+        int start1 = 0, start2 = 0;
         while (true) {
-            // 出口：某一边已排空，答案在另一边的当前有效部分里
-            if (p1 >= len1) {
-                return nums2[p2 + k - 1];
-            } else if (p2 >= len2) {
-                return nums1[p1 + k - 1];
-            } else if (k == 1) {
-                return Math.min(nums1[p1], nums2[p2]);
+            if (start1 == nums1.length) {
+                return nums2[start2 + k - 1];
             }
-            // 候选下标 = 各自有效部分里第 k/2 个元素的下标；数组不够长时封顶到最后一个
-            int cand1 = Math.min(len1 - 1, p1 + k / 2 - 1);
-            int cand2 = Math.min(len2 - 1, p2 + k / 2 - 1);
-            if (nums1[cand1] <= nums2[cand2]) {
-                // 排除 nums1 从 p1 到 cand1（含候选），数量 = 候选下标 - 旧起点 + 1
-                int removed = cand1 - p1 + 1;
-                p1 = cand1 + 1;
-                k -= removed;
+            if (start2 == nums2.length) {
+                return nums1[start1 + k - 1];
+            }
+            if (k == 1) {
+                return Math.min(nums1[start1], nums2[start2]);
+            }
+            int p1 = Math.min(start1 + k / 2 - 1, nums1.length - 1);
+            int p2 = Math.min(start2 + k / 2 - 1, nums2.length - 1);
+            if (nums1[p1] < nums2[p2]) {
+                // 排除 [start1, p1]中间所有的元素，元素个数为 p1- start1 + 1;
+                k -= (p1 - start1 + 1);
+                start1 = p1 + 1;
             } else {
-                int removed = cand2 - p2 + 1;
-                p2 = cand2 + 1;
-                k -= removed;
+                // 排除 [start2, p2]中间所有的元素，元素个数为 p2- start2 + 1;
+                k -= (p2 - start2  + 1);
+                start2 = p2 + 1;
             }
         }
     }

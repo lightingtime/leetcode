@@ -44,11 +44,27 @@
       "time_complexity": "O(log(m+n))",
       "space_complexity": "O(1)",
       "optimal": false,
-      "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。"
+      "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。",
+      "code": "    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        // TODO: 在这里实现你的解法\n        int len = nums1.length + nums2.length;\n        if ((len & 1) == 1) {\n            return getKth(nums1, nums2, len / 2 + 1);\n        }\n        return (getKth(nums1, nums2, len / 2 + 1) + getKth(nums1, nums2, len / 2)) / 2.0;\n    }\n\n    private int getKth(int[] nums1, int[] nums2, int k) {\n        int start1 = 0, start2 = 0;\n        while (true) {\n            if (start1 == nums1.length) {\n                return nums2[start2 + k - 1];\n            }\n            if (start2 == nums2.length) {\n                return nums1[start1 + k - 1];\n            }\n            if (k == 1) {\n                return Math.min(nums1[start1], nums2[start2]);\n            }\n            int p1 = Math.min(start1 + k / 2 - 1, nums1.length - 1);\n            int p2 = Math.min(start2 + k / 2 - 1, nums2.length - 1);\n            if (nums1[p1] < nums2[p2]) {\n                // 排除 [start1, p1]中间所有的元素，元素个数为 p1- start1 + 1;\n                k -= (p1 - start1 + 1);\n                start1 = p1 + 1;\n            } else {\n                // 排除 [start2, p2]中间所有的元素，元素个数为 p2- start2 + 1;\n                k -= (p2 - start2  + 1);\n                start2 = p2 + 1;\n            }\n        }\n    }\n"
     }
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
   ],
-  "approach_detail": "问题本质：两个有序数组合并后的中位数，要求 O(log(m+n))，所以不能真合并，只能用二分排除求第 k 小。\n关键设计：中位数换算成第 k 小：奇数总长取第 totLen/2+1 小，偶数取第 totLen/2 与第 totLen/2+1 小的平均。kthSmallest 维护两数组的有效起点 p1、p2，每轮从两侧各取第 k/2 个候选，比较后排除较小一侧的 k/2 个元素并让 k 减去实际排除数量——每轮 k 减半，达到 log 复杂度。\n边界：k==1 时取两侧有效区头部较小者；某一侧排空时答案在另一侧 p+k-1；候选下标超界时封顶到数组末尾（cand=min(len-1, p+k/2-1)），排除数量按实际移除计算；偶数长度要算两个 k。\n复杂度：O(log(m+n)) 时间、O(1) 空间，最优；合并法 O(m+n) 不满足题目要求。"
+  "approach_detail": "问题本质：两个有序数组合并后的中位数，要求 O(log(m+n))，所以不能真合并，只能用二分排除求第 k 小。\n关键设计：中位数换算成第 k 小：奇数总长取第 totLen/2+1 小，偶数取第 totLen/2 与第 totLen/2+1 小的平均。kthSmallest 维护两数组的有效起点 p1、p2，每轮从两侧各取第 k/2 个候选，比较后排除较小一侧的 k/2 个元素并让 k 减去实际排除数量——每轮 k 减半，达到 log 复杂度。\n边界：k==1 时取两侧有效区头部较小者；某一侧排空时答案在另一侧 p+k-1；候选下标超界时封顶到数组末尾（cand=min(len-1, p+k/2-1)），排除数量按实际移除计算；偶数长度要算两个 k。\n复杂度：O(log(m+n)) 时间、O(1) 空间，最优；合并法 O(m+n) 不满足题目要求。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-08-30",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "两数组第k小（每轮排除较小侧k/2）",
+      "time_complexity": "O(log(m+n))",
+      "space_complexity": "O(1)",
+      "optimal": false,
+      "notes": "与一刷对比：思路同一刷（两数组第 k 小 + 每轮排除较小侧 k/2），复杂度不变 O(log(m+n))/O(1)；这次从零推导，未参考一刷源码。\n\n这次没想起来的原因：中位数→第 k 小的转化、每轮排除 k/2 个候选的机制都遗忘了，靠引导重新推导。二刷踩的坑：① 中位数换算 k 的式子（奇数 totLen/2+1、偶数 totLen/2 与 totLen/2+1）一开始算错；② k==1 出口缺失，k/2=0 时候选下标 start-1 越界；③ 候选下标是 0 基、排除数量是闭区间长度（p-start+1），k=2 时用 p-start 会减 0 空转。一刷的核心坑（第 k 小 1 基排名换算）这次没再犯。\n\n掌握度：weak——全程大量探讨、本地多次编译/越界失败后才 AC，非一次提交。\n\n下一步提醒：未尝试划分数组 O(log(min(m,n))) 的进阶写法，下次复习可挑战。"
+    }
+  ]
 }
