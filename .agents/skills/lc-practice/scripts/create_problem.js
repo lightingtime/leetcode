@@ -366,6 +366,39 @@ function buildTemplate(problem, method, snippetClsName) {
 
 // 二刷保护：src 下已有同名类（一刷归档在分类子目录）时，临时改名为 .java.bak，
 // 避免与 src 根目录的二刷文件在 IDEA 全项目编译时“类重复”；lc-submit 收尾归档覆盖时恢复。
+// 强制保留原写法（必做）：改名 .bak 前，把归档源码的提交区代码固化进 analysis.json 的 submissions
+// （补到缺 code 的既有条目；没有条目则追加一条一刷记录）。此后 .bak 被删除 / 归档被覆盖，原写法代码也不丢失。
+function saveArchiveCode(archiveFile, className) {
+  const m = className.match(/^LC(\d+)_/);
+  if (!m) return;
+  const id = String(parseInt(m[1], 10));
+  const problemsDir = path.join(LC_DIR, 'problems');
+  let dir = null;
+  for (const e of fs.readdirSync(problemsDir)) {
+    if (e.startsWith(id + '_') && fs.existsSync(path.join(problemsDir, e, 'analysis.json'))) { dir = e; break; }
+  }
+  if (!dir) return;
+  const ap = path.join(problemsDir, dir, 'analysis.json');
+  let a = {};
+  try { a = JSON.parse(fs.readFileSync(ap, 'utf8')); } catch { return; }
+  const content = fs.readFileSync(archiveFile, 'utf8');
+  const mm = content.match(/\/\/ ==== 提交代码开始 ====\n([\s\S]*?)\/\/ ==== 提交代码结束 ====/);
+  if (!mm) return;
+  const code = mm[1].trim() + '\n';
+  a.submissions = Array.isArray(a.submissions) ? a.submissions : [];
+  const hole = a.submissions.find(s => !s.code);
+  if (hole) {
+    hole.code = code;
+  } else {
+    const dateMatch = content.match(/刷题日期：(\d{4}-\d{2}-\d{2})/);
+    a.submissions.push({ date: dateMatch ? dateMatch[1] : todayStr(), verdict: 'Accepted', approach: '一刷原写法（二刷建题时自动归档）', code });
+  }
+  fs.writeFileSync(ap, JSON.stringify(a, null, 2));
+  console.log(`一刷原写法已固化到 analysis.json（${path.basename(ap)}）`);
+}
+
+// 二刷保护：src 下已有同名类（一刷归档在分类子目录）时，临时改名为 .java.bak，
+// 避免与 src 根目录的二刷文件在 IDEA 全项目编译时“类重复”；lc-submit 收尾归档覆盖时恢复。
 function backupDuplicateArchive(file, className) {
   const root = path.join(__dirname, '..', '..', '..', '..', 'src');
   const dups = [];
@@ -379,6 +412,7 @@ function backupDuplicateArchive(file, className) {
   })(root);
   for (const dup of dups) {
     const bak = dup + '.bak';
+    saveArchiveCode(dup, className); // 改名 .bak 前先把一刷原写法固化进 analysis.json
     fs.renameSync(dup, bak);
     console.log(`检测到同名归档 ${dup}，二刷期间已临时改名为 ${path.basename(bak)}（避免 IDEA 重复类）；提交归档覆盖时恢复。`);
   }

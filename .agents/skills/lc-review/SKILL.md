@@ -34,10 +34,12 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
    - 展示时给出：题目链接、难度、分类、一刷完成日期、是否薄弱（⚠）、需要在 IDEA 打开的文件。
 2. 重开题目：复用 `lc-practice` 的拉题/建题脚本生成新的 `src/LC{题号}_{题名}.java`。
    - **重复类自动处理（必做）**：建题脚本 `create_problem.js` 检测到 `src/{分类}/` 下已有同名一刷归档时，会把它临时改名为 `.java.bak`（IDEA 不编译），避免根目录二刷文件与归档类重复导致编译失败；提交收尾（lc-submit 归档覆盖）时恢复为归档文件。
+   - **原写法强制保留（必做，禁止任何一步丢失中间版本代码）**：改名 `.java.bak` 前，`create_problem.js` 自动把归档源码的提交区代码固化进该题 `analysis.json` 的 `submissions`（补到缺 code 的既有条目，无条目则追加「一刷原写法」记录）；此后 `.bak` 被删除、归档被覆盖，一刷/中间版本代码都在 analysis.json 可查。任何流程都不得让 `submissions` 出现缺 `code` 的条目。
    - **测试用例与一刷保持一致（必做）**：把一刷归档 `main` 测试区（示例 + 边界 + 回归用例）原样同步到二刷文件，禁止重新设计或留 TODO；文件头注明「二刷 · 一刷日期/思路」和「测试用例与一刷归档保持一致」。
    - 一刷源码已在 `src/{分类}/` 归档，不删除；git 历史保留旧版。
 3. 用户重写并本地测试通过后，走 `lc-submit` 提交力扣（复习提交由 lc-submit 自动识别）。
 4. 记录掌握度：Accepted 后由 lc-submit 调用 `node ".agents/skills/lc-review/scripts/review.js" done --seq <seq> --mastery strong|weak ...`（含 approach/time/space/optimal/firstTry），写入 analysis.json reviews + 更新调度。
+   - **同思路合并不丢旧代码（必做）**：`review.js done` 合并同 approach 的 submissions 时，若新代码覆盖旧 code，先把旧 code 存入 `prev_code` 字段（脚本已内置，禁止手工绕过）；复盘页「写法卡片」会以可折叠「上一版写法」展示。
    - **掌握度判定**：提交一次 Accepted 且全程无探讨 = strong；探讨过/提示过/非一次 AC = weak。本地自己调试改对、提交一次 AC 算 strong。
    - **notes 必写深度分析（禁止一句话敷衍）**：`--notes` 用多行 Markdown，至少含 ① 与上一轮对比（思路/写法/复杂度差异）；② 这次为什么想起来/没想起来（一刷犯的错这次如何规避）；③ 掌握度判定依据（是否一次 AC、有无探讨）；④ 下一步提醒（未尝试的更优写法、可顺带复习的相关题）。复盘页「复习记录 / 历轮表现」按 md 渲染，写浅了等于没复盘。
    - **notes 宁缺毋滥（禁止凑字数）**：只写有实质信息的点；「下一步提醒」没有实质内容就整节省略，不要用「已达最优不必尝试」这类废话填充。

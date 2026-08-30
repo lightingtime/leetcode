@@ -198,10 +198,12 @@ function renderSolutions() {
     const sCode = s.code || (i === subs.length - 1 ? code : '');
     const sLabel = s.code ? `${fileBase}.java · ${s.approach}` : path.relative(ROOT, srcFile).replace(/\\/g, '/');
     const codeHtml = sCode ? codeBlock(sLabel, sCode) : '<p class="muted">（该写法为中间版本，未单独留存代码，思路与指标见上；历史代码可在 git 中追溯）</p>';
+    const prevHtml = s.prev_code ? `<details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary>${codeBlock(sLabel + ' · 上一版', s.prev_code)}</details>` : '';
     return `<div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 ${i + 1} · ${esc(s.approach || '')}</h3>
     <p><span class="chip">时间 ${esc(s.time_complexity || '—')}</span><span class="chip">空间 ${esc(s.space_complexity || '—')}</span><span class="chip">内存 ${fmtMem(s.memory_bytes)}</span><span class="chip">用例 ${esc(s.testcases || '—')}</span></p>
     ${codeHtml}
+    ${prevHtml}
   </div>`;
   }).join('');
 }

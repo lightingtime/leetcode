@@ -221,7 +221,12 @@ if (cmd === 'init') {
     if (same) {
       const better = (sub.optimal && !same.optimal) ||
         (sub.optimal === same.optimal && sub.memory_bytes != null && (same.memory_bytes == null || sub.memory_bytes < same.memory_bytes));
-      if (better || codeNote) Object.assign(same, sub);
+      if (better || codeNote) {
+        // 强制保留原写法（必做）：合并覆盖前把旧 code 存入 prev_code，绝不静默丢弃中间版本代码
+        const oldCode = same.code;
+        if (codeNote && oldCode && oldCode !== codeNote && !same.prev_code) same.prev_code = oldCode;
+        Object.assign(same, sub);
+      }
     } else {
       a.submissions.push(sub);
     }

@@ -72,6 +72,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 - **汇报（必体现二刷对比）**：输出「二刷第 N 次 · 距上次 X 天 · 较强/较弱 · 一次 AC/多次」，并对比一刷：思路是否更换、复杂度/内存是否更优、是否命中已沉淀套路（`pattern` 记录）；据此更新 `optimal`/`code_notes`。
 - **复盘页**：生成复盘页时复习记录区块自动置前（`generate_review.js` 已支持），submissions 由 review.js 合并（新思路追加、同思路保留最优）。
 - **归档覆盖（必做）**：复习文件在 `src/` 根，Accepted 后用其内容覆盖 `src/{分类}/LC{题号}_{题名}.java`（git 历史保留一刷版），删除根目录新文件与建题时产生的 `src/{分类}/LC{题号}_{题名}.java.bak`（若有）；analysis.json / 复盘页里指向旧位置结构的链接同步更新。
+- **原写法强制保留（必做，删 .bak 前核对）**：删除 `.java.bak` / 覆盖归档前，先核对 `analysis.json` 的 `submissions`——所有既有写法条目的 `code` 已保存（建题时已自动固化；若仍缺 code，用 `git show <归档commit>:src/{分类}/LC{题号}_{题名}.java` 找回提交区代码补上），同思路被覆盖的旧版存 `prev_code`。任何情况下不得让原写法/中间版本代码只存在于 git 历史而 analysis.json 缺失。
 - **打卡与收尾**：照常 `checkin --seq` + `build_site.js` + commit（含 review_state.json）。
 - **复习提交失败（WA/TLE/RE）**：按下方失败分支分析，但提示标准更高——先读 `analysis.json` 的一刷 `approach`/`submissions`，指出「一刷用的 XX，这次为什么没想起来」，再给宽泛提示；错误习惯照常记录。
 
