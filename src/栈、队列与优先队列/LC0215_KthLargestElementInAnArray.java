@@ -2,12 +2,9 @@
 // LeetCode 215. 数组中的第K个最大元素 (Kth Largest Element in an Array)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/kth-largest-element-in-an-array/
-// 二刷 · 一刷日期：2026-08-07（一刷思路：快速选择 Hoare 分区，O(n) 平均）
-// 测试用例与一刷归档保持一致
-// 刷题日期：2026-08-30
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-07，上次复习 2026-08-31，较弱）
+// 一刷思路：快速选择（Hoare 分区），O(n) 平均 / O(1)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -16,13 +13,12 @@ public class LC0215_KthLargestElementInAnArray {
 
     // ==== 提交代码开始 ====
     public int findKthLargest(int[] nums, int k) {
-        // TODO: 在这里实现你的解法
         return quickSelect(nums, 0, nums.length - 1, nums.length - k);
     }
 
     private int quickSelect(int[] nums, int l, int r, int k) {
         if (l == r) {
-            return nums[l];
+            return nums[r];
         }
         int p = nums[r];
         int i = l, j = l;
@@ -33,7 +29,7 @@ public class LC0215_KthLargestElementInAnArray {
             }
             j++;
         }
-        swap(nums, i, r);
+        swap(nums, i , r);
         if (k == i) {
             return nums[i];
         } else if (k < i) {
@@ -41,6 +37,7 @@ public class LC0215_KthLargestElementInAnArray {
         } else {
             return quickSelect(nums, i + 1, r, k);
         }
+
     }
 
     private void swap(int[] nums, int i, int j) {
