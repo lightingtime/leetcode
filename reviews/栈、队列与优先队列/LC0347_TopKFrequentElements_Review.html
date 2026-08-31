@@ -155,9 +155,42 @@
         }
     }
 </pre></div></details>
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 桶排序（频次桶倒序收集）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 25/25</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0347_TopKFrequentElements.java · 桶排序（频次桶倒序收集）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">int</span> max = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+            map.<span class="tk-f">merge</span>(num, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(map.<span class="tk-f">get</span>(num), max);
+        }
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;[] bucket = <span class="tk-k">new</span> <span class="tk-t">List</span>[max + <span class="tk-n">1</span>];
+        <span class="tk-k">for</span> (<span class="tk-t">Map</span>.<span class="tk-t">Entry</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; entry : map.<span class="tk-f">entrySet</span>()) {
+            <span class="tk-k">if</span> (bucket[entry.<span class="tk-f">getValue</span>()] == <span class="tk-k">null</span>) {
+                bucket[entry.<span class="tk-f">getValue</span>()] = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            }
+            bucket[entry.<span class="tk-f">getValue</span>()].<span class="tk-f">add</span>(entry.<span class="tk-f">getKey</span>());
+        }
+        <span class="tk-k">int</span>[] ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[k];
+        <span class="tk-k">int</span> index = k - <span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = max; i &gt; <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">if</span> (bucket[i] != <span class="tk-k">null</span>) {
+                <span class="tk-k">for</span> (<span class="tk-t">Integer</span> key : bucket[i]) {
+                    ans[index] = key;
+                    index--;
+                    <span class="tk-k">if</span> (index == -<span class="tk-n">1</span>) {
+                        <span class="tk-k">return</span> ans;
+                    }
+                }
+            }
+        }
+        <span class="tk-k">return</span> ans;
+    }</pre></div>
+    
   </div></section>
   
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>桶排序装桶漏 add：if (bucket[f]==null) 创建后必须无条件 add，写成 if/else 导致每个频次桶只装第二个及以后的元素、首个元素丢失；收集时 index==-1 只 break 内层循环，外层继续扫非空桶会 ans[-1] 越界</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -171,7 +204,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
-      <h3>错误习惯复盘</h3><p><b>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</b>（累计 1 次）</p><p><b>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</b>（累计 1 次）</p><p><b>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</b>（累计 1 次）</p><p><b>桶排序装桶漏 add：if (bucket[f]==null) 创建后必须无条件 add，写成 if/else 导致每个频次桶只装第二个及以后的元素、首个元素丢失；收集时 index==-1 只 break 内层循环，外层继续扫非空桶会 ans[-1] 越界</b>（累计 1 次）</p>
       <h3>复习提醒</h3><div class="quote">★ 复习提醒：LC347 除已实现的哈希表+快选外，可试桶排序/计数线性做法（O(n)，题解链接 https://leetcode.cn/problems/top-k-frequent-elements/solutions/3655287/tong-pai-xu-on-xian-xing-zuo-fa-pythonja-oqq2/），复习时重写一次</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 33 · top-k-frequent-elements</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>

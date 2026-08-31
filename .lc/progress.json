@@ -3105,6 +3105,17 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "桶排序装桶漏 add：if (bucket[f]==null) 创建后必须无条件 add，写成 if/else 导致每个频次桶只装第二个及以后的元素、首个元素丢失；收集时 index==-1 只 break 内层循环，外层继续扫非空桶会 ans[-1] 越界",
+      "count": 1,
+      "examples": [
+        "top-k-frequent-elements"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-01"
     }
   ],
   "category_hints": {

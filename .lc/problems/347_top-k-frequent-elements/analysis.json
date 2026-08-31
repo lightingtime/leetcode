@@ -23,6 +23,10 @@
     {
       "habit": "快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k<i 左、k>i 右；写成 k<=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l>r 非法区间无限递归（栈溢出）或越界",
       "count": 1
+    },
+    {
+      "habit": "桶排序装桶漏 add：if (bucket[f]==null) 创建后必须无条件 add，写成 if/else 导致每个频次桶只装第二个及以后的元素、首个元素丢失；收集时 index==-1 只 break 内层循环，外层继续扫非空桶会 ans[-1] 越界",
+      "count": 1
     }
   ],
   "hints": [
@@ -48,6 +52,20 @@
       "prev_code": "public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int num : nums) {\n            map.merge(num, 1, Integer::sum);\n        }\n        List<Node> list = new ArrayList<>();\n        map.forEach((value, freq) -> {\n            list.add(new Node(value, freq));\n        });\n        quickSelect(list, 0, list.size() - 1, list.size() - k);\n        int[] ans = new int[k];\n        for (int i = 0; i < k; i++) {\n            ans[i] = list.get(list.size() - k + i).value;\n        }\n        return ans;\n    }\n\n    private void quickSelect(List<Node> list, int l, int r, int k) {\n        if (l == r) {\n            return;\n        }\n        int x = list.get(l).freq, i = l - 1, j = r + 1;\n        while (i < j) {\n            do {\n                i++;\n            } while (x > list.get(i).freq);\n            do {\n                j--;\n            } while (x < list.get(j).freq);\n            if (i < j) {\n                Node temp = list.get(i);\n                list.set(i, list.get(j));\n                list.set(j, temp);\n            }\n        }\n        if (k <= j) {\n            quickSelect(list, l, j, k);\n        } else {\n            quickSelect(list, j + 1, r, k);\n        }\n    }\n\n    class Node {\n        Integer value;\n        Integer freq;\n\n        public Node(Integer value, Integer freq) {\n            this.value = value;\n            this.freq = freq;\n        }\n    }\n",
       "mastery": "weak",
       "pass": 1
+    },
+    {
+      "date": "2026-09-01",
+      "verdict": "Accepted",
+      "testcases": "25/25",
+      "approach": "桶排序（频次桶倒序收集）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "同轮复习第二种写法：频次当下标开桶（长度 max+1），倒序收集 k 个；创建桶后无条件 add、装满 k 个 return。严格 O(n)，无最坏退化。",
+      "mastery": "weak",
+      "pass": 1,
+      "memory_bytes": 47884000,
+      "code": "public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> map = new HashMap<>();\n        int max = Integer.MIN_VALUE;\n        for (int num : nums) {\n            map.merge(num, 1, Integer::sum);\n            max = Math.max(map.get(num), max);\n        }\n        List<Integer>[] bucket = new List[max + 1];\n        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {\n            if (bucket[entry.getValue()] == null) {\n                bucket[entry.getValue()] = new ArrayList<>();\n            }\n            bucket[entry.getValue()].add(entry.getKey());\n        }\n        int[] ans = new int[k];\n        int index = k - 1;\n        for (int i = max; i > 0; i--) {\n            if (bucket[i] != null) {\n                for (Integer key : bucket[i]) {\n                    ans[index] = key;\n                    index--;\n                    if (index == -1) {\n                        return ans;\n                    }\n                }\n            }\n        }\n        return ans;\n    }"
     }
   ],
   "reviews": [

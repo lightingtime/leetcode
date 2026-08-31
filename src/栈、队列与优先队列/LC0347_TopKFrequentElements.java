@@ -14,59 +14,34 @@ public class LC0347_TopKFrequentElements {
     // ==== 提交代码开始 ====
     public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap<>();
+        int max = Integer.MIN_VALUE;
         for (int num : nums) {
             map.merge(num, 1, Integer::sum);
+            max = Math.max(map.get(num), max);
         }
-        List<Node> list = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> en : map.entrySet()) {
-            list.add(new Node(en.getKey(), en.getValue()));
-        }
-        quickSort(list, 0, list.size() - 1, list.size() - k);
-        return list.subList(list.size() - k, list.size()).stream().map(Node::getNum).mapToInt(Integer::intValue).toArray();
-    }
-
-    private void quickSort(List<Node> list, int l, int r, int k) {
-        if (l == r) {
-            return;
-        }
-        int p = list.get(r).count;
-        int i = l, j = l;
-        while (j < r) {
-            if (list.get(j).count < p) {
-                swap(list, i, j);
-                i++;
+        List<Integer>[] bucket = new List[max + 1];
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (bucket[entry.getValue()] == null) {
+                bucket[entry.getValue()] = new ArrayList<>();
             }
-            j++;
+            bucket[entry.getValue()].add(entry.getKey());
         }
-        swap(list, i, r);
-        if (k == i) {
-            return;
-        } else if (k < i) {
-            quickSort(list, l, i - 1, k);
-        } else {
-            quickSort(list, i + 1, r, k);
+        int[] ans = new int[k];
+        int index = k - 1;
+        for (int i = max; i > 0; i--) {
+            if (bucket[i] != null) {
+                for (Integer key : bucket[i]) {
+                    ans[index] = key;
+                    index--;
+                    if (index == -1) {
+                        return ans;
+                    }
+                }
+            }
         }
+        return ans;
     }
 
-    private void swap(List<Node> list, int i, int j) {
-        Node node = list.get(i);
-        list.set(i, list.get(j));
-        list.set(j, node);
-    }
-
-    static class Node {
-        int num;
-        int count;
-
-        public Node(int num, int count) {
-            this.num = num;
-            this.count = count;
-        }
-
-        public int getNum() {
-            return num;
-        }
-    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
