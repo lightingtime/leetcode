@@ -1,13 +1,10 @@
 // ============================================================
 // LeetCode 94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)
-// 难度：简单 | 分类：栈、队列与优先队列
+// 难度：Easy | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/binary-tree-inorder-traversal/
-// 二刷 · 一刷日期：2026-08-07（一刷思路：TODO 从归档 analysis.json 查看，中序遍历）
-// 测试用例与一刷归档保持一致
-// 刷题日期：2026-08-30
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 复习日期：2026-08-31（复习 · 一刷 2026-08-07，上次复习 2026-08-30，较弱）
+// 一刷思路：迭代中序遍历（显式栈）——先沿左链入栈，出栈访问后转右子树
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -15,21 +12,20 @@ import java.util.*;
 public class LC0094_BinaryTreeInorderTraversal {
 
     // ==== 提交代码开始 ====
+    List<Integer> ans;
     public List<Integer> inorderTraversal(TreeNode root) {
-        // TODO: 在这里实现你的解法
-        List<Integer> ans = new ArrayList<>();
-        TreeNode cur = root;
-        Deque<TreeNode> queue = new ArrayDeque<>();
-        while (!queue.isEmpty() || cur != null) {
-            while (cur != null) {
-                queue.offerLast(cur);
-                cur = cur.left;
-            }
-            cur = queue.pollLast();
-            ans.add(cur.val);
-            cur = cur.right;
-        }
+        ans = new ArrayList<>();
+        dfs(root);
         return ans;
+    }
+
+    private void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        ans.add(root.val);
+        dfs(root.right);
     }
     // ==== 提交代码结束 ====
 

@@ -52,17 +52,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-08-31",
       "verdict": "Accepted",
-      "testcases": "71/71",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 43428000,
+      "memory_bytes": 43284000,
       "approach": "递归 DFS（中序）",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "递归 DFS 中序（左根右），结果列表入口重置；曾踩实例字段跨调用累积的坑（本地多组测试串台），且字段声明在提交区外会编译失败；修正后力扣 71/71 Accepted。进阶迭代写法另行实现",
-      "code": "    List<Integer> ans;\n    public List<Integer> inorderTraversal(TreeNode root) {\n        ans = new ArrayList<>();\n        dfs(root);\n        return ans;\n    }\n\n    private void dfs(TreeNode root) {\n        if (root == null) {\n            return;\n        }\n        dfs(root.left);\n        ans.add(root.val);\n        dfs(root.right);\n    }"
+      "notes": "",
+      "code": "List<Integer> ans;\n    public List<Integer> inorderTraversal(TreeNode root) {\n        ans = new ArrayList<>();\n        dfs(root);\n        return ans;\n    }\n\n    private void dfs(TreeNode root) {\n        if (root == null) {\n            return;\n        }\n        dfs(root.left);\n        ans.add(root.val);\n        dfs(root.right);\n    }",
+      "prev_code": "    List<Integer> ans;\n    public List<Integer> inorderTraversal(TreeNode root) {\n        ans = new ArrayList<>();\n        dfs(root);\n        return ans;\n    }\n\n    private void dfs(TreeNode root) {\n        if (root == null) {\n            return;\n        }\n        dfs(root.left);\n        ans.add(root.val);\n        dfs(root.right);\n    }",
+      "mastery": "strong",
+      "pass": 2
     },
     {
       "date": "2026-08-07",
@@ -95,6 +98,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "与一刷对比：一刷写了递归 DFS + 迭代栈两种，这次只重写迭代栈（一刷的薄弱点），思路/复杂度一致 O(n)/O(n)，代码结构与一刷迭代版基本一致（Deque + cur 指针）。\n\n为什么能想起来：中序顺序（左-根-右）固定，迭代栈'一路向左压栈 → 弹出访问 → 转右子树'是标准套路；展示时我给了机制方向提示，但用户直接独立写出、未再追问，本地一次通过。\n\n掌握度：strong——本地一次通过、力扣一次 AC、无实质探讨。本次 approach 复用一刷'迭代栈（cur指针）'字符串，验证 review.js 同写法合并（normalized 匹配命中，未拆成两条）。\n\n下一步提醒：递归版一刷已有未重写；可顺带串练前序/后序迭代版（144/145）与 Morris 中序遍历（O(1) 空间）进阶。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-08-31",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "递归 DFS（中序）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": ""
     }
   ]
 }
