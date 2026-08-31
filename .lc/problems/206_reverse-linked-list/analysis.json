@@ -46,18 +46,19 @@
       "code": "    public ListNode reverseList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode newHead = reverseList(head.next);\n        head.next.next = head;\n        head.next = null;\n        return newHead;\n    }\n"
     },
     {
-      "date": "2026-08-30",
+      "date": "2026-08-31",
       "verdict": "Accepted",
       "testcases": "",
       "approach": "迭代三指针（pre/cur/next）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "与一刷对比：同一思路（迭代三指针），O(n)/O(1) 不变；这次无提示独立写出，代码结构与一刷一致。\n\n为什么能想起来：链表反转是高频基础操作，三指针模式（先存 next → 指向前驱 → pre/cur 后移）已内化，属固定套路不易遗忘；相比 Hard 中位数题的推导型思路，这类机械套路二刷更容易直接写出。\n\n掌握度：strong——本地一次通过、力扣一次 AC、全程无探讨。\n\n下一步提醒：反转链表是多个中等题的基础（25 K个一组翻转 / 92 反转链表II / 143 重排链表 / 234 回文链表），后续复习可顺带串练。",
+      "notes": "",
       "mastery": "strong",
-      "pass": 1,
-      "memory_bytes": 44464000,
-      "code": "    public ListNode reverseList(ListNode head) {\n        // TODO: 在这里实现你的解法\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode pre = null;\n        ListNode cur = head;\n        while (cur != null) {\n            ListNode next = cur.next;\n            cur.next = pre;\n            pre = cur;\n            cur = next;\n        }\n        return pre;\n    }\n"
+      "pass": 2,
+      "memory_bytes": 44716000,
+      "code": "public ListNode reverseList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode pre = null, cur = head;\n        while (cur != null) {\n            ListNode next = cur.next;\n            cur.next = pre;\n            pre = cur;\n            cur = next;\n        }\n        return pre;\n    }",
+      "prev_code": "    public ListNode reverseList(ListNode head) {\n        // TODO: 在这里实现你的解法\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode pre = null;\n        ListNode cur = head;\n        while (cur != null) {\n            ListNode next = cur.next;\n            cur.next = pre;\n            pre = cur;\n            cur = next;\n        }\n        return pre;\n    }\n"
     }
   ],
   "hints": [
@@ -77,6 +78,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "与一刷对比：同一思路（迭代三指针），O(n)/O(1) 不变；这次无提示独立写出，代码结构与一刷一致。\n\n为什么能想起来：链表反转是高频基础操作，三指针模式（先存 next → 指向前驱 → pre/cur 后移）已内化，属固定套路不易遗忘；相比 Hard 中位数题的推导型思路，这类机械套路二刷更容易直接写出。\n\n掌握度：strong——本地一次通过、力扣一次 AC、全程无探讨。\n\n下一步提醒：反转链表是多个中等题的基础（25 K个一组翻转 / 92 反转链表II / 143 重排链表 / 234 回文链表），后续复习可顺带串练。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-08-31",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "迭代三指针（pre/cur/next）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
     }
   ]
 }

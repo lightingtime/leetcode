@@ -1,13 +1,10 @@
 // ============================================================
 // LeetCode 206. 反转链表 (Reverse Linked List)
-// 难度：简单 | 分类：链表
+// 难度：Easy | 分类：链表
 // 链接：https://leetcode.cn/problems/reverse-linked-list/
-// 二刷 · 一刷日期：2026-08-06（一刷思路：迭代三指针 pre/cur/next，O(n)）
-// 测试用例与一刷归档保持一致
-// 刷题日期：2026-08-30
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 复习日期：2026-08-31（复习 · 一刷 2026-08-06，上次复习 2026-08-30）
+// 一刷思路：迭代三指针 pre/cur/next，O(n)/O(1)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -16,12 +13,10 @@ public class LC0206_ReverseLinkedList {
 
     // ==== 提交代码开始 ====
     public ListNode reverseList(ListNode head) {
-        // TODO: 在这里实现你的解法
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode pre = null;
-        ListNode cur = head;
+        ListNode pre = null, cur = head;
         while (cur != null) {
             ListNode next = cur.next;
             cur.next = pre;
