@@ -3061,6 +3061,28 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-08-31"
+    },
+    {
+      "habit": "自底向上归并：段间游标 cur 推进混乱——取段后未判空就取 next（cur 为 null 时 NPE）、第二段从 head 重走而非从右段头续走、断链后 cur=tail.next 恒为 null、subLen 未翻倍（i++ 而非 i<<=1）、排序后返回原 head 而非 dummy.next",
+      "count": 1,
+      "examples": [
+        "sort-list"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-31"
+    },
+    {
+      "habit": "自底向上归并取段步数：头节点已算第 0 个，要凑 subLen 个节点只需再走 subLen-1 步；for 循环从 j=0 起会多取一个节点（段长变 subLen+1），导致左段吞掉右段、head2 取空",
+      "count": 1,
+      "examples": [
+        "sort-list"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-08-31"
     }
   ],
   "category_hints": {

@@ -35,6 +35,14 @@
     {
       "habit": "快慢指针找中点第二次犯：循环条件 fast.next!=null 判停+slow 无条件前移，[1,2] 仍返回节点2 → second=null → sortList 无限递归栈溢出",
       "count": 1
+    },
+    {
+      "habit": "自底向上归并：段间游标 cur 推进混乱——取段后未判空就取 next（cur 为 null 时 NPE）、第二段从 head 重走而非从右段头续走、断链后 cur=tail.next 恒为 null、subLen 未翻倍（i++ 而非 i<<=1）、排序后返回原 head 而非 dummy.next",
+      "count": 1
+    },
+    {
+      "habit": "自底向上归并取段步数：头节点已算第 0 个，要凑 subLen 个节点只需再走 subLen-1 步；for 循环从 j=0 起会多取一个节点（段长变 subLen+1），导致左段吞掉右段、head2 取空",
+      "count": 1
     }
   ],
   "hints": [
@@ -74,17 +82,19 @@
       "code": "public ListNode sortList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        // 两半必须各自递归排序后再合并（此前漏掉分治，直接 merge 两个乱序序列）\n        ListNode mid = getMid(head);\n        ListNode second = mid.next;\n        mid.next = null;\n        ListNode newHead = sortList(head);\n        second = sortList(second);\n        return mergeList(newHead, second);\n    }\n\n    private ListNode mergeList(ListNode head, ListNode second) {\n        ListNode newHead = new ListNode();\n        ListNode p1 = head, p2 = second, p = newHead;\n        // 只把 p 指向较小节点、p 前移，不断任何链（断链会拆碎链表并让 p 变 null 触发 NPE）\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                p.next = p1;\n                p1 = p1.next;\n            } else {\n                p.next = p2;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) p.next = p1;\n        if (p2 != null) p.next = p2;\n        return newHead.next;\n    }\n\n    private ListNode getMid(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        // fast 每轮完整走 2 步、slow 走 1 步，fast 到尾时 slow 恰在中点\n        // 条件 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」（此前偶数长度 slow 多走，[1,2] 返回节点 2 致无限递归）\n        ListNode fast = head, slow = head;\n        while (fast.next != null && fast.next.next != null) {\n            fast = fast.next.next;\n            slow = slow.next;\n        }\n        return slow;\n    }"
     },
     {
-      "date": "2026-08-30",
+      "date": "2026-08-31",
       "verdict": "Accepted",
       "testcases": "",
       "approach": "自底向上归并（迭代）",
       "time_complexity": "O(n log n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与之前对比**：自顶向下（递归栈 O(log n)）→ 自底向上（迭代 O(1) 空间），mergeList 复用；空间达成进阶。\n\n**关键点（讨论过的）**：\n- 取段走 k 步：first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数；i 从 0 会多走 1 步吞掉下一段。\n- 断链刻意且临时：左段尾、右段尾各断一次，段独立 merge 才能正确终止；当前合并段尾先保持 null，跨段衔接由下一轮 pre.next = mergeList(...) 完成，不能 pre.next = cur（会接上未排序原始段）。\n\n**掌握度依据**：思路框架提示 + 两轮理解问答后独立写出正确实现，力扣一次 Accepted（30/30）→ 较弱，间隔重置 1 天。\n\n**下一步**：已达成 O(1) 空间进阶，本题闭环。",
+      "notes": "",
       "mastery": "weak",
       "pass": 2,
-      "memory_bytes": 59728000
+      "memory_bytes": 59428000,
+      "code": "public ListNode sortList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        int len = getLen(head);\n        ListNode dummy = new ListNode(0, head);\n        for (int i = 1; i < len; i <<= 1) {\n            ListNode pre = dummy, cur = dummy.next;\n            while (cur != null) {\n                ListNode head1 = cur;\n                for (int j = 1; j < i && cur.next != null; j++) {\n                    cur = cur.next;\n                }\n\n                ListNode head2 = cur.next;\n                cur.next = null;\n                cur = head2;\n                for (int j = 1; j < i && cur != null && cur.next != null; j++) {\n                    cur = cur.next;\n                }\n                ListNode next = null;\n                if (cur != null) {\n                    next = cur.next;\n                    cur.next = null;\n                }\n                pre.next = mergeList(head1, head2);\n                while (pre.next != null) {\n                    pre = pre.next;\n                }\n                cur = next;\n            }\n        }\n\n        return dummy.next;\n    }\n\n    private ListNode mergeList(ListNode head1, ListNode head2) {\n        ListNode dummy = new ListNode();\n        ListNode p = dummy;\n        ListNode p1 = head1, p2 = head2;\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                p.next = p1;\n                p1 = p1.next;\n            } else {\n                p.next = p2;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) {\n            p.next = p1;\n        }\n        if (p2 != null) {\n            p.next = p2;\n        }\n        return dummy.next;\n\n    }\n\n    private int getLen(ListNode head) {\n        int count = 0;\n        ListNode p = head;\n        while (p != null) {\n            count++;\n            p = p.next;\n        }\n        return count;\n    }",
+      "prev_code": "public ListNode sortList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        int len = getLen(head);\n        ListNode dummy = new ListNode(0, head);\n        for (int subLen = 1; subLen < len; subLen <<= 1) {\n            ListNode pre = dummy, cur = dummy.next;\n            while (cur != null) {\n                ListNode first = cur;\n                // first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数\n                for (int i = 1; i < subLen && cur.next != null; i++) {\n                    cur = cur.next;\n                }\n                ListNode second = cur.next;\n                // 断左段尾：让左段独立，merge 才能正确终止\n                cur.next = null;\n                cur = second;\n                for (int i = 1; i < subLen && cur != null && cur.next != null; i++) {\n                    cur = cur.next;\n                }\n                ListNode next = null;\n                if (cur != null) {\n                    next = cur.next;\n                    // 断右段尾：不让右段串到后续未处理段\n                    cur.next = null;\n                }\n                // 衔接合并段：不能 pre.next = cur（cur 还是未排序的原始段），须等 merge 后由本行接上\n                pre.next = mergeList(first, second);\n                while (pre.next != null) {\n                    pre = pre.next;\n                }\n                cur = next;\n            }\n\n        }\n        return dummy.next;\n    }\n\n    private int getLen(ListNode head) {\n        int count = 0;\n        ListNode dummy = new ListNode(0, head);\n        ListNode p = dummy.next;\n        while (p != null) {\n            count++;\n            p = p.next;\n        }\n        return count;\n    }\n\n    private ListNode mergeList(ListNode head, ListNode second) {\n        ListNode newHead = new ListNode();\n        ListNode p1 = head, p2 = second, p = newHead;\n        // 只把 p 指向较小节点、p 前移，不断任何链（断链会拆碎链表并让 p 变 null 触发 NPE）\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                p.next = p1;\n                p1 = p1.next;\n            } else {\n                p.next = p2;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) p.next = p1;\n        if (p2 != null) p.next = p2;\n        return newHead.next;\n    }\n"
     }
   ],
   "approach_detail": "问题本质：O(n log n) 排序链表。数组排序需要随机访问，归并排序只需要 next 指针，天然适配链表。\n关键设计：递归分治——快慢指针找中点（fast 走 2 步、slow 走 1 步，fast 到区间尾时 slow 是中点）；区间写成 [head, tail)，当 head.next==tail 时断开为单节点；两半分别排序后 merge 有序合并（dummy 节点串接，每次取较小者，一方走完直接续接剩余链）。\n边界：空链表和单节点直接返回；奇数/偶数长度切分都正确；[head,tail) 左闭右开让切分不重不漏；merge 时一方为 null 要处理。\n复杂度：时间 O(n log n)；空间 O(log n) 递归栈（若题目严格要求 O(1) 空间，可改自底向上归并，但递归版已通过判题）。\n\n**进阶写法 · 自底向上归并（O(1) 空间）**：\n- **思路**：先统计链表长度 len；subLen 从 1 开始每轮翻倍（subLen < len），每轮把链表按 subLen 分段，相邻两段 merge 成 2*subLen 的有序段接到结果链；全程无递归 → 额外空间 O(1)。\n- **取段走 k 步，i 为什么从 1 起**：`first = cur` 已取段头（第 0 个节点），循环只需把 cur 从段头推到段尾，步数 = subLen-1，故 `for (int i = 1; i < subLen ...)` 恰好走 subLen-1 步；i 从 0 会多走 1 步，把下一段也吞进来。\n- **断链位置（刻意且临时）**：左段尾 `cur.next = null`、右段尾 `cur.next = null` 各断一次，让每段独立，merge 的 `while (p1 != null && p2 != null)` 才能正确终止。\n- **跨段衔接，为什么没有 pre.next = cur**：当前合并段尾先保持 null（段独立），下一轮通过 `pre.next = mergeList(...)` 接到 pre（上轮合并段尾）后面；不能 `pre.next = cur`，因为 cur 指向的还是未排序的原始段，直接接上会破坏归并。\n- **具体 case 推演**（`[4,2,1,3]`）：\n  1. subLen=1：取 4、2 各自断尾 → merge → `[2,4]`；取 1、3 → merge → `[1,3]`；pre 串联 → `2→4→1→3`\n  2. subLen=2：取 `[2,4]`、`[1,3]` 断尾 → merge → `[1,2,3,4]` ✓\n- **复杂度**：时间 O(n log n)（每轮 O(n)，共 log n 轮）；空间 O(1)（仅指针），达成进阶要求。",
@@ -101,6 +111,19 @@
       "space_complexity": "O(log n)",
       "optimal": false,
       "notes": "**与一刷对比**：思路一致（自顶向下归并：快慢指针找中点切分 + 递归排序 + merge）；本次实现从一刷的 sortList(head, tail) 带尾参数改为「返回左半最后一个」写法，merge 去掉了多余断链。\n\n**为什么这次没想起来**：两次卡点——① 分治结构缺失（切完直接 merge，两半未排序）；② 快慢指针找中点偶数长度偏后（[1,2] 返回节点 2）→ second=null → sortList 无限递归栈溢出；经提示后在 getMid 用 fast.next.next != null 保证「slow 前进 ⇔ fast 走满 2 步」修正。\n\n**掌握度依据**：测试多次失败、经两轮提示定位后改对 → 较弱，间隔重置 1 天。\n\n**下一步提醒**：递归栈 O(log n) 未达进阶，可尝试自底向上迭代归并（1→2→4 逐段合并）达 O(1) 空间。\n\n**与之前对比**：自顶向下（递归栈 O(log n)）→ 自底向上（迭代 O(1) 空间），mergeList 复用；空间达成进阶。\n\n**关键点（讨论过的）**：\n- 取段走 k 步：first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数；i 从 0 会多走 1 步吞掉下一段。\n- 断链刻意且临时：左段尾、右段尾各断一次，段独立 merge 才能正确终止；当前合并段尾先保持 null，跨段衔接由下一轮 pre.next = mergeList(...) 完成，不能 pre.next = cur（会接上未排序原始段）。\n\n**掌握度依据**：思路框架提示 + 两轮理解问答后独立写出正确实现，力扣一次 Accepted（30/30）→ 较弱，间隔重置 1 天。\n\n**下一步**：已达成 O(1) 空间进阶，本题闭环。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-08-31",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "自底向上归并（迭代）",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": ""
     }
   ]
 }

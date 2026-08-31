@@ -2,10 +2,9 @@
 // LeetCode 148. 排序链表 (Sort List)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-list/
-// 刷题日期：2026-08-30（进阶练习 · 自底向上归并 O(1) 空间；保留 mergeList，删自顶向下递归与 getMid）
-//
-// 思路：自底向上归并——subLen 从 1 翻倍，走 k 步取段 + 断链 + merge，迭代无递归
-// 复杂度：时间 O(n log n) 空间 O(1)
+// 复习日期：2026-08-31（复习 · 一刷 2026-08-05，上次复习 2026-08-30）
+// 一刷思路：自底向上归并 O(1) 空间（subLen 翻倍取段 + merge）；进阶练习版本
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -19,54 +18,40 @@ public class LC0148_SortList {
         }
         int len = getLen(head);
         ListNode dummy = new ListNode(0, head);
-        for (int subLen = 1; subLen < len; subLen <<= 1) {
+        for (int i = 1; i < len; i <<= 1) {
             ListNode pre = dummy, cur = dummy.next;
             while (cur != null) {
-                ListNode first = cur;
-                // first 已取段头（第 0 个），cur 只需再走 subLen-1 步到段尾，故 i 从 1 计数
-                for (int i = 1; i < subLen && cur.next != null; i++) {
+                ListNode head1 = cur;
+                for (int j = 1; j < i && cur.next != null; j++) {
                     cur = cur.next;
                 }
-                ListNode second = cur.next;
-                // 断左段尾：让左段独立，merge 才能正确终止
+
+                ListNode head2 = cur.next;
                 cur.next = null;
-                cur = second;
-                for (int i = 1; i < subLen && cur != null && cur.next != null; i++) {
+                cur = head2;
+                for (int j = 1; j < i && cur != null && cur.next != null; j++) {
                     cur = cur.next;
                 }
                 ListNode next = null;
                 if (cur != null) {
                     next = cur.next;
-                    // 断右段尾：不让右段串到后续未处理段
                     cur.next = null;
                 }
-                // 衔接合并段：不能 pre.next = cur（cur 还是未排序的原始段），须等 merge 后由本行接上
-                pre.next = mergeList(first, second);
+                pre.next = mergeList(head1, head2);
                 while (pre.next != null) {
                     pre = pre.next;
                 }
                 cur = next;
             }
-
         }
+
         return dummy.next;
     }
 
-    private int getLen(ListNode head) {
-        int count = 0;
-        ListNode dummy = new ListNode(0, head);
-        ListNode p = dummy.next;
-        while (p != null) {
-            count++;
-            p = p.next;
-        }
-        return count;
-    }
-
-    private ListNode mergeList(ListNode head, ListNode second) {
-        ListNode newHead = new ListNode();
-        ListNode p1 = head, p2 = second, p = newHead;
-        // 只把 p 指向较小节点、p 前移，不断任何链（断链会拆碎链表并让 p 变 null 触发 NPE）
+    private ListNode mergeList(ListNode head1, ListNode head2) {
+        ListNode dummy = new ListNode();
+        ListNode p = dummy;
+        ListNode p1 = head1, p2 = head2;
         while (p1 != null && p2 != null) {
             if (p1.val < p2.val) {
                 p.next = p1;
@@ -77,9 +62,24 @@ public class LC0148_SortList {
             }
             p = p.next;
         }
-        if (p1 != null) p.next = p1;
-        if (p2 != null) p.next = p2;
-        return newHead.next;
+        if (p1 != null) {
+            p.next = p1;
+        }
+        if (p2 != null) {
+            p.next = p2;
+        }
+        return dummy.next;
+
+    }
+
+    private int getLen(ListNode head) {
+        int count = 0;
+        ListNode p = head;
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        return count;
     }
     // ==== 提交代码结束 ====
 
@@ -117,6 +117,11 @@ public class LC0148_SortList {
         try {
             if (!checkEq(listNode(-100000, 0, 100000), s.sortList(listNode(100000, -100000, 0)), "边界6-大数混合")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界6-大数混合 异常: " + t); }
+
+        // ---- 回归测试（力扣 WA 根因：段长未翻倍，n=9 时右段跨块无序导致 merge 错）----
+        try {
+            if (!checkEq(listNode(-50, -45, -45, -41, -37, 5, 37, 44, 44), s.sortList(listNode(44, 5, -37, -45, -50, 37, -45, 44, -41)), "回归-段长不翻倍")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("回归-段长不翻倍 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
