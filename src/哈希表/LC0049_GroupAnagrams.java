@@ -2,10 +2,10 @@
 // LeetCode 49. 字母异位词分组 (Group Anagrams)
 // 难度：Medium | 分类：哈希表
 // 链接：https://leetcode.cn/problems/group-anagrams/
-// 刷题日期：2026-08-29（二刷 · 一刷 2026-08-03，一刷非一次 AC：计数编码键遗漏次数）
+// 复习日期：2026-08-31（复习 · 一刷 2026-08-03，上次复习 2026-08-29）
+// 一刷思路：字符计数 → 拼接「字母+次数」编码作 key，异位词共享同一 key → 哈希表分组
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 //
-// 思路：字符计数 → 拼接「字母+次数」编码作 key，异位词共享同一 key → 哈希表分组
-// 复杂度：时间 O(L)（L = 所有字符串总长度） 空间 O(L)
 // ============================================================
 
 import java.util.*;
@@ -16,7 +16,8 @@ public class LC0049_GroupAnagrams {
     public List<List<String>> groupAnagrams(String[] strs) {
         Map<String, List<String>> map = new HashMap<>();
         for (String str : strs) {
-            map.computeIfAbsent(getKey(str), k -> new ArrayList<>()).add(str);
+            String key = getKey(str);
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(str);
         }
         return map.values().stream().toList();
     }

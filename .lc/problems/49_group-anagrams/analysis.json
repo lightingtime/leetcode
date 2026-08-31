@@ -37,21 +37,35 @@
       "space_complexity": "O(L)",
       "optimal": true,
       "notes": "**与一刷对比**：思路未换（计数编码键 + 哈希表）；写法从 `containsKey` 双查精简为 `computeIfAbsent` 单入口（当前代码见「我的解法」），分支更少、不易漏。\n\n**一次 AC 归因**：一刷编码键漏次数（`a`/`aa` 撞同一键），二刷 key 采用「字母+次数」完整编码，从设计上规避了同类错误。\n\n**掌握度依据**：一次提交 Accepted（129/129）、全程无探讨 → 较强，间隔 ×2.5。"
-    }
-  ],
-  "submissions": [
+    },
     {
-      "date": "2026-08-29",
+      "pass": 2,
+      "date": "2026-08-31",
+      "mastery": "strong",
+      "firstTry": true,
       "verdict": "Accepted",
       "testcases": "",
       "approach": "计数编码键 + 哈希表",
       "time_complexity": "O(L)",
       "space_complexity": "O(L)",
       "optimal": true,
-      "notes": "二刷一次 AC：computeIfAbsent + 计数编码 key，写法比一刷更精简",
+      "notes": ""
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-08-31",
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "计数编码键 + 哈希表",
+      "time_complexity": "O(L)",
+      "space_complexity": "O(L)",
+      "optimal": true,
+      "notes": "",
       "mastery": "strong",
-      "pass": 1,
-      "memory_bytes": 50288000
+      "pass": 2,
+      "memory_bytes": 50228000,
+      "code": "public List<List<String>> groupAnagrams(String[] strs) {\n        Map<String, List<String>> map = new HashMap<>();\n        for (String str : strs) {\n            map.computeIfAbsent(getKey(str), k -> new ArrayList<>()).add(str);\n        }\n        return map.values().stream().toList();\n    }\n\n    private String getKey(String str) {\n        int[] count = new int[26];\n        for (char c : str.toCharArray()) {\n            count[c - 'a']++;\n        }\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < 26; i++) {\n            if (count[i] > 0) {\n                sb.append(i + 'a').append(count[i]);\n            }\n        }\n        return sb.toString();\n    }\n"
     }
   ],
   "approach_detail": "**问题本质**：把「互为字母异位词」的字符串归到同一组。异位词 = 相同字符多重集合（与排列顺序无关），所以核心是把「等价关系」转成「相同键」。\n\n**解法选择理由**：归组需要 O(1) 查找，用哈希表；键有两条路线——① 排序后的字符串（每串 O(k log k)）；② 字符计数编码（每串 O(k)）。计数编码把 26 个字母计数拼成固定格式，达到线性最优。\n\n**关键设计决策**：\n- 键 = 逐字符统计次数后拼接「字母+次数」，如 `aabbbc` → `a2b3c1`；同字符多重集合必得同键，异位词必然同组。\n- 编码**必须带次数**：只拼字母会漏次数（`aab` 与 `ab` 都变 `ab` 而撞键）——一刷正是栽在「编码键遗漏次数」。\n- 用 `computeIfAbsent(key, k -> new ArrayList<>()).add(str)` 一步完成「取组/建组」，避免 containsKey 双查。\n\n**具体 case 推演**（输入 `[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]`）：\n\n| 字符串 | 计数 | 编码 key | 分组 |\n| --- | --- | --- | --- |\n| eat | a1 e1 t1 | a1e1t1 | [eat, tea, ate] |\n| tea | a1 e1 t1 | a1e1t1 | ↑ |\n| tan | a1 n1 t1 | a1n1t1 | [tan, nat] |\n| ate | a1 e1 t1 | a1e1t1 | ↑ |\n| nat | a1 n1 t1 | a1n1t1 | ↑ |\n| bat | a1 b1 t1 | a1b1t1 | [bat] |\n\n**边界与细节**：空串 `\"\"` 计数全 0、编码为空串，仍独立成组（示例2）；全相同字符串同键同组；单字符、长度上限 100、数组上限 10^4 均只需线性时间，编码串长度 ≤ 26×4，不会膨胀。\n\n**复杂度下限论证**：输出必须包含全部字符串（每个至少写一次），时间下界 Ω(L)；空间上所有分组必须存下所有字符串，Ω(L)。计数编码实现 O(L) 时间 + O(L) 空间，已达到下限，最优。"
