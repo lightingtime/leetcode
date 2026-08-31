@@ -252,7 +252,7 @@
       "category": "数组与矩阵",
       "date": "2026-08-06",
       "firstPass": true,
-      "optimal": false,
+      "optimal": true,
       "notes": "两数组第k小：每轮比较两侧第 k/2 个候选，排除较小侧（候选+其前元素），k 减实际排除数；一次提交 Accepted（2099/2099）。核心坑：第 k 小是 1 基排名，main 里按 0 基下标换算会整体偏小 1。"
     },
     {

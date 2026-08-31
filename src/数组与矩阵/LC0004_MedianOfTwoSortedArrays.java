@@ -2,51 +2,45 @@
 // LeetCode 4. 寻找两个正序数组的中位数 (Median of Two Sorted Arrays)
 // 难度：Hard | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/median-of-two-sorted-arrays/
-// 二刷 · 一刷日期：2026-08-06（一刷思路：两数组找第 k 小，O(log(m+n))）
-// 测试用例与一刷归档保持一致
-// 刷题日期：2026-08-30
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 复习日期：2026-08-31（复习 · 一刷 2026-08-06，上次复习 2026-08-30，较弱）
+// 一刷思路：两数组找第 k 小，O(log(m+n))；一刷非一次 AC（第 k 小概念与边界都卡过）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
+import java.util.*;
 
 public class LC0004_MedianOfTwoSortedArrays {
 
     // ==== 提交代码开始 ====
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        // TODO: 在这里实现你的解法
-        int len = nums1.length + nums2.length;
-        if ((len & 1) == 1) {
-            return getKth(nums1, nums2, len / 2 + 1);
+        if (nums1.length > nums2.length) {
+            return findMedianSortedArrays(nums2, nums1);
         }
-        return (getKth(nums1, nums2, len / 2 + 1) + getKth(nums1, nums2, len / 2)) / 2.0;
-    }
+        int m = nums1.length;
+        int n = nums2.length;
+        int left = -1, right = m;
+        while (left + 1 < right) {
+            int i = left + (right - left) / 2;
+            int j = (m + n + 1) / 2 - i - 2;
 
-    private int getKth(int[] nums1, int[] nums2, int k) {
-        int start1 = 0, start2 = 0;
-        while (true) {
-            if (start1 == nums1.length) {
-                return nums2[start2 + k - 1];
-            }
-            if (start2 == nums2.length) {
-                return nums1[start1 + k - 1];
-            }
-            if (k == 1) {
-                return Math.min(nums1[start1], nums2[start2]);
-            }
-            int p1 = Math.min(start1 + k / 2 - 1, nums1.length - 1);
-            int p2 = Math.min(start2 + k / 2 - 1, nums2.length - 1);
-            if (nums1[p1] < nums2[p2]) {
-                // 排除 [start1, p1]中间所有的元素，元素个数为 p1- start1 + 1;
-                k -= (p1 - start1 + 1);
-                start1 = p1 + 1;
+            if (nums1[i] <= nums2[j + 1]) {
+                left = i;
             } else {
-                // 排除 [start2, p2]中间所有的元素，元素个数为 p2- start2 + 1;
-                k -= (p2 - start2  + 1);
-                start2 = p2 + 1;
+                right = i;
             }
         }
+        int i = left;
+        int j = (m + n + 1) / 2 - i - 2;
+
+        // nums1[i] nums2[j]
+        // nums1[i + 1] nums2[j + 1]
+        int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;
+        int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;
+        int aip1 = i + 1 < m ? nums1[i + 1] : Integer.MAX_VALUE;
+        int bjp1 = j + 1 < n ? nums2[j + 1] : Integer.MAX_VALUE;
+        int maxInMin = Math.max(ai, bj);
+        int minInMax = Math.min(aip1, bjp1);
+        return (m + n) % 2 > 0 ? maxInMin : (maxInMin + minInMax) / 2.0;
     }
     // ==== 提交代码结束 ====
 
