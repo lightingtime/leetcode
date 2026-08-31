@@ -33,19 +33,38 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "86/86",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 45420000,
+      "memory_bytes": 45692000,
       "approach": "递归上下界",
       "time_complexity": "O(n)",
-      "space_complexity": "O(树高)",
+      "space_complexity": "O(h)",
       "optimal": true,
-      "notes": "递归上下界校验：左子树收紧 upper 并继承 lower，右子树收紧 lower 并继承 upper（曾把未收紧侧重置为 ±∞ 丢失祖先约束，修正）；long 防 int 边界。10 组本地全绿，力扣 86/86 Accepted"
+      "notes": "",
+      "code": "public boolean isValidBST(TreeNode root) {\n        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n    }\n\n    private boolean isValidBSTHelper(TreeNode node, long upper, long lower) {\n        if (node == null) {\n            return true;\n        }\n        if (node.val >= upper || node.val <= lower) {\n            return false;\n        }\n        return isValidBSTHelper(node.left, node.val, lower) && isValidBSTHelper(node.right, upper, node.val);\n    }",
+      "prev_code": "public boolean isValidBST(TreeNode root) {\n        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n    }\n\n    private boolean isValidBSTHelper(TreeNode root, long upper, long lower) {\n        if (root == null) {\n            return true;\n        }\n        if (root.val >= upper || root.val <= lower) {\n            return false;\n        }\n        return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "递归上下界",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": true,
+      "notes": ""
+    }
   ]
 }
