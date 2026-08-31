@@ -37,17 +37,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-30",
+      "date": "2026-08-31",
       "verdict": "Accepted",
-      "testcases": "23/23",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 59064000,
+      "memory_bytes": 59224000,
       "approach": "HashMap+双向链表（哨兵头尾）",
       "time_complexity": "O(1)",
       "space_complexity": "O(capacity)",
       "optimal": true,
-      "code": "    static class LRUCache {\n        Map<Integer, Node> map;\n        Node head;\n        Node tail;\n        int capacity;\n\n        public LRUCache(int capacity) {\n            this.capacity = capacity;\n            map = new HashMap<>();\n            head = new Node();\n            tail = new Node();\n            head.next = tail;\n            tail.pre = head;\n        }\n\n        public int get(int key) {\n            if (!map.containsKey(key)) {\n                return -1;\n            }\n            Node node = map.get(key);\n            unLinkNode(node);\n            move2Head(node);\n            return node.val;\n        }\n\n        public void put(int key, int value) {\n            Node node;\n            if (map.containsKey(key)) {\n                node = map.get(key);\n                node.val = value;\n                unLinkNode(node);\n            } else {\n                node = new Node(key, value);\n                map.put(key, node);\n            }\n            move2Head(node);\n            if (map.size() > capacity) {\n                Node last = tail.pre;\n                unLinkNode(last);\n                map.remove(last.key);\n            }\n        }\n\n        private void unLinkNode(Node node) {\n            node.pre.next = node.next;\n            node.next.pre = node.pre;\n        }\n\n        private void move2Head(Node node) {\n            node.next = head.next;\n            node.pre = head;\n            head.next.pre = node;\n            head.next = node;\n        }\n\n        static class Node {\n            Node next;\n            Node pre;\n            int val;\n            int key;\n\n            Node() {}\n\n            Node(int key, int val) {\n                this.key = key;\n                this.val = val;\n            }\n        }\n    }\n",
-      "notes": "同一写法合并为一条：一刷 2026-08-07 首提 Accepted（23/23），二刷 2026-08-30 重写后按「变量更清晰/结构更完整/更整洁/更少 bug」标准保留优化版（capacity 命名、Node 置为内部类、去除 value==null 冗余防御与 TODO 残留）；get/put 均 O(1)。"
+      "code": "static class LRUCache {\n        Map<Integer, Node> map;\n        int capacity;\n        Node head;\n        Node tail;\n        int size;\n        public LRUCache(int capacity) {\n            this.map = new HashMap<>();\n            this.capacity = capacity;\n            this.size = 0;\n            head = new Node();\n            tail = new Node();\n            head.next = tail;\n            tail.pre = head;\n        }\n        public int get(int key) {\n            if (!map.containsKey(key)) {\n                return -1;\n            }\n            Node node = map.get(key);\n            unLinkNode(node);\n            move2Head(node);\n            return node.val;\n        }\n\n        private void move2Head(Node node) {\n            node.next = head.next;\n            node.pre = head;\n            head.next.pre = node;\n            head.next = node;\n        }\n\n        private void unLinkNode(Node node) {\n            node.next.pre = node.pre;\n            node.pre.next = node.next;\n            node.next = null;\n            node.pre = null;\n        }\n\n        public void put(int key, int value) {\n            Node node;\n            if (map.containsKey(key)) {\n                node = map.get(key);\n                node.val = value;\n                unLinkNode(node);\n            } else {\n                node = new Node(value, key);\n                map.put(key, node);\n                size++;\n            }\n            move2Head(node);\n            if (size > capacity) {\n                Node pre = map.get(tail.pre.key);\n                unLinkNode(pre);\n                map.remove(pre.key);\n                size--;\n                pre = null;\n            }\n        }\n    }\n\n    static class Node {\n        Node next;\n        Node pre;\n        int val;\n        int key;\n\n        public Node() {\n        }\n\n        public Node(int val, int key) {\n            this.val = val;\n            this.key = key;\n        }\n    }",
+      "notes": "",
+      "prev_code": "    static class LRUCache {\n        Map<Integer, Node> map;\n        Node head;\n        Node tail;\n        int capacity;\n\n        public LRUCache(int capacity) {\n            this.capacity = capacity;\n            map = new HashMap<>();\n            head = new Node();\n            tail = new Node();\n            head.next = tail;\n            tail.pre = head;\n        }\n\n        public int get(int key) {\n            if (!map.containsKey(key)) {\n                return -1;\n            }\n            Node node = map.get(key);\n            unLinkNode(node);\n            move2Head(node);\n            return node.val;\n        }\n\n        public void put(int key, int value) {\n            Node node;\n            if (map.containsKey(key)) {\n                node = map.get(key);\n                node.val = value;\n                unLinkNode(node);\n            } else {\n                node = new Node(key, value);\n                map.put(key, node);\n            }\n            move2Head(node);\n            if (map.size() > capacity) {\n                Node last = tail.pre;\n                unLinkNode(last);\n                map.remove(last.key);\n            }\n        }\n\n        private void unLinkNode(Node node) {\n            node.pre.next = node.next;\n            node.next.pre = node.pre;\n        }\n\n        private void move2Head(Node node) {\n            node.next = head.next;\n            node.pre = head;\n            head.next.pre = node;\n            head.next = node;\n        }\n\n        static class Node {\n            Node next;\n            Node pre;\n            int val;\n            int key;\n\n            Node() {}\n\n            Node(int key, int val) {\n                this.key = key;\n                this.val = val;\n            }\n        }\n    }\n",
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "hints": [
@@ -66,6 +69,19 @@
       "space_complexity": "O(capacity)",
       "optimal": true,
       "notes": "与一刷对比：同一思路（HashMap O(1) 查找 + 双向链表 O(1) 增删 + 哨兵头尾），节点类一刷叫 DoubleLinkNode、这次叫 Node；复杂度一致 O(1)/O(capacity)，这次独立写出未参考一刷。\n\n为什么能想起来：LRU 是高频设计题，'哈希+双向链表'组合是固定套路（哈希管查找、链表管最近使用顺序），get/put 的'访问即移到头部'语义清晰，比推导型题目好回忆。\n\n掌握度：strong——本地一次通过、全程无探讨。力扣首提 Compile Error 是 submit.js 设计题解包 bug（Node 与 LRUCache 平级 static class 被误吞导致顶层 static），修复管线后代码原样重提即 AC，非用户写法问题；已把该修复写进 lc-submit。\n\n下一步提醒：设计题把辅助类（如 Node）放在主类内更稳（本地与提交都无歧义）；可顺带串练 460. LFU 缓存（双哈希+频率链表）。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-08-31",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "HashMap+双向链表（哨兵头尾）",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(capacity)",
+      "optimal": true,
+      "notes": ""
     }
   ]
 }

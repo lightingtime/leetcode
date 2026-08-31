@@ -2,12 +2,9 @@
 // LeetCode 146. LRU 缓存 (LRU Cache)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/lru-cache/
-// 二刷 · 一刷日期：2026-08-06（一刷思路：HashMap + 双向链表，get/put O(1)）
-// 测试用例与一刷归档保持一致
-// 刷题日期：2026-08-30
-//
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 复习日期：2026-08-31（复习 · 一刷 2026-08-07，上次复习 2026-08-30，较弱）
+// 一刷思路：HashMap + 双向链表（哨兵头尾），get/put O(1)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -18,19 +15,19 @@ public class LC0146_LruCache {
     // ==== 提交代码开始 ====
     static class LRUCache {
         Map<Integer, Node> map;
+        int capacity;
         Node head;
         Node tail;
-        int capacity;
-
+        int size;
         public LRUCache(int capacity) {
+            this.map = new HashMap<>();
             this.capacity = capacity;
-            map = new HashMap<>();
+            this.size = 0;
             head = new Node();
             tail = new Node();
             head.next = tail;
             tail.pre = head;
         }
-
         public int get(int key) {
             if (!map.containsKey(key)) {
                 return -1;
@@ -41,29 +38,6 @@ public class LC0146_LruCache {
             return node.val;
         }
 
-        public void put(int key, int value) {
-            Node node;
-            if (map.containsKey(key)) {
-                node = map.get(key);
-                node.val = value;
-                unLinkNode(node);
-            } else {
-                node = new Node(key, value);
-                map.put(key, node);
-            }
-            move2Head(node);
-            if (map.size() > capacity) {
-                Node last = tail.pre;
-                unLinkNode(last);
-                map.remove(last.key);
-            }
-        }
-
-        private void unLinkNode(Node node) {
-            node.pre.next = node.next;
-            node.next.pre = node.pre;
-        }
-
         private void move2Head(Node node) {
             node.next = head.next;
             node.pre = head;
@@ -71,21 +45,50 @@ public class LC0146_LruCache {
             head.next = node;
         }
 
-        static class Node {
-            Node next;
-            Node pre;
-            int val;
-            int key;
+        private void unLinkNode(Node node) {
+            node.next.pre = node.pre;
+            node.pre.next = node.next;
+            node.next = null;
+            node.pre = null;
+        }
 
-            Node() {}
-
-            Node(int key, int val) {
-                this.key = key;
-                this.val = val;
+        public void put(int key, int value) {
+            Node node;
+            if (map.containsKey(key)) {
+                node = map.get(key);
+                node.val = value;
+                unLinkNode(node);
+            } else {
+                node = new Node(value, key);
+                map.put(key, node);
+                size++;
+            }
+            move2Head(node);
+            if (size > capacity) {
+                Node pre = map.get(tail.pre.key);
+                unLinkNode(pre);
+                map.remove(pre.key);
+                size--;
+                pre = null;
             }
         }
     }
-    // ==== 提交代码结束 ====    // ==== 提交代码结束 ====
+
+    static class Node {
+        Node next;
+        Node pre;
+        int val;
+        int key;
+
+        public Node() {
+        }
+
+        public Node(int val, int key) {
+            this.val = val;
+            this.key = key;
+        }
+    }
+    // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
         // 设计题：按题目示例手动构造调用序列
