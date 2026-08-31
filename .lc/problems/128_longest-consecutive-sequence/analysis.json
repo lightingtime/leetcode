@@ -15,7 +15,6 @@
   "time_complexity": "O(n)",
   "space_complexity": "O(n)",
   "notes": "最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环",
@@ -28,8 +27,24 @@
     {
       "habit": "存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合",
       "count": 1
+    },
+    {
+      "habit": "最长连续序列起点判断错位：用「已处理过的 map」判断 num-1 是否存在，而非「全量集合」——未处理的左邻居会漏判起点（中间元素被 continue 丢弃），且 while 跳变依赖的 map.get(x+1) 只对起点存过、不可靠，导致序列只统计一小段",
+      "count": 1
+    },
+    {
+      "habit": "区间合并跳跃依赖不可靠：while 里 map.get(x+1) 依赖遍历顺序——未处理的 x+1 不在 map 中直接 NPE，且 map 对中间元素存 1、对起点存长度，语义不一；正确区间合并应只维护区间两端点的长度并跳过已访问元素",
+      "count": 1
+    },
+    {
+      "habit": "最长连续序列遍历了原数组 nums 而非去重后的 set：重复的起点值（如大量 0）每个都触发一次完整 while 扩展，O(n²) 导致 TLE；必须遍历 set 保证每个序列只从起点统计一次",
+      "count": 1
     }
   ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ],
+  "code_notes": [],
   "patterns": [
     {
       "title": "记忆化/哈希表：先定死 map 的 value 语义，value 必须是最终要比较的量",
@@ -48,19 +63,35 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-08",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "85/85",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 96116000,
+      "memory_bytes": 96308000,
       "approach": "HashSet + 从段起点向上延展",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "最长连续序列：HashSet 去重 + 只从段起点向上延展计数，每段只数一次 O(n)，修复 map 值语义错位与乱序依赖后 Accepted（85/85）"
+      "notes": "",
+      "code": "public int longestConsecutive(int[] nums) {\n        int max = 0;\n        Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());\n        for (int num : set) {\n            int x = num;\n            if (set.contains(x - 1)) {\n                continue;\n            }\n            while (set.contains(x + 1)) {\n                x++;\n            }\n            max = Math.max(max, x - num + 1);\n        }\n        return max;\n    }",
+      "prev_code": "public int longestConsecutive(int[] nums) {\n        int max = 0;\n        Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());\n        for (Integer num : set) {\n            int x = num;\n            if (set.contains(x - 1)) {\n                continue;\n            }\n            while (set.contains(x + 1)) {\n                x++;\n            }\n            max = Math.max(max, x - num + 1);\n        }\n        return max;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "HashSet + 从段起点向上延展",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": ""
+    }
   ]
 }

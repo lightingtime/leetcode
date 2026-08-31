@@ -3116,6 +3116,39 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "最长连续序列起点判断错位：用「已处理过的 map」判断 num-1 是否存在，而非「全量集合」——未处理的左邻居会漏判起点（中间元素被 continue 丢弃），且 while 跳变依赖的 map.get(x+1) 只对起点存过、不可靠，导致序列只统计一小段",
+      "count": 1,
+      "examples": [
+        "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "区间合并跳跃依赖不可靠：while 里 map.get(x+1) 依赖遍历顺序——未处理的 x+1 不在 map 中直接 NPE，且 map 对中间元素存 1、对起点存长度，语义不一；正确区间合并应只维护区间两端点的长度并跳过已访问元素",
+      "count": 1,
+      "examples": [
+        "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "最长连续序列遍历了原数组 nums 而非去重后的 set：重复的起点值（如大量 0）每个都触发一次完整 while 扩展，O(n²) 导致 TLE；必须遍历 set 保证每个序列只从起点统计一次",
+      "count": 1,
+      "examples": [
+        "longest-consecutive-sequence"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-09-01"
     }
   ],
   "category_hints": {

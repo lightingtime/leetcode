@@ -2,8 +2,9 @@
 // LeetCode 128. 最长连续序列 (Longest Consecutive Sequence)
 // 难度：Medium | 分类：图与并查集
 // 链接：https://leetcode.cn/problems/longest-consecutive-sequence/
-// 刷题日期：2026-08-08
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-08）
+// 一刷思路：哈希集合 + 只从「序列起点」开始扩展（num-1 不在集合才作为起点），O(n)/O(n)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -15,7 +16,7 @@ public class LC0128_LongestConsecutiveSequence {
     public int longestConsecutive(int[] nums) {
         int max = 0;
         Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());
-        for (Integer num : set) {
+        for (int num : set) {
             int x = num;
             if (set.contains(x - 1)) {
                 continue;
@@ -69,6 +70,14 @@ public class LC0128_LongestConsecutiveSequence {
         try {
             if (!TestUtil.checkEq(1, s.longestConsecutive(new int[]{5, 3, 1}), "边界8-断开序列")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界8 异常: " + t); }
+
+        // ---- 回归测试（力扣 TLE 根因：遍历 nums 含大量重复起点 0，每个 0 都完整扩展一次 → O(n²)；须遍历去重后的 set）----
+        try {
+            int[] big = new int[10001];
+            for (int i = 0; i < 5000; i++) big[i] = 0;          // 5000 个重复起点
+            for (int i = 0; i < 5001; i++) big[5000 + i] = i + 1; // 1..5001 连续
+            if (!TestUtil.checkEq(5002, s.longestConsecutive(big), "回归-TLE重复起点")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("回归-TLE重复起点 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

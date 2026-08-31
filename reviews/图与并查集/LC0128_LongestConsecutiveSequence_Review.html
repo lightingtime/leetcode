@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>128. 最长连续序列 (Longest Consecutive Sequence)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-consecutive-sequence/" rel="noopener">https://leetcode.cn/problems/longest-consecutive-sequence/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：并查集、数组、哈希表</p><h2>题目描述</h2><p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p><p>请你设计并实现时间复杂度为 O(n) 的算法解决此问题。</p><p>示例 1：</p><p>输入：nums = [100,4,200,1,3,2]</p><p>输出：4</p><p>解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p><p>示例 2：</p><p>输入：nums = [0,3,7,2,5,8,4,6,0,1]</p><p>输出：9</p><p>示例 3：</p><p>输入：nums = [1,0,1,2]</p><p>输出：3</p><p>提示：</p><p>0 5</p><p>-109 9</p><h2>示例</h2><ol><li>输入：nums = [100,4,200,1,3,2]</li></ol><p>输出：4</p><p>解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p><ol><li>输入：nums = [0,3,7,2,5,8,4,6,0,1]</li></ol><p>输出：9</p><ol><li>输入：nums = [1,0,1,2]</li></ol><p>输出：3</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 多次提交 ｜ HashSet + 从段起点向上延展 ｜ O(n) · O(n)</p>
+      
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,33 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>HashSet + 从段起点向上延展</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashSet + 从段起点向上延展</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.7 MB</span><span class="chip">用例 85/85</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0128_LongestConsecutiveSequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.8 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-t">Arrays</span>.<span class="tk-f">stream</span>(nums).<span class="tk-f">boxed</span>().<span class="tk-f">collect</span>(<span class="tk-t">Collectors</span>.<span class="tk-f">toSet</span>());
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : set) {
+            <span class="tk-k">int</span> x = num;
+            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(x - <span class="tk-n">1</span>)) {
+                <span class="tk-k">continue</span>;
+            }
+            <span class="tk-k">while</span> (set.<span class="tk-f">contains</span>(x + <span class="tk-n">1</span>)) {
+                x++;
+            }
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
+        }
+        <span class="tk-k">return</span> max;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-t">Arrays</span>.<span class="tk-f">stream</span>(nums).<span class="tk-f">boxed</span>().<span class="tk-f">collect</span>(<span class="tk-t">Collectors</span>.<span class="tk-f">toSet</span>());
         <span class="tk-k">for</span> (<span class="tk-t">Integer</span> num : set) {
@@ -51,10 +77,11 @@
             max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
         }
         <span class="tk-k">return</span> max;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>85/85 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>最长连续序列起点判断错位：用「已处理过的 map」判断 num-1 是否存在，而非「全量集合」——未处理的左邻居会漏判起点（中间元素被 continue 丢弃），且 while 跳变依赖的 map.get(x+1) 只对起点存过、不可靠，导致序列只统计一小段</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 踩坑<span class="tl-badge bug">已记录</span></span><p>区间合并跳跃依赖不可靠：while 里 map.get(x+1) 依赖遍历顺序——未处理的 x+1 不在 map 中直接 NPE，且 map 对中间元素存 1、对起点存长度，语义不一；正确区间合并应只维护区间两端点的长度并跳过已访问元素</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 踩坑<span class="tl-badge bug">已记录</span></span><p>最长连续序列遍历了原数组 nums 而非去重后的 set：重复的起点值（如大量 0）每个都触发一次完整 while 扩展，O(n²) 导致 TLE；必须遍历 set 保证每个序列只从起点统计一次</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">07 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">08 · 提交<span class="tl-badge ok">Accepted</span></span><p>85/85 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>记忆化/哈希表：先定死 map 的 value 语义，value 必须是最终要比较的量</h3><p>用 map 做记忆化或统计前，先明确 key→value 存什么：最终要比较的（长度/最大值）就必须直接存长度本身。把中间定位值（前驱位置、起点偏移）当长度存进 map 再参与 max 比较，结果是无意义数值；跳链时用存储值当步长还可能振荡死循环。</p></div><div class="card md"><h3>链式记忆化：存在性判断基于全集，不能基于已处理集合</h3><p>算 f(x)=1+f(x-1) 时，x-1『在不在』必须问全集（所有输入先去重放入），不能问『处理到当前为止见过没有』——否则输入乱序时前驱后到，x 被过早判定为孤立点，缓存值过期。做法：先全部放入（标记未算），再按需递归/循环算；或 HashSet 存全集 + map 只做记忆化。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -68,7 +95,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 图与并查集</h3><div class="quote">连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。</div>
-      <h3>错误习惯复盘</h3><p><b>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</b>（累计 1 次）</p><p><b>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</b>（累计 1 次）</p><p><b>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</b>（累计 1 次）</p><p><b>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</b>（累计 1 次）</p><p><b>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</b>（累计 1 次）</p><p><b>最长连续序列起点判断错位：用「已处理过的 map」判断 num-1 是否存在，而非「全量集合」——未处理的左邻居会漏判起点（中间元素被 continue 丢弃），且 while 跳变依赖的 map.get(x+1) 只对起点存过、不可靠，导致序列只统计一小段</b>（累计 1 次）</p><p><b>区间合并跳跃依赖不可靠：while 里 map.get(x+1) 依赖遍历顺序——未处理的 x+1 不在 map 中直接 NPE，且 map 对中间元素存 1、对起点存长度，语义不一；正确区间合并应只维护区间两端点的长度并跳过已访问元素</b>（累计 1 次）</p><p><b>最长连续序列遍历了原数组 nums 而非去重后的 set：重复的起点值（如大量 0）每个都触发一次完整 while 扩展，O(n²) 导致 TLE；必须遍历 set 保证每个序列只从起点统计一次</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 42 · longest-consecutive-sequence</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
