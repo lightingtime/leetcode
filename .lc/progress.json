@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-31",
+  "updated": "2026-09-01",
   "current_seq": 170,
   "done": [
     {
@@ -3083,6 +3083,28 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-08-31"
+    },
+    {
+      "habit": "快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）",
+      "count": 1,
+      "examples": [
+        "top-k-frequent-elements"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k<i 左、k>i 右；写成 k<=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l>r 非法区间无限递归（栈溢出）或越界",
+      "count": 1,
+      "examples": [
+        "top-k-frequent-elements"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-01"
     }
   ],
   "category_hints": {

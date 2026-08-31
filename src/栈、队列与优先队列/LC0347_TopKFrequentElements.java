@@ -2,7 +2,9 @@
 // LeetCode 347. 前 K 个高频元素 (Top K Frequent Elements)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/top-k-frequent-elements/
-// 刷题日期：2026-08-07
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-07）
+// 一刷思路：哈希计数 + 快速选择，O(n) 平均；code-notes：复习可试桶排序 O(n) 线性做法
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -16,49 +18,53 @@ public class LC0347_TopKFrequentElements {
             map.merge(num, 1, Integer::sum);
         }
         List<Node> list = new ArrayList<>();
-        map.forEach((value, freq) -> {
-            list.add(new Node(value, freq));
-        });
-        quickSelect(list, 0, list.size() - 1, list.size() - k);
-        int[] ans = new int[k];
-        for (int i = 0; i < k; i++) {
-            ans[i] = list.get(list.size() - k + i).value;
+        for (Map.Entry<Integer, Integer> en : map.entrySet()) {
+            list.add(new Node(en.getKey(), en.getValue()));
         }
-        return ans;
+        quickSort(list, 0, list.size() - 1, list.size() - k);
+        return list.subList(list.size() - k, list.size()).stream().map(Node::getNum).mapToInt(Integer::intValue).toArray();
     }
 
-    private void quickSelect(List<Node> list, int l, int r, int k) {
+    private void quickSort(List<Node> list, int l, int r, int k) {
         if (l == r) {
             return;
         }
-        int x = list.get(l).freq, i = l - 1, j = r + 1;
-        while (i < j) {
-            do {
+        int p = list.get(r).count;
+        int i = l, j = l;
+        while (j < r) {
+            if (list.get(j).count < p) {
+                swap(list, i, j);
                 i++;
-            } while (x > list.get(i).freq);
-            do {
-                j--;
-            } while (x < list.get(j).freq);
-            if (i < j) {
-                Node temp = list.get(i);
-                list.set(i, list.get(j));
-                list.set(j, temp);
             }
+            j++;
         }
-        if (k <= j) {
-            quickSelect(list, l, j, k);
+        swap(list, i, r);
+        if (k == i) {
+            return;
+        } else if (k < i) {
+            quickSort(list, l, i - 1, k);
         } else {
-            quickSelect(list, j + 1, r, k);
+            quickSort(list, i + 1, r, k);
         }
     }
 
-    class Node {
-        Integer value;
-        Integer freq;
+    private void swap(List<Node> list, int i, int j) {
+        Node node = list.get(i);
+        list.set(i, list.get(j));
+        list.set(j, node);
+    }
 
-        public Node(Integer value, Integer freq) {
-            this.value = value;
-            this.freq = freq;
+    static class Node {
+        int num;
+        int count;
+
+        public Node(int num, int count) {
+            this.num = num;
+            this.count = count;
+        }
+
+        public int getNum() {
+            return num;
         }
     }
     // ==== 提交代码结束 ====
@@ -69,34 +75,69 @@ public class LC0347_TopKFrequentElements {
 
         // ---- 示例测试（来自题目，答案顺序任意，用无序比较）----
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{1, 2}, s.topKFrequent(new int[]{1, 1, 1, 2, 2, 3}, 2), "示例1")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{1, 2}, s.topKFrequent(new int[]{1, 1, 1, 2, 2, 3}, 2), "示例1"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例1 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEqUnordered(new int[]{1}, s.topKFrequent(new int[]{1}, 1), "示例2")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例2 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{1, 2}, s.topKFrequent(new int[]{1, 2, 1, 2, 1, 2, 3, 1, 3, 2}, 2), "示例3")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{1, 2}, s.topKFrequent(new int[]{1, 2, 1, 2, 1, 2, 3, 1, 3, 2}, 2), "示例3"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例3 异常: " + t);
+        }
 
         // ---- 边界测试 ----
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{7}, s.topKFrequent(new int[]{7, 7, 7, 7}, 1), "边界1-全相同")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{7}, s.topKFrequent(new int[]{7, 7, 7, 7}, 1), "边界1-全相同"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界1 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{1, 2, 3}, s.topKFrequent(new int[]{1, 2, 3, 1, 2, 1}, 3), "边界2-k等于不同元素个数")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{1, 2, 3}, s.topKFrequent(new int[]{1, 2, 3, 1, 2, 1}, 3), "边界2-k等于不同元素个数"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界2 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{-1, -3}, s.topKFrequent(new int[]{-1, -1, -2, -3, -3}, 2), "边界3-负数")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界3 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{-1, -3}, s.topKFrequent(new int[]{-1, -1, -2, -3, -3}, 2), "边界3-负数"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界3 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{-10000, 10000}, s.topKFrequent(new int[]{-10000, 10000, -10000, 10000, 0}, 2), "边界4-极值范围")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界4 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{-10000, 10000}, s.topKFrequent(new int[]{-10000, 10000, -10000, 10000, 0}, 2), "边界4-极值范围"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界4 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{3}, s.topKFrequent(new int[]{1, 2, 2, 3, 3, 3}, 1), "边界5-单最高频")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{3}, s.topKFrequent(new int[]{1, 2, 2, 3, 3, 3}, 1), "边界5-单最高频"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界5 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(new int[]{4, 1}, s.topKFrequent(new int[]{4, 4, 1, 1, 1, 2, 2, 3, 4, 4, 4}, 2), "边界6-长数组频率交错")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(new int[]{4, 1}, s.topKFrequent(new int[]{4, 4, 1, 1, 1, 2, 2, 3, 4, 4, 4}, 2), "边界6-长数组频率交错"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界6 异常: " + t);
+        }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

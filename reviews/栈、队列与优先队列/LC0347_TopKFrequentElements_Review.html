@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>347. 前 K 个高频元素 (Top K Frequent Elements)</h1><p>&gt; <a href="https://leetcode.cn/problems/top-k-frequent-elements/" rel="noopener">https://leetcode.cn/problems/top-k-frequent-elements/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：数组、哈希表、分治、桶排序、计数、快速选择、排序、堆（优先队列）</p><h2>题目描述</h2><p>给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。</p><p>示例 1：</p><p>输入：nums = [1,1,1,2,2,3], k = 2</p><p>输出：[1,2]</p><p>示例 2：</p><p>输入：nums = [1], k = 1</p><p>输出：[1]</p><p>示例 3：</p><p>输入：nums = [1,2,1,2,1,2,3,1,3,2], k = 2</p><p>输出：[1,2]</p><p>提示：</p><p>1 5</p><p>-104 4</p><p>k 的取值范围是 [1, 数组中不相同的元素的个数]</p><p>题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的</p><p>进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 多次提交 ｜ 哈希表+快速选择 ｜ O(n) 平均 · O(n)</p>
+      
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,73 @@
         <li><span>复杂度</span><b>O(n) 平均 · O(m)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>哈希表+快速选择</b></li>
+        <li><span>复杂度</span><b>O(n) 平均 · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 哈希表+快速选择</h3>
-    <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(m)</span><span class="chip">内存 ≈ 45.8 MB</span><span class="chip">用例 25/25</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0347_TopKFrequentElements.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+    <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.9 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0347_TopKFrequentElements.java · 哈希表+快速选择</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+            map.<span class="tk-f">merge</span>(num, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+        }
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Node</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-t">Map</span>.<span class="tk-t">Entry</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; en : map.<span class="tk-f">entrySet</span>()) {
+            list.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">Node</span>(en.<span class="tk-f">getKey</span>(), en.<span class="tk-f">getValue</span>()));
+        }
+        <span class="tk-f">quickSort</span>(list, <span class="tk-n">0</span>, list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>, list.<span class="tk-f">size</span>() - k);
+        <span class="tk-k">return</span> list.<span class="tk-f">subList</span>(list.<span class="tk-f">size</span>() - k, list.<span class="tk-f">size</span>()).<span class="tk-f">stream</span>().<span class="tk-f">map</span>(<span class="tk-t">Node</span>::getNum).<span class="tk-f">mapToInt</span>(<span class="tk-t">Integer</span>::intValue).<span class="tk-f">toArray</span>();
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">quickSort</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">Node</span>&gt; list, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span>;
+        }
+        <span class="tk-k">int</span> p = list.<span class="tk-f">get</span>(r).count;
+        <span class="tk-k">int</span> i = l, j = l;
+        <span class="tk-k">while</span> (j &lt; r) {
+            <span class="tk-k">if</span> (list.<span class="tk-f">get</span>(j).count &lt; p) {
+                <span class="tk-f">swap</span>(list, i, j);
+                i++;
+            }
+            j++;
+        }
+        <span class="tk-f">swap</span>(list, i, r);
+        <span class="tk-k">if</span> (k == i) {
+            <span class="tk-k">return</span>;
+        } <span class="tk-k">else</span> <span class="tk-k">if</span> (k &lt; i) {
+            <span class="tk-f">quickSort</span>(list, l, i - <span class="tk-n">1</span>, k);
+        } <span class="tk-k">else</span> {
+            <span class="tk-f">quickSort</span>(list, i + <span class="tk-n">1</span>, r, k);
+        }
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">Node</span>&gt; list, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-t">Node</span> node = list.<span class="tk-f">get</span>(i);
+        list.<span class="tk-f">set</span>(i, list.<span class="tk-f">get</span>(j));
+        list.<span class="tk-f">set</span>(j, node);
+    }
+
+    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+        <span class="tk-k">int</span> num;
+        <span class="tk-k">int</span> count;
+
+        <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-k">int</span> num, <span class="tk-k">int</span> count) {
+            <span class="tk-k">this</span>.num = num;
+            <span class="tk-k">this</span>.count = count;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">getNum</span>() {
+            <span class="tk-k">return</span> num;
+        }
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0347_TopKFrequentElements.java · 哈希表+快速选择 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
             map.<span class="tk-f">merge</span>(num, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
@@ -87,10 +153,11 @@
             <span class="tk-k">this</span>.value = value;
             <span class="tk-k">this</span>.freq = freq;
         }
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -104,7 +171,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</b>（累计 1 次）</p><p><b>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</b>（累计 1 次）</p>
       <h3>复习提醒</h3><div class="quote">★ 复习提醒：LC347 除已实现的哈希表+快选外，可试桶排序/计数线性做法（O(n)，题解链接 https://leetcode.cn/problems/top-k-frequent-elements/solutions/3655287/tong-pai-xu-on-xian-xing-zuo-fa-pythonja-oqq2/），复习时重写一次</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 33 · top-k-frequent-elements</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
