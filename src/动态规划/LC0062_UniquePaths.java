@@ -1,9 +1,10 @@
 // ============================================================
 // LeetCode 62. 不同路径 (Unique Paths)
-// 难度：Medium | 分类：动态规划
+// 难度：Medium | 分类：动态规划（子类型：线性/网格 DP）
 // 链接：https://leetcode.cn/problems/unique-paths/
-// 刷题日期：2026-08-09
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-09）
+// 一刷思路：一维滚动 DP（dp[j] = dp[j]（上） + dp[j-1]（左）），O(m*n)/O(n)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -13,10 +14,10 @@ public class LC0062_UniquePaths {
     // ==== 提交代码开始 ====
     public int uniquePaths(int m, int n) {
         int[] dp = new int[n];
-        dp[0] = 1;
-        for (int i = 0; i < m; i++) {
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
-                dp[j] = dp[j - 1] + dp[j];
+                dp[j] += dp[j - 1];
             }
         }
         return dp[n - 1];
@@ -53,7 +54,7 @@ public class LC0062_UniquePaths {
             System.out.println("示例4 异常: " + t);
         }
 
-        // ---- 边界测试（自己补充）----
+        // ---- 边界测试（与一刷归档保持一致）----
         try {
             if (!TestUtil.checkEq(1, s.uniquePaths(1, 1), "边界-1x1")) failures++;
         } catch (Throwable t) {

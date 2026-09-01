@@ -34,19 +34,38 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-09",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "64/64",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 42628000,
+      "memory_bytes": 42568000,
       "approach": "一维滚动 DP",
       "time_complexity": "O(m*n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "一维滚动 DP；初始化与循环统一为 dp[0]=1 + 双层循环"
+      "notes": "**① 与上一轮对比**：一刷与本次同为「一维滚动 DP」O(mn)/O(n)，本次一次写对；未用二维表（O(mn) 空间）。\n\n**② 这次为什么想起来**：网格 DP 套路——dp[j] 更新前是上一行值（上方），dp[j-1] 已是本行新值（左方），`dp[j] += dp[j-1]` 恰好等于 上+左；第一行/第一列全 1 由 `Arrays.fill(dp,1)` 初始化。一刷非一次 AC 的错误点这次规避了。\n\n**③ 掌握度判定**：一次提交 Accepted（64/64）且全程无探讨 → strong。\n\n**④ 下一步提醒**：LC63 带障碍不同路径（障碍处 dp=0）、LC64 最小路径和（同滚动骨架）可顺带复习；组合数解法 C(m+n-2, m-1) 为 O(min(m,n))，但结果需 long。",
+      "code": "    public int uniquePaths(int m, int n) {\n        int[] dp = new int[n];\n        Arrays.fill(dp, 1);\n        for (int i = 1; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                dp[j] += dp[j - 1];\n            }\n        }\n        return dp[n - 1];\n    }",
+      "prev_code": "public int uniquePaths(int m, int n) {\n        int[] dp = new int[n];\n        dp[0] = 1;\n        for (int i = 0; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                dp[j] = dp[j - 1] + dp[j];\n            }\n        }\n        return dp[n - 1];\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷与本次同为「一维滚动 DP」O(mn)/O(n)，本次一次写对；未用二维表（O(mn) 空间）。\n\n**② 这次为什么想起来**：网格 DP 套路——dp[j] 更新前是上一行值（上方），dp[j-1] 已是本行新值（左方），`dp[j] += dp[j-1]` 恰好等于 上+左；第一行/第一列全 1 由 `Arrays.fill(dp,1)` 初始化。一刷非一次 AC 的错误点这次规避了。\n\n**③ 掌握度判定**：一次提交 Accepted（64/64）且全程无探讨 → strong。\n\n**④ 下一步提醒**：LC63 带障碍不同路径（障碍处 dp=0）、LC64 最小路径和（同滚动骨架）可顺带复习；组合数解法 C(m+n-2, m-1) 为 O(min(m,n))，但结果需 long。"
+    }
   ]
 }
