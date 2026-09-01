@@ -47,20 +47,38 @@
       "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        dfs(root, targetSum);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        countFrom(root, 0, targetSum);\n        dfs(root.left, targetSum);\n        dfs(root.right, targetSum);\n\n    }\n\n    private void countFrom(TreeNode root, long cur, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        cur += root.val;\n        if (cur == targetSum) {\n            ans++;\n        }\n        countFrom(root.left, cur, targetSum);\n        countFrom(root.right, cur, targetSum);\n    }"
     },
     {
-      "date": "2026-08-18",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "130/130",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 46920000,
+      "memory_bytes": 46784000,
       "approach": "前缀和+回溯哈希",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "前缀和+回溯哈希：DFS 维护根到当前节点前缀和，map 登记已见前缀次数；先查 sum-target 累加答案再登记当前前缀，子树返回后撤销当前前缀防兄弟分支串扰；O(n) 时间，本题最优。",
-      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, targetSum, 0, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        Integer cnt = map.merge(sum, -1, Integer::sum);\n        if (cnt == 0) {\n            map.remove(sum);\n        }\n    }"
+      "notes": "**① 与上一轮对比**：一刷与本次同为「前缀和+回溯哈希」O(n)/O(n)；本次实现思路一次写对（long 防溢出、哨兵 0、回溯撤销），唯一错误是漏改占位 return 0（应 return ans），经分析后修正。\n\n**② 这次为什么想起来/没想起来**：核心机制这次彻底想通——map 存「当前路径上前缀和出现次数」；get 在 put 前做（防 target=0 时自匹配空路径）；负数导致同路径前缀和重复所以必须计数而非布尔；「sum 是局部变量不用回溯、map 是共享状态必须撤销」分清。一刷非一次 AC 的点（回溯撤销/防溢出）这次规避。\n\n**③ 掌握度判定**：探讨过（前缀和语义多个概念问答）+ 提交前修过一次返回占位 → weak；提交一次 Accepted。\n\n**④ 下一步提醒**：LC560 和为 K 的子数组（前缀和+哈希计数同款模板）可顺带复习；双重 DFS 版 O(n²) 在 n≤1000 可行但非最优。",
+      "code": "    int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        ans = 0;\n        dfs(root, targetSum, 0L, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        // 从根节点到当前节点的和为sum，如果子孙节点的和为 sum’ = sum + targetSum\n        // 当前节点就变成了一个可以的起始节点，即当前节点到 sum' 的节点之前的路径和为targetSum，ans++\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        // 离开当前节点了，出现sum这个路径要减去1，不然会让兄弟节点看到这条路径\n        map.merge(sum, -1, Integer::sum);\n    }",
+      "prev_code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, targetSum, 0, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        Integer cnt = map.merge(sum, -1, Integer::sum);\n        if (cnt == 0) {\n            map.remove(sum);\n        }\n    }",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "前缀和+回溯哈希",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷与本次同为「前缀和+回溯哈希」O(n)/O(n)；本次实现思路一次写对（long 防溢出、哨兵 0、回溯撤销），唯一错误是漏改占位 return 0（应 return ans），经分析后修正。\n\n**② 这次为什么想起来/没想起来**：核心机制这次彻底想通——map 存「当前路径上前缀和出现次数」；get 在 put 前做（防 target=0 时自匹配空路径）；负数导致同路径前缀和重复所以必须计数而非布尔；「sum 是局部变量不用回溯、map 是共享状态必须撤销」分清。一刷非一次 AC 的点（回溯撤销/防溢出）这次规避。\n\n**③ 掌握度判定**：探讨过（前缀和语义多个概念问答）+ 提交前修过一次返回占位 → weak；提交一次 Accepted。\n\n**④ 下一步提醒**：LC560 和为 K 的子数组（前缀和+哈希计数同款模板）可顺带复习；双重 DFS 版 O(n²) 在 n≤1000 可行但非最优。"
+    }
   ]
 }

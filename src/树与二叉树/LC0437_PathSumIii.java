@@ -2,8 +2,9 @@
 // LeetCode 437. 路径总和 III (Path Sum III)
 // 难度：Medium | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/path-sum-iii/
-// 刷题日期：2026-08-18
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-18）
+// 一刷思路：前缀和 + 回溯哈希（路径方向唯一，前缀和 diff 计数），O(n)/O(n)；另记录双重 DFS 写法
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -13,10 +14,10 @@ public class LC0437_PathSumIii {
     // ==== 提交代码开始 ====
     int ans;
     public int pathSum(TreeNode root, int targetSum) {
-        ans = 0;
         Map<Long, Integer> map = new HashMap<>();
         map.put(0L, 1);
-        dfs(root, targetSum, 0, map);
+        ans = 0;
+        dfs(root, targetSum, 0L, map);
         return ans;
     }
 
@@ -24,21 +25,20 @@ public class LC0437_PathSumIii {
         if (root == null) {
             return;
         }
+
         sum += root.val;
 
         ans += map.getOrDefault(sum - targetSum, 0);
+        // 从根节点到当前节点的和为sum，如果子孙节点的和为 sum’ = sum + targetSum
+        // 当前节点就变成了一个可以的起始节点，即当前节点到 sum' 的节点之前的路径和为targetSum，ans++
         map.merge(sum, 1, Integer::sum);
 
         dfs(root.left, targetSum, sum, map);
         dfs(root.right, targetSum, sum, map);
 
-        Integer cnt = map.merge(sum, -1, Integer::sum);
-        if (cnt == 0) {
-            map.remove(sum);
-        }
+        // 离开当前节点了，出现sum这个路径要减去1，不然会让兄弟节点看到这条路径
+        map.merge(sum, -1, Integer::sum);
     }
-
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -53,7 +53,7 @@ public class LC0437_PathSumIii {
             if (!checkEq(3, s.pathSum(treeNode(5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1), 22), "示例2")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
-        // ---- 边界测试（自己补充）----
+        // ---- 边界测试（与一刷归档保持一致）----
         // 空树：无任何路径
         try { if (!checkEq(0, s.pathSum(null, 0), "边界1-空树")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1-空树 异常: " + t); }
         // 单节点命中：节点自身即一条路径
