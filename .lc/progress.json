@@ -3149,6 +3149,28 @@
         "图与并查集"
       ],
       "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "DFS 返回值语义改错：让陆地格子的返回值依赖邻居是否还有未访问陆地（has |= dfs 邻居），叶子陆地/孤立陆地全部返回 false，导致整片永远 false、ans 恒为 0；正确做法是发现未访问陆地即计数、dfs 只负责标记（或返回『当前格是陆地』）",
+      "count": 1,
+      "examples": [
+        "number-of-islands"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "空网格未处理：直接取 grid[0].length 越界；应先判 m==0 再取列数",
+      "count": 1,
+      "examples": [
+        "number-of-islands"
+      ],
+      "categories": [
+        "图与并查集"
+      ],
+      "last_seen": "2026-09-01"
     }
   ],
   "category_hints": {

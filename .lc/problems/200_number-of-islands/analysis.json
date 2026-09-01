@@ -15,7 +15,6 @@
   "time_complexity": "O(m*n)",
   "space_complexity": "O(m*n)",
   "notes": "岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "网格 DFS 越界守卫写反：i>=0 && i<len && j>=0 && j<len 为真表示在界内却 return 0，导致所有在界调用直接返回（示例全得 0）；同类问题第 2 次（先例：链表守卫写反恒真）",
@@ -28,8 +27,20 @@
     {
       "habit": "统计口径混淆：用 max=Math.max(max, dfs面积) 求最大岛屿面积，而题目要岛屿个数；计数应在发现未访问陆地时 +1，且 dfs 返回值不参与计数",
       "count": 1
+    },
+    {
+      "habit": "DFS 返回值语义改错：让陆地格子的返回值依赖邻居是否还有未访问陆地（has |= dfs 邻居），叶子陆地/孤立陆地全部返回 false，导致整片永远 false、ans 恒为 0；正确做法是发现未访问陆地即计数、dfs 只负责标记（或返回『当前格是陆地』）",
+      "count": 1
+    },
+    {
+      "habit": "空网格未处理：直接取 grid[0].length 越界；应先判 m==0 再取列数",
+      "count": 1
     }
   ],
+  "hints": [
+    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
+  ],
+  "code_notes": [],
   "patterns": [
     {
       "title": "网格连通分量 DFS：四方向偏移 + 越界守卫 + 发现即计数",
@@ -41,19 +52,36 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-08",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "49/49",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 52848000,
+      "memory_bytes": 52468000,
       "approach": "DFS 洪水填充",
       "time_complexity": "O(m*n)",
       "space_complexity": "O(m*n)",
       "optimal": true,
-      "notes": "岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）"
+      "notes": "**① 与上一轮对比**：一刷与本次同为「DFS 洪水填充」（visited + 四方向），主循环发现未访问陆地即计数。本次第一版把计数改成「dfs 返回 true 才 +1」，但 dfs 内没有 return true（has |= 邻居），叶子/孤立陆地返回 false，全图恒 0；同时丢了空网格 m==0 守卫，grid[0] 越界。分析后改回「陆地 return true + 主循环计数」，并补回空网格守卫。\n\n**② 这次为什么没想起来**：一刷骨架是「dfs 只标记、返回值回答当前格是不是陆地」；这次想用一个返回值同时完成「标记 + 判断 + 计数」，把「当前格是陆地」混进「邻居是否还有未访问陆地」，语义串味。规避：连通分量计数 = 发现新块时 +1；dfs 返回值只回答「当前格是不是陆地」，不承担计数。\n\n**③ 掌握度判定**：非一次 AC（第一版全图恒 0 + 空网格越界，经分析修复），且有探讨 → weak。\n\n**④ 下一步提醒**：本次空间 O(mn)（visited + 递归栈），可尝试原地淹没（把访问过的 '1' 改为 '0'）省掉 visited，额外空间 O(1)；也可对比 BFS 队列版 / 并查集版。",
+      "code": "    boolean[][] visited;\n    public int numIslands(char[][] grid) {\n        int ans = 0;\n        int m = grid.length;\n        if (m == 0) {\n            return ans;\n        }\n        int n = grid[0].length;\n        visited = new boolean[m][n];\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (!visited[i][j] && dfs(grid, i, j)) {\n                    ans++;\n                }\n            }\n        }\n        return ans;\n    }\n\n    private boolean dfs(char[][] grid, int i, int j) {\n        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length) {\n            return false;\n        }\n        if (visited[i][j]) {\n            return false;\n        }\n        visited[i][j] = true;\n        if (grid[i][j] == '0') {\n            return false;\n        }\n        boolean has = true;\n        has |= dfs(grid, i + 1, j);\n        has |= dfs(grid, i - 1, j);\n        has |= dfs(grid, i, j + 1);\n        has |= dfs(grid, i, j - 1);\n        return has;\n    }",
+      "prev_code": "boolean[][] visited;\n    public int numIslands(char[][] grid) {\n        int count = 0;\n        int m = grid.length;\n        if (m == 0) {\n            return count;\n        }\n        int n = grid[0].length;\n        if (n == 0) {\n            return count;\n        }\n        visited = new boolean[m][n];\n\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (!visited[i][j] && dfs(grid, i, j)) {\n                    count++;\n                }\n            }\n        }\n        return count;\n    }\n\n    int[] xd = new int[]{-1,1, 0, 0};\n    int[] yd = new int[]{0, 0 , -1, 1};\n    private boolean dfs(char[][] grid, int i, int j) {\n        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) {\n            return false;\n        }\n        if (visited[i][j]) {\n            return false;\n        }\n        visited[i][j] = true;\n        if (grid[i][j] == '0') {\n            return false;\n        }\n        for (int k = 0; k < xd.length; k++) {\n            dfs(grid, i + xd[k], j + yd[k]);\n        }\n        return true;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
-  ]
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "DFS 洪水填充",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(m*n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷与本次同为「DFS 洪水填充」（visited + 四方向），主循环发现未访问陆地即计数。本次第一版把计数改成「dfs 返回 true 才 +1」，但 dfs 内没有 return true（has |= 邻居），叶子/孤立陆地返回 false，全图恒 0；同时丢了空网格 m==0 守卫，grid[0] 越界。分析后改回「陆地 return true + 主循环计数」，并补回空网格守卫。\n\n**② 这次为什么没想起来**：一刷骨架是「dfs 只标记、返回值回答当前格是不是陆地」；这次想用一个返回值同时完成「标记 + 判断 + 计数」，把「当前格是陆地」混进「邻居是否还有未访问陆地」，语义串味。规避：连通分量计数 = 发现新块时 +1；dfs 返回值只回答「当前格是不是陆地」，不承担计数。\n\n**③ 掌握度判定**：非一次 AC（第一版全图恒 0 + 空网格越界，经分析修复），且有探讨 → weak。\n\n**④ 下一步提醒**：本次空间 O(mn)（visited + 递归栈），可尝试原地淹没（把访问过的 '1' 改为 '0'）省掉 visited，额外空间 O(1)；也可对比 BFS 队列版 / 并查集版。"
+    }
+  ],
+  "approach_detail": "**问题本质**：网格上求「四连通陆地连通块」的个数。每个格子要么水要么陆地，陆地按上下左右连通，目标是统计连通分量数量。\n\n**解法选择理由**：连通分量计数有两类经典工具——DFS/BFS 洪水填充（标记访问过的陆地）和并查集。本题网格规模 m,n ≤ 300，DFS 洪水填充每个格子恰好访问一次，O(mn)，实现最直接；并查集需额外维护父子结构，适合「动态加边/多次查询连通性」场景，本题静态一次遍历用 DFS 更简洁，故选 DFS。\n\n**关键设计决策**：\n- 方向数组只放上下左右 4 组；放 8 组会把斜对角误连成同一块（边界6 专门验证）。\n- 主循环 `!visited[i][j] && dfs(i,j)`：只有「未访问的陆地」才进入计数，dfs 负责把整块连通陆地全部标记 visited，之后同块格子再被扫到直接跳过。\n- dfs 返回值语义 = 「当前格是不是陆地」：越界/已访问/是水 → false；是陆地 → 标记后 return true。注意 return true 在标记之后，且不依赖邻居返回值，单格陆地（边界2）也能正确计 1。\n- 空网格守卫：先判 m == 0 再取 grid[0].length，顺序反了直接 AIOOBE（边界1）。\n\n**边界与细节**：空网格 → 0；单格陆地 → 1；单格水 → 0；全水 → 0；全陆地 → 1；斜对角不相邻 → 5；单行/单列 → 按连通分段数；环状陆地（中间被水包围的 '1' 环）→ 1。以上全部在本地 main 测试区覆盖。\n\n**具体 case 推演**（grid = {{'1','0','1','1'}}，期望 2）：\n1. (0,0)：未访问陆地 → dfs：标记 visited[0][0]；是陆地 → return true → ans=1。\n2. (0,1)：水 → dfs 标记后 return false，不计数。\n3. (0,2)：未访问陆地 → dfs：标记；向右 dfs(0,3) 标记并 return true → 本格 return true → ans=2。\n4. (0,3)：已访问 → 主循环跳过。\n5. 最终 ans=2。两片陆地（[0] 与 [2,3]）分别由各自「第一个未访问陆地格」触发计数，连通性靠 visited 去重保证不会重复计。\n\n**复杂度与下限论证**：每个格子最多被 dfs 进入一次（visited 保证），每次进入做 O(1) 的越界/访问/水判断与 4 次邻居调用，总 O(mn)；任何算法都必须至少读一遍每个格子才能区分水陆，故 Ω(mn)，O(mn) 时间最优。空间 visited O(mn) + 递归栈最坏 O(mn)（全陆地时深度优先链），可优化为原地把 '1' 改 '0' 达到额外 O(1)。\n"
 }
