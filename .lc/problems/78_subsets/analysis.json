@@ -12,11 +12,9 @@
   "firstPass": false,
   "optimal": true,
   "approach": "回溯（起点推进）",
-  "approach_detail": "问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。本题有两种等价写法，一次只选一种框架。\n\n写法 1 · 选/不选（已提交）：\n- 递归参数 index 表示下一个待决策的元素；每层两个分支：加入 nums[index] 递归 index+1，或不加入直接递归 index+1；\n- 答案只在叶子收集：index == nums.length 时所有元素决策完毕，把 list 副本加入答案；\n- 必须显式终止，否则 index 越界访问；空集由根节点一路「不选」产生。\n\n写法 2 · 起点推进（已提交）：\n- 递归参数 start 表示下一个可选的起点；for 循环枚举「下一个加入子集的元素」，选 nums[i] 后递归 i+1 并撤销；\n- 「不选」由循环 i++ 隐含表达，不需要第二个递归分支；\n- 答案在每个节点入口收集：该框架下每个节点形成的列表互不相同，不会重复；循环自然结束，无需显式终止。\n\n两种写法对比：\n- 复杂度相同：时间 O(n·2^n)（2^n 个子集，每个复制 O(n)），空间 O(n)（递归栈 + 当前列表，不含输出）；\n- 差别只在「答案收集时机」：选/不选框架内部节点会与叶子重复，只能叶子加；起点推进框架每个节点唯一，入口加即可；\n- 都无需排序（元素互异）；含重复元素时两种框架都要排序 + 跳过相邻相同值。\n\n为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；两种写法每个子集恰好生成一次、无重复枚举，已达下限。\n\n补充：写法 2 的「不选」到底在哪里（具体 case 推演）——\n- 起点推进的循环不是在问「要不要选 nums[i]」，而是在决定「下一个加入子集的元素是哪个」；\n- 具体 case：nums=[1,2,3]，dfs(0, []) 的三条分支：i=0 选 1 → 生成包含 1 的全部子集；i=1 选 2 → list 从未加入过 1，「循环从 0 推进到 1」这个动作本身就是不选 1；i=2 选 3 → 同时跳过 1 和 2，即不选 1、不选 2；\n- 结论：选/不选框架把「不选」写成显式分支；起点推进框架把「不选」编码在循环推进里——i 每前进一位就放弃前面那位；若在循环里再写显式「不选」递归，等于把同一动作做两遍（写法 1 调试时的重复问题）。",
   "time_complexity": "O(n*2^n)",
   "space_complexity": "O(n)",
   "notes": "回溯起点推进框架，每个节点都是唯一子集",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "回溯递归起点传错/框架混用：下一层起点必须从当前选中下标的下一个位置继续（传 i+1），传旧 index 会让同一元素重复入选（如 [1,3,3]）、子集重复、递归树爆炸 OOM；「选/不选」与「起点推进」两种回溯框架不要叠用",
@@ -29,8 +27,17 @@
     {
       "habit": "答案收集时机与框架不匹配：选/不选框架里当前列表要等所有元素决策完才是完整子集，只能在叶子（index==n）加答案；在入口加会把同一子集重复记录（n=10 得到 2047=2^11-1 个）",
       "count": 1
+    },
+    {
+      "habit": "子集两种回溯框架混用：叶子收集（选/不选）套 for 循环（起点推进），同一分支被重复探索导致重复子集/丢子集；一次只能用一套框架——选/不选按 index 每层只处理一个元素，起点推进按 start 每节点收集",
+      "count": 1
     }
   ],
+  "hints": [
+    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ],
+  "approach_detail": "问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。本题有两种等价写法，一次只选一种框架。\n\n写法 1 · 选/不选（已提交）：\n- 递归参数 index 表示下一个待决策的元素；每层两个分支：加入 nums[index] 递归 index+1，或不加入直接递归 index+1；\n- 答案只在叶子收集：index == nums.length 时所有元素决策完毕，把 list 副本加入答案；\n- 必须显式终止，否则 index 越界访问；空集由根节点一路「不选」产生。\n\n写法 2 · 起点推进（已提交）：\n- 递归参数 start 表示下一个可选的起点；for 循环枚举「下一个加入子集的元素」，选 nums[i] 后递归 i+1 并撤销；\n- 「不选」由循环 i++ 隐含表达，不需要第二个递归分支；\n- 答案在每个节点入口收集：该框架下每个节点形成的列表互不相同，不会重复；循环自然结束，无需显式终止。\n\n两种写法对比：\n- 复杂度相同：时间 O(n·2^n)（2^n 个子集，每个复制 O(n)），空间 O(n)（递归栈 + 当前列表，不含输出）；\n- 差别只在「答案收集时机」：选/不选框架内部节点会与叶子重复，只能叶子加；起点推进框架每个节点唯一，入口加即可；\n- 都无需排序（元素互异）；含重复元素时两种框架都要排序 + 跳过相邻相同值。\n\n为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；两种写法每个子集恰好生成一次、无重复枚举，已达下限。\n\n补充：写法 2 的「不选」到底在哪里（具体 case 推演）——\n- 起点推进的循环不是在问「要不要选 nums[i]」，而是在决定「下一个加入子集的元素是哪个」；\n- 具体 case：nums=[1,2,3]，dfs(0, []) 的三条分支：i=0 选 1 → 生成包含 1 的全部子集；i=1 选 2 → list 从未加入过 1，「循环从 0 推进到 1」这个动作本身就是不选 1；i=2 选 3 → 同时跳过 1 和 2，即不选 1、不选 2；\n- 结论：选/不选框架把「不选」写成显式分支；起点推进框架把「不选」编码在循环推进里——i 每前进一位就放弃前面那位；若在循环里再写显式「不选」递归，等于把同一动作做两遍（写法 1 调试时的重复问题）。",
+  "code_notes": [],
   "patterns": [
     {
       "title": "回溯枚举子集：两种框架不可混用，递归起点必须前进",
@@ -69,20 +76,35 @@
       "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        if (index >= nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n\n            list.add(nums[index]);\n            dfs(nums, index + 1, list);\n\n            list.remove(list.size() - 1);\n            dfs(nums, index + 1, list);\n    }"
     },
     {
-      "date": "2026-08-09",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "10/10",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 44644000,
+      "memory_bytes": 44612000,
       "approach": "回溯（起点推进）",
       "time_complexity": "O(n*2^n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "回溯起点推进框架，每个节点都是唯一子集",
-      "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int start, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n        for (int i = start; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }"
+      "notes": "**① 与上一轮对比**：一刷记录了两种写法（选/不选 + 起点推进）；本次选「起点推进（每节点收集）」。第一版把两套框架混用（叶子收集 + for 循环 + 循环内「不选」递归）导致重复 []、丢 [1,2]，经分析后改为纯起点推进，一次写对。\n\n**② 这次为什么没想起来**：一刷两种写法都写过，但没沉淀「一次只用一套框架」的纪律；本次先把两套框架的决策对象想通——A 决策「元素进不进」（不选必须显式），B 决策「下一个选哪个」（不选 = 循环跳过，什么都不选 = 节点收集），理解后不再混用。\n\n**③ 掌握度判定**：探讨过（明确要了两套正确答案）+ 第一版失败 → weak；本地一次过、提交一次 Accepted，但全程有探讨。\n\n**④ 下一步提醒**：B 骨架可迁移——组合 LC77（size==k 才收集）、组合总和 LC39（dfs(i) 不前进可重复取）、排列 LC46（visited 数组代替 start）；复习时用 A 视角自检「每个元素进/不进两条路径都覆盖到」防漏防重。",
+      "code": "    List<List<Integer>> ans;\n\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n\n        for (int i = index; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }",
+      "prev_code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int start, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n        for (int i = start; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "回溯（起点推进）",
+      "time_complexity": "O(n*2^n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷记录了两种写法（选/不选 + 起点推进）；本次选「起点推进（每节点收集）」。第一版把两套框架混用（叶子收集 + for 循环 + 循环内「不选」递归）导致重复 []、丢 [1,2]，经分析后改为纯起点推进，一次写对。\n\n**② 这次为什么没想起来**：一刷两种写法都写过，但没沉淀「一次只用一套框架」的纪律；本次先把两套框架的决策对象想通——A 决策「元素进不进」（不选必须显式），B 决策「下一个选哪个」（不选 = 循环跳过，什么都不选 = 节点收集），理解后不再混用。\n\n**③ 掌握度判定**：探讨过（明确要了两套正确答案）+ 第一版失败 → weak；本地一次过、提交一次 Accepted，但全程有探讨。\n\n**④ 下一步提醒**：B 骨架可迁移——组合 LC77（size==k 才收集）、组合总和 LC39（dfs(i) 不前进可重复取）、排列 LC46（visited 数组代替 start）；复习时用 A 视角自检「每个元素进/不进两条路径都覆盖到」防漏防重。"
+    }
   ]
 }

@@ -2,8 +2,9 @@
 // LeetCode 78. 子集 (Subsets)
 // 难度：Medium | 分类：回溯
 // 链接：https://leetcode.cn/problems/subsets/
-// 刷题日期：2026-08-09
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-09）
+// 一刷思路：回溯（起点推进，每节点收集答案；另有「选/不选」写法，见 analysis.json submissions）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -12,15 +13,17 @@ public class LC0078_Subsets {
 
     // ==== 提交代码开始 ====
     List<List<Integer>> ans;
+
     public List<List<Integer>> subsets(int[] nums) {
         ans = new ArrayList<>();
         dfs(nums, 0, new ArrayList<>());
         return ans;
     }
 
-    private void dfs(int[] nums, int start, List<Integer> list) {
+    private void dfs(int[] nums, int index, List<Integer> list) {
         ans.add(new ArrayList<>(list));
-        for (int i = start; i < nums.length; i++) {
+
+        for (int i = index; i < nums.length; i++) {
             list.add(nums[i]);
             dfs(nums, i + 1, list);
             list.remove(list.size() - 1);
@@ -34,16 +37,28 @@ public class LC0078_Subsets {
 
         // ---- 示例测试（来自题目）----
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(), Arrays.asList(1), Arrays.asList(2), Arrays.asList(1, 2), Arrays.asList(3), Arrays.asList(1, 3), Arrays.asList(2, 3), Arrays.asList(1, 2, 3)), s.subsets(new int[]{1, 2, 3}), "示例1")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(), Arrays.asList(1), Arrays.asList(2), Arrays.asList(1, 2), Arrays.asList(3), Arrays.asList(1, 3), Arrays.asList(2, 3), Arrays.asList(1, 2, 3)), s.subsets(new int[]{1, 2, 3}), "示例1"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例1 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(), Arrays.asList(0)), s.subsets(new int[]{0}), "示例2")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(), Arrays.asList(0)), s.subsets(new int[]{0}), "示例2"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例2 异常: " + t);
+        }
 
-        // ---- 边界测试（自己补充）----
+        // ---- 边界测试（与一刷归档保持一致）----
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(), Arrays.asList(1), Arrays.asList(2), Arrays.asList(1, 2)), s.subsets(new int[]{1, 2}), "边界-两元素")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-两元素 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(), Arrays.asList(1), Arrays.asList(2), Arrays.asList(1, 2)), s.subsets(new int[]{1, 2}), "边界-两元素"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-两元素 异常: " + t);
+        }
         try {
             List<List<Integer>> r10 = s.subsets(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
             boolean ok = r10 != null && r10.size() == 1024 && r10.stream().distinct().count() == 1024;
@@ -53,7 +68,10 @@ public class LC0078_Subsets {
             } else {
                 System.out.println("边界-长度10 通过 ✓");
             }
-        } catch (Throwable t) { failures++; System.out.println("边界-长度10 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-长度10 异常: " + t);
+        }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
