@@ -1,36 +1,45 @@
 // ============================================================
 // LeetCode 72. 编辑距离 (Edit Distance)
-// 难度：Medium | 分类：动态规划
+// 难度：Medium | 分类：动态规划（子类型：线性/网格 DP）
 // 链接：https://leetcode.cn/problems/edit-distance/
-// 刷题日期：2026-08-19
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-19）
+// 一刷思路：DP 二维表格 dp[i][j]（O(mn)/O(mn)，optimal=false）
+// 二刷要求：写出空间优化版——滚动数组 O(n)，diag 变量每列末更新为 prevRowSame 保持「斜对角」语义
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
+import java.util.*;
 
 public class LC0072_EditDistance {
 
     // ==== 提交代码开始 ====
     public int minDistance(String word1, String word2) {
-        int m = word1.length();
         int n = word2.length();
-        if (m == 0) return n;
-        if (n == 0) return m;
-        // 滚动数组：dp[j] 存当前行 dp[i][j]，覆盖前先取旧值当 dp[i-1][j]；diag 存斜对角 dp[i-1][j-1]
+        int m = word1.length();
+        // dp[j]：word2 前 j 个字符的最小操作数；行开始前是上一行，覆盖后是当前行
         int[] dp = new int[n + 1];
+        // 第 0 行（word1 为空）：变成 word2 前 j 个字符需插入 j 次
         for (int j = 0; j <= n; j++) {
-            dp[j] = j; // 第 0 行：dp[0][j] = j
+            dp[j] = j;
         }
-        for (int i = 1; i <= m; i++) {
-            int diag = dp[0]; // 进第 1 列前，diag = dp[i-1][0]
-            dp[0] = i;        // 第 0 列：dp[i][0] = i
+        // i 是 0 基字符下标，对应二维表第 i+1 行
+        for (int i = 0; i < m; i++) {
+            // dig = 左上角（上一行 j-1 的旧值）；先取旧 dp[0]，供 j=1 使用
+            int dig = dp[0];
+            // 本行第 0 列：word1 前 i+1 个字符全部删除
+            dp[0] = i + 1;
             for (int j = 1; j <= n; j++) {
-                int prevRowSame = dp[j]; // 覆盖前保存 dp[i-1][j]
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    dp[j] = diag;
+                // prev = 覆盖前的 dp[j]（上一行第 j 列）：删除候选，并用于更新 dig
+                int prev = dp[j];
+                if (word1.charAt(i) == word2.charAt(j - 1)) {
+                    // 字符相同 → 成本等于左上角
+                    dp[j] = dig;
                 } else {
-                    dp[j] = Math.min(Math.min(prevRowSame, dp[j - 1]), diag) + 1;
+                    // 插入=本行左 dp[j-1]、删除=上一行 dp[j]、替换=左上 dig，取最小 +1
+                    dp[j] = Math.min(dp[j - 1], Math.min(dp[j], dig)) + 1;
                 }
-                diag = prevRowSame; // 下一列的斜对角 = dp[i-1][j]
+                // dig 更新为上一行第 j 列旧值，作为下一列 j+1 的左上角
+                dig = prev;
             }
         }
         return dp[n];
@@ -49,7 +58,7 @@ public class LC0072_EditDistance {
             if (!TestUtil.checkEq(5, s.minDistance("intention", "execution"), "示例2")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
-        // ---- 边界测试（针对编辑距离的具体逻辑）----
+        // ---- 边界测试（与一刷归档保持一致）----
         // 双空 / 一边为空（全插入、全删除）
         try { if (!TestUtil.checkEq(0, s.minDistance("", ""), "双空")) failures++; } catch (Throwable t) { failures++; System.out.println("双空 异常: " + t); }
         try { if (!TestUtil.checkEq(3, s.minDistance("", "abc"), "空->abc全插入")) failures++; } catch (Throwable t) { failures++; System.out.println("空->abc全插入 异常: " + t); }

@@ -12,14 +12,30 @@
   "firstPass": true,
   "optimal": false,
   "approach": "DP 二维表格",
-  "approach_detail": "**问题本质与解法选择**\n- 本质：求两个字符串的最小编辑距离，是典型的最优化问题；word1 前缀转 word2 前缀的过程有大量重叠子问题（如转 \"abc\" 时反复用到 \"ab\"、\"a\" 等更短前缀的结果），因此用动态规划。\n- 为什么不暴力：每次操作有插入/删除/替换 3 种选择，递归枚举是指数级；DP 把每个 (i,j) 前缀对的结果只算一次，共 O(mn) 个状态。\n\n**关键设计决策**\n- 状态定义：dp[i][j] = word1 前 i 个字符转成 word2 前 j 个字符所需的最小操作数（i、j 是前缀长度，不是下标，所以表是 (m+1)x(n+1)）。\n- 转移（看末尾字符 word1[i-1] 与 word2[j-1]）：\n  - 相等：dp[i][j] = dp[i-1][j-1]（末尾天然匹配，无需操作）\n  - 不等：三种操作取最小再 +1\n    1. 删除 word1 末尾字符：dp[i-1][j] + 1\n    2. word1 末尾插入 word2[j-1]：dp[i][j-1] + 1\n    3. 替换末尾为 word2[j-1]：dp[i-1][j-1] + 1\n- 初始化：dp[0][j]=j（空串转非空只能靠插入），dp[i][0]=i（非空转空只能靠删除）。\n- 返回 dp[m][n]。\n\n**具体 case 推演：word1=\"ab\"，word2=\"abc\"（期望答案 1）**\n- 初始化后：dp[0][0..3] = 0,1,2,3；dp[0..2][0] = 0,1,2\n- i=1, j=1：a==a → dp[1][1]=dp[0][0]=0\n- i=1, j=2：a vs b 不等 → min(dp[0][2]=2, dp[1][1]=0, dp[0][1]=1)+1 = 1（插入 b，\"a\"→\"ab\"）\n- i=1, j=3：a vs c 不等 → min(dp[0][3]=3, dp[1][2]=1, dp[0][2]=2)+1 = 2\n- i=2, j=1：b vs a 不等 → min(dp[1][1]=0, dp[2][0]=2, dp[1][0]=1)+1 = 1（替换 b→a）\n- i=2, j=2：b==b → dp[2][2]=dp[1][1]=0\n- i=2, j=3：b vs c 不等 → min(dp[1][3]=2, dp[2][2]=0, dp[1][2]=1)+1 = 1（插入 c）\n- 答案 dp[2][3]=1 ✓\n\n**边界与细节**\n- 双空：dp[0][0]=0。\n- 一边为空：全插入 / 全删除，直接被初始化行/列覆盖。\n- 单字符相同 / 不同、全相同、等长全替换（结果=长度）、交换两字符（2 步，替换或删+插）均已在本地测试覆盖。\n- 下标对齐：charAt(i-1) / charAt(j-1) 对应前缀长度 i / j，避免越界。\n\n**复杂度与下限论证**\n- 时间 O(mn)：两层循环填表，每格 O(1) 转移；两个串的所有前缀组合都要比较，O(mn) 是问题本身的下限。\n- 空间 O(mn)：完整二维表；每格只依赖上一行同列、当前行左邻、上一行左邻，可滚动压缩到 O(n)。",
   "time_complexity": "O(mn)",
   "space_complexity": "O(mn)",
   "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)",
+  "mistakes": [
+    {
+      "habit": "编辑距离滚动数组漏维护 diag（左上角）：相同/替换必须用上一行 j-1 的旧值 diag，且每列末要 diag=旧dp[j]（prevRowSame）；误用 dp[j-1]（本行左边/插入）导致转移全错",
+      "count": 1
+    },
+    {
+      "habit": "滚动数组长度/边界错误：dp 需开 n+1（含哨兵列）、j 从 1 起、dp[0] 每行重置为 i、空输入特判；漏哨兵列导致 dp[-1] 越界与返回 dp[n-1] 少 1",
+      "count": 1
+    },
+    {
+      "habit": "滚动数组行号/下标语义错位：循环 i 从 0 起代表处理第 i+1 个字符，第 0 列应 dp[0]=i+1 而非 i；且 i>0 条件误伤第一行的字符相同判断（第一行也参与相等分支）",
+      "count": 1
+    }
+  ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "approach_detail": "**问题本质与解法选择**\n- 本质：求两个字符串的最小编辑距离，是典型的最优化问题；word1 前缀转 word2 前缀的过程有大量重叠子问题（如转 \"abc\" 时反复用到 \"ab\"、\"a\" 等更短前缀的结果），因此用动态规划。\n- 为什么不暴力：每次操作有插入/删除/替换 3 种选择，递归枚举是指数级；DP 把每个 (i,j) 前缀对的结果只算一次，共 O(mn) 个状态。\n\n**关键设计决策**\n- 状态定义：dp[i][j] = word1 前 i 个字符转成 word2 前 j 个字符所需的最小操作数（i、j 是前缀长度，不是下标，所以表是 (m+1)x(n+1)）。\n- 转移（看末尾字符 word1[i-1] 与 word2[j-1]）：\n  - 相等：dp[i][j] = dp[i-1][j-1]（末尾天然匹配，无需操作）\n  - 不等：三种操作取最小再 +1\n    1. 删除 word1 末尾字符：dp[i-1][j] + 1\n    2. word1 末尾插入 word2[j-1]：dp[i][j-1] + 1\n    3. 替换末尾为 word2[j-1]：dp[i-1][j-1] + 1\n- 初始化：dp[0][j]=j（空串转非空只能靠插入），dp[i][0]=i（非空转空只能靠删除）。\n- 返回 dp[m][n]。\n\n**具体 case 推演：word1=\"ab\"，word2=\"abc\"（期望答案 1）**\n- 初始化后：dp[0][0..3] = 0,1,2,3；dp[0..2][0] = 0,1,2\n- i=1, j=1：a==a → dp[1][1]=dp[0][0]=0\n- i=1, j=2：a vs b 不等 → min(dp[0][2]=2, dp[1][1]=0, dp[0][1]=1)+1 = 1（插入 b，\"a\"→\"ab\"）\n- i=1, j=3：a vs c 不等 → min(dp[0][3]=3, dp[1][2]=1, dp[0][2]=2)+1 = 2\n- i=2, j=1：b vs a 不等 → min(dp[1][1]=0, dp[2][0]=2, dp[1][0]=1)+1 = 1（替换 b→a）\n- i=2, j=2：b==b → dp[2][2]=dp[1][1]=0\n- i=2, j=3：b vs c 不等 → min(dp[1][3]=2, dp[2][2]=0, dp[1][2]=1)+1 = 1（插入 c）\n- 答案 dp[2][3]=1 ✓\n\n**边界与细节**\n- 双空：dp[0][0]=0。\n- 一边为空：全插入 / 全删除，直接被初始化行/列覆盖。\n- 单字符相同 / 不同、全相同、等长全替换（结果=长度）、交换两字符（2 步，替换或删+插）均已在本地测试覆盖。\n- 下标对齐：charAt(i-1) / charAt(j-1) 对应前缀长度 i / j，避免越界。\n\n**复杂度与下限论证**\n- 时间 O(mn)：两层循环填表，每格 O(1) 转移；两个串的所有前缀组合都要比较，O(mn) 是问题本身的下限。\n- 空间 O(mn)：完整二维表；每格只依赖上一行同列、当前行左邻、上一行左邻，可滚动压缩到 O(n)。",
   "code_notes": [
     "复习时要求独立写出空间优化版：滚动数组 O(n)，关键是 diag 变量在每列末更新为 prevRowSame 来保持「斜对角」语义"
   ],
-  "mistakes": [],
   "patterns": [],
   "submissions": [
     {
@@ -32,11 +48,38 @@
       "time_complexity": "O(mn)",
       "space_complexity": "O(mn)",
       "optimal": false,
-      "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)"
+      "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)",
+      "code": "public int minDistance(String word1, String word2) {\n        int m = word1.length();\n        int n = word2.length();\n        if (m == 0) return n;\n        if (n == 0) return m;\n        // 滚动数组：dp[j] 存当前行 dp[i][j]，覆盖前先取旧值当 dp[i-1][j]；diag 存斜对角 dp[i-1][j-1]\n        int[] dp = new int[n + 1];\n        for (int j = 0; j <= n; j++) {\n            dp[j] = j; // 第 0 行：dp[0][j] = j\n        }\n        for (int i = 1; i <= m; i++) {\n            int diag = dp[0]; // 进第 1 列前，diag = dp[i-1][0]\n            dp[0] = i;        // 第 0 列：dp[i][0] = i\n            for (int j = 1; j <= n; j++) {\n                int prevRowSame = dp[j]; // 覆盖前保存 dp[i-1][j]\n                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {\n                    dp[j] = diag;\n                } else {\n                    dp[j] = Math.min(Math.min(prevRowSame, dp[j - 1]), diag) + 1;\n                }\n                diag = prevRowSame; // 下一列的斜对角 = dp[i-1][j]\n            }\n        }\n        return dp[n];\n    }\n"
+    },
+    {
+      "date": "2026-09-01",
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷是 DP 二维表格 O(mn)/O(mn)（optimal=false）；本次按要求写出空间优化版——一维滚动数组 O(n)，用 dig/prev 维护「左上角」。时间不变，空间 O(mn) → O(n)，达到最优。\n\n**② 这次为什么想起来/没想起来**：滚动数组最难的是 dig 生命周期，反复错三轮——① 漏 diag，用本行 dp[j-1] 当左上；② dig 更新成覆盖后的新值；③ 第 0 行初始化被删、dp[0]=i 少 1、i>0 误伤第一行相同判断。最后把「dig = 上一行 j-1 的旧值，每列末取覆盖前 dp[j]」「第 0 行是整张表的地基」彻底想通后一次写对。\n\n**③ 掌握度判定**：多次失败 + 大量探讨 → weak；提交一次 Accepted（1149/1149）。\n\n**④ 下一步提醒**：LC1143 最长公共子序列、LC583 两个字符串删除操作是同款滚动 DP 骨架；一刷二维表写法保留在 submissions 可对照。",
+      "mastery": "weak",
+      "pass": 1,
+      "memory_bytes": 44536000,
+      "code": "    public int minDistance(String word1, String word2) {\n        int n = word2.length();\n        int m = word1.length();\n        // dp[j]：word2 前 j 个字符的最小操作数；行开始前是上一行，覆盖后是当前行\n        int[] dp = new int[n + 1];\n        // 第 0 行（word1 为空）：变成 word2 前 j 个字符需插入 j 次\n        for (int j = 0; j <= n; j++) {\n            dp[j] = j;\n        }\n        // i 是 0 基字符下标，对应二维表第 i+1 行\n        for (int i = 0; i < m; i++) {\n            // dig = 左上角（上一行 j-1 的旧值）；先取旧 dp[0]，供 j=1 使用\n            int dig = dp[0];\n            // 本行第 0 列：word1 前 i+1 个字符全部删除\n            dp[0] = i + 1;\n            for (int j = 1; j <= n; j++) {\n                // prev = 覆盖前的 dp[j]（上一行第 j 列）：删除候选，并用于更新 dig\n                int prev = dp[j];\n                if (word1.charAt(i) == word2.charAt(j - 1)) {\n                    // 字符相同 → 成本等于左上角\n                    dp[j] = dig;\n                } else {\n                    // 插入=本行左 dp[j-1]、删除=上一行 dp[j]、替换=左上 dig，取最小 +1\n                    dp[j] = Math.min(dp[j - 1], Math.min(dp[j], dig)) + 1;\n                }\n                // dig 更新为上一行第 j 列旧值，作为下一列 j+1 的左上角\n                dig = prev;\n            }\n        }\n        return dp[n];\n    }"
     }
   ],
-  "hints": [
-    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
-  ],
-  "dp_subtype": "线性DP"
+  "dp_subtype": "线性DP",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷是 DP 二维表格 O(mn)/O(mn)（optimal=false）；本次按要求写出空间优化版——一维滚动数组 O(n)，用 dig/prev 维护「左上角」。时间不变，空间 O(mn) → O(n)，达到最优。\n\n**② 这次为什么想起来/没想起来**：滚动数组最难的是 dig 生命周期，反复错三轮——① 漏 diag，用本行 dp[j-1] 当左上；② dig 更新成覆盖后的新值；③ 第 0 行初始化被删、dp[0]=i 少 1、i>0 误伤第一行相同判断。最后把「dig = 上一行 j-1 的旧值，每列末取覆盖前 dp[j]」「第 0 行是整张表的地基」彻底想通后一次写对。\n\n**③ 掌握度判定**：多次失败 + 大量探讨 → weak；提交一次 Accepted（1149/1149）。\n\n**④ 下一步提醒**：LC1143 最长公共子序列、LC583 两个字符串删除操作是同款滚动 DP 骨架；一刷二维表写法保留在 submissions 可对照。"
+    }
+  ]
 }

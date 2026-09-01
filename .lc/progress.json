@@ -967,7 +967,7 @@
       "category": "动态规划",
       "date": "2026-08-19",
       "firstPass": true,
-      "optimal": false,
+      "optimal": true,
       "notes": "一次 AC；二维 DP 时间最优，空间 O(mn) 可优化为滚动数组 O(n)"
     },
     {
@@ -3180,6 +3180,39 @@
       ],
       "categories": [
         "回溯"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "编辑距离滚动数组漏维护 diag（左上角）：相同/替换必须用上一行 j-1 的旧值 diag，且每列末要 diag=旧dp[j]（prevRowSame）；误用 dp[j-1]（本行左边/插入）导致转移全错",
+      "count": 1,
+      "examples": [
+        "edit-distance"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "滚动数组长度/边界错误：dp 需开 n+1（含哨兵列）、j 从 1 起、dp[0] 每行重置为 i、空输入特判；漏哨兵列导致 dp[-1] 越界与返回 dp[n-1] 少 1",
+      "count": 1,
+      "examples": [
+        "edit-distance"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "滚动数组行号/下标语义错位：循环 i 从 0 起代表处理第 i+1 个字符，第 0 列应 dp[0]=i+1 而非 i；且 i>0 条件误伤第一行的字符相同判断（第一行也参与相等分支）",
+      "count": 1,
+      "examples": [
+        "edit-distance"
+      ],
+      "categories": [
+        "动态规划"
       ],
       "last_seen": "2026-09-01"
     }
