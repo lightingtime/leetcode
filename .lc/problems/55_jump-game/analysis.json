@@ -34,19 +34,38 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-09",
+      "date": "2026-09-01",
       "verdict": "Accepted",
-      "testcases": "178/178",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 48412000,
+      "memory_bytes": 48276000,
       "approach": "贪心（最远可达）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "贪心最远可达，先判可达再更新"
+      "notes": "**① 与上一轮对比**：一刷与本次同为「贪心（最远可达）」O(n)/O(1)，本次一次写对；未用 DP（O(n²) 会 TLE）。\n\n**② 这次为什么想起来**：核心记忆点「卡死检测」——遍历时若 maxJump < i 说明 i 不可达，提前返回 false；循环只需走到 n-2，最后判断 maxJump >= n-1。一刷非一次 AC 的错误点这次规避了。\n\n**③ 掌握度判定**：一次提交 Accepted（178/178）且全程无探讨 → strong。\n\n**④ 下一步提醒**：LC45 跳跃游戏 II 求最少步数，贪心需额外维护「当前步可达右边界 + 下一跳最远」，可顺带复习；本题 DP 版 O(n²) 不可取。",
+      "code": "    public boolean canJump(int[] nums) {\n        int maxJump = 0;\n        for (int i = 0; i < nums.length - 1; i++) {\n            if (maxJump < i) {\n                return false;\n            }\n            maxJump = Math.max(maxJump, i + nums[i]);\n        }\n        return maxJump >= nums.length - 1;\n    }",
+      "prev_code": "public boolean canJump(int[] nums) {\n        int farthest = 0;\n        for (int i = 0; i < nums.length; i++) {\n            if (farthest >= nums.length - 1) {\n                return true;\n            }\n            if (i > farthest) {\n                return false;\n            }\n            farthest = Math.max(farthest, i + nums[i]);\n        }\n        return false;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-01",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "贪心（最远可达）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：一刷与本次同为「贪心（最远可达）」O(n)/O(1)，本次一次写对；未用 DP（O(n²) 会 TLE）。\n\n**② 这次为什么想起来**：核心记忆点「卡死检测」——遍历时若 maxJump < i 说明 i 不可达，提前返回 false；循环只需走到 n-2，最后判断 maxJump >= n-1。一刷非一次 AC 的错误点这次规避了。\n\n**③ 掌握度判定**：一次提交 Accepted（178/178）且全程无探讨 → strong。\n\n**④ 下一步提醒**：LC45 跳跃游戏 II 求最少步数，贪心需额外维护「当前步可达右边界 + 下一跳最远」，可顺带复习；本题 DP 版 O(n²) 不可取。"
+    }
   ]
 }

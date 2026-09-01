@@ -1,9 +1,10 @@
 // ============================================================
 // LeetCode 55. 跳跃游戏 (Jump Game)
-// 难度：Medium | 分类：动态规划
+// 难度：Medium | 分类：动态规划（最优解：贪心·最远可达 O(n)/O(1)）
 // 链接：https://leetcode.cn/problems/jump-game/
-// 刷题日期：2026-08-09
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-09）
+// 一刷思路：贪心（最远可达）：维护 maxReach，遍历时若 i > maxReach 则卡死，否则 maxReach = max(maxReach, i + nums[i])
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -12,17 +13,14 @@ public class LC0055_JumpGame {
 
     // ==== 提交代码开始 ====
     public boolean canJump(int[] nums) {
-        int farthest = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (farthest >= nums.length - 1) {
-                return true;
-            }
-            if (i > farthest) {
+        int maxJump = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (maxJump < i) {
                 return false;
             }
-            farthest = Math.max(farthest, i + nums[i]);
+            maxJump = Math.max(maxJump, i + nums[i]);
         }
-        return false;
+        return maxJump >= nums.length - 1;
     }
     // ==== 提交代码结束 ====
 
@@ -38,7 +36,7 @@ public class LC0055_JumpGame {
             if (!TestUtil.checkEq(false, s.canJump(new int[]{3, 2, 1, 0, 4}), "示例2")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
-        // ---- 边界测试（自己补充）----
+        // ---- 边界测试（与一刷归档保持一致）----
         try {
             if (!TestUtil.checkEq(true, s.canJump(new int[]{0}), "边界-单元素")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界-单元素 异常: " + t); }
