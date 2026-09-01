@@ -1,9 +1,10 @@
 // ============================================================
 // LeetCode 5. 最长回文子串 (Longest Palindromic Substring)
-// 难度：Medium | 分类：动态规划
+// 难度：Medium | 分类：动态规划（子类型：区间 DP）
 // 链接：https://leetcode.cn/problems/longest-palindromic-substring/
-// 刷题日期：2026-08-09
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-09）
+// 一刷思路：中心扩散（O(n^2)/O(1)）；另记录区间 DP（boolean 表）写法，见 analysis.json submissions
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -12,28 +13,27 @@ public class LC0005_LongestPalindromicSubstring {
 
     // ==== 提交代码开始 ====
     public String longestPalindrome(String s) {
-        int n = s.length();
-        if (n < 2) return s;
-        int maxLen = 0;
+        int max = 0;
         int start = -1;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < s.length(); i++) {
             int len1 = getLen(s, i, i);
             int len2 = getLen(s, i, i + 1);
             int len = Math.max(len1, len2);
-            if (len > maxLen) {
-                maxLen = len;
-                start = i - (maxLen - 1) / 2;
+            if (len > max) {
+                max = len;
+                start = i - (max - 1) / 2;
             }
         }
-        return s.substring(start, start + maxLen);
+        return s.substring(start, start + max);
     }
 
-    private int getLen(String s, int l, int r) {
-        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
-            l--;
-            r++;
+    private int getLen(String s, int i, int j) {
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
+            i--;
+            j++;
         }
-        return r - l - 1;
+        // 此时 (i, j) i j 都已经到了不合法的下标，所以是 j - i + 1 - 2
+        return j - i - 1;
     }
     // ==== 提交代码结束 ====
 
@@ -50,18 +50,30 @@ public class LC0005_LongestPalindromicSubstring {
             } else {
                 System.out.println("示例1 通过 ✓");
             }
-        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例1 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("bb", s.longestPalindrome("cbbd"), "示例2")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例2 异常: " + t);
+        }
 
-        // ---- 边界测试（自己补充）----
+        // ---- 边界测试（与一刷归档保持一致）----
         try {
             if (!TestUtil.checkEq("a", s.longestPalindrome("a"), "边界-单字符")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-单字符 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-单字符 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("aa", s.longestPalindrome("aa"), "边界-双字符相同")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-双字符相同 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-双字符相同 异常: " + t);
+        }
         try {
             String r2 = s.longestPalindrome("ab");
             if (!("a".equals(r2) || "b".equals(r2))) {
@@ -70,20 +82,35 @@ public class LC0005_LongestPalindromicSubstring {
             } else {
                 System.out.println("边界-双字符不同 通过 ✓");
             }
-        } catch (Throwable t) { failures++; System.out.println("边界-双字符不同 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-双字符不同 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("aaaa", s.longestPalindrome("aaaa"), "边界-全相同")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-全相同 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-全相同 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("abba", s.longestPalindrome("abbacdef"), "边界-偶数中心")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-偶数中心 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-偶数中心 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("bab", s.longestPalindrome("cbabd"), "边界-奇数中心")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-奇数中心 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-奇数中心 异常: " + t);
+        }
         try {
             String longAll = "a".repeat(1000);
             if (!TestUtil.checkEq(longAll, s.longestPalindrome(longAll), "边界-长全同")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-长全同 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-长全同 异常: " + t);
+        }
         try {
             String r3 = s.longestPalindrome("abca");
             if (!("a".equals(r3) || "b".equals(r3) || "c".equals(r3))) {
@@ -92,13 +119,22 @@ public class LC0005_LongestPalindromicSubstring {
             } else {
                 System.out.println("边界-两端等内非回文 通过 ✓");
             }
-        } catch (Throwable t) { failures++; System.out.println("边界-两端等内非回文 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-两端等内非回文 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("abccba", s.longestPalindrome("abccba"), "边界-长度6回文")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-长度6回文 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-长度6回文 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq("abcba", s.longestPalindrome("abcba"), "边界-长度5回文")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界-长度5回文 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-长度5回文 异常: " + t);
+        }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

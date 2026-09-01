@@ -20,18 +20,29 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>5. 最长回文子串 (Longest Palindromic Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-palindromic-substring/" rel="noopener">https://leetcode.cn/problems/longest-palindromic-substring/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：双指针、字符串、动态规划、Manacher 算法</p><h2>题目描述</h2><p>给你一个字符串 s，找到 s 中最长的 回文 子串。</p><p>示例 1：</p><p>输入：s = "babad"</p><p>输出："bab"</p><p>解释："aba" 同样是符合题意的答案。</p><p>示例 2：</p><p>输入：s = "cbbd"</p><p>输出："bb"</p><p>提示：</p><p>1</p><p>s 仅由数字和英文字母组成</p><h2>示例</h2><ol><li>输入：s = "babad"</li></ol><p>输出："bab"</p><p>解释："aba" 同样是符合题意的答案。</p><ol><li>输入：s = "cbbd"</li></ol><p>输出："bb"</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 中心扩散 ｜ O(n^2) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong>：一刷主写法即中心扩散（O(n²)/O(1)），本次同样用中心扩散，奇偶双中心一次写对；一刷另记录过区间 DP boolean 表写法，本次未用（中心扩散空间 O(1) 更优）。</p><p><strong>② 这次为什么想起来</strong>：中心扩散套路已内化——每个位置 i 同时以 (i,i) 奇中心和 (i,i+1) 偶中心向两边扩，getLen 越界即停、返回 j-i-1；起点用 i-(len-1)/2 反推。无探讨一次写对。</p><p><strong>③ 掌握度判定</strong>：一次提交 Accepted（144/144）且全程无探讨 → strong。</p><p><strong>④ 下一步提醒</strong>：本题 n≤1000，O(n²) 足够；更长串可对比 Manacher O(n)。区间 DP（boolean 表 O(n²)/O(n²)）可作为「回文判断子问题」的对照写法，但中心扩散已是本题空间最优。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>中心扩散</b></li>
         <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
         
+      </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>中心扩散</b></li>
+        <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -59,10 +70,34 @@
         }
         <span class="tk-k">return</span> ans;
     }</pre></div>
+    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 中心扩散</h3>
-    <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 144/144</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
+    <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> start = -<span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">int</span> len1 = <span class="tk-f">getLen</span>(s, i, i);
+            <span class="tk-k">int</span> len2 = <span class="tk-f">getLen</span>(s, i, i + <span class="tk-n">1</span>);
+            <span class="tk-k">int</span> len = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(len1, len2);
+            <span class="tk-k">if</span> (len &gt; max) {
+                max = len;
+                start = i - (max - <span class="tk-n">1</span>) / <span class="tk-n">2</span>;
+            }
+        }
+        <span class="tk-k">return</span> s.<span class="tk-f">substring</span>(start, start + max);
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">getLen</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">while</span> (i &gt;= <span class="tk-n">0</span> &amp;&amp; j &lt; s.<span class="tk-f">length</span>() &amp;&amp; s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(j)) {
+            i--;
+            j++;
+        }
+        <span class="tk-c">// 此时 (i, j) i j 都已经到了不合法的下标，所以是 j - i + 1 - 2</span>
+        <span class="tk-k">return</span> j - i - <span class="tk-n">1</span>;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
         <span class="tk-k">if</span> (n &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> s;
         <span class="tk-k">int</span> maxLen = <span class="tk-n">0</span>;
@@ -85,7 +120,7 @@
             r++;
         }
         <span class="tk-k">return</span> r - l - <span class="tk-n">1</span>;
-    }</pre></div>
+    }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找最长回文子串。本题有 DP 与中心扩散两种常规解法，均已提交记录。</p><p>写法 1 · 区间 DP（已提交）：</p><ul><li>dp[i][j] = s[i..j] 是否为回文，转移 dp[i][j] = (s[i]==s[j]) &amp;&amp; dp[i+1][j-1]（j-i &gt;= 2）；</li><li>base：长度 1 恒真、长度 2 两端相等；填表用 i 倒序满足依赖方向；答案更新必须校验 dp[i][j]==true；</li><li>复杂度 O(n^2) 时间、O(n^2) 空间。</li></ul><p>写法 2 · 中心扩散（已提交）：</p><ul><li>每个回文有唯一中心：奇数长度中心是字符本身，偶数长度中心是两个字符之间，共 2n-1 个中心；</li><li>对每个中心向两边扩散直到两端不等，返回半径长度；</li><li>主循环对每个 i 分别以 (i,i) 和 (i,i+1) 为起点扩散，取更长者更新答案；</li><li>起点换算：start = i - (maxLen-1)/2；</li><li>复杂度 O(n^2) 时间（每个中心最多扩 O(n)）、O(1) 空间。</li></ul><p>具体 case 推演（s=babad）：</p><ul><li>中心 = 下标 1 的 a：b==b → bab（长 3），越界停；</li><li>中心 = 下标 2 的 b：a==a → aba（长 3），再外 b!=d 停；</li><li>空隙中心（a 与 b 之间）：a!=b，长 0；</li><li>最长 3，bab / aba 任取。</li></ul><p>两种写法对比：</p><ul><li>DP 状态定义更「正统」，方便扩展（如回文子序列）；中心扩散代码更简洁、空间 O(1)；</li><li>时间同为 O(n^2)；Manacher 可到 O(n) 是进阶。</li></ul><p>为什么是最优/可接受：O(n^2) 是本题常规最优解（暴力 O(n^3) 不可接受）；中心扩散的空间 O(1) 是两种常规解法里最优的。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>144/144 用例。</p></div></div></div></section>
