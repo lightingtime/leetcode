@@ -2,40 +2,39 @@
 // LeetCode 17. 电话号码的字母组合 (Letter Combinations of a Phone Number)
 // 难度：Medium | 分类：回溯
 // 链接：https://leetcode.cn/problems/letter-combinations-of-a-phone-number/
-// 刷题日期：2026-08-08
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-08）
+// 一刷思路：回溯 DFS（map 数字→字母，len 走到 digits.length() 收集结果）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
 
 public class LC0017_LetterCombinationsOfAPhoneNumber {
-
     // ==== 提交代码开始 ====
-    List<String> ans;
     String[] map = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    List<String> ans;
     public List<String> letterCombinations(String digits) {
         ans = new ArrayList<>();
-        if (digits.length() == 0) {
+        if (digits.isEmpty()) {
             return ans;
         }
         dfs(digits, new StringBuilder(), 0);
         return ans;
     }
 
-    private void dfs(String digits, StringBuilder sb, int len) {
+    private void dfs(String digits, StringBuilder path, int len) {
         if (len == digits.length()) {
-            ans.add(sb.toString());
+            ans.add(path.toString());
             return;
         }
 
         for (char c : map[digits.charAt(len) - '0'].toCharArray()) {
-            sb.append(c);
-            dfs(digits, sb, len + 1);
-            sb.deleteCharAt(sb.length() - 1);
+            path.append(c);
+            dfs(digits, path, len+1);
+            path.deleteCharAt(path.length() - 1);
         }
 
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -50,7 +49,7 @@ public class LC0017_LetterCombinationsOfAPhoneNumber {
             if (!TestUtil.checkEq(Arrays.asList("a", "b", "c"), s.letterCombinations("2"), "示例2")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
-        // ---- 边界测试（自己补充）----
+        // ---- 边界测试（与一刷归档保持一致）----
         try {
             List<String> empty = s.letterCombinations("");
             if (empty.size() != 0) {
