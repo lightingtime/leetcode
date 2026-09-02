@@ -1129,12 +1129,12 @@
       "title": "路径总和 III",
       "category": "树与二叉树",
       "first_pass_date": "2026-08-18",
-      "last_review_date": "2026-09-01",
-      "next_review_date": "2026-09-02",
-      "interval_days": 1,
-      "review_count": 1,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-02",
+      "next_review_date": "2026-09-05",
+      "interval_days": 3,
+      "review_count": 2,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "convert-bst-to-greater-tree": {
