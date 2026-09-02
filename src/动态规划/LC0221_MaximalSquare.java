@@ -16,9 +16,6 @@ public class LC0221_MaximalSquare {
         int m = matrix.length;
         int n = matrix[0].length;
         int[] dp = new int[n];
-        for (int i = 0; i < n; i++) {
-            dp[i] = matrix[0][i] == '1' ? 1 :0;
-        }
         int max = 0;
         for (int i = 0; i < m; i++) {
             int dig = dp[0];
