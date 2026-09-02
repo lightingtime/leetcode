@@ -63,20 +63,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-01",
+      "date": "2026-09-02",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "85/85",
       "runtime_ms": null,
-      "memory_bytes": 96308000,
+      "memory_bytes": 95976000,
       "approach": "HashSet + 从段起点向上延展",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "",
-      "code": "public int longestConsecutive(int[] nums) {\n        int max = 0;\n        Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());\n        for (int num : set) {\n            int x = num;\n            if (set.contains(x - 1)) {\n                continue;\n            }\n            while (set.contains(x + 1)) {\n                x++;\n            }\n            max = Math.max(max, x - num + 1);\n        }\n        return max;\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-08）：HashSet + 段起点延展，非一次 AC（曾把计数语义写错、依赖遍历乱序导致错算）。\n- 复习①（2026-09-01）：同思路一次 AC 但记较弱。\n- 本次（第 2 次复习）：独立写出同款「HashSet 去重 + 只从段起点向上延展」，本地 13 组全绿（含回归用例：重复值 + 重复起点防 TLE）+ 力扣 85/85 一次 Accepted。\n\n**② 这次为什么想起来**\n- O(n) 的关键在「每段只数一次」：先 set.contains(x-1) 判断 x 是否为段起点，不是起点直接 continue；只有起点才 while 向上延展，段内每个元素至多被走一次 → 摊还 O(n)，避免对每个元素都从头数一遍的 O(n²)。\n- 重复元素由 HashSet 天然去重；遍历 set 而非原数组，长度相同不影响正确性。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（85/85）、全程无探讨 → strong；该题连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 相关题：LC217/219 存在重复元素（HashSet/滑动窗口）；LC3 无重复最长子串；LC56 合并区间（连续段另一种组织方式）。\n- 对照练习：本题也可用「值 → 根」并查集，遍历时合并 num 与 num±1 并维护段长，复习「图与并查集」分类时可两种都写一遍。",
+      "code": "public int longestConsecutive(int[] nums) {\n    Set<Integer> set = new HashSet<>();\n    for (int num : nums) {\n        set.add(num);\n    }\n    int max = 0;\n    for (Integer num : set) {\n        int x = num;\n        if (set.contains(x - 1)) {\n            continue;\n        }\n        while (set.contains(x + 1)) {\n            x++;\n        }\n        max = Math.max(max, x - num + 1);\n    }\n    return max;\n}",
       "prev_code": "public int longestConsecutive(int[] nums) {\n        int max = 0;\n        Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());\n        for (Integer num : set) {\n            int x = num;\n            if (set.contains(x - 1)) {\n                continue;\n            }\n            while (set.contains(x + 1)) {\n                x++;\n            }\n            max = Math.max(max, x - num + 1);\n        }\n        return max;\n    }\n",
-      "mastery": "weak",
-      "pass": 1
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "reviews": [
@@ -92,6 +92,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-02",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "85/85",
+      "approach": "HashSet + 从段起点向上延展",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-08）：HashSet + 段起点延展，非一次 AC（曾把计数语义写错、依赖遍历乱序导致错算）。\n- 复习①（2026-09-01）：同思路一次 AC 但记较弱。\n- 本次（第 2 次复习）：独立写出同款「HashSet 去重 + 只从段起点向上延展」，本地 13 组全绿（含回归用例：重复值 + 重复起点防 TLE）+ 力扣 85/85 一次 Accepted。\n\n**② 这次为什么想起来**\n- O(n) 的关键在「每段只数一次」：先 set.contains(x-1) 判断 x 是否为段起点，不是起点直接 continue；只有起点才 while 向上延展，段内每个元素至多被走一次 → 摊还 O(n)，避免对每个元素都从头数一遍的 O(n²)。\n- 重复元素由 HashSet 天然去重；遍历 set 而非原数组，长度相同不影响正确性。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（85/85）、全程无探讨 → strong；该题连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 相关题：LC217/219 存在重复元素（HashSet/滑动窗口）；LC3 无重复最长子串；LC56 合并区间（连续段另一种组织方式）。\n- 对照练习：本题也可用「值 → 根」并查集，遍历时合并 num 与 num±1 并维护段长，复习「图与并查集」分类时可两种都写一遍。"
     }
   ]
 }

@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>128. 最长连续序列 (Longest Consecutive Sequence)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-consecutive-sequence/" rel="noopener">https://leetcode.cn/problems/longest-consecutive-sequence/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：并查集、数组、哈希表</p><h2>题目描述</h2><p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p><p>请你设计并实现时间复杂度为 O(n) 的算法解决此问题。</p><p>示例 1：</p><p>输入：nums = [100,4,200,1,3,2]</p><p>输出：4</p><p>解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p><p>示例 2：</p><p>输入：nums = [0,3,7,2,5,8,4,6,0,1]</p><p>输出：9</p><p>示例 3：</p><p>输入：nums = [1,0,1,2]</p><p>输出：3</p><p>提示：</p><p>0 5</p><p>-109 9</p><h2>示例</h2><ol><li>输入：nums = [100,4,200,1,3,2]</li></ol><p>输出：4</p><p>解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p><ol><li>输入：nums = [0,3,7,2,5,8,4,6,0,1]</li></ol><p>输出：9</p><ol><li>输入：nums = [1,0,1,2]</li></ol><p>输出：3</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（85/85）｜ 一次 AC ｜ HashSet + 从段起点向上延展 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-08）：HashSet + 段起点延展，非一次 AC（曾把计数语义写错、依赖遍历乱序导致错算）。</li><li>复习①（2026-09-01）：同思路一次 AC 但记较弱。</li><li>本次（第 2 次复习）：独立写出同款「HashSet 去重 + 只从段起点向上延展」，本地 13 组全绿（含回归用例：重复值 + 重复起点防 TLE）+ 力扣 85/85 一次 Accepted。</li></ul><p><strong>② 这次为什么想起来</strong></p><ul><li>O(n) 的关键在「每段只数一次」：先 set.contains(x-1) 判断 x 是否为段起点，不是起点直接 continue；只有起点才 while 向上延展，段内每个元素至多被走一次 → 摊还 O(n)，避免对每个元素都从头数一遍的 O(n²)。</li><li>重复元素由 HashSet 天然去重；遍历 set 而非原数组，长度相同不影响正确性。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本次一次提交 Accepted（85/85）、全程无探讨 → strong；该题连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>相关题：LC217/219 存在重复元素（HashSet/滑动窗口）；LC3 无重复最长子串；LC56 合并区间（连续段另一种组织方式）。</li><li>对照练习：本题也可用「值 → 根」并查集，遍历时合并 num 与 num±1 并维护段长，复习「图与并查集」分类时可两种都写一遍。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（—）｜ 多次提交 ｜ HashSet + 从段起点向上延展 ｜ O(n) · O(n)</p>
       
@@ -37,32 +41,35 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>HashSet + 从段起点向上延展</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashSet + 从段起点向上延展</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.8 MB</span><span class="chip">用例 —</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.5 MB</span><span class="chip">用例 85/85</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
-        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
-        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-t">Arrays</span>.<span class="tk-f">stream</span>(nums).<span class="tk-f">boxed</span>().<span class="tk-f">collect</span>(<span class="tk-t">Collectors</span>.<span class="tk-f">toSet</span>());
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : set) {
-            <span class="tk-k">int</span> x = num;
-            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(x - <span class="tk-n">1</span>)) {
-                <span class="tk-k">continue</span>;
-            }
-            <span class="tk-k">while</span> (set.<span class="tk-f">contains</span>(x + <span class="tk-n">1</span>)) {
-                x++;
-            }
-            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
+    <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
+    <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+        set.<span class="tk-f">add</span>(num);
+    }
+    <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+    <span class="tk-k">for</span> (<span class="tk-t">Integer</span> num : set) {
+        <span class="tk-k">int</span> x = num;
+        <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(x - <span class="tk-n">1</span>)) {
+            <span class="tk-k">continue</span>;
         }
-        <span class="tk-k">return</span> max;
-    }</pre></div>
+        <span class="tk-k">while</span> (set.<span class="tk-f">contains</span>(x + <span class="tk-n">1</span>)) {
+            x++;
+        }
+        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
+    }
+    <span class="tk-k">return</span> max;
+}</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-t">Arrays</span>.<span class="tk-f">stream</span>(nums).<span class="tk-f">boxed</span>().<span class="tk-f">collect</span>(<span class="tk-t">Collectors</span>.<span class="tk-f">toSet</span>());
