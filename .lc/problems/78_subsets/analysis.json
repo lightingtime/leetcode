@@ -76,20 +76,20 @@
       "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        if (index >= nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n\n            list.add(nums[index]);\n            dfs(nums, index + 1, list);\n\n            list.remove(list.size() - 1);\n            dfs(nums, index + 1, list);\n    }"
     },
     {
-      "date": "2026-09-01",
+      "date": "2026-09-02",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "10/10",
       "runtime_ms": null,
-      "memory_bytes": 44612000,
+      "memory_bytes": 44672000,
       "approach": "回溯（起点推进）",
       "time_complexity": "O(n*2^n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**：一刷记录了两种写法（选/不选 + 起点推进）；本次选「起点推进（每节点收集）」。第一版把两套框架混用（叶子收集 + for 循环 + 循环内「不选」递归）导致重复 []、丢 [1,2]，经分析后改为纯起点推进，一次写对。\n\n**② 这次为什么没想起来**：一刷两种写法都写过，但没沉淀「一次只用一套框架」的纪律；本次先把两套框架的决策对象想通——A 决策「元素进不进」（不选必须显式），B 决策「下一个选哪个」（不选 = 循环跳过，什么都不选 = 节点收集），理解后不再混用。\n\n**③ 掌握度判定**：探讨过（明确要了两套正确答案）+ 第一版失败 → weak；本地一次过、提交一次 Accepted，但全程有探讨。\n\n**④ 下一步提醒**：B 骨架可迁移——组合 LC77（size==k 才收集）、组合总和 LC39（dfs(i) 不前进可重复取）、排列 LC46（visited 数组代替 start）；复习时用 A 视角自检「每个元素进/不进两条路径都覆盖到」防漏防重。",
-      "code": "    List<List<Integer>> ans;\n\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n\n        for (int i = index; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：回溯「选/不选」两分支，非一次 AC。\n- 复习①（2026-09-01）：改「起点推进」写法，较弱。\n- 本次（第 2 次复习）：独立写出「起点推进」，本地全绿 + 力扣 10/10 一次 Accepted。写法：进入 dfs 先把当前 path 快照加入 ans（每个节点都是合法子集），再 for i=index..n-1 选 nums[i]、递归 i+1、回溯 remove 末尾。\n\n**② 为什么想起来**\n- 子集枚举的关键：不用等到叶子，**递归树上的每个节点都代表一个子集**，所以进函数先 add 快照；起点推进（下一层从 i+1 开始）保证同一元素不重复选、天然不重不漏。\n- 「起点推进」与组合模板（LC77/LC39/LC40）同框架，比「选/不选」更通用，这次直接选它。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（10/10）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒 / 代码注意**\n- 空输入守卫 if (nums.length == 0) return ans 语义不严谨：若真有空输入，子集应返回 [[]]（dfs 会把空 path 快照加入），返回 [] 是错的——本题约束 n≥1 才未触发。LC17「空输入→[]」的结论不能照搬到枚举/组合类题，删除守卫交给 dfs 处理即可。\n- 同框架：LC77 组合、LC39 组合总和、LC90 子集 II（含重复元素，需先排序 + 同层去重）。",
+      "code": "List<List<Integer>> ans;\npublic List<List<Integer>> subsets(int[] nums) {\n    ans = new ArrayList<>();\n    if (nums.length == 0) {\n        return ans;\n    }\n    dfs(nums, 0, new ArrayList<>());\n    return ans;\n}\n\nprivate void dfs(int[] nums, int index, ArrayList<Integer> path) {\n    ans.add(new ArrayList<>(path));\n\n    for (int i = index; i < nums.length; i++) {\n        path.add(nums[i]);\n        dfs(nums, i + 1, path);\n        path.remove(path.size() - 1);\n    }\n}",
       "prev_code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int start, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n        for (int i = start; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }",
-      "mastery": "weak",
-      "pass": 1
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "reviews": [
@@ -105,6 +105,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**：一刷记录了两种写法（选/不选 + 起点推进）；本次选「起点推进（每节点收集）」。第一版把两套框架混用（叶子收集 + for 循环 + 循环内「不选」递归）导致重复 []、丢 [1,2]，经分析后改为纯起点推进，一次写对。\n\n**② 这次为什么没想起来**：一刷两种写法都写过，但没沉淀「一次只用一套框架」的纪律；本次先把两套框架的决策对象想通——A 决策「元素进不进」（不选必须显式），B 决策「下一个选哪个」（不选 = 循环跳过，什么都不选 = 节点收集），理解后不再混用。\n\n**③ 掌握度判定**：探讨过（明确要了两套正确答案）+ 第一版失败 → weak；本地一次过、提交一次 Accepted，但全程有探讨。\n\n**④ 下一步提醒**：B 骨架可迁移——组合 LC77（size==k 才收集）、组合总和 LC39（dfs(i) 不前进可重复取）、排列 LC46（visited 数组代替 start）；复习时用 A 视角自检「每个元素进/不进两条路径都覆盖到」防漏防重。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-02",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "10/10",
+      "approach": "回溯（起点推进）",
+      "time_complexity": "O(n*2^n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：回溯「选/不选」两分支，非一次 AC。\n- 复习①（2026-09-01）：改「起点推进」写法，较弱。\n- 本次（第 2 次复习）：独立写出「起点推进」，本地全绿 + 力扣 10/10 一次 Accepted。写法：进入 dfs 先把当前 path 快照加入 ans（每个节点都是合法子集），再 for i=index..n-1 选 nums[i]、递归 i+1、回溯 remove 末尾。\n\n**② 为什么想起来**\n- 子集枚举的关键：不用等到叶子，**递归树上的每个节点都代表一个子集**，所以进函数先 add 快照；起点推进（下一层从 i+1 开始）保证同一元素不重复选、天然不重不漏。\n- 「起点推进」与组合模板（LC77/LC39/LC40）同框架，比「选/不选」更通用，这次直接选它。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（10/10）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒 / 代码注意**\n- 空输入守卫 if (nums.length == 0) return ans 语义不严谨：若真有空输入，子集应返回 [[]]（dfs 会把空 path 快照加入），返回 [] 是错的——本题约束 n≥1 才未触发。LC17「空输入→[]」的结论不能照搬到枚举/组合类题，删除守卫交给 dfs 处理即可。\n- 同框架：LC77 组合、LC39 组合总和、LC90 子集 II（含重复元素，需先排序 + 同层去重）。"
     }
   ]
 }

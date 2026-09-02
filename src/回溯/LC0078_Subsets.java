@@ -2,8 +2,8 @@
 // LeetCode 78. 子集 (Subsets)
 // 难度：Medium | 分类：回溯
 // 链接：https://leetcode.cn/problems/subsets/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-09）
-// 一刷思路：回溯（起点推进，每节点收集答案；另有「选/不选」写法，见 analysis.json submissions）
+// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-09 · 上次 2026-09-01 较弱）
+// 一刷写法：回溯（选/不选）；上次写法：回溯（起点推进），每个节点都是唯一子集
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -13,20 +13,22 @@ public class LC0078_Subsets {
 
     // ==== 提交代码开始 ====
     List<List<Integer>> ans;
-
     public List<List<Integer>> subsets(int[] nums) {
         ans = new ArrayList<>();
+        if (nums.length == 0) {
+            return ans;
+        }
         dfs(nums, 0, new ArrayList<>());
         return ans;
     }
 
-    private void dfs(int[] nums, int index, List<Integer> list) {
-        ans.add(new ArrayList<>(list));
+    private void dfs(int[] nums, int index, ArrayList<Integer> path) {
+        ans.add(new ArrayList<>(path));
 
         for (int i = index; i < nums.length; i++) {
-            list.add(nums[i]);
-            dfs(nums, i + 1, list);
-            list.remove(list.size() - 1);
+            path.add(nums[i]);
+            dfs(nums, i + 1, path);
+            path.remove(path.size() - 1);
         }
     }
     // ==== 提交代码结束 ====
