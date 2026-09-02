@@ -2,8 +2,8 @@
 // LeetCode 200. 岛屿数量 (Number of Islands)
 // 难度：Medium | 分类：图与并查集
 // 链接：https://leetcode.cn/problems/number-of-islands/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-08）
-// 一刷思路：DFS 淹没（visited 标记 + 四方向递归），O(mn)/O(mn)
+// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-08 · 上次 2026-09-01 较弱）
+// 一刷/上次思路：DFS 洪水填充：扫到未访问的 1 即计数并递归四方向淹没，visited 防重
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -13,9 +13,10 @@ public class LC0200_NumberOfIslands {
 
     // ==== 提交代码开始 ====
     boolean[][] visited;
+    int ans;
     public int numIslands(char[][] grid) {
-        int ans = 0;
         int m = grid.length;
+        ans = 0;
         if (m == 0) {
             return ans;
         }
@@ -32,10 +33,7 @@ public class LC0200_NumberOfIslands {
     }
 
     private boolean dfs(char[][] grid, int i, int j) {
-        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length) {
-            return false;
-        }
-        if (visited[i][j]) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || visited[i][j]) {
             return false;
         }
         visited[i][j] = true;
@@ -43,10 +41,10 @@ public class LC0200_NumberOfIslands {
             return false;
         }
         boolean has = true;
-        has |= dfs(grid, i + 1, j);
-        has |= dfs(grid, i - 1, j);
-        has |= dfs(grid, i, j + 1);
-        has |= dfs(grid, i, j - 1);
+        dfs(grid, i + 1, j);
+        dfs(grid, i - 1, j);
+        dfs(grid, i, j + 1);
+        dfs(grid, i, j - 1);
         return has;
     }
     // ==== 提交代码结束 ====
