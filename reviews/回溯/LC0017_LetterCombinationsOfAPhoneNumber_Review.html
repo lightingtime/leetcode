@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>17. 电话号码的字母组合 (Letter Combinations of a Phone Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/" rel="noopener">https://leetcode.cn/problems/letter-combinations-of-a-phone-number/</a></p><p>难度：Medium ｜ 分类：回溯</p><p>标签：哈希表、字符串、回溯</p><h2>题目描述</h2><p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。</p><p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p><p>示例 1：</p><p>输入：digits = "23"</p><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><p>示例 2：</p><p>输入：digits = "2"</p><p>输出：["a","b","c"]</p><p>提示：</p><p>1</p><p>digits[i] 是范围 ['2', '9'] 的一个数字。</p><h2>示例</h2><ol><li>输入：digits = "23"</li></ol><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><ol><li>输入：digits = "2"</li></ol><p>输出：["a","b","c"]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(4^n·n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-08）：回溯 DFS，首 WA 即空输入返回 [""]（应 []）；修复后 AC，非一次。</li><li>复习①（2026-09-01）：同思路一次 AC，较强。</li><li>本次（第 2 次复习）：回溯主体（逐位选字母 + append→递归→deleteCharAt 撤销）一次写出，但<strong>空输入边界复发</strong>——本地边界1 失败（返回 [""]），经提示补 digits.isEmpty() 短路后修复；力扣 24/24 Accepted。</li></ul><p><strong>② 为什么没想起来</strong></p><ul><li>递归主流程记得牢，但「空输入」这类应在递归入口前挡掉的边界被忽略：dfs 终止条件 sb.length()==digits.length() 在空串时 0==0 立即成立，直接产出空串结果。</li><li>一刷踩过同一坑却未内化——当时只修了代码，没把「写递归前先列输入端点、空输入先短路」变成习惯；本次已记录错误习惯（累计 1 次）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本地曾失败（空输入复发）+ 经提示修复 → weak；力扣侧一次 Accepted（24/24），firstTry=true。下次复习 09-03 重点复查空输入边界与整体回溯骨架。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同骨架回溯题：LC22 括号生成、LC39 组合总和、LC46 全排列、LC78 子集——共性都是「选/撤销」+ 入口边界（空/0）单独短路。</li><li>空输入在 List/String 返回题里常表现为 [""] vs []，动手前先列出输入范围端点用例。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 回溯 DFS ｜ O(4^n·n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong>：一刷与本次同为「回溯 DFS」（map 数字→字母，StringBuilder 记录路径，len 到 digits.length() 收集，空输入单独返回），思路与写法完全一致，本次一次写对。</p><p><strong>② 这次为什么想起来</strong>：一刷已沉淀「回溯枚举组合」套路：空输入提前返回 + 终止条件对空串直接成立。这次先想到 len==digits.length() 终止 + 每层枚举当前数字字母做选择/撤销，空输入单独 return ans 避免把空串当组合，全部命中。</p><p><strong>③ 掌握度判定</strong>：一次提交即 Accepted（24/24）且全程无探讨 → strong。</p><p><strong>④ 下一步提醒</strong>：组合数本身就是指数级（4^n），任何解法都要枚举全部组合，O(4^n·n) 是本题下界；仅可对比队列逐层扩展（BFS 版）实现，复杂度相同但需保存全部前缀、空间更大，回溯是本题更优写法。</p></div>
@@ -37,41 +41,40 @@
         <li><span>复杂度</span><b>O(4^n·n) · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>回溯 DFS</b></li>
         <li><span>复杂度</span><b>O(4^n·n) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯 DFS</h3>
-    <p><span class="chip">时间 O(4^n·n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0017_LetterCombinationsOfAPhoneNumber.java · 回溯 DFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-t">String</span>[] map = {<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
-    <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
-    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {
-        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-        <span class="tk-k">if</span> (digits.<span class="tk-f">isEmpty</span>()) {
-            <span class="tk-k">return</span> ans;
-        }
-        <span class="tk-f">dfs</span>(digits, <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>(), <span class="tk-n">0</span>);
+    <p><span class="chip">时间 O(4^n·n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 24/24</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0017_LetterCombinationsOfAPhoneNumber.java · 回溯 DFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">String</span>[] numbers = <span class="tk-k">new</span> <span class="tk-t">String</span>[]{<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
+<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+<span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {
+    ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+    <span class="tk-k">if</span> (digits.<span class="tk-f">isEmpty</span>()) {
         <span class="tk-k">return</span> ans;
     }
+    <span class="tk-f">dfs</span>(digits, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>());
+    <span class="tk-k">return</span> ans;
+}
 
-    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> digits, <span class="tk-t">StringBuilder</span> path, <span class="tk-k">int</span> len) {
-        <span class="tk-k">if</span> (len == digits.<span class="tk-f">length</span>()) {
-            ans.<span class="tk-f">add</span>(path.<span class="tk-f">toString</span>());
-            <span class="tk-k">return</span>;
-        }
+<span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> digits, <span class="tk-k">int</span> index, <span class="tk-t">StringBuilder</span> sb) {
+    <span class="tk-k">if</span> (sb.<span class="tk-f">length</span>() == digits.<span class="tk-f">length</span>()) {
+        ans.<span class="tk-f">add</span>(sb.<span class="tk-f">toString</span>());
+        <span class="tk-k">return</span>;
+    }
 
-        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : map[digits.<span class="tk-f">charAt</span>(len) - <span class="tk-s">'0'</span>].<span class="tk-f">toCharArray</span>()) {
-            path.<span class="tk-f">append</span>(c);
-            <span class="tk-f">dfs</span>(digits, path, len+<span class="tk-n">1</span>);
-            path.<span class="tk-f">deleteCharAt</span>(path.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
-        }
-
-    }</pre></div>
+    <span class="tk-k">for</span> (<span class="tk-k">char</span> c : numbers[digits.<span class="tk-f">charAt</span>(index) - <span class="tk-s">'0'</span>].<span class="tk-f">toCharArray</span>()) {
+        sb.<span class="tk-f">append</span>(c);
+        <span class="tk-f">dfs</span>(digits, index + <span class="tk-n">1</span>, sb);
+        sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
+    }
+}</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0017_LetterCombinationsOfAPhoneNumber.java · 回溯 DFS · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
     <span class="tk-t">String</span>[] map = {<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
     <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {
@@ -99,7 +102,7 @@
 </pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：给定数字串（每位是 2-9），每位映射到固定字母集（7/9 是 4 个字母，其余 3 个），求所有「每位置取一个字母」的组合串。本质是<strong>多路选择的枚举</strong>：每层递归决定一位选哪个字母，枚举所有路径。</p><p><strong>解法选择理由</strong>：组合枚举的标准工具是回溯（递归 + 选择/撤销）。组合总数是指数级（最多 4^n），必须枚举全部，没有多项式捷径；回溯每次在一条路径上增量构造（StringBuilder），相比「每层复制整串」省内存，是本题最直接写法。</p><p><strong>关键设计决策</strong>：</p><ul><li><code>map</code> 数组：下标 = 数字（0-9），值 = 该键字母串，<code>map[digits.charAt(len)-'0']</code> 取当前位可选字母。</li><li>终止条件 <code>len == digits.length()</code>：len 既是已选位数也是下一层的下标，走到末尾收集 <code>path.toString()</code>。</li><li>选择/撤销：<code>path.append(c)</code> 进入下一层，返回后 <code>deleteCharAt(last)</code> 撤销，保证兄弟分支互不污染。</li><li>空输入单独返回：<code>len==0==digits.length()</code> 会直接把空串当组合收集（得到 <code>[""]</code>），题目要求空输入返回空列表，故入口处提前 <code>return</code>。</li></ul><p><strong>边界与细节</strong>：空输入 → []；单数字 7/9（4 字母键）→ 4 个单字母；全相同数字（22）→ 3×3 笛卡尔积；混合四字母键（27）→ 3×4；多数字（234）→ 3×3×3。以上边界 1-6 已覆盖，且输入都在约束内（仅 2-9、长度 0-4）。</p><p><strong>具体 case 推演</strong>（digits = "27"，期望 12 个组合）：</p><ol><li><code>dfs("27", path="", len=0)</code>：<code>map[2]="abc"</code>，先选 'a' → path="a"，进入 len=1。</li><li><code>dfs(..., path="a", len=1)</code>：<code>map[7]="pqrs"</code>，依次选 'p','q','r','s' → 收集 "ap","aq","ar","as"，每选一个后 <code>deleteCharAt</code> 撤销。</li><li>回到 len=0，撤销 'a' → path=""，再选 'b' → 重复第 2 步收集 "bp"..."bs"；再选 'c' 同理。</li><li>共 3×4=12 条，与边界6 期望一致。</li></ol><p><strong>复杂度与下限论证</strong>：设每位字母数 c_i，组合总数 = ∏c_i，最坏全 4 字母键 = 4^n；每生成一个长度 n 的串要 O(n) 复制，总 O(4^n·n)。因为输出本身就有 4^n 个串，任何解法都至少 O(4^n·n)，时间达下界。空间 O(n)（递归栈深度 n + StringBuilder 长度 n），无额外结果存储（结果本身不算）。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>24/24 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>空输入未单独短路：digits 为空串时递归基（sb.length()==digits.length()）立即成立，把空串加入结果返回 [""] 而非 []；应先把 digits.isEmpty() 判掉返回空列表。一刷同样踩过此坑，属复发边界错误</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>24/24 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>回溯枚举组合：空输入要提前返回，终止条件对空串直接成立</h3><p>回溯枚举（字母组合/子集/排列）里，终止条件 len==目标长度 对空输入一开始就成立，会把空串当成一个合法组合加入答案；题目要求空输入返回空列表时，需在进入递归前单独返回。另外测试工具若把空串规范化成空内容，[] 与 [""] 会无法区分，需用 size 断言兜底。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -113,7 +116,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 回溯</h3><div class="quote">回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>空输入未单独短路：digits 为空串时递归基（sb.length()==digits.length()）立即成立，把空串加入结果返回 [""] 而非 []；应先把 digits.isEmpty() 判掉返回空列表。一刷同样踩过此坑，属复发边界错误</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 45 · letter-combinations-of-a-phone-number</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>

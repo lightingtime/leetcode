@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-01",
+  "updated": "2026-09-02",
   "current_seq": 170,
   "done": [
     {
@@ -3215,6 +3215,17 @@
         "动态规划"
       ],
       "last_seen": "2026-09-01"
+    },
+    {
+      "habit": "空输入未单独短路：digits 为空串时递归基（sb.length()==digits.length()）立即成立，把空串加入结果返回 [\"\"] 而非 []；应先把 digits.isEmpty() 判掉返回空列表。一刷同样踩过此坑，属复发边界错误",
+      "count": 1,
+      "examples": [
+        "letter-combinations-of-a-phone-number"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-09-02"
     }
   ],
   "category_hints": {

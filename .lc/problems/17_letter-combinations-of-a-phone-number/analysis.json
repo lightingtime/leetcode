@@ -15,8 +15,16 @@
   "time_complexity": "O(4^n·n)",
   "space_complexity": "O(n)",
   "notes": "电话号码字母组合：回溯逐位选字母 + StringBuilder 撤销，修复空输入边界（应返回 [] 而非 [\"\"]）后 Accepted（24/24）",
+  "mistakes": [
+    {
+      "habit": "空输入未单独短路：digits 为空串时递归基（sb.length()==digits.length()）立即成立，把空串加入结果返回 [\"\"] 而非 []；应先把 digits.isEmpty() 判掉返回空列表。一刷同样踩过此坑，属复发边界错误",
+      "count": 1
+    }
+  ],
+  "hints": [
+    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ],
   "code_notes": [],
-  "mistakes": [],
   "patterns": [
     {
       "title": "回溯枚举组合：空输入要提前返回，终止条件对空串直接成立",
@@ -28,24 +36,21 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-01",
+      "date": "2026-09-02",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "24/24",
       "runtime_ms": null,
-      "memory_bytes": 43720000,
+      "memory_bytes": 43880000,
       "approach": "回溯 DFS",
       "time_complexity": "O(4^n·n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**：一刷与本次同为「回溯 DFS」（map 数字→字母，StringBuilder 记录路径，len 到 digits.length() 收集，空输入单独返回），思路与写法完全一致，本次一次写对。\n\n**② 这次为什么想起来**：一刷已沉淀「回溯枚举组合」套路：空输入提前返回 + 终止条件对空串直接成立。这次先想到 len==digits.length() 终止 + 每层枚举当前数字字母做选择/撤销，空输入单独 return ans 避免把空串当组合，全部命中。\n\n**③ 掌握度判定**：一次提交即 Accepted（24/24）且全程无探讨 → strong。\n\n**④ 下一步提醒**：组合数本身就是指数级（4^n），任何解法都要枚举全部组合，O(4^n·n) 是本题下界；仅可对比队列逐层扩展（BFS 版）实现，复杂度相同但需保存全部前缀、空间更大，回溯是本题更优写法。",
-      "code": "    String[] map = {\"\", \"\", \"abc\", \"def\", \"ghi\", \"jkl\", \"mno\", \"pqrs\", \"tuv\", \"wxyz\"};\n    List<String> ans;\n    public List<String> letterCombinations(String digits) {\n        ans = new ArrayList<>();\n        if (digits.isEmpty()) {\n            return ans;\n        }\n        dfs(digits, new StringBuilder(), 0);\n        return ans;\n    }\n\n    private void dfs(String digits, StringBuilder path, int len) {\n        if (len == digits.length()) {\n            ans.add(path.toString());\n            return;\n        }\n\n        for (char c : map[digits.charAt(len) - '0'].toCharArray()) {\n            path.append(c);\n            dfs(digits, path, len+1);\n            path.deleteCharAt(path.length() - 1);\n        }\n\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-08）：回溯 DFS，首 WA 即空输入返回 [\"\"]（应 []）；修复后 AC，非一次。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：回溯主体（逐位选字母 + append→递归→deleteCharAt 撤销）一次写出，但**空输入边界复发**——本地边界1 失败（返回 [\"\"]），经提示补 digits.isEmpty() 短路后修复；力扣 24/24 Accepted。\n\n**② 为什么没想起来**\n- 递归主流程记得牢，但「空输入」这类应在递归入口前挡掉的边界被忽略：dfs 终止条件 sb.length()==digits.length() 在空串时 0==0 立即成立，直接产出空串结果。\n- 一刷踩过同一坑却未内化——当时只修了代码，没把「写递归前先列输入端点、空输入先短路」变成习惯；本次已记录错误习惯（累计 1 次）。\n\n**③ 掌握度判定**\n- 本地曾失败（空输入复发）+ 经提示修复 → weak；力扣侧一次 Accepted（24/24），firstTry=true。下次复习 09-03 重点复查空输入边界与整体回溯骨架。\n\n**④ 下一步提醒**\n- 同骨架回溯题：LC22 括号生成、LC39 组合总和、LC46 全排列、LC78 子集——共性都是「选/撤销」+ 入口边界（空/0）单独短路。\n- 空输入在 List/String 返回题里常表现为 [\"\"] vs []，动手前先列出输入范围端点用例。",
+      "code": "String[] numbers = new String[]{\"\", \"\", \"abc\", \"def\", \"ghi\", \"jkl\", \"mno\", \"pqrs\", \"tuv\", \"wxyz\"};\nList<String> ans;\npublic List<String> letterCombinations(String digits) {\n    ans = new ArrayList<>();\n    if (digits.isEmpty()) {\n        return ans;\n    }\n    dfs(digits, 0, new StringBuilder());\n    return ans;\n}\n\nprivate void dfs(String digits, int index, StringBuilder sb) {\n    if (sb.length() == digits.length()) {\n        ans.add(sb.toString());\n        return;\n    }\n\n    for (char c : numbers[digits.charAt(index) - '0'].toCharArray()) {\n        sb.append(c);\n        dfs(digits, index + 1, sb);\n        sb.deleteCharAt(sb.length() - 1);\n    }\n}",
       "prev_code": "List<String> ans;\n    String[] map = {\"\", \"\", \"abc\", \"def\", \"ghi\", \"jkl\", \"mno\", \"pqrs\", \"tuv\", \"wxyz\"};\n    public List<String> letterCombinations(String digits) {\n        ans = new ArrayList<>();\n        if (digits.length() == 0) {\n            return ans;\n        }\n        dfs(digits, new StringBuilder(), 0);\n        return ans;\n    }\n\n    private void dfs(String digits, StringBuilder sb, int len) {\n        if (len == digits.length()) {\n            ans.add(sb.toString());\n            return;\n        }\n\n        for (char c : map[digits.charAt(len) - '0'].toCharArray()) {\n            sb.append(c);\n            dfs(digits, sb, len + 1);\n            sb.deleteCharAt(sb.length() - 1);\n        }\n\n    }\n",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
-  ],
-  "hints": [
-    "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
   ],
   "reviews": [
     {
@@ -60,6 +65,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**：一刷与本次同为「回溯 DFS」（map 数字→字母，StringBuilder 记录路径，len 到 digits.length() 收集，空输入单独返回），思路与写法完全一致，本次一次写对。\n\n**② 这次为什么想起来**：一刷已沉淀「回溯枚举组合」套路：空输入提前返回 + 终止条件对空串直接成立。这次先想到 len==digits.length() 终止 + 每层枚举当前数字字母做选择/撤销，空输入单独 return ans 避免把空串当组合，全部命中。\n\n**③ 掌握度判定**：一次提交即 Accepted（24/24）且全程无探讨 → strong。\n\n**④ 下一步提醒**：组合数本身就是指数级（4^n），任何解法都要枚举全部组合，O(4^n·n) 是本题下界；仅可对比队列逐层扩展（BFS 版）实现，复杂度相同但需保存全部前缀、空间更大，回溯是本题更优写法。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-02",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "24/24",
+      "approach": "回溯 DFS",
+      "time_complexity": "O(4^n·n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-08）：回溯 DFS，首 WA 即空输入返回 [\"\"]（应 []）；修复后 AC，非一次。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：回溯主体（逐位选字母 + append→递归→deleteCharAt 撤销）一次写出，但**空输入边界复发**——本地边界1 失败（返回 [\"\"]），经提示补 digits.isEmpty() 短路后修复；力扣 24/24 Accepted。\n\n**② 为什么没想起来**\n- 递归主流程记得牢，但「空输入」这类应在递归入口前挡掉的边界被忽略：dfs 终止条件 sb.length()==digits.length() 在空串时 0==0 立即成立，直接产出空串结果。\n- 一刷踩过同一坑却未内化——当时只修了代码，没把「写递归前先列输入端点、空输入先短路」变成习惯；本次已记录错误习惯（累计 1 次）。\n\n**③ 掌握度判定**\n- 本地曾失败（空输入复发）+ 经提示修复 → weak；力扣侧一次 Accepted（24/24），firstTry=true。下次复习 09-03 重点复查空输入边界与整体回溯骨架。\n\n**④ 下一步提醒**\n- 同骨架回溯题：LC22 括号生成、LC39 组合总和、LC46 全排列、LC78 子集——共性都是「选/撤销」+ 入口边界（空/0）单独短路。\n- 空输入在 List/String 返回题里常表现为 [\"\"] vs []，动手前先列出输入范围端点用例。"
     }
   ],
   "approach_detail": "**问题本质**：给定数字串（每位是 2-9），每位映射到固定字母集（7/9 是 4 个字母，其余 3 个），求所有「每位置取一个字母」的组合串。本质是**多路选择的枚举**：每层递归决定一位选哪个字母，枚举所有路径。\n\n**解法选择理由**：组合枚举的标准工具是回溯（递归 + 选择/撤销）。组合总数是指数级（最多 4^n），必须枚举全部，没有多项式捷径；回溯每次在一条路径上增量构造（StringBuilder），相比「每层复制整串」省内存，是本题最直接写法。\n\n**关键设计决策**：\n- `map` 数组：下标 = 数字（0-9），值 = 该键字母串，`map[digits.charAt(len)-'0']` 取当前位可选字母。\n- 终止条件 `len == digits.length()`：len 既是已选位数也是下一层的下标，走到末尾收集 `path.toString()`。\n- 选择/撤销：`path.append(c)` 进入下一层，返回后 `deleteCharAt(last)` 撤销，保证兄弟分支互不污染。\n- 空输入单独返回：`len==0==digits.length()` 会直接把空串当组合收集（得到 `[\"\"]`），题目要求空输入返回空列表，故入口处提前 `return`。\n\n**边界与细节**：空输入 → []；单数字 7/9（4 字母键）→ 4 个单字母；全相同数字（22）→ 3×3 笛卡尔积；混合四字母键（27）→ 3×4；多数字（234）→ 3×3×3。以上边界 1-6 已覆盖，且输入都在约束内（仅 2-9、长度 0-4）。\n\n**具体 case 推演**（digits = \"27\"，期望 12 个组合）：\n1. `dfs(\"27\", path=\"\", len=0)`：`map[2]=\"abc\"`，先选 'a' → path=\"a\"，进入 len=1。\n2. `dfs(..., path=\"a\", len=1)`：`map[7]=\"pqrs\"`，依次选 'p','q','r','s' → 收集 \"ap\",\"aq\",\"ar\",\"as\"，每选一个后 `deleteCharAt` 撤销。\n3. 回到 len=0，撤销 'a' → path=\"\"，再选 'b' → 重复第 2 步收集 \"bp\"...\"bs\"；再选 'c' 同理。\n4. 共 3×4=12 条，与边界6 期望一致。\n\n**复杂度与下限论证**：设每位字母数 c_i，组合总数 = ∏c_i，最坏全 4 字母键 = 4^n；每生成一个长度 n 的串要 O(n) 复制，总 O(4^n·n)。因为输出本身就有 4^n 个串，任何解法都至少 O(4^n·n)，时间达下界。空间 O(n)（递归栈深度 n + StringBuilder 长度 n），无额外结果存储（结果本身不算）。\n"

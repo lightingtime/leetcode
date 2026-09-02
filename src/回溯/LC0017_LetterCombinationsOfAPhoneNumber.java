@@ -2,38 +2,38 @@
 // LeetCode 17. 电话号码的字母组合 (Letter Combinations of a Phone Number)
 // 难度：Medium | 分类：回溯
 // 链接：https://leetcode.cn/problems/letter-combinations-of-a-phone-number/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-08）
-// 一刷思路：回溯 DFS（map 数字→字母，len 走到 digits.length() 收集结果）
+// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-08 · 上次 2026-09-01 较强）
+// 一刷/上次思路：回溯 DFS：逐位选字母 + StringBuilder 撤销（append 后递归再 deleteCharAt）
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
 
 public class LC0017_LetterCombinationsOfAPhoneNumber {
+
     // ==== 提交代码开始 ====
-    String[] map = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    String[] numbers = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     List<String> ans;
     public List<String> letterCombinations(String digits) {
         ans = new ArrayList<>();
         if (digits.isEmpty()) {
             return ans;
         }
-        dfs(digits, new StringBuilder(), 0);
+        dfs(digits, 0, new StringBuilder());
         return ans;
     }
 
-    private void dfs(String digits, StringBuilder path, int len) {
-        if (len == digits.length()) {
-            ans.add(path.toString());
+    private void dfs(String digits, int index, StringBuilder sb) {
+        if (sb.length() == digits.length()) {
+            ans.add(sb.toString());
             return;
         }
 
-        for (char c : map[digits.charAt(len) - '0'].toCharArray()) {
-            path.append(c);
-            dfs(digits, path, len+1);
-            path.deleteCharAt(path.length() - 1);
+        for (char c : numbers[digits.charAt(index) - '0'].toCharArray()) {
+            sb.append(c);
+            dfs(digits, index + 1, sb);
+            sb.deleteCharAt(sb.length() - 1);
         }
-
     }
     // ==== 提交代码结束 ====
 
@@ -53,7 +53,13 @@ public class LC0017_LetterCombinationsOfAPhoneNumber {
         try {
             List<String> empty = s.letterCombinations("");
             if (empty.size() != 0) {
-                System.out.println("边界1 失败 ✗ 期望=[] 实际=" + empty);
+                StringBuilder shown = new StringBuilder("[");
+                for (int i = 0; i < empty.size(); i++) {
+                    if (i > 0) shown.append(", ");
+                    shown.append('"').append(empty.get(i)).append('"');
+                }
+                shown.append(']');
+                System.out.println("边界1 失败 ✗ 期望 size=0 []，实际 size=" + empty.size() + " " + shown);
                 failures++;
             } else {
                 System.out.println("边界1 通过 ✓");
