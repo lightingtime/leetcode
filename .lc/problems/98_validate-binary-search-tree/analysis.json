@@ -33,20 +33,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-01",
+      "date": "2026-09-02",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "86/86",
       "runtime_ms": null,
-      "memory_bytes": 45692000,
+      "memory_bytes": 45624000,
       "approach": "递归上下界",
       "time_complexity": "O(n)",
-      "space_complexity": "O(h)",
+      "space_complexity": "O(树高)",
       "optimal": true,
-      "notes": "",
-      "code": "public boolean isValidBST(TreeNode root) {\n        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n    }\n\n    private boolean isValidBSTHelper(TreeNode node, long upper, long lower) {\n        if (node == null) {\n            return true;\n        }\n        if (node.val >= upper || node.val <= lower) {\n            return false;\n        }\n        return isValidBSTHelper(node.left, node.val, lower) && isValidBSTHelper(node.right, upper, node.val);\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-07）：递归上下界，首 WA——左/右子树只收紧一侧、另一侧重置为 ±∞，丢失祖先约束（根 10 右子树里出现 6 < 10 未被拦）；用 long 上下界处理 int 极值。非一次 AC。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：独立写出同款递归上下界，本地 10 组全绿 + 力扣 86/86 一次 Accepted。写法与归档一致：空节点 true；节点值落在 (lower, upper) 开区间，越界即 false；左子树继承 lower、upper 收紧为 val，右子树继承 upper、lower 收紧为 val。\n\n**② 这次为什么想起来**\n- 核心记忆点：BST 校验不是「和孩子比大小」，而是「每个节点必须落在祖先区间 (lower, upper) 内」，一路向下把区间收窄；上下界从 long 的 ±∞ 起步，节点值恰为 Integer 极值时也不误判。\n- 一刷丢祖先约束的坑这次直接规避：左右两侧边界都显式继承传递，未收紧的一侧绝不重置为 ±∞。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（86/86）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 等价写法：BST 中序遍历严格递增（迭代栈 + prev 前驱比较），可作为第二写法练习。\n- 相关题：LC230 二叉搜索树中第 K 小（中序）、LC700/701 搜索与插入、LC450 删除节点（前驱/后继替换）。\n- 恒记边界：相等值（重复）不合法；比较用 long 或先判相等再比大小。",
+      "code": "public boolean isValidBST(TreeNode root) {\n    return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n}\n\nprivate boolean isValidBSTHelper(TreeNode root, long upper, long lower) {\n    if (root == null) {\n        return true;\n    }\n    if (root.val >= upper || root.val <= lower) {\n        return false;\n    }\n    return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);\n}",
       "prev_code": "public boolean isValidBST(TreeNode root) {\n        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n    }\n\n    private boolean isValidBSTHelper(TreeNode root, long upper, long lower) {\n        if (root == null) {\n            return true;\n        }\n        if (root.val >= upper || root.val <= lower) {\n            return false;\n        }\n        return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -65,6 +65,19 @@
       "space_complexity": "O(h)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-02",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "86/86",
+      "approach": "递归上下界",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(树高)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-07）：递归上下界，首 WA——左/右子树只收紧一侧、另一侧重置为 ±∞，丢失祖先约束（根 10 右子树里出现 6 < 10 未被拦）；用 long 上下界处理 int 极值。非一次 AC。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：独立写出同款递归上下界，本地 10 组全绿 + 力扣 86/86 一次 Accepted。写法与归档一致：空节点 true；节点值落在 (lower, upper) 开区间，越界即 false；左子树继承 lower、upper 收紧为 val，右子树继承 upper、lower 收紧为 val。\n\n**② 这次为什么想起来**\n- 核心记忆点：BST 校验不是「和孩子比大小」，而是「每个节点必须落在祖先区间 (lower, upper) 内」，一路向下把区间收窄；上下界从 long 的 ±∞ 起步，节点值恰为 Integer 极值时也不误判。\n- 一刷丢祖先约束的坑这次直接规避：左右两侧边界都显式继承传递，未收紧的一侧绝不重置为 ±∞。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（86/86）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 等价写法：BST 中序遍历严格递增（迭代栈 + prev 前驱比较），可作为第二写法练习。\n- 相关题：LC230 二叉搜索树中第 K 小（中序）、LC700/701 搜索与插入、LC450 删除节点（前驱/后继替换）。\n- 恒记边界：相等值（重复）不合法；比较用 long 或先判相等再比大小。"
     }
   ]
 }
