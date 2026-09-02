@@ -2,9 +2,9 @@
 // LeetCode 347. 前 K 个高频元素 (Top K Frequent Elements)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/top-k-frequent-elements/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-07）
-// 一刷思路：哈希计数 + 快速选择，O(n) 平均；code-notes：复习可试桶排序 O(n) 线性做法
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-07 · 上次 2026-09-01 较弱）
+// 一刷思路：哈希计数 + 快速选择，O(n) 平均；上次复习已写「哈希表+快选」与「桶排序 O(n)」两版
+// 测试用例与一刷归档保持一致（示例 + 边界）
 // ============================================================
 
 import java.util.*;
@@ -17,23 +17,23 @@ public class LC0347_TopKFrequentElements {
         int max = Integer.MIN_VALUE;
         for (int num : nums) {
             map.merge(num, 1, Integer::sum);
-            max = Math.max(map.get(num), max);
+            max = Math.max(max, map.get(num));
         }
-        List<Integer>[] bucket = new List[max + 1];
+        List<Integer>[] count = new List[max + 1];
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            if (bucket[entry.getValue()] == null) {
-                bucket[entry.getValue()] = new ArrayList<>();
+            if (count[entry.getValue()] == null) {
+                count[entry.getValue()] = new ArrayList<>();
             }
-            bucket[entry.getValue()].add(entry.getKey());
+            count[entry.getValue()].add(entry.getKey());
         }
         int[] ans = new int[k];
-        int index = k - 1;
-        for (int i = max; i > 0; i--) {
-            if (bucket[i] != null) {
-                for (Integer key : bucket[i]) {
-                    ans[index] = key;
-                    index--;
-                    if (index == -1) {
+        int index = 0;
+        for (int i = count.length - 1; i >= 0; i--) {
+            if (count[i] != null) {
+                for (Integer num : count[i]) {
+                    ans[index] = num;
+                    index++;
+                    if (index == k) {
                         return ans;
                     }
                 }
@@ -41,7 +41,6 @@ public class LC0347_TopKFrequentElements {
         }
         return ans;
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
