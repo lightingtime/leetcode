@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>297. 二叉树的序列化与反序列化 (Serialize and Deserialize Binary Tree)</h1><p>&gt; <a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/" rel="noopener">https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/</a></p><p>难度：Hard ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、广度优先搜索、设计、字符串、二叉树</p><h2>题目描述</h2><p>序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。</p><p>请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。</p><p>提示: 输入输出格式与 LeetCode 目前使用的方式一致，详情请参阅 LeetCode 序列化二叉树的格式。你并非必须采取这种方式，你也可以采用其他的方法解决这个问题。</p><p>示例 1：</p><p>输入：root = [1,2,3,null,null,4,5]</p><p>输出：[1,2,3,null,null,4,5]</p><p>示例 2：</p><p>输入：root = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：root = [1]</p><p>输出：[1]</p><p>示例 4：</p><p>输入：root = [1,2]</p><p>输出：[1,2]</p><p>提示：</p><p>树中结点数在范围 [0, 104] 内</p><p>-1000</p><h2>示例</h2><ol><li>输入：root = [1,2,3,null,null,4,5]</li></ol><p>输出：[1,2,3,null,null,4,5]</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><ol><li>输入：root = [1]</li></ol><p>输出：[1]</p><ol><li>输入：root = [1,2]</li></ol><p>输出：[1,2]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（53/53）｜ 一次 AC ｜ 层序 BFS + 占位符 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-08）：层序 BFS + # 占位，首 WA——序列化队列 offerLast 配 pollLast 变成栈序导致顺序错位，改 pollFirst 后往返一致。非一次 AC。</li><li>复习①（2026-09-01）：同思路一次 AC，较强。</li><li>本次（第 2 次复习）：独立写出同款「层序 BFS 序列化 + 队列重建反序列化」，本地 9 组往返一致 + 力扣 53/53 一次 Accepted。细节差异：反序列化队列用 ArrayDeque、判空用 Objects.equals，思路不变。</li></ul><p><strong>② 这次为什么想起来</strong></p><ul><li>序列化 = 层序遍历把 null 也写进串（# 占位）；只有非空节点才入队继续展开，每展开一个非空节点就写它左右两个孩子（值或 #），串长 = 1 + 2×非空节点数，天然自洽。</li><li>反序列化按「层序对称」读：队列只放待展开的非空节点，下标 i 顺序读左右孩子，# 跳过建点；队列空即结束，不会越界。</li><li>一刷「队首队尾混用」的坑这次没犯：进出都只从队首 poll / 队尾 offer，方向单一。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本次一次提交 Accepted（53/53）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>等价写法：先序 DFS 序列化 + 递归重建（指针/全局下标），与层序 BFS 都该会；LC449 BST 序列化可只存前序靠大小关系重建。</li><li>相关：LC606 根据二叉树创建字符串（序列化变体）。</li><li>恒记：空树往返（"[]" ↔ null）；节点值可负、可为 Integer 极值，分隔符要能区分。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 层序 BFS + 占位符 ｜ O(n) · O(n)</p>
       
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>层序 BFS + 占位符</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
@@ -47,56 +51,57 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 层序 BFS + 占位符</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.3 MB</span><span class="chip">用例 —</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.9 MB</span><span class="chip">用例 53/53</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0297_SerializeAndDeserializeBinaryTree.java · 层序 BFS + 占位符</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Codec</span> {
-        <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">serialize</span>(<span class="tk-t">TreeNode</span> root) {
-            <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
-                <span class="tk-k">return</span> <span class="tk-s">"[]"</span>;
-            }
-            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
-            queue.<span class="tk-f">offer</span>(root);
-            <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
-                <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
-                <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
-                    <span class="tk-t">TreeNode</span> node = queue.<span class="tk-f">pollFirst</span>();
-                    <span class="tk-k">if</span> (node != <span class="tk-k">null</span>) {
-                        list.<span class="tk-f">add</span>(node.val + <span class="tk-s">""</span>);
-                        queue.<span class="tk-f">offerLast</span>(node.left);
-                        queue.<span class="tk-f">offerLast</span>(node.right);
-                    } <span class="tk-k">else</span> {
-                        list.<span class="tk-f">add</span>(<span class="tk-s">"#"</span>);
-                    }
-                }
-            }
-            <span class="tk-k">return</span> <span class="tk-s">"["</span> + <span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">","</span>, list)  + <span class="tk-s">"]"</span>;
+    <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">serialize</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-s">"[]"</span>;
         }
-        <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">deserialize</span>(<span class="tk-t">String</span> data) {
-            data = data.<span class="tk-f">substring</span>(<span class="tk-n">1</span>, data.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
-            <span class="tk-k">if</span> (data.<span class="tk-f">isEmpty</span>()) {
-                <span class="tk-k">return</span> <span class="tk-k">null</span>;
-            }
-            <span class="tk-t">String</span>[] split = data.<span class="tk-f">split</span>(<span class="tk-s">","</span>);
-            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
-            <span class="tk-t">TreeNode</span> root = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[<span class="tk-n">0</span>]));
-            queue.<span class="tk-f">offer</span>(root);
-            <span class="tk-k">int</span> i = <span class="tk-n">1</span>;
-            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
-                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">pollFirst</span>();
-                <span class="tk-k">if</span> (!split[i].<span class="tk-f">equals</span>(<span class="tk-s">"#"</span>)) {
-                    cur.left = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[i]));
-                    queue.<span class="tk-f">offerLast</span>(cur.left);
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
+        <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        queue.<span class="tk-f">offer</span>(root);
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
+                <span class="tk-t">TreeNode</span> node = queue.<span class="tk-f">pollFirst</span>();
+                <span class="tk-k">if</span> (node != <span class="tk-k">null</span>) {
+                    list.<span class="tk-f">add</span>(node.val + <span class="tk-s">""</span>);
+                    queue.<span class="tk-f">offerLast</span>(node.left);
+                    queue.<span class="tk-f">offerLast</span>(node.right);
+                } <span class="tk-k">else</span> {
+                    list.<span class="tk-f">add</span>(<span class="tk-s">"#"</span>);
                 }
-                i++;
-                <span class="tk-k">if</span> (!split[i].<span class="tk-f">equals</span>(<span class="tk-s">"#"</span>)) {
-                    cur.right = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[i]));
-                    queue.<span class="tk-f">offerLast</span>(cur.right);
-                }
-                i++;
             }
-            <span class="tk-k">return</span> root;
         }
-    }</pre></div>
+        <span class="tk-k">return</span> <span class="tk-s">"["</span> + <span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">","</span>, list) + <span class="tk-s">"]"</span>;
+    }
+
+    <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">deserialize</span>(<span class="tk-t">String</span> data) {
+        data = data.<span class="tk-f">substring</span>(<span class="tk-n">1</span>, data.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
+        <span class="tk-k">if</span> (data.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">return</span> <span class="tk-k">null</span>;
+        }
+        <span class="tk-t">String</span>[] split = data.<span class="tk-f">split</span>(<span class="tk-s">","</span>);
+        <span class="tk-t">TreeNode</span> root = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[<span class="tk-n">0</span>]));
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        queue.<span class="tk-f">offer</span>(root);
+        <span class="tk-k">int</span> i = <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-t">TreeNode</span> node = queue.<span class="tk-f">pollFirst</span>();
+            <span class="tk-k">if</span> (!<span class="tk-t">Objects</span>.<span class="tk-f">equals</span>(split[i], <span class="tk-s">"#"</span>)) {
+                node.left = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[i]));
+                queue.<span class="tk-f">offerLast</span>(node.left);
+            }
+            i++;
+            <span class="tk-k">if</span> (!<span class="tk-t">Objects</span>.<span class="tk-f">equals</span>(split[i], <span class="tk-s">"#"</span>)) {
+                node.right = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[i]));
+                queue.<span class="tk-f">offerLast</span>(node.right);
+            }
+            i++;
+        }
+        <span class="tk-k">return</span> root;
+    }
+}</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0297_SerializeAndDeserializeBinaryTree.java · 层序 BFS + 占位符 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Codec</span> {
         <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">serialize</span>(<span class="tk-t">TreeNode</span> root) {
             <span class="tk-t">StringBuilder</span> sb = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();

@@ -33,20 +33,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-01",
+      "date": "2026-09-02",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "53/53",
       "runtime_ms": null,
-      "memory_bytes": 48564000,
+      "memory_bytes": 48144000,
       "approach": "层序 BFS + 占位符",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "",
-      "code": "static class Codec {\n        public String serialize(TreeNode root) {\n            if (root == null) {\n                return \"[]\";\n            }\n            Deque<TreeNode> queue = new LinkedList<>();\n            queue.offer(root);\n            List<String> list = new ArrayList<>();\n            while (!queue.isEmpty()) {\n                int size = queue.size();\n                for (int i = 0; i < size; i++) {\n                    TreeNode node = queue.pollFirst();\n                    if (node != null) {\n                        list.add(node.val + \"\");\n                        queue.offerLast(node.left);\n                        queue.offerLast(node.right);\n                    } else {\n                        list.add(\"#\");\n                    }\n                }\n            }\n            return \"[\" + String.join(\",\", list)  + \"]\";\n        }\n        public TreeNode deserialize(String data) {\n            data = data.substring(1, data.length() - 1);\n            if (data.isEmpty()) {\n                return null;\n            }\n            String[] split = data.split(\",\");\n            Deque<TreeNode> queue = new LinkedList<>();\n            TreeNode root = new TreeNode(Integer.parseInt(split[0]));\n            queue.offer(root);\n            int i = 1;\n            while (!queue.isEmpty()) {\n                TreeNode cur = queue.pollFirst();\n                if (!split[i].equals(\"#\")) {\n                    cur.left = new TreeNode(Integer.parseInt(split[i]));\n                    queue.offerLast(cur.left);\n                }\n                i++;\n                if (!split[i].equals(\"#\")) {\n                    cur.right = new TreeNode(Integer.parseInt(split[i]));\n                    queue.offerLast(cur.right);\n                }\n                i++;\n            }\n            return root;\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-08）：层序 BFS + # 占位，首 WA——序列化队列 offerLast 配 pollLast 变成栈序导致顺序错位，改 pollFirst 后往返一致。非一次 AC。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：独立写出同款「层序 BFS 序列化 + 队列重建反序列化」，本地 9 组往返一致 + 力扣 53/53 一次 Accepted。细节差异：反序列化队列用 ArrayDeque、判空用 Objects.equals，思路不变。\n\n**② 这次为什么想起来**\n- 序列化 = 层序遍历把 null 也写进串（# 占位）；只有非空节点才入队继续展开，每展开一个非空节点就写它左右两个孩子（值或 #），串长 = 1 + 2×非空节点数，天然自洽。\n- 反序列化按「层序对称」读：队列只放待展开的非空节点，下标 i 顺序读左右孩子，# 跳过建点；队列空即结束，不会越界。\n- 一刷「队首队尾混用」的坑这次没犯：进出都只从队首 poll / 队尾 offer，方向单一。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（53/53）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 等价写法：先序 DFS 序列化 + 递归重建（指针/全局下标），与层序 BFS 都该会；LC449 BST 序列化可只存前序靠大小关系重建。\n- 相关：LC606 根据二叉树创建字符串（序列化变体）。\n- 恒记：空树往返（\"[]\" ↔ null）；节点值可负、可为 Integer 极值，分隔符要能区分。",
+      "code": "static class Codec {\n    public String serialize(TreeNode root) {\n        if (root == null) {\n            return \"[]\";\n        }\n        Deque<TreeNode> queue = new LinkedList<>();\n        List<String> list = new ArrayList<>();\n        queue.offer(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            for (int i = 0; i < size; i++) {\n                TreeNode node = queue.pollFirst();\n                if (node != null) {\n                    list.add(node.val + \"\");\n                    queue.offerLast(node.left);\n                    queue.offerLast(node.right);\n                } else {\n                    list.add(\"#\");\n                }\n            }\n        }\n        return \"[\" + String.join(\",\", list) + \"]\";\n    }\n\n    public TreeNode deserialize(String data) {\n        data = data.substring(1, data.length() - 1);\n        if (data.isEmpty()) {\n            return null;\n        }\n        String[] split = data.split(\",\");\n        TreeNode root = new TreeNode(Integer.parseInt(split[0]));\n        Deque<TreeNode> queue = new ArrayDeque<>();\n        queue.offer(root);\n        int i = 1;\n        while (!queue.isEmpty()) {\n            TreeNode node = queue.pollFirst();\n            if (!Objects.equals(split[i], \"#\")) {\n                node.left = new TreeNode(Integer.parseInt(split[i]));\n                queue.offerLast(node.left);\n            }\n            i++;\n            if (!Objects.equals(split[i], \"#\")) {\n                node.right = new TreeNode(Integer.parseInt(split[i]));\n                queue.offerLast(node.right);\n            }\n            i++;\n        }\n        return root;\n    }\n}",
       "prev_code": "static class Codec {\n        public String serialize(TreeNode root) {\n            StringBuilder sb = new StringBuilder();\n            if (root == null) {\n                return sb.toString();\n            }\n            Deque<TreeNode> queue = new LinkedList<>();\n            queue.offerLast(root);\n            while (!queue.isEmpty()) {\n                TreeNode cur = queue.pollFirst();\n                if (cur != null) {\n                    sb.append(cur.val + \",\");\n                    queue.offerLast(cur.left);\n                    queue.offerLast(cur.right);\n                } else {\n                    sb.append(\"#,\");\n                }\n            }\n            sb.deleteCharAt(sb.length() - 1);\n            return sb.toString();\n        }\n\n        public TreeNode deserialize(String data) {\n            if (data == null || data.isEmpty()) {\n                return null;\n            }\n            String[] vals = data.split(\",\");\n            TreeNode root = new TreeNode(Integer.parseInt(vals[0]));\n            Deque<TreeNode> queue = new LinkedList<>();\n            queue.offerLast(root);\n            int i = 1;\n            while (!queue.isEmpty()) {\n                TreeNode cur = queue.pollFirst();\n                if (!vals[i].equals(\"#\")) {\n                    TreeNode node = new TreeNode(Integer.parseInt(vals[i]));\n                    cur.left = node;\n                    queue.offerLast(node);\n                }\n                i++;\n                if (!vals[i].equals(\"#\")) {\n                    TreeNode node = new TreeNode(Integer.parseInt(vals[i]));\n                    cur.right = node;\n                    queue.offerLast(node);\n                }\n                i++;\n            }\n            return root;\n        }\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -65,6 +65,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-02",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "53/53",
+      "approach": "层序 BFS + 占位符",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-08）：层序 BFS + # 占位，首 WA——序列化队列 offerLast 配 pollLast 变成栈序导致顺序错位，改 pollFirst 后往返一致。非一次 AC。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：独立写出同款「层序 BFS 序列化 + 队列重建反序列化」，本地 9 组往返一致 + 力扣 53/53 一次 Accepted。细节差异：反序列化队列用 ArrayDeque、判空用 Objects.equals，思路不变。\n\n**② 这次为什么想起来**\n- 序列化 = 层序遍历把 null 也写进串（# 占位）；只有非空节点才入队继续展开，每展开一个非空节点就写它左右两个孩子（值或 #），串长 = 1 + 2×非空节点数，天然自洽。\n- 反序列化按「层序对称」读：队列只放待展开的非空节点，下标 i 顺序读左右孩子，# 跳过建点；队列空即结束，不会越界。\n- 一刷「队首队尾混用」的坑这次没犯：进出都只从队首 poll / 队尾 offer，方向单一。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（53/53）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 等价写法：先序 DFS 序列化 + 递归重建（指针/全局下标），与层序 BFS 都该会；LC449 BST 序列化可只存前序靠大小关系重建。\n- 相关：LC606 根据二叉树创建字符串（序列化变体）。\n- 恒记：空树往返（\"[]\" ↔ null）；节点值可负、可为 Integer 极值，分隔符要能区分。"
     }
   ],
   "approach_detail": "### 反序列化参数 i 的作用：为什么下标能自动对应左右子树\n\n**i 的语义**：`deserialize` 中 `i` 是指向 `vals`（序列化数组）的「下一个待消费槽位」下标；每处理完一个父节点的左右孩子，`i` 前进 2。\n\n**为什么能对上**：serialize 与 deserialize 是**同一个 BFS 的「写」与「读」两个方向**：\n\n- serialize：每个节点出队时，把它 `left`、`right`（含 null）**紧接着写入**序列化串——所以每个节点都「消耗」2 个输出槽位；null 只写出、不入队。\n- deserialize：每个非空父节点出队时，从 `vals` 连续读取 2 个槽位作为左右孩子——同样每节点消耗 2 个输入槽位；`#` 跳过不建节点。\n\n两条 BFS 的「非空节点出队顺序」完全相同（都是层序），因此「读的位置」天然等于「写的位置」——`i` 不需要数学公式，它就是复刻 serialize 写入节奏的游标。\n\n**case 推演**（树 `[1,2,3,null,null,4,5]`）：serialize 产出 `1,2,3,#,#,4,5,#,#,#,#`（每个非空节点后紧跟左右两槽位）。\n\n| deserialize 出队父节点 | 消费 i | 槽位内容 | 动作 |\n| --- | --- | --- | --- |\n| 1 | 1, 2 | 2, 3 | 挂 left=2、right=3，2/3 入队 |\n| 2 | 3, 4 | #, # | 左空、右空，不入队 |\n| 3 | 5, 6 | 4, 5 | 挂 left=4、right=5，4/5 入队 |\n| 4 | 7, 8 | #, # | 左空、右空 |\n| 5 | 9, 10 | #, # | 左空、右空 |\n\n对照 serialize 的写入：1 出队时写 2,3；2 出队时写 #,#；3 出队时写 4,5……——**读的顺序就是写的顺序**，所以 `i` 每次 +2 就精确落在「当前父节点的左右孩子」上。\n\n**一句话**：`i` 不是靠 `2i`/`2i+1` 公式定位（那要求完全二叉树连续数组），而是靠「读写同节奏」——BFS 队列保证非空节点按层序处理，每个节点固定消费两个槽位，指针 `i` 自然与左右子树一一对应。"
