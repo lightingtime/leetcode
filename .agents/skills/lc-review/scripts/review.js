@@ -12,7 +12,7 @@
 // 间隔模型：Ebbinghaus 遗忘曲线 + SM-2（EF=2.5）
 //   较强：间隔 = 上次 × 2.5（首次 1 天起），上限 60 天；
 //         第 2 次较强起（连续较强 ≥ STRONG_BOOST_MIN_CONSECUTIVE）每次再上浮 STRONG_BOOST_DAYS 天（尽早拉开，减少高频回访）
-//   较弱：间隔重置 1 天，连续较强清零
+//   较弱：间隔重置 WEAK_INTERVAL_DAYS 天（2 天，避免次日高频回访），连续较强清零
 //   连续 2 次较强且间隔达上限 → 标记已掌握，退出队列
 const fs = require('fs');
 const path = require('path');
@@ -27,7 +27,7 @@ const REVIEW_DEADLINE = '2026-09-15';       // 硬性目标：第二遍（首轮
 const BASE_INTERVAL_DAYS = 1;               // 首次复习后的基础间隔
 const EF = 2.5;                             // SM-2 初始易度因子
 const MAX_INTERVAL_DAYS = 60;               // 间隔上限
-const WEAK_INTERVAL_DAYS = 1;               // 较弱掌握重置间隔
+const WEAK_INTERVAL_DAYS = 2;               // 较弱掌握重置间隔（放宽为 2 天，避免次日高频回访）
 const MASTER_CONSECUTIVE_STRONG = 2;        // 连续较强达到上限即掌握
 const STRONG_BOOST_MIN_CONSECUTIVE = 1;     // 连续较强达到该次数后即开始上浮（1 = 第 2 次较强起）
 const STRONG_BOOST_DAYS = 2;                // 达到后每次再额外拉长天数
