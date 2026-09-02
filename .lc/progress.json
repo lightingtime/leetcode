@@ -3248,6 +3248,17 @@
         "数组与矩阵"
       ],
       "last_seen": "2026-09-03"
+    },
+    {
+      "habit": "编辑距离滚动 DP 状态定义错位：word2 有 n 字符需 n+1 个状态（前缀长度语义），误开 new int[n] 且内层 j=1..n-1 漏最后一列；第 0 行初值写成 j+1（应为 j）；未处理 word2 为空 n==0 越界——本地 13 组失败 9 组",
+      "count": 1,
+      "examples": [
+        "edit-distance"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-03"
     }
   ],
   "category_hints": {
