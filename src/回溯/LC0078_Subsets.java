@@ -15,9 +15,6 @@ public class LC0078_Subsets {
     List<List<Integer>> ans;
     public List<List<Integer>> subsets(int[] nums) {
         ans = new ArrayList<>();
-        if (nums.length == 0) {
-            return ans;
-        }
         dfs(nums, 0, new ArrayList<>());
         return ans;
     }
