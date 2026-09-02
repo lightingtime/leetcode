@@ -1,9 +1,11 @@
 // ============================================================
 // LeetCode 221. 最大正方形 (Maximal Square)
-// 难度：Medium | 分类：动态规划
+// 难度：Medium | 分类：动态规划（子类型：线性/网格 DP）
 // 链接：https://leetcode.cn/problems/maximal-square/
-// 刷题日期：2026-08-19
-//
+// 复习日期：2026-09-01（复习 · 一刷 2026-08-19）
+// 一刷思路：DP 三邻居 min+1（dp[i][j] = 以 (i,j) 为右下角的最大正方形边长），O(mn)/O(mn)
+// 二刷提示：空间可滚动到 O(n)（只依赖上一行 + 本行左 + 左上，同 LC62/LC72 套路）
+// 测试用例与一刷归档保持一致（示例 + WA 回归 + 边界）
 // ============================================================
 
 
@@ -13,24 +15,26 @@ public class LC0221_MaximalSquare {
     public int maximalSquare(char[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
-        int[][] dp = new int[m][n];
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = matrix[0][i] == '1' ? 1 :0;
+        }
         int max = 0;
         for (int i = 0; i < m; i++) {
-            dp[i][0] = matrix[i][0] == '1' ? 1 : 0;
-            max = Math.max(max, dp[i][0]);
-        }
-        for (int j = 0; j < n; j++) {
-            dp[0][j] = matrix[0][j] == '1' ? 1 : 0;
-            max = Math.max(max, dp[0][j]);
-        }
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
-                if (matrix[i][j] == '1') {
-                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
+            int dig = dp[0];
+            for (int j = 0; j < n; j++) {
+                int pre = dp[j];
+                if (matrix[i][j] == '0') {
+                    dp[j] = 0;
                 } else {
-                    dp[i][j] = 0;
+                    if (i > 0 && j > 0) {
+                        dp[j] = Math.min(dp[j - 1], Math.min(pre, dig)) + 1;
+                    } else {
+                        dp[j] = 1;
+                    }
                 }
-                max = Math.max(max, dp[i][j]);
+                dig = pre;
+                max = Math.max(max, dp[j]);
             }
         }
         return max * max;
@@ -58,7 +62,7 @@ public class LC0221_MaximalSquare {
                 new char[]{'0','1','1','0','1','1'}, new char[]{'1','1','1','0','1','0'},
                 new char[]{'0','1','1','1','1','1'}, new char[]{'1','1','0','1','1','1'}}), "WA回归6x6")) failures++; } catch (Throwable t) { failures++; System.out.println("WA回归6x6 异常: " + t); }
 
-        // ---- 边界测试（针对最大正方形的具体逻辑）----
+        // ---- 边界测试（与一刷归档保持一致）----
         // 单元素：'1' -> 1，'0' -> 0
         try { if (!TestUtil.checkEq(1, s.maximalSquare(new char[][]{new char[]{'1'}}), "单元素1")) failures++; } catch (Throwable t) { failures++; System.out.println("单元素1 异常: " + t); }
         // 全零：无 1，面积为 0

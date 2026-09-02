@@ -989,7 +989,7 @@
       "category": "动态规划",
       "date": "2026-08-19",
       "firstPass": false,
-      "optimal": false,
+      "optimal": true,
       "notes": "第2次提交AC（首WA：'0'格未清零继承邻居正数）；DP O(mn)/O(mn) 空间可滚动优化"
     },
     {
