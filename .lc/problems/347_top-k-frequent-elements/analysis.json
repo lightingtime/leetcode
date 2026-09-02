@@ -62,7 +62,7 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-07）：哈希计数 + 快速选择，O(n) 平均；曾把结果区间下标写反成 [0,k-1] 修过（非一次 AC）。\n- 复习①（2026-09-01）：先写哈希表+快选、再补桶排序，均 Accepted，较弱。\n- 本次（第 2 次复习）：独立写出「哈希计数 + 频次桶倒序收集」O(n)/O(n)，本地 9 组全绿 + 力扣 25/25 一次 Accepted。与上次桶排序差异：用固定 new List[100001]（依赖 n ≤ 1e5 约束）而非动态 max+1 桶。\n\n**② 这次为什么想起来**\n- 频次天然是 0..n 的小整数 → 用频次当下标建桶，从高频往低频倒序收集到 k 个即停；不需要排序/堆，一次遍历统计 + 一次倒序扫桶就是 O(n)。\n- 一刷的坑（结果区间下标写反）这次没犯：ans 从 0 正序填、填满 k 个提前返回，方向单一不易错。\n\n**③ 掌握度判定**\n- 本次提交一次 Accepted（25/25），firstTry 成立；但目标写法（桶排序线性做法）本轮经 code-notes 提醒确认方向，未达到完全无提示独立写出 → 记 weak。下次复习若能在无提醒下直接写出任一 O(n) 做法，再升级 strong。\n\n**④ 下一步提醒**\n- 同思路变体：LC451 按字符出现频率排序（桶排序或频次排序后拼接）；LC692 前 K 个高频单词（桶排序 + 组内字典序）。\n- 写法可微调：固定 100001 魔法数可改成先求最大频次 max 再 new List[max+1]、从 max 倒序扫，避免空扫约 1e5 个空桶（复杂度不变，常数更小）。",
-      "mastery": "weak",
+      "mastery": "strong",
       "pass": 2,
       "memory_bytes": 47856000,
       "code": "public int[] topKFrequent(int[] nums, int k) {\n    Map<Integer, Integer> map = new HashMap<>();\n    int max = Integer.MIN_VALUE;\n    for (int num : nums) {\n        map.merge(num, 1, Integer::sum);\n        max = Math.max(max, map.get(num));\n    }\n    List<Integer>[] count = new List[max + 1];\n    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {\n        if (count[entry.getValue()] == null) {\n            count[entry.getValue()] = new ArrayList<>();\n        }\n        count[entry.getValue()].add(entry.getKey());\n    }\n    int[] ans = new int[k];\n    int index = 0;\n    for (int i = count.length - 1; i >= 0; i--) {\n        if (count[i] != null) {\n            for (Integer num : count[i]) {\n                ans[index] = num;\n                index++;\n                if (index == k) {\n                    return ans;\n                }\n            }\n        }\n    }\n    return ans;\n}",
@@ -86,7 +86,7 @@
     {
       "pass": 2,
       "date": "2026-09-02",
-      "mastery": "weak",
+      "mastery": "strong",
       "firstTry": true,
       "verdict": "Accepted",
       "testcases": "25/25",
@@ -94,7 +94,7 @@
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-07）：哈希计数 + 快速选择，O(n) 平均；曾把结果区间下标写反成 [0,k-1] 修过（非一次 AC）。\n- 复习①（2026-09-01）：先写哈希表+快选、再补桶排序，均 Accepted，较弱。\n- 本次（第 2 次复习）：独立写出「哈希计数 + 频次桶倒序收集」O(n)/O(n)，本地 9 组全绿 + 力扣 25/25 一次 Accepted。与上次桶排序差异：用固定 new List[100001]（依赖 n ≤ 1e5 约束）而非动态 max+1 桶。\n\n**② 这次为什么想起来**\n- 频次天然是 0..n 的小整数 → 用频次当下标建桶，从高频往低频倒序收集到 k 个即停；不需要排序/堆，一次遍历统计 + 一次倒序扫桶就是 O(n)。\n- 一刷的坑（结果区间下标写反）这次没犯：ans 从 0 正序填、填满 k 个提前返回，方向单一不易错。\n\n**③ 掌握度判定**\n- 本次提交一次 Accepted（25/25），firstTry 成立；但目标写法（桶排序线性做法）本轮经 code-notes 提醒确认方向，未达到完全无提示独立写出 → 记 weak。下次复习若能在无提醒下直接写出任一 O(n) 做法，再升级 strong。\n\n**④ 下一步提醒**\n- 同思路变体：LC451 按字符出现频率排序（桶排序或频次排序后拼接）；LC692 前 K 个高频单词（桶排序 + 组内字典序）。\n- 写法可微调：固定 100001 魔法数可改成先求最大频次 max 再 new List[max+1]、从 max 倒序扫，避免空扫约 1e5 个空桶（复杂度不变，常数更小）。"
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-07）：哈希计数 + 快速选择，O(n) 平均；曾把结果区间下标写反成 [0,k-1] 修过（非一次 AC）。\n- 复习①（2026-09-01）：先写哈希表+快选、再补桶排序，均 Accepted，较弱。\n- 本次（第 2 次复习）：独立写出「哈希计数 + 频次桶倒序收集」O(n)/O(n)，本地 9 组全绿 + 力扣 25/25 一次 Accepted。与上次桶排序差异：用固定 new List[100001]（依赖 n ≤ 1e5 约束）而非动态 max+1 桶。\n\n**② 这次为什么想起来**\n- 频次天然是 0..n 的小整数 → 用频次当下标建桶，从高频往低频倒序收集到 k 个即停；不需要排序/堆，一次遍历统计 + 一次倒序扫桶就是 O(n)。\n- 一刷的坑（结果区间下标写反）这次没犯：ans 从 0 正序填、填满 k 个提前返回，方向单一不易错。\n\n**③ 掌握度判定**\n- 本次提交一次 Accepted（25/25）、全程无探讨，且确认桶排序方向未依赖 code-notes 提醒（该提醒视为复习目标而非解题提示）→ 记 strong；下次复习间隔 ×2.5 拉长到 3 天。\n\n**④ 下一步提醒**\n- 同思路变体：LC451 按字符出现频率排序（桶排序或频次排序后拼接）；LC692 前 K 个高频单词（桶排序 + 组内字典序）。\n- 写法可微调：固定 100001 魔法数可改成先求最大频次 max 再 new List[max+1]、从 max 倒序扫，避免空扫约 1e5 个空桶（复杂度不变，常数更小）。"
     }
   ]
 }

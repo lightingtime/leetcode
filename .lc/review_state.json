@@ -458,11 +458,11 @@
       "category": "栈、队列与优先队列",
       "first_pass_date": "2026-08-07",
       "last_review_date": "2026-09-02",
-      "next_review_date": "2026-09-03",
-      "interval_days": 1,
+      "next_review_date": "2026-09-05",
+      "interval_days": 3,
       "review_count": 2,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "largest-rectangle-in-histogram": {
