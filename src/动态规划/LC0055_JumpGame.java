@@ -1,9 +1,9 @@
 // ============================================================
 // LeetCode 55. 跳跃游戏 (Jump Game)
-// 难度：Medium | 分类：动态规划（最优解：贪心·最远可达 O(n)/O(1)）
+// 难度：Medium | 分类：动态规划（贪心最优）
 // 链接：https://leetcode.cn/problems/jump-game/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-09）
-// 一刷思路：贪心（最远可达）：维护 maxReach，遍历时若 i > maxReach 则卡死，否则 maxReach = max(maxReach, i + nums[i])
+// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-09 · 上次 2026-09-01 较强）
+// 一刷/上次思路：贪心维护最远可达下标（i<=reach 时才更新 reach=max(reach, i+nums[i])），reach>=n-1 即可达
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -13,14 +13,14 @@ public class LC0055_JumpGame {
 
     // ==== 提交代码开始 ====
     public boolean canJump(int[] nums) {
-        int maxJump = 0;
-        for (int i = 0; i < nums.length - 1; i++) {
-            if (maxJump < i) {
+        int maxReach = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (maxReach < i) {
                 return false;
             }
-            maxJump = Math.max(maxJump, i + nums[i]);
+            maxReach = Math.max(maxReach, i + nums[i]);
         }
-        return maxJump >= nums.length - 1;
+        return maxReach >= nums.length - 1;
     }
     // ==== 提交代码结束 ====
 
