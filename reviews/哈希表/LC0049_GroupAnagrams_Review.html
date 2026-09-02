@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-03</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>49. 字母异位词分组 (Group Anagrams)</h1><p>&gt; <a href="https://leetcode.cn/problems/group-anagrams/" rel="noopener">https://leetcode.cn/problems/group-anagrams/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：数组、哈希表、字符串、排序</p><h2>题目描述</h2><p>给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。</p><p>示例 1:</p><p>输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]</p><p>输出: [["bat"],["nat","tan"],["ate","eat","tea"]]</p><p>解释：</p><p>在 strs 中没有字符串可以通过重新排列来形成 "bat"。</p><p>字符串 "nat" 和 "tan" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>字符串 "ate" ，"eat" 和 "tea" 是字母异位词，因为它们可以重新排列以形成彼此。</p><p>示例 2:</p><p>输入: strs = [""]</p><p>输出: [[""]]</p><p>示例 3:</p><p>输入: strs = ["a"]</p><p>输出: [["a"]]</p><p>提示：</p><p>1 4</p><p>0</p><p>strs[i] 仅包含小写字母</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-03 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（129/129）｜ 一次 AC ｜ 计数编码键 + 哈希表 ｜ O(n*L) · O(n*L)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-03）：计数编码键 + 哈希表，非一次 AC（曾键里漏掉出现次数）。</li><li>复习①②（08-29 / 08-31）：同思路，均一次 AC，较强。</li><li>本次（第 3 次复习）：独立写出同款「26 字母计数 → 编码键 → HashMap 归组」，本地 9 组全绿 + 力扣 129/129 一次 Accepted；收尾用 computeIfAbsent + stream().toList()，写法比历次更精简。</li></ul><p><strong>② 为什么想起来</strong></p><ul><li>异位词本质是字母多重集相同 → 归一到「每字母出现次数」作 key，按 0..25 固定顺序把 字母+次数 拼成编码串，同组字符串 key 必相等、不同组必不等。</li><li>归组结构固定：Map&lt;key, List&gt;，新词 computeIfAbsent 建组后 add，最后取 values。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本次一次提交 Accepted（129/129）、全程无探讨 → strong；连续 3 次较强，按新调度规则（连续较强≥2 后每次 +2 天）间隔 = 3×2.5+2 = 10 天 → 下次 2026-09-13。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同套路：LC242 有效的字母异位词（两串计数比对）、LC438 字符串中所有字母异位词（滑动窗口 + 计数比较）。</li><li>编码键必须把 26 个字母的完整计数编进去，不能只拼出现过的字母——漏次数会撞 key（一刷踩过）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-08-31 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 计数编码键 + 哈希表 ｜ O(L) · O(L)</p>
       
@@ -42,17 +46,37 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>计数编码键 + 哈希表</b></li>
-        <li><span>复杂度</span><b>O(L) · O(L)</b></li>
+        <li><span>复杂度</span><b>O(n*L) · O(n*L)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 计数编码键 + 哈希表</h3>
-    <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(L)</span><span class="chip">内存 ≈ 47.9 MB</span><span class="chip">用例 —</span></p>
+    <p><span class="chip">时间 O(n*L)</span><span class="chip">空间 O(n*L)</span><span class="chip">内存 ≈ 49.4 MB</span><span class="chip">用例 129/129</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0049_GroupAnagrams.java · 计数编码键 + 哈希表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; <span class="tk-f">groupAnagrams</span>(<span class="tk-t">String</span>[] strs) {
+    <span class="tk-t">Map</span>&lt;<span class="tk-t">String</span>, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+    <span class="tk-k">for</span> (<span class="tk-t">String</span> str : strs) {
+        <span class="tk-t">String</span> key = <span class="tk-f">getKey</span>(str);
+        map.<span class="tk-f">computeIfAbsent</span>(key, k -&gt; <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;()).<span class="tk-f">add</span>(str);
+    }
+    <span class="tk-k">return</span> map.<span class="tk-f">values</span>().<span class="tk-f">stream</span>().<span class="tk-f">toList</span>();
+}
+
+<span class="tk-k">private</span> <span class="tk-t">String</span> <span class="tk-f">getKey</span>(<span class="tk-t">String</span> str) {
+    <span class="tk-k">int</span>[] count = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">26</span>];
+    <span class="tk-k">for</span> (<span class="tk-k">char</span> c : str.<span class="tk-f">toCharArray</span>()) {
+        count[c - <span class="tk-s">'a'</span>]++;
+    }
+    <span class="tk-t">StringBuilder</span> sb = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+    <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; count.length; i++) {
+        sb.<span class="tk-f">append</span>(i + <span class="tk-s">'a'</span>).<span class="tk-f">append</span>(count[i]);
+    }
+    <span class="tk-k">return</span> sb.<span class="tk-f">toString</span>();
+}</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0049_GroupAnagrams.java · 计数编码键 + 哈希表 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; <span class="tk-f">groupAnagrams</span>(<span class="tk-t">String</span>[] strs) {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">String</span>, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt;&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-t">String</span> str : strs) {
             map.<span class="tk-f">computeIfAbsent</span>(<span class="tk-f">getKey</span>(str), k -&gt; <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;()).<span class="tk-f">add</span>(str);
@@ -73,8 +97,7 @@
         }
         <span class="tk-k">return</span> sb.<span class="tk-f">toString</span>();
     }
-</pre></div>
-    
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：把「互为字母异位词」的字符串归到同一组。异位词 = 相同字符多重集合（与排列顺序无关），所以核心是把「等价关系」转成「相同键」。</p><p><strong>解法选择理由</strong>：归组需要 O(1) 查找，用哈希表；键有两条路线——① 排序后的字符串（每串 O(k log k)）；② 字符计数编码（每串 O(k)）。计数编码把 26 个字母计数拼成固定格式，达到线性最优。</p><p><strong>关键设计决策</strong>：</p><ul><li>键 = 逐字符统计次数后拼接「字母+次数」，如 <code>aabbbc</code> → <code>a2b3c1</code>；同字符多重集合必得同键，异位词必然同组。</li><li>编码<strong>必须带次数</strong>：只拼字母会漏次数（<code>aab</code> 与 <code>ab</code> 都变 <code>ab</code> 而撞键）——一刷正是栽在「编码键遗漏次数」。</li><li>用 <code>computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(str)</code> 一步完成「取组/建组」，避免 containsKey 双查。</li></ul><p><strong>具体 case 推演</strong>（输入 <code>["eat","tea","tan","ate","nat","bat"]</code>）：</p><div class="table-wrap"><table><thead><tr><th>字符串</th><th>计数</th><th>编码 key</th><th>分组</th></tr></thead><tbody><tr><td>eat</td><td>a1 e1 t1</td><td>a1e1t1</td><td>[eat, tea, ate]</td></tr><tr><td>tea</td><td>a1 e1 t1</td><td>a1e1t1</td><td>↑</td></tr><tr><td>tan</td><td>a1 n1 t1</td><td>a1n1t1</td><td>[tan, nat]</td></tr><tr><td>ate</td><td>a1 e1 t1</td><td>a1e1t1</td><td>↑</td></tr><tr><td>nat</td><td>a1 n1 t1</td><td>a1n1t1</td><td>↑</td></tr><tr><td>bat</td><td>a1 b1 t1</td><td>a1b1t1</td><td>[bat]</td></tr></tbody></table></div><p><strong>边界与细节</strong>：空串 <code>""</code> 计数全 0、编码为空串，仍独立成组（示例2）；全相同字符串同键同组；单字符、长度上限 100、数组上限 10^4 均只需线性时间，编码串长度 ≤ 26×4，不会膨胀。</p><p><strong>复杂度下限论证</strong>：输出必须包含全部字符串（每个至少写一次），时间下界 Ω(L)；空间上所有分组必须存下所有字符串，Ω(L)。计数编码实现 O(L) 时间 + O(L) 空间，已达到下限，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>键编码遗漏次数：分组键只编码出现的字母集合，漏掉每个字母的出现次数，导致 'a' 与 'aa'、'ab' 与 'aab' 被错误分到同一组</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>129/129 用例。</p></div></div></div></section>

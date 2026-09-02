@@ -2,10 +2,9 @@
 // LeetCode 49. 字母异位词分组 (Group Anagrams)
 // 难度：Medium | 分类：哈希表
 // 链接：https://leetcode.cn/problems/group-anagrams/
-// 复习日期：2026-08-31（复习 · 一刷 2026-08-03，上次复习 2026-08-29）
-// 一刷思路：字符计数 → 拼接「字母+次数」编码作 key，异位词共享同一 key → 哈希表分组
+// 复习日期：2026-09-03（第 3 次复习 · 一刷 2026-08-03 · 上次 2026-08-31 较强）
+// 一刷/历次思路：计数编码键 + 哈希表（key=26 个字母计数的编码串，同组异位词键相同）O(n·L)
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
-//
 // ============================================================
 
 import java.util.*;
@@ -28,10 +27,8 @@ public class LC0049_GroupAnagrams {
             count[c - 'a']++;
         }
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 26; i++) {
-            if (count[i] > 0) {
-                sb.append(i + 'a').append(count[i]);
-            }
+        for (int i = 0; i < count.length; i++) {
+            sb.append(i + 'a').append(count[i]);
         }
         return sb.toString();
     }
