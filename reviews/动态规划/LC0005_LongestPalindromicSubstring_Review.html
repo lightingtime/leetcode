@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>5. 最长回文子串 (Longest Palindromic Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-palindromic-substring/" rel="noopener">https://leetcode.cn/problems/longest-palindromic-substring/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：双指针、字符串、动态规划、Manacher 算法</p><h2>题目描述</h2><p>给你一个字符串 s，找到 s 中最长的 回文 子串。</p><p>示例 1：</p><p>输入：s = "babad"</p><p>输出："bab"</p><p>解释："aba" 同样是符合题意的答案。</p><p>示例 2：</p><p>输入：s = "cbbd"</p><p>输出："bb"</p><p>提示：</p><p>1</p><p>s 仅由数字和英文字母组成</p><h2>示例</h2><ol><li>输入：s = "babad"</li></ol><p>输出："bab"</p><p>解释："aba" 同样是符合题意的答案。</p><ol><li>输入：s = "cbbd"</li></ol><p>输出："bb"</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（144/144）｜ 多次提交 ｜ 中心扩散 ｜ O(n^2) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-09）：区间 DP（boolean 表）O(n²)/O(n²)，非一次 AC。</li><li>复习①（2026-09-01）：中心扩散 O(n²)/O(1)，较强。</li><li>本次（第 2 次复习）：第一次提交给中心扩散外套 len×j 双层冗余循环，全同长串退化 O(n³)，力扣 TLE（93/144）；按提示去掉外层 len、只遍历 n 个下标（单字符中心 j 与双字符中心 j,j+1）各扩一次后 144/144 Accepted，O(n²)/O(1)。</li></ul><p><strong>② 为什么没想起来</strong></p><ul><li>中心扩散思想记得（从中心向两边扩），但「枚举中心」写成了冗余嵌套：外层 len 每轮把 j&lt;len 的中心又扩一遍，中心被重复处理 O(n) 次，全同串每次扩到串边界 → O(n³)。</li><li>教训：枚举中心先想总数——2n-1 个（每个 j 两种中心），一层循环即可；多加「长度」外层只会在全同串上放大成 O(n³)。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>首次提交 TLE + 经提示修正 → weak；力扣最终一次 Accepted（144/144）。下次复习 09-03 重点复查能否直接写出单层中心扩散。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>中心扩散 O(n²)/O(1) 是本题最常用最优写法；进阶可了解 Manacher O(n)（回文半径 + 镜像对称）。</li><li>相关回文题：LC647 回文子串个数（同中心扩散/区间 DP）、LC516 最长回文子序列（区间 DP，注意子序列≠子串）。</li><li>TLE 回归用例（1000 全 0）已留在本地 main，防止再写回 O(n³) 结构。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-01 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 中心扩散 ｜ O(n^2) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong>：一刷主写法即中心扩散（O(n²)/O(1)），本次同样用中心扩散，奇偶双中心一次写对；一刷另记录过区间 DP boolean 表写法，本次未用（中心扩散空间 O(1) 更优）。</p><p><strong>② 这次为什么想起来</strong>：中心扩散套路已内化——每个位置 i 同时以 (i,i) 奇中心和 (i,i+1) 偶中心向两边扩，getLen 越界即停、返回 j-i-1；起点用 i-(len-1)/2 反推。无探讨一次写对。</p><p><strong>③ 掌握度判定</strong>：一次提交 Accepted（144/144）且全程无探讨 → strong。</p><p><strong>④ 下一步提醒</strong>：本题 n≤1000，O(n²) 足够；更长串可对比 Manacher O(n)。区间 DP（boolean 表 O(n²)/O(n²)）可作为「回文判断子问题」的对照写法，但中心扩散已是本题空间最优。</p></div>
@@ -37,12 +41,12 @@
         <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>中心扩散</b></li>
         <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -73,30 +77,29 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 中心扩散</h3>
-    <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
-        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
-        <span class="tk-k">int</span> start = -<span class="tk-n">1</span>;
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
-            <span class="tk-k">int</span> len1 = <span class="tk-f">getLen</span>(s, i, i);
-            <span class="tk-k">int</span> len2 = <span class="tk-f">getLen</span>(s, i, i + <span class="tk-n">1</span>);
-            <span class="tk-k">int</span> len = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(len1, len2);
-            <span class="tk-k">if</span> (len &gt; max) {
-                max = len;
-                start = i - (max - <span class="tk-n">1</span>) / <span class="tk-n">2</span>;
-            }
+    <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 144/144</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
+    <span class="tk-k">int</span> start = -<span class="tk-n">1</span>;
+    <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+    <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; s.<span class="tk-f">length</span>(); j++) {
+        <span class="tk-k">int</span> len1 = <span class="tk-f">getLen</span>(s, j, j);
+        <span class="tk-k">int</span> len2 = <span class="tk-f">getLen</span>(s, j, j + <span class="tk-n">1</span>);
+        <span class="tk-k">int</span> maxLen = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(len1, len2);
+        <span class="tk-k">if</span> (maxLen &gt; max) {
+            max = maxLen;
+            start = j - (maxLen - <span class="tk-n">1</span>) / <span class="tk-n">2</span>;
         }
-        <span class="tk-k">return</span> s.<span class="tk-f">substring</span>(start, start + max);
     }
+    <span class="tk-k">return</span> s.<span class="tk-f">substring</span>(start, start + max);
+}
 
-    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">getLen</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
-        <span class="tk-k">while</span> (i &gt;= <span class="tk-n">0</span> &amp;&amp; j &lt; s.<span class="tk-f">length</span>() &amp;&amp; s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(j)) {
-            i--;
-            j++;
-        }
-        <span class="tk-c">// 此时 (i, j) i j 都已经到了不合法的下标，所以是 j - i + 1 - 2</span>
-        <span class="tk-k">return</span> j - i - <span class="tk-n">1</span>;
-    }</pre></div>
+<span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">getLen</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+    <span class="tk-k">while</span> (i &gt;= <span class="tk-n">0</span> &amp;&amp; j &lt; s.<span class="tk-f">length</span>() &amp;&amp; s.<span class="tk-f">charAt</span>(i) == s.<span class="tk-f">charAt</span>(j)) {
+        i--;
+        j++;
+    }
+    <span class="tk-k">return</span> j - i - <span class="tk-n">1</span>;
+}</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
         <span class="tk-k">if</span> (n &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> s;
@@ -123,7 +126,7 @@
     }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找最长回文子串。本题有 DP 与中心扩散两种常规解法，均已提交记录。</p><p>写法 1 · 区间 DP（已提交）：</p><ul><li>dp[i][j] = s[i..j] 是否为回文，转移 dp[i][j] = (s[i]==s[j]) &amp;&amp; dp[i+1][j-1]（j-i &gt;= 2）；</li><li>base：长度 1 恒真、长度 2 两端相等；填表用 i 倒序满足依赖方向；答案更新必须校验 dp[i][j]==true；</li><li>复杂度 O(n^2) 时间、O(n^2) 空间。</li></ul><p>写法 2 · 中心扩散（已提交）：</p><ul><li>每个回文有唯一中心：奇数长度中心是字符本身，偶数长度中心是两个字符之间，共 2n-1 个中心；</li><li>对每个中心向两边扩散直到两端不等，返回半径长度；</li><li>主循环对每个 i 分别以 (i,i) 和 (i,i+1) 为起点扩散，取更长者更新答案；</li><li>起点换算：start = i - (maxLen-1)/2；</li><li>复杂度 O(n^2) 时间（每个中心最多扩 O(n)）、O(1) 空间。</li></ul><p>具体 case 推演（s=babad）：</p><ul><li>中心 = 下标 1 的 a：b==b → bab（长 3），越界停；</li><li>中心 = 下标 2 的 b：a==a → aba（长 3），再外 b!=d 停；</li><li>空隙中心（a 与 b 之间）：a!=b，长 0；</li><li>最长 3，bab / aba 任取。</li></ul><p>两种写法对比：</p><ul><li>DP 状态定义更「正统」，方便扩展（如回文子序列）；中心扩散代码更简洁、空间 O(1)；</li><li>时间同为 O(n^2)；Manacher 可到 O(n) 是进阶。</li></ul><p>为什么是最优/可接受：O(n^2) 是本题常规最优解（暴力 O(n^3) 不可接受）；中心扩散的空间 O(1) 是两种常规解法里最优的。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>144/144 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>中心扩散外层写成 len×j 双层循环：同一中心被重复扩散约 O(n) 次，全同长串（n≈1000）退化 O(n³)，力扣 TLE（93/144）；中心扩散应只遍历 2n-1 个中心、每个中心左右各扩一次，整体 O(n²)</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>144/144 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>DP 填表顺序满足依赖方向 + 答案更新必须校验状态</h3><p>出处：LC0005 最长回文子串</p><ul><li>dp[i][j] 依赖 dp[i+1][j-1]（左下方），按 i 正序、j 内层正序填会读到未计算的格子，必须按子串长度从小到大填（或 i 倒序）；</li><li>记录答案/最优解前必须确认 dp[i][j] 为 true：只看两端字符相等就更新会把非回文（如 abca）当成答案；</li><li>具体 case：abca 的 dp[0][3]=dp[1][2]=false，但若 ans 更新不看 dp，会错误返回 abca。</li></ul><p>要点：写 DP 先画依赖图确定填表顺序；从 dp 取值更新答案时，先校验状态本身成立。</p><ul><li>长度 2 的 base 不能走转移：dp[i][i+1] 已在初始化置位，主循环再执行 dp[i][j]=dp[i+1][j-1] 会读到无效下三角把 true 覆盖，偶数长度回文全断；长度 2 直接判两端相等或排除 j==i+1。</li></ul></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -137,7 +140,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
-      <h3>错误习惯复盘</h3><p><b>DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填</b>（累计 1 次）</p><p><b>DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填</b>（累计 1 次）</p><p><b>DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）</b>（累计 1 次）</p><p><b>中心扩散外层写成 len×j 双层循环：同一中心被重复扩散约 O(n) 次，全同长串（n≈1000）退化 O(n³)，力扣 TLE（93/144）；中心扩散应只遍历 2n-1 个中心、每个中心左右各扩一次，整体 O(n²)</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 51 · longest-palindromic-substring</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>

@@ -709,12 +709,12 @@
       "title": "最长回文子串",
       "category": "动态规划",
       "first_pass_date": "2026-08-09",
-      "last_review_date": "2026-09-01",
-      "next_review_date": "2026-09-02",
+      "last_review_date": "2026-09-02",
+      "next_review_date": "2026-09-03",
       "interval_days": 1,
-      "review_count": 1,
-      "mastery": "strong",
-      "consecutive_strong": 1,
+      "review_count": 2,
+      "mastery": "weak",
+      "consecutive_strong": 0,
       "mastered": false
     },
     "generate-parentheses": {

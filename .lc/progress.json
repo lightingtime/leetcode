@@ -3226,6 +3226,17 @@
         "回溯"
       ],
       "last_seen": "2026-09-02"
+    },
+    {
+      "habit": "中心扩散外层写成 len×j 双层循环：同一中心被重复扩散约 O(n) 次，全同长串（n≈1000）退化 O(n³)，力扣 TLE（93/144）；中心扩散应只遍历 2n-1 个中心、每个中心左右各扩一次，整体 O(n²)",
+      "count": 1,
+      "examples": [
+        "longest-palindromic-substring"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-02"
     }
   ],
   "category_hints": {

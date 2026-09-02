@@ -12,11 +12,9 @@
   "firstPass": false,
   "optimal": true,
   "approach": "中心扩散",
-  "approach_detail": "问题本质：找最长回文子串。本题有 DP 与中心扩散两种常规解法，均已提交记录。\n\n写法 1 · 区间 DP（已提交）：\n- dp[i][j] = s[i..j] 是否为回文，转移 dp[i][j] = (s[i]==s[j]) && dp[i+1][j-1]（j-i >= 2）；\n- base：长度 1 恒真、长度 2 两端相等；填表用 i 倒序满足依赖方向；答案更新必须校验 dp[i][j]==true；\n- 复杂度 O(n^2) 时间、O(n^2) 空间。\n\n写法 2 · 中心扩散（已提交）：\n- 每个回文有唯一中心：奇数长度中心是字符本身，偶数长度中心是两个字符之间，共 2n-1 个中心；\n- 对每个中心向两边扩散直到两端不等，返回半径长度；\n- 主循环对每个 i 分别以 (i,i) 和 (i,i+1) 为起点扩散，取更长者更新答案；\n- 起点换算：start = i - (maxLen-1)/2；\n- 复杂度 O(n^2) 时间（每个中心最多扩 O(n)）、O(1) 空间。\n\n具体 case 推演（s=babad）：\n- 中心 = 下标 1 的 a：b==b → bab（长 3），越界停；\n- 中心 = 下标 2 的 b：a==a → aba（长 3），再外 b!=d 停；\n- 空隙中心（a 与 b 之间）：a!=b，长 0；\n- 最长 3，bab / aba 任取。\n\n两种写法对比：\n- DP 状态定义更「正统」，方便扩展（如回文子序列）；中心扩散代码更简洁、空间 O(1)；\n- 时间同为 O(n^2)；Manacher 可到 O(n) 是进阶。\n\n为什么是最优/可接受：O(n^2) 是本题常规最优解（暴力 O(n^3) 不可接受）；中心扩散的空间 O(1) 是两种常规解法里最优的。",
   "time_complexity": "O(n^2)",
   "space_complexity": "O(1)",
   "notes": "中心扩散：2n-1 个中心向两边扩展，O(1) 空间",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "DP 记录答案未校验状态 + 填表顺序违反依赖：最长回文子串里只要 s[i]==s[j] 就更新 ans，没检查 dp[i][j] 是否为 true，导致非回文（如 abca）被当作答案；dp[i][j] 依赖 dp[i+1][j-1]，按 i 正序填会读到未计算的格子，应按子串长度从小到大填",
@@ -25,8 +23,17 @@
     {
       "habit": "DP 长度 2 的 base case 被转移式覆盖：dp[i][i+1] 初始化正确，但主循环对相邻格也执行 dp[i][j]=dp[i+1][j-1]，读到无效下三角 dp[i+1][i]=false，把 true 覆盖掉，导致所有偶数长度回文断链（aa→a、abba/abccba 丢失）",
       "count": 1
+    },
+    {
+      "habit": "中心扩散外层写成 len×j 双层循环：同一中心被重复扩散约 O(n) 次，全同长串（n≈1000）退化 O(n³)，力扣 TLE（93/144）；中心扩散应只遍历 2n-1 个中心、每个中心左右各扩一次，整体 O(n²)",
+      "count": 1
     }
   ],
+  "hints": [
+    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "approach_detail": "问题本质：找最长回文子串。本题有 DP 与中心扩散两种常规解法，均已提交记录。\n\n写法 1 · 区间 DP（已提交）：\n- dp[i][j] = s[i..j] 是否为回文，转移 dp[i][j] = (s[i]==s[j]) && dp[i+1][j-1]（j-i >= 2）；\n- base：长度 1 恒真、长度 2 两端相等；填表用 i 倒序满足依赖方向；答案更新必须校验 dp[i][j]==true；\n- 复杂度 O(n^2) 时间、O(n^2) 空间。\n\n写法 2 · 中心扩散（已提交）：\n- 每个回文有唯一中心：奇数长度中心是字符本身，偶数长度中心是两个字符之间，共 2n-1 个中心；\n- 对每个中心向两边扩散直到两端不等，返回半径长度；\n- 主循环对每个 i 分别以 (i,i) 和 (i,i+1) 为起点扩散，取更长者更新答案；\n- 起点换算：start = i - (maxLen-1)/2；\n- 复杂度 O(n^2) 时间（每个中心最多扩 O(n)）、O(1) 空间。\n\n具体 case 推演（s=babad）：\n- 中心 = 下标 1 的 a：b==b → bab（长 3），越界停；\n- 中心 = 下标 2 的 b：a==a → aba（长 3），再外 b!=d 停；\n- 空隙中心（a 与 b 之间）：a!=b，长 0；\n- 最长 3，bab / aba 任取。\n\n两种写法对比：\n- DP 状态定义更「正统」，方便扩展（如回文子序列）；中心扩散代码更简洁、空间 O(1)；\n- 时间同为 O(n^2)；Manacher 可到 O(n) 是进阶。\n\n为什么是最优/可接受：O(n^2) 是本题常规最优解（暴力 O(n^3) 不可接受）；中心扩散的空间 O(1) 是两种常规解法里最优的。",
+  "code_notes": [],
   "patterns": [
     {
       "title": "DP 填表顺序满足依赖方向 + 答案更新必须校验状态",
@@ -51,24 +58,21 @@
       "code": "public String longestPalindrome(String s) {\n        int n = s.length();\n        boolean[][] dp = new boolean[n][n];\n        for (int i = 0; i < n; i++) {\n            dp[i][i] = true;\n            if (i < n - 1 && s.charAt(i) == s.charAt(i + 1)) {\n                dp[i][i + 1] = true;\n            }\n        }\n        String ans = \"\";\n        for (int i = n - 1; i >= 0; i--) {\n            for (int j = 0; j < n; j++) {\n                if (j - i >= 2 && s.charAt(i) == s.charAt(j)) {\n                    dp[i][j] = dp[i + 1][j - 1];\n                }\n                if (dp[i][j] && j - i >= ans.length()) {\n                    ans = s.substring(i, j + 1);\n                }\n            }\n        }\n        return ans;\n    }"
     },
     {
-      "date": "2026-09-01",
+      "date": "2026-09-02",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "144/144",
       "runtime_ms": null,
-      "memory_bytes": 43740000,
+      "memory_bytes": 43976000,
       "approach": "中心扩散",
       "time_complexity": "O(n^2)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**：一刷主写法即中心扩散（O(n²)/O(1)），本次同样用中心扩散，奇偶双中心一次写对；一刷另记录过区间 DP boolean 表写法，本次未用（中心扩散空间 O(1) 更优）。\n\n**② 这次为什么想起来**：中心扩散套路已内化——每个位置 i 同时以 (i,i) 奇中心和 (i,i+1) 偶中心向两边扩，getLen 越界即停、返回 j-i-1；起点用 i-(len-1)/2 反推。无探讨一次写对。\n\n**③ 掌握度判定**：一次提交 Accepted（144/144）且全程无探讨 → strong。\n\n**④ 下一步提醒**：本题 n≤1000，O(n²) 足够；更长串可对比 Manacher O(n)。区间 DP（boolean 表 O(n²)/O(n²)）可作为「回文判断子问题」的对照写法，但中心扩散已是本题空间最优。",
-      "code": "    public String longestPalindrome(String s) {\n        int max = 0;\n        int start = -1;\n        for (int i = 0; i < s.length(); i++) {\n            int len1 = getLen(s, i, i);\n            int len2 = getLen(s, i, i + 1);\n            int len = Math.max(len1, len2);\n            if (len > max) {\n                max = len;\n                start = i - (max - 1) / 2;\n            }\n        }\n        return s.substring(start, start + max);\n    }\n\n    private int getLen(String s, int i, int j) {\n        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {\n            i--;\n            j++;\n        }\n        // 此时 (i, j) i j 都已经到了不合法的下标，所以是 j - i + 1 - 2\n        return j - i - 1;\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：区间 DP（boolean 表）O(n²)/O(n²)，非一次 AC。\n- 复习①（2026-09-01）：中心扩散 O(n²)/O(1)，较强。\n- 本次（第 2 次复习）：第一次提交给中心扩散外套 len×j 双层冗余循环，全同长串退化 O(n³)，力扣 TLE（93/144）；按提示去掉外层 len、只遍历 n 个下标（单字符中心 j 与双字符中心 j,j+1）各扩一次后 144/144 Accepted，O(n²)/O(1)。\n\n**② 为什么没想起来**\n- 中心扩散思想记得（从中心向两边扩），但「枚举中心」写成了冗余嵌套：外层 len 每轮把 j<len 的中心又扩一遍，中心被重复处理 O(n) 次，全同串每次扩到串边界 → O(n³)。\n- 教训：枚举中心先想总数——2n-1 个（每个 j 两种中心），一层循环即可；多加「长度」外层只会在全同串上放大成 O(n³)。\n\n**③ 掌握度判定**\n- 首次提交 TLE + 经提示修正 → weak；力扣最终一次 Accepted（144/144）。下次复习 09-03 重点复查能否直接写出单层中心扩散。\n\n**④ 下一步提醒**\n- 中心扩散 O(n²)/O(1) 是本题最常用最优写法；进阶可了解 Manacher O(n)（回文半径 + 镜像对称）。\n- 相关回文题：LC647 回文子串个数（同中心扩散/区间 DP）、LC516 最长回文子序列（区间 DP，注意子序列≠子串）。\n- TLE 回归用例（1000 全 0）已留在本地 main，防止再写回 O(n³) 结构。",
+      "code": "public String longestPalindrome(String s) {\n    int start = -1;\n    int max = 0;\n    for (int j = 0; j < s.length(); j++) {\n        int len1 = getLen(s, j, j);\n        int len2 = getLen(s, j, j + 1);\n        int maxLen = Math.max(len1, len2);\n        if (maxLen > max) {\n            max = maxLen;\n            start = j - (maxLen - 1) / 2;\n        }\n    }\n    return s.substring(start, start + max);\n}\n\nprivate int getLen(String s, int i, int j) {\n    while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {\n        i--;\n        j++;\n    }\n    return j - i - 1;\n}",
       "prev_code": "public String longestPalindrome(String s) {\n        int n = s.length();\n        if (n < 2) return s;\n        int maxLen = 0;\n        int start = -1;\n        for (int i = 0; i < n; i++) {\n            int len1 = getLen(s, i, i);\n            int len2 = getLen(s, i, i + 1);\n            int len = Math.max(len1, len2);\n            if (len > maxLen) {\n                maxLen = len;\n                start = i - (maxLen - 1) / 2;\n            }\n        }\n        return s.substring(start, start + maxLen);\n    }\n\n    private int getLen(String s, int l, int r) {\n        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {\n            l--;\n            r++;\n        }\n        return r - l - 1;\n    }",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
-  ],
-  "hints": [
-    "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
   ],
   "dp_subtype": "区间DP",
   "reviews": [
@@ -84,6 +88,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**：一刷主写法即中心扩散（O(n²)/O(1)），本次同样用中心扩散，奇偶双中心一次写对；一刷另记录过区间 DP boolean 表写法，本次未用（中心扩散空间 O(1) 更优）。\n\n**② 这次为什么想起来**：中心扩散套路已内化——每个位置 i 同时以 (i,i) 奇中心和 (i,i+1) 偶中心向两边扩，getLen 越界即停、返回 j-i-1；起点用 i-(len-1)/2 反推。无探讨一次写对。\n\n**③ 掌握度判定**：一次提交 Accepted（144/144）且全程无探讨 → strong。\n\n**④ 下一步提醒**：本题 n≤1000，O(n²) 足够；更长串可对比 Manacher O(n)。区间 DP（boolean 表 O(n²)/O(n²)）可作为「回文判断子问题」的对照写法，但中心扩散已是本题空间最优。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-02",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "144/144",
+      "approach": "中心扩散",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：区间 DP（boolean 表）O(n²)/O(n²)，非一次 AC。\n- 复习①（2026-09-01）：中心扩散 O(n²)/O(1)，较强。\n- 本次（第 2 次复习）：第一次提交给中心扩散外套 len×j 双层冗余循环，全同长串退化 O(n³)，力扣 TLE（93/144）；按提示去掉外层 len、只遍历 n 个下标（单字符中心 j 与双字符中心 j,j+1）各扩一次后 144/144 Accepted，O(n²)/O(1)。\n\n**② 为什么没想起来**\n- 中心扩散思想记得（从中心向两边扩），但「枚举中心」写成了冗余嵌套：外层 len 每轮把 j<len 的中心又扩一遍，中心被重复处理 O(n) 次，全同串每次扩到串边界 → O(n³)。\n- 教训：枚举中心先想总数——2n-1 个（每个 j 两种中心），一层循环即可；多加「长度」外层只会在全同串上放大成 O(n³)。\n\n**③ 掌握度判定**\n- 首次提交 TLE + 经提示修正 → weak；力扣最终一次 Accepted（144/144）。下次复习 09-03 重点复查能否直接写出单层中心扩散。\n\n**④ 下一步提醒**\n- 中心扩散 O(n²)/O(1) 是本题最常用最优写法；进阶可了解 Manacher O(n)（回文半径 + 镜像对称）。\n- 相关回文题：LC647 回文子串个数（同中心扩散/区间 DP）、LC516 最长回文子序列（区间 DP，注意子序列≠子串）。\n- TLE 回归用例（1000 全 0）已留在本地 main，防止再写回 O(n³) 结构。"
     }
   ]
 }
