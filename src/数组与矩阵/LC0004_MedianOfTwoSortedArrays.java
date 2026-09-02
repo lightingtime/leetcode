@@ -2,8 +2,9 @@
 // LeetCode 4. 寻找两个正序数组的中位数 (Median of Two Sorted Arrays)
 // 难度：Hard | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/median-of-two-sorted-arrays/
-// 复习日期：2026-08-31（复习 · 一刷 2026-08-06，上次复习 2026-08-30，较弱）
-// 一刷思路：两数组找第 k 小，O(log(m+n))；一刷非一次 AC（第 k 小概念与边界都卡过）
+// 复习日期：2026-09-03（第 3 次复习 · 一刷 2026-08-06 · 上次 2026-08-31 较强）
+// 一刷/复习①写法：两数组第 k 小（每轮排除较小侧 k/2），O(log(m+n))；复习②进阶：划分数组二分切分点 O(log(min(m,n)))
+// 复习提醒：k 是 1 基排名；候选下标 p + k/2 - 1 封顶 len-1，排除数 = 候选下标 - 起点 + 1
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -16,31 +17,37 @@ public class LC0004_MedianOfTwoSortedArrays {
         if (nums1.length > nums2.length) {
             return findMedianSortedArrays(nums2, nums1);
         }
+
         int m = nums1.length;
         int n = nums2.length;
-        int left = -1, right = m;
+
+        int left = -1;
+        int right = m;
+
         while (left + 1 < right) {
             int i = left + (right - left) / 2;
-            int j = (m + n + 1) / 2 - i - 2;
-
+            int j = (m + n + 1) / 2 - i -2;
             if (nums1[i] <= nums2[j + 1]) {
                 left = i;
             } else {
                 right = i;
             }
         }
+
         int i = left;
         int j = (m + n + 1) / 2 - i - 2;
 
-        // nums1[i] nums2[j]
-        // nums1[i + 1] nums2[j + 1]
         int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;
         int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;
-        int aip1 = i + 1 < m ? nums1[i + 1] : Integer.MAX_VALUE;
-        int bjp1 = j + 1 < n ? nums2[j + 1] : Integer.MAX_VALUE;
+        int aip1 = i < m - 1 ? nums1[i + 1] : Integer.MAX_VALUE;
+        int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;
         int maxInMin = Math.max(ai, bj);
         int minInMax = Math.min(aip1, bjp1);
-        return (m + n) % 2 > 0 ? maxInMin : (maxInMin + minInMax) / 2.0;
+        if (((m + n) & 1) == 1) {
+            return maxInMin;
+        } else {
+            return (maxInMin + minInMax) / 2.0;
+        }
     }
     // ==== 提交代码结束 ====
 

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-02",
+  "updated": "2026-09-03",
   "current_seq": 170,
   "done": [
     {
@@ -3237,6 +3237,17 @@
         "动态规划"
       ],
       "last_seen": "2026-09-02"
+    },
+    {
+      "habit": "划分数组二分的失败分支把 nums2 切分点 j 赋给 nums1 搜索上界 right（下标空间混用），某些输入区间不收缩 → 死循环（[1,2,3,4,5] vs [6] 复现）；失败分支应向 nums1 区间收缩（right=i），j 只能由 i 推导",
+      "count": 1,
+      "examples": [
+        "median-of-two-sorted-arrays"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-09-03"
     }
   ],
   "category_hints": {
