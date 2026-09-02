@@ -11,7 +11,7 @@
 //   - progress.json 只保留一刷索引，不写入复习数据
 // 间隔模型：Ebbinghaus 遗忘曲线 + SM-2（EF=2.5）
 //   较强：间隔 = 上次 × 2.5（首次 1 天起），上限 60 天；
-//         连续 2 次及以上较强后，每次再上浮 STRONG_BOOST_DAYS 天（尽早拉开，减少高频回访）
+//         第 2 次较强起（连续较强 ≥ STRONG_BOOST_MIN_CONSECUTIVE）每次再上浮 STRONG_BOOST_DAYS 天（尽早拉开，减少高频回访）
 //   较弱：间隔重置 1 天，连续较强清零
 //   连续 2 次较强且间隔达上限 → 标记已掌握，退出队列
 const fs = require('fs');
@@ -29,7 +29,7 @@ const EF = 2.5;                             // SM-2 初始易度因子
 const MAX_INTERVAL_DAYS = 60;               // 间隔上限
 const WEAK_INTERVAL_DAYS = 1;               // 较弱掌握重置间隔
 const MASTER_CONSECUTIVE_STRONG = 2;        // 连续较强达到上限即掌握
-const STRONG_BOOST_MIN_CONSECUTIVE = 2;     // 连续较强达到该次数后，后续间隔额外上浮
+const STRONG_BOOST_MIN_CONSECUTIVE = 1;     // 连续较强达到该次数后即开始上浮（1 = 第 2 次较强起）
 const STRONG_BOOST_DAYS = 2;                // 达到后每次再额外拉长天数
 
 function todayStr() {
@@ -193,7 +193,7 @@ if (cmd === 'init') {
   let interval;
   if (mastery === 'strong') {
     interval = st.review_count === 0 ? BASE_INTERVAL_DAYS : Math.min(MAX_INTERVAL_DAYS, Math.round((st.interval_days || BASE_INTERVAL_DAYS) * EF));
-    // 连续 2 次及以上较强：在 ×2.5 基础上再上浮，尽早拉开间隔（减少高频回访）
+    // 第 2 次较强起（连续较强 ≥ 阈值）：在 ×2.5 基础上再上浮，尽早拉开间隔（减少高频回访）
     if ((st.consecutive_strong || 0) >= STRONG_BOOST_MIN_CONSECUTIVE) {
       interval = Math.min(MAX_INTERVAL_DAYS, interval + STRONG_BOOST_DAYS);
     }
