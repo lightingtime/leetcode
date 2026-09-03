@@ -3259,6 +3259,17 @@
         "动态规划"
       ],
       "last_seen": "2026-09-03"
+    },
+    {
+      "habit": "状态机 DP 重写时把『卖出』写成从空仓态直接累加 prices[i]（没有买入成本），导致收益逐日凭空叠加；买入来源又混进含当天卖出收益的状态，冷冻期约束失效（LC309 复习轮）",
+      "count": 1,
+      "examples": [
+        "best-time-to-buy-and-sell-stock-with-cooldown"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-03"
     }
   ],
   "category_hints": {
