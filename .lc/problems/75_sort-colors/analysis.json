@@ -15,7 +15,6 @@
   "time_complexity": "O(n)",
   "space_complexity": "O(1)",
   "notes": "重写为标准荷兰国旗：0 交换后 mid 前进、2 交换后 mid 回看、1 前进，严格一趟 O(n)/O(1)，Accepted（89/89）",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "分区双指针死循环：没有覆盖无可交换的终态，当 start/end 都指向 1 且中间全为 1 时无任何指针移动，外层 while 永不退出（表现为测试超时）",
@@ -28,8 +27,16 @@
     {
       "habit": "扫描指针推进逻辑有跳跃：0 分支将 mid 重置为 start 后循环底部又无条件 mid++，跳过未处理位置；2 分支交换后也没有停住回看换入值，导致 [0,2,1] 中下标 1 的 2 从未被检查",
       "count": 1
+    },
+    {
+      "habit": "荷兰国旗（三指针分区）：2 与右指针交换后循环仍无条件前进 i，导致从右端换入的元素（可能是 0）被跳过不复查",
+      "count": 1
     }
   ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
+  "code_notes": [],
   "patterns": [
     {
       "title": "三路原地分区：两个边界指针 + 一个扫描指针",
@@ -54,23 +61,21 @@
       "code": "public void sortColors(int[] nums) {\n        int start = 0, end = nums.length - 1;\n        int mid = start;\n        while (mid <= end) {\n            if (nums[mid] == 0) {\n                int temp = nums[start];\n                nums[start] = nums[mid];\n                nums[mid] = temp;\n                start++;\n                mid = start;\n            } else if (nums[mid] == 2) {\n                int temp = nums[end];\n                nums[end] = nums[mid];\n                nums[mid] = temp;\n                end--;\n            } else {\n                mid++;\n            }\n        }\n    }"
     },
     {
-      "date": "2026-08-30",
+      "date": "2026-09-05",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "90/90",
       "runtime_ms": null,
-      "memory_bytes": 43852000,
+      "memory_bytes": 43588000,
       "approach": "三指针分区（荷兰国旗）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路一致（三指针分区），写法等价——本次用 lt/i/gt：交换 2 后 i 不动（回看换来的值）、交换 0 后 lt 与 i 都前进、1 跳过；一刷同此语义。\n\n**一次 AC 归因**：一刷栽在 0 分支误重置 mid 导致非严格一趟；本次每一步推进明确（2→右端、0→左端、1→中间），并沿用一刷边界测试（全 0/全 2/已排序/逆序/回归），从设计与验证两端规避同类错误。\n\n**掌握度依据**：一次提交 Accepted（90/90）、无探讨 → 较强，间隔 ×2.5。",
-      "mastery": "strong",
-      "pass": 1,
-      "code": "public void sortColors(int[] nums) {\n        // 分区不变量：\n        //   [0,lt)   全 0\n        //   [lt,i)   全 1\n        //   (gt,n-1] 全 2\n        //   [i,gt]   未处理 → 循环条件 i<=gt（i==gt 时那一格仍未处理）\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            if (nums[i] == 2) {\n                swap(nums, i, gt);\n                gt--;\n            } else if (nums[i] == 0) {\n                swap(nums, lt, i);\n                lt++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }\n"
+      "notes": "**与上一轮（08-31）对比**：思路仍是三指针分区（荷兰国旗），最终写法与上轮等价——2 分支交换后 `i` 停住回看换入值、0 分支 `lt` 与 `i` 同步前进、1 分支直接前进，一趟 O(n)/O(1)。本轮把易错点固化成回归测试（`[1,2,0]`、`[1,1,2,0]` 这类「换入 0 需复查」用例）并纳入本地边界区。\n\n**为什么又没写对**：首版把 `i++` 放到循环体末尾无条件执行，2 分支换完后直接前进，从右端换入的未处理元素（可能是 0）被永久跳过。这是上轮复盘明确写过的规则（「交换 2 后 i 不动，回看换来的值」），说明这轮仍是「背代码结构」而不是「讲清分区不变量」：荷兰国旗一趟完成靠的是 `[i,gt]` 视为未处理区，2 分支换入的值必须留在 `i` 位下轮复查；无条件前进会让 0 停在 1 右边（如 `[1,2,0]` 得到 `[1,0,2]`）。被边界用例打回后对照不变量（`[0,lt)` 全 0、`[lt,i)` 全 1、`(gt,n-1]` 全 2）才修正。\n\n**掌握度判定**：力扣一次提交即 Accepted，但本地首版未通过、经分析提示（2 分支后不能前进）后修正，属「提示过 / 非一次 AC」→ weak。",
+      "mastery": "weak",
+      "pass": 3,
+      "code": "public void sortColors(int[] nums) {\n    int lt = 0, i = 0, gt = nums.length - 1;\n    while (i <= gt) {\n        if (nums[i] == 2) {\n            swap(nums, i, gt);\n            gt--;\n        } else if (nums[i] == 0) {\n            swap(nums, i, lt);\n            lt++;\n            i++;\n        } else {\n            i++;\n        }\n    }\n}\n\nprivate void swap(int[] nums, int i, int j) {\n    int temp = nums[i];\n    nums[i] = nums[j];\n    nums[j] = temp;\n}",
+      "prev_code": "public void sortColors(int[] nums) {\n        // 分区不变量：\n        //   [0,lt)   全 0\n        //   [lt,i)   全 1\n        //   (gt,n-1] 全 2\n        //   [i,gt]   未处理 → 循环条件 i<=gt（i==gt 时那一格仍未处理）\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            if (nums[i] == 2) {\n                swap(nums, i, gt);\n                gt--;\n            } else if (nums[i] == 0) {\n                swap(nums, lt, i);\n                lt++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }\n"
     }
-  ],
-  "hints": [
-    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ],
   "reviews": [
     {
@@ -98,6 +103,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-05",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "90/90",
+      "approach": "三指针分区（荷兰国旗）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与上一轮（08-31）对比**：思路仍是三指针分区（荷兰国旗），最终写法与上轮等价——2 分支交换后 `i` 停住回看换入值、0 分支 `lt` 与 `i` 同步前进、1 分支直接前进，一趟 O(n)/O(1)。本轮把易错点固化成回归测试（`[1,2,0]`、`[1,1,2,0]` 这类「换入 0 需复查」用例）并纳入本地边界区。\n\n**为什么又没写对**：首版把 `i++` 放到循环体末尾无条件执行，2 分支换完后直接前进，从右端换入的未处理元素（可能是 0）被永久跳过。这是上轮复盘明确写过的规则（「交换 2 后 i 不动，回看换来的值」），说明这轮仍是「背代码结构」而不是「讲清分区不变量」：荷兰国旗一趟完成靠的是 `[i,gt]` 视为未处理区，2 分支换入的值必须留在 `i` 位下轮复查；无条件前进会让 0 停在 1 右边（如 `[1,2,0]` 得到 `[1,0,2]`）。被边界用例打回后对照不变量（`[0,lt)` 全 0、`[lt,i)` 全 1、`(gt,n-1]` 全 2）才修正。\n\n**掌握度判定**：力扣一次提交即 Accepted，但本地首版未通过、经分析提示（2 分支后不能前进）后修正，属「提示过 / 非一次 AC」→ weak。"
     }
   ]
 }

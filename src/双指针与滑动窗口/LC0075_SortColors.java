@@ -2,12 +2,10 @@
 // LeetCode 75. 颜色分类 (Sort Colors)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-colors/
-// 复习日期：2026-08-31（复习 · 一刷 2026-08-05，上次复习 2026-08-30）
-// 一刷思路：三指针分区（荷兰国旗）——0 归左、2 归右、1 居中；一刷非一次 AC：0 分支误重置 mid 导致非严格一趟
+// 复习日期：2026-09-05（第 3 次复习 · 一刷 2026-08-05 · 上次 2026-08-31 较强）
+// 一刷思路：三指针分区（荷兰国旗）——0 归左、2 归右、1 居中；注意 2 分支交换后不前进、回看换入值
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
-
-import java.util.*;
 
 public class LC0075_SortColors {
 
@@ -28,10 +26,10 @@ public class LC0075_SortColors {
         }
     }
 
-    private void swap(int[] nums, int i, int r) {
+    private void swap(int[] nums, int i, int j) {
         int temp = nums[i];
-        nums[i] = nums[r];
-        nums[r] = temp;
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
     // ==== 提交代码结束 ====
 
@@ -92,6 +90,17 @@ public class LC0075_SortColors {
             s.sortColors(nums);
             if (!TestUtil.checkEq(new int[]{0, 1, 2}, nums, "回归-WA用例")) failures++;
         } catch (Throwable t) { failures++; System.out.println("回归-WA用例 异常: " + t); }
+
+        try {
+            int[] nums = new int[]{1, 2, 0};
+            s.sortColors(nums);
+            if (!TestUtil.checkEq(new int[]{0, 1, 2}, nums, "边界8-换入0需复查")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界8-换入0需复查 异常: " + t); }
+        try {
+            int[] nums = new int[]{1, 1, 2, 0};
+            s.sortColors(nums);
+            if (!TestUtil.checkEq(new int[]{0, 1, 1, 2}, nums, "边界9-多个1后跟0")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界9-多个1后跟0 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
