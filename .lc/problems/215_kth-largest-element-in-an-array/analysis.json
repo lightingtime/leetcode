@@ -82,6 +82,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-05",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "47/47",
+      "approach": "快速选择（Lomuto 分区）",
+      "time_complexity": "O(n) 平均",
+      "space_complexity": "O(log n)",
+      "optimal": true,
+      "notes": "与上轮对比：上轮（09-01）即 Lomuto 分区快速选择，本次独立重写仍是同一写法（pivot=nums[r]，i 记小于区边界、j 扫描；k==i 返回 / k<i 递归左半 / k>i 递归右半），仅方法名与变量命名略异，复杂度、内存基本持平，写法无本质变化。\n\n这次为什么能想起来：未翻一刷/上轮代码直接回忆——Top-K 类题先锁定快选或堆；两个关键点一次想清：k 用全局 0 基下标（n-k），递归不修改 k 只缩区间；分区固定一种（Lomuto）不混搭。上次三个坑（Hoare+Lomuto 混搭、k 语义混用、左递归含已归位 pivot 致区间不缩）这次均未再犯。\n\n掌握度判定：strong——全程无探讨，本地 9 组（示例+边界）一次全过，力扣一次提交 Accepted 47/47。\n\n下一步提醒：快选最坏 O(n²) 来自固定取 nums[r] 作 pivot，可试随机化 pivot（先交换随机下标再分区）摊平最坏概率；顺带可复习 347 前 K 高频（快选/桶排序）。"
     }
   ]
 }

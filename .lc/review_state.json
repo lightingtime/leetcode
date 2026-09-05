@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-03",
+  "updated": "2026-09-05",
   "deadline": "2026-09-15",
   "problems": {
     "two-sum": {
@@ -443,12 +443,12 @@
       "title": "数组中的第K个最大元素",
       "category": "栈、队列与优先队列",
       "first_pass_date": "2026-08-07",
-      "last_review_date": "2026-09-01",
-      "next_review_date": "2026-09-04",
-      "interval_days": 3,
-      "review_count": 2,
+      "last_review_date": "2026-09-05",
+      "next_review_date": "2026-09-15",
+      "interval_days": 10,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "top-k-frequent-elements": {

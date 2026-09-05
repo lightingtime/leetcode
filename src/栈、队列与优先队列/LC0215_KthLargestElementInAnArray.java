@@ -2,8 +2,8 @@
 // LeetCode 215. 数组中的第K个最大元素 (Kth Largest Element in an Array)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/kth-largest-element-in-an-array/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-07，上次复习 2026-08-31，较弱）
-// 一刷思路：快速选择（Hoare 分区），O(n) 平均 / O(1)
+// 复习日期：2026-09-05（二刷复习 · 一刷 2026-08-07，上次复习 2026-09-01，较弱）
+// 一刷思路：快速选择（Hoare 分区），O(n) 平均 / O(log n)
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -13,12 +13,12 @@ public class LC0215_KthLargestElementInAnArray {
 
     // ==== 提交代码开始 ====
     public int findKthLargest(int[] nums, int k) {
-        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+        return quickSort(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    private int quickSelect(int[] nums, int l, int r, int k) {
+    private int quickSort(int[] nums, int l, int r, int k) {
         if (l == r) {
-            return nums[r];
+            return nums[l];
         }
         int p = nums[r];
         int i = l, j = l;
@@ -29,15 +29,14 @@ public class LC0215_KthLargestElementInAnArray {
             }
             j++;
         }
-        swap(nums, i , r);
-        if (k == i) {
+        swap(nums, i, r);
+        if (i == k) {
             return nums[i];
-        } else if (k < i) {
-            return quickSelect(nums, l, i - 1, k);
+        } else if (i < k) {
+            return quickSort(nums, i + 1, r, k);
         } else {
-            return quickSelect(nums, i + 1, r, k);
+            return quickSort(nums, l, i - 1, k);
         }
-
     }
 
     private void swap(int[] nums, int i, int j) {
@@ -88,6 +87,5 @@ public class LC0215_KthLargestElementInAnArray {
         }
         System.out.println("全部测试通过");
     }
-
 
 }
