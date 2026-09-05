@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)</h1><p>&gt; <a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/" rel="noopener">https://leetcode.cn/problems/binary-tree-inorder-traversal/</a></p><p>难度：Easy ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、二叉树</p><h2>题目描述</h2><p>给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。</p><p>示例 1：</p><p>输入：root = [1,null,2,3]</p><p>输出：[1,3,2]</p><p>示例 2：</p><p>输入：root = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：root = [1]</p><p>输出：[1]</p><p>提示：</p><p>树中节点数目在范围 [0, 100] 内</p><p>-100</p><p>进阶: 递归算法很简单，你可以通过迭代算法完成吗？</p><h2>示例</h2><ol><li>输入：root = [1,null,2,3]</li></ol><p>输出：[1,3,2]</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><ol><li>输入：root = [1]</li></ol><p>输出：[1]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（71/71）｜ 一次 AC ｜ 迭代栈（cur指针） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（08-31，strong）写的是递归 DFS（函数栈隐式）；本轮回到<strong>迭代显式栈</strong>（与一刷思路一致）：<code>cur</code> 沿左链压栈 → 弹栈访问 → 转右子树。两种写法 O(n)/O(n) 相同，本轮刻意选迭代版练「不用递归」的写法。</li><li>相比一刷迭代版（当时 4 轮修正才过：重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）：本轮一次成型，外层条件 <code>!stack.isEmpty() || cur != null</code> 与内层左链循环直接写对，没有再踩「右子树没接上 cur」的坑。一刷迭代代码在 submissions prev_code 保留。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>中序迭代是固定套路：记忆锚点是「<strong>cur 指针 + 先一路向左压栈</strong>」，弹栈即访问、立刻转右；外层 while 同时管「栈空但有右子树要走」。前两轮分别写过递归与迭代，两个模板都已内化，本轮未参考直接写出迭代版。</li><li>空树提前 return 的写法也沿用一刷教训，避免主循环特判。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（本轮未给任何提示），本地 9 组（示例 3 + 边界 6：全左链/全右链/负数/大数/混合非平衡/BST 有序）一次全绿，力扣一次提交 Accepted 71/71。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>中序的递归/迭代都已掌握；可串练 144 前序、145 后序的迭代写法（后序较 tricky：需标记第二次访问或反转法），巩固显式栈模拟。</li><li>延伸（非必需）：Morris 中序 O(1) 空间（线索树），了解即可，面试常规不要求。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-08-31 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 递归 DFS（中序） ｜ O(n) · O(n)</p>
       
@@ -42,9 +46,9 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
-        <li><span>思路</span><b>递归 DFS（中序）</b></li>
+        <li><span>思路</span><b>迭代栈（cur指针）</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
@@ -84,12 +88,14 @@
     }</pre></div></details>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈（cur指针）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.6 MB</span><span class="chip">用例 71/71</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
-        <span class="tk-c">// TODO: 在这里实现你的解法</span>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.5 MB</span><span class="chip">用例 71/71</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
         <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-        <span class="tk-t">TreeNode</span> cur = root;
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> ans;
+        }
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-t">TreeNode</span> cur = root;
         <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>() || cur != <span class="tk-k">null</span>) {
             <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
                 queue.<span class="tk-f">offerLast</span>(cur);
@@ -100,8 +106,7 @@
             cur = cur.right;
         }
         <span class="tk-k">return</span> ans;
-    }
-</pre></div>
+    }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
         <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
         <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
@@ -121,7 +126,7 @@
         <span class="tk-k">return</span> ans;
     }</pre></div></details>
   </div></section>
-  
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>二叉树中序 = 左子树 → 根 → 右子树。递归版本最直白（<code>dfs(root.left)</code> → 访问 → <code>dfs(root.right)</code>），但本质是借系统调用栈；迭代版要把这个「栈」显式写出来，规则完全一样：<strong>沿左链一路压栈，弹栈即访问，然后转向右子树</strong>。</p><p>选择迭代而非递归的原因：练习显式栈模拟（面试常考「不用递归做遍历」），且空间可精确控制；与上一轮递归版是同一复杂度的两种写法。</p><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>理由</th></tr></thead><tbody><tr><td><code>cur</code> 指针 + 两层 while</td><td>内层 <code>while (cur != null) { push(cur); cur = cur.left; }</code> 模拟「一路向左」；弹栈后 <code>cur = cur.right</code> 转右</td></tr><tr><td>外层条件 `!stack.isEmpty() \</td><td>\</td><td>cur != null`</td><td>两个状态都要覆盖：栈空但 cur 非空（刚处理完一个根，要去它右子树）；cur 空但栈非空（回退到父节点）</td></tr><tr><td>用 <code>Deque</code> + <code>offerLast</code>/<code>pollLast</code></td><td>明确当作栈用（<code>push</code>/<code>pop</code> 等价）；数组双端队列避免 <code>Stack</code> 的同步开销</td></tr><tr><td>空树提前返回空表</td><td>让主循环无需特判；测试示例2 空树直接覆盖</td></tr></tbody></table></div><p><strong>具体 case 推演（示例1：<code>[1, null, 2, 3]</code>，即 1 的右孩子 2，2 的左孩子 3）</strong></p><div class="table-wrap"><table><thead><tr><th>步骤</th><th>栈（底→顶）</th><th>cur</th><th>动作 / ans</th></tr></thead><tbody><tr><td>0</td><td>[]</td><td>1</td><td>内层：push 1，cur=null</td></tr><tr><td>1</td><td>[1]</td><td>null</td><td>内层结束；外层：栈非空 → pop 1，访问，ans=[1]，cur=1.right=2</td></tr><tr><td>2</td><td>[]</td><td>2</td><td>内层：push 2，cur=2.left=3；push 3，cur=null</td></tr><tr><td>3</td><td>[2,3]</td><td>null</td><td>pop 3，访问，ans=[1,3]，cur=3.right=null</td></tr><tr><td>4</td><td>[2]</td><td>null</td><td>pop 2，访问，ans=[1,3,2]，cur=2.right=null</td></tr><tr><td>5</td><td>[]</td><td>null</td><td>栈空且 cur 空 → 结束</td></tr></tbody></table></div><p>输出 <code>[1,3,2]</code>，与题目一致。注意每个节点恰好入栈一次、出栈一次，访问顺序严格左-根-右。</p><p><strong>边界与细节</strong></p><ul><li>空树 <code>[]</code> → 直接返回空表，不 NullPointer。</li><li>全左链 <code>[3,2,1]</code>（边界1）：一路压栈到底，再逐个弹出，顺序 = 1,2,3（即树高方向上由深到浅 = 中序）。</li><li>全右链 <code>[1,null,2,null,3]</code>（边界2）：每层「压一个、弹一个」，外层靠 cur 非空驱动。</li><li>单节点 / 负数值 / 大数：与结构无关，按值原样收集即可。</li><li>测试本地用了 <code>treeNode(层序数组)</code> 构造，<code>norm</code> 只比较收集到的中序列表顺序。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个节点入栈/出栈各一次，总操作常数倍 n；中序遍历必须访问全部 n 个节点，Ω(n) 是下界，已达成。</li><li>空间 O(n)：最坏（全左链）栈深 = n；递归版调用栈同样 O(n)。</li><li>是否有更优：题目 Follow-up 提到能否用迭代（本解即达标）；若要 O(1) 空间可学 Morris 线索树（利用叶子空指针临时改造树结构），但会改动树且代码复杂，常规面试写显式栈 O(n) 即可，本题不要求 O(1) 空间，故本解为「满足题意 + 常数友好」档。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>共享可变字段收集结果未在每次入口重置：成员列表跨多次调用累积（上一次结果串到下一次）；且该字段声明在提交区外，提交包装后引用会编译失败</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序遍历重复压栈死循环：弹栈访问后只处理右孩子，下一轮从栈顶重新把该节点左链再压一遍（left 指针未变），无限循环 OOM；且空 root 直接 push(null) 导致 NPE</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序：内层只压左孩子、当前节点 cur 自己未入栈，首次弹栈取到 null 直接 NPE；访问后未把 cur 移到右孩子（只 push 右孩子），会再次重复压栈</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>迭代中序：内层 while (cur.left) 未把 cur==null 当正常状态（栈非空时访问完右空节点后 cur 为 null），直接解引用 NPE；内层应以 cur!=null 为条件</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>71/71 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>递归收集结果：用局部列表+helper 参数，避免实例字段跨调用累积</h3><p>递归/回溯收集结果的列表如果是实例字段，多次调用（本地多组测试）会串台；正确做法是入口方法内 new 列表并传给递归 helper 收集，或入口先 clear。声明必须放在提交区内。出处：LC0094 binary-tree-inorder-traversal。</p></div><div class="card md"><h3>迭代中序：cur 指针驱动 + 左链一次压栈，访问后 cur=cur.right</h3><p>迭代中序遍历用 cur 指针驱动外层 while(cur!=null || !stack.isEmpty())；内层一路压 cur 并 cur=cur.left 到最左，弹栈访问后 cur=cur.right 继续，保证每个节点只压一次。错误写法是每次看栈顶重新走左链（left 不变会重复压栈死循环），且空 root 不能入栈。</p></div></section>
   <section><h2>分析结果</h2>
