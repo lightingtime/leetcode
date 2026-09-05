@@ -625,12 +625,12 @@
       "title": "电话号码的字母组合",
       "category": "回溯",
       "first_pass_date": "2026-08-08",
-      "last_review_date": "2026-09-02",
-      "next_review_date": "2026-09-04",
-      "interval_days": 2,
-      "review_count": 2,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-05",
+      "next_review_date": "2026-09-10",
+      "interval_days": 5,
+      "review_count": 3,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "permutations": {

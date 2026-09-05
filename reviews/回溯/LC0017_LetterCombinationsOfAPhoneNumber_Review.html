@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>17. 电话号码的字母组合 (Letter Combinations of a Phone Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/" rel="noopener">https://leetcode.cn/problems/letter-combinations-of-a-phone-number/</a></p><p>难度：Medium ｜ 分类：回溯</p><p>标签：哈希表、字符串、回溯</p><h2>题目描述</h2><p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。</p><p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p><p>示例 1：</p><p>输入：digits = "23"</p><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><p>示例 2：</p><p>输入：digits = "2"</p><p>输出：["a","b","c"]</p><p>提示：</p><p>1</p><p>digits[i] 是范围 ['2', '9'] 的一个数字。</p><h2>示例</h2><ol><li>输入：digits = "23"</li></ol><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><ol><li>输入：digits = "2"</li></ol><p>输出：["a","b","c"]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(4^n·n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上轮（09-02，weak）与本轮同为回溯 DFS（numbers 表 + dfs 逐位选字母 + append/deleteCharAt 撤销），主体结构一致；本次关键差异：写代码前主动先写 <code>if (digits.isEmpty()) return ans;</code> 入口短路，空输入边界一次通过，未再复发。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>上轮把「空串应返回 [] 而非 [""]」记为错误习惯（两轮复发），这轮动手前先检查输入端点：空串走入口短路，递归基 <code>sb.length()==digits.length()</code> 只在 digits 非空时才有意义；边界 1（size=0）一次过，说明「写递归前先挡输入端点」已内化。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨，本地 8 组（示例 2 + 边界 6，含空串/四字母键 7·9/全相同/三数字/混合键）一次全过，力扣一次提交 Accepted 24/24。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>回溯骨架不变，可顺带复习同框架题 LC22 括号生成 / LC39 组合总和 / LC46 全排列 / LC78 子集（选/撤销 + 入口边界短路）。</li><li>队列逐层扩展（BFS 版）复杂度相同但需保存全部前缀、空间更大，回溯仍是本题更优写法，无需再试。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(4^n·n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-08）：回溯 DFS，首 WA 即空输入返回 [""]（应 []）；修复后 AC，非一次。</li><li>复习①（2026-09-01）：同思路一次 AC，较强。</li><li>本次（第 2 次复习）：回溯主体（逐位选字母 + append→递归→deleteCharAt 撤销）一次写出，但<strong>空输入边界复发</strong>——本地边界1 失败（返回 [""]），经提示补 digits.isEmpty() 短路后修复；力扣 24/24 Accepted。</li></ul><p><strong>② 为什么没想起来</strong></p><ul><li>递归主流程记得牢，但「空输入」这类应在递归入口前挡掉的边界被忽略：dfs 终止条件 sb.length()==digits.length() 在空串时 0==0 立即成立，直接产出空串结果。</li><li>一刷踩过同一坑却未内化——当时只修了代码，没把「写递归前先列输入端点、空输入先短路」变成习惯；本次已记录错误习惯（累计 1 次）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本地曾失败（空输入复发）+ 经提示修复 → weak；力扣侧一次 Accepted（24/24），firstTry=true。下次复习 09-03 重点复查空输入边界与整体回溯骨架。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同骨架回溯题：LC22 括号生成、LC39 组合总和、LC46 全排列、LC78 子集——共性都是「选/撤销」+ 入口边界（空/0）单独短路。</li><li>空输入在 List/String 返回题里常表现为 [""] vs []，动手前先列出输入范围端点用例。</li></ul></div>
@@ -41,12 +45,12 @@
         <li><span>复杂度</span><b>O(4^n·n) · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 2 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>回溯 DFS</b></li>
         <li><span>复杂度</span><b>O(4^n·n) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
