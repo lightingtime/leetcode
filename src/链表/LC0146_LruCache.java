@@ -2,9 +2,9 @@
 // LeetCode 146. LRU 缓存 (LRU Cache)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/lru-cache/
-// 复习日期：2026-08-31（复习 · 一刷 2026-08-07，上次复习 2026-08-30，较弱）
-// 一刷思路：HashMap + 双向链表（哨兵头尾），get/put O(1)
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 刷题日期：2026-09-05（复习轮二刷重开 · 一刷 2026-08-07）
+// 测试用例与一刷归档保持一致（示例 + 边界，见 .bak）
+//
 // ============================================================
 
 import java.util.*;
@@ -14,13 +14,13 @@ public class LC0146_LruCache {
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 LRUCache 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class LRUCache {
-        Map<Integer, Node> map;
-        int capacity;
         Node head;
         Node tail;
+        int capacity;
         int size;
+        Map<Integer, Node> map;
         public LRUCache(int capacity) {
-            this.map = new HashMap<>();
+            map = new HashMap<>();
             this.capacity = capacity;
             this.size = 0;
             head = new Node();
@@ -48,8 +48,6 @@ public class LC0146_LruCache {
         private void unLinkNode(Node node) {
             node.next.pre = node.pre;
             node.pre.next = node.next;
-            node.next = null;
-            node.pre = null;
         }
 
         public void put(int key, int value) {
@@ -59,33 +57,33 @@ public class LC0146_LruCache {
                 node.val = value;
                 unLinkNode(node);
             } else {
-                node = new Node(value, key);
+                node = new Node(key, value);
                 map.put(key, node);
                 size++;
             }
             move2Head(node);
             if (size > capacity) {
-                Node pre = map.get(tail.pre.key);
-                unLinkNode(pre);
-                map.remove(pre.key);
+                Node delete = map.get(tail.pre.key);
+                unLinkNode(delete);
+                map.remove(delete.key);
                 size--;
-                pre = null;
+                delete = null;
             }
         }
     }
 
     static class Node {
-        Node next;
         Node pre;
-        int val;
+        Node next;
         int key;
+        int val;
 
         public Node() {
         }
 
-        public Node(int val, int key) {
-            this.val = val;
+        public Node(int key, int val) {
             this.key = key;
+            this.val = val;
         }
     }
     // ==== 提交代码结束 ====

@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>146. LRU 缓存 (LRU Cache)</h1><p>&gt; <a href="https://leetcode.cn/problems/lru-cache/" rel="noopener">https://leetcode.cn/problems/lru-cache/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：设计、哈希表、链表、双向链表</p><h2>题目描述</h2><p>请你设计并实现一个满足 LRU (最近最少使用) 缓存 约束的数据结构。</p><p>实现 LRUCache 类：</p><p>LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存</p><p>int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。</p><p>void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。</p><p>函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。</p><p>示例：</p><p>输入</p><p>["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]</p><p>[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]</p><p>输出</p><p>[null, null, null, 1, null, -1, null, -1, 3, 4]</p><p>解释</p><p>LRUCache lRUCache = new LRUCache(2);</p><p>lRUCache.put(1, 1); // 缓存是 {1=1}</p><p>lRUCache.put(2, 2); // 缓存是 {1=1, 2=2}</p><p>lRUCache.get(1); // 返回 1</p><p>lRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}</p><p>lRUCache.get(2); // 返回 -1 (未找到)</p><p>lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}</p><p>lRUCache.get(1); // 返回 -1 (未找到)</p><p>lRUCache.get(3); // 返回 3</p><p>lRUCache.get(4); // 返回 4</p><p>提示：</p><p>1</p><p>0</p><p>0 5</p><p>最多调用 2 * 105 次 get 和 put</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（23/23）｜ 一次 AC ｜ HashMap+双向链表（哨兵头尾） ｜ O(1) · O(capacity)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上轮（08-31，strong）与本次同一思路：HashMap O(1) 定位 + 双向链表（哨兵头尾）O(1) 增删，<code>get</code>/<code>put</code> 命中先摘再移头、满则摘尾同步删 map。本轮仅做命名/字段整理（显式并列 capacity/size/map、淘汰变量 rename），逻辑等价；8-31 版代码已存入 submissions prev_code，一刷版保留为独立条目，均未丢失。</li><li>相比一刷（08-07，非一次 AC）：一刷用 <code>map.size()</code> 判淘汰、未显式维护 size；本轮/上轮改为显式 <code>size</code> 自增自减 + 节点存 key，淘汰用 <code>tail.pre</code> 身份取尾，代码结构更稳。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>LRU 是高频记忆型设计题，固定套路「哈希管查找 + 双向链表管最近使用顺序」语义清晰：get/put「访问即移到头部、满了摘尾部」没有推导成本。前两轮均 strong 已内化，本轮未参考一刷直接写出主结构。</li><li>上轮已沉淀 pattern「LRU 哈希表+双向链表：两结构必须同步增删，哨兵判身份不判值」，本轮 put 新 key 的 <code>map.put + size++</code>、淘汰的 <code>map.remove + size--</code> 三处同步一次写对，没有再踩一刷「漏 map.put / 漏 size」的坑。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：用户确认独立重写、未参考/未提示，本地 5 组（示例标准序列 + capacity=1 / 空缓存 get / get 刷新 / 更新已存在 key）一次全绿，力扣一次提交 Accepted 23/23。</li><li>说明：本次会话中间文件是上一流程遗留的坏草稿（put 漏 map.put、对 new 节点误 unLink），补测试后暴露 NPE；用户重写后即全绿，非本轮写法的多轮调试。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>HashMap+双向链表已是题设 O(1) 要求下的最优结构，无更优档可追。</li><li>可顺带串练 460. LFU 缓存（频率 + 时间双维淘汰，双哈希 + 频率桶链表），巩固「双结构同步」这类设计题写法。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-08-31 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ HashMap+双向链表（哨兵头尾） ｜ O(1) · O(capacity)</p>
       
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>HashMap+双向链表（哨兵头尾）</b></li>
         <li><span>复杂度</span><b>O(1) · O(capacity)</b></li>
@@ -50,9 +54,156 @@
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
-    <h3 style="margin:0 0 8px">写法 1 · HashMap+双向链表（哨兵头尾）</h3>
-    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(capacity)</span><span class="chip">内存 ≈ 56.5 MB</span><span class="chip">用例 —</span></p>
+    <h3 style="margin:0 0 8px">写法 1 · 哈希表+双向链表</h3>
+    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 129.0 MB</span><span class="chip">用例 25/25</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0146_LruCache.java · 哈希表+双向链表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">LRUCache</span> {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Node</span>&gt; map;
+        <span class="tk-t">Node</span> head;
+        <span class="tk-t">Node</span> tail;
+        <span class="tk-k">int</span> capacity;
+
+        <span class="tk-k">public</span> <span class="tk-t">LRUCache</span>(<span class="tk-k">int</span> capacity) {
+            <span class="tk-k">this</span>.capacity = capacity;
+            map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            head = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
+            tail = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
+            head.next = tail;
+            tail.pre = head;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">get</span>(<span class="tk-k">int</span> key) {
+            <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(key)) {
+                <span class="tk-k">return</span> -<span class="tk-n">1</span>;
+            }
+            <span class="tk-t">Node</span> node = map.<span class="tk-f">get</span>(key);
+            <span class="tk-f">unLinkNode</span>(node);
+            <span class="tk-f">move2Head</span>(node);
+            <span class="tk-k">return</span> node.val;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">put</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> value) {
+            <span class="tk-t">Node</span> node;
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(key)) {
+                node = map.<span class="tk-f">get</span>(key);
+                node.val = value;
+                <span class="tk-f">unLinkNode</span>(node);
+            } <span class="tk-k">else</span> {
+                node = <span class="tk-k">new</span> <span class="tk-t">Node</span>(key, value);
+                map.<span class="tk-f">put</span>(key, node);
+            }
+            <span class="tk-f">move2Head</span>(node);
+            <span class="tk-k">if</span> (map.<span class="tk-f">size</span>() &gt; capacity) {
+                <span class="tk-t">Node</span> last = tail.pre;
+                <span class="tk-f">unLinkNode</span>(last);
+                map.<span class="tk-f">remove</span>(last.key);
+            }
+        }
+
+        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">unLinkNode</span>(<span class="tk-t">Node</span> node) {
+            node.pre.next = node.next;
+            node.next.pre = node.pre;
+        }
+
+        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">move2Head</span>(<span class="tk-t">Node</span> node) {
+            node.next = head.next;
+            node.pre = head;
+            head.next.pre = node;
+            head.next = node;
+        }
+
+        <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+            <span class="tk-t">Node</span> next;
+            <span class="tk-t">Node</span> pre;
+            <span class="tk-k">int</span> val;
+            <span class="tk-k">int</span> key;
+
+            <span class="tk-t">Node</span>() {}
+
+            <span class="tk-t">Node</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> val) {
+                <span class="tk-k">this</span>.key = key;
+                <span class="tk-k">this</span>.val = val;
+            }
+        }
+    }
+</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · HashMap+双向链表（哨兵头尾）</h3>
+    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(capacity)</span><span class="chip">内存 ≈ 56.4 MB</span><span class="chip">用例 23/23</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0146_LruCache.java · HashMap+双向链表（哨兵头尾）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">LRUCache</span> {
+        <span class="tk-t">Node</span> head;
+        <span class="tk-t">Node</span> tail;
+        <span class="tk-k">int</span> capacity;
+        <span class="tk-k">int</span> size;
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Node</span>&gt; map;
+        <span class="tk-k">public</span> <span class="tk-t">LRUCache</span>(<span class="tk-k">int</span> capacity) {
+            map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            <span class="tk-k">this</span>.capacity = capacity;
+            <span class="tk-k">this</span>.size = <span class="tk-n">0</span>;
+            head = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
+            tail = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
+            head.next = tail;
+            tail.pre = head;
+        }
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">get</span>(<span class="tk-k">int</span> key) {
+            <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(key)) {
+                <span class="tk-k">return</span> -<span class="tk-n">1</span>;
+            }
+            <span class="tk-t">Node</span> node = map.<span class="tk-f">get</span>(key);
+            <span class="tk-f">unLinkNode</span>(node);
+            <span class="tk-f">move2Head</span>(node);
+            <span class="tk-k">return</span> node.val;
+        }
+
+        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">move2Head</span>(<span class="tk-t">Node</span> node) {
+            node.next = head.next;
+            node.pre = head;
+            head.next.pre = node;
+            head.next = node;
+        }
+
+        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">unLinkNode</span>(<span class="tk-t">Node</span> node) {
+            node.next.pre = node.pre;
+            node.pre.next = node.next;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">put</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> value) {
+            <span class="tk-t">Node</span> node;
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(key)) {
+                node = map.<span class="tk-f">get</span>(key);
+                node.val = value;
+                <span class="tk-f">unLinkNode</span>(node);
+            } <span class="tk-k">else</span> {
+                node = <span class="tk-k">new</span> <span class="tk-t">Node</span>(key, value);
+                map.<span class="tk-f">put</span>(key, node);
+                size++;
+            }
+            <span class="tk-f">move2Head</span>(node);
+            <span class="tk-k">if</span> (size &gt; capacity) {
+                <span class="tk-t">Node</span> delete = map.<span class="tk-f">get</span>(tail.pre.key);
+                <span class="tk-f">unLinkNode</span>(delete);
+                map.<span class="tk-f">remove</span>(delete.key);
+                size--;
+                delete = <span class="tk-k">null</span>;
+            }
+        }
+    }
+
+    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
+        <span class="tk-t">Node</span> pre;
+        <span class="tk-t">Node</span> next;
+        <span class="tk-k">int</span> key;
+        <span class="tk-k">int</span> val;
+
+        <span class="tk-k">public</span> <span class="tk-t">Node</span>() {
+        }
+
+        <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> val) {
+            <span class="tk-k">this</span>.key = key;
+            <span class="tk-k">this</span>.val = val;
+        }
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0146_LruCache.java · HashMap+双向链表（哨兵头尾） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">LRUCache</span> {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Node</span>&gt; map;
         <span class="tk-k">int</span> capacity;
         <span class="tk-t">Node</span> head;
@@ -126,79 +277,9 @@
             <span class="tk-k">this</span>.val = val;
             <span class="tk-k">this</span>.key = key;
         }
-    }</pre></div>
-    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0146_LruCache.java · HashMap+双向链表（哨兵头尾） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">LRUCache</span> {
-        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Node</span>&gt; map;
-        <span class="tk-t">Node</span> head;
-        <span class="tk-t">Node</span> tail;
-        <span class="tk-k">int</span> capacity;
-
-        <span class="tk-k">public</span> <span class="tk-t">LRUCache</span>(<span class="tk-k">int</span> capacity) {
-            <span class="tk-k">this</span>.capacity = capacity;
-            map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
-            head = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
-            tail = <span class="tk-k">new</span> <span class="tk-t">Node</span>();
-            head.next = tail;
-            tail.pre = head;
-        }
-
-        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">get</span>(<span class="tk-k">int</span> key) {
-            <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(key)) {
-                <span class="tk-k">return</span> -<span class="tk-n">1</span>;
-            }
-            <span class="tk-t">Node</span> node = map.<span class="tk-f">get</span>(key);
-            <span class="tk-f">unLinkNode</span>(node);
-            <span class="tk-f">move2Head</span>(node);
-            <span class="tk-k">return</span> node.val;
-        }
-
-        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">put</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> value) {
-            <span class="tk-t">Node</span> node;
-            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(key)) {
-                node = map.<span class="tk-f">get</span>(key);
-                node.val = value;
-                <span class="tk-f">unLinkNode</span>(node);
-            } <span class="tk-k">else</span> {
-                node = <span class="tk-k">new</span> <span class="tk-t">Node</span>(key, value);
-                map.<span class="tk-f">put</span>(key, node);
-            }
-            <span class="tk-f">move2Head</span>(node);
-            <span class="tk-k">if</span> (map.<span class="tk-f">size</span>() &gt; capacity) {
-                <span class="tk-t">Node</span> last = tail.pre;
-                <span class="tk-f">unLinkNode</span>(last);
-                map.<span class="tk-f">remove</span>(last.key);
-            }
-        }
-
-        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">unLinkNode</span>(<span class="tk-t">Node</span> node) {
-            node.pre.next = node.next;
-            node.next.pre = node.pre;
-        }
-
-        <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">move2Head</span>(<span class="tk-t">Node</span> node) {
-            node.next = head.next;
-            node.pre = head;
-            head.next.pre = node;
-            head.next = node;
-        }
-
-        <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
-            <span class="tk-t">Node</span> next;
-            <span class="tk-t">Node</span> pre;
-            <span class="tk-k">int</span> val;
-            <span class="tk-k">int</span> key;
-
-            <span class="tk-t">Node</span>() {}
-
-            <span class="tk-t">Node</span>(<span class="tk-k">int</span> key, <span class="tk-k">int</span> val) {
-                <span class="tk-k">this</span>.key = key;
-                <span class="tk-k">this</span>.val = val;
-            }
-        }
-    }
-</pre></div></details>
+    }</pre></div></details>
   </div></section>
-  
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>题目要求 get / put 都 O(1)，并且缓存满时要淘汰「最久未使用」的 key。要同时满足两个约束：</p><ul><li>查找必须 O(1) → 需要哈希表：<code>Map&lt;Integer, Node&gt;</code>（key → 节点）。</li><li>维护「最近使用顺序」且删除/移动任意元素 O(1) → 数组删除要 O(n) 移位、单链表删除拿不到前驱，只有双向链表能做到 O(1) 摘除任意节点。</li></ul><p>所以标准结构是 <strong>HashMap + 双向链表（带哨兵头尾）</strong>：哈希管定位，链表管顺序。链表约定：头部 = 最近使用，尾部 = 最久未使用。访问（get 命中或 put 更新已存在 key）→ 摘下来移到头部；插入新 key → 放头部；容量满 → 摘尾部并同步删 map。</p><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>节点里存 key</td><td>淘汰尾部节点时能直接 <code>map.remove(node.key)</code>，否则无从知道删哪个 key</td></tr><tr><td>显式维护 <code>size</code></td><td>用 <code>size &gt; capacity</code> 判淘汰；一刷用 <code>map.size()</code> 也行，但显式 size 语义更清楚</td></tr><tr><td>哨兵 <code>head</code> / <code>tail</code></td><td>空表、单节点、插头、删尾全都不写判空分支，统一走 <code>unLinkNode</code> + <code>move2Head</code></td></tr><tr><td>拆出 <code>unLinkNode</code> / <code>move2Head</code> 两个私有方法</td><td>get 命中与 put 更新共用同一套「摘 + 移头」逻辑，避免复制粘贴</td></tr><tr><td>三个结构同步增删</td><td>put 新 key：建节点 + <code>map.put</code> + <code>size++</code> + 挂头部；淘汰：摘尾 + <code>map.remove</code> + <code>size--</code>。漏一个就出现「get 不到新 key」或「永不淘汰」</td></tr></tbody></table></div><p><strong>具体 case 推演（capacity = 2）</strong></p><p>题目示例序列：<code>put(1,1), put(2,2), get(1), put(3,3), get(2), put(4,4), get(1), get(3), get(4)</code>。逐操作看 map 与链表状态（链表从左到右 = 头部最近 → 尾部最久）：</p><div class="table-wrap"><table><thead><tr><th>操作</th><th>map（key→value）</th><th>链表顺序（最近→最久）</th><th>动作 / 淘汰</th></tr></thead><tbody><tr><td>put(1,1)</td><td>{1:1}</td><td>1</td><td>新 key：建节点 1，挂头部</td></tr><tr><td>put(2,2)</td><td>{1:1, 2:2}</td><td>2 → 1</td><td>新 key：建节点 2，挂头部</td></tr><tr><td>get(1)=1</td><td>{1:1, 2:2}</td><td>1 → 2</td><td>命中：摘 1 移到头部（1 变最近）</td></tr><tr><td>put(3,3)</td><td>{1:1, 3:3}，2 被逐</td><td>3 → 1</td><td>新 key 且 size=2=capacity：先淘汰尾部 2（<code>map.remove(2)</code>、<code>size--</code>），再插 3 头部</td></tr><tr><td>get(2)=-1</td><td>同上</td><td>3 → 1</td><td>map 里已无 2 → 返回 -1</td></tr><tr><td>put(4,4)</td><td>{1:1, 3:3, 4:4}？→ 淘汰 1</td><td>4 → 3</td><td>满：淘汰尾部 1（此刻最久是 1，因为 3 刚插入），插 4</td></tr><tr><td>get(1)=-1</td><td>{3:3, 4:4}</td><td>4 → 3</td><td>1 已被逐 → -1</td></tr><tr><td>get(3)=3</td><td>{3:3, 4:4}</td><td>3 → 4</td><td>命中：3 移到头部</td></tr><tr><td>get(4)=4</td><td>{3:3, 4:4}</td><td>4 → 3</td><td>命中：4 移到头部</td></tr></tbody></table></div><p>对照代码里 <code>put</code> 的 else 分支：<code>node = new Node(key,value); map.put(key,node); size++;</code> 三件事缺一不可——漏 <code>map.put</code> 则后续 get 新 key 永远 -1；漏 <code>size++</code> 则 <code>size &gt; capacity</code> 永不成立、淘汰永不触发。<code>get</code> 命中后先 <code>unLinkNode</code> 再 <code>move2Head</code>，顺序不能反：若先 move2Head，node 仍在原位，自链会把自己 next 搞乱。</p><p><strong>边界与细节</strong></p><ul><li>capacity=1：每插一个新 key 都先淘汰唯一旧 key，链表始终只有一个数据节点。</li><li>空缓存 get 任意 key → -1（map 查不到直接返回）。</li><li>put 已存在的 key = 更新 value + 刷新为最近使用（先摘再移头）。</li><li>哨兵节点用身份判断（<code>tail.pre</code> / <code>head.next</code>），不比较 value——value 可能任意，哨兵只是占位。</li><li>get/put 的容器类名是 <code>LRUCache</code>（设计题），提交区只交类实现，<code>main</code> 负责本地模拟调用序列。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间：get / put 均 O(1)（哈希平均 O(1) 查找 + 双向链表常数次指针操作）；put 的淘汰也是 O(1)。</li><li>空间：O(capacity)，map 与链表节点数都被容量限制。</li><li>为什么是最优：题设把 get/put 的复杂度下限钉死在 O(1)，任何用数组/单链表维护顺序的做法删除或移动都要 O(n)，不满足题意；HashMap + 双向链表正是达成该下界的标准结构，不存在更优档。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>设计题双结构同步遗漏：put 新 key 只操作链表、漏掉 map.put（get 查不到新 key），且 size 从未自增/自减导致 size==capacity 永不成立、淘汰永不触发；淘汰时也未 map.remove 被逐出 key（节点未存 key 无从删除）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>条件分支覆盖不全：容量未满的普通插入 else 路径完全为空（没建节点/没挂链/没 map.put），只写了容量已满时的淘汰分支，导致所有 put 新 key 都无效</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>LRU 哈希表+双向链表：两结构必须同步增删，哨兵判身份不判值</h3><p>map 负责 O(1) 定位节点、链表维护使用顺序，两者必须同步：插入新 key 要 map.put(key,node) 并 size++；淘汰时 cut 掉尾节点后，必须用该节点存的 key 做 map.remove 并 size--；get/更新命中时先 cut 再 moveToHead 刷新顺序。哨兵节点用 cur==head || cur==tail 判身份，不要用 value==null 猜。出处：LC0146 lru-cache。</p></div></section>
   <section><h2>分析结果</h2>
