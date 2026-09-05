@@ -583,12 +583,12 @@
       "title": "最长连续序列",
       "category": "图与并查集",
       "first_pass_date": "2026-08-08",
-      "last_review_date": "2026-09-02",
-      "next_review_date": "2026-09-05",
-      "interval_days": 3,
-      "review_count": 2,
+      "last_review_date": "2026-09-05",
+      "next_review_date": "2026-09-15",
+      "interval_days": 10,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "number-of-islands": {
