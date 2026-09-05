@@ -2,7 +2,7 @@
 // LeetCode 200. 岛屿数量 (Number of Islands)
 // 难度：Medium | 分类：图与并查集
 // 链接：https://leetcode.cn/problems/number-of-islands/
-// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-08 · 上次 2026-09-01 较弱）
+// 复习日期：2026-09-06（第 3 次复习 · 一刷 2026-08-08 · 上次 2026-09-02 较强）
 // 一刷/上次思路：DFS 洪水填充：扫到未访问的 1 即计数并递归四方向淹没，visited 防重
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
@@ -12,11 +12,11 @@ import java.util.*;
 public class LC0200_NumberOfIslands {
 
     // ==== 提交代码开始 ====
-    boolean[][] visited;
     int ans;
+    boolean[][] visited;
     public int numIslands(char[][] grid) {
-        int m = grid.length;
         ans = 0;
+        int m = grid.length;
         if (m == 0) {
             return ans;
         }
@@ -40,12 +40,11 @@ public class LC0200_NumberOfIslands {
         if (grid[i][j] == '0') {
             return false;
         }
-        boolean has = true;
         dfs(grid, i + 1, j);
         dfs(grid, i - 1, j);
         dfs(grid, i, j + 1);
         dfs(grid, i, j - 1);
-        return has;
+        return true;
     }
     // ==== 提交代码结束 ====
 
