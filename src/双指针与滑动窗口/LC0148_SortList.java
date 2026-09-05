@@ -2,7 +2,7 @@
 // LeetCode 148. 排序链表 (Sort List)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-list/
-// 复习日期：2026-09-01（复习 · 一刷 2026-08-05，上次复习 2026-08-31，较弱）
+// 复习日期：2026-09-06（第 4 次复习 · 一刷 2026-08-05 · 上次 2026-09-01 较强）
 // 一刷思路：自底向上归并 O(1) 空间（subLen 翻倍取段 + merge）；上次踩坑：段长 i++ 非翻倍、i<<=2 误乘4
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
@@ -16,9 +16,9 @@ public class LC0148_SortList {
         if (head == null || head.next == null) {
             return head;
         }
-        int len = getLen(head);
+        int maxLen = getLen(head);
         ListNode dummy = new ListNode(0, head);
-        for (int i = 1; i < len; i <<= 1) {
+        for (int i = 1; i <= maxLen; i <<= 1) {
             ListNode pre = dummy, cur = dummy.next;
             while (cur != null) {
                 ListNode head1 = cur;
