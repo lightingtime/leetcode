@@ -29,17 +29,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-19",
+      "date": "2026-09-06",
       "verdict": "Accepted",
       "testcases": "210/210",
       "runtime_ms": null,
-      "memory_bytes": 43872000,
+      "memory_bytes": 43900000,
       "approach": "三状态机 DP（含冷冻期）",
       "time_complexity": "O(n)",
-      "space_complexity": "O(n)",
-      "optimal": false,
-      "notes": "一次 AC；三状态机 DP（持有/刚卖/自由空仓），买入只从自由空仓转移即冷冻期约束；时间 O(n) 已达下界，空间 O(n) 可滚动压到 O(1)",
-      "code": "public int maxProfit(int[] prices) {\n        return maxProfit(prices, 1);\n    }\n\n    public int maxProfit(int[] prices, int k) {\n        int[][] dp = new int[prices.length][3];\n        dp[0][0] = -prices[0];\n        for (int i = 1; i < prices.length; i++) {\n            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][2] - prices[i]);\n            dp[i][1] = dp[i - 1][0] + prices[i];\n            dp[i][2] = Math.max(dp[i-1][2], i-k >= 0 ? dp[i-k][1] : 0);\n        }\n        return Math.max(dp[prices.length - 1][1], dp[prices.length - 1][2]);\n    }\n"
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上一轮（09-03，weak，有探讨）与本次同思路：**三状态机 DP**（持有 hold / 空仓可买 empty / 冷冻 cold），但当时用 O(n) 数组存三列。\n- 本轮按要求**滚动到 O(1)**：只保留 `hold`/`empty`/`cold` 三个标量，循环里用 `preHold`/`preEmpty` 暂存旧值，避免同轮内「先更新 hold 再被 empty/cold 读到新值」的串扰。空间 O(n)→O(1)，是归档复习提醒里要练的优化点；一刷 O(n) 版代码将存入 submissions prev_code。\n\n**② 为什么这次能想起来**\n- 状态机锚点 = 「**互斥状态 + 列出每个状态当天能从哪些状态来**」：hold（继续持有 / 从 cold 买入）、empty（继续空仓 / 卖出后落地）、cold（冷冻，只能从卖出的那天进入，即由 empty 前值派生）。转移方向想清楚后，代码只是 3 个 max。\n- 09-03 探讨的转移图已内化：本轮直接写对「买入只发生在冷却结束后、卖出后次日不能买」的隔天约束，没有再踩转移串扰的坑。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 9 组（示例 2 + 边界 7：全相同/单调递减/单调递增/冷冻期隔天/长持有胜短线/低点持有/等待入场/大数组递增）一次全绿，力扣一次提交 Accepted 210/210。\n\n**④ 下一步提醒**\n- O(1) 空间 + O(n) 时间已是本题状态机 DP 的最优档。\n- 相关串练：121（买卖一次）、122（可多次无冷冻，两态即可）、714（含手续费，两态+费率）、123/188（限制交易次数，状态机加「次数维」）。",
+      "code": "public int maxProfit(int[] prices) {\n        int hold = -prices[0];\n        int empty = 0;\n        int cold = 0;\n        for (int i = 1; i < prices.length; i++) {\n            int preHold = hold;\n            int preEmpty = empty;\n            // hold -> hold, cold -> hold\n            hold = Math.max(hold, cold - prices[i]);\n            // hold -> empty, empty -> empty, cold -> empty\n            empty = Math.max(preEmpty, preHold + prices[i]);\n            // cold -> cold, empty -> cold\n            cold = Math.max(preEmpty, cold);\n        }\n        return Math.max(empty, cold);\n    }",
+      "prev_code": "public int maxProfit(int[] prices) {\n        return maxProfit(prices, 1);\n    }\n\n    public int maxProfit(int[] prices, int k) {\n        int[][] dp = new int[prices.length][3];\n        dp[0][0] = -prices[0];\n        for (int i = 1; i < prices.length; i++) {\n            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][2] - prices[i]);\n            dp[i][1] = dp[i - 1][0] + prices[i];\n            dp[i][2] = Math.max(dp[i-1][2], i-k >= 0 ? dp[i-k][1] : 0);\n        }\n        return Math.max(dp[prices.length - 1][1], dp[prices.length - 1][2]);\n    }\n",
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "dp_subtype": "状态机DP",
@@ -56,6 +59,19 @@
       "space_complexity": "O(n)",
       "optimal": false,
       "notes": "复习重写：把状态含义理顺（持有/空仓可买/刚卖冷冻），买入只用 empty[i-1]、empty[i] 吸收 cold[i-k]，修正了初版『空仓直接 +prices[i]』与卖出后同日可买的错误后本地全过；力扣一次 Accepted 210/210。空间仍 O(n)，未做滚动，下轮目标 O(1)。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-06",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "210/210",
+      "approach": "三状态机 DP（含冷冻期）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上一轮（09-03，weak，有探讨）与本次同思路：**三状态机 DP**（持有 hold / 空仓可买 empty / 冷冻 cold），但当时用 O(n) 数组存三列。\n- 本轮按要求**滚动到 O(1)**：只保留 `hold`/`empty`/`cold` 三个标量，循环里用 `preHold`/`preEmpty` 暂存旧值，避免同轮内「先更新 hold 再被 empty/cold 读到新值」的串扰。空间 O(n)→O(1)，是归档复习提醒里要练的优化点；一刷 O(n) 版代码将存入 submissions prev_code。\n\n**② 为什么这次能想起来**\n- 状态机锚点 = 「**互斥状态 + 列出每个状态当天能从哪些状态来**」：hold（继续持有 / 从 cold 买入）、empty（继续空仓 / 卖出后落地）、cold（冷冻，只能从卖出的那天进入，即由 empty 前值派生）。转移方向想清楚后，代码只是 3 个 max。\n- 09-03 探讨的转移图已内化：本轮直接写对「买入只发生在冷却结束后、卖出后次日不能买」的隔天约束，没有再踩转移串扰的坑。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 9 组（示例 2 + 边界 7：全相同/单调递减/单调递增/冷冻期隔天/长持有胜短线/低点持有/等待入场/大数组递增）一次全绿，力扣一次提交 Accepted 210/210。\n\n**④ 下一步提醒**\n- O(1) 空间 + O(n) 时间已是本题状态机 DP 的最优档。\n- 相关串练：121（买卖一次）、122（可多次无冷冻，两态即可）、714（含手续费，两态+费率）、123/188（限制交易次数，状态机加「次数维」）。"
     }
   ]
 }

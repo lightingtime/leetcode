@@ -1000,7 +1000,7 @@
       "category": "动态规划",
       "date": "2026-08-19",
       "firstPass": true,
-      "optimal": false,
+      "optimal": true,
       "notes": "一次 AC；三状态机 DP（持有/刚卖/自由空仓），买入只从自由空仓转移即冷冻期约束；时间 O(n) 已达下界，空间 O(n) 可滚动压到 O(1)"
     },
     {

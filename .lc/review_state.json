@@ -1269,12 +1269,12 @@
       "title": "买卖股票的最佳时机含冷冻期",
       "category": "动态规划",
       "first_pass_date": "2026-08-19",
-      "last_review_date": "2026-09-03",
-      "next_review_date": "2026-09-05",
-      "interval_days": 2,
-      "review_count": 1,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-06",
+      "next_review_date": "2026-09-11",
+      "interval_days": 5,
+      "review_count": 2,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "house-robber-iii": {
