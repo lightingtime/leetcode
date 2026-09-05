@@ -18,14 +18,18 @@
     <span class="badge tag">分类 动态规划</span>
     <span class="badge tag">子类型 线性DP</span>
     <span class="badge plain">多次通过</span>
-    <span class="badge plain">已满足题意·可进阶</span>
+    <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-20</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>32. 最长有效括号 (Longest Valid Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-valid-parentheses/" rel="noopener">https://leetcode.cn/problems/longest-valid-parentheses/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：栈、字符串、动态规划、括号序列</p><h2>题目描述</h2><p>给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号 子串 的长度。</p><p>左右括号匹配，即每个左括号都有对应的右括号将其闭合的字符串是格式正确的，比如 "(()())"。</p><p>示例 1：</p><p>输入：s = "(()"</p><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><p>示例 2：</p><p>输入：s = ")()())"</p><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><p>示例 3：</p><p>输入：s = ""</p><p>输出：0</p><p>提示：</p><p>0 4</p><p>s[i] 为 '(' 或 ')'</p><h2>示例</h2><ol><li>输入：s = "(()"</li></ol><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><ol><li>输入：s = ")()())"</li></ol><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><ol><li>输入：s = ""</li></ol><p>输出：0</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（235/235）｜ 一次 AC ｜ 一维 DP ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-20）与本次同思路：<strong>一维 DP</strong>——<code>dp[i]</code> = 以 i 结尾的最长有效括号长度，只处理 <code>')'</code>，分「前一字符是 <code>'('</code>（直接配对）」「前一字符是 <code>')'</code>（回跳找配对）」两类，最后取 max。</li><li>本次代码结构与一刷大体一致；一刷版代码已存入 submissions prev_code。</li></ul><p><strong>② 为什么这轮没独立写出来（看了答案）</strong></p><ul><li>用户自述本轮<strong>参考了答案</strong>。核心卡点在第二类转移：连续 <code>')'</code> 时不能只看前一个字符，要<strong>回跳 <code>j = i - dp[i-1] - 1</code></strong> 找到与当前 <code>')'</code> 配对的 <code>'('</code>，并<strong>拼接更前面的有效段</strong> <code>dp[j-1]</code>——即 <code>dp[i] = dp[i-1] + 2 + (j&gt;0 ? dp[j-1] : 0)</code>。这个「回跳 + 跨段拼接」是把多个有效段串起来的关键，光背公式不画 case 容易忘。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>weak：用户明确说明看了答案（按规则参考答案 = 较弱）；本地 9 组（示例 2 + 边界 7：全右/嵌套/包裹后拼接/连续两段/中间断开/长连续合法 1000 等）全绿，力扣一次提交 Accepted 235/235。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>下次重写前先不看答案，把两类转移在纸上默写一遍并用小 case 推演：① <code>"()"</code> 结尾 → <code>dp[i] = dp[i-2] + 2</code>；② <code>"))"</code> 结尾 → 回跳 j 找到 <code>'('</code> 后 <code>dp[i-1]+2</code> 再拼 <code>dp[j-1]</code>。能独立默出这两个分支才算真正掌握。</li><li>可对比其它写法：栈存下标（O(n) 空间）、贪心双向扫描（O(1) 空间）——同一题的三种视角。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,46 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>一维 DP</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维 DP</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 235/235</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0032_LongestValidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestValidParentheses</span>(<span class="tk-t">String</span> s) {
+    <div class="code-wrap"><div class="code-head"><span>LC0032_LongestValidParentheses.java · 一维 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestValidParentheses</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[s.<span class="tk-f">length</span>()];
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(i) == <span class="tk-s">')'</span>) {
+                <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == <span class="tk-s">'('</span>) {
+                    <span class="tk-k">if</span> (i - <span class="tk-n">2</span> &gt;= <span class="tk-n">0</span>) {
+                        dp[i] = dp[i - <span class="tk-n">2</span>] + <span class="tk-n">2</span>;
+                    } <span class="tk-k">else</span> {
+                        dp[i] = <span class="tk-n">2</span>;
+                    }
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == <span class="tk-s">')'</span>) {
+                    <span class="tk-k">int</span> j = i - dp[i - <span class="tk-n">1</span>] - <span class="tk-n">1</span>;
+                    <span class="tk-k">if</span> (j &gt;= <span class="tk-n">0</span>) {
+                        <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'('</span>) {
+                            <span class="tk-k">if</span> (j - <span class="tk-n">1</span> &gt;= <span class="tk-n">0</span>) {
+                                dp[i] = dp[i - <span class="tk-n">1</span>] + <span class="tk-n">2</span> + dp[j - <span class="tk-n">1</span>];
+                            } <span class="tk-k">else</span> {
+                                dp[i] = dp[i - <span class="tk-n">1</span>] + <span class="tk-n">2</span>;
+                            }
+                        }
+                    }
+                }
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[i]);
+            }
+        }
+        <span class="tk-k">return</span> max;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0032_LongestValidParentheses.java · 一维 DP · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestValidParentheses</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n];
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
@@ -65,7 +104,8 @@
             }
         }
         <span class="tk-k">return</span> max;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：求字符串中最长连续有效括号子串长度。暴力枚举每个子串再校验是 O(n^3)，不可行；观察到一个关键性质：有效串必须以 <code>)</code> 闭合，且当前 <code>)</code> 只能闭合「最近的未配对左括号」，因此可以定义「以当前位置结尾」的一维状态递推。</p><p>解法选择理由：</p><ul><li>定义 <code>dp[i]</code> = 以 <code>s[i]</code> 结尾的最长有效括号子串长度；<code>s[i] == '('</code> 时它不可能结尾，<code>dp[i] = 0</code>。</li><li>只有遇到 <code>)</code> 才可能让 <code>dp[i] &gt; 0</code>，按前一个字符分成两类：直接配对 <code>()</code> 和跳段配对 <code>...))</code>。</li></ul><p>关键设计：</p><ol><li>情况一：<code>s[i-1] == '('</code>，末尾形成 <code>()</code>，长度为 2，前面 <code>s[i-2]</code> 结尾的有效段可以拼接，所以 <code>dp[i] = dp[i-2] + 2</code>（<code>i-2 &lt; 0</code> 时就是 2）。</li><li>情况二：<code>s[i-1] == ')'</code>，以 <code>i-1</code> 结尾有一段长度 <code>dp[i-1]</code> 的已闭合有效串，配对的左括号在 <code>j = i - dp[i-1] - 1</code>；只有 <code>j &gt;= 0</code> 且 <code>s[j] == '('</code> 时配对成立，<code>dp[i] = dp[i-1] + 2</code>，并且 <code>j-1 &gt;= 0</code> 时还能再拼接前面的 <code>dp[j-1]</code>。</li><li>全程用 <code>max</code> 记录最大值，答案不是 <code>dp[n-1]</code>（最优段不一定以末尾结尾）。</li></ol><p>具体 case 推演（<code>s = "()(())"</code>，期望 6）：</p><div class="table-wrap"><table><thead><tr><th><code>i</code></th><th>字符</th><th><code>dp[i]</code></th><th>说明</th></tr></thead><tbody><tr><td>0</td><td><code>(</code></td><td>0</td><td>左括号不能结尾</td></tr><tr><td>1</td><td><code>)</code></td><td>2</td><td><code>s[0] == '('</code> 直接配对</td></tr><tr><td>2</td><td><code>(</code></td><td>0</td><td>左括号不能结尾</td></tr><tr><td>3</td><td><code>(</code></td><td>0</td><td>左括号不能结尾</td></tr><tr><td>4</td><td><code>)</code></td><td>2</td><td><code>s[3] == '('</code> 直接配对，<code>dp[2]+2 = 2</code></td></tr><tr><td>5</td><td><code>)</code></td><td>6</td><td><code>j = 5-2-1 = 2</code>，<code>s[2] == '('</code> 配对；<code>dp[5] = dp[4]+2+dp[1] = 2+2+2 = 6</code></td></tr></tbody></table></div><p>再推演 <code>s = "())"</code>（下标 2 的 <code>)</code> 无配对）：</p><ul><li><code>i = 2</code>，<code>dp[1] = 2</code>，<code>j = 2-2-1 = -1 &lt; 0</code>，不配对，<code>dp[2]</code> 保持 0，而不是 <code>dp[1]+2 = 4</code>。</li></ul><p>边界与细节：</p><ul><li>空串、全左括号、全右括号、<code>")("</code> 都返回 0。</li><li><code>"())(()"</code> 中间断开：<code>i=2</code> 时 <code>j&lt;0</code> 不能错误延长。</li><li><code>"(())"</code>：<code>i=3</code> 时 <code>j=0</code> 配对成立，但前面没有可拼接段，<code>dp[j-1]</code> 越界按 0 处理，结果为 4。</li><li><code>"()(())"</code> 验证配对后必须拼接 <code>dp[j-1]</code> 而不是 <code>dp[j]</code>。</li></ul><p>复杂度分析：</p><ul><li>时间复杂度 <code>O(n)</code>：单次遍历，每步 O(1)，已达下界（每个字符至少要检查一次）。</li><li>空间复杂度 <code>O(n)</code>：dp 数组；可进一步用双指针/计数法做到 O(1)，所以本题标记为可进阶。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 转移的配对/拼接边界写错：① j&lt;0 时仍 +2 错误延长（s[i] 前无配对左括号应保持 0）；② 配对后向前拼接用了 dp[j] 而非 dp[j-1]（s[j] 本身是 '('，不可能是有效段结尾）；③ 把 j-1&gt;=0 越界保护当成配对条件，导致 j=0 的合法配对被跳过；配对成立条件是 j&gt;=0 且 s[j]=='('，dp[j-1] 仅在 j-1&gt;=0 时加</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>235/235 用例。</p></div></div></div></section>
@@ -80,12 +120,12 @@
     </div>
     <div class="card">
       <h3>算法判定</h3>
-      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
       <h3>错误习惯复盘</h3><p><b>DP 转移的配对/拼接边界写错：① j&lt;0 时仍 +2 错误延长（s[i] 前无配对左括号应保持 0）；② 配对后向前拼接用了 dp[j] 而非 dp[j-1]（s[j] 本身是 '('，不可能是有效段结尾）；③ 把 j-1&gt;=0 越界保护当成配对条件，导致 j=0 的合法配对被跳过；配对成立条件是 j&gt;=0 且 s[j]=='('，dp[j-1] 仅在 j-1&gt;=0 时加</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
-      <p><span class="chip">seq 96 · longest-valid-parentheses</span><span class="chip">firstPass: false</span><span class="chip">optimal: false</span></p>
+      <p><span class="chip">seq 96 · longest-valid-parentheses</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
       <div class="quote">一维 DP：dp[i] 以 i 结尾的最长有效长度；遇 ) 分直接配对与跳段配对+向前拼接；O(n)/O(n)，本地修 3 处边界后力扣一次 Accepted</div>
     </div>
   </section>

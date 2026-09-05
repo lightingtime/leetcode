@@ -1055,7 +1055,7 @@
       "category": "动态规划",
       "date": "2026-08-20",
       "firstPass": false,
-      "optimal": false,
+      "optimal": true,
       "notes": "一维 DP：dp[i] 以 i 结尾的最长有效长度；遇 ) 分直接配对与跳段配对+向前拼接；O(n)/O(n)，本地修 3 处边界后力扣一次 Accepted"
     },
     {

@@ -34,20 +34,39 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-20",
+      "date": "2026-09-06",
       "verdict": "Accepted",
       "testcases": "235/235",
       "runtime_ms": null,
-      "memory_bytes": 45408000,
+      "memory_bytes": 45368000,
       "approach": "一维 DP",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
-      "optimal": false,
-      "notes": "一维 DP：dp[i] 以 i 结尾的最长有效长度；遇 ) 分直接配对与跳段配对+向前拼接；O(n)/O(n)，本地修 3 处边界后力扣一次 Accepted"
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（08-20）与本次同思路：**一维 DP**——`dp[i]` = 以 i 结尾的最长有效括号长度，只处理 `')'`，分「前一字符是 `'('`（直接配对）」「前一字符是 `')'`（回跳找配对）」两类，最后取 max。\n- 本次代码结构与一刷大体一致；一刷版代码已存入 submissions prev_code。\n\n**② 为什么这轮没独立写出来（看了答案）**\n- 用户自述本轮**参考了答案**。核心卡点在第二类转移：连续 `')'` 时不能只看前一个字符，要**回跳 `j = i - dp[i-1] - 1`** 找到与当前 `')'` 配对的 `'('`，并**拼接更前面的有效段** `dp[j-1]`——即 `dp[i] = dp[i-1] + 2 + (j>0 ? dp[j-1] : 0)`。这个「回跳 + 跨段拼接」是把多个有效段串起来的关键，光背公式不画 case 容易忘。\n\n**③ 掌握度判定**\n- weak：用户明确说明看了答案（按规则参考答案 = 较弱）；本地 9 组（示例 2 + 边界 7：全右/嵌套/包裹后拼接/连续两段/中间断开/长连续合法 1000 等）全绿，力扣一次提交 Accepted 235/235。\n\n**④ 下一步提醒**\n- 下次重写前先不看答案，把两类转移在纸上默写一遍并用小 case 推演：① `\"()\"` 结尾 → `dp[i] = dp[i-2] + 2`；② `\"))\"` 结尾 → 回跳 j 找到 `'('` 后 `dp[i-1]+2` 再拼 `dp[j-1]`。能独立默出这两个分支才算真正掌握。\n- 可对比其它写法：栈存下标（O(n) 空间）、贪心双向扫描（O(1) 空间）——同一题的三种视角。",
+      "code": "public int longestValidParentheses(String s) {\n        int[] dp = new int[s.length()];\n        int max = 0;\n        for (int i = 0; i < s.length(); i++) {\n            if (s.charAt(i) == ')') {\n                if (i > 0 && s.charAt(i - 1) == '(') {\n                    if (i - 2 >= 0) {\n                        dp[i] = dp[i - 2] + 2;\n                    } else {\n                        dp[i] = 2;\n                    }\n                } else if (i > 0 && s.charAt(i - 1) == ')') {\n                    int j = i - dp[i - 1] - 1;\n                    if (j >= 0) {\n                        if (s.charAt(j) == '(') {\n                            if (j - 1 >= 0) {\n                                dp[i] = dp[i - 1] + 2 + dp[j - 1];\n                            } else {\n                                dp[i] = dp[i - 1] + 2;\n                            }\n                        }\n                    }\n                }\n                max = Math.max(max, dp[i]);\n            }\n        }\n        return max;\n    }",
+      "prev_code": "public int longestValidParentheses(String s) {\n        int n = s.length();\n        int[] dp = new int[n];\n        int max = 0;\n        for (int i = 0; i < n; i++) {\n            if (s.charAt(i) == ')') {\n                if (i > 0 && s.charAt(i - 1) == '(') {\n                    if (i - 2 >= 0) {\n                        dp[i] = dp[i - 2] + 2;\n                    } else {\n                        dp[i] = 2;\n                    }\n                } else if (i > 0 && s.charAt(i - 1) == ')') {\n                    int j = i - dp[i-1] - 1;\n                    if (j >= 0) {\n                        if (s.charAt(j) == '(') {\n                            if (j - 1 >= 0) {\n                                dp[i] = dp[i - 1] + 2 + dp[j - 1];\n                            } else {\n                                dp[i] = dp[i - 1] + 2;\n                            }\n                        }\n                    }\n                }\n                max = Math.max(max, dp[i]);\n            }\n        }\n        return max;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
   ],
-  "dp_subtype": "线性DP"
+  "dp_subtype": "线性DP",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "235/235",
+      "approach": "一维 DP",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（08-20）与本次同思路：**一维 DP**——`dp[i]` = 以 i 结尾的最长有效括号长度，只处理 `')'`，分「前一字符是 `'('`（直接配对）」「前一字符是 `')'`（回跳找配对）」两类，最后取 max。\n- 本次代码结构与一刷大体一致；一刷版代码已存入 submissions prev_code。\n\n**② 为什么这轮没独立写出来（看了答案）**\n- 用户自述本轮**参考了答案**。核心卡点在第二类转移：连续 `')'` 时不能只看前一个字符，要**回跳 `j = i - dp[i-1] - 1`** 找到与当前 `')'` 配对的 `'('`，并**拼接更前面的有效段** `dp[j-1]`——即 `dp[i] = dp[i-1] + 2 + (j>0 ? dp[j-1] : 0)`。这个「回跳 + 跨段拼接」是把多个有效段串起来的关键，光背公式不画 case 容易忘。\n\n**③ 掌握度判定**\n- weak：用户明确说明看了答案（按规则参考答案 = 较弱）；本地 9 组（示例 2 + 边界 7：全右/嵌套/包裹后拼接/连续两段/中间断开/长连续合法 1000 等）全绿，力扣一次提交 Accepted 235/235。\n\n**④ 下一步提醒**\n- 下次重写前先不看答案，把两类转移在纸上默写一遍并用小 case 推演：① `\"()\"` 结尾 → `dp[i] = dp[i-2] + 2`；② `\"))\"` 结尾 → 回跳 j 找到 `'('` 后 `dp[i-1]+2` 再拼 `dp[j-1]`。能独立默出这两个分支才算真正掌握。\n- 可对比其它写法：栈存下标（O(n) 空间）、贪心双向扫描（O(1) 空间）——同一题的三种视角。"
+    }
+  ]
 }

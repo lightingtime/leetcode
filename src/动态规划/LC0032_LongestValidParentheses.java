@@ -2,7 +2,7 @@
 // LeetCode 32. 最长有效括号 (Longest Valid Parentheses)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-valid-parentheses/
-// 刷题日期：2026-08-20
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-20）
 //
 // 思路：一维 DP，dp[i] 表示以 i 结尾的最长有效括号长度；遇 ')' 时按前一个字符分类，配对后尝试拼接更前面的有效段。
 // 复杂度：时间 O(n)，空间 O(n)
@@ -12,10 +12,9 @@ public class LC0032_LongestValidParentheses {
 
     // ==== 提交代码开始 ====
     public int longestValidParentheses(String s) {
-        int n = s.length();
-        int[] dp = new int[n];
+        int[] dp = new int[s.length()];
         int max = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == ')') {
                 if (i > 0 && s.charAt(i - 1) == '(') {
                     if (i - 2 >= 0) {
@@ -24,7 +23,7 @@ public class LC0032_LongestValidParentheses {
                         dp[i] = 2;
                     }
                 } else if (i > 0 && s.charAt(i - 1) == ')') {
-                    int j = i - dp[i-1] - 1;
+                    int j = i - dp[i - 1] - 1;
                     if (j >= 0) {
                         if (s.charAt(j) == '(') {
                             if (j - 1 >= 0) {
