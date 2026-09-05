@@ -2,7 +2,7 @@
 // LeetCode 5. 最长回文子串 (Longest Palindromic Substring)
 // 难度：Medium | 分类：动态规划（子类型：区间 DP；最优常写中心扩散）
 // 链接：https://leetcode.cn/problems/longest-palindromic-substring/
-// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-09 · 上次 2026-09-01 较强）
+// 复习日期：2026-09-05（第 3 次复习 · 一刷 2026-08-09 · 上次 2026-09-02 较弱）
 // 一刷写法：区间 DP（boolean 表，按长度枚举）；上次写法：中心扩散（2n-1 个中心，O(1) 空间）
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
@@ -13,26 +13,29 @@ public class LC0005_LongestPalindromicSubstring {
 
     // ==== 提交代码开始 ====
     public String longestPalindrome(String s) {
+        if (s.isEmpty()) {
+            return "";
+        }
         int start = -1;
         int max = 0;
-        for (int j = 0; j < s.length(); j++) {
-            int len1 = getLen(s, j, j);
-            int len2 = getLen(s, j, j + 1);
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = getLen(s, i, i);
+            int len2 = getLen(s, i, i + 1);
             int maxLen = Math.max(len1, len2);
             if (maxLen > max) {
                 max = maxLen;
-                start = j - (maxLen - 1) / 2;
+                start = i - (maxLen - 1) / 2;
             }
         }
         return s.substring(start, start + max);
     }
 
-    private int getLen(String s, int i, int j) {
-        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
-            i--;
-            j++;
+    private int getLen(String s, int l, int r) {
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
         }
-        return j - i - 1;
+        return r - l - 1;
     }
     // ==== 提交代码结束 ====
 
