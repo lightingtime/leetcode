@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-05",
+  "updated": "2026-09-06",
   "current_seq": 170,
   "done": [
     {
@@ -3281,6 +3281,17 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-09-05"
+    },
+    {
+      "habit": "1D 滚动 DP 漏目标串为空(n=0)的基例：dp 开 0 长度后直接 return dp[n-1] 越界；word2 为空时应返回 m（全删除），双空返回 0",
+      "count": 1,
+      "examples": [
+        "edit-distance"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-06"
     }
   ],
   "category_hints": {
