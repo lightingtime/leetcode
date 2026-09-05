@@ -51,17 +51,17 @@
       "code": "public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[][] dp = new int[m][n];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            dp[i][0] = matrix[i][0] == '1' ? 1 : 0;\n            max = Math.max(max, dp[i][0]);\n        }\n        for (int j = 0; j < n; j++) {\n            dp[0][j] = matrix[0][j] == '1' ? 1 : 0;\n            max = Math.max(max, dp[0][j]);\n        }\n        for (int i = 1; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                if (matrix[i][j] == '1') {\n                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;\n                } else {\n                    dp[i][j] = 0;\n                }\n                max = Math.max(max, dp[i][j]);\n            }\n        }\n        return max * max;\n    }\n"
     },
     {
-      "date": "2026-09-02",
+      "date": "2026-09-05",
       "verdict": "Accepted",
       "testcases": "81/81",
       "approach": "一维滚动 DP",
       "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-19）：DP 二维表 dp[m][n]，O(mn)/O(mn)，首 WA（0 格未清零继承邻居正数）后二次提交 AC，optimal=false。\n- 本次二刷：先独立重写出正确 O(mn) 二维版（一次 AC，0 格清零的坑没再犯）；随后按提示压缩空间为一维滚动数组 O(n)（dp[j] 滚动保留上一行值，pre/dig 接力维护「上 / 左上」），再次一次 AC。时间 O(mn) 不变，空间 O(mn) → O(n)，达最优。\n\n**② 这次为什么想起来 / 没想起来**\n- 转移「三邻居 min + 1」记得牢；一刷的 0 格清零错误这次直接规避（格子为 0 先置 0 再谈转移）。\n- 滚动数组真正难点在「左上」依赖：dp[j-1] 被本行左格更新后已不是上一行的值，必须用更新前的 dp[j]（即 pre）在列末接力给下一列的 dig。第一版先提交的是 O(mn) 二维表，滚动压缩是被提示后才动手——「只留一行 + 左上旧值接力」的空间优化意识还不够自动。\n\n**③ 掌握度判定**\n- 本轮两次提交均 Accepted，但 O(n) 滚动是被提示后重写才达成（非一次到位），记 weak；下次复习重点验证能否直接写出滚动版。\n\n**④ 下一步提醒**\n- 同款「三邻居取 min」网格题：LC1277 统计全 1 正方形子矩阵（同 dp 每格累加 dp 值）；LC85 最大矩形（每行算连续 1 高度后对行做柱状图最大矩形，单调栈 O(mn)）。\n- 滚动数组 pre/dig 接力可与 LC62 / LC72 的 dig/prev 套路互相印证。",
-      "mastery": "weak",
-      "pass": 1,
-      "memory_bytes": 79512000,
+      "notes": "**① 与上一轮对比**\n- 上轮（09-02，weak）：先写二维表 O(mn)/O(mn) 一次 AC，滚动压缩是提示后才重写；本轮直接写出一维滚动（dp[j] 滚动保留上一行值；pre=更新前 dp[j] 即「上」，列末 dig=pre 接力「左上」），一次成型 O(mn)/O(n) 达最优。\n- 小冗余（不影响正确性）：主循环前对第 0 行做了一段预初始化 dp[i]=1，实际会被主循环 i=0 分支覆盖，可整段删除。\n\n**② 为什么这次能想起来**\n- 上轮复盘把「滚动难点=左上旧值接力（pre/dig）」列为下次验证点，这次写循环前先列每列要保留的旧值：上=dp[j]、左上=dig、左=dp[j-1]；dig 必须在列末用 pre（更新前的 dp[j]）更新，不能读已被本行覆盖的 dp[j]。\n- 一刷两个老坑也直接规避：'1'→1/'0'→0 未写反；全程维护 max 最后返回 max*max（没只取右下角）。\n\n**③ 掌握度判定**\n- strong：全程无探讨，本地 13 组（示例 3 + WA 回归 6x6 + 边界 9）一次全过，力扣一次提交 Accepted 81/81。\n\n**④ 下一步提醒**\n- 同款「三邻居取 min」网格题可顺带复习 LC1277 统计全 1 正方形子矩阵（每格累加 dp 值）；LC85 最大矩形（逐行连续 1 高度 + 单调栈）。\n- 滚动数组 pre/dig 接力与 LC62 / LC72 同套路，已可互证，无需再单独练。",
+      "mastery": "strong",
+      "pass": 2,
+      "memory_bytes": 79492000,
       "code": "public int maximalSquare(char[][] matrix) {\n    int m = matrix.length;\n    int n = matrix[0].length;\n    int[] dp = new int[n];\n    for (int i = 0; i < n; i++) {\n        dp[i] = matrix[0][i] == '1' ? 1 :0;\n    }\n    int max = 0;\n    for (int i = 0; i < m; i++) {\n        int dig = dp[0];\n        for (int j = 0; j < n; j++) {\n            int pre = dp[j];\n            if (matrix[i][j] == '0') {\n                dp[j] = 0;\n            } else {\n                if (i > 0 && j > 0) {\n                    dp[j] = Math.min(dp[j - 1], Math.min(pre, dig)) + 1;\n                } else {\n                    dp[j] = 1;\n                }\n            }\n            dig = pre;\n            max = Math.max(max, dp[j]);\n        }\n    }\n    return max * max;\n}"
     }
   ],
@@ -82,6 +82,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-19）：DP 二维表 dp[m][n]，O(mn)/O(mn)，首 WA（0 格未清零继承邻居正数）后二次提交 AC，optimal=false。\n- 本次二刷：先独立重写出正确 O(mn) 二维版（一次 AC，0 格清零的坑没再犯）；随后按提示压缩空间为一维滚动数组 O(n)（dp[j] 滚动保留上一行值，pre/dig 接力维护「上 / 左上」），再次一次 AC。时间 O(mn) 不变，空间 O(mn) → O(n)，达最优。\n\n**② 这次为什么想起来 / 没想起来**\n- 转移「三邻居 min + 1」记得牢；一刷的 0 格清零错误这次直接规避（格子为 0 先置 0 再谈转移）。\n- 滚动数组真正难点在「左上」依赖：dp[j-1] 被本行左格更新后已不是上一行的值，必须用更新前的 dp[j]（即 pre）在列末接力给下一列的 dig。第一版先提交的是 O(mn) 二维表，滚动压缩是被提示后才动手——「只留一行 + 左上旧值接力」的空间优化意识还不够自动。\n\n**③ 掌握度判定**\n- 本轮两次提交均 Accepted，但 O(n) 滚动是被提示后重写才达成（非一次到位），记 weak；下次复习重点验证能否直接写出滚动版。\n\n**④ 下一步提醒**\n- 同款「三邻居取 min」网格题：LC1277 统计全 1 正方形子矩阵（同 dp 每格累加 dp 值）；LC85 最大矩形（每行算连续 1 高度后对行做柱状图最大矩形，单调栈 O(mn)）。\n- 滚动数组 pre/dig 接力可与 LC62 / LC72 的 dig/prev 套路互相印证。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-05",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "81/81",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上轮（09-02，weak）：先写二维表 O(mn)/O(mn) 一次 AC，滚动压缩是提示后才重写；本轮直接写出一维滚动（dp[j] 滚动保留上一行值；pre=更新前 dp[j] 即「上」，列末 dig=pre 接力「左上」），一次成型 O(mn)/O(n) 达最优。\n- 小冗余（不影响正确性）：主循环前对第 0 行做了一段预初始化 dp[i]=1，实际会被主循环 i=0 分支覆盖，可整段删除。\n\n**② 为什么这次能想起来**\n- 上轮复盘把「滚动难点=左上旧值接力（pre/dig）」列为下次验证点，这次写循环前先列每列要保留的旧值：上=dp[j]、左上=dig、左=dp[j-1]；dig 必须在列末用 pre（更新前的 dp[j]）更新，不能读已被本行覆盖的 dp[j]。\n- 一刷两个老坑也直接规避：'1'→1/'0'→0 未写反；全程维护 max 最后返回 max*max（没只取右下角）。\n\n**③ 掌握度判定**\n- strong：全程无探讨，本地 13 组（示例 3 + WA 回归 6x6 + 边界 9）一次全过，力扣一次提交 Accepted 81/81。\n\n**④ 下一步提醒**\n- 同款「三邻居取 min」网格题可顺带复习 LC1277 统计全 1 正方形子矩阵（每格累加 dp 值）；LC85 最大矩形（逐行连续 1 高度 + 单调栈）。\n- 滚动数组 pre/dig 接力与 LC62 / LC72 同套路，已可互证，无需再单独练。"
     }
   ]
 }

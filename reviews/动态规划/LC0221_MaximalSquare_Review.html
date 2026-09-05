@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-19</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>221. 最大正方形 (Maximal Square)</h1><p>&gt; <a href="https://leetcode.cn/problems/maximal-square/" rel="noopener">https://leetcode.cn/problems/maximal-square/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、动态规划、矩阵</p><h2>题目描述</h2><p>在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积。</p><p>示例 1：</p><p>输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]</p><p>输出：4</p><p>示例 2：</p><p>输入：matrix = [["0","1"],["1","0"]]</p><p>输出：1</p><p>示例 3：</p><p>输入：matrix = [["0"]]</p><p>输出：0</p><p>提示：</p><p>m == matrix.length</p><p>n == matrix[i].length</p><p>1</p><p>matrix[i][j] 为 '0' 或 '1'</p><h2>示例</h2><ol><li>输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]</li></ol><p>输出：4</p><ol><li>输入：matrix = [["0","1"],["1","0"]]</li></ol><p>输出：1</p><ol><li>输入：matrix = [["0"]]</li></ol><p>输出：0</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（81/81）｜ 一次 AC ｜ 一维滚动 DP ｜ O(mn) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上轮（09-02，weak）：先写二维表 O(mn)/O(mn) 一次 AC，滚动压缩是提示后才重写；本轮直接写出一维滚动（dp[j] 滚动保留上一行值；pre=更新前 dp[j] 即「上」，列末 dig=pre 接力「左上」），一次成型 O(mn)/O(n) 达最优。</li><li>小冗余（不影响正确性）：主循环前对第 0 行做了一段预初始化 dp[i]=1，实际会被主循环 i=0 分支覆盖，可整段删除。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>上轮复盘把「滚动难点=左上旧值接力（pre/dig）」列为下次验证点，这次写循环前先列每列要保留的旧值：上=dp[j]、左上=dig、左=dp[j-1]；dig 必须在列末用 pre（更新前的 dp[j]）更新，不能读已被本行覆盖的 dp[j]。</li><li>一刷两个老坑也直接规避：'1'→1/'0'→0 未写反；全程维护 max 最后返回 max*max（没只取右下角）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨，本地 13 组（示例 3 + WA 回归 6x6 + 边界 9）一次全过，力扣一次提交 Accepted 81/81。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同款「三邻居取 min」网格题可顺带复习 LC1277 统计全 1 正方形子矩阵（每格累加 dp 值）；LC85 最大矩形（逐行连续 1 高度 + 单调栈）。</li><li>滚动数组 pre/dig 接力与 LC62 / LC72 同套路，已可互证，无需再单独练。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-02 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（81/81）｜ 多次提交 ｜ 一维滚动 DP ｜ O(mn) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-19）：DP 二维表 dp[m][n]，O(mn)/O(mn)，首 WA（0 格未清零继承邻居正数）后二次提交 AC，optimal=false。</li><li>本次二刷：先独立重写出正确 O(mn) 二维版（一次 AC，0 格清零的坑没再犯）；随后按提示压缩空间为一维滚动数组 O(n)（dp[j] 滚动保留上一行值，pre/dig 接力维护「上 / 左上」），再次一次 AC。时间 O(mn) 不变，空间 O(mn) → O(n)，达最优。</li></ul><p><strong>② 这次为什么想起来 / 没想起来</strong></p><ul><li>转移「三邻居 min + 1」记得牢；一刷的 0 格清零错误这次直接规避（格子为 0 先置 0 再谈转移）。</li><li>滚动数组真正难点在「左上」依赖：dp[j-1] 被本行左格更新后已不是上一行的值，必须用更新前的 dp[j]（即 pre）在列末接力给下一列的 dig。第一版先提交的是 O(mn) 二维表，滚动压缩是被提示后才动手——「只留一行 + 左上旧值接力」的空间优化意识还不够自动。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本轮两次提交均 Accepted，但 O(n) 滚动是被提示后重写才达成（非一次到位），记 weak；下次复习重点验证能否直接写出滚动版。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同款「三邻居取 min」网格题：LC1277 统计全 1 正方形子矩阵（同 dp 每格累加 dp 值）；LC85 最大矩形（每行算连续 1 高度后对行做柱状图最大矩形，单调栈 O(mn)）。</li><li>滚动数组 pre/dig 接力可与 LC62 / LC72 的 dig/prev 套路互相印证。</li></ul></div>
@@ -37,12 +41,12 @@
         <li><span>复杂度</span><b>O(mn) · O(mn)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>一维滚动 DP</b></li>
         <li><span>复杂度</span><b>O(mn) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
