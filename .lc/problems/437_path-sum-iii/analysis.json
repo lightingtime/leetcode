@@ -47,20 +47,20 @@
       "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        dfs(root, targetSum);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        countFrom(root, 0, targetSum);\n        dfs(root.left, targetSum);\n        dfs(root.right, targetSum);\n\n    }\n\n    private void countFrom(TreeNode root, long cur, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        cur += root.val;\n        if (cur == targetSum) {\n            ans++;\n        }\n        countFrom(root.left, cur, targetSum);\n        countFrom(root.right, cur, targetSum);\n    }"
     },
     {
-      "date": "2026-09-02",
+      "date": "2026-09-06",
       "verdict": "Accepted",
       "testcases": "130/130",
       "runtime_ms": null,
-      "memory_bytes": 46784000,
+      "memory_bytes": 46856000,
       "approach": "前缀和+回溯哈希",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-18）：双重 DFS（以每个节点为起点向下累计），最坏 O(n²)，optimal=false，非一次 AC。\n- 复习①（2026-09-01）：升级「前缀和 + 回溯哈希」O(n)/O(n)，较弱。\n- 本次（第 2 次复习）：独立写出同款前缀和+回溯哈希，本地 9 组全绿 + 力扣 130/130 一次 Accepted。\n\n**② 为什么想起来**\n- 路径必须自上而下连续，根到当前节点的前缀和唯一确定一条链；子路径和 = 当前前缀和 - 某祖先前缀和，等于 target ⇔ 祖先前缀和 = cur - target。DFS 时先查 map 中 (sum - target) 的出现次数累加，再把当前前缀和登记 +1。\n- 树回溯必须撤销：当前前缀和只在当前根到叶链上有效，兄弟分支不能看到，返回前把计数 -1；map 预置 {0:1} 表示空路径前缀，才能统计从根开始就命中 target 的整条路径。\n- 前缀和用 long，防负值/大数溢出（边界-大数防溢出 用例）。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（130/130）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 同套路（前缀和 + 哈希）：LC560 和为 K 的子数组（一维数组版，无需回溯撤销）；LC525 连续数组（0/1 转 ±1 前缀和找最长相等段）。\n- 对比：LC112/113 路径总和 I/II 要求整条根到叶子路径，LC437 允许任意连续子树路径——后者正是前缀和差值的用武之地。",
-      "code": "int ans;\npublic int pathSum(TreeNode root, int targetSum) {\n    Map<Long, Integer> map = new HashMap<>();\n    map.put(0L, 1);\n    ans = 0;\n    dfs(root, 0L, targetSum, map);\n    return ans;\n}\n\nprivate void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n    if (root == null) {\n        return;\n    }\n\n    sum += root.val;\n    ans += map.getOrDefault(sum - targetSum, 0);\n    map.merge(sum, 1, Integer::sum);\n\n    dfs(root.left, sum, targetSum, map);\n    dfs(root.right, sum, targetSum, map);\n\n    map.merge(sum, -1, Integer::sum);\n}",
-      "prev_code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, targetSum, 0, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum, long sum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, targetSum, sum, map);\n        dfs(root.right, targetSum, sum, map);\n\n        Integer cnt = map.merge(sum, -1, Integer::sum);\n        if (cnt == 0) {\n            map.remove(sum);\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**前缀和 + 回溯哈希**——DFS 维护根到当前节点的前缀和 `sum`，用 `Map<Long,Integer>` 记录「某前缀和出现的次数」，每到一个节点先查 `map[sum - targetSum]` 累加答案，再把当前 `sum` 计数 +1 进子树，回溯时 -1 撤销。\n- 相比一刷的「双重 DFS」（每个节点当起点再向下枚举，O(n²)），前缀和写法 O(n)，本轮直接写最优版；09-02 版代码已存入 submissions prev_code，一刷双重 DFS 保留为独立条目。\n- 细节差异：本轮 `dfs` 入口用 `0`（int 自动拓宽为 long），与 09-02 的 `0L` 等价；`sum` 用 `long` 防溢出（大数防溢出回归用例覆盖）。\n\n**② 为什么这次能想起来**\n- 锚点：「树上路径和 = 前缀和差」——`sum(子路径) = targetSum ⇔ 当前前缀和 - 某祖先前缀和 = targetSum`，所以只需在 DFS 中查「当前 sum - targetSum 出现过几次」。回溯时对 map 做 -1 撤销，保证只统计「从某个祖先到当前节点」的连续下向路径，不会跨分支串。\n- 上轮 strong 已内化：map 里先放 `0 -> 1`（整条根路径自身 = target 的情况）、`sum - targetSum` 先查再把自己入 map（避免把当前节点当祖先、统计到空路径），本轮一次写对。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 9 组（示例 2 + 边界 7：空树/单节点命中未命中/右链中间路径/负数回落/全零多路径/大数防溢出）一次全绿，力扣一次提交 Accepted 130/130。\n\n**④ 下一步提醒**\n- 前缀和 + 回溯哈希 O(n)/O(n) 已是本题最优档（比双重 DFS O(n²) 好一个量级）；同套路：560 和为 K 的子数组（一维数组版前缀和哈希，先查再入、负数同样适用）。\n- 相关题：124 二叉树最大路径和、543 直径——树形「向下路径」类可串练。",
+      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        ans = 0;\n        dfs(root, 0, targetSum, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n        sum += root.val;\n        ans += map.getOrDefault(sum - targetSum, 0);\n\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, sum, targetSum, map);\n        dfs(root.right, sum, targetSum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }",
+      "prev_code": "int ans;\npublic int pathSum(TreeNode root, int targetSum) {\n    Map<Long, Integer> map = new HashMap<>();\n    map.put(0L, 1);\n    ans = 0;\n    dfs(root, 0L, targetSum, map);\n    return ans;\n}\n\nprivate void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n    if (root == null) {\n        return;\n    }\n\n    sum += root.val;\n    ans += map.getOrDefault(sum - targetSum, 0);\n    map.merge(sum, 1, Integer::sum);\n\n    dfs(root.left, sum, targetSum, map);\n    dfs(root.right, sum, targetSum, map);\n\n    map.merge(sum, -1, Integer::sum);\n}",
       "mastery": "strong",
-      "pass": 2
+      "pass": 3
     }
   ],
   "hints": [
@@ -92,6 +92,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-18）：双重 DFS（以每个节点为起点向下累计），最坏 O(n²)，optimal=false，非一次 AC。\n- 复习①（2026-09-01）：升级「前缀和 + 回溯哈希」O(n)/O(n)，较弱。\n- 本次（第 2 次复习）：独立写出同款前缀和+回溯哈希，本地 9 组全绿 + 力扣 130/130 一次 Accepted。\n\n**② 为什么想起来**\n- 路径必须自上而下连续，根到当前节点的前缀和唯一确定一条链；子路径和 = 当前前缀和 - 某祖先前缀和，等于 target ⇔ 祖先前缀和 = cur - target。DFS 时先查 map 中 (sum - target) 的出现次数累加，再把当前前缀和登记 +1。\n- 树回溯必须撤销：当前前缀和只在当前根到叶链上有效，兄弟分支不能看到，返回前把计数 -1；map 预置 {0:1} 表示空路径前缀，才能统计从根开始就命中 target 的整条路径。\n- 前缀和用 long，防负值/大数溢出（边界-大数防溢出 用例）。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（130/130）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 同套路（前缀和 + 哈希）：LC560 和为 K 的子数组（一维数组版，无需回溯撤销）；LC525 连续数组（0/1 转 ±1 前缀和找最长相等段）。\n- 对比：LC112/113 路径总和 I/II 要求整条根到叶子路径，LC437 允许任意连续子树路径——后者正是前缀和差值的用武之地。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-06",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "approach": "前缀和+回溯哈希",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**前缀和 + 回溯哈希**——DFS 维护根到当前节点的前缀和 `sum`，用 `Map<Long,Integer>` 记录「某前缀和出现的次数」，每到一个节点先查 `map[sum - targetSum]` 累加答案，再把当前 `sum` 计数 +1 进子树，回溯时 -1 撤销。\n- 相比一刷的「双重 DFS」（每个节点当起点再向下枚举，O(n²)），前缀和写法 O(n)，本轮直接写最优版；09-02 版代码已存入 submissions prev_code，一刷双重 DFS 保留为独立条目。\n- 细节差异：本轮 `dfs` 入口用 `0`（int 自动拓宽为 long），与 09-02 的 `0L` 等价；`sum` 用 `long` 防溢出（大数防溢出回归用例覆盖）。\n\n**② 为什么这次能想起来**\n- 锚点：「树上路径和 = 前缀和差」——`sum(子路径) = targetSum ⇔ 当前前缀和 - 某祖先前缀和 = targetSum`，所以只需在 DFS 中查「当前 sum - targetSum 出现过几次」。回溯时对 map 做 -1 撤销，保证只统计「从某个祖先到当前节点」的连续下向路径，不会跨分支串。\n- 上轮 strong 已内化：map 里先放 `0 -> 1`（整条根路径自身 = target 的情况）、`sum - targetSum` 先查再把自己入 map（避免把当前节点当祖先、统计到空路径），本轮一次写对。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 9 组（示例 2 + 边界 7：空树/单节点命中未命中/右链中间路径/负数回落/全零多路径/大数防溢出）一次全绿，力扣一次提交 Accepted 130/130。\n\n**④ 下一步提醒**\n- 前缀和 + 回溯哈希 O(n)/O(n) 已是本题最优档（比双重 DFS O(n²) 好一个量级）；同套路：560 和为 K 的子数组（一维数组版前缀和哈希，先查再入、负数同样适用）。\n- 相关题：124 二叉树最大路径和、543 直径——树形「向下路径」类可串练。"
     }
   ]
 }

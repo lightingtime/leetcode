@@ -2,7 +2,7 @@
 // LeetCode 437. 路径总和 III (Path Sum III)
 // 难度：Medium | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/path-sum-iii/
-// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-18 · 上次 2026-09-01 较弱）
+// 复习日期：2026-09-06（第 3 次复习 · 一刷 2026-08-18 · 上次 2026-09-02 较强）
 // 一刷写法：双重 DFS O(n²)（非最优）；上次写法：前缀和 + 回溯哈希 O(n)
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
@@ -17,7 +17,7 @@ public class LC0437_PathSumIii {
         Map<Long, Integer> map = new HashMap<>();
         map.put(0L, 1);
         ans = 0;
-        dfs(root, 0L, targetSum, map);
+        dfs(root, 0, targetSum, map);
         return ans;
     }
 
@@ -25,9 +25,9 @@ public class LC0437_PathSumIii {
         if (root == null) {
             return;
         }
-
         sum += root.val;
         ans += map.getOrDefault(sum - targetSum, 0);
+
         map.merge(sum, 1, Integer::sum);
 
         dfs(root.left, sum, targetSum, map);
