@@ -33,17 +33,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-06",
+      "date": "2026-09-06",
       "verdict": "Accepted",
       "testcases": "28/28",
       "runtime_ms": null,
-      "memory_bytes": 44700000,
+      "memory_bytes": 44876000,
       "approach": "递归反转（head.next.next = head）",
       "time_complexity": "O(n)",
-      "space_complexity": "O(n)递归栈",
-      "optimal": false,
-      "notes": "递归反转：reverseList(head.next) 返回新头，head.next.next = head 让原后继（反转后位于子链表尾部）指回头部，head.next = null 断开；一次 Accepted（28/28）。曾把返回的新头当原后继接回，中间节点全丢（[5,1]）。",
-      "code": "    public ListNode reverseList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode newHead = reverseList(head.next);\n        head.next.next = head;\n        head.next = null;\n        return newHead;\n    }\n"
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上两轮（08-30/08-31，均 strong）写的是**迭代三指针**（pre/cur/next，O(1) 空间）；本轮回到**递归反转**（`reverseList(head.next)` 后 `head.next.next = head`，O(n) 递归栈）——即一刷的写法，两种都掌握。\n- 递归版与一刷差异：本轮写法一致（先递归拿到新头，再把当前节点接到尾部、断掉原 next），一次成型；一刷递归版代码将存入 submissions prev_code。迭代三指针版保留为独立条目。\n\n**② 为什么这次能想起来**\n- 递归锚点：「**相信子问题**」——`newHead = reverseList(head.next)` 已经帮我把后面整段反转好并返回新头，我只需要把 `head` 接到这段的尾巴上：`head.next.next = head`（head 的下一节点反转后成了整段尾部），再 `head.next = null` 防环。\n- 终止条件 `head == null || head.next == null` 同时覆盖空表与单节点。本轮直接写对，没有再踩「忘了断 head.next 造成环」的坑（链表自环回归用例覆盖）。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 9 组（示例 3 + 边界 6：单节点/偶数长度/全相同/负数/极端大数等）一次全绿，力扣一次提交 Accepted 28/28。\n\n**④ 下一步提醒**\n- 递归与迭代两种反转都已掌握；递归注意空间是 O(n)（调用栈），面试若要求 O(1) 用迭代三指针。\n- 相关串练：92 反转链表 II（区间反转，先走到 left 再局部反转）、25 K 个一组翻转链表、234 回文链表（快慢指针+反转后半）。",
+      "code": "public ListNode reverseList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode newHead = reverseList(head.next);\n\n        head.next.next = head;\n        head.next = null;\n        return newHead;\n    }",
+      "prev_code": "    public ListNode reverseList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode newHead = reverseList(head.next);\n        head.next.next = head;\n        head.next = null;\n        return newHead;\n    }\n",
+      "mastery": "strong",
+      "pass": 3
     },
     {
       "date": "2026-08-31",
@@ -91,6 +94,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-06",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "28/28",
+      "approach": "递归反转（head.next.next = head）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上两轮（08-30/08-31，均 strong）写的是**迭代三指针**（pre/cur/next，O(1) 空间）；本轮回到**递归反转**（`reverseList(head.next)` 后 `head.next.next = head`，O(n) 递归栈）——即一刷的写法，两种都掌握。\n- 递归版与一刷差异：本轮写法一致（先递归拿到新头，再把当前节点接到尾部、断掉原 next），一次成型；一刷递归版代码将存入 submissions prev_code。迭代三指针版保留为独立条目。\n\n**② 为什么这次能想起来**\n- 递归锚点：「**相信子问题**」——`newHead = reverseList(head.next)` 已经帮我把后面整段反转好并返回新头，我只需要把 `head` 接到这段的尾巴上：`head.next.next = head`（head 的下一节点反转后成了整段尾部），再 `head.next = null` 防环。\n- 终止条件 `head == null || head.next == null` 同时覆盖空表与单节点。本轮直接写对，没有再踩「忘了断 head.next 造成环」的坑（链表自环回归用例覆盖）。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 9 组（示例 3 + 边界 6：单节点/偶数长度/全相同/负数/极端大数等）一次全绿，力扣一次提交 Accepted 28/28。\n\n**④ 下一步提醒**\n- 递归与迭代两种反转都已掌握；递归注意空间是 O(n)（调用栈），面试若要求 O(1) 用迭代三指针。\n- 相关串练：92 反转链表 II（区间反转，先走到 left 再局部反转）、25 K 个一组翻转链表、234 回文链表（快慢指针+反转后半）。"
     }
   ]
 }

@@ -345,12 +345,12 @@
       "title": "反转链表",
       "category": "链表",
       "first_pass_date": "2026-08-06",
-      "last_review_date": "2026-08-31",
-      "next_review_date": "2026-09-05",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-06",
+      "next_review_date": "2026-09-21",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 2,
+      "consecutive_strong": 3,
       "mastered": false
     },
     "add-two-numbers": {

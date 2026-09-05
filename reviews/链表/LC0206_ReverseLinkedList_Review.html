@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-06</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>206. 反转链表 (Reverse Linked List)</h1><p>&gt; <a href="https://leetcode.cn/problems/reverse-linked-list/" rel="noopener">https://leetcode.cn/problems/reverse-linked-list/</a></p><p>难度：Easy ｜ 分类：链表</p><p>标签：递归、链表</p><h2>题目描述</h2><p>给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。</p><p>示例 1：</p><p>输入：head = [1,2,3,4,5]</p><p>输出：[5,4,3,2,1]</p><p>示例 2：</p><p>输入：head = [1,2]</p><p>输出：[2,1]</p><p>示例 3：</p><p>输入：head = []</p><p>输出：[]</p><p>提示：</p><p>链表中节点的数目范围是 [0, 5000]</p><p>-5000</p><p>进阶：链表可以选用迭代或递归方式完成反转。你能否用两种方法解决这道题？</p><h2>示例</h2><ol><li>输入：head = [1,2,3,4,5]</li></ol><p>输出：[5,4,3,2,1]</p><ol><li>输入：head = [1,2]</li></ol><p>输出：[2,1]</p><ol><li>输入：head = []</li></ol><p>输出：[]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-06 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（28/28）｜ 一次 AC ｜ 递归反转（head.next.next = head） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上两轮（08-30/08-31，均 strong）写的是<strong>迭代三指针</strong>（pre/cur/next，O(1) 空间）；本轮回到<strong>递归反转</strong>（<code>reverseList(head.next)</code> 后 <code>head.next.next = head</code>，O(n) 递归栈）——即一刷的写法，两种都掌握。</li><li>递归版与一刷差异：本轮写法一致（先递归拿到新头，再把当前节点接到尾部、断掉原 next），一次成型；一刷递归版代码将存入 submissions prev_code。迭代三指针版保留为独立条目。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>递归锚点：「<strong>相信子问题</strong>」——<code>newHead = reverseList(head.next)</code> 已经帮我把后面整段反转好并返回新头，我只需要把 <code>head</code> 接到这段的尾巴上：<code>head.next.next = head</code>（head 的下一节点反转后成了整段尾部），再 <code>head.next = null</code> 防环。</li><li>终止条件 <code>head == null || head.next == null</code> 同时覆盖空表与单节点。本轮直接写对，没有再踩「忘了断 head.next 造成环」的坑（链表自环回归用例覆盖）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（未给思路提示），本地 9 组（示例 3 + 边界 6：单节点/偶数长度/全相同/负数/极端大数等）一次全绿，力扣一次提交 Accepted 28/28。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>递归与迭代两种反转都已掌握；递归注意空间是 O(n)（调用栈），面试若要求 O(1) 用迭代三指针。</li><li>相关串练：92 反转链表 II（区间反转，先走到 left 再局部反转）、25 K 个一组翻转链表、234 回文链表（快慢指针+反转后半）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-08-31 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 迭代三指针（pre/cur/next） ｜ O(n) · O(1)</p>
       
@@ -42,17 +46,27 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
-        <li><span>思路</span><b>迭代三指针（pre/cur/next）</b></li>
-        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>思路</span><b>递归反转（head.next.next = head）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归反转（head.next.next = head）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)递归栈</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 28/28</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0206_ReverseLinkedList.java · 递归反转（head.next.next = head）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">reverseList</span>(<span class="tk-t">ListNode</span> head) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.8 MB</span><span class="chip">用例 28/28</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0206_ReverseLinkedList.java · 递归反转（head.next.next = head）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">reverseList</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> head;
+        }
+        <span class="tk-t">ListNode</span> newHead = <span class="tk-f">reverseList</span>(head.next);
+
+        head.next.next = head;
+        head.next = <span class="tk-k">null</span>;
+        <span class="tk-k">return</span> newHead;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0206_ReverseLinkedList.java · 递归反转（head.next.next = head） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">reverseList</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> head;
         }
@@ -61,8 +75,7 @@
         head.next = <span class="tk-k">null</span>;
         <span class="tk-k">return</span> newHead;
     }
-</pre></div>
-    
+</pre></div></details>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代三指针（pre/cur/next）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 —</span></p>
