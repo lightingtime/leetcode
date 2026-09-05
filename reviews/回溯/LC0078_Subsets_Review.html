@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>78. 子集 (Subsets)</h1><p>&gt; <a href="https://leetcode.cn/problems/subsets/" rel="noopener">https://leetcode.cn/problems/subsets/</a></p><p>难度：Medium ｜ 分类：回溯</p><p>标签：位运算、数组、回溯</p><h2>题目描述</h2><p>给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。</p><p>解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。</p><p>示例 1：</p><p>输入：nums = [1,2,3]</p><p>输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]</p><p>示例 2：</p><p>输入：nums = [0]</p><p>输出：[[],[0]]</p><p>提示：</p><p>1</p><p>-10</p><p>nums 中的所有元素 互不相同</p><h2>示例</h2><ol><li>输入：nums = [1,2,3]</li></ol><p>输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]</p><ol><li>输入：nums = [0]</li></ol><p>输出：[[],[0]]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-06 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（10/10）｜ 一次 AC ｜ 回溯（起点推进） ｜ O(n*2^n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-02，strong）与本次同思路：<strong>回溯·起点推进</strong>——<code>dfs(index)</code> 每进一层先把当前 <code>path</code> 快照加入 ans（每个节点即一个子集，空集由根快照给出），再 <code>for i = index..n-1</code> 选一个元素、递归 <code>i+1</code>、回溯 remove。</li><li>与 09-02 版差异：本轮去掉了 <code>if (nums.length == 0) return ans;</code> 守卫——那是 e54a3b4 复盘后的修正（题目约束 n≥1 不会触发，去掉更精简）；09-02 含守卫版代码已存入 submissions prev_code。一刷的「选/不选」写法保留为独立条目。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>锚点：「<strong>每个递归节点都先 ans.add(path 快照)</strong>，然后循环推进起点」——这样天然覆盖空集（根节点）与全集（推进到末尾），且不重不漏；「不选」不需要显式分支，由循环把起点往后推隐式表达。</li><li>上轮 strong 已内化，本轮一次写出，没再踩「只在叶子节点加 ans 导致漏中间子集/漏空集」的坑（长度10 关键成员校验含空集与全集，直接防这类漏解）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（未给思路提示），本地 6 组（示例 2 + 归档边界 2 + 09-06 增补 2：长度10 含空集/全集成员校验、负数 8 子集）一次全绿，力扣一次提交 Accepted 10/10。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>「起点推进」与「选/不选」两种子集写法都已掌握，回溯模板可迁移：90 子集 II（同层去重）、46 全排列（used 数组）、77 组合、39 组合总和（可重复选）。</li><li>本题输出 2^n 个子集，O(n·2^n) 时间/拷贝是下界，无更优档。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（10/10）｜ 一次 AC ｜ 回溯（起点推进） ｜ O(n*2^n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-09）：回溯「选/不选」两分支，非一次 AC。</li><li>复习①（2026-09-01）：改「起点推进」写法，较弱。</li><li>本次（第 2 次复习）：独立写出「起点推进」，本地全绿 + 力扣 10/10 一次 Accepted。写法：进入 dfs 先把当前 path 快照加入 ans（每个节点都是合法子集），再 for i=index..n-1 选 nums[i]、递归 i+1、回溯 remove 末尾。</li></ul><p><strong>② 为什么想起来</strong></p><ul><li>子集枚举的关键：不用等到叶子，<strong>递归树上的每个节点都代表一个子集</strong>，所以进函数先 add 快照；起点推进（下一层从 i+1 开始）保证同一元素不重复选、天然不重不漏。</li><li>「起点推进」与组合模板（LC77/LC39/LC40）同框架，比「选/不选」更通用，这次直接选它。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本次一次提交 Accepted（10/10）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。</li></ul><p><strong>④ 下一步提醒 / 代码注意</strong></p><ul><li>空输入守卫 if (nums.length == 0) return ans 语义不严谨：若真有空输入，子集应返回 [[]]（dfs 会把空 path 快照加入），返回 [] 是错的——本题约束 n≥1 才未触发。LC17「空输入→[]」的结论不能照搬到枚举/组合类题，删除守卫交给 dfs 处理即可。</li><li>同框架：LC77 组合、LC39 组合总和、LC90 子集 II（含重复元素，需先排序 + 同层去重）。</li></ul></div>
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>回溯（起点推进）</b></li>
         <li><span>复杂度</span><b>O(n*2^n) · O(n)</b></li>
@@ -74,8 +78,24 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 回溯（起点推进）</h3>
-    <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.6 MB</span><span class="chip">用例 10/10</span></p>
+    <p><span class="chip">时间 O(n*2^n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.5 MB</span><span class="chip">用例 10/10</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（起点推进）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">subsets</span>(<span class="tk-k">int</span>[] nums) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-f">dfs</span>(nums, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;<span class="tk-t">Integer</span>&gt;());
+        <span class="tk-k">return</span> ans;
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> index, <span class="tk-t">ArrayList</span>&lt;<span class="tk-t">Integer</span>&gt; path) {
+        ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(path));
+
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = index; i &lt; nums.length; i++) {
+            path.<span class="tk-f">add</span>(nums[i]);
+            <span class="tk-f">dfs</span>(nums, i + <span class="tk-n">1</span>, path);
+            path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+        }
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（起点推进） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
 <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">subsets</span>(<span class="tk-k">int</span>[] nums) {
     ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
     <span class="tk-k">if</span> (nums.length == <span class="tk-n">0</span>) {
@@ -93,22 +113,7 @@
         <span class="tk-f">dfs</span>(nums, i + <span class="tk-n">1</span>, path);
         path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
     }
-}</pre></div>
-    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0078_Subsets.java · 回溯（起点推进） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; ans;
-    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; <span class="tk-f">subsets</span>(<span class="tk-k">int</span>[] nums) {
-        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-        <span class="tk-f">dfs</span>(nums, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
-        <span class="tk-k">return</span> ans;
-    }
-
-    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> start, <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list) {
-        ans.<span class="tk-f">add</span>(<span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;(list));
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = start; i &lt; nums.length; i++) {
-            list.<span class="tk-f">add</span>(nums[i]);
-            <span class="tk-f">dfs</span>(nums, i + <span class="tk-n">1</span>, list);
-            list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
-        }
-    }</pre></div></details>
+}</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n 个互异元素的所有子集共 2^n 个，每个元素只有「选/不选」两个决定。枚举全部子集，回溯/DFS 是天然选择。本题有两种等价写法，一次只选一种框架。</p><p>写法 1 · 选/不选（已提交）：</p><ul><li>递归参数 index 表示下一个待决策的元素；每层两个分支：加入 nums[index] 递归 index+1，或不加入直接递归 index+1；</li><li>答案只在叶子收集：index == nums.length 时所有元素决策完毕，把 list 副本加入答案；</li><li>必须显式终止，否则 index 越界访问；空集由根节点一路「不选」产生。</li></ul><p>写法 2 · 起点推进（已提交）：</p><ul><li>递归参数 start 表示下一个可选的起点；for 循环枚举「下一个加入子集的元素」，选 nums[i] 后递归 i+1 并撤销；</li><li>「不选」由循环 i++ 隐含表达，不需要第二个递归分支；</li><li>答案在每个节点入口收集：该框架下每个节点形成的列表互不相同，不会重复；循环自然结束，无需显式终止。</li></ul><p>两种写法对比：</p><ul><li>复杂度相同：时间 O(n·2^n)（2^n 个子集，每个复制 O(n)），空间 O(n)（递归栈 + 当前列表，不含输出）；</li><li>差别只在「答案收集时机」：选/不选框架内部节点会与叶子重复，只能叶子加；起点推进框架每个节点唯一，入口加即可；</li><li>都无需排序（元素互异）；含重复元素时两种框架都要排序 + 跳过相邻相同值。</li></ul><p>为什么是最优：输出规模本身就是 2^n 个最多 n 长的子集，任何算法都必须生成 O(n·2^n) 的数据；两种写法每个子集恰好生成一次、无重复枚举，已达下限。</p><p>补充：写法 2 的「不选」到底在哪里（具体 case 推演）——</p><ul><li>起点推进的循环不是在问「要不要选 nums[i]」，而是在决定「下一个加入子集的元素是哪个」；</li><li>具体 case：nums=[1,2,3]，dfs(0, []) 的三条分支：i=0 选 1 → 生成包含 1 的全部子集；i=1 选 2 → list 从未加入过 1，「循环从 0 推进到 1」这个动作本身就是不选 1；i=2 选 3 → 同时跳过 1 和 2，即不选 1、不选 2；</li><li>结论：选/不选框架把「不选」写成显式分支；起点推进框架把「不选」编码在循环推进里——i 每前进一位就放弃前面那位；若在循环里再写显式「不选」递归，等于把同一动作做两遍（写法 1 调试时的重复问题）。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>回溯递归起点传错/框架混用：下一层起点必须从当前选中下标的下一个位置继续（传 i+1），传旧 index 会让同一元素重复入选（如 [1,3,3]）、子集重复、递归树爆炸 OOM；「选/不选」与「起点推进」两种回溯框架不要叠用</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>选/不选递归缺少终止条件：删掉 for 循环后没有处理 index 越界，仍访问 nums[index] 导致 AIOOBE；换框架后要同步补上新的边界出口（没有元素可决策时直接返回）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>答案收集时机与框架不匹配：选/不选框架里当前列表要等所有元素决策完才是完整子集，只能在叶子（index==n）加答案；在入口加会把同一子集重复记录（n=10 得到 2047=2^11-1 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>子集两种回溯框架混用：叶子收集（选/不选）套 for 循环（起点推进），同一分支被重复探索导致重复子集/丢子集；一次只能用一套框架——选/不选按 index 每层只处理一个元素，起点推进按 start 每节点收集</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>10/10 用例。</p></div></div></div></section>

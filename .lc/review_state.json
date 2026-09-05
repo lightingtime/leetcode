@@ -653,12 +653,12 @@
       "title": "子集",
       "category": "回溯",
       "first_pass_date": "2026-08-09",
-      "last_review_date": "2026-09-02",
-      "next_review_date": "2026-09-05",
-      "interval_days": 3,
-      "review_count": 2,
+      "last_review_date": "2026-09-06",
+      "next_review_date": "2026-09-16",
+      "interval_days": 10,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "word-search": {

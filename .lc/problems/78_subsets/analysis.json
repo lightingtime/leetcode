@@ -76,20 +76,20 @@
       "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        if (index >= nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n\n            list.add(nums[index]);\n            dfs(nums, index + 1, list);\n\n            list.remove(list.size() - 1);\n            dfs(nums, index + 1, list);\n    }"
     },
     {
-      "date": "2026-09-02",
+      "date": "2026-09-06",
       "verdict": "Accepted",
       "testcases": "10/10",
       "runtime_ms": null,
-      "memory_bytes": 44672000,
+      "memory_bytes": 44604000,
       "approach": "回溯（起点推进）",
       "time_complexity": "O(n*2^n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：回溯「选/不选」两分支，非一次 AC。\n- 复习①（2026-09-01）：改「起点推进」写法，较弱。\n- 本次（第 2 次复习）：独立写出「起点推进」，本地全绿 + 力扣 10/10 一次 Accepted。写法：进入 dfs 先把当前 path 快照加入 ans（每个节点都是合法子集），再 for i=index..n-1 选 nums[i]、递归 i+1、回溯 remove 末尾。\n\n**② 为什么想起来**\n- 子集枚举的关键：不用等到叶子，**递归树上的每个节点都代表一个子集**，所以进函数先 add 快照；起点推进（下一层从 i+1 开始）保证同一元素不重复选、天然不重不漏。\n- 「起点推进」与组合模板（LC77/LC39/LC40）同框架，比「选/不选」更通用，这次直接选它。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（10/10）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒 / 代码注意**\n- 空输入守卫 if (nums.length == 0) return ans 语义不严谨：若真有空输入，子集应返回 [[]]（dfs 会把空 path 快照加入），返回 [] 是错的——本题约束 n≥1 才未触发。LC17「空输入→[]」的结论不能照搬到枚举/组合类题，删除守卫交给 dfs 处理即可。\n- 同框架：LC77 组合、LC39 组合总和、LC90 子集 II（含重复元素，需先排序 + 同层去重）。",
-      "code": "List<List<Integer>> ans;\npublic List<List<Integer>> subsets(int[] nums) {\n    ans = new ArrayList<>();\n    if (nums.length == 0) {\n        return ans;\n    }\n    dfs(nums, 0, new ArrayList<>());\n    return ans;\n}\n\nprivate void dfs(int[] nums, int index, ArrayList<Integer> path) {\n    ans.add(new ArrayList<>(path));\n\n    for (int i = index; i < nums.length; i++) {\n        path.add(nums[i]);\n        dfs(nums, i + 1, path);\n        path.remove(path.size() - 1);\n    }\n}",
-      "prev_code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int start, List<Integer> list) {\n        ans.add(new ArrayList<>(list));\n        for (int i = start; i < nums.length; i++) {\n            list.add(nums[i]);\n            dfs(nums, i + 1, list);\n            list.remove(list.size() - 1);\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**回溯·起点推进**——`dfs(index)` 每进一层先把当前 `path` 快照加入 ans（每个节点即一个子集，空集由根快照给出），再 `for i = index..n-1` 选一个元素、递归 `i+1`、回溯 remove。\n- 与 09-02 版差异：本轮去掉了 `if (nums.length == 0) return ans;` 守卫——那是 e54a3b4 复盘后的修正（题目约束 n≥1 不会触发，去掉更精简）；09-02 含守卫版代码已存入 submissions prev_code。一刷的「选/不选」写法保留为独立条目。\n\n**② 为什么这次能想起来**\n- 锚点：「**每个递归节点都先 ans.add(path 快照)**，然后循环推进起点」——这样天然覆盖空集（根节点）与全集（推进到末尾），且不重不漏；「不选」不需要显式分支，由循环把起点往后推隐式表达。\n- 上轮 strong 已内化，本轮一次写出，没再踩「只在叶子节点加 ans 导致漏中间子集/漏空集」的坑（长度10 关键成员校验含空集与全集，直接防这类漏解）。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 6 组（示例 2 + 归档边界 2 + 09-06 增补 2：长度10 含空集/全集成员校验、负数 8 子集）一次全绿，力扣一次提交 Accepted 10/10。\n\n**④ 下一步提醒**\n- 「起点推进」与「选/不选」两种子集写法都已掌握，回溯模板可迁移：90 子集 II（同层去重）、46 全排列（used 数组）、77 组合、39 组合总和（可重复选）。\n- 本题输出 2^n 个子集，O(n·2^n) 时间/拷贝是下界，无更优档。",
+      "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<Integer>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, ArrayList<Integer> path) {\n        ans.add(new ArrayList<>(path));\n\n        for (int i = index; i < nums.length; i++) {\n            path.add(nums[i]);\n            dfs(nums, i + 1, path);\n            path.remove(path.size() - 1);\n        }\n    }",
+      "prev_code": "List<List<Integer>> ans;\npublic List<List<Integer>> subsets(int[] nums) {\n    ans = new ArrayList<>();\n    if (nums.length == 0) {\n        return ans;\n    }\n    dfs(nums, 0, new ArrayList<>());\n    return ans;\n}\n\nprivate void dfs(int[] nums, int index, ArrayList<Integer> path) {\n    ans.add(new ArrayList<>(path));\n\n    for (int i = index; i < nums.length; i++) {\n        path.add(nums[i]);\n        dfs(nums, i + 1, path);\n        path.remove(path.size() - 1);\n    }\n}",
       "mastery": "strong",
-      "pass": 2
+      "pass": 3
     }
   ],
   "reviews": [
@@ -118,6 +118,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：回溯「选/不选」两分支，非一次 AC。\n- 复习①（2026-09-01）：改「起点推进」写法，较弱。\n- 本次（第 2 次复习）：独立写出「起点推进」，本地全绿 + 力扣 10/10 一次 Accepted。写法：进入 dfs 先把当前 path 快照加入 ans（每个节点都是合法子集），再 for i=index..n-1 选 nums[i]、递归 i+1、回溯 remove 末尾。\n\n**② 为什么想起来**\n- 子集枚举的关键：不用等到叶子，**递归树上的每个节点都代表一个子集**，所以进函数先 add 快照；起点推进（下一层从 i+1 开始）保证同一元素不重复选、天然不重不漏。\n- 「起点推进」与组合模板（LC77/LC39/LC40）同框架，比「选/不选」更通用，这次直接选它。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（10/10）、全程无探讨 → strong；连续两轮 weak 后本轮独立一次写对，升级 strong，间隔 ×2.5 拉长。\n\n**④ 下一步提醒 / 代码注意**\n- 空输入守卫 if (nums.length == 0) return ans 语义不严谨：若真有空输入，子集应返回 [[]]（dfs 会把空 path 快照加入），返回 [] 是错的——本题约束 n≥1 才未触发。LC17「空输入→[]」的结论不能照搬到枚举/组合类题，删除守卫交给 dfs 处理即可。\n- 同框架：LC77 组合、LC39 组合总和、LC90 子集 II（含重复元素，需先排序 + 同层去重）。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-06",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "10/10",
+      "approach": "回溯（起点推进）",
+      "time_complexity": "O(n*2^n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**回溯·起点推进**——`dfs(index)` 每进一层先把当前 `path` 快照加入 ans（每个节点即一个子集，空集由根快照给出），再 `for i = index..n-1` 选一个元素、递归 `i+1`、回溯 remove。\n- 与 09-02 版差异：本轮去掉了 `if (nums.length == 0) return ans;` 守卫——那是 e54a3b4 复盘后的修正（题目约束 n≥1 不会触发，去掉更精简）；09-02 含守卫版代码已存入 submissions prev_code。一刷的「选/不选」写法保留为独立条目。\n\n**② 为什么这次能想起来**\n- 锚点：「**每个递归节点都先 ans.add(path 快照)**，然后循环推进起点」——这样天然覆盖空集（根节点）与全集（推进到末尾），且不重不漏；「不选」不需要显式分支，由循环把起点往后推隐式表达。\n- 上轮 strong 已内化，本轮一次写出，没再踩「只在叶子节点加 ans 导致漏中间子集/漏空集」的坑（长度10 关键成员校验含空集与全集，直接防这类漏解）。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 6 组（示例 2 + 归档边界 2 + 09-06 增补 2：长度10 含空集/全集成员校验、负数 8 子集）一次全绿，力扣一次提交 Accepted 10/10。\n\n**④ 下一步提醒**\n- 「起点推进」与「选/不选」两种子集写法都已掌握，回溯模板可迁移：90 子集 II（同层去重）、46 全排列（used 数组）、77 组合、39 组合总和（可重复选）。\n- 本题输出 2^n 个子集，O(n·2^n) 时间/拷贝是下界，无更优档。"
     }
   ]
 }
