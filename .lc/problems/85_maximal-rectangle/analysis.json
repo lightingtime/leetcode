@@ -34,20 +34,38 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-20",
+      "date": "2026-09-06",
       "verdict": "Accepted",
-      "testcases": "76/76",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 51096000,
+      "memory_bytes": 51048000,
       "approach": "单调栈 + 逐行高度",
       "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "逐行高度 + 单调栈直方图：heights 递推每列向上连续 1，每行单调栈求最大矩形；O(mn)/O(n)，修压栈下标后 Accepted"
+      "notes": "二刷一次 AC：逐行高度递推 + 哨兵单调栈求直方图最大矩形，逻辑与一刷一致，直接默写通过",
+      "code": "public int maximalRectangle(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] heights = new int[n + 2];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n            Deque<Integer> stack = new ArrayDeque<>();\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int area = height * width;\n                    max = Math.max(max, area);\n                }\n                stack.offerLast(j);\n            }\n        }\n        return max;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
   ],
-  "dp_subtype": "线性DP"
+  "dp_subtype": "线性DP",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "单调栈 + 逐行高度",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "二刷一次 AC：逐行高度递推 + 哨兵单调栈求直方图最大矩形，逻辑与一刷一致，直接默写通过"
+    }
+  ]
 }

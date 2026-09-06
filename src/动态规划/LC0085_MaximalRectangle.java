@@ -2,7 +2,7 @@
 // LeetCode 85. 最大矩形 (Maximal Rectangle)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/maximal-rectangle/
-// 刷题日期：2026-08-20
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-20）
 //
 // 思路：逐行维护每列向上连续 1 的高度，形成直方图；每行用单调栈求直方图最大矩形，全局取最大。
 // 复杂度：时间 O(m*n)，空间 O(n)
@@ -14,27 +14,25 @@ public class LC0085_MaximalRectangle {
 
     // ==== 提交代码开始 ====
     public int maximalRectangle(char[][] matrix) {
-        int m = matrix.length;
-        int n = matrix[0].length;
-        int[] heights = new int[n + 2];
+        int[] array = new int[matrix[0].length + 2];
         int max = 0;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
                 if (i == 0) {
-                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;
+                    array[j + 1] = matrix[i][j] == '1' ? 1 : 0;
                 } else {
-                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;
+                    array[j + 1] = matrix[i][j] == '1' ? (1 + array[j + 1]): 0;
                 }
             }
-            Deque<Integer> stack = new ArrayDeque<>();
-            for (int j = 0; j < heights.length; j++) {
-                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {
-                    int height = heights[stack.pollLast()];
-                    int width = j - stack.peekLast() - 1;
+            Deque<Integer> deque = new ArrayDeque<>();
+            for (int j = 0; j < array.length; j++) {
+                while (!deque.isEmpty() && array[deque.peekLast()] > array[j]) {
+                    int height = array[deque.pollLast()];
+                    int width = j - deque.peekLast() - 1;
                     int area = height * width;
                     max = Math.max(max, area);
                 }
-                stack.offerLast(j);
+                deque.offerLast(j);
             }
         }
         return max;
