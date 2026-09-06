@@ -2,7 +2,10 @@
 // LeetCode 116. 填充每个节点的下一个右侧节点指针 (Populating Next Right Pointers in Each Node)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/
-// 刷题日期：2026-08-24
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-24）
+// 一刷思路：递归（前序 DFS）——先连 root.left.next=root.right、root.right.next=root.next.left，再递归左右子树
+// 一刷复杂度：时间 O(n)，空间 O(log n) 递归栈（完美二叉树高 log n）
+// 测试用例与一刷归档保持一致
 //
 // ============================================================
 
@@ -33,17 +36,25 @@ public class LC0116_PopulatingNextRightPointersInEachNode {
     // ==== 提交代码开始 ====
     public Node connect(Node root) {
         if (root == null) {
-            return root;
+            return null;
         }
-        if (root.left != null) {
-            root.left.next = root.right;
-            root.right.next = root.next != null ? root.next.left : null;
-            connect(root.left);
-            connect(root.right);
+        Node mostLeft = root;
+        while (mostLeft.left != null) {
+            Node cur = mostLeft;
+            while (cur != null) {
+                cur.left.next = cur.right;
+                if (cur.next != null) {
+                    cur.right.next = cur.next.left;
+                }
+                cur = cur.next;
+            }
+            mostLeft = mostLeft.left;
         }
+
         return root;
+
     }
-    // ==== 提交代码结束 ====
+// ==== 提交代码结束 ====
 
     public static void main(String[] args) {
         int failures = 0;

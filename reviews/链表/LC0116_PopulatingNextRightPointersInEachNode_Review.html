@@ -20,18 +20,29 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>116. 填充每个节点的下一个右侧节点指针 (Populating Next Right Pointers in Each Node)</h1><p>&gt; <a href="https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/" rel="noopener">https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：树、深度优先搜索、广度优先搜索、链表、二叉树</p><h2>题目描述</h2><p>给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：</p><p>struct Node {</p><p>int val;</p><p>Node *left;</p><p>Node *right;</p><p>Node *next;</p><p>}</p><p>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p><p>初始状态下，所有 next 指针都被设置为 NULL。</p><p>示例 1：</p><p>输入：root = [1,2,3,4,5,6,7]</p><p>输出：[1,#,2,3,#,4,5,6,7,#]</p><p>解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。</p><p>示例 2:</p><p>输入：root = []</p><p>输出：[]</p><p>提示：</p><p>树中节点的数量在 [0, 212 - 1] 范围内</p><p>-1000</p><p>进阶：</p><p>你只能使用常量级额外空间。</p><p>使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。</p><h2>示例</h2><ol><li>输入：root = [1,2,3,4,5,6,7]</li></ol><p>输出：[1,#,2,3,#,4,5,6,7,#]</p><p>解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。</p><ol><li>输入：root = []</li></ol><p>输出：[]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-07 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 迭代按层连接（利用上层 next 指针） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>① 与上一轮对比：一刷是递归前序 DFS（空间 O(log n) 递归栈），本次独立换用<strong>迭代按层连接</strong>——外层循环取每层最左节点，内层沿该层已连好的 next 遍历，为下一层连 left.next=right、right.next=cur.next.left；空间降到 O(1)，属新写法（比一刷更优），追加新 submissions 条目。</p><p>② 为什么能想起：没走引导，凭「下一层连接需要借助当前层已连好的 next 指针」直接想到迭代版；一刷踩过的坑（递归顺序导致跨父连接缺失/顺序错乱）被迭代结构天然规避。</p><p>③ 掌握度判定：一次提交即 Accepted、全程无探讨，记较强。</p><p>④ 下一步提醒：可与 117（非完美二叉树）对比——本题能直接 cur.left.next=cur.right 依赖完美树结构；117 需要每层维护 dummy 头结点处理缺孩子的边，下次可顺带回忆差异。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)（递归栈不计额外空间）</b></li>
         
+      </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>迭代按层连接（利用上层 next 指针）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -63,6 +74,7 @@
             <span class="tk-k">return</span> root;
         }
 </pre></div>
+    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · O(1) 空间：mostLeft 逐层向下，利用上一层已连好的 next 连接下一层（写法2）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 59/59</span></p>
@@ -85,6 +97,7 @@
         }
         <span class="tk-k">return</span> root;
     }</pre></div>
+    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 3 · 递归（前序 DFS）：先连左右子与跨父 next，再递归左右子树（写法3）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)（递归栈不计额外空间）</span><span class="chip">内存 ≈ 44.9 MB</span><span class="chip">用例 59/59</span></p>
@@ -101,6 +114,31 @@
         }
         <span class="tk-k">return</span> root;
     }</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 4 · 迭代按层连接（利用上层 next 指针）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0116_PopulatingNextRightPointersInEachNode.java · 迭代按层连接（利用上层 next 指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">connect</span>(<span class="tk-t">Node</span> root) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">null</span>;
+        }
+        <span class="tk-t">Node</span> mostLeft = root;
+        <span class="tk-k">while</span> (mostLeft.left != <span class="tk-k">null</span>) {
+            <span class="tk-t">Node</span> cur = mostLeft;
+            <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
+                cur.left.next = cur.right;
+                <span class="tk-k">if</span> (cur.next != <span class="tk-k">null</span>) {
+                    cur.right.next = cur.next.left;
+                }
+                cur = cur.next;
+            }
+            mostLeft = mostLeft.left;
+        }
+
+        <span class="tk-k">return</span> root;
+
+    }</pre></div>
+    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><ul><li>完美二叉树要把同一层节点用 next 串成链表。关键观察：如果某一层的 next 已经连好，处理这一层时能借 cur 与 cur.next 找到下一层所有节点的「右侧邻居」，无需队列。这一观察对迭代与递归都成立。</li></ul><p><strong>写法 1（BFS + 队列）</strong></p><ul><li>每轮 while 前记 <code>size = queue.size()</code> 划出本层，只处理 size 个节点，<code>pre.next = node</code> 串联同层，层首 next 保持 null。</li><li>空子节点不入队：叶子节点的 null 子节点入队会导致 size 计数错乱、pollFirst 取 null 后访问 <code>node.left</code> 抛 NPE（真实踩过）。</li><li>时间 O(n)、空间 O(n)。正确但未达进阶空间要求。</li></ul><p><strong>写法 2（O(1) 空间迭代，利用上一层 next）</strong></p><ul><li><code>mostLeft</code> 指向每层最左节点，外层 <code>while (mostLeft.left != null)</code> 按层向下；<code>cur</code> 遍历当前层（该层 next 已连好）。</li><li>对每个 cur：<code>cur.left.next = cur.right</code>（同父相连）；若 <code>cur.next != null</code> 则 <code>cur.right.next = cur.next.left</code>（跨父连接，依赖当前层 next 就绪）。</li><li>一层处理完 <code>mostLeft = mostLeft.left</code> 下移；初始化第 1 层只有 root 天然就绪。空间 O(1)。</li></ul><p><strong>写法 3（递归 / 前序 DFS）</strong></p><ul><li>递归语义：处理当前节点的两个子节点——<code>root.left.next = root.right</code>（同父相连）；<code>root.right.next = root.next != null ? root.next.left : null</code>（跨父，依赖「当前节点所在层的 next 已连好」）。</li><li>处理完当前节点后递归 <code>connect(root.left)</code>、<code>connect(root.right)</code>：前序保证进入下一层前，其父层 next 已由上层处理完毕；先左后右保持同层从左到右。</li><li>完美二叉树保证 <code>root.left</code> 非空时 <code>root.right</code> 也非空（<code>root.left != null</code> 一个判断覆盖两者）。</li><li>空间：递归栈 O(log n)（完美二叉树高度=层数），题目声明递归栈不算额外空间，因此同样满足进阶 O(1) 额外空间。</li></ul><p><strong>具体 case 推演（写法 3）：7 节点树 [1,2,3,4,5,6,7]</strong></p><ul><li>connect(1)：2.next=3；3.next = 1.next(null) → null；递归 connect(2)、connect(3)。</li><li>connect(2)：4.next=5；5.next = 2.next(3).left = 6；递归 connect(4)、connect(5)。</li><li>connect(3)：6.next=7；7.next = 3.next(null) → null；递归 connect(6)、connect(7)。</li><li>结果：2→3、4→5→6→7，与示例一致。</li></ul><p><strong>复杂度与最优性（三写法对比）</strong></p><p>| 写法 | 时间 | 额外空间 | 满足进阶 O(1) |</p><p>| BFS 队列 | O(n) | O(n) | 否 |</p><p>| 迭代利用 next | O(n) | O(1) | 是 |</p><p>| 递归 DFS | O(n) | O(1)（递归栈不计） | 是 |</p><ul><li>时间下限：每个 next 都必须被设置，至少访问全部节点 Ω(n)，三种写法都达到。</li><li>空间下限：除返回值外无需额外存储，写法 2/3 的 O(1) 即最优；写法 2 与写法 3 为该题并列最优解。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>59/59 用例。</p></div></div></div></section>
