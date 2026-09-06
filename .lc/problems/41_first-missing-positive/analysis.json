@@ -40,10 +40,26 @@
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "答案在 [1,n+1]：v 归位到 v-1；while 条件= v 有效(1..n) && 目标位!=v，无效值占位也交换、重复值停止；扫描 nums[i]!=i+1 返回 i+1，全对返回 n+1；本地多轮修正+力扣一次 WA 后 AC"
+      "notes": "答案在 [1,n+1]：v 归位到 v-1；while 条件= v 有效(1..n) && 目标位!=v，无效值占位也交换、重复值停止；扫描 nums[i]!=i+1 返回 i+1，全对返回 n+1；本地多轮修正+力扣一次 WA 后 AC",
+      "code": "public int firstMissingPositive(int[] nums) {\n        for (int i = 0; i < nums.length; i++) {\n            if (nums[i] > nums.length || nums[i] <= 0) {\n                continue;\n            }\n            while (nums[i] > 0 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]) {\n                int temp = nums[nums[i] - 1];\n                nums[nums[i] - 1] = nums[i];\n                nums[i] = temp;\n            }\n        }\n        for (int i = 0; i < nums.length; i++) {\n            if (nums[i] != i + 1) {\n                return i + 1;\n            }\n        }\n        return nums.length + 1;\n    }\n"
     }
   ],
   "hints": [
     "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "原地归位（cyclic sort 值域偏移）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与一刷同写法（cyclic sort 值域偏移：v 归位 v-1，while 条件 v∈[1,n] 且目标位≠v，重复值停；扫 nums[i]!=i+1 返回）；复杂度 O(n)/O(1)，内存 71,632 KB。② 出错点：本轮先写出错误交换顺序 temp=nums[i]; nums[i]=nums[nums[i]-1]; nums[nums[i]-1]=temp——第 2 行先把 nums[i] 覆盖，第 3 行再用 nums[i]-1 当目标下标时取到新值，导致写错槽位（[3,1,2] 写成 [2,3,2]）/越界（[2,0,1] 下标 -1）/死循环；经讲解确认『依赖 nums[i] 的下标求值必须先于 nums[i] 改写』，改为先存目标槽旧值→v 写入目标槽→旧值回填后正确。③ 判定：一次提交即 Accepted，但 swap 求值顺序问题经探讨修正，记较弱。④ 下一步提醒：下次复习先口头答两点再写——a) while 为何要判 nums[target] != nums[i]（重复值防死循环）；b) swap 为何 nums[i] 只能最后一步改；一刷 WA 过的边界 11（无效值占位）仍在测试区回归。"
+    }
   ]
 }

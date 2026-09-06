@@ -2,8 +2,10 @@
 // LeetCode 41. 缺失的第一个正数 (First Missing Positive)
 // 难度：Hard | 分类：哈希表
 // 链接：https://leetcode.cn/problems/first-missing-positive/
-// 刷题日期：2026-08-21
-//
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-21）
+// 一刷思路：原地归位（cyclic sort 值域偏移）——答案在 [1,n+1]；v 归位到 v-1，无效值占位也交换、重复值停止；扫 nums[i]!=i+1 返回 i+1
+// 一刷复杂度：时间 O(n)，空间 O(1)
+// 测试用例与一刷归档保持一致
 // ============================================================
 
 import java.util.*;
@@ -12,22 +14,20 @@ public class LC0041_FirstMissingPositive {
 
     // ==== 提交代码开始 ====
     public int firstMissingPositive(int[] nums) {
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > nums.length || nums[i] <= 0) {
-                continue;
-            }
-            while (nums[i] > 0 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]) {
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            while (nums[i] > 0 && nums[i] <= n && nums[nums[i] - 1] != nums[i]) {
                 int temp = nums[nums[i] - 1];
                 nums[nums[i] - 1] = nums[i];
                 nums[i] = temp;
             }
         }
-        for (int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < n; i++) {
             if (nums[i] != i + 1) {
                 return i + 1;
             }
         }
-        return nums.length + 1;
+        return n + 1;
     }
     // ==== 提交代码结束 ====
 
