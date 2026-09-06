@@ -2,8 +2,11 @@
 // LeetCode 149. 直线上最多的点数 (Max Points on a Line)
 // 难度：Hard | 分类：哈希表
 // 链接：https://leetcode.cn/problems/max-points-on-a-line/
-// 刷题日期：2026-08-21
-//
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-21）
+// 一刷思路：三点共线叉积（O(n³)，非最优）；code-notes 要求二刷改写为 O(n²) 最优解：
+// 固定每个基准点 i，HashMap<归一化斜率, 计数> 统计与 i 同斜率的点数，答案取 max(count)+1
+// 斜率 key = 差值 (dx,dy) 除以 gcd 约分 + 符号统一（dx<0 或 dx==0&&dy<0 时取反）
+// 测试用例与一刷归档保持一致
 // ============================================================
 
 import java.util.*;
@@ -12,31 +15,47 @@ public class LC0149_MaxPointsOnALine {
 
     // ==== 提交代码开始 ====
     public int maxPoints(int[][] points) {
-        int ans = 1;
+        int max = 0;
         for (int i = 0; i < points.length; i++) {
-            int[] p1 = points[i];
-            for (int j = i + 1; j < points.length; j++) {
-                int[] p2 = points[j];
-                int count = 2;
-                for (int k = j + 1; k < points.length; k++) {
-                    int[] p = points[k];
-                    // p1 -> p2 (p2[1] - p1[1], p2[0] - p1[0])
-                    // p -> p2 (p[1] - p2[1], p[0] - p2[0])
-                    // 三点共线 ⇔ 这两个向量平行 ⇔ 叉积为 0：
-                    // P1P2 × P2P = (p2[1] - p1[1])*(p[0] - p2[0]) − (p[1] - p2[1])*(p2[0] - p1[0]) == 0
-                    int s1 = (p2[1] - p1[1]) * (p[0] - p2[0]);
-                    int s2 = (p[1] - p2[1]) * (p2[0] - p1[0]);
-                    if (s1 == s2) {
-                        count++;
-                    }
+            Map<String, Integer> map = new HashMap<>();
+            int[] a = points[i];
+            int curMax = 0;
+            int same = 0;
+            for (int j = 0; j < points.length; j++) {
+                if (i == j) {
+                    continue;
                 }
-                ans = Math.max(ans, count);
+                int[] b = points[j];
+                int dx = a[0] - b[0];
+                int dy = a[1] - b[1];
+                if (dx == 0 && dy == 0) {
+                    same++;
+                    continue;
+                }
+                if (dx < 0 || (dx == 0 && dy < 0)) {
+                    dx = -dx;
+                    dy = -dy;
+                }
+                int g = gcd(Math.abs(dx), Math.abs(dy));
+                dx = dx / g;
+                dy = dy / g;
+                String key = dx + "," + dy;
+                map.merge(key, 1, Integer::sum);
+                curMax = Math.max(curMax, map.get(key));
             }
+            max = Math.max(max, curMax + 1 + same);
         }
-        return ans;
+        return max;
     }
 
-
+    private int gcd(int dx, int dy) {
+        while (dy != 0) {
+            int n = dx % dy;
+            dx = dy;
+            dy = n;
+        }
+        return dx;
+    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

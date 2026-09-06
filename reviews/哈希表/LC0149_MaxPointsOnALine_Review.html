@@ -18,14 +18,18 @@
     <span class="badge tag">分类 哈希表</span>
     
     <span class="badge plain">多次通过</span>
-    <span class="badge plain">已满足题意·可进阶</span>
+    <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-21</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>149. 直线上最多的点数 (Max Points on a Line)</h1><p>&gt; <a href="https://leetcode.cn/problems/max-points-on-a-line/" rel="noopener">https://leetcode.cn/problems/max-points-on-a-line/</a></p><p>难度：Hard ｜ 分类：哈希表</p><p>标签：几何、数组、哈希表、数学、最大公约数、欧几里得算法</p><h2>题目描述</h2><p>给你一个数组 points ，其中 points[i] = [xi, yi] 表示 X-Y 平面上的一个点。求最多有多少个点在同一条直线上。</p><p>示例 1：</p><p>输入：points = [[1,1],[2,2],[3,3]]</p><p>输出：3</p><p>示例 2：</p><p>输入：points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]</p><p>输出：4</p><p>提示：</p><p>1</p><p>points[i].length == 2</p><p>-104 i, yi 4</p><p>points 中的所有点 互不相同</p><h2>示例</h2><ol><li>输入：points = [[1,1],[2,2],[3,3]]</li></ol><p>输出：3</p><ol><li>输入：points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]</li></ol><p>输出：4</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 固定锚点 + 归一化斜率哈希（O(n²)） ｜ O(n²) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：一刷是 O(n³) 三点共线叉积（非最优），按 code-notes 要求二刷升级为 O(n²) 固定锚点 + 归一化斜率哈希——固定锚点 i 后同斜率 ⇔ 共线，gcd 约分 + 符号统一（dx≥0、dy 保留符号）得规范 key，答案 = max(斜率组计数) + 1 + same；复杂度从 O(n³) 降到 O(n²)，内存 47,248 KB。</p><p>② 为什么没想起来 / 出错过程：一开始完全忘记 O(n²) 视角（经分块引导从「一条线 = 点 + 方向」重建）；写码暴露三个真实错误：a) int[] 当 HashMap key——数组 equals/hashCode 是引用相等，get 永远 null → NPE；b) map 建在锚点循环外，跨锚点累计计数，答案膨胀（示例1 期望 3 实际 7、300 点共线实际 89701）；c) curMax 用普通赋值而非 Math.max，主导斜率不连续出现时丢峰值。另补了 gcd 取 abs（规范）与重复坐标 same 计数（防 gcd(0,0) 除零）。每个错误都是可迁移教训：key 类型、作用域/生命周期、聚合要取 max。</p><p>③ 掌握度判定：力扣一次提交即 Accepted，但全程大量探讨 + 多轮修正，记较弱。</p><p>④ 下一步提醒：下次复习先口头讲三步再写——a) 为何固定锚点后「同斜率 = 共线」、为什么答案要 +1（锚点自己）；b) 符号统一为何不能直接 abs（会把斜率正负两条线并成一条）；c) HashMap key 不能是 int[]、聚合计数要 Math.max。可顺带复习同套路题 447 回旋镖数量（距离平方归一化计数）。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(n³) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>固定锚点 + 归一化斜率哈希（O(n²)）</b></li>
+        <li><span>复杂度</span><b>O(n²) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 三点共线叉积（O(n³)）</h3>
     <p><span class="chip">时间 O(n³)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.4 MB</span><span class="chip">用例 42/42</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0149_MaxPointsOnALine.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPoints</span>(<span class="tk-k">int</span>[][] points) {
+    <div class="code-wrap"><div class="code-head"><span>LC0149_MaxPointsOnALine.java · 三点共线叉积（O(n³)）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPoints</span>(<span class="tk-k">int</span>[][] points) {
         <span class="tk-k">int</span> ans = <span class="tk-n">1</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; points.length; i++) {
             <span class="tk-k">int</span>[] p1 = points[i];
@@ -60,9 +71,57 @@
             }
         }
         <span class="tk-k">return</span> ans;
+    }
+</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 固定锚点 + 归一化斜率哈希（O(n²)）</h3>
+    <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0149_MaxPointsOnALine.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPoints</span>(<span class="tk-k">int</span>[][] points) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; points.length; i++) {
+            <span class="tk-t">Map</span>&lt;<span class="tk-t">String</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            <span class="tk-k">int</span>[] a = points[i];
+            <span class="tk-k">int</span> curMax = <span class="tk-n">0</span>;
+            <span class="tk-k">int</span> same = <span class="tk-n">0</span>;
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; points.length; j++) {
+                <span class="tk-k">if</span> (i == j) {
+                    <span class="tk-k">continue</span>;
+                }
+                <span class="tk-k">int</span>[] b = points[j];
+                <span class="tk-k">int</span> dx = a[<span class="tk-n">0</span>] - b[<span class="tk-n">0</span>];
+                <span class="tk-k">int</span> dy = a[<span class="tk-n">1</span>] - b[<span class="tk-n">1</span>];
+                <span class="tk-k">if</span> (dx == <span class="tk-n">0</span> &amp;&amp; dy == <span class="tk-n">0</span>) {
+                    same++;
+                    <span class="tk-k">continue</span>;
+                }
+                <span class="tk-k">if</span> (dx &lt; <span class="tk-n">0</span> || (dx == <span class="tk-n">0</span> &amp;&amp; dy &lt; <span class="tk-n">0</span>)) {
+                    dx = -dx;
+                    dy = -dy;
+                }
+                <span class="tk-k">int</span> g = <span class="tk-f">gcd</span>(<span class="tk-t">Math</span>.<span class="tk-f">abs</span>(dx), <span class="tk-t">Math</span>.<span class="tk-f">abs</span>(dy));
+                dx = dx / g;
+                dy = dy / g;
+                <span class="tk-t">String</span> key = dx + <span class="tk-s">","</span> + dy;
+                map.<span class="tk-f">merge</span>(key, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+                curMax = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(curMax, map.<span class="tk-f">get</span>(key));
+            }
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, curMax + <span class="tk-n">1</span> + same);
+        }
+        <span class="tk-k">return</span> max;
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">gcd</span>(<span class="tk-k">int</span> dx, <span class="tk-k">int</span> dy) {
+        <span class="tk-k">while</span> (dy != <span class="tk-n">0</span>) {
+            <span class="tk-k">int</span> n = dx % dy;
+            dx = dy;
+            dy = n;
+        }
+        <span class="tk-k">return</span> dx;
     }</pre></div>
+    
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：求共线点数最大值。点 i 与点 j 确定一条直线，统计「有多少个点也在这条直线上」的最大值。</p><p>解法选择理由（三点共线叉积，O(n³)）：</p><ul><li>枚举每一对点 (p1, p2) 作为直线的两个基准点，再扫描第三个点 p 是否与它们共线。</li><li>共线判定用向量叉积：向量 p1→p2 与向量 p2→p 平行 ⇔ 叉积为 0，写成整数比较 s1 == s2，避免浮点斜率精度问题，也无需约分。</li><li>n ≤ 300，三重循环 C(300,3) ≈ 445 万次，Java 完全可过。</li></ul><p>关键设计决策：</p><ol><li>外层 i、j 枚举点对 p1、p2，count 从 2 起（p1、p2 本身两点）。</li><li>内层 k 枚举第三个点 p，判断是否共线：</li></ol><ul><li>s1 = (p2[1]-p1[1]) * (p[0]-p2[0]) = dy(p1→p2) × dx(p2→p)</li><li>s2 = (p[1]-p2[1]) * (p2[0]-p1[0]) = dy(p2→p) × dx(p1→p2)</li><li>s1 == s2 ⇔ dy12·dx2p − dy2p·dx12 == 0 ⇔ 叉积为 0 ⇔ 三点共线。</li></ul><ol><li>ans 初始 1：n≥1 时至少 1 个点；内层可能不执行（单点/无第三点时）也要正确。</li><li>每对 (p1,p2) 更新全局最大 count。</li><li>坐标 ±10^4，差值乘积最大 4×10^8，int 不溢出。</li></ol><p>具体 case 推演：</p><p>示例1 [[1,1],[2,2],[3,3]]（期望 3）：</p><ul><li>i=0 p1=(1,1), j=1 p2=(2,2), k=2 p=(3,3)：</li><li>s1 = (2-1)×(3-2) = 1；s2 = (3-2)×(2-1) = 1 → 相等 → count=3 → ans=3 ✓</li></ul><p>边界5 [[0,0],[2,4],[4,8],[1,2]]（期望 4，斜率 2 的线）：</p><ul><li>(0,0),(2,4) 与 (4,8)：s1=(4-0)×(4-2)=8，s2=(8-4)×(2-0)=8 → 共线；</li><li>(0,0),(2,4) 与 (1,2)：s1=(4-0)×(1-2)=-4，s2=(2-4)×(2-0)=-4 → 共线 → count=4 ✓</li></ul><p>边界1 单点 [[0,0]]：内层不执行，ans 保持 1 ✓</p><p>边界与细节：</p><ul><li>单点/两点：ans 初始 1，两点时 count=2。</li><li>水平线/垂直线：dx 或 dy 为 0 时叉积式仍正确。</li><li>重复点：题目保证互不相同，无需处理。</li><li>300 点共线：最内层 4.45M 次整数运算，无性能问题。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n³)：三重组合枚举；n=300 时约 4.45M 次，可接受但不是最优。</li><li>空间 O(1)：只用常数变量。</li><li>最优性：本题最优是 O(n²)：固定一个基准点，用 HashMap&lt;归一化斜率, 计数&gt; 统计「与基准点斜率相同的点数」，取 count+1 最大值；叉积法省空间但多一重循环。当前写法复杂度未达最优（optimal=false），但 n 上限小、能 AC。</li></ul></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>给 n 个点找「共线最多」的直线。朴素思路（一刷 O(n³)）是枚举每对点定一条直线，再扫第三点判共线——慢在每条线都把第三点重算一遍。</p><p>关键转化：一条直线可由「一个点 + 一个方向」唯一确定。固定锚点 i 后，点 j 与 i 共线 ⟺ 方向 (dx,dy) 相同；方向从「锚点指向点」计算，且 (d) 与 (−d) 是同一条线要合并。于是问题变成对每个锚点统计「每个方向出现次数」，取最大次数 + 锚点自己。整体 O(n²)。</p><p><strong>关键设计决策</strong></p><ol><li>方向归一化（key）：(dx,dy) 先除以 gcd(|dx|,|dy|) 得最简方向，再符号统一（dx&lt;0，或 dx==0 且 dy&lt;0 时整体取反），保证 dx≥0、dy 的符号保留斜率正负。</li></ol><ul><li>为什么不能 abs 两个：abs 会把 (1,1)（斜率+1）与 (1,−1)（斜率−1）并成同 key，两条不同直线被合并而虚高。</li><li>key 用字符串 dx+","+dy（或 long 编码），<strong>不能用 int[]</strong>：Java 数组 equals/hashCode 是引用相等，每次都查不到。</li></ul><ol><li>每轮锚点新建 HashMap：斜率相对各自锚点，跨锚点累计会污染计数（典型错误：map 建在循环外导致答案膨胀）。</li><li>聚合取峰值：curMax = max(curMax, count)，不是直接取当前斜率计数——主导斜率不连续出现时会丢峰值。</li><li>重复坐标：j 与锚点 i 重合（dx==dy==0）时 gcd(0,0) 会除零，单独用 same 计数，答案 = curMax + 1 + same（重合副本在过锚点的任意直线上都算）。</li></ol><p><strong>具体 case 推演</strong>：A=(0,0), B=(1,1), C=(−1,−1), D=(1,−1)</p><p>锚点 A=(0,0)：</p><ul><li>B：dx=1, dy=1 → gcd=1 → key (1,1) → 计数 1</li><li>C：dx=−1, dy=−1 → 符号统一 → (1,1) → 计数 2</li><li>D：dx=1, dy=−1 → 符号不动 → (1,−1) → 计数 1</li><li>收尾：max(2)+1 = 3（A,B,C 在斜率 +1 线上）✓；若用 abs，B/C/D 全变 (1,1) 会错算成 4</li></ul><p><strong>边界与细节</strong></p><ul><li>单点：内层空转，max=0+1=1 ✓</li><li>垂直 dx=0：符号统一保证 dy&gt;0 → key (0,1)；水平 dy=0 → (1,0)，两者不混淆</li><li>300 点全共线：每锚点计数 299，答案 299+1=300</li><li>重复坐标隐藏用例：same 计数兜底，避免 gcd(0,0) 除零</li></ul><p><strong>复杂度与下限论证</strong></p><p>时间 O(n²)（外层锚点 n × 内层 n，每次 gcd O(logC)，C 为坐标范围）——因为「共线关系」必须比较所有点对方向，任两点都要检查是否同线，比较点对已是 Ω(n²)；空间 O(n)（每轮一张斜率表）。相对一刷 O(n³) 去掉的正是「每条线重扫第三点」的冗余层，故 O(n²) 为该问题可达的最优复杂度。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>42/42 用例。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
@@ -75,12 +134,12 @@
     </div>
     <div class="card">
       <h3>算法判定</h3>
-      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
       <h3>复习提醒</h3><div class="quote">★ 复习重写为 O(n²) 最优解：固定每个基准点 i，HashMap&lt;归一化斜率, 计数&gt; 统计「与 i 斜率相同的其他点数」，答案取 max(count)+1；斜率 key = 差值 (dx,dy) 除以 gcd 约分 + 符号统一（dx&lt;0 或 dx==0&amp;&amp;dy&lt;0 时取反），编码用 dx*40001+dy 或字符串；不要再用 O(n³) 叉积。</div>
       <h3>完成记录</h3>
-      <p><span class="chip">seq 110 · max-points-on-a-line</span><span class="chip">firstPass: false</span><span class="chip">optimal: false</span></p>
+      <p><span class="chip">seq 110 · max-points-on-a-line</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
       <div class="quote">枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优</div>
     </div>
   </section>

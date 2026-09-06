@@ -1209,7 +1209,7 @@
       "category": "哈希表",
       "date": "2026-08-21",
       "firstPass": false,
-      "optimal": false,
+      "optimal": true,
       "notes": "枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优"
     },
     {
