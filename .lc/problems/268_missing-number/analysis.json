@@ -67,5 +67,20 @@
   ],
   "hints": [
     "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "求和（差值累加）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与一刷最终归档同写法（ans 从 n 起步逐项 ans += i - nums[i]，末态恰为缺失值）；一刷还写过 cyclic sort，本次直接选求和法。复杂度 O(n)/O(1)。细节：本次用 int 替代一刷的 long+Math.toIntExact——n≤10^4 时中间量上界约 n²=10^8 远小于 int 上限，等价且更简，非新思路。② 为什么能想起：『缺失 = 期望和 - 实际和』是典型数学套路，回忆顺畅；缺 0/缺 n/上限大数组等边界被本地用例覆盖，未踩坑。③ 判定：一次提交即 Accepted、全程无探讨，记较强。④ 下一步提醒：能说出另两条路即可——异或 x ^= i ^ nums[i] 消成唯一缺失、cyclic sort 原地交换（一刷第一条写法）；下次复习任选其一写通即可。"
+    }
   ]
 }
