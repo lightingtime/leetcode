@@ -39,19 +39,37 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-23",
+      "date": "2026-09-06",
       "verdict": "Accepted",
-      "testcases": "76/76",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 44528000,
+      "memory_bytes": 44148000,
       "approach": "二分：比较 nums[mid] 与 nums[mid+1] 沿上升方向收拢",
       "time_complexity": "O(log n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": ""
+      "notes": "① 与上一轮对比：与一刷同思路（二分比较 nums[mid] 与 nums[mid+1]，沿上升方向收拢，两端视为 −∞），本轮写成 (l, r] 前开后闭变体：l=−1 哨兵、候选集恒为 (l, r]、mid = l+(r−l)/2 永不越界访问 nums[mid+1]、终止 l+1==r 返回 r；与一刷闭区间写法等价。复杂度 O(log n)/O(1)，内存 44,148 KB。\n\n② 为什么没完全独立想起：忘记核心观察「上坡 → 峰必在右、下坡 → 峰必在左（含 mid）+ 两端 −∞ 兜底」，经引导重建；随后自己写出 (l,r] 正确变体，但卡在「为什么返回 r 而不是 l」——分析确认：终止时候选集 [l+1, r] 只剩 r 一个元素，l 是已被排除的下界（示例 [1,2,1,3,5,6,4] 终止时 l=4 是非峰、r=5 是峰），返回值必须与区间不变量配套。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但核心思路经提示重建 + 返回值语义经分析确认，记较弱。\n\n④ 下一步提醒：下次复习先讲清两种写法的不变量再写——闭区间 [l,r]（l=mid+1/r=mid）终止 l==r 返回谁都行；(l,r] 变体终止时 r 是唯一候选必须返回 r；mid+1 越界靠区间设计规避而非特判。",
+      "code": "public int findPeakElement(int[] nums) {\n        if (nums.length < 2) return 0;\n        int l = 0, r = nums.length - 1;\n        while (l < r) {\n            int mid = l + (r - l) / 2;\n            if (mid == 0) {\n                if (nums[mid] > nums[mid + 1]) {\n                    return mid;\n                }\n                l = mid + 1;\n            } else if (mid == nums.length - 1) {\n                if (nums[mid] > nums[mid - 1]) {\n                    return mid;\n                }\n                r = mid - 1;\n            } else if (mid > 0 && mid < nums.length - 1 && nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1]) {\n                return mid;\n            } else {\n                if (nums[mid] > nums[mid + 1]) {\n                    r = mid - 1;\n                } else {\n                    l = mid + 1;\n                }\n            }\n        }\n        return r;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "二分：比较 nums[mid] 与 nums[mid+1] 沿上升方向收拢",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与一刷同思路（二分比较 nums[mid] 与 nums[mid+1]，沿上升方向收拢，两端视为 −∞），本轮写成 (l, r] 前开后闭变体：l=−1 哨兵、候选集恒为 (l, r]、mid = l+(r−l)/2 永不越界访问 nums[mid+1]、终止 l+1==r 返回 r；与一刷闭区间写法等价。复杂度 O(log n)/O(1)，内存 44,148 KB。\n\n② 为什么没完全独立想起：忘记核心观察「上坡 → 峰必在右、下坡 → 峰必在左（含 mid）+ 两端 −∞ 兜底」，经引导重建；随后自己写出 (l,r] 正确变体，但卡在「为什么返回 r 而不是 l」——分析确认：终止时候选集 [l+1, r] 只剩 r 一个元素，l 是已被排除的下界（示例 [1,2,1,3,5,6,4] 终止时 l=4 是非峰、r=5 是峰），返回值必须与区间不变量配套。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但核心思路经提示重建 + 返回值语义经分析确认，记较弱。\n\n④ 下一步提醒：下次复习先讲清两种写法的不变量再写——闭区间 [l,r]（l=mid+1/r=mid）终止 l==r 返回谁都行；(l,r] 变体终止时 r 是唯一候选必须返回 r；mid+1 越界靠区间设计规避而非特判。"
+    }
   ]
 }

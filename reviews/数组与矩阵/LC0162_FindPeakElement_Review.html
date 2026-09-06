@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-23</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>162. 寻找峰值 (Find Peak Element)</h1><p>&gt; <a href="https://leetcode.cn/problems/find-peak-element/" rel="noopener">https://leetcode.cn/problems/find-peak-element/</a></p><p>难度：Medium ｜ 分类：数组与矩阵</p><p>标签：数组、二分查找</p><h2>题目描述</h2><p>峰值元素是指其值严格大于左右相邻值的元素。</p><p>给你一个整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。</p><p>你可以假设 nums[-1] = nums[n] = -∞ 。</p><p>你必须实现时间复杂度为 O(log n) 的算法来解决此问题。</p><p>示例 1：</p><p>输入：nums = [1,2,3,1]</p><p>输出：2</p><p>解释：3 是峰值元素，你的函数应该返回其索引 2。</p><p>示例 2：</p><p>输入：nums = [1,2,1,3,5,6,4]</p><p>输出：1 或 5</p><p>解释：你的函数可以返回索引 1，其峰值元素为 2；</p><p>或者返回索引 5， 其峰值元素为 6。</p><p>提示：</p><p>1</p><p>-231 31 - 1</p><p>对于所有有效的 i 都有 nums[i] != nums[i + 1]</p><h2>示例</h2><ol><li>输入：nums = [1,2,3,1]</li></ol><p>输出：2</p><p>解释：3 是峰值元素，你的函数应该返回其索引 2。</p><ol><li>输入：nums = [1,2,1,3,5,6,4]</li></ol><p>输出：1 或 5</p><p>解释：你的函数可以返回索引 1，其峰值元素为 2；</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 二分：比较 nums[mid] 与 nums[mid+1] 沿上升方向收拢 ｜ O(log n) · O(1)</p>
+      <div class="review-note md"><p>① 与上一轮对比：与一刷同思路（二分比较 nums[mid] 与 nums[mid+1]，沿上升方向收拢，两端视为 −∞），本轮写成 (l, r] 前开后闭变体：l=−1 哨兵、候选集恒为 (l, r]、mid = l+(r−l)/2 永不越界访问 nums[mid+1]、终止 l+1==r 返回 r；与一刷闭区间写法等价。复杂度 O(log n)/O(1)，内存 44,148 KB。</p><p>② 为什么没完全独立想起：忘记核心观察「上坡 → 峰必在右、下坡 → 峰必在左（含 mid）+ 两端 −∞ 兜底」，经引导重建；随后自己写出 (l,r] 正确变体，但卡在「为什么返回 r 而不是 l」——分析确认：终止时候选集 [l+1, r] 只剩 r 一个元素，l 是已被排除的下界（示例 [1,2,1,3,5,6,4] 终止时 l=4 是非峰、r=5 是峰），返回值必须与区间不变量配套。</p><p>③ 掌握度判定：力扣一次提交即 Accepted，但核心思路经提示重建 + 返回值语义经分析确认，记较弱。</p><p>④ 下一步提醒：下次复习先讲清两种写法的不变量再写——闭区间 [l,r]（l=mid+1/r=mid）终止 l==r 返回谁都行；(l,r] 变体终止时 r 是唯一候选必须返回 r；mid+1 越界靠区间设计规避而非特判。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(log n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>二分：比较 nums[mid] 与 nums[mid+1] 沿上升方向收拢</b></li>
+        <li><span>复杂度</span><b>O(log n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二分：比较 nums[mid] 与 nums[mid+1] 沿上升方向收拢</h3>
-    <p><span class="chip">时间 O(log n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.5 MB</span><span class="chip">用例 76/76</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/数组与矩阵/LC0162_FindPeakElement.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findPeakElement</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(log n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.1 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0162_FindPeakElement.java · 二分：比较 nums[mid] 与 nums[mid+1] 沿上升方向收拢</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findPeakElement</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">if</span> (nums.length &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> <span class="tk-n">0</span>;
         <span class="tk-k">int</span> l = <span class="tk-n">0</span>, r = nums.length - <span class="tk-n">1</span>;
         <span class="tk-k">while</span> (l &lt; r) {
@@ -63,7 +74,9 @@
             }
         }
         <span class="tk-k">return</span> r;
-    }</pre></div>
+    }
+</pre></div>
+    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>在<strong>无序</strong>数组里找任意一个「严格大于左右邻居」的峰值索引，且外侧视为 -∞，要求 <code>O(log n)</code>。</li><li>朴素线性扫描是 <code>O(n)</code>，不满足要求 → 必须二分。</li><li>关键性质：<code>nums[mid] &lt; nums[mid+1]</code>（上坡）时，沿上升方向走一定能到达某个峰（因为数组右端外侧是 -∞，爬坡不可能永远上升）；<code>nums[mid] &gt; nums[mid+1]</code>（下坡）时，峰在左侧（含 mid）。二分就是反复用这条「局部趋势」决定收缩方向。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li><code>l=0, r=n-1</code>，<code>while (l &lt; r)</code>，<code>mid = l + (r-l)/2</code>。</li><li>判断顺序：</li></ul><ol><li><code>mid==0</code>：<code>nums[0] &gt; nums[1]</code> 则 0 是峰返回；否则 <code>l=mid+1</code>（0 不是峰，峰必在右半）。</li><li><code>mid==n-1</code>：<code>nums[n-1] &gt; nums[n-2]</code> 则返回；否则 <code>r=mid-1</code>。</li><li>中间且 <code>nums[mid]</code> 严格大于两邻居 → 直接返回 mid。</li><li>其余（mid 非峰）：<code>nums[mid] &gt; nums[mid+1]</code> 下坡 → <code>r=mid-1</code>；否则上坡 → <code>l=mid+1</code>。</li></ol><ul><li>端点特判里非峰时必须<strong>推进指针</strong>（<code>l=mid+1</code> / <code>r=mid-1</code>），否则 l/r 不变会死循环——这是初版代码的死循环根因，已修正。</li><li>方向依据必须是 <code>nums[mid]</code> 与<strong>相邻元素</strong> <code>nums[mid+1]</code> 比较（局部趋势），不能用与区间远端 <code>nums[r]</code> 比较——初版用后者导致示例 1 返回 0，已修正。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>单元素：直接返回 0（两侧 -∞）。</li><li>单调递增：峰在末尾；单调递减：峰在开头——由外侧 -∞ 保证。</li><li>两元素：递增返回 1、递减返回 0。</li><li>int 上下限：<code>[MIN, MAX]</code> 峰在 1、<code>[MAX, MIN]</code> 峰在 0，比较运算无溢出风险。</li><li>相邻元素互不相等（题目约束），无需处理相等。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每轮区间减半，<code>O(log n)</code>；只用 3 个指针变量，<code>O(1)</code>。</li><li>最优性：无序数组中峰值位置无法在 <code>o(log n)</code> 次比较内确定（对抗性论证：任何算法都必须排除掉约一半的候选才能保证找到峰），<code>Ω(log n)</code> 为下界，本解法达到。</li></ul><p><strong>⑤ 具体 case 推演：示例 1 <code>[1,2,3,1]</code>（期望 2）</strong></p><div class="table-wrap"><table><thead><tr><th>轮</th><th>l</th><th>r</th><th>mid</th><th>判断</th><th>动作</th></tr></thead><tbody><tr><td>1</td><td>0</td><td>3</td><td>1</td><td>非端点；<code>nums[1]=2</code> 不严格大于两邻居；<code>2 &gt; nums[2]=3</code> 否（上坡）</td><td><code>l=mid+1=2</code></td></tr><tr><td>2</td><td>2</td><td>3</td><td>2</td><td>非端点；<code>nums[2]=3 &gt; nums[1]=2 &amp;&amp; &gt; nums[3]=1</code> → 峰</td><td><code>return 2</code> ✓</td></tr></tbody></table></div><ul><li>第 1 轮若不看局部趋势而看 <code>nums[mid] &gt; nums[r]</code>（<code>2 &gt; nums[3]=1</code> 真）会错误 <code>r=0</code> 返回 0——正是初版 bug。</li></ul><p><strong>⑥ 具体 case 推演：两元素 <code>[1,2]</code>（期望 1）</strong></p><ul><li><code>l=0, r=1, mid=0</code>；<code>mid==0</code> 分支：<code>nums[0]=1 &gt; nums[1]=2</code> 否 → <code>l=mid+1=1</code>。</li><li><code>l=1, r=1</code> → <code>while</code> 退出 → <code>return r=1</code> ✓。</li><li>若 <code>mid==0</code> 分支非峰时不推进（初版无 <code>l=mid+1</code>），<code>l=0,r=1</code> 永远不变 → 死循环——这是初版本地测试卡死的根因。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>峰值二分方向依据错：用 nums[mid] 与区间右端点 nums[r] 比较决定收缩方向，丢失局部趋势信息，上坡段被错误丢到左半；应比较 nums[mid] 与相邻元素 nums[mid+1]，邻居更大则峰在右半、更小则峰在左半含 mid</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>二分端点特判无 else 推进：mid 落在 0 或 n-1 且该位置非峰时，if 分支成立但内部不 return，else 链被整体跳过，l/r 都不更新导致死循环；端点非峰时也必须收缩搜索区间，或让端点走统一方向判断避免特判</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>76/76 用例。</p></div></div></div></section>
