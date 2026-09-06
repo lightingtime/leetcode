@@ -22,19 +22,37 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-21",
+      "date": "2026-09-06",
       "verdict": "Accepted",
-      "testcases": "21/21",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 101024000,
+      "memory_bytes": 100868000,
       "approach": "HashMap + ArrayList（换位删除）",
-      "time_complexity": "O(1)",
+      "time_complexity": "O(1) 均摊",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "ArrayList 提供 O(1) 随机下标，HashMap<val,index> 提供 O(1) 定位；删除时把末尾元素换到被删位置再删末尾，并同步更新被换元素的下标；三个方法均摊 O(1)，本地两轮修正后一次提交 AC"
+      "notes": "① 与上一轮对比：与一刷同写法（HashMap<val,下标> + ArrayList 换位删除）；本轮先误用 LinkedList——get/set/getRandom 按下标访问是 O(n)，破坏题目 O(1) 硬性要求，经提示换成 ArrayList 后 21/21 AC；复杂度仍均摊 O(1)/O(n)，内存 100,868 KB 与一刷 101,024 KB 基本持平。② 为什么没完全独立想起：主结构（map 存下标 + 末尾换位删除）记住了，但没把『容器选型』当成 O(1) 承诺的一部分；暴露了对 ArrayList 随机访问 O(1) vs LinkedList 链表 O(n) 的底层差异没内化。一刷未踩此坑（直接用 ArrayList），属本轮新暴露的薄弱点。③ 判定：最终一次提交即 Accepted，但数据结构选型经提示修正，记较弱。④ 下一步提醒：下次复习先答『为什么必须 ArrayList 而非 LinkedList』再写码；可顺带复习 381（允许重复的 O(1) 结构，用 HashMap<val, HashSet<下标>>）。",
+      "code": "static class RandomizedSet {\n        List<Integer> nums;\n        Map<Integer, Integer> indices;\n        Random random;\n        public RandomizedSet() {\n            nums = new ArrayList<>();\n            indices = new HashMap<>();\n            random = new Random();\n        }\n        public boolean insert(int val) {\n            if (indices.containsKey(val)) {\n                return false;\n            }\n            indices.put(val, nums.size());\n            nums.add(val);\n            return true;\n        }\n        public boolean remove(int val) {\n            if (!indices.containsKey(val)) {\n                return false;\n            }\n            int index = indices.get(val);\n            int lastVal = nums.get(nums.size() - 1);\n            nums.set(index, lastVal);\n            indices.put(lastVal, index);\n            nums.remove(nums.size() - 1);\n            indices.remove(val);\n            return true;\n        }\n        public int getRandom() {\n            return nums.get(random.nextInt(nums.size()));\n        }\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
   "hints": [
     "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "HashMap + ArrayList（换位删除）",
+      "time_complexity": "O(1) 均摊",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与一刷同写法（HashMap<val,下标> + ArrayList 换位删除）；本轮先误用 LinkedList——get/set/getRandom 按下标访问是 O(n)，破坏题目 O(1) 硬性要求，经提示换成 ArrayList 后 21/21 AC；复杂度仍均摊 O(1)/O(n)，内存 100,868 KB 与一刷 101,024 KB 基本持平。② 为什么没完全独立想起：主结构（map 存下标 + 末尾换位删除）记住了，但没把『容器选型』当成 O(1) 承诺的一部分；暴露了对 ArrayList 随机访问 O(1) vs LinkedList 链表 O(n) 的底层差异没内化。一刷未踩此坑（直接用 ArrayList），属本轮新暴露的薄弱点。③ 判定：最终一次提交即 Accepted，但数据结构选型经提示修正，记较弱。④ 下一步提醒：下次复习先答『为什么必须 ArrayList 而非 LinkedList』再写码；可顺带复习 381（允许重复的 O(1) 结构，用 HashMap<val, HashSet<下标>>）。"
+    }
   ]
 }

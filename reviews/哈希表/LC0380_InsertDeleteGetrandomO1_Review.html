@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-21</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>380. O(1) 时间插入、删除和获取随机元素 (Insert Delete GetRandom O(1))</h1><p>&gt; <a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/" rel="noopener">https://leetcode.cn/problems/insert-delete-getrandom-o1/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：设计、数组、哈希表、数学、随机化</p><h2>题目描述</h2><p>实现RandomizedSet 类：</p><p>RandomizedSet() 初始化 RandomizedSet 对象</p><p>bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。</p><p>bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。</p><p>int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。</p><p>你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。</p><p>示例：</p><p>输入</p><p>["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]</p><p>[[], [1], [2], [2], [], [1], [2], []]</p><p>输出</p><p>[null, true, false, true, 2, true, false, 2]</p><p>解释</p><p>RandomizedSet randomizedSet = new RandomizedSet();</p><p>randomizedSet.insert(1); // 向集合中插入 1 。返回 true 表示 1 被成功地插入。</p><p>randomizedSet.remove(2); // 返回 false ，表示集合中不存在 2 。</p><p>randomizedSet.insert(2); // 向集合中插入 2 。返回 true 。集合现在包含 [1,2] 。</p><p>randomizedSet.getRandom(); // getRandom 应随机返回 1 或 2 。</p><p>randomizedSet.remove(1); // 从集合中移除 1 ，返回 true 。集合现在包含 [2] 。</p><p>randomizedSet.insert(2); // 2 已在集合中，所以返回 false 。</p><p>randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom 总是返回 2 。</p><p>提示：</p><p>-231 31 - 1</p><p>最多调用 insert、remove 和 getRandom 函数 2 * 105 次</p><p>在调用 getRandom 方法时，数据结构中 至少存在一个 元素。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ HashMap + ArrayList（换位删除） ｜ O(1) 均摊 · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：与一刷同写法（HashMap&lt;val,下标&gt; + ArrayList 换位删除）；本轮先误用 LinkedList——get/set/getRandom 按下标访问是 O(n)，破坏题目 O(1) 硬性要求，经提示换成 ArrayList 后 21/21 AC；复杂度仍均摊 O(1)/O(n)，内存 100,868 KB 与一刷 101,024 KB 基本持平。② 为什么没完全独立想起：主结构（map 存下标 + 末尾换位删除）记住了，但没把『容器选型』当成 O(1) 承诺的一部分；暴露了对 ArrayList 随机访问 O(1) vs LinkedList 链表 O(n) 的底层差异没内化。一刷未踩此坑（直接用 ArrayList），属本轮新暴露的薄弱点。③ 判定：最终一次提交即 Accepted，但数据结构选型经提示修正，记较弱。④ 下一步提醒：下次复习先答『为什么必须 ArrayList 而非 LinkedList』再写码；可顺带复习 381（允许重复的 O(1) 结构，用 HashMap&lt;val, HashSet&lt;下标&gt;&gt;）。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(1) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>HashMap + ArrayList（换位删除）</b></li>
+        <li><span>复杂度</span><b>O(1) 均摊 · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap + ArrayList（换位删除）</h3>
-    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.3 MB</span><span class="chip">用例 21/21</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0380_InsertDeleteGetrandomO1.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">RandomizedSet</span> {
+    <p><span class="chip">时间 O(1) 均摊</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.2 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0380_InsertDeleteGetrandomO1.java · HashMap + ArrayList（换位删除）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">RandomizedSet</span> {
         <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; nums;
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; indices;
         <span class="tk-t">Random</span> random;
@@ -69,7 +80,9 @@
         <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">getRandom</span>() {
             <span class="tk-k">return</span> nums.<span class="tk-f">get</span>(random.<span class="tk-f">nextInt</span>(nums.<span class="tk-f">size</span>()));
         }
-    }</pre></div>
+    }
+</pre></div>
+    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：设计一个集合，支持 O(1) 均摊的插入、删除、随机等概率取值。难点在于三个约束同时成立：哈希表能 O(1) 插删但无法按下标随机；数组能 O(1) 随机但删除中间元素是 O(n)；需要两者配合。</p><p>解法选择理由（HashMap + ArrayList）：</p><ul><li>getRandom 要 O(1) 且等概率 → 必须能按下标 O(1) 随机访问 → ArrayList，random.nextInt(size) 取下标。</li><li>insert/remove 要 O(1) → HashMap&lt;val, index&gt; 记录每个值在数组中的下标，O(1) 定位。</li><li>数组删除中间元素 O(n) 的问题用「换位删除」解决：把最后一个元素复制到被删位置，再删末尾——删除变成 O(1)。</li><li>关键不变量：数组元素与 map 中「值 → 下标」始终一致，任何移动都必须同步更新 map。</li></ul><p>关键设计决策：</p><ol><li>insert：先查 map 是否已有（有则 false）；没有则 indices.put(val, nums.size())，再 nums.add(val)。</li><li>remove：先查 map（没有则 false）；拿到 index；把 nums 最后一个元素 lastVal 换到 index（nums.set(index, lastVal)）；<strong>必须 indices.put(lastVal, index) 同步 lastVal 的新下标</strong>；再删末尾 nums.remove(size-1)；最后 indices.remove(val)。</li><li>getRandom：nums.get(random.nextInt(nums.size()))，每个下标等概率 → 每个元素等概率。</li><li>顺序细节：先 put(lastVal, index) 再 remove(val)，保证 map 始终准确；若 lastVal==val（删的就是最后一个），put 后 remove 会清掉，结果一致。</li></ol><p>具体 case 推演：</p><p>边界6（换位后删除）：insert(1), insert(2), insert(3), remove(1), remove(3)</p><div class="table-wrap"><table><thead><tr><th>操作</th><th>nums</th><th>indices</th></tr></thead><tbody><tr><td>insert(1)</td><td>[1]</td><td>{1:0}</td></tr><tr><td>insert(2)</td><td>[1,2]</td><td>{1:0, 2:1}</td></tr><tr><td>insert(3)</td><td>[1,2,3]</td><td>{1:0, 2:1, 3:2}</td></tr><tr><td>remove(1)：index=0，lastVal=3</td><td>nums[0]=3 → [3,2]</td><td>put(3,0) → {2:1, 3:0}，remove(1) → {2:1, 3:0}</td></tr><tr><td>remove(3)：index=0，lastVal=2</td><td>nums[0]=2 → [2]</td><td>put(2,0) → {2:0}，remove(3) → {2:0}</td></tr><tr><td>getRandom</td><td>2</td><td>✓</td></tr></tbody></table></div><p>如果漏掉 put(lastVal, index)：remove(1) 后 map 仍是 {3:2}，remove(3) 时 nums.get(2) 越界——这就是本地边界6 抓到的隐藏 bug。</p><p>示例：insert(1) true → remove(2) false → insert(2) true → getRandom ∈ {1,2} → remove(1) true（2 换到下标 0）→ insert(2) false → getRandom == 2 ✓</p><p>边界与细节：</p><ul><li>重复 insert / 不存在的 remove 都先查 map，返回 false。</li><li>删除最后一个元素：lastVal==val，put 再 remove 无害。</li><li>删除后集合变空再 insert：nums.size() 作为新下标，正确。</li><li>int 端点值 MIN/MAX 都能作 key。</li><li>2×10^5 次调用：ArrayList/HashMap 均摊 O(1)，无性能问题。</li></ul><p>复杂度分析：</p><ul><li>时间 O(1) 均摊：insert/remove 各常数次 map/数组操作（HashMap 均摊 O(1)），getRandom O(1)。</li><li>空间 O(n)：ArrayList + HashMap 各存 n 个元素。</li><li>最优性：信息论上随机访问需要数组、定位需要哈希，两者结合是标准最优结构；无法低于 O(1) 均摊。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>21/21 用例。</p></div></div></div></section>

@@ -2,50 +2,52 @@
 // LeetCode 380. O(1) 时间插入、删除和获取随机元素 (Insert Delete GetRandom O(1))
 // 难度：Medium | 分类：哈希表
 // 链接：https://leetcode.cn/problems/insert-delete-getrandom-o1/
-// 刷题日期：2026-08-21
-//
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-21）
+// 一刷思路：HashMap<val, 下标> + ArrayList（换位删除）——list 给 O(1) 随机下标，map 给 O(1) 定位；
+// 删除时把末尾元素换到被删位置再删末尾，并同步被换元素的下标；三操作均摊 O(1)
+// 一刷复杂度：时间均摊 O(1)，空间 O(n)
+// 测试用例与一刷归档保持一致
 // ============================================================
 
 import java.util.*;
 
 public class LC0380_InsertDeleteGetrandomO1 {
 
-    // 设计题：力扣模板类名为 RandomizedSet，提交脚本会把 static class 解包为顶层类。
+    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 RandomizedSet 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class RandomizedSet {
-        List<Integer> nums;
-        Map<Integer, Integer> indices;
+        Map<Integer, Integer> map;
+        List<Integer> list;
         Random random;
         public RandomizedSet() {
-            nums = new ArrayList<>();
-            indices = new HashMap<>();
+            map = new HashMap<>();
+            list = new ArrayList<>();
             random = new Random();
         }
         public boolean insert(int val) {
-            if (indices.containsKey(val)) {
+            if (map.containsKey(val)) {
                 return false;
             }
-            indices.put(val, nums.size());
-            nums.add(val);
+            list.add(val);
+            map.put(val, list.size() - 1);
             return true;
         }
         public boolean remove(int val) {
-            if (!indices.containsKey(val)) {
+            if (!map.containsKey(val)) {
                 return false;
             }
-            int index = indices.get(val);
-            int lastVal = nums.get(nums.size() - 1);
-            nums.set(index, lastVal);
-            indices.put(lastVal, index);
-            nums.remove(nums.size() - 1);
-            indices.remove(val);
+            int index = map.get(val);
+            int value = list.get(list.size() - 1);
+            map.put(value, index);
+            list.set(index, value);
+            list.remove(list.size() - 1);
+            map.remove(val);
             return true;
         }
         public int getRandom() {
-            return nums.get(random.nextInt(nums.size()));
+            return list.get(random.nextInt(list.size()));
         }
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -148,5 +150,4 @@ public class LC0380_InsertDeleteGetrandomO1 {
         }
         System.out.println("全部测试通过");
     }
-
 }
