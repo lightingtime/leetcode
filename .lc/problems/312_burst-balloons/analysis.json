@@ -35,19 +35,37 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-20",
+      "date": "2026-09-06",
       "verdict": "Accepted",
-      "testcases": "73/73",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 44744000,
+      "memory_bytes": 44732000,
       "approach": "区间 DP",
       "time_complexity": "O(n^3)",
       "space_complexity": "O(n^2)",
       "optimal": true,
-      "notes": "区间 DP：补 1 哨兵 + dp[i][j] 开区间最后戳 k 切分，按区间长度从小到大填表；O(n^3)/O(n^2)，修 3 处后 Accepted"
+      "notes": "① 与上一轮对比：思路与一刷一致（开区间 dp[i][j] + 两端补 1 哨兵 + 枚举最后戳的 k），写法仅把 array[n+1]、len<=n+1 写成 array[array.length-1]、len<array.length 的等价形式；复杂度仍 O(n^3)/O(n^2)，内存 44,732 KB 与一刷 44,744 KB 基本持平。② 为什么没完全独立想起：卡在「len 为什么从 2 开始」——对『开区间里 len=1 是空区间恒 0、len=2 是最小可算单位』这层地基没完全内化，讲解后补上了；一刷踩过的错（修 3 处才 AC）这次没有重犯。③ 掌握度判定：一次提交即 Accepted，但提交前就核心结构探讨过，记较弱。④ 下一步提醒：薄弱点集中在填表起点/地基论证，下次复习要求先不看代码讲清 dp 开区间定义与 len=1→2 的理由再写；可顺带复习同类区间 DP（5 最长回文子串、10 正则匹配）。",
+      "code": "public int maxCoins(int[] nums) {\n        int n = nums.length;\n        int[][] dp = new int[n + 2][n + 2];\n        int[] array = new int[n + 2];\n        System.arraycopy(nums, 0, array, 1, nums.length);\n        array[0] = array[n + 1] = 1;\n        for (int len = 2; len <= n + 1; len++) {\n            for (int i = 0; i + len <= n + 1; i++) {\n                int j = i + len;\n                for (int k = i + 1; k < j; k++) {\n                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);\n                }\n            }\n        }\n        return dp[0][n+ 1];\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "区间 DP",
+      "time_complexity": "O(n^3)",
+      "space_complexity": "O(n^2)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：思路与一刷一致（开区间 dp[i][j] + 两端补 1 哨兵 + 枚举最后戳的 k），写法仅把 array[n+1]、len<=n+1 写成 array[array.length-1]、len<array.length 的等价形式；复杂度仍 O(n^3)/O(n^2)，内存 44,732 KB 与一刷 44,744 KB 基本持平。② 为什么没完全独立想起：卡在「len 为什么从 2 开始」——对『开区间里 len=1 是空区间恒 0、len=2 是最小可算单位』这层地基没完全内化，讲解后补上了；一刷踩过的错（修 3 处才 AC）这次没有重犯。③ 掌握度判定：一次提交即 Accepted，但提交前就核心结构探讨过，记较弱。④ 下一步提醒：薄弱点集中在填表起点/地基论证，下次复习要求先不看代码讲清 dp 开区间定义与 len=1→2 的理由再写；可顺带复习同类区间 DP（5 最长回文子串、10 正则匹配）。"
+    }
   ]
 }

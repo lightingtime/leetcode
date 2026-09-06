@@ -2,30 +2,31 @@
 // LeetCode 312. 戳气球 (Burst Balloons)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/burst-balloons/
-// 刷题日期：2026-08-20
-//
-// 思路：区间 DP（dp[i][j] 戳破开区间 (i,j) 内气球的最大硬币，端点当边界不戳），两端补 1 哨兵；枚举最后戳的 k，按区间长度从小到大填表。
-// 复杂度：时间 O(n^3)，空间 O(n^2)
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-20）
+// 一刷思路：区间 DP（dp[i][j] 戳破开区间 (i,j) 内气球的最大硬币，端点当边界不戳），两端补 1 哨兵；枚举最后戳的 k，按区间长度从小到大填表。
+// 一刷复杂度：时间 O(n^3)，空间 O(n^2)
+// 测试用例与一刷归档保持一致
 // ============================================================
+
+import java.util.*;
 
 public class LC0312_BurstBalloons {
 
     // ==== 提交代码开始 ====
     public int maxCoins(int[] nums) {
-        int n = nums.length;
-        int[][] dp = new int[n + 2][n + 2];
-        int[] array = new int[n + 2];
+        int[] array = new int[nums.length + 2];
         System.arraycopy(nums, 0, array, 1, nums.length);
-        array[0] = array[n + 1] = 1;
-        for (int len = 2; len <= n + 1; len++) {
-            for (int i = 0; i + len <= n + 1; i++) {
+        array[0] = array[array.length - 1] = 1;
+        int[][] dp = new int[array.length][array.length];
+        for (int len = 2; len < array.length; len++) {
+            for (int i = 0; i + len < array.length; i++) {
                 int j = i + len;
                 for (int k = i + 1; k < j; k++) {
                     dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);
                 }
             }
         }
-        return dp[0][n+ 1];
+        return dp[0][array.length - 1];
     }
     // ==== 提交代码结束 ====
 
