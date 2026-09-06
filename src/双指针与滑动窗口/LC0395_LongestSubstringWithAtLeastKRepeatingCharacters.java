@@ -2,40 +2,45 @@
 // LeetCode 395. 至少有 K 个重复字符的最长子串 (Longest Substring with At Least K Repeating Characters)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/
-// 刷题日期：2026-08-22
-//
-// 思路：分治 —— 统计当前区间频次，找到第一个出现次数 < k 的字符（墙），它不可能在合法子串中；跳过连续墙后对墙左边与右边分别递归，取最大。
-// 复杂度：时间 O(n^2) 最坏（每层最多 2 个互不重叠子问题），空间 O(n) 递归栈
+// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-22）
+// 一刷思路：分治 —— 统计当前区间频次，找到第一个出现次数 < k 的字符（墙），它不可能在合法子串中；跳过连续墙后对墙左、右分别递归取最大
+// 一刷复杂度：时间 O(n^2) 最坏，空间 O(n) 递归栈
+// 测试用例与一刷归档保持一致
 // ============================================================
 
+import java.util.*;
 
 public class LC0395_LongestSubstringWithAtLeastKRepeatingCharacters {
 
     // ==== 提交代码开始 ====
     public int longestSubstring(String s, int k) {
-        return dfs(s.toCharArray(), 0, s.length(), k);
+        return dfs(s, 0, s.length() - 1, k);
     }
 
-    private int dfs(char[] ch, int start, int end, int k) {
-        if (end - start < k) {
+    private int dfs(String s, int l, int r, int k) {
+        if (l > r) {
             return 0;
         }
         int[] count = new int[26];
-        for (int i = start; i < end; i++) {
-            count[ch[i] - 'a']++;
+        for (int i = l; i <= r; i++) {
+            count[s.charAt(i) - 'a']++;
         }
-        for (int i = start; i < end; i++) {
-            if (count[ch[i] - 'a'] < k) {
-                int j = i + 1;
-                while (j < end && count[ch[j] - 'a'] < k) {
-                    j++;
-                }
-                return Math.max(dfs(ch, start, i, k), dfs(ch, j, end, k));
+        int p = -1;
+        for (int i = l; i <= r; i++) {
+            if (count[s.charAt(i) - 'a'] < k) {
+                p = i;
+                break;
             }
         }
-        return end - start;
+        if (p == -1) {
+            return r - l + 1;
+        }
+        int q = p;
+        while (q <= r && count[s.charAt(q) - 'a'] < k) {
+            q++;
+        }
+        return Math.max(dfs(s, l, p - 1, k), dfs(s, q, r, k));
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

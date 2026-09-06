@@ -1308,7 +1308,7 @@
       "category": "双指针与滑动窗口",
       "date": "2026-08-22",
       "firstPass": true,
-      "optimal": false,
+      "optimal": true,
       "notes": ""
     },
     {

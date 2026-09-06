@@ -18,14 +18,18 @@
     <span class="badge tag">分类 双指针与滑动窗口</span>
     
     <span class="badge plain">一次通过</span>
-    <span class="badge plain">已满足题意·可进阶</span>
+    <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-22</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>395. 至少有 K 个重复字符的最长子串 (Longest Substring with At Least K Repeating Characters)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/" rel="noopener">https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、字符串、分治、滑动窗口</p><h2>题目描述</h2><p>给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。</p><p>如果不存在这样的子字符串，则返回 0。</p><p>示例 1：</p><p>输入：s = "aaabb", k = 3</p><p>输出：3</p><p>解释：最长子串为 "aaa" ，其中 'a' 重复了 3 次。</p><p>示例 2：</p><p>输入：s = "ababbc", k = 2</p><p>输出：5</p><p>解释：最长子串为 "ababb" ，其中 'a' 重复了 2 次， 'b' 重复了 3 次。</p><p>提示：</p><p>1 4</p><p>s 仅由小写英文字母组成</p><p>1 5</p><h2>示例</h2><ol><li>输入：s = "aaabb"，k = 3</li></ol><p>输出：3</p><p>解释：最长子串为 "aaa" ，其中 'a' 重复了 3 次。</p><ol><li>输入：s = "ababbc"，k = 2</li></ol><p>输出：5</p><p>解释：最长子串为 "ababb" ，其中 'a' 重复了 2 次， 'b' 重复了 3 次。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 分治（第一堵墙切左右+跳过连续墙） ｜ O(n^2) 最坏 · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：与一刷同写法（分治：统计区间频次 → 找第一个出现 &lt;k 的墙字符 → 跳过连续墙 → 对墙左、右递归取 max）；复杂度 O(n²) 最坏 / O(n) 递归栈，内存 43,208 KB。</p><p>② 为什么没想起来 / 出错过程：思路全忘，经「墙 = 整区间都凑不齐 k 次的字符不可能进任何合法子串」分块引导重建（示例 ababbc 中 c=1 是墙 → 切出 ababb=5）。写码时犯一个具体错误：频次表 count[26] 用「位置 i」当下标（count[i]）而非字符（count[s.charAt(i)-'a']）——≤26 长串把空槽 0 全当墙、&gt;26 长串直接越界，示例1 期望 3 实际 0；经分析定位第 31/40 行后改正。</p><p>③ 掌握度判定：力扣一次提交即 Accepted，但思路经引导重建 + 下标 bug 经分析修正，记较弱。</p><p>④ 下一步提醒：下次复习先口头讲清「&lt;k 字符为何是墙、切分为何不丢解」再写；易错点记住「频次表下标 = 字符编号，不是位置」；可补充了解枚举字符种类数 1..26 次滑动窗口的 O(26n) 替代写法作对比。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(n^2) 最坏 · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>分治（第一堵墙切左右+跳过连续墙）</b></li>
+        <li><span>复杂度</span><b>O(n^2) 最坏 · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 分治（第一堵墙切左右+跳过连续墙）</h3>
-    <p><span class="chip">时间 O(n^2) 最坏</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 38/38</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0395_LongestSubstringWithAtLeastKRepeatingCharacters.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestSubstring</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> k) {
+    <p><span class="chip">时间 O(n^2) 最坏</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0395_LongestSubstringWithAtLeastKRepeatingCharacters.java · 分治（第一堵墙切左右+跳过连续墙）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestSubstring</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> k) {
         <span class="tk-k">return</span> <span class="tk-f">dfs</span>(s.<span class="tk-f">toCharArray</span>(), <span class="tk-n">0</span>, s.<span class="tk-f">length</span>(), k);
     }
 
@@ -59,7 +70,9 @@
             }
         }
         <span class="tk-k">return</span> end - start;
-    }</pre></div>
+    }
+</pre></div>
+    
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择</strong></p><ul><li>找最长子串，使其中<strong>每个字符出现次数 ≥ k</strong>。</li><li>关键观察：若某字符在当前串（区间）中总出现次数 &lt; k，它不可能出现在任何合法子串里 → 它把区间切成若干互不相交的段，原问题变成子段上的同构子问题 → <strong>分治</strong>。</li><li>分治写法直观、可接受；本题更优做法是「按窗口内不同字符数枚举的滑动窗口」，时间复杂度 O(26n)。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li><code>dfs(ch, start, end, k)</code>：处理 <code>s[start..end)</code>，返回该区间内满足条件的最长合法子串长度。</li><li>每次进入先统计区间频次 <code>count[26]</code>。</li><li>找到<strong>第一个</strong>频次 &lt; k 的字符（墙）；用 <code>j</code> <strong>跳过连续墙</strong>，保证左右子区间都不含墙。</li><li>返回 <code>max(dfs(start, i), dfs(j, end))</code>——只切这一刀，避免对每个墙都递归导致指数膨胀（之前版本的教训）。</li><li>区间内无墙 → 整段合法 → 返回 <code>end - start</code>。</li><li>剪枝：<code>end - start &lt; k</code> → 0。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li><code>k &gt; s.length</code>：<code>end-start &lt; k</code> 直接返回 0。</li><li>无墙（所有字符全局 ≥ k）：整串合法，返回串长。</li><li>墙在开头/结尾：左/右子区间为空，递归返回 0。</li><li>连续墙：<code>while</code> 跳过，避免把墙段传进递归。</li><li>最后一个墙之后的段由「右递归」覆盖（这正是上一版漏掉、后被边界 11/12 抓住的洞）。</li></ul><p><strong>④ 复杂度与最优性</strong></p><ul><li>每层最多 2 个<strong>互不重叠</strong>的子问题；最坏 O(n²)（斜切形态），一般接近 O(n log n)；空间 O(n) 递归栈。</li><li>更优方向：枚举窗口内不同字符数 <code>t=1..26</code>，对每个 <code>t</code> 用滑动窗口找「恰好 t 种不同字符且每种 ≥ k」的最长窗口，总 O(26n)。当前实现不是时间最优（最优性标为否）。</li></ul><p><strong>⑤ 具体 case 推演：<code>s="baaac"</code>、<code>k=3</code></strong></p><ul><li><code>dfs(0,5)</code>：统计 <code>b=1, a=3, c=1</code>。第一个墙在 <code>i=0</code>（<code>b</code> 出现 1 &lt; 3），<code>j</code> 到 1（<code>a</code> 非墙）。</li><li>返回 <code>max(dfs(0,0), dfs(1,5))</code>。</li><li><code>dfs(1,5)="aaac"</code>：统计 <code>a=3, c=1</code>。墙在 <code>i=4</code>（<code>c</code>），<code>j=5</code>。</li><li>返回 <code>max(dfs(1,4), dfs(5,5))</code>；<code>dfs(1,4)="aaa"</code> 无墙 → 3；<code>dfs(5,5)</code> 空 → 0。</li><li>答案 3 ✓（<code>"aaa"</code> 段在墙 <code>b</code> 与 <code>c</code> 之间，由左右递归覆盖）。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>切分法段内验证缺失：按全局频次&lt;k 的字符切分后，直接拿两切点间原始长度当答案，没对每段重新统计并验证段内每个字符都&gt;=k（全局够、段内可能不够），导致把非法段长度计入；且无切分点（所有字符全局&gt;=k）时漏掉整串合法的情况</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>38/38 用例一次通过。</p></div></div></div></section>
@@ -74,12 +87,12 @@
     </div>
     <div class="card">
       <h3>算法判定</h3>
-      <p>思路满足题意，但存在进阶最优写法（见复盘备注），可在复习轮重写。</p>
+      <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
       <h3>错误习惯复盘</h3><p><b>切分法段内验证缺失：按全局频次&lt;k 的字符切分后，直接拿两切点间原始长度当答案，没对每段重新统计并验证段内每个字符都&gt;=k（全局够、段内可能不够），导致把非法段长度计入；且无切分点（所有字符全局&gt;=k）时漏掉整串合法的情况</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
-      <p><span class="chip">seq 119 · longest-substring-with-at-least-k-repeating-characters</span><span class="chip">firstPass: true</span><span class="chip">optimal: false</span></p>
+      <p><span class="chip">seq 119 · longest-substring-with-at-least-k-repeating-characters</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote"></div>
     </div>
   </section>

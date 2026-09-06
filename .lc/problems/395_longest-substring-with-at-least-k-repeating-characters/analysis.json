@@ -35,19 +35,37 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-22",
+      "date": "2026-09-06",
       "verdict": "Accepted",
-      "testcases": "38/38",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 43284000,
+      "memory_bytes": 43208000,
       "approach": "分治（第一堵墙切左右+跳过连续墙）",
       "time_complexity": "O(n^2) 最坏",
       "space_complexity": "O(n)",
-      "optimal": false,
-      "notes": ""
+      "optimal": true,
+      "notes": "① 与上一轮对比：与一刷同写法（分治：统计区间频次 → 找第一个出现 <k 的墙字符 → 跳过连续墙 → 对墙左、右递归取 max）；复杂度 O(n²) 最坏 / O(n) 递归栈，内存 43,208 KB。\n\n② 为什么没想起来 / 出错过程：思路全忘，经「墙 = 整区间都凑不齐 k 次的字符不可能进任何合法子串」分块引导重建（示例 ababbc 中 c=1 是墙 → 切出 ababb=5）。写码时犯一个具体错误：频次表 count[26] 用「位置 i」当下标（count[i]）而非字符（count[s.charAt(i)-'a']）——≤26 长串把空槽 0 全当墙、>26 长串直接越界，示例1 期望 3 实际 0；经分析定位第 31/40 行后改正。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但思路经引导重建 + 下标 bug 经分析修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲清「<k 字符为何是墙、切分为何不丢解」再写；易错点记住「频次表下标 = 字符编号，不是位置」；可补充了解枚举字符种类数 1..26 次滑动窗口的 O(26n) 替代写法作对比。",
+      "code": "public int longestSubstring(String s, int k) {\n        return dfs(s.toCharArray(), 0, s.length(), k);\n    }\n\n    private int dfs(char[] ch, int start, int end, int k) {\n        if (end - start < k) {\n            return 0;\n        }\n        int[] count = new int[26];\n        for (int i = start; i < end; i++) {\n            count[ch[i] - 'a']++;\n        }\n        for (int i = start; i < end; i++) {\n            if (count[ch[i] - 'a'] < k) {\n                int j = i + 1;\n                while (j < end && count[ch[j] - 'a'] < k) {\n                    j++;\n                }\n                return Math.max(dfs(ch, start, i, k), dfs(ch, j, end, k));\n            }\n        }\n        return end - start;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "分治（第一堵墙切左右+跳过连续墙）",
+      "time_complexity": "O(n^2) 最坏",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与一刷同写法（分治：统计区间频次 → 找第一个出现 <k 的墙字符 → 跳过连续墙 → 对墙左、右递归取 max）；复杂度 O(n²) 最坏 / O(n) 递归栈，内存 43,208 KB。\n\n② 为什么没想起来 / 出错过程：思路全忘，经「墙 = 整区间都凑不齐 k 次的字符不可能进任何合法子串」分块引导重建（示例 ababbc 中 c=1 是墙 → 切出 ababb=5）。写码时犯一个具体错误：频次表 count[26] 用「位置 i」当下标（count[i]）而非字符（count[s.charAt(i)-'a']）——≤26 长串把空槽 0 全当墙、>26 长串直接越界，示例1 期望 3 实际 0；经分析定位第 31/40 行后改正。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但思路经引导重建 + 下标 bug 经分析修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲清「<k 字符为何是墙、切分为何不丢解」再写；易错点记住「频次表下标 = 字符编号，不是位置」；可补充了解枚举字符种类数 1..26 次滑动窗口的 O(26n) 替代写法作对比。"
+    }
   ]
 }
