@@ -3292,6 +3292,17 @@
         "动态规划"
       ],
       "last_seen": "2026-09-06"
+    },
+    {
+      "habit": "溢出防护要与累加变量的符号设计配套：无符号幅值存 int 时到 2^31 就必须截断（正 2147483648 装不进 int，构造即回绕成负，后续预判全失效）；带符号 int 累加或 long 幅值则 -2^31 可表示",
+      "count": 1,
+      "examples": [
+        "string-to-integer-atoi"
+      ],
+      "categories": [
+        "字符串"
+      ],
+      "last_seen": "2026-09-06"
     }
   ],
   "category_hints": {
