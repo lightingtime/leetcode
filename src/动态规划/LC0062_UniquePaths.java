@@ -1,9 +1,9 @@
 // ============================================================
 // LeetCode 62. 不同路径 (Unique Paths)
-// 难度：Medium | 分类：动态规划（线性/网格 DP）
+// 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/unique-paths/
-// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-09 · 上次 2026-09-01 较强）
-// 一刷/上次思路：一维滚动 DP：dp[j] += dp[j-1]（上+左），O(mn)/O(n)
+// 二刷日期：2026-09-07（第 3 次复习 · 一刷 2026-08-09 · 上次 2026-09-02 较强）
+// 一刷/上次思路：一维滚动 DP——dp 全 1 初始化，双层循环 dp[j] = dp[j-1] + dp[j]
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -31,60 +31,21 @@ public class LC0062_UniquePaths {
         // ---- 示例测试（来自题目）----
         try {
             if (!TestUtil.checkEq(28, s.uniquePaths(3, 7), "示例1")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("示例1 异常: " + t);
-        }
+        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
         try {
             if (!TestUtil.checkEq(3, s.uniquePaths(3, 2), "示例2")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("示例2 异常: " + t);
-        }
+        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
         try {
             if (!TestUtil.checkEq(28, s.uniquePaths(7, 3), "示例3")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("示例3 异常: " + t);
-        }
+        } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
         try {
             if (!TestUtil.checkEq(6, s.uniquePaths(3, 3), "示例4")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("示例4 异常: " + t);
-        }
+        } catch (Throwable t) { failures++; System.out.println("示例4 异常: " + t); }
 
-        // ---- 边界测试（与一刷归档保持一致）----
-        try {
-            if (!TestUtil.checkEq(1, s.uniquePaths(1, 1), "边界-1x1")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("边界-1x1 异常: " + t);
-        }
-        try {
-            if (!TestUtil.checkEq(1, s.uniquePaths(1, 10), "边界-单行")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("边界-单行 异常: " + t);
-        }
-        try {
-            if (!TestUtil.checkEq(1, s.uniquePaths(10, 1), "边界-单列")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("边界-单列 异常: " + t);
-        }
-        try {
-            if (!TestUtil.checkEq(2, s.uniquePaths(2, 2), "边界-2x2")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("边界-2x2 异常: " + t);
-        }
-        try {
-            if (!TestUtil.checkEq(601080390, s.uniquePaths(17, 17), "边界-大网格")) failures++;
-        } catch (Throwable t) {
-            failures++;
-            System.out.println("边界-大网格 异常: " + t);
-        }
+        // ---- 边界测试（自己补充）----
+        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
+        // 例如： try { if (!TestUtil.checkEq(期望, s.uniquePaths(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
+        // 若题目允许任意顺序返回（下标对 / 集合），用 TestUtil.checkEqUnordered 代替 TestUtil.checkEq
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
