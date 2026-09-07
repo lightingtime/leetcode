@@ -2,8 +2,9 @@
 // LeetCode 138. 随机链表的复制 (Copy List with Random Pointer)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/copy-list-with-random-pointer/
-// 刷题日期：2026-08-24
-//
+// 二刷日期：2026-09-07（第 1 次复习 · 一刷 2026-08-24）
+// 一刷/上次思路：原地穿插三遍（复制节点插入原节点后 → 设 random → 拆开两链表）O(1) 空间
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -24,9 +25,10 @@ public class LC0138_CopyListWithRandomPointer {
     }
 
     // ==== 提交代码开始 ====
+
     public Node copyRandomList(Node head) {
         if (head == null) {
-            return head;
+            return null;
         }
         for (Node node = head; node != null; node = node.next.next) {
             Node nodeNew = new Node(node.val);
@@ -35,17 +37,12 @@ public class LC0138_CopyListWithRandomPointer {
         }
         for (Node node = head; node != null; node = node.next.next) {
             Node nodeNew = node.next;
-            // 这里注意是链接 原来 node 的 随机节点的next
-            // 因为此时的随机节点的next是我们创建出来的随机节点的copy
             nodeNew.random = node.random != null ? node.random.next : null;
         }
         Node newHead = head.next;
-        // 注意这里 node = node.next
         for (Node node = head; node != null; node = node.next) {
-            // 断开拷贝节点
             Node nodeNew = node.next;
             node.next = nodeNew.next;
-            // 同上面的用法，需要链接下一个节点的拷贝节点，就是 nodeNew.next(原节点的下一个节点).next(原节点下一个节点的拷贝节点)
             nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null;
         }
         return newHead;
