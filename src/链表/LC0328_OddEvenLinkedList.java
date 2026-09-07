@@ -2,8 +2,9 @@
 // LeetCode 328. 奇偶链表 (Odd Even Linked List)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/odd-even-linked-list/
-// 刷题日期：2026-08-24
-//
+// 二刷日期：2026-09-07（第 1 次复习 · 一刷 2026-08-24）
+// 一刷/上次思路：原地交替 odd/even 各跳 next.next，odd.next 接 evenHead（O(1) 空间）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -13,7 +14,7 @@ public class LC0328_OddEvenLinkedList {
     // ==== 提交代码开始 ====
     public ListNode oddEvenList(ListNode head) {
         if (head == null) {
-            return head;
+            return null;
         }
         ListNode evenHead = head.next;
         ListNode odd = head, even = evenHead;
