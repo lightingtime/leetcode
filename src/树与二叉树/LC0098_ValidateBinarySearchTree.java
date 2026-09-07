@@ -2,7 +2,7 @@
 // LeetCode 98. 验证二叉搜索树 (Validate Binary Search Tree)
 // 难度：Medium | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/validate-binary-search-tree/
-// 复习日期：2026-09-02（第 2 次复习 · 一刷 2026-08-07 · 上次 2026-09-01 较强）
+// 二刷日期：2026-09-07（第 3 次复习 · 一刷 2026-08-07 · 上次 2026-09-02 较强）
 // 一刷/上次思路：递归上下界校验（Long 处理 int 极值）：左子树收紧上界、右子树收紧下界
 // 测试用例与一刷归档保持一致（示例 + 边界）
 // ============================================================
@@ -25,7 +25,6 @@ public class LC0098_ValidateBinarySearchTree {
         }
         return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

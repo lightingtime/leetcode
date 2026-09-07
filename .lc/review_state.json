@@ -513,12 +513,12 @@
       "title": "验证二叉搜索树",
       "category": "树与二叉树",
       "first_pass_date": "2026-08-07",
-      "last_review_date": "2026-09-02",
-      "next_review_date": "2026-09-07",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-07",
+      "next_review_date": "2026-09-22",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 2,
+      "consecutive_strong": 3,
       "mastered": false
     },
     "binary-tree-level-order-traversal": {

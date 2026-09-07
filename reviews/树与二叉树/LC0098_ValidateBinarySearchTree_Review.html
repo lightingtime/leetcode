@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>98. 验证二叉搜索树 (Validate Binary Search Tree)</h1><p>&gt; <a href="https://leetcode.cn/problems/validate-binary-search-tree/" rel="noopener">https://leetcode.cn/problems/validate-binary-search-tree/</a></p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、二叉搜索树、二叉树</p><h2>题目描述</h2><p>给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。</p><p>有效 二叉搜索树定义如下：</p><p>节点的左子树只包含 严格小于 当前节点的数。</p><p>节点的右子树只包含 严格大于 当前节点的数。</p><p>所有左子树和右子树自身必须也是二叉搜索树。</p><p>示例 1：</p><p>输入：root = [2,1,3]</p><p>输出：true</p><p>示例 2：</p><p>输入：root = [5,1,4,null,null,3,6]</p><p>输出：false</p><p>解释：根节点的值是 5 ，但是右子节点的值是 4 。</p><p>提示：</p><p>树中节点数目范围在[1, 104] 内</p><p>-231 31 - 1</p><h2>示例</h2><ol><li>输入：root = [2,1,3]</li></ol><p>输出：true</p><ol><li>输入：root = [5,1,4,null,null,3,6]</li></ol><p>输出：false</p><p>解释：根节点的值是 5 ，但是右子节点的值是 4 。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-07 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 递归上下界 ｜ O(n) · O(树高)</p>
+      <div class="review-note md"><p><strong>与上一轮（09-02 较强）对比</strong>：思路与写法保持一致——递归上下界校验，左右子树分别收紧 <code>upper</code>/<code>lower</code>，用 <code>Long</code> 的 <code>±2^63</code> 处理 int 极值初值；本地 10 个用例（单节点、右子树整体违规、相等值、左子树大于根、全右链、负值、int 极值、深层 BST）首跑全过，力扣一次提交 Accepted（86/86）。</p><p><strong>为什么这次想起来了</strong>：BST 判定的关键约束是「只和父节点比较不够，必须沿路径维护 (lower, upper) 可允许区间」；上一轮沉淀的 int 极值用例（<code>0, MIN, MAX</code>）直接提醒了用 Long 传界的必要性，写法上先写空节点返回 true、再判 <code>root.val</code> 越界、最后递归收紧两侧。</p><p><strong>掌握度依据</strong>：会话全程无探讨、无提示；本地首跑 10 用例全过，力扣一次提交 Accepted → 较强；连续第 3 次较强，间隔 ×2.5 后再上浮。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-02 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（86/86）｜ 一次 AC ｜ 递归上下界 ｜ O(n) · O(树高)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-07）：递归上下界，首 WA——左/右子树只收紧一侧、另一侧重置为 ±∞，丢失祖先约束（根 10 右子树里出现 6 &lt; 10 未被拦）；用 long 上下界处理 int 极值。非一次 AC。</li><li>复习①（2026-09-01）：同思路一次 AC，较强。</li><li>本次（第 2 次复习）：独立写出同款递归上下界，本地 10 组全绿 + 力扣 86/86 一次 Accepted。写法与归档一致：空节点 true；节点值落在 (lower, upper) 开区间，越界即 false；左子树继承 lower、upper 收紧为 val，右子树继承 upper、lower 收紧为 val。</li></ul><p><strong>② 这次为什么想起来</strong></p><ul><li>核心记忆点：BST 校验不是「和孩子比大小」，而是「每个节点必须落在祖先区间 (lower, upper) 内」，一路向下把区间收窄；上下界从 long 的 ±∞ 起步，节点值恰为 Integer 极值时也不误判。</li><li>一刷丢祖先约束的坑这次直接规避：左右两侧边界都显式继承传递，未收紧的一侧绝不重置为 ±∞。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本次一次提交 Accepted（86/86）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>等价写法：BST 中序遍历严格递增（迭代栈 + prev 前驱比较），可作为第二写法练习。</li><li>相关题：LC230 二叉搜索树中第 K 小（中序）、LC700/701 搜索与插入、LC450 删除节点（前驱/后继替换）。</li><li>恒记边界：相等值（重复）不合法；比较用 long 或先判相等再比大小。</li></ul></div>
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>递归上下界</b></li>
         <li><span>复杂度</span><b>O(n) · O(树高)</b></li>
@@ -51,7 +55,7 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归上下界</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树高)</span><span class="chip">内存 ≈ 43.5 MB</span><span class="chip">用例 86/86</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树高)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0098_ValidateBinarySearchTree.java · 递归上下界</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValidBST</span>(<span class="tk-t">TreeNode</span> root) {
     <span class="tk-k">return</span> <span class="tk-f">isValidBSTHelper</span>(root, <span class="tk-t">Long</span>.<span class="tk-t">MAX_VALUE</span>, <span class="tk-t">Long</span>.<span class="tk-t">MIN_VALUE</span>);
 }
