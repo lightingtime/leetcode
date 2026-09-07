@@ -2,10 +2,9 @@
 // LeetCode 268. 丢失的数字 (Missing Number)
 // 难度：Easy | 分类：哈希表
 // 链接：https://leetcode.cn/problems/missing-number/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-21）
-// 一刷思路：求和（差值累加）——ans 从 n 起步，逐项 ans += i - nums[i]，O(n)/O(1)；一刷还写过原地交换（cyclic sort）写法
-// 一刷复杂度：时间 O(n)，空间 O(1)
-// 测试用例与一刷归档保持一致
+// 二刷日期：2026-09-07（第 2 次复习 · 一刷 2026-08-21 · 上次 2026-09-06 较强）
+// 一刷/上次思路：求和差值累加（ans 从 n 起步，ans += i - nums[i]）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -14,11 +13,11 @@ public class LC0268_MissingNumber {
 
     // ==== 提交代码开始 ====
     public int missingNumber(int[] nums) {
-        int target = nums.length;
+        int sum = nums.length;
         for (int i = 0; i < nums.length; i++) {
-            target = target + i - nums[i];
+            sum += i - nums[i];
         }
-        return target;
+        return sum;
     }
     // ==== 提交代码结束 ====
 

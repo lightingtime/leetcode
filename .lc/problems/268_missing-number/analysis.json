@@ -52,17 +52,20 @@
       "code": "public int missingNumber(int[] nums) {\n        for (int i = 0; i < nums.length; i++) {\n            if (nums[i] == nums.length) {\n                continue;\n            }\n            while (nums[i] != i) {\n                int temp = nums[nums[i]];\n                nums[nums[i]] = nums[i];\n                nums[i] = temp;\n                if (nums[i] == nums.length) {\n                    break;\n                }\n            }\n        }\n        for (int i = 0; i < nums.length; i++) {\n            if (nums[i] != i) {\n                return i;\n            }\n        }\n        return nums.length;\n    }"
     },
     {
-      "date": "2026-08-21",
+      "date": "2026-09-07",
       "verdict": "Accepted",
       "testcases": "122/122",
       "runtime_ms": null,
-      "memory_bytes": 47836000,
+      "memory_bytes": 47912000,
       "approach": "求和（差值累加）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "求和差分累加：ans 从 n 起步，每轮 ans += i - nums[i]，用 long+Math.toIntExact 防溢出；O(n)/O(1)，第二种写法再次 Accepted",
-      "code": "public int missingNumber(int[] nums) {\n        long ans = nums.length;\n        for (int i = 0; i < nums.length; i++) {\n            ans = ans + i - nums[i];\n        }\n        return Math.toIntExact(ans);\n    }"
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-21）：先写「原地交换（cyclic sort）」后改「求和差值累加」第二种写法再 AC；复习①（2026-09-06）同款求和一次 AC 较强。\n- 本次（第 2 次复习）：独立写出求和差值累加——`sum = n`，循环 `sum += i - nums[i]`，返回 `sum`；比一刷版本更精简（去掉了 `long + Math.toIntExact`，n ≤ 10^4 时 int 累积量级 ~5×10^7 不会溢出）。本地 12 组全绿 + 力扣 122/122 一次 Accepted。旧版（long 防溢出）已存入 `prev_code` 可对比。\n\n**② 为什么想起来**\n- `0..n` 完整和是定值，数组恰缺一个数 → 「完整和 − 实际和」就是答案。写成差值累加不必先算大和再减：从 n 起步每轮 `sum += i - nums[i]`，等价于把完整序列所有 i 加上、数组所有值减去，剩的就是缺的数。\n- 差值累加过程中不会累积出大中间值，int 足够；约束外的超长数组才需要 long。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（122/122）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- XOR 方案 `ans ^= i ^ nums[i]`（0..n 与数组全部异或，成对抵消）是本题另一 O(1) 写法，且天然不怕溢出，可作为换写法练习。\n- 关联「缺失/重复」题：LC136 只出现一次（XOR）、LC287 寻找重复数（快慢指针）。",
+      "code": "    public int missingNumber(int[] nums) {\n        int sum = nums.length;\n        for (int i = 0; i < nums.length; i++) {\n            sum += i - nums[i];\n        }\n        return sum;\n    }",
+      "prev_code": "public int missingNumber(int[] nums) {\n        long ans = nums.length;\n        for (int i = 0; i < nums.length; i++) {\n            ans = ans + i - nums[i];\n        }\n        return Math.toIntExact(ans);\n    }",
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "hints": [
@@ -81,6 +84,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：与一刷最终归档同写法（ans 从 n 起步逐项 ans += i - nums[i]，末态恰为缺失值）；一刷还写过 cyclic sort，本次直接选求和法。复杂度 O(n)/O(1)。细节：本次用 int 替代一刷的 long+Math.toIntExact——n≤10^4 时中间量上界约 n²=10^8 远小于 int 上限，等价且更简，非新思路。② 为什么能想起：『缺失 = 期望和 - 实际和』是典型数学套路，回忆顺畅；缺 0/缺 n/上限大数组等边界被本地用例覆盖，未踩坑。③ 判定：一次提交即 Accepted、全程无探讨，记较强。④ 下一步提醒：能说出另两条路即可——异或 x ^= i ^ nums[i] 消成唯一缺失、cyclic sort 原地交换（一刷第一条写法）；下次复习任选其一写通即可。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-07",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "122/122",
+      "approach": "求和（差值累加）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-21）：先写「原地交换（cyclic sort）」后改「求和差值累加」第二种写法再 AC；复习①（2026-09-06）同款求和一次 AC 较强。\n- 本次（第 2 次复习）：独立写出求和差值累加——`sum = n`，循环 `sum += i - nums[i]`，返回 `sum`；比一刷版本更精简（去掉了 `long + Math.toIntExact`，n ≤ 10^4 时 int 累积量级 ~5×10^7 不会溢出）。本地 12 组全绿 + 力扣 122/122 一次 Accepted。旧版（long 防溢出）已存入 `prev_code` 可对比。\n\n**② 为什么想起来**\n- `0..n` 完整和是定值，数组恰缺一个数 → 「完整和 − 实际和」就是答案。写成差值累加不必先算大和再减：从 n 起步每轮 `sum += i - nums[i]`，等价于把完整序列所有 i 加上、数组所有值减去，剩的就是缺的数。\n- 差值累加过程中不会累积出大中间值，int 足够；约束外的超长数组才需要 long。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（122/122）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- XOR 方案 `ans ^= i ^ nums[i]`（0..n 与数组全部异或，成对抵消）是本题另一 O(1) 写法，且天然不怕溢出，可作为换写法练习。\n- 关联「缺失/重复」题：LC136 只出现一次（XOR）、LC287 寻找重复数（快慢指针）。"
     }
   ]
 }
