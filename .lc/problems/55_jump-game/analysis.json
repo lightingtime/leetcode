@@ -79,6 +79,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：贪心最远可达，非一次 AC——教训是必须先判当前位置可达、再更新 reach（先更新会把不可达位置也纳入计算）。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：独立写出同款贪心——for i 扫描，若 maxReach < i 直接 false，否则 maxReach = max(maxReach, i + nums[i])；本地 8 组全绿 + 力扣 178/178 一次 Accepted。\n\n**② 为什么想起来**\n- 单指针维护「最远可达」：只要 i 没越过 reach，当前位置一定可达（前面某步能跳到这里），用它的跳跃能力刷新 reach；一旦 i > reach 说明中间被 0 卡死。\n- O(n)/O(1) 是下限：每个位置至少要扫一次才能判定，无需额外空间。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（178/178）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 变体：LC45 跳跃游戏 II（最少步数，贪心每段取最远 / DP）、LC1306 跳跃游戏 III（从起点可跳 i±nums[i]，BFS/DFS 判能否到 0）。\n- 陷阱记忆：更新 reach 前必须先判 i <= reach；全 0 且非末尾的数组会在 i=1 处正确返回 false。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-07",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "178/178",
+      "approach": "贪心（最远可达）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 复习②（2026-09-02）：贪心最远可达，一次 AC 较强。\n- 本次（第 3 次复习）：独立写出同款贪心——`for i` 扫描，`maxRight < i` 直接返回 false，否则 `maxRight = max(maxRight, i + nums[i])`；思路与写法零改动，仅变量名 `maxReach → maxRight`。本地 8 组全绿 + 力扣 178/178 一次 Accepted，内存 48.2MB 与上轮持平。\n- 同思路合并，不新增 submissions 条目；本轮代码与上轮等价（仅重命名），不覆盖 canonical 代码，无中间版本丢失。\n\n**② 为什么想起来**\n- 核心不变量：`reach` 之前的所有下标都可达（前面某步能跳到），所以只需单指针从左扫，用每个可达位置的 `i + nums[i]` 尽力推远上界；`i` 一旦越过 `reach` 说明被 0 卡死。\n- 上轮已固化的顺序「先判当前位置可达、再刷新 reach」这次直接写出，没有重犯一刷先更新后判定的错。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（178/178）、全程无探讨 → strong；连续较强 3 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- 变体：LC45 跳跃游戏 II（最少步数，贪心按「段」取最远 / DP）、LC1306 跳跃游戏 III（每次跳 `i±nums[i]` 能否到 0，BFS/DFS）。\n- 同类「单指针可达性」题：维护可达上界 + 扫描指针不越过上界，是共同套路。"
     }
   ]
 }
