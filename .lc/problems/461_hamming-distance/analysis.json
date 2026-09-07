@@ -35,17 +35,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-20",
+      "date": "2026-09-07",
       "verdict": "Accepted",
       "testcases": "149/149",
       "runtime_ms": null,
-      "memory_bytes": 42728000,
+      "memory_bytes": 42652000,
       "approach": "异或 + 位计数",
       "time_complexity": "O(1)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "x^y 差异掩码 + 逐位 popcount（&1 判断 + >>> 右移）；O(1)/O(1)，修无条件计数后 Accepted",
-      "code": "public int hammingDistance(int x, int y) {\n        int t = x ^ y;\n        int ans = 0;\n        while (t != 0) {\n            if ((t & 1) == 1) {\n                ans++;\n            }\n            t >>>= 1;\n        }\n        return ans;\n    }\n"
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-20）：异或 + 位计数，非一次 AC（曾无条件计数）。\n- 复习①（2026-09-06）：同思路一次 AC 较强。\n- 本次（第 2 次复习）：独立写出同款——`t = x ^ y` 得到差异位掩码，`while (t != 0)` 内 `if ((t & 1) == 1) count++`、`t >>>= 1`；本地 9 组全绿 + 力扣 149/149 一次 Accepted，内存 42.7MB 与上轮持平。旧写法（一刷 canonical）已存入 `prev_code` 可对比。\n\n**② 为什么想起来**\n- 汉明距离本质 = 两个数二进制「不同位」的个数 → 先 `x ^ y` 把不同位置 1，剩下就是数掩码里 1 的个数。\n- 必须用 `>>>`（无符号右移）而非 `>>`：Java int 有符号，负数算术右移会把符号位 1 一直填进来导致死循环。\n- 一刷「无条件计数」的教训这次规避了：只在 `(t & 1) == 1` 时计数（等价 `count += t & 1`）。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（149/149）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- 若想换写法：Brian Kernighan `t &= t - 1` 每次清零最低位 1，循环次数 = 1 的个数；或 `Integer.bitCount(x ^ y)` 一行。\n- 关联题：LC191 位 1 的个数、LC338 比特位计数（可复用该套路）。",
+      "code": "    public int hammingDistance(int x, int y) {\n        int t = x ^ y;\n        int count = 0;\n        while (t != 0) {\n            if ((t & 1) == 1) {\n                count++;\n            }\n            t >>>= 1;\n        }\n        return count;\n    }",
+      "prev_code": "public int hammingDistance(int x, int y) {\n        int t = x ^ y;\n        int ans = 0;\n        while (t != 0) {\n            if ((t & 1) == 1) {\n                ans++;\n            }\n            t >>>= 1;\n        }\n        return ans;\n    }\n",
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "hints": [
@@ -64,6 +67,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：与一刷同一写法（x^y 差异掩码 + 逐位 &1 计数 + 无符号右移），思路未换；复杂度仍 O(1)（最多 32 次）/O(1)，内存 42,868 KB 与一刷 42,728 KB 基本持平。② 为什么能独立想起：Easy 且套路典型——汉明距离 = 异或后数 1 的个数，属『位运算差异掩码』，回忆顺畅无卡点。③ 掌握度判定：一次提交即 Accepted、全程无探讨，记较强。④ 下一步提醒：记住等价写法 Integer.bitCount(x^y) 与 Brian Kernighan（n &= n-1）计数，下次写出移位版后能立刻说出另两种即可，不必改写法。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-07",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "149/149",
+      "approach": "异或 + 位计数",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-20）：异或 + 位计数，非一次 AC（曾无条件计数）。\n- 复习①（2026-09-06）：同思路一次 AC 较强。\n- 本次（第 2 次复习）：独立写出同款——`t = x ^ y` 得到差异位掩码，`while (t != 0)` 内 `if ((t & 1) == 1) count++`、`t >>>= 1`；本地 9 组全绿 + 力扣 149/149 一次 Accepted，内存 42.7MB 与上轮持平。旧写法（一刷 canonical）已存入 `prev_code` 可对比。\n\n**② 为什么想起来**\n- 汉明距离本质 = 两个数二进制「不同位」的个数 → 先 `x ^ y` 把不同位置 1，剩下就是数掩码里 1 的个数。\n- 必须用 `>>>`（无符号右移）而非 `>>`：Java int 有符号，负数算术右移会把符号位 1 一直填进来导致死循环。\n- 一刷「无条件计数」的教训这次规避了：只在 `(t & 1) == 1` 时计数（等价 `count += t & 1`）。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（149/149）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- 若想换写法：Brian Kernighan `t &= t - 1` 每次清零最低位 1，循环次数 = 1 的个数；或 `Integer.bitCount(x ^ y)` 一行。\n- 关联题：LC191 位 1 的个数、LC338 比特位计数（可复用该套路）。"
     }
   ]
 }
