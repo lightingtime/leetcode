@@ -2,10 +2,9 @@
 // LeetCode 85. 最大矩形 (Maximal Rectangle)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/maximal-rectangle/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-20）
-//
-// 思路：逐行维护每列向上连续 1 的高度，形成直方图；每行用单调栈求直方图最大矩形，全局取最大。
-// 复杂度：时间 O(m*n)，空间 O(n)
+// 二刷日期：2026-09-07（第 2 次复习 · 一刷 2026-08-20 · 上次 2026-09-06 较强）
+// 一刷/上次思路：逐行高度 + 单调栈直方图（heights 哨兵 +2）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -14,28 +13,30 @@ public class LC0085_MaximalRectangle {
 
     // ==== 提交代码开始 ====
     public int maximalRectangle(char[][] matrix) {
-        int[] array = new int[matrix[0].length + 2];
-        int max = 0;
+        int[] heights = new int[matrix[0].length + 2];
+        int maxArea = 0;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
                 if (i == 0) {
-                    array[j + 1] = matrix[i][j] == '1' ? 1 : 0;
+                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;
                 } else {
-                    array[j + 1] = matrix[i][j] == '1' ? (1 + array[j + 1]): 0;
+                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;
                 }
             }
-            Deque<Integer> deque = new ArrayDeque<>();
-            for (int j = 0; j < array.length; j++) {
-                while (!deque.isEmpty() && array[deque.peekLast()] > array[j]) {
-                    int height = array[deque.pollLast()];
-                    int width = j - deque.peekLast() - 1;
+
+            Deque<Integer> stack = new ArrayDeque<>();
+            for (int j = 0; j < heights.length; j++) {
+                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {
+                    int height = heights[stack.pollLast()];
+                    int width = j - stack.peekLast() - 1;
                     int area = height * width;
-                    max = Math.max(max, area);
+                    maxArea = Math.max(area, maxArea);
                 }
-                deque.offerLast(j);
+                stack.offerLast(j);
             }
+
         }
-        return max;
+        return maxArea;
     }
     // ==== 提交代码结束 ====
 
