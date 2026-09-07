@@ -31,21 +31,60 @@ public class LC0062_UniquePaths {
         // ---- 示例测试（来自题目）----
         try {
             if (!TestUtil.checkEq(28, s.uniquePaths(3, 7), "示例1")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例1 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq(3, s.uniquePaths(3, 2), "示例2")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例2 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq(28, s.uniquePaths(7, 3), "示例3")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例3 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq(6, s.uniquePaths(3, 3), "示例4")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例4 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例4 异常: " + t);
+        }
 
-        // ---- 边界测试（自己补充）----
-        // TODO: 补充空输入 / 单元素 / 全相同 / 大数等边界
-        // 例如： try { if (!TestUtil.checkEq(期望, s.uniquePaths(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
-        // 若题目允许任意顺序返回（下标对 / 集合），用 TestUtil.checkEqUnordered 代替 TestUtil.checkEq
+        // ---- 边界测试（与一刷归档保持一致）----
+        try {
+            if (!TestUtil.checkEq(1, s.uniquePaths(1, 1), "边界-1x1")) failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-1x1 异常: " + t);
+        }
+        try {
+            if (!TestUtil.checkEq(1, s.uniquePaths(1, 10), "边界-单行")) failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-单行 异常: " + t);
+        }
+        try {
+            if (!TestUtil.checkEq(1, s.uniquePaths(10, 1), "边界-单列")) failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-单列 异常: " + t);
+        }
+        try {
+            if (!TestUtil.checkEq(2, s.uniquePaths(2, 2), "边界-2x2")) failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-2x2 异常: " + t);
+        }
+        try {
+            if (!TestUtil.checkEq(601080390, s.uniquePaths(17, 17), "边界-大网格")) failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界-大网格 异常: " + t);
+        }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

@@ -413,12 +413,32 @@ function backupDuplicateArchive(file, className) {
       else if (e.name === className + '.java' && path.resolve(full) !== path.resolve(file)) dups.push(full);
     }
   })(root);
+  const baks = [];
   for (const dup of dups) {
     const bak = dup + '.bak';
     saveArchiveCode(dup, className); // 改名 .bak 前先把一刷原写法固化进 analysis.json
     fs.renameSync(dup, bak);
+    baks.push(bak);
     console.log(`检测到同名归档 ${dup}，二刷期间已临时改名为 ${path.basename(bak)}（避免 IDEA 重复类）；提交归档覆盖时恢复。`);
   }
+  return baks;
+}
+
+// 复习重开：把归档（已改名为 .bak）main 测试区（示例 + 边界 + 回归用例 + 辅助方法）原样同步进新文件，
+// 保证「测试用例与一刷归档保持一致」，禁止退回示例 + TODO 占位导致边界/回归用例丢失。
+function syncReviewTests(file, baks) {
+  const marker = '    public static void main(String[] args)';
+  let content = fs.readFileSync(file, 'utf8');
+  let tIdx = content.indexOf(marker);
+  for (const bak of baks) {
+    const archived = fs.readFileSync(bak, 'utf8');
+    const aIdx = archived.indexOf(marker);
+    if (aIdx < 0 || tIdx < 0) continue;
+    const tail = archived.slice(aIdx);
+    content = content.slice(0, tIdx) + tail;
+    console.log(`已从 ${path.basename(bak)} 同步完整测试区（main 及辅助方法）到 ${path.basename(file)}`);
+  }
+  fs.writeFileSync(file, content, 'utf8');
 }
 
 function main() {
@@ -440,7 +460,8 @@ function main() {
     }
   }
   fs.writeFileSync(file, content, 'utf8');
-  backupDuplicateArchive(file, className);
+  const baks = backupDuplicateArchive(file, className);
+  if (baks.length > 0) syncReviewTests(file, baks); // 复习重开：同步归档测试区，防边界用例丢失
   console.log(`已生成：${file}`);
   console.log(`类名：${className}${method ? ` | 方法：${method.ret} ${method.name}(...)` : ' | 设计题'}`);
   console.log('请在 IntelliJ IDEA 中打开该文件，补全方法体，运行 main 测试。');
