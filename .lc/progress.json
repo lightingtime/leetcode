@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-06",
+  "updated": "2026-09-07",
   "current_seq": 170,
   "done": [
     {
@@ -3303,6 +3303,17 @@
         "字符串"
       ],
       "last_seen": "2026-09-06"
+    },
+    {
+      "habit": "序列化/反序列化顺序不一致：serialize 用 pollLast（offerLast+pollLast=栈/LIFO）出队、deserialize 用 pollFirst（队列/FIFO）读取，写读顺序不匹配导致结构错乱；offerLast 配 pollFirst 才是队列，两个方法必须统一同一遍历语义",
+      "count": 1,
+      "examples": [
+        "serialize-and-deserialize-binary-tree"
+      ],
+      "categories": [
+        "树与二叉树"
+      ],
+      "last_seen": "2026-09-07"
     }
   ],
   "category_hints": {
