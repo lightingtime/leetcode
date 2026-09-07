@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-05</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>75. 颜色分类 (Sort Colors)</h1><p>&gt; <a href="https://leetcode.cn/problems/sort-colors/" rel="noopener">https://leetcode.cn/problems/sort-colors/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针、冒泡排序、排序、快速排序</p><h2>题目描述</h2><p>给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地 对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。</p><p>我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。</p><p>必须在不使用库内置的 sort 函数的情况下解决这个问题。</p><p>示例 1：</p><p>输入：nums = [2,0,2,1,1,0]</p><p>输出：[0,0,1,1,2,2]</p><p>解释：</p><p>该数组包含两个 0、两个 1 和两个 2。将它们原地排序后，所有 0 排在最前面，接着是所有 1，最后是所有 2。</p><p>示例 2：</p><p>输入：nums = [2,0,1]</p><p>输出：[0,1,2]</p><p>解释：</p><p>数组中有且仅有一个 0、一个 1 和一个 2，按 0、1、2 的顺序原地排列。</p><p>提示：</p><p>n == nums.length</p><p>1</p><p>nums[i] 为 0、1 或 2</p><p>进阶：</p><p>你能想出一个仅使用常数空间的一趟扫描算法吗？</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-07 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 三指针分区（荷兰国旗） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>与上一轮（09-05 较弱）对比</strong>：思路与写法未变，仍是荷兰国旗三指针（<code>lt</code> 维护 0 区右界、<code>i</code> 扫描、<code>gt</code> 维护 2 区左界）；与 09-05 版代码实质等价（仅 <code>swap</code> 形参命名 i/j → l/r）。上轮固化的回归用例（<code>[1,2,0]</code>、<code>[1,1,2,0]</code> 换入 0 需复查）原样保留，本地 11 个用例一次全过，力扣一次提交 Accepted（90/90）。</p><p><strong>为什么这次想起来了</strong>：上轮弱在首版 2 分支交换后无条件 <code>i++</code>，靠回归用例兜底才修对；本轮把三条推进规则按分支顺序写死——先写 2 分支（交换后 <code>gt--</code>、<code>i</code> 停住回看换入值）→ 再写 0 分支（交换后 <code>lt++</code>、<code>i++</code>）→ 最后 1 分支直接 <code>i++</code>，从书写顺序上杜绝「无条件 i++」这个老错误，写完即对。</p><p><strong>掌握度依据</strong>：会话全程无探讨、无提示；本地首跑 11 用例全过，力扣一次提交 Accepted → 较强，间隔 ×2.5 拉长。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（90/90）｜ 多次提交 ｜ 三指针分区（荷兰国旗） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>与上一轮（08-31）对比</strong>：思路仍是三指针分区（荷兰国旗），最终写法与上轮等价——2 分支交换后 <code>i</code> 停住回看换入值、0 分支 <code>lt</code> 与 <code>i</code> 同步前进、1 分支直接前进，一趟 O(n)/O(1)。本轮把易错点固化成回归测试（<code>[1,2,0]</code>、<code>[1,1,2,0]</code> 这类「换入 0 需复查」用例）并纳入本地边界区。</p><p><strong>为什么又没写对</strong>：首版把 <code>i++</code> 放到循环体末尾无条件执行，2 分支换完后直接前进，从右端换入的未处理元素（可能是 0）被永久跳过。这是上轮复盘明确写过的规则（「交换 2 后 i 不动，回看换来的值」），说明这轮仍是「背代码结构」而不是「讲清分区不变量」：荷兰国旗一趟完成靠的是 <code>[i,gt]</code> 视为未处理区，2 分支换入的值必须留在 <code>i</code> 位下轮复查；无条件前进会让 0 停在 1 右边（如 <code>[1,2,0]</code> 得到 <code>[1,0,2]</code>）。被边界用例打回后对照不变量（<code>[0,lt)</code> 全 0、<code>[lt,i)</code> 全 1、<code>(gt,n-1]</code> 全 2）才修正。</p><p><strong>掌握度判定</strong>：力扣一次提交即 Accepted，但本地首版未通过、经分析提示（2 分支后不能前进）后修正，属「提示过 / 非一次 AC」→ weak。</p></div>
@@ -45,12 +49,12 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 3 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>三指针分区（荷兰国旗）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
