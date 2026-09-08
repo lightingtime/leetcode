@@ -2,7 +2,7 @@
 // LeetCode 150. 逆波兰表达式求值 (Evaluate Reverse Polish Notation)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/evaluate-reverse-polish-notation/
-// 刷题日期：2026-08-24
+// 刷题日期：2026-09-07
 //
 // ============================================================
 
@@ -15,26 +15,26 @@ public class LC0150_EvaluateReversePolishNotation {
         Deque<Integer> stack = new ArrayDeque<>();
         for (String token : tokens) {
             if (token.equals("+")) {
-                int a = stack.pop();
-                int b = stack.pop();
-                stack.push(a + b);
+                int a = stack.pollLast();
+                int b = stack.pollLast();
+                stack.offerLast(a + b);
             } else if (token.equals("-")) {
-                int a = stack.pop();
-                int b = stack.pop();
-                stack.push(b - a);
+                int b = stack.pollLast();
+                int a = stack.pollLast();
+                stack.offerLast(a - b);
             } else if (token.equals("*")) {
-                int a = stack.pop();
-                int b = stack.pop();
-                stack.push(a * b);
+                int a = stack.pollLast();
+                int b = stack.pollLast();
+                stack.offerLast(a * b);
             } else if (token.equals("/")) {
-                int a = stack.pop();
-                int b = stack.pop();
-                stack.push(b / a);
+                int b = stack.pollLast();
+                int a = stack.pollLast();
+                stack.offerLast(a / b);
             } else {
-                stack.push(Integer.parseInt(token));
+                stack.offerLast(Integer.parseInt(token));
             }
         }
-        return stack.pop();
+        return stack.peek();
     }
     // ==== 提交代码结束 ====
 
