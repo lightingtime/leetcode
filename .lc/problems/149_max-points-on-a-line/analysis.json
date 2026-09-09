@@ -1,72 +1,86 @@
 {
- "seq": 112,
- "id": "149",
- "slug": "max-points-on-a-line",
- "title": "直线上最多的点数",
- "category": "哈希表",
- "date": "2026-08-21",
- "verdict": "Accepted",
- "testcases": "42/42",
- "runtime_ms": null,
- "memory_bytes": 43424000,
- "firstPass": false,
- "optimal": false,
- "approach": "三点共线叉积（O(n³)）",
- "dp_subtype": "",
- "approach_detail": "**问题本质与解法选择理由**\n给 n 个点找「共线最多」的直线。朴素思路（一刷 O(n³)）是枚举每对点定一条直线，再扫第三点判共线——慢在每条线都把第三点重算一遍。\n关键转化：一条直线可由「一个点 + 一个方向」唯一确定。固定锚点 i 后，点 j 与 i 共线 ⟺ 方向 (dx,dy) 相同；方向从「锚点指向点」计算，且 (d) 与 (−d) 是同一条线要合并。于是问题变成对每个锚点统计「每个方向出现次数」，取最大次数 + 锚点自己。整体 O(n²)。\n\n**关键设计决策**\n1. 方向归一化（key）：(dx,dy) 先除以 gcd(|dx|,|dy|) 得最简方向，再符号统一（dx<0，或 dx==0 且 dy<0 时整体取反），保证 dx≥0、dy 的符号保留斜率正负。\n   - 为什么不能 abs 两个：abs 会把 (1,1)（斜率+1）与 (1,−1)（斜率−1）并成同 key，两条不同直线被合并而虚高。\n   - key 用字符串 dx+\",\"+dy（或 long 编码），**不能用 int[]**：Java 数组 equals/hashCode 是引用相等，每次都查不到。\n2. 每轮锚点新建 HashMap：斜率相对各自锚点，跨锚点累计会污染计数（典型错误：map 建在循环外导致答案膨胀）。\n3. 聚合取峰值：curMax = max(curMax, count)，不是直接取当前斜率计数——主导斜率不连续出现时会丢峰值。\n4. 重复坐标：j 与锚点 i 重合（dx==dy==0）时 gcd(0,0) 会除零，单独用 same 计数，答案 = curMax + 1 + same（重合副本在过锚点的任意直线上都算）。\n\n**具体 case 推演**：A=(0,0), B=(1,1), C=(−1,−1), D=(1,−1)\n锚点 A=(0,0)：\n- B：dx=1, dy=1 → gcd=1 → key (1,1) → 计数 1\n- C：dx=−1, dy=−1 → 符号统一 → (1,1) → 计数 2\n- D：dx=1, dy=−1 → 符号不动 → (1,−1) → 计数 1\n- 收尾：max(2)+1 = 3（A,B,C 在斜率 +1 线上）✓；若用 abs，B/C/D 全变 (1,1) 会错算成 4\n\n**边界与细节**\n- 单点：内层空转，max=0+1=1 ✓\n- 垂直 dx=0：符号统一保证 dy>0 → key (0,1)；水平 dy=0 → (1,0)，两者不混淆\n- 300 点全共线：每锚点计数 299，答案 299+1=300\n- 重复坐标隐藏用例：same 计数兜底，避免 gcd(0,0) 除零\n\n**复杂度与下限论证**\n时间 O(n²)（外层锚点 n × 内层 n，每次 gcd O(logC)，C 为坐标范围）——因为「共线关系」必须比较所有点对方向，任两点都要检查是否同线，比较点对已是 Ω(n²)；空间 O(n)（每轮一张斜率表）。相对一刷 O(n³) 去掉的正是「每条线重扫第三点」的冗余层，故 O(n²) 为该问题可达的最优复杂度。",
- "time_complexity": "O(n³)",
- "space_complexity": "O(1)",
- "notes": "枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优",
- "code_notes": [
-  "复习重写为 O(n²) 最优解：固定每个基准点 i，HashMap<归一化斜率, 计数> 统计「与 i 斜率相同的其他点数」，答案取 max(count)+1；斜率 key = 差值 (dx,dy) 除以 gcd 约分 + 符号统一（dx<0 或 dx==0&&dy<0 时取反），编码用 dx*40001+dy 或字符串；不要再用 O(n³) 叉积。"
- ],
- "mistakes": [],
- "patterns": [],
- "submissions": [
-  {
-   "date": "2026-08-21",
-   "verdict": "Accepted",
-   "testcases": "42/42",
-   "runtime_ms": null,
-   "memory_bytes": 43424000,
-   "approach": "三点共线叉积（O(n³)）",
-   "time_complexity": "O(n³)",
-   "space_complexity": "O(1)",
-   "optimal": false,
-   "notes": "枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优",
-   "code": "public int maxPoints(int[][] points) {\n        int ans = 1;\n        for (int i = 0; i < points.length; i++) {\n            int[] p1 = points[i];\n            for (int j = i + 1; j < points.length; j++) {\n                int[] p2 = points[j];\n                int count = 2;\n                for (int k = j + 1; k < points.length; k++) {\n                    int[] p = points[k];\n                    // p1 -> p2 (p2[1] - p1[1], p2[0] - p1[0])\n                    // p -> p2 (p[1] - p2[1], p[0] - p2[0])\n                    // 三点共线 ⇔ 这两个向量平行 ⇔ 叉积为 0：\n                    // P1P2 × P2P = (p2[1] - p1[1])*(p[0] - p2[0]) − (p[1] - p2[1])*(p2[0] - p1[0]) == 0\n                    int s1 = (p2[1] - p1[1]) * (p[0] - p2[0]);\n                    int s2 = (p[1] - p2[1]) * (p2[0] - p1[0]);\n                    if (s1 == s2) {\n                        count++;\n                    }\n                }\n                ans = Math.max(ans, count);\n            }\n        }\n        return ans;\n    }\n"
-  },
-  {
-   "date": "2026-09-06",
-   "verdict": "Accepted",
-   "testcases": "",
-   "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
-   "time_complexity": "O(n²)",
-   "space_complexity": "O(n)",
-   "optimal": true,
-   "notes": "① 与上一轮对比：一刷是 O(n³) 三点共线叉积（非最优），按 code-notes 要求二刷升级为 O(n²) 固定锚点 + 归一化斜率哈希——固定锚点 i 后同斜率 ⇔ 共线，gcd 约分 + 符号统一（dx≥0、dy 保留符号）得规范 key，答案 = max(斜率组计数) + 1 + same；复杂度从 O(n³) 降到 O(n²)，内存 47,248 KB。\n\n② 为什么没想起来 / 出错过程：一开始完全忘记 O(n²) 视角（经分块引导从「一条线 = 点 + 方向」重建）；写码暴露三个真实错误：a) int[] 当 HashMap key——数组 equals/hashCode 是引用相等，get 永远 null → NPE；b) map 建在锚点循环外，跨锚点累计计数，答案膨胀（示例1 期望 3 实际 7、300 点共线实际 89701）；c) curMax 用普通赋值而非 Math.max，主导斜率不连续出现时丢峰值。另补了 gcd 取 abs（规范）与重复坐标 same 计数（防 gcd(0,0) 除零）。每个错误都是可迁移教训：key 类型、作用域/生命周期、聚合要取 max。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但全程大量探讨 + 多轮修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲三步再写——a) 为何固定锚点后「同斜率 = 共线」、为什么答案要 +1（锚点自己）；b) 符号统一为何不能直接 abs（会把斜率正负两条线并成一条）；c) HashMap key 不能是 int[]、聚合计数要 Math.max。可顺带复习同套路题 447 回旋镖数量（距离平方归一化计数）。",
-   "mastery": "weak",
-   "pass": 1,
-   "memory_bytes": 47248000,
-   "code": "    public int maxPoints(int[][] points) {\n        int max = 0;\n        for (int i = 0; i < points.length; i++) {\n            Map<String, Integer> map = new HashMap<>();\n            int[] a = points[i];\n            int curMax = 0;\n            int same = 0;\n            for (int j = 0; j < points.length; j++) {\n                if (i == j) {\n                    continue;\n                }\n                int[] b = points[j];\n                int dx = a[0] - b[0];\n                int dy = a[1] - b[1];\n                if (dx == 0 && dy == 0) {\n                    same++;\n                    continue;\n                }\n                if (dx < 0 || (dx == 0 && dy < 0)) {\n                    dx = -dx;\n                    dy = -dy;\n                }\n                int g = gcd(Math.abs(dx), Math.abs(dy));\n                dx = dx / g;\n                dy = dy / g;\n                String key = dx + \",\" + dy;\n                map.merge(key, 1, Integer::sum);\n                curMax = Math.max(curMax, map.get(key));\n            }\n            max = Math.max(max, curMax + 1 + same);\n        }\n        return max;\n    }\n\n    private int gcd(int dx, int dy) {\n        while (dy != 0) {\n            int n = dx % dy;\n            dx = dy;\n            dy = n;\n        }\n        return dx;\n    }"
-  }
- ],
- "hints": [
-  "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
- ],
- "reviews": [
-  {
-   "pass": 1,
-   "date": "2026-09-06",
-   "mastery": "weak",
-   "firstTry": true,
-   "verdict": "Accepted",
-   "testcases": "",
-   "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
-   "time_complexity": "O(n²)",
-   "space_complexity": "O(n)",
-   "optimal": true,
-   "notes": "① 与上一轮对比：一刷是 O(n³) 三点共线叉积（非最优），按 code-notes 要求二刷升级为 O(n²) 固定锚点 + 归一化斜率哈希——固定锚点 i 后同斜率 ⇔ 共线，gcd 约分 + 符号统一（dx≥0、dy 保留符号）得规范 key，答案 = max(斜率组计数) + 1 + same；复杂度从 O(n³) 降到 O(n²)，内存 47,248 KB。\n\n② 为什么没想起来 / 出错过程：一开始完全忘记 O(n²) 视角（经分块引导从「一条线 = 点 + 方向」重建）；写码暴露三个真实错误：a) int[] 当 HashMap key——数组 equals/hashCode 是引用相等，get 永远 null → NPE；b) map 建在锚点循环外，跨锚点累计计数，答案膨胀（示例1 期望 3 实际 7、300 点共线实际 89701）；c) curMax 用普通赋值而非 Math.max，主导斜率不连续出现时丢峰值。另补了 gcd 取 abs（规范）与重复坐标 same 计数（防 gcd(0,0) 除零）。每个错误都是可迁移教训：key 类型、作用域/生命周期、聚合要取 max。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但全程大量探讨 + 多轮修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲三步再写——a) 为何固定锚点后「同斜率 = 共线」、为什么答案要 +1（锚点自己）；b) 符号统一为何不能直接 abs（会把斜率正负两条线并成一条）；c) HashMap key 不能是 int[]、聚合计数要 Math.max。可顺带复习同套路题 447 回旋镖数量（距离平方归一化计数）。"
-  }
- ]
+  "seq": 112,
+  "id": "149",
+  "slug": "max-points-on-a-line",
+  "title": "直线上最多的点数",
+  "category": "哈希表",
+  "date": "2026-08-21",
+  "verdict": "Accepted",
+  "testcases": "42/42",
+  "runtime_ms": null,
+  "memory_bytes": 43424000,
+  "firstPass": false,
+  "optimal": false,
+  "approach": "三点共线叉积（O(n³)）",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质与解法选择理由**\n给 n 个点找「共线最多」的直线。朴素思路（一刷 O(n³)）是枚举每对点定一条直线，再扫第三点判共线——慢在每条线都把第三点重算一遍。\n关键转化：一条直线可由「一个点 + 一个方向」唯一确定。固定锚点 i 后，点 j 与 i 共线 ⟺ 方向 (dx,dy) 相同；方向从「锚点指向点」计算，且 (d) 与 (−d) 是同一条线要合并。于是问题变成对每个锚点统计「每个方向出现次数」，取最大次数 + 锚点自己。整体 O(n²)。\n\n**关键设计决策**\n1. 方向归一化（key）：(dx,dy) 先除以 gcd(|dx|,|dy|) 得最简方向，再符号统一（dx<0，或 dx==0 且 dy<0 时整体取反），保证 dx≥0、dy 的符号保留斜率正负。\n   - 为什么不能 abs 两个：abs 会把 (1,1)（斜率+1）与 (1,−1)（斜率−1）并成同 key，两条不同直线被合并而虚高。\n   - key 用字符串 dx+\",\"+dy（或 long 编码），**不能用 int[]**：Java 数组 equals/hashCode 是引用相等，每次都查不到。\n2. 每轮锚点新建 HashMap：斜率相对各自锚点，跨锚点累计会污染计数（典型错误：map 建在循环外导致答案膨胀）。\n3. 聚合取峰值：curMax = max(curMax, count)，不是直接取当前斜率计数——主导斜率不连续出现时会丢峰值。\n4. 重复坐标：j 与锚点 i 重合（dx==dy==0）时 gcd(0,0) 会除零，单独用 same 计数，答案 = curMax + 1 + same（重合副本在过锚点的任意直线上都算）。\n\n**具体 case 推演**：A=(0,0), B=(1,1), C=(−1,−1), D=(1,−1)\n锚点 A=(0,0)：\n- B：dx=1, dy=1 → gcd=1 → key (1,1) → 计数 1\n- C：dx=−1, dy=−1 → 符号统一 → (1,1) → 计数 2\n- D：dx=1, dy=−1 → 符号不动 → (1,−1) → 计数 1\n- 收尾：max(2)+1 = 3（A,B,C 在斜率 +1 线上）✓；若用 abs，B/C/D 全变 (1,1) 会错算成 4\n\n**边界与细节**\n- 单点：内层空转，max=0+1=1 ✓\n- 垂直 dx=0：符号统一保证 dy>0 → key (0,1)；水平 dy=0 → (1,0)，两者不混淆\n- 300 点全共线：每锚点计数 299，答案 299+1=300\n- 重复坐标隐藏用例：same 计数兜底，避免 gcd(0,0) 除零\n\n**复杂度与下限论证**\n时间 O(n²)（外层锚点 n × 内层 n，每次 gcd O(logC)，C 为坐标范围）——因为「共线关系」必须比较所有点对方向，任两点都要检查是否同线，比较点对已是 Ω(n²)；空间 O(n)（每轮一张斜率表）。相对一刷 O(n³) 去掉的正是「每条线重扫第三点」的冗余层，故 O(n²) 为该问题可达的最优复杂度。",
+  "time_complexity": "O(n³)",
+  "space_complexity": "O(1)",
+  "notes": "枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优",
+  "code_notes": [
+    "复习重写为 O(n²) 最优解：固定每个基准点 i，HashMap<归一化斜率, 计数> 统计「与 i 斜率相同的其他点数」，答案取 max(count)+1；斜率 key = 差值 (dx,dy) 除以 gcd 约分 + 符号统一（dx<0 或 dx==0&&dy<0 时取反），编码用 dx*40001+dy 或字符串；不要再用 O(n³) 叉积。"
+  ],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-08-21",
+      "verdict": "Accepted",
+      "testcases": "42/42",
+      "runtime_ms": null,
+      "memory_bytes": 43424000,
+      "approach": "三点共线叉积（O(n³)）",
+      "time_complexity": "O(n³)",
+      "space_complexity": "O(1)",
+      "optimal": false,
+      "notes": "枚举每对点 p1,p2 定直线，第三点 p 用向量叉积判共线（s1==s2）；n=300 时约 445 万次可过；非最优，O(n²) 斜率哈希更优",
+      "code": "public int maxPoints(int[][] points) {\n        int ans = 1;\n        for (int i = 0; i < points.length; i++) {\n            int[] p1 = points[i];\n            for (int j = i + 1; j < points.length; j++) {\n                int[] p2 = points[j];\n                int count = 2;\n                for (int k = j + 1; k < points.length; k++) {\n                    int[] p = points[k];\n                    // p1 -> p2 (p2[1] - p1[1], p2[0] - p1[0])\n                    // p -> p2 (p[1] - p2[1], p[0] - p2[0])\n                    // 三点共线 ⇔ 这两个向量平行 ⇔ 叉积为 0：\n                    // P1P2 × P2P = (p2[1] - p1[1])*(p[0] - p2[0]) − (p[1] - p2[1])*(p2[0] - p1[0]) == 0\n                    int s1 = (p2[1] - p1[1]) * (p[0] - p2[0]);\n                    int s2 = (p[1] - p2[1]) * (p2[0] - p1[0]);\n                    if (s1 == s2) {\n                        count++;\n                    }\n                }\n                ans = Math.max(ans, count);\n            }\n        }\n        return ans;\n    }\n"
+    },
+    {
+      "date": "2026-09-09",
+      "verdict": "Accepted",
+      "testcases": "42/42",
+      "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与 09-06 复习同思路（固定锚点 + 归一化斜率哈希 O(n²)），本次用 Long key = dx*400001+dy 编码代替字符串，gcd 用辗转相除迭代；比一刷 O(n³) 叉积已降一档，复杂度不变 O(n²)。\n② 为什么能想起来：code_notes 明确要求不退回 O(n³) 叉积；回忆点是「共线 ⇔ 相对锚点斜率相同」，浮点斜率有精度问题 → 用 (dx,dy) 除以 gcd 的整数对当 key，并先统一符号避免 (1,-1)/(-1,1) 判成不同线。\n③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（42/42），未探讨/未看归档 → strong。\n④ 下一步提醒：注意本题约束「点互不相同」，故无需处理重复点；若变体允许重复点，需额外统计 same 点并计入答案。",
+      "mastery": "strong",
+      "pass": 2,
+      "memory_bytes": 47272000,
+      "code": "    public int maxPoints(int[][] points) {\n        int max = 0;\n        for (int i = 0; i < points.length; i++) {\n            Map<Long, Integer> map = new HashMap<>();\n            int[] a = points[i];\n            for (int j = 0; j < points.length; j++) {\n                if (i == j) {\n                    continue;\n                }\n                int[] b = points[j];\n                int dx = b[0] - a[0];\n                int dy = b[1] - a[1];\n                if (dx < 0 || (dx == 0 && dy < 0)) {\n                    dx = -dx;\n                    dy = -dy;\n                }\n                int m = gcd(Math.abs(dx), Math.abs(dy));\n                dx = dx / m;\n                dy = dy / m;\n                long key = dx * 400001L + dy;\n                map.merge(key, 1, Integer::sum);\n                max = Math.max(max, map.get(key));\n            }\n\n        }\n        // 最终答案需要 \n        return max + 1;\n    }\n\n    private int gcd(int a, int b) {\n        while (b != 0) {\n            int temp = a % b;\n            a = b;\n            b = temp;\n        }\n        return a;\n    }",
+      "prev_code": "    public int maxPoints(int[][] points) {\n        int max = 0;\n        for (int i = 0; i < points.length; i++) {\n            Map<String, Integer> map = new HashMap<>();\n            int[] a = points[i];\n            int curMax = 0;\n            int same = 0;\n            for (int j = 0; j < points.length; j++) {\n                if (i == j) {\n                    continue;\n                }\n                int[] b = points[j];\n                int dx = a[0] - b[0];\n                int dy = a[1] - b[1];\n                if (dx == 0 && dy == 0) {\n                    same++;\n                    continue;\n                }\n                if (dx < 0 || (dx == 0 && dy < 0)) {\n                    dx = -dx;\n                    dy = -dy;\n                }\n                int g = gcd(Math.abs(dx), Math.abs(dy));\n                dx = dx / g;\n                dy = dy / g;\n                String key = dx + \",\" + dy;\n                map.merge(key, 1, Integer::sum);\n                curMax = Math.max(curMax, map.get(key));\n            }\n            max = Math.max(max, curMax + 1 + same);\n        }\n        return max;\n    }\n\n    private int gcd(int dx, int dy) {\n        while (dy != 0) {\n            int n = dx % dy;\n            dx = dy;\n            dy = n;\n        }\n        return dx;\n    }"
+    }
+  ],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-06",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：一刷是 O(n³) 三点共线叉积（非最优），按 code-notes 要求二刷升级为 O(n²) 固定锚点 + 归一化斜率哈希——固定锚点 i 后同斜率 ⇔ 共线，gcd 约分 + 符号统一（dx≥0、dy 保留符号）得规范 key，答案 = max(斜率组计数) + 1 + same；复杂度从 O(n³) 降到 O(n²)，内存 47,248 KB。\n\n② 为什么没想起来 / 出错过程：一开始完全忘记 O(n²) 视角（经分块引导从「一条线 = 点 + 方向」重建）；写码暴露三个真实错误：a) int[] 当 HashMap key——数组 equals/hashCode 是引用相等，get 永远 null → NPE；b) map 建在锚点循环外，跨锚点累计计数，答案膨胀（示例1 期望 3 实际 7、300 点共线实际 89701）；c) curMax 用普通赋值而非 Math.max，主导斜率不连续出现时丢峰值。另补了 gcd 取 abs（规范）与重复坐标 same 计数（防 gcd(0,0) 除零）。每个错误都是可迁移教训：key 类型、作用域/生命周期、聚合要取 max。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但全程大量探讨 + 多轮修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲三步再写——a) 为何固定锚点后「同斜率 = 共线」、为什么答案要 +1（锚点自己）；b) 符号统一为何不能直接 abs（会把斜率正负两条线并成一条）；c) HashMap key 不能是 int[]、聚合计数要 Math.max。可顺带复习同套路题 447 回旋镖数量（距离平方归一化计数）。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-09",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "42/42",
+      "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：与 09-06 复习同思路（固定锚点 + 归一化斜率哈希 O(n²)），本次用 Long key = dx*400001+dy 编码代替字符串，gcd 用辗转相除迭代；比一刷 O(n³) 叉积已降一档，复杂度不变 O(n²)。\n② 为什么能想起来：code_notes 明确要求不退回 O(n³) 叉积；回忆点是「共线 ⇔ 相对锚点斜率相同」，浮点斜率有精度问题 → 用 (dx,dy) 除以 gcd 的整数对当 key，并先统一符号避免 (1,-1)/(-1,1) 判成不同线。\n③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（42/42），未探讨/未看归档 → strong。\n④ 下一步提醒：注意本题约束「点互不相同」，故无需处理重复点；若变体允许重复点，需额外统计 same 点并计入答案。"
+    }
+  ]
 }

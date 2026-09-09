@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-21</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>149. 直线上最多的点数 (Max Points on a Line)</h1><p>&gt; <a href="https://leetcode.cn/problems/max-points-on-a-line/" rel="noopener">https://leetcode.cn/problems/max-points-on-a-line/</a></p><p>难度：Hard ｜ 分类：哈希表</p><p>标签：几何、数组、哈希表、数学、最大公约数、欧几里得算法</p><h2>题目描述</h2><p>给你一个数组 points ，其中 points[i] = [xi, yi] 表示 X-Y 平面上的一个点。求最多有多少个点在同一条直线上。</p><p>示例 1：</p><p>输入：points = [[1,1],[2,2],[3,3]]</p><p>输出：3</p><p>示例 2：</p><p>输入：points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]</p><p>输出：4</p><p>提示：</p><p>1</p><p>points[i].length == 2</p><p>-104 i, yi 4</p><p>points 中的所有点 互不相同</p><h2>示例</h2><ol><li>输入：points = [[1,1],[2,2],[3,3]]</li></ol><p>输出：3</p><ol><li>输入：points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]</li></ol><p>输出：4</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-09 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（42/42）｜ 一次 AC ｜ 固定锚点 + 归一化斜率哈希（O(n²)） ｜ O(n²) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：与 09-06 复习同思路（固定锚点 + 归一化斜率哈希 O(n²)），本次用 Long key = dx*400001+dy 编码代替字符串，gcd 用辗转相除迭代；比一刷 O(n³) 叉积已降一档，复杂度不变 O(n²)。</p><p>② 为什么能想起来：code_notes 明确要求不退回 O(n³) 叉积；回忆点是「共线 ⇔ 相对锚点斜率相同」，浮点斜率有精度问题 → 用 (dx,dy) 除以 gcd 的整数对当 key，并先统一符号避免 (1,-1)/(-1,1) 判成不同线。</p><p>③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（42/42），未探讨/未看归档 → strong。</p><p>④ 下一步提醒：注意本题约束「点互不相同」，故无需处理重复点；若变体允许重复点，需额外统计 same 点并计入答案。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 固定锚点 + 归一化斜率哈希（O(n²)） ｜ O(n²) · O(n)</p>
       <div class="review-note md"><p>① 与上一轮对比：一刷是 O(n³) 三点共线叉积（非最优），按 code-notes 要求二刷升级为 O(n²) 固定锚点 + 归一化斜率哈希——固定锚点 i 后同斜率 ⇔ 共线，gcd 约分 + 符号统一（dx≥0、dy 保留符号）得规范 key，答案 = max(斜率组计数) + 1 + same；复杂度从 O(n³) 降到 O(n²)，内存 47,248 KB。</p><p>② 为什么没想起来 / 出错过程：一开始完全忘记 O(n²) 视角（经分块引导从「一条线 = 点 + 方向」重建）；写码暴露三个真实错误：a) int[] 当 HashMap key——数组 equals/hashCode 是引用相等，get 永远 null → NPE；b) map 建在锚点循环外，跨锚点累计计数，答案膨胀（示例1 期望 3 实际 7、300 点共线实际 89701）；c) curMax 用普通赋值而非 Math.max，主导斜率不连续出现时丢峰值。另补了 gcd 取 abs（规范）与重复坐标 same 计数（防 gcd(0,0) 除零）。每个错误都是可迁移教训：key 类型、作用域/生命周期、聚合要取 max。</p><p>③ 掌握度判定：力扣一次提交即 Accepted，但全程大量探讨 + 多轮修正，记较弱。</p><p>④ 下一步提醒：下次复习先口头讲三步再写——a) 为何固定锚点后「同斜率 = 共线」、为什么答案要 +1（锚点自己）；b) 符号统一为何不能直接 abs（会把斜率正负两条线并成一条）；c) HashMap key 不能是 int[]、聚合计数要 Math.max。可顺带复习同套路题 447 回旋镖数量（距离平方归一化计数）。</p></div>
@@ -37,12 +41,12 @@
         <li><span>复杂度</span><b>O(n³) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>固定锚点 + 归一化斜率哈希（O(n²)）</b></li>
         <li><span>复杂度</span><b>O(n²) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -76,8 +80,45 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 固定锚点 + 归一化斜率哈希（O(n²)）</h3>
-    <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/哈希表/LC0149_MaxPointsOnALine.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPoints</span>(<span class="tk-k">int</span>[][] points) {
+    <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.1 MB</span><span class="chip">用例 42/42</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0149_MaxPointsOnALine.java · 固定锚点 + 归一化斜率哈希（O(n²)）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPoints</span>(<span class="tk-k">int</span>[][] points) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; points.length; i++) {
+            <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+            <span class="tk-k">int</span>[] a = points[i];
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; points.length; j++) {
+                <span class="tk-k">if</span> (i == j) {
+                    <span class="tk-k">continue</span>;
+                }
+                <span class="tk-k">int</span>[] b = points[j];
+                <span class="tk-k">int</span> dx = b[<span class="tk-n">0</span>] - a[<span class="tk-n">0</span>];
+                <span class="tk-k">int</span> dy = b[<span class="tk-n">1</span>] - a[<span class="tk-n">1</span>];
+                <span class="tk-k">if</span> (dx &lt; <span class="tk-n">0</span> || (dx == <span class="tk-n">0</span> &amp;&amp; dy &lt; <span class="tk-n">0</span>)) {
+                    dx = -dx;
+                    dy = -dy;
+                }
+                <span class="tk-k">int</span> m = <span class="tk-f">gcd</span>(<span class="tk-t">Math</span>.<span class="tk-f">abs</span>(dx), <span class="tk-t">Math</span>.<span class="tk-f">abs</span>(dy));
+                dx = dx / m;
+                dy = dy / m;
+                <span class="tk-k">long</span> key = dx * <span class="tk-n">400001L</span> + dy;
+                map.<span class="tk-f">merge</span>(key, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, map.<span class="tk-f">get</span>(key));
+            }
+
+        }
+        <span class="tk-c">// 最终答案需要 </span>
+        <span class="tk-k">return</span> max + <span class="tk-n">1</span>;
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">gcd</span>(<span class="tk-k">int</span> a, <span class="tk-k">int</span> b) {
+        <span class="tk-k">while</span> (b != <span class="tk-n">0</span>) {
+            <span class="tk-k">int</span> temp = a % b;
+            a = b;
+            b = temp;
+        }
+        <span class="tk-k">return</span> a;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0149_MaxPointsOnALine.java · 固定锚点 + 归一化斜率哈希（O(n²)） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxPoints</span>(<span class="tk-k">int</span>[][] points) {
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; points.length; i++) {
             <span class="tk-t">Map</span>&lt;<span class="tk-t">String</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
@@ -118,8 +159,7 @@
             dy = n;
         }
         <span class="tk-k">return</span> dx;
-    }</pre></div>
-    
+    }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>给 n 个点找「共线最多」的直线。朴素思路（一刷 O(n³)）是枚举每对点定一条直线，再扫第三点判共线——慢在每条线都把第三点重算一遍。</p><p>关键转化：一条直线可由「一个点 + 一个方向」唯一确定。固定锚点 i 后，点 j 与 i 共线 ⟺ 方向 (dx,dy) 相同；方向从「锚点指向点」计算，且 (d) 与 (−d) 是同一条线要合并。于是问题变成对每个锚点统计「每个方向出现次数」，取最大次数 + 锚点自己。整体 O(n²)。</p><p><strong>关键设计决策</strong></p><ol><li>方向归一化（key）：(dx,dy) 先除以 gcd(|dx|,|dy|) 得最简方向，再符号统一（dx&lt;0，或 dx==0 且 dy&lt;0 时整体取反），保证 dx≥0、dy 的符号保留斜率正负。</li></ol><ul><li>为什么不能 abs 两个：abs 会把 (1,1)（斜率+1）与 (1,−1)（斜率−1）并成同 key，两条不同直线被合并而虚高。</li><li>key 用字符串 dx+","+dy（或 long 编码），<strong>不能用 int[]</strong>：Java 数组 equals/hashCode 是引用相等，每次都查不到。</li></ul><ol><li>每轮锚点新建 HashMap：斜率相对各自锚点，跨锚点累计会污染计数（典型错误：map 建在循环外导致答案膨胀）。</li><li>聚合取峰值：curMax = max(curMax, count)，不是直接取当前斜率计数——主导斜率不连续出现时会丢峰值。</li><li>重复坐标：j 与锚点 i 重合（dx==dy==0）时 gcd(0,0) 会除零，单独用 same 计数，答案 = curMax + 1 + same（重合副本在过锚点的任意直线上都算）。</li></ol><p><strong>具体 case 推演</strong>：A=(0,0), B=(1,1), C=(−1,−1), D=(1,−1)</p><p>锚点 A=(0,0)：</p><ul><li>B：dx=1, dy=1 → gcd=1 → key (1,1) → 计数 1</li><li>C：dx=−1, dy=−1 → 符号统一 → (1,1) → 计数 2</li><li>D：dx=1, dy=−1 → 符号不动 → (1,−1) → 计数 1</li><li>收尾：max(2)+1 = 3（A,B,C 在斜率 +1 线上）✓；若用 abs，B/C/D 全变 (1,1) 会错算成 4</li></ul><p><strong>边界与细节</strong></p><ul><li>单点：内层空转，max=0+1=1 ✓</li><li>垂直 dx=0：符号统一保证 dy&gt;0 → key (0,1)；水平 dy=0 → (1,0)，两者不混淆</li><li>300 点全共线：每锚点计数 299，答案 299+1=300</li><li>重复坐标隐藏用例：same 计数兜底，避免 gcd(0,0) 除零</li></ul><p><strong>复杂度与下限论证</strong></p><p>时间 O(n²)（外层锚点 n × 内层 n，每次 gcd O(logC)，C 为坐标范围）——因为「共线关系」必须比较所有点对方向，任两点都要检查是否同线，比较点对已是 Ω(n²)；空间 O(n)（每轮一张斜率表）。相对一刷 O(n³) 去掉的正是「每条线重扫第三点」的冗余层，故 O(n²) 为该问题可达的最优复杂度。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>42/42 用例。</p></div></div></div></section>

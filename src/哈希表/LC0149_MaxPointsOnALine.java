@@ -2,11 +2,14 @@
 // LeetCode 149. 直线上最多的点数 (Max Points on a Line)
 // 难度：Hard | 分类：哈希表
 // 链接：https://leetcode.cn/problems/max-points-on-a-line/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-21）
-// 一刷思路：三点共线叉积（O(n³)，非最优）；code-notes 要求二刷改写为 O(n²) 最优解：
-// 固定每个基准点 i，HashMap<归一化斜率, 计数> 统计与 i 同斜率的点数，答案取 max(count)+1
-// 斜率 key = 差值 (dx,dy) 除以 gcd 约分 + 符号统一（dx<0 或 dx==0&&dy<0 时取反）
-// 测试用例与一刷归档保持一致
+// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-21 · 上次复习 2026-09-06）
+// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
+// 复习要求（code_notes）：写 O(n²) 归一化斜率最优解，不要退回 O(n³) 叉积。
+//
+// 思路：固定每个锚点 i，统计它与其余点的归一化斜率 (dx/g, dy/g) 出现次数；
+//       斜率 key 先符号统一（dx<0 或 dx==0&&dy<0 取反）再除以 gcd，编码 dx*400001+dy。
+//       答案 = 最大同斜率点数 + 1（锚点自身）。
+// 复杂度：时间 O(n² logC)（gcd 小常数），空间 O(n)
 // ============================================================
 
 import java.util.*;
@@ -17,44 +20,39 @@ public class LC0149_MaxPointsOnALine {
     public int maxPoints(int[][] points) {
         int max = 0;
         for (int i = 0; i < points.length; i++) {
-            Map<String, Integer> map = new HashMap<>();
+            Map<Long, Integer> map = new HashMap<>();
             int[] a = points[i];
-            int curMax = 0;
-            int same = 0;
             for (int j = 0; j < points.length; j++) {
                 if (i == j) {
                     continue;
                 }
                 int[] b = points[j];
-                int dx = a[0] - b[0];
-                int dy = a[1] - b[1];
-                if (dx == 0 && dy == 0) {
-                    same++;
-                    continue;
-                }
+                int dx = b[0] - a[0];
+                int dy = b[1] - a[1];
                 if (dx < 0 || (dx == 0 && dy < 0)) {
                     dx = -dx;
                     dy = -dy;
                 }
-                int g = gcd(Math.abs(dx), Math.abs(dy));
-                dx = dx / g;
-                dy = dy / g;
-                String key = dx + "," + dy;
+                int m = gcd(Math.abs(dx), Math.abs(dy));
+                dx = dx / m;
+                dy = dy / m;
+                long key = dx * 400001L + dy;
                 map.merge(key, 1, Integer::sum);
-                curMax = Math.max(curMax, map.get(key));
+                max = Math.max(max, map.get(key));
             }
-            max = Math.max(max, curMax + 1 + same);
+
         }
-        return max;
+        // 最终答案需要 + 1， 因为本身那个基点在上面计算结果的时候没有加进去
+        return max + 1;
     }
 
-    private int gcd(int dx, int dy) {
-        while (dy != 0) {
-            int n = dx % dy;
-            dx = dy;
-            dy = n;
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = a % b;
+            a = b;
+            b = temp;
         }
-        return dx;
+        return a;
     }
     // ==== 提交代码结束 ====
 
