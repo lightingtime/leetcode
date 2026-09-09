@@ -2,9 +2,10 @@
 // LeetCode 32. 最长有效括号 (Longest Valid Parentheses)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-valid-parentheses/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-20）
+// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-06）
+// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
 //
-// 思路：一维 DP，dp[i] 表示以 i 结尾的最长有效括号长度；遇 ')' 时按前一个字符分类，配对后尝试拼接更前面的有效段。
+// 思路：一维 DP，dp[i] 表示以 i 结尾的最长有效括号长度；遇 ')' 按前一个字符分类，配对后拼接更前面的有效段。
 // 复杂度：时间 O(n)，空间 O(n)
 // ============================================================
 
@@ -17,25 +18,15 @@ public class LC0032_LongestValidParentheses {
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == ')') {
                 if (i > 0 && s.charAt(i - 1) == '(') {
-                    if (i - 2 >= 0) {
-                        dp[i] = dp[i - 2] + 2;
-                    } else {
-                        dp[i] = 2;
-                    }
+                    dp[i] = i > 1 ? dp[i - 2] + 2 : 2;
                 } else if (i > 0 && s.charAt(i - 1) == ')') {
                     int j = i - dp[i - 1] - 1;
-                    if (j >= 0) {
-                        if (s.charAt(j) == '(') {
-                            if (j - 1 >= 0) {
-                                dp[i] = dp[i - 1] + 2 + dp[j - 1];
-                            } else {
-                                dp[i] = dp[i - 1] + 2;
-                            }
-                        }
+                    if (j >= 0 && s.charAt(j) == '(') {
+                        dp[i] = (j > 0 ? dp[j - 1] + 2 : 2) + dp[i - 1];
                     }
                 }
-                max = Math.max(max, dp[i]);
             }
+            max = Math.max(max, dp[i]);
         }
         return max;
     }

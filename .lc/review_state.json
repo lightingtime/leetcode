@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-08",
+  "updated": "2026-09-09",
   "deadline": "2026-09-15",
   "problems": {
     "two-sum": {
@@ -1339,12 +1339,12 @@
       "title": "最长有效括号",
       "category": "动态规划",
       "first_pass_date": "2026-08-20",
-      "last_review_date": "2026-09-06",
-      "next_review_date": "2026-09-08",
-      "interval_days": 2,
-      "review_count": 1,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-09",
+      "next_review_date": "2026-09-14",
+      "interval_days": 5,
+      "review_count": 2,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "maximal-rectangle": {

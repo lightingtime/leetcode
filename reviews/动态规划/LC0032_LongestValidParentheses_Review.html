@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-20</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>32. 最长有效括号 (Longest Valid Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-valid-parentheses/" rel="noopener">https://leetcode.cn/problems/longest-valid-parentheses/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：栈、字符串、动态规划、括号序列</p><h2>题目描述</h2><p>给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号 子串 的长度。</p><p>左右括号匹配，即每个左括号都有对应的右括号将其闭合的字符串是格式正确的，比如 "(()())"。</p><p>示例 1：</p><p>输入：s = "(()"</p><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><p>示例 2：</p><p>输入：s = ")()())"</p><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><p>示例 3：</p><p>输入：s = ""</p><p>输出：0</p><p>提示：</p><p>0 4</p><p>s[i] 为 '(' 或 ')'</p><h2>示例</h2><ol><li>输入：s = "(()"</li></ol><p>输出：2</p><p>解释：最长有效括号子串是 "()"</p><ol><li>输入：s = ")()())"</li></ol><p>输出：4</p><p>解释：最长有效括号子串是 "()()"</p><ol><li>输入：s = ""</li></ol><p>输出：0</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-09 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（235/235）｜ 一次 AC ｜ 一维 DP ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：与 09-06 复习同一思路（一维 DP O(n)/O(n)），本次把两处分支压成三元表达式（<code>dp[i-2]+2</code>、前缀拼接 <code>(j&gt;0?dp[j-1]+2:2)+dp[i-1]</code>），代码更短，复杂度不变。</p><p>② 为什么这次能想起来：触发点是状态定义「dp[i] = 以 i 结尾的最长有效括号长度」——括号匹配 + 求连续段，先想能否用「以位置结尾」的线性状态；遇到 <code>...))</code> 跳段配对时主动补上 <code>dp[j-1]</code> 前缀拼接，规避了这类题最容易漏的「配对后还要接更前面一段」。</p><p>③ 掌握度判定：本地 12 个用例一次跑通，力扣一次提交 Accepted（235/235），全程未看归档/未探讨 → strong。</p><p>④ 下一步提醒：时间 O(n) 已是下界；空间可进阶到 O(1)（左右两遍计数法：balance&lt;0 重置、balance==0 更新答案，左到右 + 右到左各一遍），下次复习可试该写法；顺带可复习 20. 有效括号。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（235/235）｜ 一次 AC ｜ 一维 DP ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-20）与本次同思路：<strong>一维 DP</strong>——<code>dp[i]</code> = 以 i 结尾的最长有效括号长度，只处理 <code>')'</code>，分「前一字符是 <code>'('</code>（直接配对）」「前一字符是 <code>')'</code>（回跳找配对）」两类，最后取 max。</li><li>本次代码结构与一刷大体一致；一刷版代码已存入 submissions prev_code。</li></ul><p><strong>② 为什么这轮没独立写出来（看了答案）</strong></p><ul><li>用户自述本轮<strong>参考了答案</strong>。核心卡点在第二类转移：连续 <code>')'</code> 时不能只看前一个字符，要<strong>回跳 <code>j = i - dp[i-1] - 1</code></strong> 找到与当前 <code>')'</code> 配对的 <code>'('</code>，并<strong>拼接更前面的有效段</strong> <code>dp[j-1]</code>——即 <code>dp[i] = dp[i-1] + 2 + (j&gt;0 ? dp[j-1] : 0)</code>。这个「回跳 + 跨段拼接」是把多个有效段串起来的关键，光背公式不画 case 容易忘。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>weak：用户明确说明看了答案（按规则参考答案 = 较弱）；本地 9 组（示例 2 + 边界 7：全右/嵌套/包裹后拼接/连续两段/中间断开/长连续合法 1000 等）全绿，力扣一次提交 Accepted 235/235。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>下次重写前先不看答案，把两类转移在纸上默写一遍并用小 case 推演：① <code>"()"</code> 结尾 → <code>dp[i] = dp[i-2] + 2</code>；② <code>"))"</code> 结尾 → 回跳 j 找到 <code>'('</code> 后 <code>dp[i-1]+2</code> 再拼 <code>dp[j-1]</code>。能独立默出这两个分支才算真正掌握。</li><li>可对比其它写法：栈存下标（O(n) 空间）、贪心双向扫描（O(1) 空间）——同一题的三种视角。</li></ul></div>
@@ -37,42 +41,32 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>一维 DP</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维 DP</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.3 MB</span><span class="chip">用例 235/235</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0032_LongestValidParentheses.java · 一维 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestValidParentheses</span>(<span class="tk-t">String</span> s) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.7 MB</span><span class="chip">用例 235/235</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0032_LongestValidParentheses.java · 一维 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestValidParentheses</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[s.<span class="tk-f">length</span>()];
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
             <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(i) == <span class="tk-s">')'</span>) {
                 <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == <span class="tk-s">'('</span>) {
-                    <span class="tk-k">if</span> (i - <span class="tk-n">2</span> &gt;= <span class="tk-n">0</span>) {
-                        dp[i] = dp[i - <span class="tk-n">2</span>] + <span class="tk-n">2</span>;
-                    } <span class="tk-k">else</span> {
-                        dp[i] = <span class="tk-n">2</span>;
-                    }
+                    dp[i] = i &gt; <span class="tk-n">1</span> ? dp[i - <span class="tk-n">2</span>] + <span class="tk-n">2</span> : <span class="tk-n">2</span>;
                 } <span class="tk-k">else</span> <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == <span class="tk-s">')'</span>) {
                     <span class="tk-k">int</span> j = i - dp[i - <span class="tk-n">1</span>] - <span class="tk-n">1</span>;
-                    <span class="tk-k">if</span> (j &gt;= <span class="tk-n">0</span>) {
-                        <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'('</span>) {
-                            <span class="tk-k">if</span> (j - <span class="tk-n">1</span> &gt;= <span class="tk-n">0</span>) {
-                                dp[i] = dp[i - <span class="tk-n">1</span>] + <span class="tk-n">2</span> + dp[j - <span class="tk-n">1</span>];
-                            } <span class="tk-k">else</span> {
-                                dp[i] = dp[i - <span class="tk-n">1</span>] + <span class="tk-n">2</span>;
-                            }
-                        }
+                    <span class="tk-k">if</span> (j &gt;= <span class="tk-n">0</span> &amp;&amp; s.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'('</span>) {
+                        dp[i] = (j &gt; <span class="tk-n">0</span> ? dp[j - <span class="tk-n">1</span>] + <span class="tk-n">2</span> : <span class="tk-n">2</span>) + dp[i - <span class="tk-n">1</span>];
                     }
                 }
-                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[i]);
             }
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, dp[i]);
         }
         <span class="tk-k">return</span> max;
     }</pre></div>
