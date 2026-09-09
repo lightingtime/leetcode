@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-20</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>312. 戳气球 (Burst Balloons)</h1><p>&gt; <a href="https://leetcode.cn/problems/burst-balloons/" rel="noopener">https://leetcode.cn/problems/burst-balloons/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。</p><p>现在要求你戳破所有的气球。戳破第 i 个气球，你可以获得 nums[i - 1] * nums[i] * nums[i + 1] 枚硬币。 这里的 i - 1 和 i + 1 代表和 i 相邻的两个气球的序号。如果 i - 1或 i + 1 超出了数组的边界，那么就当它是一个数字为 1 的气球。</p><p>求所能获得硬币的最大数量。</p><p>示例 1：</p><p>输入：nums = [3,1,5,8]</p><p>输出：167</p><p>解释：</p><p>nums = [3,1,5,8] --&gt; [3,5,8] --&gt; [3,8] --&gt; [8] --&gt; []</p><p>coins = 3*1*5 + 3*5*8 + 1*3*8 + 1*8*1 = 167</p><p>示例 2：</p><p>输入：nums = [1,5]</p><p>输出：10</p><p>提示：</p><p>n == nums.length</p><p>1</p><p>0</p><h2>示例</h2><ol><li>输入：nums = [3,1,5,8]</li></ol><p>输出：167</p><ol><li>输入：nums = [1,5]</li></ol><p>输出：10</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-09 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（73/73）｜ 一次 AC ｜ 区间 DP ｜ O(n^3) · O(n^2)</p>
+      <div class="review-note md"><p>① 与上一轮对比：与 09-06 复习同一思路（区间 DP：dp[i][j] 开区间 + 两端 1 哨兵 + 枚举最后戳的 k），本次用 arraycopy 补哨兵、三层循环直接填表，代码更紧凑；复杂度不变 O(n^3)/O(n^2)。</p><p>② 为什么这次能想起来：记忆点是「戳破会改变相邻关系 → 正着模拟有后效性，改问『最后戳破谁』把区间切成两个互不干扰的开区间」，并先按 n&lt;=300 判断 O(n^3) 可行；这次直接按区间长度从小到大填表，没有把 k 误当成第一个戳的。</p><p>③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（73/73），未看归档/未探讨 → strong。</p><p>④ 下一步提醒：命中已沉淀套路「区间 DP：最后一步切分 + 补哨兵」；同类可巩固的还有 1000. 合并石头的最低成本（同样是枚举最后一步合并的区间 DP）。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 区间 DP ｜ O(n^3) · O(n^2)</p>
       <div class="review-note md"><p>① 与上一轮对比：思路与一刷一致（开区间 dp[i][j] + 两端补 1 哨兵 + 枚举最后戳的 k），写法仅把 array[n+1]、len&lt;=n+1 写成 array[array.length-1]、len&lt;array.length 的等价形式；复杂度仍 O(n^3)/O(n^2)，内存 44,732 KB 与一刷 44,744 KB 基本持平。② 为什么没完全独立想起：卡在「len 为什么从 2 开始」——对『开区间里 len=1 是空区间恒 0、len=2 是最小可算单位』这层地基没完全内化，讲解后补上了；一刷踩过的错（修 3 处才 AC）这次没有重犯。③ 掌握度判定：一次提交即 Accepted，但提交前就核心结构探讨过，记较弱。④ 下一步提醒：薄弱点集中在填表起点/地基论证，下次复习要求先不看代码讲清 dp 开区间定义与 len=1→2 的理由再写；可顺带复习同类区间 DP（5 最长回文子串、10 正则匹配）。</p></div>
@@ -37,18 +41,34 @@
         <li><span>复杂度</span><b>O(n^3) · O(n^2)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>区间 DP</b></li>
         <li><span>复杂度</span><b>O(n^3) · O(n^2)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 区间 DP</h3>
-    <p><span class="chip">时间 O(n^3)</span><span class="chip">空间 O(n^2)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0312_BurstBalloons.java · 区间 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxCoins</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n^3)</span><span class="chip">空间 O(n^2)</span><span class="chip">内存 ≈ 42.5 MB</span><span class="chip">用例 73/73</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0312_BurstBalloons.java · 区间 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxCoins</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> n = nums.length;
+        <span class="tk-k">int</span>[] array = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>];
+        <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(nums, <span class="tk-n">0</span>, array, <span class="tk-n">1</span>, n);
+        array[<span class="tk-n">0</span>] = array[array.length - <span class="tk-n">1</span>] = <span class="tk-n">1</span>;
+        <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[array.length][array.length];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> len = <span class="tk-n">2</span>; len &lt; array.length; len++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i + len &lt; array.length; i++) {
+                <span class="tk-k">int</span> j = i + len;
+                <span class="tk-k">for</span> (<span class="tk-k">int</span> k = i + <span class="tk-n">1</span>; k &lt; j; k++) {
+                    dp[i][j] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);
+                }
+            }
+        }
+        <span class="tk-k">return</span> dp[<span class="tk-n">0</span>][array.length - <span class="tk-n">1</span>];
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0312_BurstBalloons.java · 区间 DP · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxCoins</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> n = nums.length;
         <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>][n + <span class="tk-n">2</span>];
         <span class="tk-k">int</span>[] array = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>];
@@ -64,8 +84,7 @@
         }
         <span class="tk-k">return</span> dp[<span class="tk-n">0</span>][n+ <span class="tk-n">1</span>];
     }
-</pre></div>
-    
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：n 个气球按某个顺序全部戳破，每次得分依赖「当前相邻气球」，求最大总得分。直接枚举顺序是 O(n!)，不可行；正着做会不断改变相邻关系，所以倒过来想「最后一个戳谁」——最后一个被戳的气球左右邻居固定，且把问题切成两个互不影响的子区间。</p><p>解法选择理由（区间 DP）：</p><ul><li>在数组两端补 1 哨兵，<code>val = [1] + nums + [1]</code>，下标 0..n+1。</li><li>定义 <code>dp[i][j]</code> = 戳破开区间 <code>(i, j)</code> 内所有气球（端点 i、j 不戳，只当边界）能拿到的最大硬币。</li><li>最后戳 <code>k</code>（i &lt; k &lt; j）时，<code>(i,k)</code> 和 <code>(k,j)</code> 已戳完，k 的左右邻居就是 i 和 j，得分 = <code>val[i] * val[k] * val[j]</code>；左右子区间互不影响。</li><li>答案 = <code>dp[0][n+1]</code>（0 和 n+1 是哨兵，戳完中间全部真实气球）。</li></ul><p>关键设计：</p><ol><li>转移：<code>dp[i][j] = max(dp[i][k] + val[i]*val[k]*val[j] + dp[k][j])</code>，枚举所有 <code>i &lt; k &lt; j</code>。</li><li>填表顺序：三层循环，外层按区间长度 <code>len</code> 从小到大（2..n+1），中层左端点 <code>i</code>（<code>j = i+len</code>），内层枚举 <code>k</code>。长度小的区间先算完，<code>dp[i][k]</code>、<code>dp[k][j]</code> 才可用。</li><li>哨兵数组创建后必须把 <code>val[0]</code>、<code>val[n+1]</code> 设为 1；转移里所有取值都用 <code>val</code>，不能用原 <code>nums</code>（否则越界且边界不是 1）。</li></ol><p>具体 case 推演（<code>nums = [3,1,5]</code>，<code>val = [1,3,1,5,1]</code>，期望 35）：</p><div class="table-wrap"><table><thead><tr><th>len</th><th>i</th><th>j</th><th>k 候选</th><th>dp</th></tr></thead><tbody><tr><td>2</td><td>0</td><td>2</td><td>k=1: <code>0+1×3×1+0</code></td><td>3</td></tr><tr><td>2</td><td>1</td><td>3</td><td>k=2: <code>0+3×1×5+0</code></td><td>15</td></tr><tr><td>2</td><td>2</td><td>4</td><td>k=3: <code>0+1×5×1+0</code></td><td>5</td></tr><tr><td>3</td><td>0</td><td>3</td><td>k=1: <code>0+1×3×5+15=30</code>；k=2: <code>3+1×1×5+0=8</code></td><td>30</td></tr><tr><td>3</td><td>1</td><td>4</td><td>k=2: <code>0+3×1×1+5=8</code>；k=3: <code>15+3×5×1+0=30</code></td><td>30</td></tr><tr><td>4</td><td>0</td><td>4</td><td>k=1: <code>0+1×3×1+30=33</code>；k=2: <code>3+1×1×1+5=9</code>；k=3: <code>30+1×5×1+0=35</code></td><td>35</td></tr></tbody></table></div><p>答案 = <code>dp[0][4] = 35</code>。</p><p>边界与细节：</p><ul><li>单元素 <code>[5]</code>：<code>val=[1,5,1]</code>，<code>dp[0][2] = 1×5×1 = 5</code>。</li><li>全 0：所有乘积为 0，返回 0。</li><li>全 1：每个气球得分 1，n 个气球共 n。</li><li>0 在中间（<code>[1,0,1]</code>）：0 只会在某次乘积中贡献 0，最优把 1 的气球各拿 1 分，共 2。</li><li>300 个全 1：int 范围内 300，验证大输入不溢出。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n^3)：len 有 n 种、i 有 O(n) 种、k 有 O(n) 种。</li><li>空间 O(n^2)：dp 表。</li><li>这是本题的标准最优解：每个子区间都要枚举分界点，O(n^3) 是区间 DP 的下限形态；n&lt;=300 时完全可接受。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>区间 DP 实现三坑：① 转移里访问原数组 nums 而非补哨兵数组，i/j 范围到 n+1 直接越界（报 ArrayIndexOutOfBounds）；② 补哨兵数组 new int[n+2] 后忘记把两端设成 1，边界值默认 0 导致乘积错；③ 右子区间写成 dp[j][k]（下三角恒 0），应为 dp[k][j]。写区间 DP 先确认所有访问都走补丁数组、哨兵值正确、子区间方向正确</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>73/73 用例。</p></div></div></div></section>
