@@ -2,11 +2,12 @@
 // LeetCode 380. O(1) 时间插入、删除和获取随机元素 (Insert Delete GetRandom O(1))
 // 难度：Medium | 分类：哈希表
 // 链接：https://leetcode.cn/problems/insert-delete-getrandom-o1/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-21）
-// 一刷思路：HashMap<val, 下标> + ArrayList（换位删除）——list 给 O(1) 随机下标，map 给 O(1) 定位；
-// 删除时把末尾元素换到被删位置再删末尾，并同步被换元素的下标；三操作均摊 O(1)
-// 一刷复杂度：时间均摊 O(1)，空间 O(n)
-// 测试用例与一刷归档保持一致
+// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-21 · 上次复习 2026-09-06）
+// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
+//
+// 思路：HashMap<值, 下标> + ArrayList 存值；插入 append 并记下标；
+//       删除把末尾元素换到被删下标再删尾（避免数组搬移）；getRandom 取随机下标。
+// 复杂度：时间均摊 O(1)，空间 O(n)
 // ============================================================
 
 import java.util.*;
@@ -37,11 +38,11 @@ public class LC0380_InsertDeleteGetrandomO1 {
                 return false;
             }
             int index = map.get(val);
-            int value = list.get(list.size() - 1);
-            map.put(value, index);
-            list.set(index, value);
-            list.remove(list.size() - 1);
+            int endVal = list.get(list.size() - 1);
+            map.put(endVal, index);
+            list.set(index, endVal);
             map.remove(val);
+            list.remove(list.size() - 1);
             return true;
         }
         public int getRandom() {
