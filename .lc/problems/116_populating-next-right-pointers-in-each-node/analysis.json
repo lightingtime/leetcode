@@ -69,18 +69,19 @@
       "code": "\n    public Node connect(Node root) {\n        if (root == null) {\n            return root;\n        }\n        if (root.left != null) {\n            root.left.next = root.right;\n            root.right.next = root.next != null ? root.next.left : null;\n            connect(root.left);\n            connect(root.right);\n        }\n        return root;\n    }"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-12",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "59/59",
       "approach": "迭代按层连接（利用上层 next 指针）",
       "time_complexity": "O(n)",
-      "space_complexity": "O(1)",
+      "space_complexity": "O(1) 额外空间",
       "optimal": true,
-      "notes": "① 与上一轮对比：一刷是递归前序 DFS（空间 O(log n) 递归栈），本次独立换用**迭代按层连接**——外层循环取每层最左节点，内层沿该层已连好的 next 遍历，为下一层连 left.next=right、right.next=cur.next.left；空间降到 O(1)，属新写法（比一刷更优），追加新 submissions 条目。\n\n② 为什么能想起：没走引导，凭「下一层连接需要借助当前层已连好的 next 指针」直接想到迭代版；一刷踩过的坑（递归顺序导致跨父连接缺失/顺序错乱）被迭代结构天然规避。\n\n③ 掌握度判定：一次提交即 Accepted、全程无探讨，记较强。\n\n④ 下一步提醒：可与 117（非完美二叉树）对比——本题能直接 cur.left.next=cur.right 依赖完美树结构；117 需要每层维护 dummy 头结点处理缺孩子的边，下次可顺带回忆差异。",
+      "notes": "① 与上一轮对比：仍采用「利用上一层已连好的 next 遍历当前层，同时连接下一层」的 O(1) 额外空间写法，结构和上一轮一致；本次只补充了变量语义注释，复杂度保持 O(n) / O(1)。\n\n② 这次为什么想起来：从完美二叉树的结构出发，先连左右子节点，再利用父节点的 `next` 找到右侧父节点并连跨子树边；外层用 `mostLeft.left` 判断是否还有下一层。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：继续以 O(1) 额外空间的迭代写法为主；递归写法仅作为备用，不优先。",
       "mastery": "strong",
-      "pass": 1,
-      "memory_bytes": 46792000,
-      "code": "public Node connect(Node root) {\n        if (root == null) {\n            return null;\n        }\n        Node mostLeft = root;\n        while (mostLeft.left != null) {\n            Node cur = mostLeft;\n            while (cur != null) {\n                cur.left.next = cur.right;\n                if (cur.next != null) {\n                    cur.right.next = cur.next.left;\n                }\n                cur = cur.next;\n            }\n            mostLeft = mostLeft.left;\n        }\n\n        return root;\n\n    }"
+      "pass": 2,
+      "memory_bytes": 46704000,
+      "code": "    public Node connect(Node root) {\n        if (root == null) {\n            return null;\n        }\n        Node mostLeft = root;\n        // mostLeft.left 是下一层存在的充要条件，是一切循环的开始\n        while (mostLeft.left != null) {\n            // node 拿到 当前层的起点，通过遍历当前层来连接下一层的next\n            Node node = mostLeft;\n            while (node != null) {\n                node.left.next = node.right;\n                if (node.next != null) {\n                    node.right.next = node.next.left;\n                }\n                node = node.next;\n            }\n            // 当前层链接完下一层的next后，可以切换到下一层继续链接下下一层\n            mostLeft = mostLeft.left;\n        }\n        return root;\n    }",
+      "prev_code": "public Node connect(Node root) {\n        if (root == null) {\n            return null;\n        }\n        Node mostLeft = root;\n        while (mostLeft.left != null) {\n            Node cur = mostLeft;\n            while (cur != null) {\n                cur.left.next = cur.right;\n                if (cur.next != null) {\n                    cur.right.next = cur.next.left;\n                }\n                cur = cur.next;\n            }\n            mostLeft = mostLeft.left;\n        }\n\n        return root;\n\n    }"
     }
   ],
   "hints": [
@@ -99,6 +100,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：一刷是递归前序 DFS（空间 O(log n) 递归栈），本次独立换用**迭代按层连接**——外层循环取每层最左节点，内层沿该层已连好的 next 遍历，为下一层连 left.next=right、right.next=cur.next.left；空间降到 O(1)，属新写法（比一刷更优），追加新 submissions 条目。\n\n② 为什么能想起：没走引导，凭「下一层连接需要借助当前层已连好的 next 指针」直接想到迭代版；一刷踩过的坑（递归顺序导致跨父连接缺失/顺序错乱）被迭代结构天然规避。\n\n③ 掌握度判定：一次提交即 Accepted、全程无探讨，记较强。\n\n④ 下一步提醒：可与 117（非完美二叉树）对比——本题能直接 cur.left.next=cur.right 依赖完美树结构；117 需要每层维护 dummy 头结点处理缺孩子的边，下次可顺带回忆差异。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-12",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "approach": "迭代按层连接（利用上层 next 指针）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1) 额外空间",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍采用「利用上一层已连好的 next 遍历当前层，同时连接下一层」的 O(1) 额外空间写法，结构和上一轮一致；本次只补充了变量语义注释，复杂度保持 O(n) / O(1)。\n\n② 这次为什么想起来：从完美二叉树的结构出发，先连左右子节点，再利用父节点的 `next` 找到右侧父节点并连跨子树边；外层用 `mostLeft.left` 判断是否还有下一层。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：继续以 O(1) 额外空间的迭代写法为主；递归写法仅作为备用，不优先。"
     }
   ]
 }
