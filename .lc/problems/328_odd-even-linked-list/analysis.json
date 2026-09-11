@@ -48,20 +48,20 @@
       "code": "public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return head;\n        }\n        ListNode evenHead = new ListNode();\n        ListNode eP = evenHead;\n        ListNode oddHead = new ListNode();\n        ListNode oP = oddHead;\n        int size = 1;\n        for (ListNode p = head; p != null;) {\n            ListNode next = p.next;\n            if ((size & 1) == 1) {\n                eP.next = p;\n                eP = eP.next;\n                eP.next = null;\n            } else {\n                oP.next = p;\n                oP = oP.next;\n                oP.next = null;\n            }\n            size++;\n            p = next;\n        }\n        eP.next = oddHead.next;\n        return evenHead.next;\n    }\n"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-12",
       "verdict": "Accepted",
       "testcases": "70/70",
       "runtime_ms": null,
-      "memory_bytes": 46492000,
+      "memory_bytes": 46644000,
       "approach": "原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC——先写「双哨兵拆链」写法1 出错（边遍历边覆盖原 next 成环/OOM），改「原地交替」写法2 后 AC，两种写法都留档。\n- 本次（第 1 次复习）：**直接写出写法2**——`evenHead = head.next` 先存偶链头，`odd/even` 双指针各跳 `next.next` 交替重连，循环结束 `odd.next = evenHead` 收尾；本地 8 组（示例 2 + 边界 6）全绿 + 力扣 70/70 一次 Accepted，内存 46.5MB 与上轮持平。旧版写法2（441B）已存入 `prev_code`，写法1（双哨兵拆链 734B）仍在 submissions 可对比。\n\n**② 为什么想起来**\n- 奇偶分组本质 = 两个互不相交的子序列按位交替，天然是「两个指针各走两步」：`odd.next = even.next`、`odd` 前移，`even.next = odd.next`、`even` 前移，二者互相借用对方的下一跳，不产生覆盖冲突。\n- 三个关键点一次到位：① 先存 `evenHead` 否则最后没法拼接；② 循环条件 `even != null && even.next != null`——奇/偶节点数不同时能安全停在正确位置（奇数个时 even 先到 null，odd 已指向末个奇数节点）；③ 结束后 `odd.next = evenHead` 必须无条件执行。\n- 一刷「拆链成环」的坑这次没出现：跳 `next.next` 的写法不依赖被拆节点自己的 next 继续遍历，所以不存在「覆盖原 next 导致无法前进」的问题。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（70/70）、全程无探讨 → strong；首次复习间隔 1 天。\n\n**④ 下一步提醒**\n- 写法1「双哨兵拆链」（先存 `p.next` 再挂载并断开、最后拼接）是另一套通用技能，应对「按奇偶/按值分组后拼接」类题可作备用。\n- 通用记忆点：涉及把一条链拆成多条再拼的题，先存各链头 + 挂载前保存后继。",
+      "notes": "① 与上一轮对比：仍使用`odd`/`even`两个链尾指针原地交替重连，最后`odd.next = evenHead`；本次代码结构和上一轮一致，复杂度保持 O(n) / O(1)。\n\n② 这次为什么想起来：循环条件锁定为`even != null && even.next != null`，每轮先用`even.next`找回下一个奇数位节点，再由新的`odd`定位下一个偶数位节点，整个过程中不创建新节点。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：继续使用原地交替写法；比它更绕的双哨兵拆链曾在实现中因覆盖`next`而产生环，不优先考虑。",
       "code": "    public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return null;\n        }\n        ListNode evenHead = head.next;\n        ListNode odd = head, even = evenHead;\n        while (even != null && even.next != null) {\n            odd.next = even.next;\n            odd = odd.next;\n            even.next = odd.next;\n            even = even.next;\n        }\n        odd.next = evenHead;\n        return head;\n    }",
       "prev_code": "\n    public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return head;\n        }\n        ListNode evenHead = head.next;\n        ListNode odd = head, even = evenHead;\n        while (even != null && even.next != null) {\n            odd.next = even.next;\n            odd = odd.next;\n            even.next = odd.next;\n            even = even.next;\n        }\n        odd.next = evenHead;\n        return head;\n    }",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -80,6 +80,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC——先写「双哨兵拆链」写法1 出错（边遍历边覆盖原 next 成环/OOM），改「原地交替」写法2 后 AC，两种写法都留档。\n- 本次（第 1 次复习）：**直接写出写法2**——`evenHead = head.next` 先存偶链头，`odd/even` 双指针各跳 `next.next` 交替重连，循环结束 `odd.next = evenHead` 收尾；本地 8 组（示例 2 + 边界 6）全绿 + 力扣 70/70 一次 Accepted，内存 46.5MB 与上轮持平。旧版写法2（441B）已存入 `prev_code`，写法1（双哨兵拆链 734B）仍在 submissions 可对比。\n\n**② 为什么想起来**\n- 奇偶分组本质 = 两个互不相交的子序列按位交替，天然是「两个指针各走两步」：`odd.next = even.next`、`odd` 前移，`even.next = odd.next`、`even` 前移，二者互相借用对方的下一跳，不产生覆盖冲突。\n- 三个关键点一次到位：① 先存 `evenHead` 否则最后没法拼接；② 循环条件 `even != null && even.next != null`——奇/偶节点数不同时能安全停在正确位置（奇数个时 even 先到 null，odd 已指向末个奇数节点）；③ 结束后 `odd.next = evenHead` 必须无条件执行。\n- 一刷「拆链成环」的坑这次没出现：跳 `next.next` 的写法不依赖被拆节点自己的 next 继续遍历，所以不存在「覆盖原 next 导致无法前进」的问题。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（70/70）、全程无探讨 → strong；首次复习间隔 1 天。\n\n**④ 下一步提醒**\n- 写法1「双哨兵拆链」（先存 `p.next` 再挂载并断开、最后拼接）是另一套通用技能，应对「按奇偶/按值分组后拼接」类题可作备用。\n- 通用记忆点：涉及把一条链拆成多条再拼的题，先存各链头 + 挂载前保存后继。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-12",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "70/70",
+      "approach": "原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍使用`odd`/`even`两个链尾指针原地交替重连，最后`odd.next = evenHead`；本次代码结构和上一轮一致，复杂度保持 O(n) / O(1)。\n\n② 这次为什么想起来：循环条件锁定为`even != null && even.next != null`，每轮先用`even.next`找回下一个奇数位节点，再由新的`odd`定位下一个偶数位节点，整个过程中不创建新节点。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：继续使用原地交替写法；比它更绕的双哨兵拆链曾在实现中因覆盖`next`而产生环，不优先考虑。"
     }
   ]
 }

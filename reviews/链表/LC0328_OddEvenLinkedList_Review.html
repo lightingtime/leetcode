@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>328. 奇偶链表 (Odd Even Linked List)</h1><p>&gt; <a href="https://leetcode.cn/problems/odd-even-linked-list/" rel="noopener">https://leetcode.cn/problems/odd-even-linked-list/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：链表</p><h2>题目描述</h2><p>给定单链表的头节点 head ，将所有索引为奇数的节点和索引为偶数的节点分别分组，保持它们原有的相对顺序，然后把偶数索引节点分组连接到奇数索引节点分组之后，返回重新排序的链表。</p><p>第一个节点的索引被认为是 奇数 ， 第二个节点的索引为 偶数 ，以此类推。</p><p>请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。</p><p>你必须在 O(1) 的额外空间复杂度和 O(n) 的时间复杂度下解决这个问题。</p><p>示例 1:</p><p>输入: head = [1,2,3,4,5]</p><p>输出: [1,3,5,2,4]</p><p>示例 2:</p><p>输入: head = [2,1,3,5,6,4,7]</p><p>输出: [2,3,6,7,1,5,4]</p><p>提示:</p><p>n == 链表中的节点数</p><p>0 4</p><p>-106 6</p><h2>示例</h2><ol><li>输入：head = [1,2,3,4,5]</li></ol><p>输出：[1,3,5,2,4]</p><ol><li>输入：head = [2,1,3,5,6,4,7]</li></ol><p>输出：[2,3,6,7,1,5,4]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（70/70）｜ 一次 AC ｜ 原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍使用<code>odd</code>/<code>even</code>两个链尾指针原地交替重连，最后<code>odd.next = evenHead</code>；本次代码结构和上一轮一致，复杂度保持 O(n) / O(1)。</p><p>② 这次为什么想起来：循环条件锁定为<code>even != null &amp;&amp; even.next != null</code>，每轮先用<code>even.next</code>找回下一个奇数位节点，再由新的<code>odd</code>定位下一个偶数位节点，整个过程中不创建新节点。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：继续使用原地交替写法；比它更绕的双哨兵拆链曾在实现中因覆盖<code>next</code>而产生环，不优先考虑。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-07 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（70/70）｜ 一次 AC ｜ 原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-24）：非一次 AC——先写「双哨兵拆链」写法1 出错（边遍历边覆盖原 next 成环/OOM），改「原地交替」写法2 后 AC，两种写法都留档。</li><li>本次（第 1 次复习）：<strong>直接写出写法2</strong>——<code>evenHead = head.next</code> 先存偶链头，<code>odd/even</code> 双指针各跳 <code>next.next</code> 交替重连，循环结束 <code>odd.next = evenHead</code> 收尾；本地 8 组（示例 2 + 边界 6）全绿 + 力扣 70/70 一次 Accepted，内存 46.5MB 与上轮持平。旧版写法2（441B）已存入 <code>prev_code</code>，写法1（双哨兵拆链 734B）仍在 submissions 可对比。</li></ul><p><strong>② 为什么想起来</strong></p><ul><li>奇偶分组本质 = 两个互不相交的子序列按位交替，天然是「两个指针各走两步」：<code>odd.next = even.next</code>、<code>odd</code> 前移，<code>even.next = odd.next</code>、<code>even</code> 前移，二者互相借用对方的下一跳，不产生覆盖冲突。</li><li>三个关键点一次到位：① 先存 <code>evenHead</code> 否则最后没法拼接；② 循环条件 <code>even != null &amp;&amp; even.next != null</code>——奇/偶节点数不同时能安全停在正确位置（奇数个时 even 先到 null，odd 已指向末个奇数节点）；③ 结束后 <code>odd.next = evenHead</code> 必须无条件执行。</li><li>一刷「拆链成环」的坑这次没出现：跳 <code>next.next</code> 的写法不依赖被拆节点自己的 next 继续遍历，所以不存在「覆盖原 next 导致无法前进」的问题。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交 Accepted（70/70）、全程无探讨 → strong；首次复习间隔 1 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>写法1「双哨兵拆链」（先存 <code>p.next</code> 再挂载并断开、最后拼接）是另一套通用技能，应对「按奇偶/按值分组后拼接」类题可作备用。</li><li>通用记忆点：涉及把一条链拆成多条再拼的题，先存各链头 + 挂载前保存后继。</li></ul></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -78,7 +82,7 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.3 MB</span><span class="chip">用例 70/70</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.5 MB</span><span class="chip">用例 70/70</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0328_OddEvenLinkedList.java · 原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">oddEvenList</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> <span class="tk-k">null</span>;
