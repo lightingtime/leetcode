@@ -2,9 +2,10 @@
 // LeetCode 461. 汉明距离 (Hamming Distance)
 // 难度：Easy | 分类：数学与位运算
 // 链接：https://leetcode.cn/problems/hamming-distance/
-// 二刷日期：2026-09-07（第 2 次复习 · 一刷 2026-08-20 · 上次 2026-09-06 较强）
-// 一刷/上次思路：异或 + 位计数（x^y 差异掩码，逐位 &1 计数 + >>> 右移）
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 3 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-07）
+//
+// 思路：异或后逐位统计 1 的个数。
+// 复杂度：时间 O(1)（最多 31 位），空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -14,14 +15,12 @@ public class LC0461_HammingDistance {
     // ==== 提交代码开始 ====
     public int hammingDistance(int x, int y) {
         int t = x ^ y;
-        int count = 0;
+        int ans = 0;
         while (t != 0) {
-            if ((t & 1) == 1) {
-                count++;
-            }
+            ans += (t & 1);
             t >>>= 1;
         }
-        return count;
+        return ans;
     }
     // ==== 提交代码结束 ====
 
