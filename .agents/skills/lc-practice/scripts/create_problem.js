@@ -47,8 +47,13 @@ function toPascal(slug) {
 }
 
 function extractSnippetInfo(snippet) {
-  const cls = (snippet.match(/class\s+(\w+)/) || [])[1] || 'Solution';
-  const body = (snippet.match(/class\s+\w+\s*\{([\s\S]*)\}/) || [])[1] || '';
+  // LeetCode 的 javaSnippet 常把节点/链表定义放在块注释里；必须先剥离注释，
+  // 否则会把注释中的辅助类误判为主类（例如 297 把 Codec 识别成 TreeNode）。
+  const code = snippet
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\/\/[^\n]*/g, '');
+  const cls = (code.match(/class\s+(\w+)/) || [])[1] || 'Solution';
+  const body = (code.match(/class\s+\w+\s*\{([\s\S]*)\}/) || [])[1] || '';
   const methods = [...body.matchAll(/public\s+(?:static\s+)?[\w<>,.\[\]\s]+\s+\w+\s*\(/g)];
   const ctors = [...body.matchAll(/public\s+\w+\s*\(/g)].filter(m => !methods.includes(m));
   const total = methods.length + ctors.length;
@@ -428,7 +433,7 @@ function backupDuplicateArchive(file, className) {
 // 保证「测试用例与一刷归档保持一致」，禁止退回示例 + TODO 占位导致边界/回归用例丢失。
 function syncReviewTests(file, baks) {
   const marker = '    public static void main(String[] args)';
-  const endMarker = '    // ==== 提交代码结束 ====';
+  const endMarker = '// ==== 提交代码结束 ====';
   let content = fs.readFileSync(file, 'utf8');
   let tIdx = content.indexOf(marker);
   let endIdx = content.indexOf(endMarker);

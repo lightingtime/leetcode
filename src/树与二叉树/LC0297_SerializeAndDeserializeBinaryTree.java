@@ -2,8 +2,8 @@
 // LeetCode 297. 二叉树的序列化与反序列化 (Serialize and Deserialize Binary Tree)
 // 难度：Hard | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/
-// 二刷日期：2026-09-07（第 3 次复习 · 一刷 2026-08-08 · 上次 2026-09-02 较强）
-// 一刷/上次思路：层序 BFS 序列化（# 占位 null），反序列化队列 + 双指针下标重建
+// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-08 · 上次复习 2026-09-07）
+// 一刷思路：层序 BFS 序列化（# 占位 null），反序列化队列 + 双指针下标重建
 // 测试用例与一刷归档保持一致（示例 + 边界，均验证 序列化→反序列化 往返一致）
 // ============================================================
 
@@ -18,17 +18,17 @@ public class LC0297_SerializeAndDeserializeBinaryTree {
             if (root == null) {
                 return "";
             }
-            Deque<TreeNode> deque = new LinkedList<>();
-            deque.offerLast(root);
+            Deque<TreeNode> stack = new LinkedList<>();
+            stack.offerLast(root);
             List<String> list = new ArrayList<>();
-            while (!deque.isEmpty()) {
-                int size = deque.size();
+            while (!stack.isEmpty()) {
+                int size = stack.size();
                 for (int i = 0; i < size; i++) {
-                    TreeNode cur = deque.pollFirst();
-                    if (cur != null) {
-                        list.add(cur.val + "");
-                        deque.offerLast(cur.left);
-                        deque.offerLast(cur.right);
+                    TreeNode node = stack.pollFirst();
+                    if (node != null) {
+                        list.add(node.val + "");
+                        stack.offerLast(node.left);
+                        stack.offerLast(node.right);
                     } else {
                         list.add("#");
                     }
@@ -43,19 +43,19 @@ public class LC0297_SerializeAndDeserializeBinaryTree {
             }
             String[] split = data.split(",");
             TreeNode root = new TreeNode(Integer.parseInt(split[0]));
-            Deque<TreeNode> deque = new ArrayDeque<>();
+            Deque<TreeNode> deque = new LinkedList<>();
             deque.offerLast(root);
             int index = 1;
-            while (!deque.isEmpty()) {
-                TreeNode node = deque.pollFirst();
+            while (index < split.length) {
+                TreeNode cur = deque.pollFirst();
                 if (!Objects.equals(split[index], "#")) {
-                    node.left = new TreeNode(Integer.parseInt(split[index]));
-                    deque.offerLast(node.left);
+                    cur.left = new TreeNode(Integer.parseInt(split[index]));
+                    deque.offerLast(cur.left);
                 }
                 index++;
                 if (!Objects.equals(split[index], "#")) {
-                    node.right = new TreeNode(Integer.parseInt(split[index]));
-                    deque.offerLast(node.right);
+                    cur.right = new TreeNode(Integer.parseInt(split[index]));
+                    deque.offerLast(cur.right);
                 }
                 index++;
             }
