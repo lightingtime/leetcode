@@ -1353,12 +1353,12 @@
       "title": "最大矩形",
       "category": "动态规划",
       "first_pass_date": "2026-08-20",
-      "last_review_date": "2026-09-07",
-      "next_review_date": "2026-09-12",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-12",
+      "next_review_date": "2026-09-27",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 2,
+      "consecutive_strong": 3,
       "mastered": false
     },
     "burst-balloons": {

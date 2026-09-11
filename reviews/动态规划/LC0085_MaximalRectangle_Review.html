@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-20</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>85. 最大矩形 (Maximal Rectangle)</h1><p>&gt; <a href="https://leetcode.cn/problems/maximal-rectangle/" rel="noopener">https://leetcode.cn/problems/maximal-rectangle/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：栈、数组、动态规划、矩阵、单调栈</p><h2>题目描述</h2><p>给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。</p><p>示例 1：</p><p>输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]</p><p>输出：6</p><p>解释：最大矩形如上图所示。</p><p>示例 2：</p><p>输入：matrix = [["0"]]</p><p>输出：0</p><p>示例 3：</p><p>输入：matrix = [["1"]]</p><p>输出：1</p><p>提示：</p><p>rows == matrix.length</p><p>cols == matrix[0].length</p><p>1</p><p>matrix[i][j] 为 '0' 或 '1'</p><h2>示例</h2><ol><li>输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]</li></ol><p>输出：6</p><p>解释：最大矩形如上图所示。</p><ol><li>输入：matrix = [["0"]]</li></ol><p>输出：0</p><ol><li>输入：matrix = [["1"]]</li></ol><p>输出：1</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（76/76）｜ 一次 AC ｜ 单调栈 + 逐行高度 ｜ O(mn) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是「逐行高度表 + 单调栈」，每一行先更新 <code>heights[j+1]</code>，再用递增栈求该直方图的最大矩形；两端哨兵高度 0 保证结束时栈自动清空。复杂度 O(mn) / O(n)。</p><p>② 这次为什么想起来：把二维矩阵逐行压成一维柱状图，<code>heights[j]</code> 表示第 j 列截至当前行连续 1 的高度；栈中保存的是高度递增的下标，遇到更矮柱时弹出并确定宽度。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：宽度公式可固定为<code>j - 新栈顶 - 1</code>，两端哨兵分别负责清栈和避免空栈判断；不要漏掉最后一行弹栈。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-07 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（76/76）｜ 一次 AC ｜ 单调栈 + 逐行高度 ｜ O(m*n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>复习①（2026-09-06）：单调栈 + 逐行高度，一次 AC 较强。</li><li>本次（第 2 次复习）：独立写出同款——<code>heights</code> 开 <code>n+2</code> 两端 0 哨兵，逐行递推列高（<code>'1'</code> 续 +1 / <code>'0'</code> 清零），每行单调递增栈结算直方图最大面积；本地 13 组（3 示例 + 10 边界回归）全绿 + 力扣 76/76 一次 Accepted，内存 50.9MB 与上轮持平。写法差异：哨兵并入数组长度，省去循环后的显式清栈；旧写法（09-06）已存入 <code>prev_code</code> 可对比。</li></ul><p><strong>② 为什么想起来</strong></p><ul><li>降维套路：把二维最大矩形拆成「每一行跑一次 LC84 直方图最大矩形」——<code>heights[j]</code> = 从第 i 行往上连续 <code>'1'</code> 的个数，行间递推 <code>heights[j] = matrix[i][j]=='1' ? heights[j]+1 : 0</code>。</li><li>单调栈每行 O(n)：栈内高度递增，遇到更矮柱子即弹出并结算「以该高度为高的矩形」，宽度 = <code>j - 新栈顶 - 1</code>；首尾 0 哨兵让所有柱子必然被结算，不用循环后再补扫。</li><li>一刷的教训（压栈/结算下标错位）这次没有重犯：弹出时先取高、再以新栈顶定宽，顺序写对。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交 Accepted（76/76）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>本题 = LC84 的二维扩展，卡住时先回忆 LC84 单调栈，再叠加逐行高度。</li><li>关联题：LC221 最大正方形（DP）、LC1504 统计全 1 子矩形（直方图 + 宽度累加）。</li></ul></div>
@@ -42,21 +46,23 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>单调栈 + 逐行高度</b></li>
-        <li><span>复杂度</span><b>O(m*n) · O(n)</b></li>
+        <li><span>复杂度</span><b>O(mn) · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单调栈 + 逐行高度</h3>
-    <p><span class="chip">时间 O(m*n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 48.6 MB</span><span class="chip">用例 76/76</span></p>
+    <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 48.8 MB</span><span class="chip">用例 76/76</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0085_MaximalRectangle.java · 单调栈 + 逐行高度</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maximalRectangle</span>(<span class="tk-k">char</span>[][] matrix) {
-        <span class="tk-k">int</span>[] heights = <span class="tk-k">new</span> <span class="tk-k">int</span>[matrix[<span class="tk-n">0</span>].length + <span class="tk-n">2</span>];
+        <span class="tk-k">int</span> m = matrix.length;
+        <span class="tk-k">int</span> n = matrix[<span class="tk-n">0</span>].length;
+        <span class="tk-k">int</span>[] heights = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">2</span>];
         <span class="tk-k">int</span> maxArea = <span class="tk-n">0</span>;
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; matrix.length; i++) {
-            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; matrix[<span class="tk-n">0</span>].length; j++) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
                 <span class="tk-k">if</span> (i == <span class="tk-n">0</span>) {
                     heights[j + <span class="tk-n">1</span>] = matrix[i][j] == <span class="tk-s">'1'</span> ? <span class="tk-n">1</span> : <span class="tk-n">0</span>;
                 } <span class="tk-k">else</span> {
@@ -69,12 +75,11 @@
                 <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; heights[stack.<span class="tk-f">peekLast</span>()] &gt; heights[j]) {
                     <span class="tk-k">int</span> height = heights[stack.<span class="tk-f">pollLast</span>()];
                     <span class="tk-k">int</span> width = j - stack.<span class="tk-f">peekLast</span>() - <span class="tk-n">1</span>;
-                    <span class="tk-k">int</span> area = height * width;
-                    maxArea = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(area, maxArea);
+                    <span class="tk-k">int</span> max = height * width;
+                    maxArea = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(maxArea, max);
                 }
                 stack.<span class="tk-f">offerLast</span>(j);
             }
-
         }
         <span class="tk-k">return</span> maxArea;
     }</pre></div>

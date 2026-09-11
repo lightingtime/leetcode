@@ -34,19 +34,19 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-07",
+      "date": "2026-09-12",
       "verdict": "Accepted",
       "testcases": "76/76",
       "runtime_ms": null,
-      "memory_bytes": 50916000,
+      "memory_bytes": 51140000,
       "approach": "单调栈 + 逐行高度",
-      "time_complexity": "O(m*n)",
+      "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 复习①（2026-09-06）：单调栈 + 逐行高度，一次 AC 较强。\n- 本次（第 2 次复习）：独立写出同款——`heights` 开 `n+2` 两端 0 哨兵，逐行递推列高（`'1'` 续 +1 / `'0'` 清零），每行单调递增栈结算直方图最大面积；本地 13 组（3 示例 + 10 边界回归）全绿 + 力扣 76/76 一次 Accepted，内存 50.9MB 与上轮持平。写法差异：哨兵并入数组长度，省去循环后的显式清栈；旧写法（09-06）已存入 `prev_code` 可对比。\n\n**② 为什么想起来**\n- 降维套路：把二维最大矩形拆成「每一行跑一次 LC84 直方图最大矩形」——`heights[j]` = 从第 i 行往上连续 `'1'` 的个数，行间递推 `heights[j] = matrix[i][j]=='1' ? heights[j]+1 : 0`。\n- 单调栈每行 O(n)：栈内高度递增，遇到更矮柱子即弹出并结算「以该高度为高的矩形」，宽度 = `j - 新栈顶 - 1`；首尾 0 哨兵让所有柱子必然被结算，不用循环后再补扫。\n- 一刷的教训（压栈/结算下标错位）这次没有重犯：弹出时先取高、再以新栈顶定宽，顺序写对。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（76/76）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- 本题 = LC84 的二维扩展，卡住时先回忆 LC84 单调栈，再叠加逐行高度。\n- 关联题：LC221 最大正方形（DP）、LC1504 统计全 1 子矩形（直方图 + 宽度累加）。",
-      "code": "    public int maximalRectangle(char[][] matrix) {\n        int[] heights = new int[matrix[0].length + 2];\n        int maxArea = 0;\n        for (int i = 0; i < matrix.length; i++) {\n            for (int j = 0; j < matrix[0].length; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n\n            Deque<Integer> stack = new ArrayDeque<>();\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int area = height * width;\n                    maxArea = Math.max(area, maxArea);\n                }\n                stack.offerLast(j);\n            }\n\n        }\n        return maxArea;\n    }",
+      "notes": "① 与上一轮对比：仍是「逐行高度表 + 单调栈」，每一行先更新 `heights[j+1]`，再用递增栈求该直方图的最大矩形；两端哨兵高度 0 保证结束时栈自动清空。复杂度 O(mn) / O(n)。\n\n② 这次为什么想起来：把二维矩阵逐行压成一维柱状图，`heights[j]` 表示第 j 列截至当前行连续 1 的高度；栈中保存的是高度递增的下标，遇到更矮柱时弹出并确定宽度。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：宽度公式可固定为`j - 新栈顶 - 1`，两端哨兵分别负责清栈和避免空栈判断；不要漏掉最后一行弹栈。",
+      "code": "    public int maximalRectangle(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] heights = new int[n + 2];\n        int maxArea = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n\n            Deque<Integer> stack = new ArrayDeque<>();\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int max = height * width;\n                    maxArea = Math.max(maxArea, max);\n                }\n                stack.offerLast(j);\n            }\n        }\n        return maxArea;\n    }",
       "mastery": "strong",
-      "pass": 2,
+      "pass": 3,
       "prev_code": "public int maximalRectangle(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] heights = new int[n + 2];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n            Deque<Integer> stack = new ArrayDeque<>();\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int area = height * width;\n                    max = Math.max(max, area);\n                }\n                stack.offerLast(j);\n            }\n        }\n        return max;\n    }\n"
     }
   ],
@@ -80,6 +80,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 复习①（2026-09-06）：单调栈 + 逐行高度，一次 AC 较强。\n- 本次（第 2 次复习）：独立写出同款——`heights` 开 `n+2` 两端 0 哨兵，逐行递推列高（`'1'` 续 +1 / `'0'` 清零），每行单调递增栈结算直方图最大面积；本地 13 组（3 示例 + 10 边界回归）全绿 + 力扣 76/76 一次 Accepted，内存 50.9MB 与上轮持平。写法差异：哨兵并入数组长度，省去循环后的显式清栈；旧写法（09-06）已存入 `prev_code` 可对比。\n\n**② 为什么想起来**\n- 降维套路：把二维最大矩形拆成「每一行跑一次 LC84 直方图最大矩形」——`heights[j]` = 从第 i 行往上连续 `'1'` 的个数，行间递推 `heights[j] = matrix[i][j]=='1' ? heights[j]+1 : 0`。\n- 单调栈每行 O(n)：栈内高度递增，遇到更矮柱子即弹出并结算「以该高度为高的矩形」，宽度 = `j - 新栈顶 - 1`；首尾 0 哨兵让所有柱子必然被结算，不用循环后再补扫。\n- 一刷的教训（压栈/结算下标错位）这次没有重犯：弹出时先取高、再以新栈顶定宽，顺序写对。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（76/76）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- 本题 = LC84 的二维扩展，卡住时先回忆 LC84 单调栈，再叠加逐行高度。\n- 关联题：LC221 最大正方形（DP）、LC1504 统计全 1 子矩形（直方图 + 宽度累加）。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-12",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "76/76",
+      "approach": "单调栈 + 逐行高度",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是「逐行高度表 + 单调栈」，每一行先更新 `heights[j+1]`，再用递增栈求该直方图的最大矩形；两端哨兵高度 0 保证结束时栈自动清空。复杂度 O(mn) / O(n)。\n\n② 这次为什么想起来：把二维矩阵逐行压成一维柱状图，`heights[j]` 表示第 j 列截至当前行连续 1 的高度；栈中保存的是高度递增的下标，遇到更矮柱时弹出并确定宽度。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：宽度公式可固定为`j - 新栈顶 - 1`，两端哨兵分别负责清栈和避免空栈判断；不要漏掉最后一行弹栈。"
     }
   ]
 }
