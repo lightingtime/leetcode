@@ -2,8 +2,10 @@
 // LeetCode 150. 逆波兰表达式求值 (Evaluate Reverse Polish Notation)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/evaluate-reverse-polish-notation/
-// 刷题日期：2026-09-07
+// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-24 · 上次复习 2026-09-08）
 //
+// 思路：栈求值；遇数字入栈，遇算符依次弹出右、左操作数，计算后压回。
+// 复杂度：时间 O(n)，空间 O(n)
 // ============================================================
 
 import java.util.*;

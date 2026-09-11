@@ -1,69 +1,85 @@
 {
- "seq": 140,
- "id": "150",
- "slug": "evaluate-reverse-polish-notation",
- "title": "逆波兰表达式求值",
- "category": "栈、队列与优先队列",
- "date": "2026-08-24",
- "verdict": "Accepted",
- "testcases": "22/22",
- "runtime_ms": null,
- "memory_bytes": 45512000,
- "firstPass": false,
- "optimal": true,
- "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
- "dp_subtype": "",
- "approach_detail": "**① 问题本质与解法选择理由**\n- 后缀表达式：算符跟在操作数后面，天然适合栈——遇数字入栈，遇算符弹栈顶两个操作数计算，结果再入栈，最后栈顶即答案。\n- 除法向零截断：Java 的 int 除法本身向零截断（如 -7/2 = -3），直接 `b / a` 即可，无需额外处理。\n\n**② 关键设计决策**\n- `Deque<Integer> stack` 当栈用：数字 `push`、算符 `pop` 两次、算完 `push` 结果，全部在队头操作。\n- 减/除法操作数顺序：先弹的是后入栈的操作数（a），后弹的是先入栈的（b），表达式是 `b - a`、`b / a`（如 `13 5 /` = 13/5，弹 a=5、b=13）。\n- 判断算符用 `token.equals(\"+\")` 等，否则 `Integer.parseInt(token)` 转数字入栈。\n\n**③ 边界与细节**\n- 单元素 [\"42\"]：无算符，直接返回 42。\n- 负数除法向零截断：-7/2、7/-2 都等于 -3（Java int 除法向零截断，与题目要求一致）。\n- 大中间结果 200^4=1.6e9：题目保证 32 位整数可表示，int 不溢出。\n- tokens 上限 10^4：栈深最坏 O(n)（如连续入栈 5000 个数字），Deque 动态扩容无问题。\n- 不含除零、表达式一定合法，无需校验栈空。\n\n**④ 复杂度分析与下限论证**\n- 时间 O(n)：每个 token 处理一次，栈操作 O(1)。\n- 空间 O(n)：栈最坏存 n 个中间操作数（如全部是数字再统一运算），这是求值必需的——后缀表达式的中间结果必须保存，空间 Ω(n) 为下限，O(n) 达到。\n- 最优性：每个 token 至少读一次，时间 Ω(n) 达到；空间必须存全部待计算操作数，Ω(n) 达到——本解为最优。\n\n**⑤ 具体 case 推演：[\"4\",\"13\",\"5\",\"/\",\"+\"]（期望 6）**\n- \"4\"：push(4)，栈 [4]。\n- \"13\"：push(13)，栈 [13,4]（顶 13）。\n- \"5\"：push(5)，栈 [5,13,4]。\n- \"/\"：a=pop=5，b=pop=13 → push(13/5=2)，栈 [2,4]。\n- \"+\"：a=pop=2，b=pop=4 → push(4+2=6)，栈 [6]。\n- 返回 6 ✅。\n- 踩坑对比：若数字用 offerLast 入队尾，\"/\" 时 pop 到的是 4 和 13 而非 13 和 5，结果错成 8。",
- "time_complexity": "O(n)",
- "space_complexity": "O(n)",
- "notes": "",
- "code_notes": [],
- "mistakes": [
-  {
-   "habit": "ArrayDeque 当栈用时混用 offerLast（队尾）与 pop（队头）：数字入栈走队尾、算符弹栈走队头，后入的数字反而最后被取，栈序错乱；栈操作必须统一用 push/pop（都在队头）",
-   "count": 1
-  }
- ],
- "patterns": [
-  {
-   "title": "ArrayDeque 当栈用：push/pop 同侧，禁止混 offerLast",
-   "text": "ArrayDeque 作栈：push=addFirst、pop=removeFirst 都在队头；数字/元素入栈必须也用 push，混用 offerLast（队尾）会破坏后进先出。后缀表达式求值遇数字 push、遇算符弹两个算完再 push，减/除注意先弹的是后操作数（b-a、b/a）。",
-   "category": "栈、队列与优先队列",
-   "problem": "evaluate-reverse-polish-notation",
-   "date": "2026-08-24"
-  }
- ],
- "submissions": [
-  {
-   "date": "2026-08-24",
-   "verdict": "Accepted",
-   "testcases": "22/22",
-   "runtime_ms": null,
-   "memory_bytes": 45512000,
-   "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
-   "time_complexity": "O(n)",
-   "space_complexity": "O(n)",
-   "optimal": true,
-   "notes": "",
-   "code": "public int evalRPN(String[] tokens) {\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String token : tokens) {\n            if (token.equals(\"+\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a + b);\n            } else if (token.equals(\"-\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(b - a);\n            } else if (token.equals(\"*\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a * b);\n            } else if (token.equals(\"/\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(b / a);\n            } else {\n                stack.push(Integer.parseInt(token));\n            }\n        }\n        return stack.pop();\n    }\n"
-  }
- ],
- "hints": [
-  "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
- ],
- "reviews": [
-  {
-   "pass": 1,
-   "date": "2026-09-08",
-   "mastery": "strong",
-   "firstTry": true,
-   "verdict": "Accepted",
-   "testcases": "23/23",
-   "approach": "栈：遇数字入栈、遇算符弹两数运算后入栈（Deque 队头模拟栈），除向零截断用 int 除法",
-   "time_complexity": "O(n)",
-   "space_complexity": "O(n)",
-   "optimal": true,
-   "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC。当时先想「递归/中缀转换」绕路，纠正为「栈直接求值」后 AC，归档写法为 `Deque` + `push/pop`（队头当栈顶）。\n- 本次（第 1 次复习）：独立写出同思路栈求值——遇数字 `offerLast` 入栈、遇算符弹栈顶两个操作数算完再入栈，除向零截断直接用 Java `int` 除法。写法仅微调（`pollLast/offerLast` 队尾当栈顶 + 减法写成 `a - b` 而非一刷的 `b - a`），语义等价，非新思路。\n\n**② 为什么能想起来 / 一刷的错这次如何规避**\n- 一刷踩的坑是「没第一时间锁定栈模型」；这次看到后缀表达式直接条件反射 = 栈：算符永远作用于它前面的两个已算好的操作数，天然 LIFO。\n- 减法/除法操作数顺序是这类题唯一易错点：先弹的是后入栈的右操作数。这次通过「弹 b（顶）→ 弹 a（次顶）→ `a - b`」的命名把顺序钉死，规避了一刷时靠猜的问题。\n\n**③ 掌握度判定依据**\n- 本地 9 组测试（3 示例 + 6 边界：单元素、负除正/正除负向零截断、负数乘法、大中间结果 200⁴、9999 tokens）全绿，一次提交即 Accepted（23/23），全程无探讨 → 记较强。\n\n**④ 下一步提醒**\n- 栈求值 + 操作数顺序的同一套路可顺带复习：`LC0224 基本计算器`、`LC0227 基本计算器 II`（中缀转后缀/双栈）、`LC0394 字符串解码`；注意它们的优先级与括号处理是比本题多出的层次。"
-  }
- ]
+  "seq": 140,
+  "id": "150",
+  "slug": "evaluate-reverse-polish-notation",
+  "title": "逆波兰表达式求值",
+  "category": "栈、队列与优先队列",
+  "date": "2026-08-24",
+  "verdict": "Accepted",
+  "testcases": "22/22",
+  "runtime_ms": null,
+  "memory_bytes": 45512000,
+  "firstPass": false,
+  "optimal": true,
+  "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择理由**\n- 后缀表达式：算符跟在操作数后面，天然适合栈——遇数字入栈，遇算符弹栈顶两个操作数计算，结果再入栈，最后栈顶即答案。\n- 除法向零截断：Java 的 int 除法本身向零截断（如 -7/2 = -3），直接 `b / a` 即可，无需额外处理。\n\n**② 关键设计决策**\n- `Deque<Integer> stack` 当栈用：数字 `push`、算符 `pop` 两次、算完 `push` 结果，全部在队头操作。\n- 减/除法操作数顺序：先弹的是后入栈的操作数（a），后弹的是先入栈的（b），表达式是 `b - a`、`b / a`（如 `13 5 /` = 13/5，弹 a=5、b=13）。\n- 判断算符用 `token.equals(\"+\")` 等，否则 `Integer.parseInt(token)` 转数字入栈。\n\n**③ 边界与细节**\n- 单元素 [\"42\"]：无算符，直接返回 42。\n- 负数除法向零截断：-7/2、7/-2 都等于 -3（Java int 除法向零截断，与题目要求一致）。\n- 大中间结果 200^4=1.6e9：题目保证 32 位整数可表示，int 不溢出。\n- tokens 上限 10^4：栈深最坏 O(n)（如连续入栈 5000 个数字），Deque 动态扩容无问题。\n- 不含除零、表达式一定合法，无需校验栈空。\n\n**④ 复杂度分析与下限论证**\n- 时间 O(n)：每个 token 处理一次，栈操作 O(1)。\n- 空间 O(n)：栈最坏存 n 个中间操作数（如全部是数字再统一运算），这是求值必需的——后缀表达式的中间结果必须保存，空间 Ω(n) 为下限，O(n) 达到。\n- 最优性：每个 token 至少读一次，时间 Ω(n) 达到；空间必须存全部待计算操作数，Ω(n) 达到——本解为最优。\n\n**⑤ 具体 case 推演：[\"4\",\"13\",\"5\",\"/\",\"+\"]（期望 6）**\n- \"4\"：push(4)，栈 [4]。\n- \"13\"：push(13)，栈 [13,4]（顶 13）。\n- \"5\"：push(5)，栈 [5,13,4]。\n- \"/\"：a=pop=5，b=pop=13 → push(13/5=2)，栈 [2,4]。\n- \"+\"：a=pop=2，b=pop=4 → push(4+2=6)，栈 [6]。\n- 返回 6 ✅。\n- 踩坑对比：若数字用 offerLast 入队尾，\"/\" 时 pop 到的是 4 和 13 而非 13 和 5，结果错成 8。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "ArrayDeque 当栈用时混用 offerLast（队尾）与 pop（队头）：数字入栈走队尾、算符弹栈走队头，后入的数字反而最后被取，栈序错乱；栈操作必须统一用 push/pop（都在队头）",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "ArrayDeque 当栈用：push/pop 同侧，禁止混 offerLast",
+      "text": "ArrayDeque 作栈：push=addFirst、pop=removeFirst 都在队头；数字/元素入栈必须也用 push，混用 offerLast（队尾）会破坏后进先出。后缀表达式求值遇数字 push、遇算符弹两个算完再 push，减/除注意先弹的是后操作数（b-a、b/a）。",
+      "category": "栈、队列与优先队列",
+      "problem": "evaluate-reverse-polish-notation",
+      "date": "2026-08-24"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-09-12",
+      "verdict": "Accepted",
+      "testcases": "23/23",
+      "runtime_ms": null,
+      "memory_bytes": 45784000,
+      "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是栈求值，继续用 `Deque` 的 `offerLast`/`pollLast` 把队尾当栈顶；减法和除法都先弹右操作数 `b`、再弹左操作数 `a`，顺序与上一轮一致，复杂度 O(n) / O(n)。\n\n② 这次为什么想起来：后缀表达式的算符天然作用于前两个已完成的操作数，扫描 token 时数字入栈，算符弹两个并压回，最终栈顶就是答案。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：减法与除法的左右操作数顺序仍是唯一易错点，继续保持「先弹右、后弹左」的命名习惯。",
+      "code": "    public int evalRPN(String[] tokens) {\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String token : tokens) {\n            if (token.equals(\"+\")) {\n                int a = stack.pollLast();\n                int b = stack.pollLast();\n                stack.offerLast(a + b);\n            } else if (token.equals(\"-\")) {\n                int b = stack.pollLast();\n                int a = stack.pollLast();\n                stack.offerLast(a - b);\n            } else if (token.equals(\"*\")) {\n                int a = stack.pollLast();\n                int b = stack.pollLast();\n                stack.offerLast(a * b);\n            } else if (token.equals(\"/\")) {\n                int b = stack.pollLast();\n                int a = stack.pollLast();\n                stack.offerLast(a / b);\n            } else {\n                stack.offerLast(Integer.parseInt(token));\n            }\n        }\n        return stack.peek();\n    }",
+      "prev_code": "public int evalRPN(String[] tokens) {\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String token : tokens) {\n            if (token.equals(\"+\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a + b);\n            } else if (token.equals(\"-\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(b - a);\n            } else if (token.equals(\"*\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a * b);\n            } else if (token.equals(\"/\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(b / a);\n            } else {\n                stack.push(Integer.parseInt(token));\n            }\n        }\n        return stack.pop();\n    }\n",
+      "mastery": "strong",
+      "pass": 2
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-08",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "23/23",
+      "approach": "栈：遇数字入栈、遇算符弹两数运算后入栈（Deque 队头模拟栈），除向零截断用 int 除法",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC。当时先想「递归/中缀转换」绕路，纠正为「栈直接求值」后 AC，归档写法为 `Deque` + `push/pop`（队头当栈顶）。\n- 本次（第 1 次复习）：独立写出同思路栈求值——遇数字 `offerLast` 入栈、遇算符弹栈顶两个操作数算完再入栈，除向零截断直接用 Java `int` 除法。写法仅微调（`pollLast/offerLast` 队尾当栈顶 + 减法写成 `a - b` 而非一刷的 `b - a`），语义等价，非新思路。\n\n**② 为什么能想起来 / 一刷的错这次如何规避**\n- 一刷踩的坑是「没第一时间锁定栈模型」；这次看到后缀表达式直接条件反射 = 栈：算符永远作用于它前面的两个已算好的操作数，天然 LIFO。\n- 减法/除法操作数顺序是这类题唯一易错点：先弹的是后入栈的右操作数。这次通过「弹 b（顶）→ 弹 a（次顶）→ `a - b`」的命名把顺序钉死，规避了一刷时靠猜的问题。\n\n**③ 掌握度判定依据**\n- 本地 9 组测试（3 示例 + 6 边界：单元素、负除正/正除负向零截断、负数乘法、大中间结果 200⁴、9999 tokens）全绿，一次提交即 Accepted（23/23），全程无探讨 → 记较强。\n\n**④ 下一步提醒**\n- 栈求值 + 操作数顺序的同一套路可顺带复习：`LC0224 基本计算器`、`LC0227 基本计算器 II`（中缀转后缀/双栈）、`LC0394 字符串解码`；注意它们的优先级与括号处理是比本题多出的层次。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-12",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "23/23",
+      "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是栈求值，继续用 `Deque` 的 `offerLast`/`pollLast` 把队尾当栈顶；减法和除法都先弹右操作数 `b`、再弹左操作数 `a`，顺序与上一轮一致，复杂度 O(n) / O(n)。\n\n② 这次为什么想起来：后缀表达式的算符天然作用于前两个已完成的操作数，扫描 token 时数字入栈，算符弹两个并压回，最终栈顶就是答案。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：减法与除法的左右操作数顺序仍是唯一易错点，继续保持「先弹右、后弹左」的命名习惯。"
+    }
+  ]
 }

@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>150. 逆波兰表达式求值 (Evaluate Reverse Polish Notation)</h1><p>&gt; <a href="https://leetcode.cn/problems/evaluate-reverse-polish-notation/" rel="noopener">https://leetcode.cn/problems/evaluate-reverse-polish-notation/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、数组、数学</p><h2>题目描述</h2><p>给你一个字符串数组 tokens ，表示一个根据 逆波兰表示法 表示的算术表达式。</p><p>请你计算该表达式。返回一个表示表达式值的整数。</p><p>注意：</p><p>有效的算符为 '+'、'-'、'*' 和 '/' 。</p><p>每个操作数（运算对象）都可以是一个整数或者另一个表达式。</p><p>两个整数之间的除法总是 向零截断 。</p><p>表达式中不含除零运算。</p><p>输入是一个根据逆波兰表示法表示的算术表达式。</p><p>答案及所有中间计算结果可以用 32 位 整数表示。</p><p>示例 1：</p><p>输入：tokens = ["2","1","+","3","*"]</p><p>输出：9</p><p>解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9</p><p>示例 2：</p><p>输入：tokens = ["4","13","5","/","+"]</p><p>输出：6</p><p>解释：该算式转化为常见的中缀算术表达式为：(4 + (13 / 5)) = 6</p><p>示例 3：</p><p>输入：tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]</p><p>输出：22</p><p>解释：该算式转化为常见的中缀算术表达式为：</p><p>((10 * (6 / ((9 + 3) * -11))) + 17) + 5</p><p>= ((10 * (6 / (12 * -11))) + 17) + 5</p><p>= ((10 * (6 / -132)) + 17) + 5</p><p>= ((10 * 0) + 17) + 5</p><p>= (0 + 17) + 5</p><p>= 17 + 5</p><p>= 22</p><p>提示：</p><p>1 4</p><p>tokens[i] 是一个算符（"+"、"-"、"*" 或 "/"），或是在范围 [-200, 200] 内的一个整数</p><p>逆波兰表达式：</p><p>逆波兰表达式是一种后缀表达式，所谓后缀就是指算符写在后面。</p><p>平常使用的算式则是一种中缀表达式，如 ( 1 + 2 ) * ( 3 + 4 ) 。</p><p>该算式的逆波兰表达式写法为 ( ( 1 2 + ) ( 3 4 + ) * ) 。</p><p>逆波兰表达式主要有以下两个优点：</p><p>去掉括号后表达式无歧义，上式即便写成 1 2 + 3 4 + * 也可以依据次序计算出正确结果。</p><p>适合用栈操作运算：遇到数字则入栈；遇到算符则取出栈顶两个数字进行计算，并将结果压入栈中</p><h2>示例</h2><ol><li>输入：tokens = ["2","1","+","3","*"]</li></ol><p>输出：9</p><p>解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9</p><ol><li>输入：tokens = ["4","13","5","/","+"]</li></ol><p>输出：6</p><p>解释：该算式转化为常见的中缀算术表达式为：(4 + (13 / 5)) = 6</p><ol><li>输入：tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]</li></ol><p>输出：22</p><p>解释：该算式转化为常见的中缀算术表达式为：</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（23/23）｜ 一次 AC ｜ 栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是栈求值，继续用 <code>Deque</code> 的 <code>offerLast</code>/<code>pollLast</code> 把队尾当栈顶；减法和除法都先弹右操作数 <code>b</code>、再弹左操作数 <code>a</code>，顺序与上一轮一致，复杂度 O(n) / O(n)。</p><p>② 这次为什么想起来：后缀表达式的算符天然作用于前两个已完成的操作数，扫描 token 时数字入栈，算符弹两个并压回，最终栈顶就是答案。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：减法与除法的左右操作数顺序仍是唯一易错点，继续保持「先弹右、后弹左」的命名习惯。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-08 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（23/23）｜ 一次 AC ｜ 栈：遇数字入栈、遇算符弹两数运算后入栈（Deque 队头模拟栈），除向零截断用 int 除法 ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-24）：非一次 AC。当时先想「递归/中缀转换」绕路，纠正为「栈直接求值」后 AC，归档写法为 <code>Deque</code> + <code>push/pop</code>（队头当栈顶）。</li><li>本次（第 1 次复习）：独立写出同思路栈求值——遇数字 <code>offerLast</code> 入栈、遇算符弹栈顶两个操作数算完再入栈，除向零截断直接用 Java <code>int</code> 除法。写法仅微调（<code>pollLast/offerLast</code> 队尾当栈顶 + 减法写成 <code>a - b</code> 而非一刷的 <code>b - a</code>），语义等价，非新思路。</li></ul><p><strong>② 为什么能想起来 / 一刷的错这次如何规避</strong></p><ul><li>一刷踩的坑是「没第一时间锁定栈模型」；这次看到后缀表达式直接条件反射 = 栈：算符永远作用于它前面的两个已算好的操作数，天然 LIFO。</li><li>减法/除法操作数顺序是这类题唯一易错点：先弹的是后入栈的右操作数。这次通过「弹 b（顶）→ 弹 a（次顶）→ <code>a - b</code>」的命名把顺序钉死，规避了一刷时靠猜的问题。</li></ul><p><strong>③ 掌握度判定依据</strong></p><ul><li>本地 9 组测试（3 示例 + 6 边界：单元素、负除正/正除负向零截断、负数乘法、大中间结果 200⁴、9999 tokens）全绿，一次提交即 Accepted（23/23），全程无探讨 → 记较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>栈求值 + 操作数顺序的同一套路可顺带复习：<code>LC0224 基本计算器</code>、<code>LC0227 基本计算器 II</code>（中缀转后缀/双栈）、<code>LC0394 字符串解码</code>；注意它们的优先级与括号处理是比本题多出的层次。</li></ul></div>
@@ -38,17 +42,42 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
-        <li><span>思路</span><b>栈：遇数字入栈、遇算符弹两数运算后入栈（Deque 队头模拟栈），除向零截断用 int 除法</b></li>
+        <li><span>思路</span><b>栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.4 MB</span><span class="chip">用例 22/22</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0150_EvaluateReversePolishNotation.java · 栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">evalRPN</span>(<span class="tk-t">String</span>[] tokens) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 43.7 MB</span><span class="chip">用例 23/23</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0150_EvaluateReversePolishNotation.java · 栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">evalRPN</span>(<span class="tk-t">String</span>[] tokens) {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-t">String</span> token : tokens) {
+            <span class="tk-k">if</span> (token.<span class="tk-f">equals</span>(<span class="tk-s">"+"</span>)) {
+                <span class="tk-k">int</span> a = stack.<span class="tk-f">pollLast</span>();
+                <span class="tk-k">int</span> b = stack.<span class="tk-f">pollLast</span>();
+                stack.<span class="tk-f">offerLast</span>(a + b);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (token.<span class="tk-f">equals</span>(<span class="tk-s">"-"</span>)) {
+                <span class="tk-k">int</span> b = stack.<span class="tk-f">pollLast</span>();
+                <span class="tk-k">int</span> a = stack.<span class="tk-f">pollLast</span>();
+                stack.<span class="tk-f">offerLast</span>(a - b);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (token.<span class="tk-f">equals</span>(<span class="tk-s">"*"</span>)) {
+                <span class="tk-k">int</span> a = stack.<span class="tk-f">pollLast</span>();
+                <span class="tk-k">int</span> b = stack.<span class="tk-f">pollLast</span>();
+                stack.<span class="tk-f">offerLast</span>(a * b);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (token.<span class="tk-f">equals</span>(<span class="tk-s">"/"</span>)) {
+                <span class="tk-k">int</span> b = stack.<span class="tk-f">pollLast</span>();
+                <span class="tk-k">int</span> a = stack.<span class="tk-f">pollLast</span>();
+                stack.<span class="tk-f">offerLast</span>(a / b);
+            } <span class="tk-k">else</span> {
+                stack.<span class="tk-f">offerLast</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(token));
+            }
+        }
+        <span class="tk-k">return</span> stack.<span class="tk-f">peek</span>();
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0150_EvaluateReversePolishNotation.java · 栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">evalRPN</span>(<span class="tk-t">String</span>[] tokens) {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-t">String</span> token : tokens) {
             <span class="tk-k">if</span> (token.<span class="tk-f">equals</span>(<span class="tk-s">"+"</span>)) {
@@ -73,8 +102,7 @@
         }
         <span class="tk-k">return</span> stack.<span class="tk-f">pop</span>();
     }
-</pre></div>
-    
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>① 问题本质与解法选择理由</strong></p><ul><li>后缀表达式：算符跟在操作数后面，天然适合栈——遇数字入栈，遇算符弹栈顶两个操作数计算，结果再入栈，最后栈顶即答案。</li><li>除法向零截断：Java 的 int 除法本身向零截断（如 -7/2 = -3），直接 <code>b / a</code> 即可，无需额外处理。</li></ul><p><strong>② 关键设计决策</strong></p><ul><li><code>Deque&lt;Integer&gt; stack</code> 当栈用：数字 <code>push</code>、算符 <code>pop</code> 两次、算完 <code>push</code> 结果，全部在队头操作。</li><li>减/除法操作数顺序：先弹的是后入栈的操作数（a），后弹的是先入栈的（b），表达式是 <code>b - a</code>、<code>b / a</code>（如 <code>13 5 /</code> = 13/5，弹 a=5、b=13）。</li><li>判断算符用 <code>token.equals("+")</code> 等，否则 <code>Integer.parseInt(token)</code> 转数字入栈。</li></ul><p><strong>③ 边界与细节</strong></p><ul><li>单元素 ["42"]：无算符，直接返回 42。</li><li>负数除法向零截断：-7/2、7/-2 都等于 -3（Java int 除法向零截断，与题目要求一致）。</li><li>大中间结果 200^4=1.6e9：题目保证 32 位整数可表示，int 不溢出。</li><li>tokens 上限 10^4：栈深最坏 O(n)（如连续入栈 5000 个数字），Deque 动态扩容无问题。</li><li>不含除零、表达式一定合法，无需校验栈空。</li></ul><p><strong>④ 复杂度分析与下限论证</strong></p><ul><li>时间 O(n)：每个 token 处理一次，栈操作 O(1)。</li><li>空间 O(n)：栈最坏存 n 个中间操作数（如全部是数字再统一运算），这是求值必需的——后缀表达式的中间结果必须保存，空间 Ω(n) 为下限，O(n) 达到。</li><li>最优性：每个 token 至少读一次，时间 Ω(n) 达到；空间必须存全部待计算操作数，Ω(n) 达到——本解为最优。</li></ul><p><strong>⑤ 具体 case 推演：["4","13","5","/","+"]（期望 6）</strong></p><ul><li>"4"：push(4)，栈 [4]。</li><li>"13"：push(13)，栈 [13,4]（顶 13）。</li><li>"5"：push(5)，栈 [5,13,4]。</li><li>"/"：a=pop=5，b=pop=13 → push(13/5=2)，栈 [2,4]。</li><li>"+"：a=pop=2，b=pop=4 → push(4+2=6)，栈 [6]。</li><li>返回 6 ✅。</li><li>踩坑对比：若数字用 offerLast 入队尾，"/" 时 pop 到的是 4 和 13 而非 13 和 5，结果错成 8。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>ArrayDeque 当栈用时混用 offerLast（队尾）与 pop（队头）：数字入栈走队尾、算符弹栈走队头，后入的数字反而最后被取，栈序错乱；栈操作必须统一用 push/pop（都在队头）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>22/22 用例。</p></div></div></div></section>
