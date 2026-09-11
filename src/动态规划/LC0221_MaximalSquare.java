@@ -1,42 +1,46 @@
 // ============================================================
 // LeetCode 221. 最大正方形 (Maximal Square)
-// 难度：Medium | 分类：动态规划（子类型：线性/网格 DP）
+// 难度：Medium | 分类：动态规划（二维网格 DP）
 // 链接：https://leetcode.cn/problems/maximal-square/
-// 复习日期：2026-09-05（第 2 次复习 · 一刷 2026-08-19 · 上次 2026-09-02 较弱）
-// 一刷思路：DP 三邻居 min+1（dp[i][j] = 以 (i,j) 为右下角的最大正方形边长），O(mn)/O(mn)
-// 上次写法：一维滚动 DP 到 O(n)（只依赖上一行 + 本行左 + 左上，dig 接力）
-// 测试用例与一刷归档保持一致（示例 + WA 回归 + 边界）
+// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-19 · 上次复习 2026-09-05）
+//
+// 思路：二维网格 DP，滚动数组记录以当前格为右下角的最大正方形边长。
+// 复杂度：时间 O(mn)，空间 O(n)
 // ============================================================
+
+import java.util.*;
 
 public class LC0221_MaximalSquare {
 
     // ==== 提交代码开始 ====
     public int maximalSquare(char[][] matrix) {
+        int m = matrix.length;
+        if (m == 0) {
+            return 0;
+        }
         int n = matrix[0].length;
         int[] dp = new int[n];
         for (int i = 0; i < n; i++) {
-            if (matrix[0][i] == '1') {
-                dp[i] = 1;
-            }
+            dp[i] = matrix[0][i] == '1' ? 1 : 0;
         }
+
         int max = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            int dig = dp[0];
+        for (int i = 0; i < m; i++) {
+            int leftTop = dp[0];
             for (int j = 0; j < n; j++) {
                 int pre = dp[j];
-                if (matrix[i][j] == '1') {
+                if (matrix[i][j] == '0') {
+                    dp[j] = 0;
+                } else {
                     if (i > 0 && j > 0) {
-                        dp[j] = Math.min(dp[j - 1], Math.min(pre, dig)) + 1;
+                        dp[j] = Math.min(dp[j - 1], Math.min(leftTop, pre)) + 1;
                     } else {
                         dp[j] = 1;
                     }
-                } else {
-                    dp[j] = 0;
                 }
-                dig = pre;
+                leftTop = pre;
                 max = Math.max(max, dp[j]);
             }
-
         }
         return max * max;
     }
