@@ -1,10 +1,11 @@
 // ============================================================
 // LeetCode 5. 最长回文子串 (Longest Palindromic Substring)
-// 难度：Medium | 分类：动态规划（子类型：区间 DP；最优常写中心扩散）
+// 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-palindromic-substring/
-// 复习日期：2026-09-05（第 3 次复习 · 一刷 2026-08-09 · 上次 2026-09-02 较弱）
-// 一刷写法：区间 DP（boolean 表，按长度枚举）；上次写法：中心扩散（2n-1 个中心，O(1) 空间）
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-09 · 上次复习 2026-09-05）
+//
+// 思路：枚举奇数和偶数中心并向外扩散，更新最长长度与起点。
+// 复杂度：时间 O(n^2)，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -16,8 +17,8 @@ public class LC0005_LongestPalindromicSubstring {
         if (s.isEmpty()) {
             return "";
         }
-        int start = -1;
         int max = 0;
+        int start = -1;
         for (int i = 0; i < s.length(); i++) {
             int len1 = getLen(s, i, i);
             int len2 = getLen(s, i, i + 1);
