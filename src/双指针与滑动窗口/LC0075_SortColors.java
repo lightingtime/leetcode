@@ -2,10 +2,13 @@
 // LeetCode 75. 颜色分类 (Sort Colors)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-colors/
-// 二刷日期：2026-09-07（第 4 次复习 · 一刷 2026-08-05 · 上次 2026-09-05 较弱）
-// 一刷思路：三指针分区（荷兰国旗）——0 归左、2 归右、1 居中；注意 2 分支交换后不前进、回看换入值
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 5 次复习 · 一刷 2026-08-05 · 上次复习 2026-09-07）
+//
+// 思路：三指针分区，原地维护 0、1、2 三个连续区间。
+// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
+
+import java.util.*;
 
 public class LC0075_SortColors {
 
@@ -24,13 +27,12 @@ public class LC0075_SortColors {
                 i++;
             }
         }
-        
     }
 
-    private void swap(int[] nums, int l, int r) {
-        int temp = nums[l];
-        nums[l] = nums[r];
-        nums[r] = temp;
+    private void swap(int[] nums, int i, int r) {
+        int temp = nums[r];
+        nums[r] = nums[i];
+        nums[i] = temp;
     }
     // ==== 提交代码结束 ====
 
