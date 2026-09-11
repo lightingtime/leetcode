@@ -428,14 +428,22 @@ function backupDuplicateArchive(file, className) {
 // 保证「测试用例与一刷归档保持一致」，禁止退回示例 + TODO 占位导致边界/回归用例丢失。
 function syncReviewTests(file, baks) {
   const marker = '    public static void main(String[] args)';
+  const endMarker = '    // ==== 提交代码结束 ====';
   let content = fs.readFileSync(file, 'utf8');
   let tIdx = content.indexOf(marker);
+  let endIdx = content.indexOf(endMarker);
   for (const bak of baks) {
     const archived = fs.readFileSync(bak, 'utf8');
     const aIdx = archived.indexOf(marker);
-    if (aIdx < 0 || tIdx < 0) continue;
+    const aEndIdx = archived.indexOf(endMarker);
+    if (aIdx < 0 || aEndIdx < 0 || tIdx < 0 || endIdx < 0) continue;
+    // 提交区之后、main 之前通常是校验/构造辅助方法；不能只截 main 之后，
+    // 否则 main 对这些方法的调用会在二刷文件中变成“找不到符号”。
+    const helperBlock = archived.slice(aEndIdx + endMarker.length, aIdx);
     const tail = archived.slice(aIdx);
-    content = content.slice(0, tIdx) + tail;
+    content = content.slice(0, endIdx + endMarker.length) + helperBlock + tail;
+    tIdx = content.indexOf(marker);
+    endIdx = content.indexOf(endMarker);
     console.log(`已从 ${path.basename(bak)} 同步完整测试区（main 及辅助方法）到 ${path.basename(file)}`);
   }
   fs.writeFileSync(file, content, 'utf8');
