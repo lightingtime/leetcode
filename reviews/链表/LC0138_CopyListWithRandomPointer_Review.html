@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>138. 随机链表的复制 (Copy List with Random Pointer)</h1><p>&gt; <a href="https://leetcode.cn/problems/copy-list-with-random-pointer/" rel="noopener">https://leetcode.cn/problems/copy-list-with-random-pointer/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：哈希表、链表</p><h2>题目描述</h2><p>给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。</p><p>构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。</p><p>例如，如果原链表中有 X 和 Y 两个节点，其中 X.random --&gt; Y 。那么在复制链表中对应的两个节点 x 和 y ，同样有 x.random --&gt; y 。</p><p>返回复制链表的头节点。</p><p>用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：</p><p>val：一个表示 Node.val 的整数。</p><p>random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为 null 。</p><p>你的代码 只 接受原链表的头节点 head 作为传入参数。</p><p>示例 1：</p><p>输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]</p><p>输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]</p><p>示例 2：</p><p>输入：head = [[1,1],[2,1]]</p><p>输出：[[1,1],[2,1]]</p><p>示例 3：</p><p>输入：head = [[3,null],[3,0],[3,null]]</p><p>输出：[[3,null],[3,0],[3,null]]</p><p>提示：</p><p>0</p><p>-104 4</p><p>Node.random 为 null 或指向链表中的节点。</p><h2>示例</h2><ol><li>输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]</li></ol><p>输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]</p><ol><li>输入：head = [[1,1],[2,1]]</li></ol><p>输出：[[1,1],[2,1]]</p><ol><li>输入：head = [[3,null],[3,0],[3,null]]</li></ol><p>输出：[[3,null],[3,0],[3,null]]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（19/19）｜ 一次 AC ｜ 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>① 与上一轮对比：上轮先尝试 HashMap 单遍法失败、经提示后才切回原地穿插；本次一开始就直接使用原地穿插三遍，没有尝试有风险的哈希重建。结构仍是「插入克隆 → 设置 random → 拆开两链表」，复杂度 O(n) / O(1)。</p><p>② 这次为什么想起来：第一遍沿 <code>node.next.next</code> 插入克隆；第二遍利用 <code>node.random.next</code> 直接定位对应克隆；第三遍同时恢复原链 next 并重建克隆链 next，三个循环的步进对象没有混淆。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：原地穿插写法已稳定；若之后改用 HashMap 写法，仍需坚持 key 使用原节点并先查后建，避免上一轮出现的多份克隆问题。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-07 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（19/19）｜ 多次提交 ｜ 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 本次过程与上一轮对比</strong></p><ul><li>一刷（2026-08-24）：先写「哈希表单遍法」失败，改「原地穿插三遍」写法2 后 AC；两种写法都留档。</li><li>本次（第 1 次复习）：<strong>先试了 HashMap 单遍法</strong>，连续两轮失败（6 组 → 5 组挂），错误与一刷记档的 habit 完全同款——用新拷贝尚未初始化的 <code>next/random</code>（null）当 map key，且 <code>put</code> 无条件覆盖登记，导致一原节点出现多份克隆、<code>map.get(head)</code> 取到孤儿；经两轮提示后放弃 HashMap，回忆出一刷「原地穿插三遍」一次通过 19/19，内存 46.8MB 与一刷持平。旧版（一刷 790B 写法2）已存入 <code>prev_code</code> 可对比。</li></ul><p><strong>② 为什么没想起来 / 为什么错</strong></p><ul><li>HashMap 法的核心约束「一原节点一克隆、先查后建、key 一律用原节点」没有内化成条件反射——一刷就为此记过 habit（本次再犯，累计 2 次）。触发场景典型是「某节点先作为别人的 random 目标被登记、后作为主节点被遍历」，或 random 后向指回；自环用例就是试金石。</li><li>原地穿插三遍能一次写对：第一遍 <code>node.next</code> 插克隆、循环步进 <code>next.next</code>；第二遍 <code>nodeNew.random = node.random.next</code>（此时 random 的 next 就是它的克隆）；第三遍拆链用 <code>node.next</code> 步进、同时恢复原链 <code>node.next = nodeNew.next</code>。三个循环的步进对象不同是易错点，这次没混。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>非一次 AC（先两轮失败 + 探讨提示后才过）→ weak；间隔重置 2 天，连续较强清零。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>若想补短板：用「HashMap 两遍法」（第一遍全量建映射、第二遍只连指针）作为换写法重新提交一次，专治这次暴露的「先查后建」盲区；练习时用自环 + 后向 random 自测。</li><li>下次复习自查点：复制带引用结构题，先默念「一原节点一克隆、key 用原节点、先查后建」再动手。</li></ul></div>
@@ -37,12 +41,12 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -72,28 +76,28 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 19/19</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0138_CopyListWithRandomPointer.java · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
-    <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">copyRandomList</span>(<span class="tk-t">Node</span> head) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.8 MB</span><span class="chip">用例 19/19</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0138_CopyListWithRandomPointer.java · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">copyRandomList</span>(<span class="tk-t">Node</span> head) {
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
         <span class="tk-k">for</span> (<span class="tk-t">Node</span> node = head; node != <span class="tk-k">null</span>; node = node.next.next) {
-            <span class="tk-t">Node</span> nodeNew = <span class="tk-k">new</span> <span class="tk-t">Node</span>(node.val);
-            nodeNew.next = node.next;
-            node.next = nodeNew;
+            <span class="tk-t">Node</span> copy = <span class="tk-k">new</span> <span class="tk-t">Node</span>(node.val);
+            copy.next = node.next;
+            node.next = copy;
         }
+
         <span class="tk-k">for</span> (<span class="tk-t">Node</span> node = head; node != <span class="tk-k">null</span>; node = node.next.next) {
-            <span class="tk-t">Node</span> nodeNew = node.next;
-            nodeNew.random = node.random != <span class="tk-k">null</span> ? node.random.next : <span class="tk-k">null</span>;
+            <span class="tk-t">Node</span> copy = node.next;
+            copy.random = node.random != <span class="tk-k">null</span> ? node.random.next : <span class="tk-k">null</span>;
         }
-        <span class="tk-t">Node</span> newHead = head.next;
+        <span class="tk-t">Node</span> copyHead = head.next;
         <span class="tk-k">for</span> (<span class="tk-t">Node</span> node = head; node != <span class="tk-k">null</span>; node = node.next) {
-            <span class="tk-t">Node</span> nodeNew = node.next;
-            node.next = nodeNew.next;
-            nodeNew.next = nodeNew.next != <span class="tk-k">null</span> ? nodeNew.next.next : <span class="tk-k">null</span>;
+            <span class="tk-t">Node</span> copy = node.next;
+            node.next = node.next.next;
+            copy.next = node.next != <span class="tk-k">null</span> ? node.next.next : <span class="tk-k">null</span>;
         }
-        <span class="tk-k">return</span> newHead;
+        <span class="tk-k">return</span> copyHead;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0138_CopyListWithRandomPointer.java · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
     <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">copyRandomList</span>(<span class="tk-t">Node</span> head) {

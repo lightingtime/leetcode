@@ -51,20 +51,20 @@
       "code": "    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return head;\n        }\n        Map<Node, Node> map = new HashMap<>();\n        Node p = head;\n        while (p != null) {\n            Node node = map.getOrDefault(p, new Node(p.val));\n            map.put(p, node);\n            if (p.next != null) {\n                node.next = map.getOrDefault(p.next, new Node(p.next.val));\n                map.put(p.next, node.next);\n            }\n            if (p.random != null) {\n                node.random = map.getOrDefault(p.random, new Node(p.random.val));\n                map.put(p.random, node.random);\n            }\n            p = p.next;\n        }\n        return map.get(head);\n    }"
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-09-12",
       "verdict": "Accepted",
       "testcases": "19/19",
       "runtime_ms": null,
-      "memory_bytes": 46844000,
+      "memory_bytes": 46948000,
       "approach": "原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 本次过程与上一轮对比**\n- 一刷（2026-08-24）：先写「哈希表单遍法」失败，改「原地穿插三遍」写法2 后 AC；两种写法都留档。\n- 本次（第 1 次复习）：**先试了 HashMap 单遍法**，连续两轮失败（6 组 → 5 组挂），错误与一刷记档的 habit 完全同款——用新拷贝尚未初始化的 `next/random`（null）当 map key，且 `put` 无条件覆盖登记，导致一原节点出现多份克隆、`map.get(head)` 取到孤儿；经两轮提示后放弃 HashMap，回忆出一刷「原地穿插三遍」一次通过 19/19，内存 46.8MB 与一刷持平。旧版（一刷 790B 写法2）已存入 `prev_code` 可对比。\n\n**② 为什么没想起来 / 为什么错**\n- HashMap 法的核心约束「一原节点一克隆、先查后建、key 一律用原节点」没有内化成条件反射——一刷就为此记过 habit（本次再犯，累计 2 次）。触发场景典型是「某节点先作为别人的 random 目标被登记、后作为主节点被遍历」，或 random 后向指回；自环用例就是试金石。\n- 原地穿插三遍能一次写对：第一遍 `node.next` 插克隆、循环步进 `next.next`；第二遍 `nodeNew.random = node.random.next`（此时 random 的 next 就是它的克隆）；第三遍拆链用 `node.next` 步进、同时恢复原链 `node.next = nodeNew.next`。三个循环的步进对象不同是易错点，这次没混。\n\n**③ 掌握度判定**\n- 非一次 AC（先两轮失败 + 探讨提示后才过）→ weak；间隔重置 2 天，连续较强清零。\n\n**④ 下一步提醒**\n- 若想补短板：用「HashMap 两遍法」（第一遍全量建映射、第二遍只连指针）作为换写法重新提交一次，专治这次暴露的「先查后建」盲区；练习时用自环 + 后向 random 自测。\n- 下次复习自查点：复制带引用结构题，先默念「一原节点一克隆、key 用原节点、先查后建」再动手。",
-      "code": "\n    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return null;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = new Node(node.val);\n            nodeNew.next = node.next;\n            node.next = nodeNew;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = node.next;\n            nodeNew.random = node.random != null ? node.random.next : null;\n        }\n        Node newHead = head.next;\n        for (Node node = head; node != null; node = node.next) {\n            Node nodeNew = node.next;\n            node.next = nodeNew.next;\n            nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null;\n        }\n        return newHead;\n    }",
+      "notes": "① 与上一轮对比：上轮先尝试 HashMap 单遍法失败、经提示后才切回原地穿插；本次一开始就直接使用原地穿插三遍，没有尝试有风险的哈希重建。结构仍是「插入克隆 → 设置 random → 拆开两链表」，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：第一遍沿 `node.next.next` 插入克隆；第二遍利用 `node.random.next` 直接定位对应克隆；第三遍同时恢复原链 next 并重建克隆链 next，三个循环的步进对象没有混淆。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：原地穿插写法已稳定；若之后改用 HashMap 写法，仍需坚持 key 使用原节点并先查后建，避免上一轮出现的多份克隆问题。",
+      "code": "    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return null;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node copy = new Node(node.val);\n            copy.next = node.next;\n            node.next = copy;\n        }\n\n        for (Node node = head; node != null; node = node.next.next) {\n            Node copy = node.next;\n            copy.random = node.random != null ? node.random.next : null;\n        }\n        Node copyHead = head.next;\n        for (Node node = head; node != null; node = node.next) {\n            Node copy = node.next;\n            node.next = node.next.next;\n            copy.next = node.next != null ? node.next.next : null;\n        }\n        return copyHead;\n    }",
       "prev_code": "\n    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return head;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = new Node(node.val);\n            nodeNew.next = node.next;\n            node.next = nodeNew;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = node.next;\n            nodeNew.random = node.random != null ? node.random.next : null;\n        }\n        Node newHead = head.next;\n        for (Node node = head; node != null; node = node.next) {\n            Node nodeNew = node.next;\n            node.next = nodeNew.next;\n            nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null;\n        }\n        return newHead;\n    }",
-      "mastery": "weak",
-      "pass": 1
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "reviews": [
@@ -80,6 +80,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 本次过程与上一轮对比**\n- 一刷（2026-08-24）：先写「哈希表单遍法」失败，改「原地穿插三遍」写法2 后 AC；两种写法都留档。\n- 本次（第 1 次复习）：**先试了 HashMap 单遍法**，连续两轮失败（6 组 → 5 组挂），错误与一刷记档的 habit 完全同款——用新拷贝尚未初始化的 `next/random`（null）当 map key，且 `put` 无条件覆盖登记，导致一原节点出现多份克隆、`map.get(head)` 取到孤儿；经两轮提示后放弃 HashMap，回忆出一刷「原地穿插三遍」一次通过 19/19，内存 46.8MB 与一刷持平。旧版（一刷 790B 写法2）已存入 `prev_code` 可对比。\n\n**② 为什么没想起来 / 为什么错**\n- HashMap 法的核心约束「一原节点一克隆、先查后建、key 一律用原节点」没有内化成条件反射——一刷就为此记过 habit（本次再犯，累计 2 次）。触发场景典型是「某节点先作为别人的 random 目标被登记、后作为主节点被遍历」，或 random 后向指回；自环用例就是试金石。\n- 原地穿插三遍能一次写对：第一遍 `node.next` 插克隆、循环步进 `next.next`；第二遍 `nodeNew.random = node.random.next`（此时 random 的 next 就是它的克隆）；第三遍拆链用 `node.next` 步进、同时恢复原链 `node.next = nodeNew.next`。三个循环的步进对象不同是易错点，这次没混。\n\n**③ 掌握度判定**\n- 非一次 AC（先两轮失败 + 探讨提示后才过）→ weak；间隔重置 2 天，连续较强清零。\n\n**④ 下一步提醒**\n- 若想补短板：用「HashMap 两遍法」（第一遍全量建映射、第二遍只连指针）作为换写法重新提交一次，专治这次暴露的「先查后建」盲区；练习时用自环 + 后向 random 自测。\n- 下次复习自查点：复制带引用结构题，先默念「一原节点一克隆、key 用原节点、先查后建」再动手。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-12",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "19/19",
+      "approach": "原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：上轮先尝试 HashMap 单遍法失败、经提示后才切回原地穿插；本次一开始就直接使用原地穿插三遍，没有尝试有风险的哈希重建。结构仍是「插入克隆 → 设置 random → 拆开两链表」，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：第一遍沿 `node.next.next` 插入克隆；第二遍利用 `node.random.next` 直接定位对应克隆；第三遍同时恢复原链 next 并重建克隆链 next，三个循环的步进对象没有混淆。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：原地穿插写法已稳定；若之后改用 HashMap 写法，仍需坚持 key 使用原节点并先查后建，避免上一轮出现的多份克隆问题。"
     }
   ]
 }

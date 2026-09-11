@@ -2,16 +2,16 @@
 // LeetCode 138. 随机链表的复制 (Copy List with Random Pointer)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/copy-list-with-random-pointer/
-// 二刷日期：2026-09-07（第 1 次复习 · 一刷 2026-08-24）
-// 一刷/上次思路：原地穿插三遍（复制节点插入原节点后 → 设 random → 拆开两链表）O(1) 空间
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-24 · 上次复习 2026-09-07）
+//
+// 一刷/上次思路：原地穿插三遍——复制节点插入原节点后 → 设置 random → 拆开两链表
+// 测试用例与一刷归档保持一致
 // ============================================================
 
 import java.util.*;
 
 public class LC0138_CopyListWithRandomPointer {
 
-    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 Node 在提交时自动处理。
     static class Node {
         int val;
         Node next;
@@ -25,27 +25,27 @@ public class LC0138_CopyListWithRandomPointer {
     }
 
     // ==== 提交代码开始 ====
-
     public Node copyRandomList(Node head) {
         if (head == null) {
             return null;
         }
         for (Node node = head; node != null; node = node.next.next) {
-            Node nodeNew = new Node(node.val);
-            nodeNew.next = node.next;
-            node.next = nodeNew;
+            Node copy = new Node(node.val);
+            copy.next = node.next;
+            node.next = copy;
         }
+
         for (Node node = head; node != null; node = node.next.next) {
-            Node nodeNew = node.next;
-            nodeNew.random = node.random != null ? node.random.next : null;
+            Node copy = node.next;
+            copy.random = node.random != null ? node.random.next : null;
         }
-        Node newHead = head.next;
+        Node copyHead = head.next;
         for (Node node = head; node != null; node = node.next) {
-            Node nodeNew = node.next;
-            node.next = nodeNew.next;
-            nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null;
+            Node copy = node.next;
+            node.next = node.next.next;
+            copy.next = node.next != null ? node.next.next : null;
         }
-        return newHead;
+        return copyHead;
     }
     // ==== 提交代码结束 ====
 
@@ -56,35 +56,59 @@ public class LC0138_CopyListWithRandomPointer {
         // 示例1: [[7,null],[13,0],[11,4],[10,2],[1,0]]
         try {
             Node h = buildList(new Integer[][]{{7, null}, {13, 0}, {11, 4}, {10, 2}, {1, 0}});
-            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "示例1")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
+            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "示例1"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例1 异常: " + t);
+        }
         // 示例2: [[1,1],[2,1]]
         try {
             Node h = buildList(new Integer[][]{{1, 1}, {2, 1}});
-            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "示例2")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
+            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "示例2"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例2 异常: " + t);
+        }
         // 示例3: [[3,null],[3,0],[3,null]]（重复值）
         try {
             Node h = buildList(new Integer[][]{{3, null}, {3, 0}, {3, null}});
-            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "示例3")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
+            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "示例3"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例3 异常: " + t);
+        }
 
         // ---- 边界测试（自己补充）----
         // 约束：0 <= n <= 1000，-10^4 <= val <= 10^4，random 为 null 或指向链表中节点
         // 边界1: 空链表
         try {
-            if (!TestUtil.checkEq(null, new LC0138_CopyListWithRandomPointer().copyRandomList(null), "边界1: 空链表")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
+            if (!TestUtil.checkEq(null, new LC0138_CopyListWithRandomPointer().copyRandomList(null), "边界1: 空链表"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界1 异常: " + t);
+        }
         // 边界2: 单节点，random 为 null
         try {
             Node h = buildList(new Integer[][]{{-1000, null}});
-            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "边界2: 单节点无random")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
+            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "边界2: 单节点无random"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界2 异常: " + t);
+        }
         // 边界3: 单节点，random 指向自己（自环）
         try {
             Node h = buildList(new Integer[][]{{1000, 0}});
-            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "边界3: 自环")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界3 异常: " + t); }
+            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "边界3: 自环"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界3 异常: " + t);
+        }
         // 边界4: n=1000 上限，random 混合指向（含 null 与多种索引），val 取边界附近
         try {
             int N = 1000;
@@ -94,8 +118,12 @@ public class LC0138_CopyListWithRandomPointer {
                 big[i][1] = i % 3 == 0 ? null : (i * 7) % N;
             }
             Node h = buildList(big);
-            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "边界4: 1000节点")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界4 异常: " + t); }
+            if (!TestUtil.checkEq(true, verify(h, new LC0138_CopyListWithRandomPointer().copyRandomList(h)), "边界4: 1000节点"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界4 异常: " + t);
+        }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
@@ -122,10 +150,17 @@ public class LC0138_CopyListWithRandomPointer {
         Map<Node, Integer> idx = new HashMap<>();
         List<Node> origNodes = new ArrayList<>();
         Node p = orig;
-        while (p != null) { idx.put(p, origNodes.size()); origNodes.add(p); p = p.next; }
+        while (p != null) {
+            idx.put(p, origNodes.size());
+            origNodes.add(p);
+            p = p.next;
+        }
         List<Node> copyNodes = new ArrayList<>();
         p = copy;
-        while (p != null) { copyNodes.add(p); p = p.next; }
+        while (p != null) {
+            copyNodes.add(p);
+            p = p.next;
+        }
         if (copyNodes.size() != origNodes.size()) return false;
         for (int i = 0; i < origNodes.size(); i++) {
             Node o = origNodes.get(i), c = copyNodes.get(i);
