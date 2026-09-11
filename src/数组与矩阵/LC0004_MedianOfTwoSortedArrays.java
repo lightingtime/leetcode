@@ -2,10 +2,10 @@
 // LeetCode 4. 寻找两个正序数组的中位数 (Median of Two Sorted Arrays)
 // 难度：Hard | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/median-of-two-sorted-arrays/
-// 复习日期：2026-09-06（第 4 次复习 · 一刷 2026-08-06 · 上次 2026-09-03 较弱）
-// 一刷/复习①写法：两数组第 k 小（每轮排除较小侧 k/2），O(log(m+n))；复习②进阶：划分数组二分切分点 O(log(min(m,n)))
-// 复习提醒：k 是 1 基排名；候选下标 p + k/2 - 1 封顶 len-1，排除数 = 候选下标 - 起点 + 1
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 5 次复习 · 一刷 2026-08-06 · 上次复习 2026-09-06）
+//
+// 思路：在较短数组上二分切分点，使两数组左半部分总数为一半且跨界有序。
+// 复杂度：时间 O(log(min(m,n)))，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -17,15 +17,14 @@ public class LC0004_MedianOfTwoSortedArrays {
         if (nums1.length > nums2.length) {
             return findMedianSortedArrays(nums2, nums1);
         }
-
         int m = nums1.length;
         int n = nums2.length;
 
-        int left = -1;
-        int right = m;
+        int left = -1, right = m;
         while (left + 1 < right) {
             int i = left + (right - left) / 2;
             int j = (m + n + 1) / 2 - i - 2;
+
             if (nums1[i] <= nums2[j + 1]) {
                 left = i;
             } else {
@@ -36,11 +35,11 @@ public class LC0004_MedianOfTwoSortedArrays {
         int j = (m + n + 1) / 2 - i - 2;
         int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;
         int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;
-        int aip1 = i < m - 1 ? nums1[i + 1] : Integer.MAX_VALUE;
+        int aip1 = i < m - 1 ? nums1[i +1] : Integer.MAX_VALUE;
         int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;
         int maxInMin = Math.max(ai, bj);
         int minInMax = Math.min(aip1, bjp1);
-        return (m + n) % 2 > 0 ? maxInMin : (maxInMin + minInMax) / 2.0;
+        return (m + n) % 2 == 1 ? maxInMin : (maxInMin + minInMax) / 2.0;
     }
     // ==== 提交代码结束 ====
 

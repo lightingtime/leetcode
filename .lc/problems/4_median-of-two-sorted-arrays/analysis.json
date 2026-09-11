@@ -54,18 +54,18 @@
       "prev_code": "    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        int len1 = nums1.length, len2 = nums2.length;\n        int totLen = len1 + len2;\n        // 中位数换算成「第 k 小」（1 基排名，不是数组下标）：\n        // 奇数总长 → 第 totLen/2 + 1 小；偶数总长 → 第 totLen/2 小与第 totLen/2 + 1 小取平均。\n        if (totLen % 2 == 1) {\n            return kthSmallest(nums1, nums2, totLen / 2 + 1);\n        }\n        int k1 = totLen / 2, k2 = totLen / 2 + 1;\n        return (kthSmallest(nums1, nums2, k1) + kthSmallest(nums1, nums2, k2)) / 2.0;\n    }\n\n    /**\n     * 返回两数组「剩余有效部分」合并后第 k 小的元素值。\n     * 约定：k 是 1 基排名（k=1 表示最小元素），不是数组下标。\n     * p1/p2 是两个数组当前的有效起点（0 基下标），下标小于 p1/p2 的元素已被排除。\n     */\n    private int kthSmallest(int[] nums1, int[] nums2, int k) {\n        int len1 = nums1.length, len2 = nums2.length;\n        int p1 = 0, p2 = 0; // 有效起点，只会向右移动，表示「前面有多少元素已被跳过」\n        while (true) {\n            // 出口：某一边已排空，答案在另一边的当前有效部分里\n            if (p1 >= len1) {\n                return nums2[p2 + k - 1];\n            } else if (p2 >= len2) {\n                return nums1[p1 + k - 1];\n            } else if (k == 1) {\n                return Math.min(nums1[p1], nums2[p2]);\n            }\n            // 候选下标 = 各自有效部分里第 k/2 个元素的下标；数组不够长时封顶到最后一个\n            int cand1 = Math.min(len1 - 1, p1 + k / 2 - 1);\n            int cand2 = Math.min(len2 - 1, p2 + k / 2 - 1);\n            if (nums1[cand1] <= nums2[cand2]) {\n                // 排除 nums1 从 p1 到 cand1（含候选），数量 = 候选下标 - 旧起点 + 1\n                int removed = cand1 - p1 + 1;\n                p1 = cand1 + 1;\n                k -= removed;\n            } else {\n                int removed = cand2 - p2 + 1;\n                p2 = cand2 + 1;\n                k -= removed;\n            }\n        }\n    }\n"
     },
     {
-      "date": "2026-09-06",
+      "date": "2026-09-12",
       "verdict": "Accepted",
       "testcases": "2099/2099",
       "approach": "划分数组二分切分点（O(log(min(m,n)))）",
       "time_complexity": "O(log(min(m,n)))",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 上一轮（09-03，weak）与本次同写法：**划分数组二分切分点 O(log(min(m,n)))**——`i` = nums1 左半最后下标（含端点），`j = (m+n+1)/2 - i - 2` 联动；二分条件 `nums1[i] <= nums2[j+1]`，终点用四个边界元素（±∞ 哨兵）求中位数。\n- 09-03 版代码已存入 submissions prev_code；一刷「两数组第 k 小」保留为独立条目。\n- code_note「重点复习③尝试进阶写法划分数组」本轮已实现（代码即该写法），提醒已清空。\n\n**② 这轮为什么还记较弱（探讨过）**\n- 代码独立写出、本地一次全绿、力扣一次 Accepted，但对关键条件 `nums1[i] <= nums2[j+1]` 的语义需要讲解后才彻底清楚——属「探讨过」，按规则记较弱。\n- 现在内化的理解锚点：`i` 含端点 ⇒ `nums1[i]` 是 nums1 左半最大、`nums2[j+1]` 是 nums2 右半最小；条件为真说明 nums1 还能多切（右移试探），为假说明 nums1 切太多（左移）；条件随 i 单调，可二分；镜像条件 `nums2[j] <= nums1[i+1]` 在终点自动成立（示例 [1,2]/[3,4]：i=0 时镜像不满足、条件1 仍真 → 继续右移到 i=1 才合法）。\n\n**③ 掌握度判定**\n- weak：一次提交即 Accepted（2099/2099）、本地 9 组全绿，但过程中就条件含义做过探讨，未达「全程无探讨」标准。\n\n**④ 下一步提醒**\n- 下次重写前先在纸面写清三件事再动代码：① i/j 各自的端点定义；② 四个边界元素是谁；③ 两个跨切点条件。写清了这题就是模板题。\n- 可串练：215 数组第 K 大（快选）、「两个有序数组第 k 小」O(log(m+n)) 写法（与本题同源）。",
+      "notes": "① 与上一轮对比：仍是划分数组二分切分点，在较短数组上二分 `i`，再同步计算 `j`；本次判题一次通过，但提交前讨论并解释了 `j` 的计算公式，按规则记 weak。复杂度 O(log(min(m,n))) / O(1)。\n\n② `j` 公式回顾：这里 `i`、`j` 是两数组左半部分最后一个元素的下标，因此左右计数分别为 `i+1`、`j+1`。令左半总数为 `half=(m+n+1)/2`，则 `(i+1)+(j+1)=half`，所以 `j=half-i-2`。例：`nums1=[1,2]`、`nums2=[3,4]`，`half=2`，当 `i=0` 时 `nums1` 左边已有 1 个元素，`nums2` 需要一个元素，故 `j=0`；公式给出 `2-0-2=0`。当 `i=1` 时 `nums2` 左侧为空，得到 `j=-1`。\n\n③ 掌握度判定：虽然首次提交 Accepted 2099/2099，但关键下标公式经讨论后才确认，判为较弱。\n\n④ 下一步提醒：下次先独立推导 `i+1+j+1=half` 再写代码，尤其分清“切分点下标”和“左半元素数量”，避免 `-2` 或 `-1` 混淆。",
       "mastery": "weak",
-      "pass": 4,
-      "memory_bytes": 49232000,
-      "code": "public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        if (nums1.length > nums2.length) {\n            return findMedianSortedArrays(nums2, nums1);\n        }\n\n        int m = nums1.length;\n        int n = nums2.length;\n\n        int left = -1;\n        int right = m;\n        while (left + 1 < right) {\n            int i = left + (right - left) / 2;\n            int j = (m + n + 1) / 2 - i - 2;\n            if (nums1[i] <= nums2[j + 1]) {\n                left = i;\n            } else {\n                right = i;\n            }\n        }\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i - 2;\n        int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n        int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n        int aip1 = i < m - 1 ? nums1[i + 1] : Integer.MAX_VALUE;\n        int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;\n        int maxInMin = Math.max(ai, bj);\n        int minInMax = Math.min(aip1, bjp1);\n        return (m + n) % 2 > 0 ? maxInMin : (maxInMin + minInMax) / 2.0;\n    }",
+      "pass": 5,
+      "memory_bytes": 49196000,
+      "code": "    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        if (nums1.length > nums2.length) {\n            return findMedianSortedArrays(nums2, nums1);\n        }\n        int m = nums1.length;\n        int n = nums2.length;\n\n        int left = -1, right = m;\n        while (left + 1 < right) {\n            int i = left + (right - left) / 2;\n            int j = (m + n + 1) / 2 - i - 2;\n\n            if (nums1[i] <= nums2[j + 1]) {\n                left = i;\n            } else {\n                right = i;\n            }\n        }\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i - 2;\n        int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n        int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n        int aip1 = i < m - 1 ? nums1[i +1] : Integer.MAX_VALUE;\n        int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;\n        int maxInMin = Math.max(ai, bj);\n        int minInMax = Math.min(aip1, bjp1);\n        return (m + n) % 2 == 1 ? maxInMin : (maxInMin + minInMax) / 2.0;\n    }",
       "prev_code": "public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n    if (nums1.length > nums2.length) {\n        return findMedianSortedArrays(nums2, nums1);\n    }\n\n    int m = nums1.length;\n    int n = nums2.length;\n\n    int left = -1;\n    int right = m;\n\n    while (left + 1 < right) {\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i -2;\n        if (nums1[i] <= nums2[j + 1]) {\n            left = i;\n        } else {\n            right = i;\n        }\n    }\n\n    int i = left;\n    int j = (m + n + 1) / 2 - i - 2;\n\n    int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n    int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n    int aip1 = i < m - 1 ? nums1[i + 1] : Integer.MAX_VALUE;\n    int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;\n    int maxInMin = Math.max(ai, bj);\n    int minInMax = Math.min(aip1, bjp1);\n    if (((m + n) & 1) == 1) {\n        return maxInMin;\n    } else {\n        return (maxInMin + minInMax) / 2.0;\n    }\n}"
     }
   ],
@@ -122,6 +122,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 上一轮（09-03，weak）与本次同写法：**划分数组二分切分点 O(log(min(m,n)))**——`i` = nums1 左半最后下标（含端点），`j = (m+n+1)/2 - i - 2` 联动；二分条件 `nums1[i] <= nums2[j+1]`，终点用四个边界元素（±∞ 哨兵）求中位数。\n- 09-03 版代码已存入 submissions prev_code；一刷「两数组第 k 小」保留为独立条目。\n- code_note「重点复习③尝试进阶写法划分数组」本轮已实现（代码即该写法），提醒已清空。\n\n**② 这轮为什么还记较弱（探讨过）**\n- 代码独立写出、本地一次全绿、力扣一次 Accepted，但对关键条件 `nums1[i] <= nums2[j+1]` 的语义需要讲解后才彻底清楚——属「探讨过」，按规则记较弱。\n- 现在内化的理解锚点：`i` 含端点 ⇒ `nums1[i]` 是 nums1 左半最大、`nums2[j+1]` 是 nums2 右半最小；条件为真说明 nums1 还能多切（右移试探），为假说明 nums1 切太多（左移）；条件随 i 单调，可二分；镜像条件 `nums2[j] <= nums1[i+1]` 在终点自动成立（示例 [1,2]/[3,4]：i=0 时镜像不满足、条件1 仍真 → 继续右移到 i=1 才合法）。\n\n**③ 掌握度判定**\n- weak：一次提交即 Accepted（2099/2099）、本地 9 组全绿，但过程中就条件含义做过探讨，未达「全程无探讨」标准。\n\n**④ 下一步提醒**\n- 下次重写前先在纸面写清三件事再动代码：① i/j 各自的端点定义；② 四个边界元素是谁；③ 两个跨切点条件。写清了这题就是模板题。\n- 可串练：215 数组第 K 大（快选）、「两个有序数组第 k 小」O(log(m+n)) 写法（与本题同源）。"
+    },
+    {
+      "pass": 5,
+      "date": "2026-09-12",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "2099/2099",
+      "approach": "划分数组二分切分点（O(log(min(m,n)))）",
+      "time_complexity": "O(log(min(m,n)))",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是划分数组二分切分点，在较短数组上二分 `i`，再同步计算 `j`；本次判题一次通过，但提交前讨论并解释了 `j` 的计算公式，按规则记 weak。复杂度 O(log(min(m,n))) / O(1)。\n\n② `j` 公式回顾：这里 `i`、`j` 是两数组左半部分最后一个元素的下标，因此左右计数分别为 `i+1`、`j+1`。令左半总数为 `half=(m+n+1)/2`，则 `(i+1)+(j+1)=half`，所以 `j=half-i-2`。例：`nums1=[1,2]`、`nums2=[3,4]`，`half=2`，当 `i=0` 时 `nums1` 左边已有 1 个元素，`nums2` 需要一个元素，故 `j=0`；公式给出 `2-0-2=0`。当 `i=1` 时 `nums2` 左侧为空，得到 `j=-1`。\n\n③ 掌握度判定：虽然首次提交 Accepted 2099/2099，但关键下标公式经讨论后才确认，判为较弱。\n\n④ 下一步提醒：下次先独立推导 `i+1+j+1=half` 再写代码，尤其分清“切分点下标”和“左半元素数量”，避免 `-2` 或 `-1` 混淆。"
     }
   ]
 }
