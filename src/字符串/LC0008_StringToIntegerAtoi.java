@@ -2,10 +2,10 @@
 // LeetCode 8. 字符串转换整数 (atoi) (String to Integer (atoi))
 // 难度：Medium | 分类：字符串
 // 链接：https://leetcode.cn/problems/string-to-integer-atoi/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-23）
-// 一刷思路：long 绝对值累加 + 累加前预判溢出 + 按符号截断（先跳空白，再读可选符号，再累数字）
-// 一刷复杂度：时间 O(n)，空间 O(1)
-// 测试用例与一刷归档保持一致
+// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-23 · 上次复习 2026-09-06）
+//
+// 思路：依次处理空白、符号和连续数字，逐位累加并在越界前截断。
+// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -15,7 +15,6 @@ public class LC0008_StringToIntegerAtoi {
     // ==== 提交代码开始 ====
     public int myAtoi(String s) {
         int index = 0;
-        int ans = 0;
         while (index < s.length() && s.charAt(index) == ' ') {
             index++;
         }
@@ -24,25 +23,22 @@ public class LC0008_StringToIntegerAtoi {
             sign = s.charAt(index) == '+' ? 1 : -1;
             index++;
         }
-        while (index < s.length() && s.charAt(index) == '0') {
-            index++;
-        }
-        if (index >= s.length()) {
-            return 0;
-        }
-        s = s.substring(index);
-        for (char c : s.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                break;
-            } else {
-                if (ans > Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 && (c - '0') >= Integer.MAX_VALUE % 10)) {
+        int ans = 0;
+        for (int i = index; i < s.length(); i++) {
+            if (Character.isDigit(s.charAt(index))) {
+                int c = s.charAt(index) - '0';
+                if (ans > Integer.MAX_VALUE / 10 ||( ans == Integer.MAX_VALUE / 10 && c >= Integer.MAX_VALUE % 10)) {
                     return Integer.MAX_VALUE;
                 }
-                if (ans < (Integer.MIN_VALUE / 10) || (ans == Integer.MIN_VALUE / 10 && (-1) *(c - '0') <= Integer.MIN_VALUE % 10)) {
+                if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && c >= (-1) * (Integer.MIN_VALUE % 10))) {
+
                     return Integer.MIN_VALUE;
                 }
-                ans = ans * 10 + sign * (c - '0');
+                ans = ans * 10 + sign * c;
+            } else {
+                break;
             }
+            index++;
         }
         return ans;
     }

@@ -64,6 +64,20 @@
       "prev_code": "public int myAtoi(String s) {\n        int ans = 0;\n        int sign = 1;\n        int m = s.length();\n        int i = 0;\n        while (i < m && s.charAt(i) == ' ') {\n            i++;\n        }\n        int start = i;\n        for (; i < m; i++) {\n            char c = s.charAt(i);\n            if (i == start && c == '+') {\n                sign = 1;\n            } else if (i == start && c == '-') {\n                sign = -1;\n            } else if (Character.isDigit(c)) {\n                int num = c - '0';\n                if (ans > Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 && num > Integer.MAX_VALUE % 10)) {\n                    return Integer.MAX_VALUE;\n                }\n\n                if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && -num < Integer.MIN_VALUE % 10)) {\n                    return Integer.MIN_VALUE;\n                }\n                ans = ans * 10 + sign * num;\n            } else {\n                break;\n            }\n        }\n        return ans;\n    }\n",
       "mastery": "weak",
       "pass": 1
+    },
+    {
+      "date": "2026-09-12",
+      "verdict": "Accepted",
+      "testcases": "1096/1096",
+      "approach": "int 带符号累加 + 乘加前双向溢出预判",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：上一轮用 `long` 先按绝对值累加、最后按符号截断；这次直接维护带符号的 `int ans`，每次乘加前同时预判 `Integer.MAX_VALUE` 和 `Integer.MIN_VALUE` 两条边界，空间仍是 O(1)，但避免使用 `long`。\n\n② 这次为什么想起来：按「跳过空白 → 读取可选符号 → 连续读数字」的顺序线性扫描，并在第一个非数字字符处停止；溢出不再事后判断，而是在乘 10 加新位之前提前截断。\n\n③ 掌握度判定：本次独立完成，没有算法提示或讨论，首次提交即 Accepted，判为较强。\n\n④ 下一步提醒：当前逻辑已达最优；可把 `for` 中只用于计数的 `i` 去掉，统一用 `index` 写 `while`，减少一个冗余变量。",
+      "mastery": "strong",
+      "pass": 2,
+      "memory_bytes": 44240000,
+      "code": "    public int myAtoi(String s) {\n        int index = 0;\n        while (index < s.length() && s.charAt(index) == ' ') {\n            index++;\n        }\n        int sign = 1;\n        if (index < s.length() && (s.charAt(index) == '+' || s.charAt(index) == '-')) {\n            sign = s.charAt(index) == '+' ? 1 : -1;\n            index++;\n        }\n        int ans = 0;\n        for (int i = index; i < s.length(); i++) {\n            if (Character.isDigit(s.charAt(index))) {\n                int c = s.charAt(index) - '0';\n                if (ans > Integer.MAX_VALUE / 10 ||( ans == Integer.MAX_VALUE / 10 && c >= Integer.MAX_VALUE % 10)) {\n                    return Integer.MAX_VALUE;\n                }\n                if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && c >= (-1) * (Integer.MIN_VALUE % 10))) {\n\n                    return Integer.MIN_VALUE;\n                }\n                ans = ans * 10 + sign * c;\n            } else {\n                break;\n            }\n            index++;\n        }\n        return ans;\n    }"
     }
   ],
   "reviews": [
@@ -79,6 +93,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：与一刷归档同写法（int 带符号累加 ans = ans*10 + sign*digit + 双向边界预判：MAX 侧 >=、MIN 侧 ans==MIN/10 时判 -digit <= MIN%10），本次为同写法合并；复杂度 O(n)/O(1)，内存 44,504 KB。\n\n② 出错过程（非一次 AC）：先写出「无符号幅值 + 末尾乘符号」变体，负侧守卫用 digit>8，允许构造正 2147483648——int 装不下正的 2^31，累加瞬间溢出回绕成负，之后「ans 是正幅值」的预判全部失效，用例 -21474836482 期望 MIN 实际 -2（1095/1096 WA）；经分析改为带符号累加（负数空间里 -2^31 可表示）后 1096/1096 AC。教训：溢出守卫的「表示空间」要与累加变量的符号设计配套——无符号幅值存 int 时到 2^31 就要截断，带符号累加则 -2^31 合法可构造。\n\n③ 掌握度判定：首次提交 WA、经分析重写后 AC，非一次 AC + 探讨，记较弱。\n\n④ 下一步提醒：下次复习先说明溢出防护策略再写——「用 long 装幅值」或「带符号 int 累加 + 双向预判」二选一，别用 int 存正的 2^31；力扣 WA 用例 -21474836482 已加入本地回归测试区。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-12",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "1096/1096",
+      "approach": "int 带符号累加 + 乘加前双向溢出预判",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：上一轮用 `long` 先按绝对值累加、最后按符号截断；这次直接维护带符号的 `int ans`，每次乘加前同时预判 `Integer.MAX_VALUE` 和 `Integer.MIN_VALUE` 两条边界，空间仍是 O(1)，但避免使用 `long`。\n\n② 这次为什么想起来：按「跳过空白 → 读取可选符号 → 连续读数字」的顺序线性扫描，并在第一个非数字字符处停止；溢出不再事后判断，而是在乘 10 加新位之前提前截断。\n\n③ 掌握度判定：本次独立完成，没有算法提示或讨论，首次提交即 Accepted，判为较强。\n\n④ 下一步提醒：当前逻辑已达最优；可把 `for` 中只用于计数的 `i` 去掉，统一用 `index` 写 `while`，减少一个冗余变量。"
     }
   ]
 }

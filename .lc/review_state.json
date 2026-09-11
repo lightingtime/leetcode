@@ -1773,12 +1773,12 @@
       "title": "字符串转换整数 (atoi)",
       "category": "字符串",
       "first_pass_date": "2026-08-23",
-      "last_review_date": "2026-09-06",
-      "next_review_date": "2026-09-08",
-      "interval_days": 2,
-      "review_count": 1,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-12",
+      "next_review_date": "2026-09-17",
+      "interval_days": 5,
+      "review_count": 2,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "count-and-say": {
