@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-21</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>268. 丢失的数字 (Missing Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/missing-number/" rel="noopener">https://leetcode.cn/problems/missing-number/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：位运算、数组、哈希表、数学、二分查找、排序</p><h2>题目描述</h2><p>给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。</p><p>示例 1：</p><p>输入：nums = [3,0,1]</p><p>输出：2</p><p>解释：n = 3，因为有 3 个数字，所以所有的数字都在范围 [0,3] 内。2 是丢失的数字，因为它没有出现在 nums 中。</p><p>示例 2：</p><p>输入：nums = [0,1]</p><p>输出：2</p><p>解释：n = 2，因为有 2 个数字，所以所有的数字都在范围 [0,2] 内。2 是丢失的数字，因为它没有出现在 nums 中。</p><p>示例 3：</p><p>输入：nums = [9,6,4,2,3,5,7,0,1]</p><p>输出：8</p><p>解释：n = 9，因为有 9 个数字，所以所有的数字都在范围 [0,9] 内。8 是丢失的数字，因为它没有出现在 nums 中。</p><p>提示：</p><p>n == nums.length</p><p>1 4</p><p>0</p><p>nums 中的所有数字都 独一无二</p><p>进阶：你能否实现线性时间复杂度、仅使用额外常数空间的算法解决此问题?</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（122/122）｜ 一次 AC ｜ 求和（差值累加） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是差值累加，把 <code>ans</code> 初始化为 <code>nums.length</code>，循环中执行 <code>ans += i - nums[i]</code>；它等价于「[0,n] 的总和 − 数组总和」，复杂度 O(n) / O(1)。</p><p>② 这次为什么想起来：完整范围只缺一个数，因此总和之差必然就是缺失值；<code>ans</code> 先包含右端点 n，再逐项抵消 0..n-1 与数组值，不需要额外哈希集合。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：当前 n≤10^4，int 求和安全；若未来范围更大，可改用 XOR 方法避免总和溢出。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-07 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（122/122）｜ 一次 AC ｜ 求和（差值累加） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-21）：先写「原地交换（cyclic sort）」后改「求和差值累加」第二种写法再 AC；复习①（2026-09-06）同款求和一次 AC 较强。</li><li>本次（第 2 次复习）：独立写出求和差值累加——<code>sum = n</code>，循环 <code>sum += i - nums[i]</code>，返回 <code>sum</code>；比一刷版本更精简（去掉了 <code>long + Math.toIntExact</code>，n ≤ 10^4 时 int 累积量级 ~5×10^7 不会溢出）。本地 12 组全绿 + 力扣 122/122 一次 Accepted。旧版（long 防溢出）已存入 <code>prev_code</code> 可对比。</li></ul><p><strong>② 为什么想起来</strong></p><ul><li><code>0..n</code> 完整和是定值，数组恰缺一个数 → 「完整和 − 实际和」就是答案。写成差值累加不必先算大和再减：从 n 起步每轮 <code>sum += i - nums[i]</code>，等价于把完整序列所有 i 加上、数组所有值减去，剩的就是缺的数。</li><li>差值累加过程中不会累积出大中间值，int 足够；约束外的超长数组才需要 long。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交 Accepted（122/122）、全程无探讨 → strong；连续较强 2 次，间隔 ×2.5 +2 拉长。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>XOR 方案 <code>ans ^= i ^ nums[i]</code>（0..n 与数组全部异或，成对抵消）是本题另一 O(1) 写法，且天然不怕溢出，可作为换写法练习。</li><li>关联「缺失/重复」题：LC136 只出现一次（XOR）、LC287 寻找重复数（快慢指针）。</li></ul></div>
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>求和（差值累加）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -76,13 +80,13 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 求和（差值累加）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 122/122</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.4 MB</span><span class="chip">用例 122/122</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0268_MissingNumber.java · 求和（差值累加）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">missingNumber</span>(<span class="tk-k">int</span>[] nums) {
-        <span class="tk-k">int</span> sum = nums.length;
+        <span class="tk-k">int</span> ans = nums.length;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
-            sum += i - nums[i];
+            ans = ans + i - nums[i];
         }
-        <span class="tk-k">return</span> sum;
+        <span class="tk-k">return</span> ans;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0268_MissingNumber.java · 求和（差值累加） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">missingNumber</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">long</span> ans = nums.length;

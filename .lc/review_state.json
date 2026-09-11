@@ -1437,12 +1437,12 @@
       "title": "丢失的数字",
       "category": "哈希表",
       "first_pass_date": "2026-08-21",
-      "last_review_date": "2026-09-07",
-      "next_review_date": "2026-09-12",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-12",
+      "next_review_date": "2026-09-27",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 2,
+      "consecutive_strong": 3,
       "mastered": false
     },
     "valid-sudoku": {
