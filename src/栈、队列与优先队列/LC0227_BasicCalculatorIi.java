@@ -2,8 +2,10 @@
 // LeetCode 227. 基本计算器 II (Basic Calculator II)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/basic-calculator-ii/
-// 刷题日期：2026-08-24
+// 复习日期：2026-09-12（第 1 次复习 · 一刷 2026-08-24）
 //
+// 思路：扫描表达式，延迟结算加减，乘除立即合并到待处理项 last。
+// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -12,8 +14,8 @@ public class LC0227_BasicCalculatorIi {
 
     // ==== 提交代码开始 ====
     public int calculate(String s) {
-        int num = 0, last = 0, sum = 0;   // num 当前数字；last 当前项（乘除累积）；sum 已定稿项之和
-        char sign = '+';                   // 当前数字之前的运算符
+        int num = 0, last = 0, sum = 0;
+        char sign = '+';
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isDigit(c)) {
@@ -21,14 +23,25 @@ public class LC0227_BasicCalculatorIi {
             }
             if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {
                 switch (sign) {
-                    case '+' -> { sum += last; last = num; }
-                    case '-' -> { sum += last; last = -num; }
-                    case '*' -> { last *= num; }
-                    case '/' -> { last /= num; }
+                    case '+' :
+                        sum += last;
+                        last = num;
+                        break;
+                    case '-':
+                        sum += last;
+                        last =- num;
+                        break;
+                    case '*':
+                        last *= num;
+                        break;
+                    case '/':
+                        last /= num;
+                        break;
                 }
-                sign = c;
                 num = 0;
+                sign = c;
             }
+
         }
         return sum + last;
     }
@@ -59,9 +72,10 @@ public class LC0227_BasicCalculatorIi {
         try {
             if (!TestUtil.checkEq(5, s.calculate("100/10/2"), "边界2: 连续除法左结合")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
-        // 边界3: 结果为负（1-2 = -1）
+        // 边界3: 结果为负（1-2 = -1；含乘除优先级时 1-2*3+3 = -2）
         try {
-            if (!TestUtil.checkEq(-1, s.calculate("1-2"), "边界3: 负数结果")) failures++;
+            if (!TestUtil.checkEq(-1, s.calculate("1-2"), "边界3a: 负数结果")) failures++;
+            if (!TestUtil.checkEq(-2, s.calculate("1-2*3+3"), "边界3b: 负数与优先级")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界3 异常: " + t); }
         // 边界4: 乘除优先级高于加减（1-2*3 = 1-6 = -5）
         try {
