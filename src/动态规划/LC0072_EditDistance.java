@@ -1,12 +1,15 @@
 // ============================================================
 // LeetCode 72. 编辑距离 (Edit Distance)
-// 难度：Medium | 分类：动态规划（子类型：线性/双序列 DP）
+// 难度：Medium | 分类：动态规划（线性 DP）
 // 链接：https://leetcode.cn/problems/edit-distance/
-// 复习日期：2026-09-06（第 3 次复习 · 一刷 2026-08-19 · 上次 2026-09-03 较弱）
-// 一刷写法：DP 二维表格 O(mn)/O(mn)；上次写法：一维滚动 DP O(n)
-// 复习提醒：滚动数组关键是 diag 变量在每列末更新为「更新前的 dp[j]」保持斜对角语义
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-19 · 上次复习 2026-09-06）
+//
+// 复写要求：已独立写出滚动数组 O(n) 空间优化，保持 leftTop 的斜对角语义。
+// 思路：一维滚动 DP，按删除、替换、插入三种代价取最小值。
+// 复杂度：时间 O(mn)，空间 O(n)
 // ============================================================
+
+import java.util.*;
 
 public class LC0072_EditDistance {
 
@@ -21,22 +24,19 @@ public class LC0072_EditDistance {
             return m;
         }
         int[] dp = new int[n];
-        // 永远记住此时的dp是带着空串行列的
         for (int i = 0; i < n; i++) {
             dp[i] = i + 1;
         }
         for (int i = 0; i < m; i++) {
-            // leftTop，表示上一行的编辑距离
-            int dig = i;
+            int leftTop = i;
             for (int j = 0; j < n; j++) {
                 int pre = dp[j];
                 if (word1.charAt(i) == word2.charAt(j)) {
-                    dp[j] = dig;
+                    dp[j] = leftTop;
                 } else {
-                    //
-                    dp[j] = Math.min(j == 0? i + 1 : dp[j - 1], Math.min(pre, dig)) + 1;
+                    dp[j] = Math.min(j == 0 ? i + 1 : dp[j - 1], Math.min(leftTop, pre)) + 1;
                 }
-                dig = pre;
+                leftTop = pre;
             }
         }
         return dp[n - 1];

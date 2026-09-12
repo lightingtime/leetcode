@@ -68,18 +68,18 @@
       "code": "public int minDistance(String word1, String word2) {\n        int m = word1.length();\n        int n = word2.length();\n        if (m == 0) return n;\n        if (n == 0) return m;\n        // 滚动数组：dp[j] 存当前行 dp[i][j]，覆盖前先取旧值当 dp[i-1][j]；diag 存斜对角 dp[i-1][j-1]\n        int[] dp = new int[n + 1];\n        for (int j = 0; j <= n; j++) {\n            dp[j] = j; // 第 0 行：dp[0][j] = j\n        }\n        for (int i = 1; i <= m; i++) {\n            int diag = dp[0]; // 进第 1 列前，diag = dp[i-1][0]\n            dp[0] = i;        // 第 0 列：dp[i][0] = i\n            for (int j = 1; j <= n; j++) {\n                int prevRowSame = dp[j]; // 覆盖前保存 dp[i-1][j]\n                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {\n                    dp[j] = diag;\n                } else {\n                    dp[j] = Math.min(Math.min(prevRowSame, dp[j - 1]), diag) + 1;\n                }\n                diag = prevRowSame; // 下一列的斜对角 = dp[i-1][j]\n            }\n        }\n        return dp[n];\n    }\n"
     },
     {
-      "date": "2026-09-06",
+      "date": "2026-09-12",
       "verdict": "Accepted",
       "testcases": "1149/1149",
       "approach": "一维滚动 DP",
       "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 上一轮（09-03，weak）与本次同思路：**一维滚动 DP**——`dp[j]` 带空串行列语义，`pre`（删除）/`dp[j-1]`（插入）/`dig`（斜对角）三个来源取 min+1；`dig = pre` 在每列末推进。本轮主体与上轮一致，差异是把**空串基例补齐**：`m==0` 返回 n、`n==0` 返回 m。\n- 09-03 版代码已存入 submissions prev_code；一刷二维表格保留为独立条目。\n\n**② 为什么这轮仍记较弱（探讨过 + 本地调试修正）**\n- 本地有两处失败：`双空` 与 `abc->空`——都是 **n=0** 时 `dp` 开成长度 0、`return dp[n-1]` 越界。经 lc-analyze 点出「目标串为空时，滚动数组那一维根本不存在」后补基例通过；随后又就 `dig = i` 而非 `i+1`（斜对角 = 上一行第 0 列 = 删 i 个，不是本行第 0 列）做了概念探讨。\n- 结论：DP 主转移（diag 语义）已内化，但**空串基例**还没形成条件反射——这正是一刷/09-03 同样没覆盖到的盲区，故记 weak。\n\n**③ 掌握度判定**\n- weak：本地非一次通过（2 失败 → 修复后全绿）、过程有探讨；力扣一次提交 Accepted 1149/1149。\n\n**④ 下一步提醒**\n- 写滚动 DP 前先口头列基例：word1 空、word2 空、双空各返回几；缩维后要自问「被压掉的那一维取 0 时会不会越界」。\n- 相关串练：1143 最长公共子序列（同双序列滚动 + 空串基例）、583 两个字符串的删除操作、10 正则表达式匹配（二维 DP 状态机）。错误习惯（n=0 基例漏判）已记录到 analysis，下次抽题会提醒。",
+      "notes": "① 与上一轮对比：仍是一维滚动 DP，满足历史优化要求，空间从二维 O(mn) 降到 O(n)；空串基例、`leftTop` 斜对角语义和 `j==0 ? i+1` 的左方基例都保留，时间复杂度 O(mn)。\n\n② 本次关键讨论：当前数组未保存二维表的第 0 列，`dp[0]` 实际对应 `dp[0][1]`，所以初始化是 `j+1`；行开始时 `leftTop=i` 表示上一行第 0 列，只有斜对角含义。`j==0` 时左方是当前行第 0 列，值为 `i+1`，因此不能拿 `dp[0]` 当左方。例：`word1=\"a\"`、`word2=\"a\"` 时，`leftTop=0`、`pre=1`，字符相同得到 `dp[0]=0`；若把 `leftTop` 当成 `i+1=1` 会错误得到 1。\n\n③ 掌握度判定：虽然首次提交 Accepted 1149/1149，但提交前讨论了 `leftTop` 与 `dp[0]` 的边界语义，且按你的要求本次记 weak。\n\n④ 下一步提醒：下次先写清二维坐标映射，或直接改成带 `n+1` 第一列的滚动数组；若继续当前紧凑布局，必须固定 `leftTop=dp[i][0]`、`j==0` 左方=`dp[i+1][0]`。",
       "mastery": "weak",
-      "pass": 3,
-      "memory_bytes": 44832000,
-      "code": "public int minDistance(String word1, String word2) {\n        int m = word1.length();\n        int n = word2.length();\n        if (m == 0) {\n            return n;\n        }\n        if (n == 0) {\n            return m;\n        }\n        int[] dp = new int[n];\n        // 永远记住此时的dp是带着空串行列的\n        for (int i = 0; i < n; i++) {\n            dp[i] = i + 1;\n        }\n        for (int i = 0; i < m; i++) {\n            // leftTop，表示上一行的编辑距离\n            int dig = i;\n            for (int j = 0; j < n; j++) {\n                int pre = dp[j];\n                if (word1.charAt(i) == word2.charAt(j)) {\n                    dp[j] = dig;\n                } else {\n                    //\n                    dp[j] = Math.min(j == 0? i + 1 : dp[j - 1], Math.min(pre, dig)) + 1;\n                }\n                dig = pre;\n            }\n        }\n        return dp[n - 1];\n    }",
+      "pass": 4,
+      "memory_bytes": 44564000,
+      "code": "    public int minDistance(String word1, String word2) {\n        int m = word1.length();\n        int n = word2.length();\n        if (m == 0) {\n            return n;\n        }\n        if (n == 0) {\n            return m;\n        }\n        int[] dp = new int[n];\n        for (int i = 0; i < n; i++) {\n            dp[i] = i + 1;\n        }\n        for (int i = 0; i < m; i++) {\n            int leftTop = i;\n            for (int j = 0; j < n; j++) {\n                int pre = dp[j];\n                if (word1.charAt(i) == word2.charAt(j)) {\n                    dp[j] = leftTop;\n                } else {\n                    dp[j] = Math.min(j == 0 ? i + 1 : dp[j - 1], Math.min(leftTop, pre)) + 1;\n                }\n                leftTop = pre;\n            }\n        }\n        return dp[n - 1];\n    }",
       "prev_code": "    public int minDistance(String word1, String word2) {\n        int m = word1.length();\n        int n = word2.length();\n        if (m == 0) {\n            return n;\n        }\n        if (n == 0) {\n            return m;\n        }\n        int[] dp = new int[n];\n        // dp初始化表示当word1为0时，处理到word2的前缀长度为j个字符需要的操作步骤\n        // j 从 0 开始，所以步骤 = j + 1\n        for (int j = 0; j < n; j++) {\n            dp[j] = j + 1;\n        }\n        for (int i = 0; i < m; i++) {\n            // leftTop 是每行开头 j = 0 那个格子的左上角（虚的，不存在的）：word1 前 i 个 -> word2 前 j 个 的步数\n            // j=0 时它是 \"前 i 个 -> 空串\" = i（数组没存 word2 为空的那一列，需手动补）\n            int leftTop = i;\n            for (int j = 0; j < n; j++) {\n                // 防止 dp[j] 被更新，记录一下\n                int pre = dp[j];\n                if (word1.charAt(i) == word2.charAt(j)) {\n                    dp[j] = leftTop;\n                } else {\n                    dp[j] = Math.min(j == 0 ? i + 1 : dp[j - 1], Math.min(pre, leftTop)) + 1;\n                }\n                // 下一列的左上角 = 本列覆盖前的 dp[j]（word1 前 i 个 -> word2 前 j+1 个）\n                leftTop = pre;\n            }\n        }\n        return dp[n - 1];\n    }"
     }
   ],
@@ -123,6 +123,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 上一轮（09-03，weak）与本次同思路：**一维滚动 DP**——`dp[j]` 带空串行列语义，`pre`（删除）/`dp[j-1]`（插入）/`dig`（斜对角）三个来源取 min+1；`dig = pre` 在每列末推进。本轮主体与上轮一致，差异是把**空串基例补齐**：`m==0` 返回 n、`n==0` 返回 m。\n- 09-03 版代码已存入 submissions prev_code；一刷二维表格保留为独立条目。\n\n**② 为什么这轮仍记较弱（探讨过 + 本地调试修正）**\n- 本地有两处失败：`双空` 与 `abc->空`——都是 **n=0** 时 `dp` 开成长度 0、`return dp[n-1]` 越界。经 lc-analyze 点出「目标串为空时，滚动数组那一维根本不存在」后补基例通过；随后又就 `dig = i` 而非 `i+1`（斜对角 = 上一行第 0 列 = 删 i 个，不是本行第 0 列）做了概念探讨。\n- 结论：DP 主转移（diag 语义）已内化，但**空串基例**还没形成条件反射——这正是一刷/09-03 同样没覆盖到的盲区，故记 weak。\n\n**③ 掌握度判定**\n- weak：本地非一次通过（2 失败 → 修复后全绿）、过程有探讨；力扣一次提交 Accepted 1149/1149。\n\n**④ 下一步提醒**\n- 写滚动 DP 前先口头列基例：word1 空、word2 空、双空各返回几；缩维后要自问「被压掉的那一维取 0 时会不会越界」。\n- 相关串练：1143 最长公共子序列（同双序列滚动 + 空串基例）、583 两个字符串的删除操作、10 正则表达式匹配（二维 DP 状态机）。错误习惯（n=0 基例漏判）已记录到 analysis，下次抽题会提醒。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-12",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "1149/1149",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是一维滚动 DP，满足历史优化要求，空间从二维 O(mn) 降到 O(n)；空串基例、`leftTop` 斜对角语义和 `j==0 ? i+1` 的左方基例都保留，时间复杂度 O(mn)。\n\n② 本次关键讨论：当前数组未保存二维表的第 0 列，`dp[0]` 实际对应 `dp[0][1]`，所以初始化是 `j+1`；行开始时 `leftTop=i` 表示上一行第 0 列，只有斜对角含义。`j==0` 时左方是当前行第 0 列，值为 `i+1`，因此不能拿 `dp[0]` 当左方。例：`word1=\"a\"`、`word2=\"a\"` 时，`leftTop=0`、`pre=1`，字符相同得到 `dp[0]=0`；若把 `leftTop` 当成 `i+1=1` 会错误得到 1。\n\n③ 掌握度判定：虽然首次提交 Accepted 1149/1149，但提交前讨论了 `leftTop` 与 `dp[0]` 的边界语义，且按你的要求本次记 weak。\n\n④ 下一步提醒：下次先写清二维坐标映射，或直接改成带 `n+1` 第一列的滚动数组；若继续当前紧凑布局，必须固定 `leftTop=dp[i][0]`、`j==0` 左方=`dp[i+1][0]`。"
     }
   ]
 }

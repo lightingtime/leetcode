@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-19</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>72. 编辑距离 (Edit Distance)</h1><p>&gt; <a href="https://leetcode.cn/problems/edit-distance/" rel="noopener">https://leetcode.cn/problems/edit-distance/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：字符串、动态规划</p><h2>题目描述</h2><p>给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数 。</p><p>你可以对一个单词进行如下三种操作：</p><p>插入一个字符</p><p>删除一个字符</p><p>替换一个字符</p><p>示例 1：</p><p>输入：word1 = "horse", word2 = "ros"</p><p>输出：3</p><p>解释：</p><p>horse -&gt; rorse (将 'h' 替换为 'r')</p><p>rorse -&gt; rose (删除 'r')</p><p>rose -&gt; ros (删除 'e')</p><p>示例 2：</p><p>输入：word1 = "intention", word2 = "execution"</p><p>输出：5</p><p>解释：</p><p>intention -&gt; inention (删除 't')</p><p>inention -&gt; enention (将 'i' 替换为 'e')</p><p>enention -&gt; exention (将 'n' 替换为 'x')</p><p>exention -&gt; exection (将 'n' 替换为 'c')</p><p>exection -&gt; execution (插入 'u')</p><p>提示：</p><p>0</p><p>word1 和 word2 由小写英文字母组成</p><h2>示例</h2><ol><li>输入：word1 = "horse"，word2 = "ros"</li></ol><p>输出：3</p><ol><li>输入：word1 = "intention"，word2 = "execution"</li></ol><p>输出：5</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-12 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（1149/1149）｜ 一次 AC ｜ 一维滚动 DP ｜ O(mn) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是一维滚动 DP，满足历史优化要求，空间从二维 O(mn) 降到 O(n)；空串基例、<code>leftTop</code> 斜对角语义和 <code>j==0 ? i+1</code> 的左方基例都保留，时间复杂度 O(mn)。</p><p>② 本次关键讨论：当前数组未保存二维表的第 0 列，<code>dp[0]</code> 实际对应 <code>dp[0][1]</code>，所以初始化是 <code>j+1</code>；行开始时 <code>leftTop=i</code> 表示上一行第 0 列，只有斜对角含义。<code>j==0</code> 时左方是当前行第 0 列，值为 <code>i+1</code>，因此不能拿 <code>dp[0]</code> 当左方。例：<code>word1="a"</code>、<code>word2="a"</code> 时，<code>leftTop=0</code>、<code>pre=1</code>，字符相同得到 <code>dp[0]=0</code>；若把 <code>leftTop</code> 当成 <code>i+1=1</code> 会错误得到 1。</p><p>③ 掌握度判定：虽然首次提交 Accepted 1149/1149，但提交前讨论了 <code>leftTop</code> 与 <code>dp[0]</code> 的边界语义，且按你的要求本次记 weak。</p><p>④ 下一步提醒：下次先写清二维坐标映射，或直接改成带 <code>n+1</code> 第一列的滚动数组；若继续当前紧凑布局，必须固定 <code>leftTop=dp[i][0]</code>、<code>j==0</code> 左方=<code>dp[i+1][0]</code>。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-06 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（1149/1149）｜ 多次提交 ｜ 一维滚动 DP ｜ O(mn) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-03，weak）与本次同思路：<strong>一维滚动 DP</strong>——<code>dp[j]</code> 带空串行列语义，<code>pre</code>（删除）/<code>dp[j-1]</code>（插入）/<code>dig</code>（斜对角）三个来源取 min+1；<code>dig = pre</code> 在每列末推进。本轮主体与上轮一致，差异是把<strong>空串基例补齐</strong>：<code>m==0</code> 返回 n、<code>n==0</code> 返回 m。</li><li>09-03 版代码已存入 submissions prev_code；一刷二维表格保留为独立条目。</li></ul><p><strong>② 为什么这轮仍记较弱（探讨过 + 本地调试修正）</strong></p><ul><li>本地有两处失败：<code>双空</code> 与 <code>abc-&gt;空</code>——都是 <strong>n=0</strong> 时 <code>dp</code> 开成长度 0、<code>return dp[n-1]</code> 越界。经 lc-analyze 点出「目标串为空时，滚动数组那一维根本不存在」后补基例通过；随后又就 <code>dig = i</code> 而非 <code>i+1</code>（斜对角 = 上一行第 0 列 = 删 i 个，不是本行第 0 列）做了概念探讨。</li><li>结论：DP 主转移（diag 语义）已内化，但<strong>空串基例</strong>还没形成条件反射——这正是一刷/09-03 同样没覆盖到的盲区，故记 weak。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>weak：本地非一次通过（2 失败 → 修复后全绿）、过程有探讨；力扣一次提交 Accepted 1149/1149。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>写滚动 DP 前先口头列基例：word1 空、word2 空、双空各返回几；缩维后要自问「被压掉的那一维取 0 时会不会越界」。</li><li>相关串练：1143 最长公共子序列（同双序列滚动 + 空串基例）、583 两个字符串的删除操作、10 正则表达式匹配（二维 DP 状态机）。错误习惯（n=0 基例漏判）已记录到 analysis，下次抽题会提醒。</li></ul></div>
@@ -46,7 +50,7 @@
         
       </ul>
     </div><div class="round-card weak">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>一维滚动 DP</b></li>
         <li><span>复杂度</span><b>O(mn) · O(n)</b></li>
@@ -85,8 +89,8 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 一维滚动 DP</h3>
-    <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.8 MB</span><span class="chip">用例 1149/1149</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0072_EditDistance.java · 一维滚动 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">minDistance</span>(<span class="tk-t">String</span> word1, <span class="tk-t">String</span> word2) {
+    <p><span class="chip">时间 O(mn)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.5 MB</span><span class="chip">用例 1149/1149</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0072_EditDistance.java · 一维滚动 DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">minDistance</span>(<span class="tk-t">String</span> word1, <span class="tk-t">String</span> word2) {
         <span class="tk-k">int</span> m = word1.<span class="tk-f">length</span>();
         <span class="tk-k">int</span> n = word2.<span class="tk-f">length</span>();
         <span class="tk-k">if</span> (m == <span class="tk-n">0</span>) {
@@ -96,22 +100,19 @@
             <span class="tk-k">return</span> m;
         }
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n];
-        <span class="tk-c">// 永远记住此时的dp是带着空串行列的</span>
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n; i++) {
             dp[i] = i + <span class="tk-n">1</span>;
         }
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
-            <span class="tk-c">// leftTop，表示上一行的编辑距离</span>
-            <span class="tk-k">int</span> dig = i;
+            <span class="tk-k">int</span> leftTop = i;
             <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
                 <span class="tk-k">int</span> pre = dp[j];
                 <span class="tk-k">if</span> (word1.<span class="tk-f">charAt</span>(i) == word2.<span class="tk-f">charAt</span>(j)) {
-                    dp[j] = dig;
+                    dp[j] = leftTop;
                 } <span class="tk-k">else</span> {
-                    <span class="tk-c">//</span>
-                    dp[j] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(j == <span class="tk-n">0</span>? i + <span class="tk-n">1</span> : dp[j - <span class="tk-n">1</span>], <span class="tk-t">Math</span>.<span class="tk-f">min</span>(pre, dig)) + <span class="tk-n">1</span>;
+                    dp[j] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(j == <span class="tk-n">0</span> ? i + <span class="tk-n">1</span> : dp[j - <span class="tk-n">1</span>], <span class="tk-t">Math</span>.<span class="tk-f">min</span>(leftTop, pre)) + <span class="tk-n">1</span>;
                 }
-                dig = pre;
+                leftTop = pre;
             }
         }
         <span class="tk-k">return</span> dp[n - <span class="tk-n">1</span>];

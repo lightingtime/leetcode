@@ -1227,10 +1227,10 @@
       "title": "编辑距离",
       "category": "动态规划",
       "first_pass_date": "2026-08-19",
-      "last_review_date": "2026-09-06",
-      "next_review_date": "2026-09-08",
+      "last_review_date": "2026-09-12",
+      "next_review_date": "2026-09-14",
       "interval_days": 2,
-      "review_count": 3,
+      "review_count": 4,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
