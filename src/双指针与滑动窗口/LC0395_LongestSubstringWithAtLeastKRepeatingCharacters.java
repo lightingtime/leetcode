@@ -2,10 +2,10 @@
 // LeetCode 395. 至少有 K 个重复字符的最长子串 (Longest Substring with At Least K Repeating Characters)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/
-// 复习日期：2026-09-06（第 1 次复习 · 一刷 2026-08-22）
-// 一刷思路：分治 —— 统计当前区间频次，找到第一个出现次数 < k 的字符（墙），它不可能在合法子串中；跳过连续墙后对墙左、右分别递归取最大
-// 一刷复杂度：时间 O(n^2) 最坏，空间 O(n) 递归栈
-// 测试用例与一刷归档保持一致
+// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-22 · 上次复习 2026-09-06）
+//
+// 思路：分治；先统计当前区间字频，用第一个不足 k 的字符切分并跳过连续墙。
+// 复杂度：时间 O(n^2)，空间 O(n)（递归栈）
 // ============================================================
 
 import java.util.*;
@@ -21,26 +21,27 @@ public class LC0395_LongestSubstringWithAtLeastKRepeatingCharacters {
         if (l > r) {
             return 0;
         }
-        int[] count = new int[26];
+        int[] counts = new int[26];
         for (int i = l; i <= r; i++) {
-            count[s.charAt(i) - 'a']++;
+            counts[s.charAt(i) - 'a']++;
         }
-        int p = -1;
+        int end = -1;
         for (int i = l; i <= r; i++) {
-            if (count[s.charAt(i) - 'a'] < k) {
-                p = i;
+            if (counts[s.charAt(i) - 'a'] < k) {
+                end = i;
                 break;
             }
         }
-        if (p == -1) {
+        if (end == -1) {
             return r - l + 1;
         }
-        int q = p;
-        while (q <= r && count[s.charAt(q) - 'a'] < k) {
-            q++;
+        int start = end;
+        while (start <= r && counts[s.charAt(start) - 'a'] < k) {
+            start++;
         }
-        return Math.max(dfs(s, l, p - 1, k), dfs(s, q, r, k));
+        return Math.max(dfs(s, l, end - 1, k), dfs(s, start, r, k));
     }
+
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -85,6 +86,10 @@ public class LC0395_LongestSubstringWithAtLeastKRepeatingCharacters {
         try { if (!TestUtil.checkEq(3, s.longestSubstring("baaac", 3), "边界11-尾段答案")) failures++; } catch (Throwable t) { failures++; System.out.println("边界11-尾段答案 异常: " + t); }
         // 12) 答案在末尾两墙之后（cbabb：c、a 为墙，合法段 bb 在末尾）
         try { if (!TestUtil.checkEq(2, s.longestSubstring("cbabb", 2), "边界12-尾段答案2")) failures++; } catch (Throwable t) { failures++; System.out.println("边界12-尾段答案2 异常: " + t); }
+
+        // 回归：全局频率满足 k，不代表切分后的当前区间内部满足 k
+        // "aabacb" 全局 a=3、b=2，但 "aaba" 内部 b 只有 1 次，最长合法段实际是 "aa"
+        try { if (!TestUtil.checkEq(2, s.longestSubstring("aabacb", 2), "回归-窗口内频率不足")) failures++; } catch (Throwable t) { failures++; System.out.println("回归-窗口内频率不足 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

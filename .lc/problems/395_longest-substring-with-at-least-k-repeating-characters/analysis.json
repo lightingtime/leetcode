@@ -12,18 +12,25 @@
   "firstPass": true,
   "optimal": false,
   "approach": "分治（第一堵墙切左右+跳过连续墙）",
-  "dp_subtype": "",
-  "approach_detail": "**① 问题本质与解法选择**\n- 找最长子串，使其中**每个字符出现次数 ≥ k**。\n- 关键观察：若某字符在当前串（区间）中总出现次数 < k，它不可能出现在任何合法子串里 → 它把区间切成若干互不相交的段，原问题变成子段上的同构子问题 → **分治**。\n- 分治写法直观、可接受；本题更优做法是「按窗口内不同字符数枚举的滑动窗口」，时间复杂度 O(26n)。\n\n**② 关键设计决策**\n- `dfs(ch, start, end, k)`：处理 `s[start..end)`，返回该区间内满足条件的最长合法子串长度。\n- 每次进入先统计区间频次 `count[26]`。\n- 找到**第一个**频次 < k 的字符（墙）；用 `j` **跳过连续墙**，保证左右子区间都不含墙。\n- 返回 `max(dfs(start, i), dfs(j, end))`——只切这一刀，避免对每个墙都递归导致指数膨胀（之前版本的教训）。\n- 区间内无墙 → 整段合法 → 返回 `end - start`。\n- 剪枝：`end - start < k` → 0。\n\n**③ 边界与细节**\n- `k > s.length`：`end-start < k` 直接返回 0。\n- 无墙（所有字符全局 ≥ k）：整串合法，返回串长。\n- 墙在开头/结尾：左/右子区间为空，递归返回 0。\n- 连续墙：`while` 跳过，避免把墙段传进递归。\n- 最后一个墙之后的段由「右递归」覆盖（这正是上一版漏掉、后被边界 11/12 抓住的洞）。\n\n**④ 复杂度与最优性**\n- 每层最多 2 个**互不重叠**的子问题；最坏 O(n²)（斜切形态），一般接近 O(n log n)；空间 O(n) 递归栈。\n- 更优方向：枚举窗口内不同字符数 `t=1..26`，对每个 `t` 用滑动窗口找「恰好 t 种不同字符且每种 ≥ k」的最长窗口，总 O(26n)。当前实现不是时间最优（最优性标为否）。\n\n**⑤ 具体 case 推演：`s=\"baaac\"`、`k=3`**\n- `dfs(0,5)`：统计 `b=1, a=3, c=1`。第一个墙在 `i=0`（`b` 出现 1 < 3），`j` 到 1（`a` 非墙）。\n- 返回 `max(dfs(0,0), dfs(1,5))`。\n- `dfs(1,5)=\"aaac\"`：统计 `a=3, c=1`。墙在 `i=4`（`c`），`j=5`。\n  - 返回 `max(dfs(1,4), dfs(5,5))`；`dfs(1,4)=\"aaa\"` 无墙 → 3；`dfs(5,5)` 空 → 0。\n- 答案 3 ✓（`\"aaa\"` 段在墙 `b` 与 `c` 之间，由左右递归覆盖）。",
   "time_complexity": "O(n^2) 最坏",
   "space_complexity": "O(n)",
   "notes": "",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "切分法段内验证缺失：按全局频次<k 的字符切分后，直接拿两切点间原始长度当答案，没对每段重新统计并验证段内每个字符都>=k（全局够、段内可能不够），导致把非法段长度计入；且无切分点（所有字符全局>=k）时漏掉整串合法的情况",
       "count": 1
+    },
+    {
+      "habit": "递归分治统计区间字符频率时误用整串频率，漏判区间内部的低频字符",
+      "count": 1
     }
   ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
+  "dp_subtype": "",
+  "approach_detail": "**① 问题本质与解法选择**\n- 找最长子串，使其中**每个字符出现次数 ≥ k**。\n- 关键观察：若某字符在当前串（区间）中总出现次数 < k，它不可能出现在任何合法子串里 → 它把区间切成若干互不相交的段，原问题变成子段上的同构子问题 → **分治**。\n- 分治写法直观、可接受；本题更优做法是「按窗口内不同字符数枚举的滑动窗口」，时间复杂度 O(26n)。\n\n**② 关键设计决策**\n- `dfs(ch, start, end, k)`：处理 `s[start..end)`，返回该区间内满足条件的最长合法子串长度。\n- 每次进入先统计区间频次 `count[26]`。\n- 找到**第一个**频次 < k 的字符（墙）；用 `j` **跳过连续墙**，保证左右子区间都不含墙。\n- 返回 `max(dfs(start, i), dfs(j, end))`——只切这一刀，避免对每个墙都递归导致指数膨胀（之前版本的教训）。\n- 区间内无墙 → 整段合法 → 返回 `end - start`。\n- 剪枝：`end - start < k` → 0。\n\n**③ 边界与细节**\n- `k > s.length`：`end-start < k` 直接返回 0。\n- 无墙（所有字符全局 ≥ k）：整串合法，返回串长。\n- 墙在开头/结尾：左/右子区间为空，递归返回 0。\n- 连续墙：`while` 跳过，避免把墙段传进递归。\n- 最后一个墙之后的段由「右递归」覆盖（这正是上一版漏掉、后被边界 11/12 抓住的洞）。\n\n**④ 复杂度与最优性**\n- 每层最多 2 个**互不重叠**的子问题；最坏 O(n²)（斜切形态），一般接近 O(n log n)；空间 O(n) 递归栈。\n- 更优方向：枚举窗口内不同字符数 `t=1..26`，对每个 `t` 用滑动窗口找「恰好 t 种不同字符且每种 ≥ k」的最长窗口，总 O(26n)。当前实现不是时间最优（最优性标为否）。\n\n**⑤ 具体 case 推演：`s=\"baaac\"`、`k=3`**\n- `dfs(0,5)`：统计 `b=1, a=3, c=1`。第一个墙在 `i=0`（`b` 出现 1 < 3），`j` 到 1（`a` 非墙）。\n- 返回 `max(dfs(0,0), dfs(1,5))`。\n- `dfs(1,5)=\"aaac\"`：统计 `a=3, c=1`。墙在 `i=4`（`c`），`j=5`。\n  - 返回 `max(dfs(1,4), dfs(5,5))`；`dfs(1,4)=\"aaa\"` 无墙 → 3；`dfs(5,5)` 空 → 0。\n- 答案 3 ✓（`\"aaa\"` 段在墙 `b` 与 `c` 之间，由左右递归覆盖）。",
+  "code_notes": [],
   "patterns": [
     {
       "title": "分治：<k 字符当墙切左右",
@@ -35,23 +42,21 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-06",
+      "date": "2026-09-12",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "38/38",
       "runtime_ms": null,
-      "memory_bytes": 43208000,
+      "memory_bytes": 42932000,
       "approach": "分治（第一堵墙切左右+跳过连续墙）",
-      "time_complexity": "O(n^2) 最坏",
+      "time_complexity": "O(n^2)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：与一刷同写法（分治：统计区间频次 → 找第一个出现 <k 的墙字符 → 跳过连续墙 → 对墙左、右递归取 max）；复杂度 O(n²) 最坏 / O(n) 递归栈，内存 43,208 KB。\n\n② 为什么没想起来 / 出错过程：思路全忘，经「墙 = 整区间都凑不齐 k 次的字符不可能进任何合法子串」分块引导重建（示例 ababbc 中 c=1 是墙 → 切出 ababb=5）。写码时犯一个具体错误：频次表 count[26] 用「位置 i」当下标（count[i]）而非字符（count[s.charAt(i)-'a']）——≤26 长串把空槽 0 全当墙、>26 长串直接越界，示例1 期望 3 实际 0；经分析定位第 31/40 行后改正。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但思路经引导重建 + 下标 bug 经分析修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲清「<k 字符为何是墙、切分为何不丢解」再写；易错点记住「频次表下标 = 字符编号，不是位置」；可补充了解枚举字符种类数 1..26 次滑动窗口的 O(26n) 替代写法作对比。",
-      "code": "public int longestSubstring(String s, int k) {\n        return dfs(s.toCharArray(), 0, s.length(), k);\n    }\n\n    private int dfs(char[] ch, int start, int end, int k) {\n        if (end - start < k) {\n            return 0;\n        }\n        int[] count = new int[26];\n        for (int i = start; i < end; i++) {\n            count[ch[i] - 'a']++;\n        }\n        for (int i = start; i < end; i++) {\n            if (count[ch[i] - 'a'] < k) {\n                int j = i + 1;\n                while (j < end && count[ch[j] - 'a'] < k) {\n                    j++;\n                }\n                return Math.max(dfs(ch, start, i, k), dfs(ch, j, end, k));\n            }\n        }\n        return end - start;\n    }\n",
+      "notes": "① 与上一轮对比：仍是分治切分；但首版错误地把整串`s`的频率用于每个递归区间，回归用例`\"aabacb\", k=2`得到 4（误把`\"aaba\"`当合法）而正确值为 2。改为只统计当前`[l,r]`后，本地 16 组全过，力扣 Accepted 38/38。\n\n② 分治逻辑：在当前区间内统计字符频率，找到第一个出现次数不足 k 的墙字符；墙一定不属于任何合法子串，因此切到左右两侧，并跳过连续墙后再递归。叶子区间若所有字符均达到 k，则整段长度可参与答案。\n\n③ 掌握度判定：首版存在实际 WA、经回归测试和分析修正后才通过，按规则记 weak。\n\n④ 下一步提醒：递归分治中所有“区间内属性”必须显式限定在`[l,r]`计算；整串全局状态只能用于全局不变量，不能直接替代子问题状态。",
+      "code": "    public int longestSubstring(String s, int k) {\n        return dfs(s, 0, s.length() - 1, k);\n    }\n\n    private int dfs(String s, int l, int r, int k) {\n        if (l > r) {\n            return 0;\n        }\n        int[] counts = new int[26];\n        for (int i = l; i <= r; i++) {\n            counts[s.charAt(i) - 'a']++;\n        }\n        int end = -1;\n        for (int i = l; i <= r; i++) {\n            if (counts[s.charAt(i) - 'a'] < k) {\n                end = i;\n                break;\n            }\n        }\n        if (end == -1) {\n            return r - l + 1;\n        }\n        int start = end;\n        while (start <= r && counts[s.charAt(start) - 'a'] < k) {\n            start++;\n        }\n        return Math.max(dfs(s, l, end - 1, k), dfs(s, start, r, k));\n    }",
       "mastery": "weak",
-      "pass": 1
+      "pass": 2,
+      "prev_code": "public int longestSubstring(String s, int k) {\n        return dfs(s.toCharArray(), 0, s.length(), k);\n    }\n\n    private int dfs(char[] ch, int start, int end, int k) {\n        if (end - start < k) {\n            return 0;\n        }\n        int[] count = new int[26];\n        for (int i = start; i < end; i++) {\n            count[ch[i] - 'a']++;\n        }\n        for (int i = start; i < end; i++) {\n            if (count[ch[i] - 'a'] < k) {\n                int j = i + 1;\n                while (j < end && count[ch[j] - 'a'] < k) {\n                    j++;\n                }\n                return Math.max(dfs(ch, start, i, k), dfs(ch, j, end, k));\n            }\n        }\n        return end - start;\n    }\n"
     }
-  ],
-  "hints": [
-    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ],
   "reviews": [
     {
@@ -66,6 +71,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：与一刷同写法（分治：统计区间频次 → 找第一个出现 <k 的墙字符 → 跳过连续墙 → 对墙左、右递归取 max）；复杂度 O(n²) 最坏 / O(n) 递归栈，内存 43,208 KB。\n\n② 为什么没想起来 / 出错过程：思路全忘，经「墙 = 整区间都凑不齐 k 次的字符不可能进任何合法子串」分块引导重建（示例 ababbc 中 c=1 是墙 → 切出 ababb=5）。写码时犯一个具体错误：频次表 count[26] 用「位置 i」当下标（count[i]）而非字符（count[s.charAt(i)-'a']）——≤26 长串把空槽 0 全当墙、>26 长串直接越界，示例1 期望 3 实际 0；经分析定位第 31/40 行后改正。\n\n③ 掌握度判定：力扣一次提交即 Accepted，但思路经引导重建 + 下标 bug 经分析修正，记较弱。\n\n④ 下一步提醒：下次复习先口头讲清「<k 字符为何是墙、切分为何不丢解」再写；易错点记住「频次表下标 = 字符编号，不是位置」；可补充了解枚举字符种类数 1..26 次滑动窗口的 O(26n) 替代写法作对比。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-12",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "38/38",
+      "approach": "分治（第一堵墙切左右+跳过连续墙）",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是分治切分；但首版错误地把整串`s`的频率用于每个递归区间，回归用例`\"aabacb\", k=2`得到 4（误把`\"aaba\"`当合法）而正确值为 2。改为只统计当前`[l,r]`后，本地 16 组全过，力扣 Accepted 38/38。\n\n② 分治逻辑：在当前区间内统计字符频率，找到第一个出现次数不足 k 的墙字符；墙一定不属于任何合法子串，因此切到左右两侧，并跳过连续墙后再递归。叶子区间若所有字符均达到 k，则整段长度可参与答案。\n\n③ 掌握度判定：首版存在实际 WA、经回归测试和分析修正后才通过，按规则记 weak。\n\n④ 下一步提醒：递归分治中所有“区间内属性”必须显式限定在`[l,r]`计算；整串全局状态只能用于全局不变量，不能直接替代子问题状态。"
     }
   ]
 }

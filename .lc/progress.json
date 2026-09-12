@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-07",
+  "updated": "2026-09-12",
   "current_seq": 170,
   "done": [
     {
@@ -3314,6 +3314,17 @@
         "树与二叉树"
       ],
       "last_seen": "2026-09-07"
+    },
+    {
+      "habit": "递归分治统计区间字符频率时误用整串频率，漏判区间内部的低频字符",
+      "count": 1,
+      "examples": [
+        "longest-substring-with-at-least-k-repeating-characters"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-09-12"
     }
   ],
   "category_hints": {
