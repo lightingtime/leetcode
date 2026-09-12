@@ -2,8 +2,10 @@
 // LeetCode 341. 扁平化嵌套列表迭代器 (Flatten Nested List Iterator)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/flatten-nested-list-iterator/
-// 刷题日期：2026-08-24
+// 复习日期：2026-09-12（第 1 次复习 · 一刷 2026-08-24）
 //
+// 思路：惰性栈；构造时逆序压栈，hasNext 展开栈顶列表直到整数或栈空。
+// 复杂度：所有操作合计时间 O(n)，空间 O(n)
 // ============================================================
 
 import java.util.*;
@@ -29,35 +31,33 @@ public class LC0341_FlattenNestedListIterator {
 
     // ==== 提交代码开始 ====
     static class NestedIterator implements Iterator<Integer> {
-        Deque<NestedInteger> stack;
+        Deque<NestedInteger> it;
         public NestedIterator(List<NestedInteger> nestedList) {
-            stack = new ArrayDeque<>();
+            it = new ArrayDeque<>();
             for (int i = nestedList.size() - 1; i >= 0; i--) {
-                stack.push(nestedList.get(i));
+                it.offerLast(nestedList.get(i));
             }
         }
 
         @Override
         public Integer next() {
-            return stack.pop().getInteger();
+            return it.pollLast().getInteger();
         }
 
         @Override
         public boolean hasNext() {
-            if (stack.isEmpty()) {
+            if (it.isEmpty()) {
                 return false;
             }
-            if (stack.peek().isInteger()) {
-                return true;
-            } else {
-                while (!stack.isEmpty() && !stack.peek().isInteger()) {
-                    NestedInteger pop = stack.pop();
-                    for (int i = pop.getList().size() - 1; i >= 0; i--) {
-                        stack.push(pop.getList().get(i));
+            while (!it.isEmpty() && !it.peekLast().isInteger()) {
+                NestedInteger nestedInteger = it.pollLast();
+                for (int i = nestedInteger.getList().size() - 1; i >= 0; i--) {
+                    if (nestedInteger.getList().get(i).isInteger() || !nestedInteger.getList().get(i).getList().isEmpty()) {
+                        it.offerLast(nestedInteger.getList().get(i));
                     }
                 }
             }
-            return !stack.isEmpty();
+            return !it.isEmpty();
         }
     }
     // ==== 提交代码结束 ====

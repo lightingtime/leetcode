@@ -3336,6 +3336,17 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-09-12"
+    },
+    {
+      "habit": "展开空列表后栈可能变空，却在下一轮循环条件继续 peek 栈顶导致 NPE",
+      "count": 1,
+      "examples": [
+        "flatten-nested-list-iterator"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-12"
     }
   ],
   "category_hints": {
