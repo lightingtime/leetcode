@@ -1,11 +1,11 @@
 // ============================================================
 // LeetCode 309. 买卖股票的最佳时机含冷冻期 (Best Time to Buy and Sell Stock with Cooldown)
-// 难度：Medium | 分类：动态规划（子类型：状态机 DP）
+// 难度：Medium | 分类：动态规划（状态机 DP）
 // 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/
-// 复习日期：2026-09-06（第 2 次复习 · 一刷 2026-08-19 · 上次 2026-09-03 较弱）
-// 一刷写法：三状态机 DP（持有/刚卖/自由空仓）O(n)/O(n)，optimal=false
-// 复习提醒：先想清楚有几个互斥状态、各自从哪些状态转移（当天/隔天）；一刷空间 O(n) 未达最优，重写可尝试滚动到 O(1)
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-12（第 3 次复习 · 一刷 2026-08-19 · 上次复习 2026-09-06）
+//
+// 思路：三状态 DP，分别维护持有、空仓、冷冻状态的最大利润。
+// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -20,14 +20,15 @@ public class LC0309_BestTimeToBuyAndSellStockWithCooldown {
         for (int i = 1; i < prices.length; i++) {
             int preHold = hold;
             int preEmpty = empty;
-            // hold -> hold, cold -> hold
-            hold = Math.max(hold, cold - prices[i]);
-            // hold -> empty, empty -> empty, cold -> empty
+            int preCold = cold;
+            // cold -> hold, hold -> hold
+            hold = Math.max(preHold, preCold - prices[i]);
+            // empty -> empty, hold -> empty
             empty = Math.max(preEmpty, preHold + prices[i]);
-            // cold -> cold, empty -> cold
-            cold = Math.max(preEmpty, cold);
+            // empty -> cold, cold -> cold
+            cold = Math.max(preCold, preEmpty);
         }
-        return Math.max(empty, cold);
+        return Math.max(cold, empty);
     }
     // ==== 提交代码结束 ====
 
