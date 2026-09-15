@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-21</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>380. O(1) 时间插入、删除和获取随机元素 (Insert Delete GetRandom O(1))</h1><p>&gt; <a href="https://leetcode.cn/problems/insert-delete-getrandom-o1/" rel="noopener">https://leetcode.cn/problems/insert-delete-getrandom-o1/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：设计、数组、哈希表、数学、随机化</p><h2>题目描述</h2><p>实现RandomizedSet 类：</p><p>RandomizedSet() 初始化 RandomizedSet 对象</p><p>bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。</p><p>bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。</p><p>int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。</p><p>你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。</p><p>示例：</p><p>输入</p><p>["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]</p><p>[[], [1], [2], [2], [], [1], [2], []]</p><p>输出</p><p>[null, true, false, true, 2, true, false, 2]</p><p>解释</p><p>RandomizedSet randomizedSet = new RandomizedSet();</p><p>randomizedSet.insert(1); // 向集合中插入 1 。返回 true 表示 1 被成功地插入。</p><p>randomizedSet.remove(2); // 返回 false ，表示集合中不存在 2 。</p><p>randomizedSet.insert(2); // 向集合中插入 2 。返回 true 。集合现在包含 [1,2] 。</p><p>randomizedSet.getRandom(); // getRandom 应随机返回 1 或 2 。</p><p>randomizedSet.remove(1); // 从集合中移除 1 ，返回 true 。集合现在包含 [2] 。</p><p>randomizedSet.insert(2); // 2 已在集合中，所以返回 false 。</p><p>randomizedSet.getRandom(); // 由于 2 是集合中唯一的数字，getRandom 总是返回 2 。</p><p>提示：</p><p>-231 31 - 1</p><p>最多调用 insert、remove 和 getRandom 函数 2 * 105 次</p><p>在调用 getRandom 方法时，数据结构中 至少存在一个 元素。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（21/21）｜ 一次 AC ｜ HashMap + ArrayList（换位删除） ｜ 单次操作平均 O(1) · O(n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是 <code>HashMap + ArrayList（换位删除）</code>，上一轮已记 strong；本次未提问、未讨论，直接复写并通过全部本地用例，力扣首次提交 Accepted 21/21，继续记 strong。</p><p>② 关键设计：<code>map</code> 存值到数组下标，<code>list</code> 保证 O(1) 随机访问；<code>remove(val)</code> 把尾元素换到待删位置，更新尾元素的新下标，再删哈希映射和数组末位。删除的恰好是尾元素时，<code>lastVal == val</code> 也不会破坏逻辑，因为最终仍会移除该值唯一映射并删除末位。</p><p>③ 边界与复杂度：重复插入/删除返回 false；<code>getRandom()</code> 用 <code>random.nextInt(size)</code> 均匀取样。单次操作平均 O(1)，空间 O(n)。</p><p>④ 掌握度判定：没有算法提示或讨论，本地与力扣均一次通过，记 strong。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-09 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（21/21）｜ 一次 AC ｜ HashMap + ArrayList（换位删除） ｜ O(1) 均摊 · O(n)</p>
       <div class="review-note md"><p>① 与上一轮对比：与 09-06 复习同一思路（HashMap&lt;值,下标&gt; + ArrayList 换位删除），结构一致无冗余；复杂度不变：时间均摊 O(1)，空间 O(n)。</p><p>② 为什么这次能想起来：记忆点是「ArrayList 末尾增删和随机访问是 O(1)，删除中间却是 O(n) → 把待删元素和末尾元素交换后 pop 尾」，HashMap 提供值→下标使交换在 O(1) 完成；删的恰好是末尾元素时同一分支天然覆盖，不用特判。</p><p>③ 掌握度判定：本地 7 个用例一次跑通，力扣一次提交 Accepted（21/21），未探讨/未看归档 → strong。</p><p>④ 下一步提醒：可迁移到 381. 允许重复的随机集合（HashMap&lt;Integer, Set&lt;Integer&gt;&gt; 存每个值的下标集合，删除任取一个下标换位删除并清理集合）。</p></div>
@@ -42,16 +46,16 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>HashMap + ArrayList（换位删除）</b></li>
-        <li><span>复杂度</span><b>O(1) 均摊 · O(n)</b></li>
+        <li><span>复杂度</span><b>单次操作平均 O(1) · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashMap + ArrayList（换位删除）</h3>
-    <p><span class="chip">时间 O(1) 均摊</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.3 MB</span><span class="chip">用例 21/21</span></p>
+    <p><span class="chip">时间 单次操作平均 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.1 MB</span><span class="chip">用例 21/21</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0380_InsertDeleteGetrandomO1.java · HashMap + ArrayList（换位删除）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">RandomizedSet</span> {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map;
         <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; list;
@@ -61,6 +65,7 @@
             list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
             random = <span class="tk-k">new</span> <span class="tk-t">Random</span>();
         }
+
         <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">insert</span>(<span class="tk-k">int</span> val) {
             <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(val)) {
                 <span class="tk-k">return</span> <span class="tk-k">false</span>;
@@ -69,18 +74,20 @@
             map.<span class="tk-f">put</span>(val, list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
             <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
+
         <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">remove</span>(<span class="tk-k">int</span> val) {
             <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(val)) {
                 <span class="tk-k">return</span> <span class="tk-k">false</span>;
             }
             <span class="tk-k">int</span> index = map.<span class="tk-f">get</span>(val);
-            <span class="tk-k">int</span> endVal = list.<span class="tk-f">get</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
-            map.<span class="tk-f">put</span>(endVal, index);
-            list.<span class="tk-f">set</span>(index, endVal);
+            <span class="tk-k">int</span> lastVal = list.<span class="tk-f">get</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            map.<span class="tk-f">put</span>(lastVal, index);
+            list.<span class="tk-f">set</span>(index, lastVal);
             map.<span class="tk-f">remove</span>(val);
             list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
             <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
+
         <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">getRandom</span>() {
             <span class="tk-k">return</span> list.<span class="tk-f">get</span>(random.<span class="tk-f">nextInt</span>(list.<span class="tk-f">size</span>()));
         }

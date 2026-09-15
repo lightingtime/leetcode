@@ -22,19 +22,19 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-09",
+      "date": "2026-09-15",
       "verdict": "Accepted",
       "testcases": "21/21",
       "runtime_ms": null,
-      "memory_bytes": 100944000,
+      "memory_bytes": 100752000,
       "approach": "HashMap + ArrayList（换位删除）",
-      "time_complexity": "O(1) 均摊",
+      "time_complexity": "单次操作平均 O(1)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：与 09-06 复习同一思路（HashMap<值,下标> + ArrayList 换位删除），结构一致无冗余；复杂度不变：时间均摊 O(1)，空间 O(n)。\n② 为什么这次能想起来：记忆点是「ArrayList 末尾增删和随机访问是 O(1)，删除中间却是 O(n) → 把待删元素和末尾元素交换后 pop 尾」，HashMap 提供值→下标使交换在 O(1) 完成；删的恰好是末尾元素时同一分支天然覆盖，不用特判。\n③ 掌握度判定：本地 7 个用例一次跑通，力扣一次提交 Accepted（21/21），未探讨/未看归档 → strong。\n④ 下一步提醒：可迁移到 381. 允许重复的随机集合（HashMap<Integer, Set<Integer>> 存每个值的下标集合，删除任取一个下标换位删除并清理集合）。",
-      "code": "    static class RandomizedSet {\n        Map<Integer, Integer> map;\n        List<Integer> list;\n        Random random;\n        public RandomizedSet() {\n            map = new HashMap<>();\n            list = new ArrayList<>();\n            random = new Random();\n        }\n        public boolean insert(int val) {\n            if (map.containsKey(val)) {\n                return false;\n            }\n            list.add(val);\n            map.put(val, list.size() - 1);\n            return true;\n        }\n        public boolean remove(int val) {\n            if (!map.containsKey(val)) {\n                return false;\n            }\n            int index = map.get(val);\n            int endVal = list.get(list.size() - 1);\n            map.put(endVal, index);\n            list.set(index, endVal);\n            map.remove(val);\n            list.remove(list.size() - 1);\n            return true;\n        }\n        public int getRandom() {\n            return list.get(random.nextInt(list.size()));\n        }\n    }",
+      "notes": "① 与上一轮对比：仍是 `HashMap + ArrayList（换位删除）`，上一轮已记 strong；本次未提问、未讨论，直接复写并通过全部本地用例，力扣首次提交 Accepted 21/21，继续记 strong。\n\n② 关键设计：`map` 存值到数组下标，`list` 保证 O(1) 随机访问；`remove(val)` 把尾元素换到待删位置，更新尾元素的新下标，再删哈希映射和数组末位。删除的恰好是尾元素时，`lastVal == val` 也不会破坏逻辑，因为最终仍会移除该值唯一映射并删除末位。\n\n③ 边界与复杂度：重复插入/删除返回 false；`getRandom()` 用 `random.nextInt(size)` 均匀取样。单次操作平均 O(1)，空间 O(n)。\n\n④ 掌握度判定：没有算法提示或讨论，本地与力扣均一次通过，记 strong。",
+      "code": "    static class RandomizedSet {\n        Map<Integer, Integer> map;\n        List<Integer> list;\n        Random random;\n        public RandomizedSet() {\n            map = new HashMap<>();\n            list = new ArrayList<>();\n            random = new Random();\n        }\n\n        public boolean insert(int val) {\n            if (map.containsKey(val)) {\n                return false;\n            }\n            list.add(val);\n            map.put(val, list.size() - 1);\n            return true;\n        }\n\n        public boolean remove(int val) {\n            if (!map.containsKey(val)) {\n                return false;\n            }\n            int index = map.get(val);\n            int lastVal = list.get(list.size() - 1);\n            map.put(lastVal, index);\n            list.set(index, lastVal);\n            map.remove(val);\n            list.remove(list.size() - 1);\n            return true;\n        }\n\n        public int getRandom() {\n            return list.get(random.nextInt(list.size()));\n        }\n    }",
       "mastery": "strong",
-      "pass": 2,
+      "pass": 3,
       "prev_code": "static class RandomizedSet {\n        List<Integer> nums;\n        Map<Integer, Integer> indices;\n        Random random;\n        public RandomizedSet() {\n            nums = new ArrayList<>();\n            indices = new HashMap<>();\n            random = new Random();\n        }\n        public boolean insert(int val) {\n            if (indices.containsKey(val)) {\n                return false;\n            }\n            indices.put(val, nums.size());\n            nums.add(val);\n            return true;\n        }\n        public boolean remove(int val) {\n            if (!indices.containsKey(val)) {\n                return false;\n            }\n            int index = indices.get(val);\n            int lastVal = nums.get(nums.size() - 1);\n            nums.set(index, lastVal);\n            indices.put(lastVal, index);\n            nums.remove(nums.size() - 1);\n            indices.remove(val);\n            return true;\n        }\n        public int getRandom() {\n            return nums.get(random.nextInt(nums.size()));\n        }\n    }\n"
     }
   ],
@@ -67,6 +67,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：与 09-06 复习同一思路（HashMap<值,下标> + ArrayList 换位删除），结构一致无冗余；复杂度不变：时间均摊 O(1)，空间 O(n)。\n② 为什么这次能想起来：记忆点是「ArrayList 末尾增删和随机访问是 O(1)，删除中间却是 O(n) → 把待删元素和末尾元素交换后 pop 尾」，HashMap 提供值→下标使交换在 O(1) 完成；删的恰好是末尾元素时同一分支天然覆盖，不用特判。\n③ 掌握度判定：本地 7 个用例一次跑通，力扣一次提交 Accepted（21/21），未探讨/未看归档 → strong。\n④ 下一步提醒：可迁移到 381. 允许重复的随机集合（HashMap<Integer, Set<Integer>> 存每个值的下标集合，删除任取一个下标换位删除并清理集合）。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "21/21",
+      "approach": "HashMap + ArrayList（换位删除）",
+      "time_complexity": "单次操作平均 O(1)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是 `HashMap + ArrayList（换位删除）`，上一轮已记 strong；本次未提问、未讨论，直接复写并通过全部本地用例，力扣首次提交 Accepted 21/21，继续记 strong。\n\n② 关键设计：`map` 存值到数组下标，`list` 保证 O(1) 随机访问；`remove(val)` 把尾元素换到待删位置，更新尾元素的新下标，再删哈希映射和数组末位。删除的恰好是尾元素时，`lastVal == val` 也不会破坏逻辑，因为最终仍会移除该值唯一映射并删除末位。\n\n③ 边界与复杂度：重复插入/删除返回 false；`getRandom()` 用 `random.nextInt(size)` 均匀取样。单次操作平均 O(1)，空间 O(n)。\n\n④ 掌握度判定：没有算法提示或讨论，本地与力扣均一次通过，记 strong。"
     }
   ]
 }

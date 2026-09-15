@@ -1493,12 +1493,12 @@
       "title": "O(1) 时间插入、删除和获取随机元素",
       "category": "哈希表",
       "first_pass_date": "2026-08-21",
-      "last_review_date": "2026-09-09",
-      "next_review_date": "2026-09-14",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-15",
+      "next_review_date": "2026-09-30",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "4sum-ii": {
