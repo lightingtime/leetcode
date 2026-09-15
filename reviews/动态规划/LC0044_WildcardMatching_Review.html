@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-26</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>44. 通配符匹配 (Wildcard Matching)</h1><p>&gt; <a href="https://leetcode.cn/problems/wildcard-matching/" rel="noopener">https://leetcode.cn/problems/wildcard-matching/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：贪心、递归、字符串、动态规划</p><h2>题目描述</h2><p>给你一个输入字符串 (s) 和一个字符模式 (p) ，请你实现一个支持 '?' 和 '*' 匹配规则的通配符匹配：</p><p>'?' 可以匹配任何单个字符。</p><p>'*' 可以匹配任意字符序列（包括空字符序列）。</p><p>判定匹配成功的充要条件是：字符模式必须能够 完全匹配 输入字符串（而不是部分匹配）。</p><p>示例 1：</p><p>输入：s = "aa", p = "a"</p><p>输出：false</p><p>解释："a" 无法匹配 "aa" 整个字符串。</p><p>示例 2：</p><p>输入：s = "aa", p = "*"</p><p>输出：true</p><p>解释：'*' 可以匹配任意字符串。</p><p>示例 3：</p><p>输入：s = "cb", p = "?a"</p><p>输出：false</p><p>解释：'?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。</p><p>提示：</p><p>0</p><p>s 仅由小写英文字母组成</p><p>p 仅由小写英文字母、'?' 或 '*' 组成</p><h2>示例</h2><ol><li>输入：s = "aa"，p = "a"</li></ol><p>输出：false</p><p>解释："a" 无法匹配 "aa" 整个字符串。</p><ol><li>输入：s = "aa"，p = "*"</li></ol><p>输出：true</p><p>解释：'*' 可以匹配任意字符串。</p><ol><li>输入：s = "cb"，p = "?a"</li></ol><p>输出：false</p><p>解释：'?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（1812/1812）｜ 多次提交 ｜ 贪心双指针+星号回溯 ｜ 最坏 O(nm) · O(1)</p>
+      <div class="review-note md"><p>① 本轮两条路都实际提交 Accepted：先写二维 DP（O(nm)/O(nm)），再实现贪心双指针+星号回溯（最坏 O(nm)/O(1)）。DP 首版在空前缀行把任意位置的<code>*</code>都设为 true，<code>"c*a*b"</code> 对 <code>"aab"</code> 误匹配，改为只继承前一位后才正确。</p><p>② 贪心关键：记录最近星号<code>startIdx</code>与当前尝试消费到的<code>s</code>位置<code>matchIdx</code>；能直接匹配则双指针前进，遇<code>*</code>先按匹配 0 个字符处理，失配时让最近星号多吃一个字符并从星号后一格重试；没有星号可回溯立即失败。</p><p>③ 贪心首版有两处错误：最终把<code>i</code>和<code>p.length()</code>、<code>j</code>和<code>s.length()</code>比较反了；循环以<code>j &lt; p.length()</code>为条件，模式先耗尽后无法回到星号继续扩展。另有一处<code>&amp;&amp;/||</code>漏括号导致<code>charAt</code>越界。修正后本地全绿，力扣 Accepted 1812/1812。</p><p>④ 掌握度判定：本轮经多次错误定位、边界讨论与反复修正才完成，记 weak。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,37 @@
         <li><span>复杂度</span><b>O(n·m) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>贪心双指针+星号回溯</b></li>
+        <li><span>复杂度</span><b>最坏 O(nm) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 线性DP双序列</h3>
-    <p><span class="chip">时间 O(n·m)</span><span class="chip">空间 O(n·m)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 1812/1812</span></p>
+    <p><span class="chip">时间 O(nm)</span><span class="chip">空间 O(nm)</span><span class="chip">内存 ≈ 45.8 MB</span><span class="chip">用例 1812/1812</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0044_WildcardMatching.java · 线性DP双序列</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
+        <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>][p.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
+        dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = <span class="tk-k">true</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= p.<span class="tk-f">length</span>(); j++) {
+            <span class="tk-k">if</span> (p.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>) == <span class="tk-s">'*'</span>) {
+                dp[<span class="tk-n">0</span>][j] = dp[<span class="tk-n">0</span>][j - <span class="tk-n">1</span>];
+            }
+        }
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= p.<span class="tk-f">length</span>(); j++) {
+                <span class="tk-k">if</span> (p.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>) == <span class="tk-s">'?'</span> || s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == p.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>)) {
+                    dp[i][j] = dp[i - <span class="tk-n">1</span>][j - <span class="tk-n">1</span>];
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (p.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>) == <span class="tk-s">'*'</span>) {
+                    dp[i][j] = dp[i - <span class="tk-n">1</span>][j] || dp[i][j - <span class="tk-n">1</span>];
+                }
+            }
+        }
+        <span class="tk-k">return</span> dp[s.<span class="tk-f">length</span>()][p.<span class="tk-f">length</span>()];
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0044_WildcardMatching.java · 线性DP双序列 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
         <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>][p.<span class="tk-f">length</span>()+ <span class="tk-n">1</span>];
         dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = <span class="tk-k">true</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt;= s.<span class="tk-f">length</span>(); i++) {
@@ -52,11 +82,36 @@
             }
         }
         <span class="tk-k">return</span> dp[s.<span class="tk-f">length</span>()][p.<span class="tk-f">length</span>()];
-    }</pre></div>
+    }</pre></div></details>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 贪心双指针+星号回溯</h3>
-    <p><span class="chip">时间 O(n·m)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 43.5 MB</span><span class="chip">用例 1812/1812</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0044_WildcardMatching.java · 贪心双指针+星号回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
+    <p><span class="chip">时间 最坏 O(nm)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 43.6 MB</span><span class="chip">用例 1812/1812</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0044_WildcardMatching.java · 贪心双指针+星号回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>, j = <span class="tk-n">0</span>, matchIdx = -<span class="tk-n">1</span>, startIdx = -<span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt; s.<span class="tk-f">length</span>()) {
+            <span class="tk-k">if</span> (j &lt; p.<span class="tk-f">length</span>() &amp;&amp; p.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'*'</span>) {
+                matchIdx = i;
+                startIdx = j;
+                j++;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (j &lt; p.<span class="tk-f">length</span>() &amp;&amp; (p.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'?'</span> || s.<span class="tk-f">charAt</span>(i) == p.<span class="tk-f">charAt</span>(j))) {
+                i++;
+                j++;
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">if</span> (startIdx &gt; -<span class="tk-n">1</span>) {
+                    matchIdx++;
+                    i = matchIdx;
+                    j = startIdx + <span class="tk-n">1</span>;
+                } <span class="tk-k">else</span> {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
+                }
+            }
+        }
+        <span class="tk-k">while</span> (j &lt; p.<span class="tk-f">length</span>() &amp;&amp; p.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'*'</span>) {
+            j++;
+        }
+        <span class="tk-k">return</span> j == p.<span class="tk-f">length</span>();
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0044_WildcardMatching.java · 贪心双指针+星号回溯 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
         <span class="tk-k">int</span> i = <span class="tk-n">0</span>, j = <span class="tk-n">0</span>, starIdx = -<span class="tk-n">1</span>, match = <span class="tk-n">0</span>;
         <span class="tk-k">while</span> (i &lt; s.<span class="tk-f">length</span>()) {
             <span class="tk-k">if</span> (j &lt; p.<span class="tk-f">length</span>() &amp;&amp; (p.<span class="tk-f">charAt</span>(j) == <span class="tk-s">'?'</span> || p.<span class="tk-f">charAt</span>(j) == s.<span class="tk-f">charAt</span>(i))) {
@@ -79,10 +134,10 @@
             j++;
         }
         <span class="tk-k">return</span> j == p.<span class="tk-f">length</span>();
-    }</pre></div>
+    }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><h2>① 问题本质与解法选择</h2><ul><li>本质：通配符全串匹配。? 占一位、* 任意序列（含空）。主流两解法：双序列线性 DP 与贪心回溯。</li><li>DP：dp[i][j]=s 前 i 个能否匹配 p 前 j 个，按 p[j-1] 是字母/?/* 三种转移，稳健直观。</li><li>贪心：双指针 + 最近星号回溯，O(1) 空间、常数小；两者时间同为 O(n·m)。</li></ul><h2>② 关键设计决策</h2><p>DP 转移表：</p><div class="table-wrap"><table><thead><tr><th>当前 p[j-1]</th><th>转移</th></tr></thead><tbody><tr><td>?</td><td>dp[i-1][j-1]</td></tr><tr><td>*</td><td>dp[i-1][j]（吃一字符）或 dp[i][j-1]（吃空）</td></tr><tr><td>字母</td><td>dp[i-1][j-1] 且 s[i-1]==p[j-1]</td></tr></tbody></table></div><p>空串行 i==0 的三分支：? 与字母直接 false；* 只有吃空方向 dp[0][j-1]，吃字符方向在空串行不存在必须短路 false——写 true 会让星号无视前面压着的字面字符凭空成立，这是 WA 用例 c*a*b 误匹配 aab 的根。</p><p>贪心变量：i/j 双指针；starIdx=最近星号位置；match=该星号已吞到的 s 位置。规则：对上→双进；遇*→记位吞空；失配→回溯让星号多吞一个（i=++match, j=starIdx+1）；无星→false；收尾跳过尾部星号。</p><h2>③ 具体 case 推演</h2><p>DP 回归用例 aab / c*a*b：dp[0][2]（空串 vs c*）正确应为 false——c 必须吃掉一个字符，空串给不了。错误写法（空串行星号吃字符恒 true）让它成 true，之后 a、b 在错误真值上叠加，最终误判匹配。</p><p>贪心 adceb / *a*b 逐步回溯：</p><div class="table-wrap"><table><thead><tr><th>i/j</th><th>动作</th></tr></thead><tbody><tr><td>0/0</td><td>* → starIdx=0, match=0, j=1</td></tr><tr><td>0/1</td><td>a==a → i=1,j=2</td></tr><tr><td>1/2</td><td>* → starIdx=2, match=1, j=3</td></tr><tr><td>1/3</td><td>b vs d 失配 → 星号2 吞 d</td></tr><tr><td>2/3</td><td>b vs c 失配 → 吞 c</td></tr><tr><td>3/3</td><td>b vs e 失配 → 吞 e</td></tr><tr><td>4/3</td><td>b==b → i=5,j=4 → true</td></tr></tbody></table></div><h2>④ 边界与细节</h2><ul><li>双空 true；空串配 * true、配 ?/字母 false</li><li>多星号吞空（空串/****）；星号吞中段（abc/a*c）；吞后接不上（abcd/a*c 必须 false）</li><li>长度 2000 上限：精确匹配、单星万能、全不匹配</li><li>DP 空串行三分支短路；贪心主循环以 i 扫完为准、j 触底靠星号回溯</li></ul><h2>⑤ 复杂度与下限论证</h2><ul><li>DP：O(n·m) 时间 O(n·m) 空间（可滚动 O(m)）</li><li>贪心：最坏 O(n·m)（反复回溯）但空间 O(1)，常数小</li><li>双序列比对两个串的下标组合都要遍历，O(n·m) 是该类问题公认可接受上限</li></ul></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>空串行的星号转移误写恒 true：i==0 时 dp[i-1][j]（星号吃字符）方向不存在，应短路为 false 而不是 true，否则星号无视前面压着的字面字符凭空成立，导致 c*a*b 误匹配 aab</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>1812/1812 用例。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>空串行的星号转移误写恒 true：i==0 时 dp[i-1][j]（星号吃字符）方向不存在，应短路为 false 而不是 true，否则星号无视前面压着的字面字符凭空成立，导致 c*a*b 误匹配 aab</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 初始化模式空前缀行时，把任意位置的 * 都单独判 true，忽略其前面已有普通字符或 ?，导致空前缀能非法跳过模式前缀</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>贪心通配符收尾比较写反（i 对 p.length、j 对 s.length），且循环以模式未耗尽为条件，模式先耗尽后无法回到最近星号继续扩展</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>复合条件漏加括号导致 &amp;&amp; 与 || 优先级错误，边界短路只保护了前半段，后半段仍可能越界访问 charAt</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>1812/1812 用例。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -96,7 +151,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 动态规划</h3><div class="quote">DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示</div>
-      <h3>错误习惯复盘</h3><p><b>空串行的星号转移误写恒 true：i==0 时 dp[i-1][j]（星号吃字符）方向不存在，应短路为 false 而不是 true，否则星号无视前面压着的字面字符凭空成立，导致 c*a*b 误匹配 aab</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>空串行的星号转移误写恒 true：i==0 时 dp[i-1][j]（星号吃字符）方向不存在，应短路为 false 而不是 true，否则星号无视前面压着的字面字符凭空成立，导致 c*a*b 误匹配 aab</b>（累计 1 次）</p><p><b>DP 初始化模式空前缀行时，把任意位置的 * 都单独判 true，忽略其前面已有普通字符或 ?，导致空前缀能非法跳过模式前缀</b>（累计 1 次）</p><p><b>贪心通配符收尾比较写反（i 对 p.length、j 对 s.length），且循环以模式未耗尽为条件，模式先耗尽后无法回到最近星号继续扩展</b>（累计 1 次）</p><p><b>复合条件漏加括号导致 &amp;&amp; 与 || 优先级错误，边界短路只保护了前半段，后半段仍可能越界访问 charAt</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 151 · wildcard-matching</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>

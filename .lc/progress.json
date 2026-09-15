@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-12",
+  "updated": "2026-09-15",
   "current_seq": 170,
   "done": [
     {
@@ -3347,6 +3347,39 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-09-12"
+    },
+    {
+      "habit": "DP 初始化模式空前缀行时，把任意位置的 * 都单独判 true，忽略其前面已有普通字符或 ?，导致空前缀能非法跳过模式前缀",
+      "count": 1,
+      "examples": [
+        "wildcard-matching"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-15"
+    },
+    {
+      "habit": "贪心通配符收尾比较写反（i 对 p.length、j 对 s.length），且循环以模式未耗尽为条件，模式先耗尽后无法回到最近星号继续扩展",
+      "count": 1,
+      "examples": [
+        "wildcard-matching"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-15"
+    },
+    {
+      "habit": "复合条件漏加括号导致 && 与 || 优先级错误，边界短路只保护了前半段，后半段仍可能越界访问 charAt",
+      "count": 1,
+      "examples": [
+        "wildcard-matching"
+      ],
+      "categories": [
+        "贪心与双指针"
+      ],
+      "last_seen": "2026-09-15"
     }
   ],
   "category_hints": {

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-12",
+  "updated": "2026-09-15",
   "deadline": "2026-09-15",
   "problems": {
     "two-sum": {
@@ -2109,11 +2109,11 @@
       "title": "通配符匹配",
       "category": "动态规划",
       "first_pass_date": "2026-08-26",
-      "last_review_date": null,
-      "next_review_date": null,
-      "interval_days": null,
-      "review_count": 0,
-      "mastery": null,
+      "last_review_date": "2026-09-15",
+      "next_review_date": "2026-09-17",
+      "interval_days": 2,
+      "review_count": 1,
+      "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
     },

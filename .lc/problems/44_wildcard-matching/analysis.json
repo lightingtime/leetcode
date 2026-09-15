@@ -12,48 +12,81 @@
   "firstPass": false,
   "optimal": true,
   "approach": "贪心双指针+星号回溯",
-  "dp_subtype": "线性DP",
-  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：通配符全串匹配。? 占一位、* 任意序列（含空）。主流两解法：双序列线性 DP 与贪心回溯。\n- DP：dp[i][j]=s 前 i 个能否匹配 p 前 j 个，按 p[j-1] 是字母/?/* 三种转移，稳健直观。\n- 贪心：双指针 + 最近星号回溯，O(1) 空间、常数小；两者时间同为 O(n·m)。\n\n## ② 关键设计决策\n\nDP 转移表：\n\n| 当前 p[j-1] | 转移 |\n|---|---|\n| ? | dp[i-1][j-1] |\n| * | dp[i-1][j]（吃一字符）或 dp[i][j-1]（吃空） |\n| 字母 | dp[i-1][j-1] 且 s[i-1]==p[j-1] |\n\n空串行 i==0 的三分支：? 与字母直接 false；* 只有吃空方向 dp[0][j-1]，吃字符方向在空串行不存在必须短路 false——写 true 会让星号无视前面压着的字面字符凭空成立，这是 WA 用例 c*a*b 误匹配 aab 的根。\n\n贪心变量：i/j 双指针；starIdx=最近星号位置；match=该星号已吞到的 s 位置。规则：对上→双进；遇*→记位吞空；失配→回溯让星号多吞一个（i=++match, j=starIdx+1）；无星→false；收尾跳过尾部星号。\n\n## ③ 具体 case 推演\n\nDP 回归用例 aab / c*a*b：dp[0][2]（空串 vs c*）正确应为 false——c 必须吃掉一个字符，空串给不了。错误写法（空串行星号吃字符恒 true）让它成 true，之后 a、b 在错误真值上叠加，最终误判匹配。\n\n贪心 adceb / *a*b 逐步回溯：\n\n| i/j | 动作 |\n|---|---|\n| 0/0 | * → starIdx=0, match=0, j=1 |\n| 0/1 | a==a → i=1,j=2 |\n| 1/2 | * → starIdx=2, match=1, j=3 |\n| 1/3 | b vs d 失配 → 星号2 吞 d |\n| 2/3 | b vs c 失配 → 吞 c |\n| 3/3 | b vs e 失配 → 吞 e |\n| 4/3 | b==b → i=5,j=4 → true |\n\n## ④ 边界与细节\n\n- 双空 true；空串配 * true、配 ?/字母 false\n- 多星号吞空（空串/****）；星号吞中段（abc/a*c）；吞后接不上（abcd/a*c 必须 false）\n- 长度 2000 上限：精确匹配、单星万能、全不匹配\n- DP 空串行三分支短路；贪心主循环以 i 扫完为准、j 触底靠星号回溯\n\n## ⑤ 复杂度与下限论证\n\n- DP：O(n·m) 时间 O(n·m) 空间（可滚动 O(m)）\n- 贪心：最坏 O(n·m)（反复回溯）但空间 O(1)，常数小\n- 双序列比对两个串的下标组合都要遍历，O(n·m) 是该类问题公认可接受上限",
   "time_complexity": "O(n·m)",
   "space_complexity": "O(1)",
   "notes": "写法2：贪心双指针+星号回溯（优化版：合并两处回溯分支，O(1)空间）；遇星记位吞空、失配/模式走完统一回溯多吞、收尾跳尾部星号",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "空串行的星号转移误写恒 true：i==0 时 dp[i-1][j]（星号吃字符）方向不存在，应短路为 false 而不是 true，否则星号无视前面压着的字面字符凭空成立，导致 c*a*b 误匹配 aab",
       "count": 1
-    }
-  ],
-  "patterns": [],
-  "submissions": [
-    {
-      "date": "2026-08-26",
-      "verdict": "Accepted",
-      "testcases": "1812/1812",
-      "runtime_ms": null,
-      "memory_bytes": 47824000,
-      "approach": "线性DP双序列",
-      "time_complexity": "O(n·m)",
-      "space_complexity": "O(n·m)",
-      "optimal": false,
-      "notes": "写法1：线性DP双序列，O(n·m)/O(n·m)；空串行星号吃字符方向需短路 false（c*a*b 误匹配 aab 的根）",
-      "code": "public boolean isMatch(String s, String p) {\n        boolean[][] dp = new boolean[s.length() + 1][p.length()+ 1];\n        dp[0][0] = true;\n        for (int i = 0; i <= s.length(); i++) {\n            for (int j = 1; j <= p.length(); j++) {\n                if (p.charAt(j - 1) == '?') {\n                    dp[i][j] = i > 0 && dp[i - 1][j - 1];\n                } else if (p.charAt(j - 1) == '*') {\n                    dp[i][j] = (i > 0 && dp[i - 1][j]) || dp[i][j - 1];\n                } else {\n                    dp[i][j] = (i > 0 && dp[i - 1][j - 1]) && p.charAt(j - 1) == s.charAt(i - 1);\n                }\n            }\n        }\n        return dp[s.length()][p.length()];\n    }"
     },
     {
-      "date": "2026-08-26",
-      "verdict": "Accepted",
-      "testcases": "1812/1812",
-      "runtime_ms": null,
-      "memory_bytes": 45604000,
-      "approach": "贪心双指针+星号回溯",
-      "time_complexity": "O(n·m)",
-      "space_complexity": "O(1)",
-      "optimal": true,
-      "notes": "写法2：贪心双指针+星号回溯（优化版：合并两处回溯分支，O(1)空间）；遇星记位吞空、失配/模式走完统一回溯多吞、收尾跳尾部星号",
-      "code": "public boolean isMatch(String s, String p) {\n        int i = 0, j = 0, starIdx = -1, match = 0;\n        while (i < s.length()) {\n            if (j < p.length() && (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i))) {\n                // 普通字符或 ?：对上就双指针前进\n                i++;\n                j++;\n            } else if (j < p.length() && p.charAt(j) == '*') {\n                // 当作 * 先不存在（吞空），记住位置，i 不动\n                starIdx = j++;\n                match = i;\n            } else if (starIdx != -1) {\n                // 失配或模式走完：让最近的 * 多吞一个字符，回到 * 之后重新开始\n                i = ++match;\n                j = starIdx + 1;\n            } else {\n                return false;\n            }\n        }\n        while (j < p.length() && p.charAt(j) == '*') {\n            j++;\n        }\n        return j == p.length();\n    }"
+      "habit": "DP 初始化模式空前缀行时，把任意位置的 * 都单独判 true，忽略其前面已有普通字符或 ?，导致空前缀能非法跳过模式前缀",
+      "count": 1
+    },
+    {
+      "habit": "贪心通配符收尾比较写反（i 对 p.length、j 对 s.length），且循环以模式未耗尽为条件，模式先耗尽后无法回到最近星号继续扩展",
+      "count": 1
+    },
+    {
+      "habit": "复合条件漏加括号导致 && 与 || 优先级错误，边界短路只保护了前半段，后半段仍可能越界访问 charAt",
+      "count": 1
     }
   ],
   "hints": [
     "DP 题先识别子类型（线性/区间/树形/背包/状态机/数位/状压），子类型决定状态定义、转移与填表顺序；再看 lc-practice/references/dp-subtypes.md 对应子类型的宽泛提示"
+  ],
+  "dp_subtype": "线性DP",
+  "approach_detail": "\n## ① 问题本质与解法选择\n\n- 本质：通配符全串匹配。? 占一位、* 任意序列（含空）。主流两解法：双序列线性 DP 与贪心回溯。\n- DP：dp[i][j]=s 前 i 个能否匹配 p 前 j 个，按 p[j-1] 是字母/?/* 三种转移，稳健直观。\n- 贪心：双指针 + 最近星号回溯，O(1) 空间、常数小；两者时间同为 O(n·m)。\n\n## ② 关键设计决策\n\nDP 转移表：\n\n| 当前 p[j-1] | 转移 |\n|---|---|\n| ? | dp[i-1][j-1] |\n| * | dp[i-1][j]（吃一字符）或 dp[i][j-1]（吃空） |\n| 字母 | dp[i-1][j-1] 且 s[i-1]==p[j-1] |\n\n空串行 i==0 的三分支：? 与字母直接 false；* 只有吃空方向 dp[0][j-1]，吃字符方向在空串行不存在必须短路 false——写 true 会让星号无视前面压着的字面字符凭空成立，这是 WA 用例 c*a*b 误匹配 aab 的根。\n\n贪心变量：i/j 双指针；starIdx=最近星号位置；match=该星号已吞到的 s 位置。规则：对上→双进；遇*→记位吞空；失配→回溯让星号多吞一个（i=++match, j=starIdx+1）；无星→false；收尾跳过尾部星号。\n\n## ③ 具体 case 推演\n\nDP 回归用例 aab / c*a*b：dp[0][2]（空串 vs c*）正确应为 false——c 必须吃掉一个字符，空串给不了。错误写法（空串行星号吃字符恒 true）让它成 true，之后 a、b 在错误真值上叠加，最终误判匹配。\n\n贪心 adceb / *a*b 逐步回溯：\n\n| i/j | 动作 |\n|---|---|\n| 0/0 | * → starIdx=0, match=0, j=1 |\n| 0/1 | a==a → i=1,j=2 |\n| 1/2 | * → starIdx=2, match=1, j=3 |\n| 1/3 | b vs d 失配 → 星号2 吞 d |\n| 2/3 | b vs c 失配 → 吞 c |\n| 3/3 | b vs e 失配 → 吞 e |\n| 4/3 | b==b → i=5,j=4 → true |\n\n## ④ 边界与细节\n\n- 双空 true；空串配 * true、配 ?/字母 false\n- 多星号吞空（空串/****）；星号吞中段（abc/a*c）；吞后接不上（abcd/a*c 必须 false）\n- 长度 2000 上限：精确匹配、单星万能、全不匹配\n- DP 空串行三分支短路；贪心主循环以 i 扫完为准、j 触底靠星号回溯\n\n## ⑤ 复杂度与下限论证\n\n- DP：O(n·m) 时间 O(n·m) 空间（可滚动 O(m)）\n- 贪心：最坏 O(n·m)（反复回溯）但空间 O(1)，常数小\n- 双序列比对两个串的下标组合都要遍历，O(n·m) 是该类问题公认可接受上限",
+  "code_notes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-09-15",
+      "verdict": "Accepted",
+      "testcases": "1812/1812",
+      "runtime_ms": null,
+      "memory_bytes": 47996000,
+      "approach": "线性DP双序列",
+      "time_complexity": "O(nm)",
+      "space_complexity": "O(nm)",
+      "optimal": false,
+      "notes": "本轮先完成的二维 DP 写法。dp[i][j] 表示 s 前 i 个字符与 p 前 j 个字符是否匹配；普通字符或 ? 走左上，* 走上方或左方。首版空前缀行把任意位置的 * 都设为 true，导致 \"aab\" 对 \"c*a*b\" 误判，改为 dp[0][j] = dp[0][j-1] 后正确。时间 O(nm)，空间 O(nm)，后续又用贪心双指针+星号回溯提交了 O(1) 额外空间版本。",
+      "code": "public boolean isMatch(String s, String p) {\n        boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];\n        dp[0][0] = true;\n        for (int j = 1; j <= p.length(); j++) {\n            if (p.charAt(j - 1) == '*') {\n                dp[0][j] = dp[0][j - 1];\n            }\n        }\n        for (int i = 1; i <= s.length(); i++) {\n            for (int j = 1; j <= p.length(); j++) {\n                if (p.charAt(j - 1) == '?' || s.charAt(i - 1) == p.charAt(j - 1)) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else if (p.charAt(j - 1) == '*') {\n                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1];\n                }\n            }\n        }\n        return dp[s.length()][p.length()];\n    }",
+      "prev_code": "public boolean isMatch(String s, String p) {\n        boolean[][] dp = new boolean[s.length() + 1][p.length()+ 1];\n        dp[0][0] = true;\n        for (int i = 0; i <= s.length(); i++) {\n            for (int j = 1; j <= p.length(); j++) {\n                if (p.charAt(j - 1) == '?') {\n                    dp[i][j] = i > 0 && dp[i - 1][j - 1];\n                } else if (p.charAt(j - 1) == '*') {\n                    dp[i][j] = (i > 0 && dp[i - 1][j]) || dp[i][j - 1];\n                } else {\n                    dp[i][j] = (i > 0 && dp[i - 1][j - 1]) && p.charAt(j - 1) == s.charAt(i - 1);\n                }\n            }\n        }\n        return dp[s.length()][p.length()];\n    }",
+      "pass": 1,
+      "mastery": "weak"
+    },
+    {
+      "date": "2026-09-15",
+      "verdict": "Accepted",
+      "testcases": "1812/1812",
+      "runtime_ms": null,
+      "memory_bytes": 45720000,
+      "approach": "贪心双指针+星号回溯",
+      "time_complexity": "最坏 O(nm)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 本轮两条路都实际提交 Accepted：先写二维 DP（O(nm)/O(nm)），再实现贪心双指针+星号回溯（最坏 O(nm)/O(1)）。DP 首版在空前缀行把任意位置的`*`都设为 true，`\"c*a*b\"` 对 `\"aab\"` 误匹配，改为只继承前一位后才正确。\n\n② 贪心关键：记录最近星号`startIdx`与当前尝试消费到的`s`位置`matchIdx`；能直接匹配则双指针前进，遇`*`先按匹配 0 个字符处理，失配时让最近星号多吃一个字符并从星号后一格重试；没有星号可回溯立即失败。\n\n③ 贪心首版有两处错误：最终把`i`和`p.length()`、`j`和`s.length()`比较反了；循环以`j < p.length()`为条件，模式先耗尽后无法回到星号继续扩展。另有一处`&&/||`漏括号导致`charAt`越界。修正后本地全绿，力扣 Accepted 1812/1812。\n\n④ 掌握度判定：本轮经多次错误定位、边界讨论与反复修正才完成，记 weak。",
+      "code": "    public boolean isMatch(String s, String p) {\n        int i = 0, j = 0, matchIdx = -1, startIdx = -1;\n        while (i < s.length()) {\n            if (j < p.length() && p.charAt(j) == '*') {\n                matchIdx = i;\n                startIdx = j;\n                j++;\n            } else if (j < p.length() && (p.charAt(j) == '?' || s.charAt(i) == p.charAt(j))) {\n                i++;\n                j++;\n            } else {\n                if (startIdx > -1) {\n                    matchIdx++;\n                    i = matchIdx;\n                    j = startIdx + 1;\n                } else {\n                    return false;\n                }\n            }\n        }\n        while (j < p.length() && p.charAt(j) == '*') {\n            j++;\n        }\n        return j == p.length();\n    }",
+      "prev_code": "public boolean isMatch(String s, String p) {\n        int i = 0, j = 0, starIdx = -1, match = 0;\n        while (i < s.length()) {\n            if (j < p.length() && (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i))) {\n                // 普通字符或 ?：对上就双指针前进\n                i++;\n                j++;\n            } else if (j < p.length() && p.charAt(j) == '*') {\n                // 当作 * 先不存在（吞空），记住位置，i 不动\n                starIdx = j++;\n                match = i;\n            } else if (starIdx != -1) {\n                // 失配或模式走完：让最近的 * 多吞一个字符，回到 * 之后重新开始\n                i = ++match;\n                j = starIdx + 1;\n            } else {\n                return false;\n            }\n        }\n        while (j < p.length() && p.charAt(j) == '*') {\n            j++;\n        }\n        return j == p.length();\n    }",
+      "mastery": "weak",
+      "pass": 1
+    }
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-15",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "1812/1812",
+      "approach": "贪心双指针+星号回溯",
+      "time_complexity": "最坏 O(nm)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 本轮两条路都实际提交 Accepted：先写二维 DP（O(nm)/O(nm)），再实现贪心双指针+星号回溯（最坏 O(nm)/O(1)）。DP 首版在空前缀行把任意位置的`*`都设为 true，`\"c*a*b\"` 对 `\"aab\"` 误匹配，改为只继承前一位后才正确。\n\n② 贪心关键：记录最近星号`startIdx`与当前尝试消费到的`s`位置`matchIdx`；能直接匹配则双指针前进，遇`*`先按匹配 0 个字符处理，失配时让最近星号多吃一个字符并从星号后一格重试；没有星号可回溯立即失败。\n\n③ 贪心首版有两处错误：最终把`i`和`p.length()`、`j`和`s.length()`比较反了；循环以`j < p.length()`为条件，模式先耗尽后无法回到星号继续扩展。另有一处`&&/||`漏括号导致`charAt`越界。修正后本地全绿，力扣 Accepted 1812/1812。\n\n④ 掌握度判定：本轮经多次错误定位、边界讨论与反复修正才完成，记 weak。"
+    }
   ]
 }
