@@ -33,7 +33,15 @@
     "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
   ],
   "code_notes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "频次桶排序求 Top-K",
+      "text": "频次天然落在 [1,n] 有界区间时，可用频次作下标建桶，从高频到低频收集 k 个，O(n) 且无快选最坏 O(n²)、无堆 log k；注意 max 上界维护与收集时 index 越界的终止判断。",
+      "category": "栈、队列与优先队列",
+      "problem": "top-k-frequent-elements",
+      "date": "2026-09-15"
+    }
+  ],
   "submissions": [
     {
       "date": "2026-09-01",
@@ -52,19 +60,19 @@
       "pass": 1
     },
     {
-      "date": "2026-09-05",
+      "date": "2026-09-15",
       "verdict": "Accepted",
-      "testcases": "25/25",
+      "testcases": "",
       "approach": "桶排序（频次桶倒序收集）",
       "time_complexity": "O(n)",
-      "space_complexity": "O(n)",
+      "space_complexity": "O(m)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）就是**桶排序（频次桶倒序收集）**，本轮同思路重写：`Map` 计数（`merge`）→ 频次作下标的桶数组 → 从高频到低频收集 k 个即 return。仅变量命名微调（count→counts、max 初值改 0），逻辑与复杂度一致；09-02 版代码已存入 submissions prev_code。\n- 相比 09-01 的「哈希表+快选」版：桶排序无随机退化、无 partition 细节，明显更好写，本轮直接选它。\n\n**② 为什么这次能想起来**\n- 套路锚点：「频次 → 桶下标」+「max 在计数时顺手维护、桶只开到 max」+「从高到低收集」。上一轮 strong 已内化，本轮未参考直接一次写出。\n- code_note 里的提醒「可试桶排序重写一次」本轮已完成，故清空该提醒。\n\n**③ 掌握度判定**\n- strong：全程无探讨（本轮未给提示），本地 9 组（示例 3 + 边界 6：全相同 / k=不同元素数 / 负数 / 极值 / 单最高频 / 长数组交错）一次全绿，力扣一次提交 Accepted 25/25。\n\n**④ 下一步提醒**\n- 本题桶排序已是线性最优档（快选/堆均不更优），无需再试其他写法。\n- 可顺带串练：692 前 K 个高频单词（同桶思路 + 字典序排序规则）、215 数组中的第 K 个最大元素（快选/堆）。",
+      "notes": "三轮复习：距上次 10 天，写法与二刷一致（频次桶倒序收集）；一次 AC，25/25，边界用例 6 组本地全过",
       "mastery": "strong",
-      "pass": 3,
-      "memory_bytes": 47976000,
-      "code": "public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> map = new HashMap<>();\n        int max = 0;\n        for (int num : nums) {\n            map.merge(num, 1, Integer::sum);\n            max = Math.max(max, map.get(num));\n        }\n        List<Integer>[] counts = new List[max + 1];\n        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {\n            if (counts[entry.getValue()] == null) {\n                counts[entry.getValue()] = new ArrayList<>();\n            }\n            counts[entry.getValue()].add(entry.getKey());\n        }\n        int[] ans = new int[k];\n        int index = 0;\n        for (int i = counts.length - 1; i >= 0; i--) {\n            if (counts[i] != null) {\n                for (Integer num : counts[i]) {\n                    ans[index++] = num;\n                    if (index == k) {\n                        return ans;\n                    }\n                }\n            }\n        }\n        return ans;\n    }",
-      "prev_code": "public int[] topKFrequent(int[] nums, int k) {\n    Map<Integer, Integer> map = new HashMap<>();\n    int max = Integer.MIN_VALUE;\n    for (int num : nums) {\n        map.merge(num, 1, Integer::sum);\n        max = Math.max(max, map.get(num));\n    }\n    List<Integer>[] count = new List[max + 1];\n    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {\n        if (count[entry.getValue()] == null) {\n            count[entry.getValue()] = new ArrayList<>();\n        }\n        count[entry.getValue()].add(entry.getKey());\n    }\n    int[] ans = new int[k];\n    int index = 0;\n    for (int i = count.length - 1; i >= 0; i--) {\n        if (count[i] != null) {\n            for (Integer num : count[i]) {\n                ans[index] = num;\n                index++;\n                if (index == k) {\n                    return ans;\n                }\n            }\n        }\n    }\n    return ans;\n}"
+      "pass": 4,
+      "memory_bytes": 47848000,
+      "code": "public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> map = new HashMap<>();\n        int max = 0;\n        for (int num : nums) {\n            map.merge(num, 1, Integer::sum);\n            max = Math.max(max, map.get(num));\n        }\n        List<Integer>[] counts = new List[max + 1];\n        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {\n            if (counts[entry.getValue()] == null) {\n                counts[entry.getValue()] = new ArrayList<>();\n            }\n            counts[entry.getValue()].add(entry.getKey());\n        }\n        int[] ans = new int[k];\n        int index = 0;\n        for (int i = max; i >= 0; i--) {\n            if (counts[i] != null) {\n                for (int j = 0; j < counts[i].size(); j++) {\n                    ans[index++] = counts[i].get(j);\n                    if (index == k) {\n                        return ans;\n                    }\n                }\n            }\n        }\n        return ans;\n    }",
+      "prev_code": "public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> map = new HashMap<>();\n        int max = 0;\n        for (int num : nums) {\n            map.merge(num, 1, Integer::sum);\n            max = Math.max(max, map.get(num));\n        }\n        List<Integer>[] counts = new List[max + 1];\n        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {\n            if (counts[entry.getValue()] == null) {\n                counts[entry.getValue()] = new ArrayList<>();\n            }\n            counts[entry.getValue()].add(entry.getKey());\n        }\n        int[] ans = new int[k];\n        int index = 0;\n        for (int i = counts.length - 1; i >= 0; i--) {\n            if (counts[i] != null) {\n                for (Integer num : counts[i]) {\n                    ans[index++] = num;\n                    if (index == k) {\n                        return ans;\n                    }\n                }\n            }\n        }\n        return ans;\n    }\n"
     }
   ],
   "reviews": [
@@ -106,6 +114,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）就是**桶排序（频次桶倒序收集）**，本轮同思路重写：`Map` 计数（`merge`）→ 频次作下标的桶数组 → 从高频到低频收集 k 个即 return。仅变量命名微调（count→counts、max 初值改 0），逻辑与复杂度一致；09-02 版代码已存入 submissions prev_code。\n- 相比 09-01 的「哈希表+快选」版：桶排序无随机退化、无 partition 细节，明显更好写，本轮直接选它。\n\n**② 为什么这次能想起来**\n- 套路锚点：「频次 → 桶下标」+「max 在计数时顺手维护、桶只开到 max」+「从高到低收集」。上一轮 strong 已内化，本轮未参考直接一次写出。\n- code_note 里的提醒「可试桶排序重写一次」本轮已完成，故清空该提醒。\n\n**③ 掌握度判定**\n- strong：全程无探讨（本轮未给提示），本地 9 组（示例 3 + 边界 6：全相同 / k=不同元素数 / 负数 / 极值 / 单最高频 / 长数组交错）一次全绿，力扣一次提交 Accepted 25/25。\n\n**④ 下一步提醒**\n- 本题桶排序已是线性最优档（快选/堆均不更优），无需再试其他写法。\n- 可顺带串练：692 前 K 个高频单词（同桶思路 + 字典序排序规则）、215 数组中的第 K 个最大元素（快选/堆）。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "桶排序（频次桶倒序收集）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(m)",
+      "optimal": true,
+      "notes": "三轮复习：距上次 10 天，写法与二刷一致（频次桶倒序收集）；一次 AC，25/25，边界用例 6 组本地全过"
     }
   ],
   "approach_detail": "**问题本质与解法选择**\n\n统计每个元素出现频次，返回频次前 k 高的元素（答案顺序任意）。先 `Map` 计数是 O(n) 逃不掉的；难点在「取前 k」：\n\n- 对频次排序 → O(m log m)，m 为不同元素数，可接受但不是最优；\n- 堆（大小 k 的小顶堆）→ O(n log k)，也常用；\n- 本题没有顺序要求，且频次天然落在 `[1, n]` 有界区间 → 可以用**计数数组当桶**：频次作下标，同频次元素放一个桶，从高频往低频收集 k 个，全程线性 O(n)。\n\n选桶排序的理由：无随机退化（快选最坏 O(n²)）、无堆的 log k、实现最直白，是这类「按频次取 top-k」的首选线性写法。\n\n**关键设计决策**\n\n| 决策 | 理由 |\n| --- | --- |\n| 计数时顺手维护 `max` | 桶只开到 `max+1` 而不是 n+1，省空间且收集起点明确 |\n| `List<Integer>[] counts = new List[max+1]` | 桶下标 = 频次，元素 = 该频次的所有 key |\n| 从 `counts.length-1` 向下收集 | 高频优先，天然满足「前 K 高频」 |\n| 收集满 k 立即 return | 避免无谓遍历（也保证桶尾空槽安全） |\n| 用 `map.merge(num,1,Integer::sum)` | 一行完成计数，语义清晰 |\n\n**具体 case 推演（示例1：`nums=[1,1,1,2,2,3], k=2`）**\n\n| 阶段 | 状态 |\n| --- | --- |\n| 计数后 | map = {1:3, 2:2, 3:1}，max = 3 |\n| 入桶后 | counts = [null, [3], [2], [1]]（下标=频次） |\n| i=3 | counts[3]=[1] → ans[0]=1，index=1 |\n| i=2 | counts[2]=[2] → ans[1]=2，index=2==k → return |\n| 结果 | ans=[1,2]（顺序任意，测试用无序比较） |\n\n对照代码：每层 if 判 `counts[i]!=null` 跳过空桶；内层 for 把同频次的 key 依次写入 ans。若 k=3，则 i=1 时还会把 3 收进来，ans=[1,2,3]。\n\n**边界与细节**\n\n- 全相同（`[7,7,7,7], k=1`）：map 只有 1 个 key、max=4，桶 [null,null,null,null,[7]]，取一个即满。\n- k=不同元素个数：从高到低收完即返回，不会越界（收集总数 = m ≥ k 保证）。\n- 负数 / 极值（-10000、10000）：只作 key 存桶，与频次下标无关，安全。\n- `max` 初值取 0：nums 非空（题目约束长度 ≥ 1），计数后必 ≥ 1；用 0 无需担心 MIN_VALUE 越界。\n- 答案顺序任意 → 本地与力扣都用无序比较（checkEqUnordered）。\n\n**复杂度与下限论证**\n\n- 时间 O(n)：计数 O(n) + 入桶 O(m)（m ≤ n）+ 收集 O(k)，均为线性；必须读完全部 n 个元素才能确定频次，Ω(n) 是下界，已达成。\n- 空间 O(n)：map O(m) + 桶数组 O(max) ≤ O(n)。\n- 对比：快选 O(n) 平均但最坏 O(n²) 且有 partition 细节；堆 O(n log k)。桶排序最坏也线性、实现最简单，是本题满足题意的最优档。"

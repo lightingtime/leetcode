@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>347. 前 K 个高频元素 (Top K Frequent Elements)</h1><p>&gt; <a href="https://leetcode.cn/problems/top-k-frequent-elements/" rel="noopener">https://leetcode.cn/problems/top-k-frequent-elements/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：数组、哈希表、分治、桶排序、计数、快速选择、排序、堆（优先队列）</p><h2>题目描述</h2><p>给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。</p><p>示例 1：</p><p>输入：nums = [1,1,1,2,2,3], k = 2</p><p>输出：[1,2]</p><p>示例 2：</p><p>输入：nums = [1], k = 1</p><p>输出：[1]</p><p>示例 3：</p><p>输入：nums = [1,2,1,2,1,2,3,1,3,2], k = 2</p><p>输出：[1,2]</p><p>提示：</p><p>1 5</p><p>-104 4</p><p>k 的取值范围是 [1, 数组中不相同的元素的个数]</p><p>题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的</p><p>进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 桶排序（频次桶倒序收集） ｜ O(n) · O(m)</p>
+      <div class="review-note md"><p>三轮复习：距上次 10 天，写法与二刷一致（频次桶倒序收集）；一次 AC，25/25，边界用例 6 组本地全过</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（25/25）｜ 一次 AC ｜ 桶排序（频次桶倒序收集） ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-02，strong）就是<strong>桶排序（频次桶倒序收集）</strong>，本轮同思路重写：<code>Map</code> 计数（<code>merge</code>）→ 频次作下标的桶数组 → 从高频到低频收集 k 个即 return。仅变量命名微调（count→counts、max 初值改 0），逻辑与复杂度一致；09-02 版代码已存入 submissions prev_code。</li><li>相比 09-01 的「哈希表+快选」版：桶排序无随机退化、无 partition 细节，明显更好写，本轮直接选它。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>套路锚点：「频次 → 桶下标」+「max 在计数时顺手维护、桶只开到 max」+「从高到低收集」。上一轮 strong 已内化，本轮未参考直接一次写出。</li><li>code_note 里的提醒「可试桶排序重写一次」本轮已完成，故清空该提醒。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（本轮未给提示），本地 9 组（示例 3 + 边界 6：全相同 / k=不同元素数 / 负数 / 极值 / 单最高频 / 长数组交错）一次全绿，力扣一次提交 Accepted 25/25。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>本题桶排序已是线性最优档（快选/堆均不更优），无需再试其他写法。</li><li>可顺带串练：692 前 K 个高频单词（同桶思路 + 字典序排序规则）、215 数组中的第 K 个最大元素（快选/堆）。</li></ul></div>
@@ -46,10 +50,10 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>桶排序（频次桶倒序收集）</b></li>
-        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>复杂度</span><b>O(n) · O(m)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
@@ -165,8 +169,36 @@
 </pre></div></details>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 桶排序（频次桶倒序收集）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.8 MB</span><span class="chip">用例 25/25</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(m)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0347_TopKFrequentElements.java · 桶排序（频次桶倒序收集）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
+            map.<span class="tk-f">merge</span>(num, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, map.<span class="tk-f">get</span>(num));
+        }
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;[] counts = <span class="tk-k">new</span> <span class="tk-t">List</span>[max + <span class="tk-n">1</span>];
+        <span class="tk-k">for</span> (<span class="tk-t">Map</span>.<span class="tk-t">Entry</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; entry : map.<span class="tk-f">entrySet</span>()) {
+            <span class="tk-k">if</span> (counts[entry.<span class="tk-f">getValue</span>()] == <span class="tk-k">null</span>) {
+                counts[entry.<span class="tk-f">getValue</span>()] = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+            }
+            counts[entry.<span class="tk-f">getValue</span>()].<span class="tk-f">add</span>(entry.<span class="tk-f">getKey</span>());
+        }
+        <span class="tk-k">int</span>[] ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[k];
+        <span class="tk-k">int</span> index = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = max; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">if</span> (counts[i] != <span class="tk-k">null</span>) {
+                <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; counts[i].<span class="tk-f">size</span>(); j++) {
+                    ans[index++] = counts[i].<span class="tk-f">get</span>(j);
+                    <span class="tk-k">if</span> (index == k) {
+                        <span class="tk-k">return</span> ans;
+                    }
+                }
+            }
+        }
+        <span class="tk-k">return</span> ans;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0347_TopKFrequentElements.java · 桶排序（频次桶倒序收集） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
@@ -193,40 +225,12 @@
             }
         }
         <span class="tk-k">return</span> ans;
-    }</pre></div>
-    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0347_TopKFrequentElements.java · 桶排序（频次桶倒序收集） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">topKFrequent</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
-    <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
-    <span class="tk-k">int</span> max = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
-    <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
-        map.<span class="tk-f">merge</span>(num, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
-        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, map.<span class="tk-f">get</span>(num));
     }
-    <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;[] count = <span class="tk-k">new</span> <span class="tk-t">List</span>[max + <span class="tk-n">1</span>];
-    <span class="tk-k">for</span> (<span class="tk-t">Map</span>.<span class="tk-t">Entry</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; entry : map.<span class="tk-f">entrySet</span>()) {
-        <span class="tk-k">if</span> (count[entry.<span class="tk-f">getValue</span>()] == <span class="tk-k">null</span>) {
-            count[entry.<span class="tk-f">getValue</span>()] = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-        }
-        count[entry.<span class="tk-f">getValue</span>()].<span class="tk-f">add</span>(entry.<span class="tk-f">getKey</span>());
-    }
-    <span class="tk-k">int</span>[] ans = <span class="tk-k">new</span> <span class="tk-k">int</span>[k];
-    <span class="tk-k">int</span> index = <span class="tk-n">0</span>;
-    <span class="tk-k">for</span> (<span class="tk-k">int</span> i = count.length - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
-        <span class="tk-k">if</span> (count[i] != <span class="tk-k">null</span>) {
-            <span class="tk-k">for</span> (<span class="tk-t">Integer</span> num : count[i]) {
-                ans[index] = num;
-                index++;
-                <span class="tk-k">if</span> (index == k) {
-                    <span class="tk-k">return</span> ans;
-                }
-            }
-        }
-    }
-    <span class="tk-k">return</span> ans;
-}</pre></div></details>
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>统计每个元素出现频次，返回频次前 k 高的元素（答案顺序任意）。先 <code>Map</code> 计数是 O(n) 逃不掉的；难点在「取前 k」：</p><ul><li>对频次排序 → O(m log m)，m 为不同元素数，可接受但不是最优；</li><li>堆（大小 k 的小顶堆）→ O(n log k)，也常用；</li><li>本题没有顺序要求，且频次天然落在 <code>[1, n]</code> 有界区间 → 可以用<strong>计数数组当桶</strong>：频次作下标，同频次元素放一个桶，从高频往低频收集 k 个，全程线性 O(n)。</li></ul><p>选桶排序的理由：无随机退化（快选最坏 O(n²)）、无堆的 log k、实现最直白，是这类「按频次取 top-k」的首选线性写法。</p><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>计数时顺手维护 <code>max</code></td><td>桶只开到 <code>max+1</code> 而不是 n+1，省空间且收集起点明确</td></tr><tr><td><code>List&lt;Integer&gt;[] counts = new List[max+1]</code></td><td>桶下标 = 频次，元素 = 该频次的所有 key</td></tr><tr><td>从 <code>counts.length-1</code> 向下收集</td><td>高频优先，天然满足「前 K 高频」</td></tr><tr><td>收集满 k 立即 return</td><td>避免无谓遍历（也保证桶尾空槽安全）</td></tr><tr><td>用 <code>map.merge(num,1,Integer::sum)</code></td><td>一行完成计数，语义清晰</td></tr></tbody></table></div><p><strong>具体 case 推演（示例1：<code>nums=[1,1,1,2,2,3], k=2</code>）</strong></p><div class="table-wrap"><table><thead><tr><th>阶段</th><th>状态</th></tr></thead><tbody><tr><td>计数后</td><td>map = {1:3, 2:2, 3:1}，max = 3</td></tr><tr><td>入桶后</td><td>counts = [null, [3], [2], [1]]（下标=频次）</td></tr><tr><td>i=3</td><td>counts[3]=[1] → ans[0]=1，index=1</td></tr><tr><td>i=2</td><td>counts[2]=[2] → ans[1]=2，index=2==k → return</td></tr><tr><td>结果</td><td>ans=[1,2]（顺序任意，测试用无序比较）</td></tr></tbody></table></div><p>对照代码：每层 if 判 <code>counts[i]!=null</code> 跳过空桶；内层 for 把同频次的 key 依次写入 ans。若 k=3，则 i=1 时还会把 3 收进来，ans=[1,2,3]。</p><p><strong>边界与细节</strong></p><ul><li>全相同（<code>[7,7,7,7], k=1</code>）：map 只有 1 个 key、max=4，桶 [null,null,null,null,[7]]，取一个即满。</li><li>k=不同元素个数：从高到低收完即返回，不会越界（收集总数 = m ≥ k 保证）。</li><li>负数 / 极值（-10000、10000）：只作 key 存桶，与频次下标无关，安全。</li><li><code>max</code> 初值取 0：nums 非空（题目约束长度 ≥ 1），计数后必 ≥ 1；用 0 无需担心 MIN_VALUE 越界。</li><li>答案顺序任意 → 本地与力扣都用无序比较（checkEqUnordered）。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：计数 O(n) + 入桶 O(m)（m ≤ n）+ 收集 O(k)，均为线性；必须读完全部 n 个元素才能确定频次，Ω(n) 是下界，已达成。</li><li>空间 O(n)：map O(m) + 桶数组 O(max) ≤ O(n)。</li><li>对比：快选 O(n) 平均但最坏 O(n²) 且有 partition 细节；堆 O(n log k)。桶排序最坏也线性、实现最简单，是本题满足题意的最优档。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择 top-K：分区比较字段写错（pivot 取 count 却用 num 比较，导致按元素值而非频率分区）；返回区间方向错（subList(k,size) 取反，应取前 k 个或快选把第 size-k 小定位后取后 k 个）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>快速选择终止分支：应 k==i 返回（pivot 已归位即答案）、k&lt;i 左、k&gt;i 右；写成 k&lt;=i 会把等号情况也递归，pivot 被换到 i 却不在左区间，导致 l&gt;r 非法区间无限递归（栈溢出）或越界</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>桶排序装桶漏 add：if (bucket[f]==null) 创建后必须无条件 add，写成 if/else 导致每个频次桶只装第二个及以后的元素、首个元素丢失；收集时 index==-1 只 break 内层循环，外层继续扫非空桶会 ans[-1] 越界</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>25/25 用例。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>频次桶排序求 Top-K</h3><p>频次天然落在 [1,n] 有界区间时，可用频次作下标建桶，从高频到低频收集 k 个，O(n) 且无快选最坏 O(n²)、无堆 log k；注意 max 上界维护与收集时 index 越界的终止判断。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

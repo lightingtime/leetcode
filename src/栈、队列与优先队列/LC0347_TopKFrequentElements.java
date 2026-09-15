@@ -2,9 +2,7 @@
 // LeetCode 347. 前 K 个高频元素 (Top K Frequent Elements)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/top-k-frequent-elements/
-// 复习日期：2026-09-05（第 3 次复习 · 一刷 2026-08-07 · 上次 2026-09-02 较强）
-// 一刷思路：哈希计数 + 快速选择，O(n) 平均；上次复习已写「哈希表+快选」与「桶排序 O(n)」两版
-// 测试用例与一刷归档保持一致（示例 + 边界）
+// 刷题日期：2026-09-15
 // ============================================================
 
 import java.util.*;
@@ -28,10 +26,10 @@ public class LC0347_TopKFrequentElements {
         }
         int[] ans = new int[k];
         int index = 0;
-        for (int i = counts.length - 1; i >= 0; i--) {
+        for (int i = max; i >= 0; i--) {
             if (counts[i] != null) {
-                for (Integer num : counts[i]) {
-                    ans[index++] = num;
+                for (int j = 0; j < counts[i].size(); j++) {
+                    ans[index++] = counts[i].get(j);
                     if (index == k) {
                         return ans;
                     }
@@ -40,7 +38,6 @@ public class LC0347_TopKFrequentElements {
         }
         return ans;
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
