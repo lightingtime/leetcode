@@ -1,22 +1,21 @@
 // ============================================================
 // LeetCode 312. 戳气球 (Burst Balloons)
-// 难度：Hard | 分类：动态规划
+// 难度：Hard | 分类：动态规划（区间 DP）
 // 链接：https://leetcode.cn/problems/burst-balloons/
-// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-06）
-// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
+// 复习日期：2026-09-15（第 3 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-09）
 //
-// 思路：区间 DP，dp[i][j] = 戳破开区间 (i,j) 内所有气球的最大硬币，两端补 1 哨兵不戳；
-//       枚举「最后戳破的 k」转移，按区间长度从小到大填表。
+// 思路：补左右哨兵，按区间长度枚举最后戳破的气球 k。
 // 复杂度：时间 O(n^3)，空间 O(n^2)
 // ============================================================
+
+import java.util.*;
 
 public class LC0312_BurstBalloons {
 
     // ==== 提交代码开始 ====
     public int maxCoins(int[] nums) {
-        int n = nums.length;
-        int[] array = new int[n + 2];
-        System.arraycopy(nums, 0, array, 1, n);
+        int[] array = new int[nums.length + 2];
+        System.arraycopy(nums, 0, array, 1, nums.length);
         array[0] = array[array.length - 1] = 1;
         int[][] dp = new int[array.length][array.length];
         for (int len = 2; len < array.length; len++) {
@@ -27,7 +26,7 @@ public class LC0312_BurstBalloons {
                 }
             }
         }
-        return dp[0][array.length - 1];
+        return dp[0][dp.length - 1];
     }
     // ==== 提交代码结束 ====
 

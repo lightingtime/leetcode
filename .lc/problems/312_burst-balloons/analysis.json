@@ -35,19 +35,19 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-09",
+      "date": "2026-09-15",
       "verdict": "Accepted",
       "testcases": "73/73",
       "runtime_ms": null,
-      "memory_bytes": 44596000,
+      "memory_bytes": 44688000,
       "approach": "区间 DP",
       "time_complexity": "O(n^3)",
       "space_complexity": "O(n^2)",
       "optimal": true,
-      "notes": "① 与上一轮对比：与 09-06 复习同一思路（区间 DP：dp[i][j] 开区间 + 两端 1 哨兵 + 枚举最后戳的 k），本次用 arraycopy 补哨兵、三层循环直接填表，代码更紧凑；复杂度不变 O(n^3)/O(n^2)。\n② 为什么这次能想起来：记忆点是「戳破会改变相邻关系 → 正着模拟有后效性，改问『最后戳破谁』把区间切成两个互不干扰的开区间」，并先按 n<=300 判断 O(n^3) 可行；这次直接按区间长度从小到大填表，没有把 k 误当成第一个戳的。\n③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（73/73），未看归档/未探讨 → strong。\n④ 下一步提醒：命中已沉淀套路「区间 DP：最后一步切分 + 补哨兵」；同类可巩固的还有 1000. 合并石头的最低成本（同样是枚举最后一步合并的区间 DP）。",
-      "code": "    public int maxCoins(int[] nums) {\n        int n = nums.length;\n        int[] array = new int[n + 2];\n        System.arraycopy(nums, 0, array, 1, n);\n        array[0] = array[array.length - 1] = 1;\n        int[][] dp = new int[array.length][array.length];\n        for (int len = 2; len < array.length; len++) {\n            for (int i = 0; i + len < array.length; i++) {\n                int j = i + len;\n                for (int k = i + 1; k < j; k++) {\n                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);\n                }\n            }\n        }\n        return dp[0][array.length - 1];\n    }",
+      "notes": "① 与上一轮对比：同样是区间 DP 与左右哨兵写法；本次未提问、未讨论，直接复写并一次提交 Accepted 73/73，记 strong。\n\n② 状态与转移：补上哨兵后令 `dp[i][j]` 表示只戳破开区间 `(i,j)` 内气球的最大收益。枚举其中最后被戳破的 `k`，此时它的左右邻居一定还是 `i`、`j`，因此 `dp[i][j]=max(dp[i][k]+a[i]*a[k]*a[j]+dp[k][j])`。按区间长度从小到大填表。\n\n③ 例 `[3,1,5,8]` 补哨兵为 `[1,3,1,5,8,1]`，最终答案取 `dp[0][5]=167`。开区间设计保证哨兵不会被真正戳破，切分子问题互不干扰。\n\n④ 掌握度判定：没有算法提示或讨论，本地全过且力扣首次提交 Accepted，记 strong。",
+      "code": "    public int maxCoins(int[] nums) {\n        int[] array = new int[nums.length + 2];\n        System.arraycopy(nums, 0, array, 1, nums.length);\n        array[0] = array[array.length - 1] = 1;\n        int[][] dp = new int[array.length][array.length];\n        for (int len = 2; len < array.length; len++) {\n            for (int i = 0; i + len < array.length; i++) {\n                int j = i + len;\n                for (int k = i + 1; k < j; k++) {\n                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);\n                }\n            }\n        }\n        return dp[0][dp.length - 1];\n    }",
       "mastery": "strong",
-      "pass": 2,
+      "pass": 3,
       "prev_code": "public int maxCoins(int[] nums) {\n        int n = nums.length;\n        int[][] dp = new int[n + 2][n + 2];\n        int[] array = new int[n + 2];\n        System.arraycopy(nums, 0, array, 1, nums.length);\n        array[0] = array[n + 1] = 1;\n        for (int len = 2; len <= n + 1; len++) {\n            for (int i = 0; i + len <= n + 1; i++) {\n                int j = i + len;\n                for (int k = i + 1; k < j; k++) {\n                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + array[i] * array[k] * array[j] + dp[k][j]);\n                }\n            }\n        }\n        return dp[0][n+ 1];\n    }\n"
     }
   ],
@@ -80,6 +80,19 @@
       "space_complexity": "O(n^2)",
       "optimal": true,
       "notes": "① 与上一轮对比：与 09-06 复习同一思路（区间 DP：dp[i][j] 开区间 + 两端 1 哨兵 + 枚举最后戳的 k），本次用 arraycopy 补哨兵、三层循环直接填表，代码更紧凑；复杂度不变 O(n^3)/O(n^2)。\n② 为什么这次能想起来：记忆点是「戳破会改变相邻关系 → 正着模拟有后效性，改问『最后戳破谁』把区间切成两个互不干扰的开区间」，并先按 n<=300 判断 O(n^3) 可行；这次直接按区间长度从小到大填表，没有把 k 误当成第一个戳的。\n③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（73/73），未看归档/未探讨 → strong。\n④ 下一步提醒：命中已沉淀套路「区间 DP：最后一步切分 + 补哨兵」；同类可巩固的还有 1000. 合并石头的最低成本（同样是枚举最后一步合并的区间 DP）。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "73/73",
+      "approach": "区间 DP",
+      "time_complexity": "O(n^3)",
+      "space_complexity": "O(n^2)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：同样是区间 DP 与左右哨兵写法；本次未提问、未讨论，直接复写并一次提交 Accepted 73/73，记 strong。\n\n② 状态与转移：补上哨兵后令 `dp[i][j]` 表示只戳破开区间 `(i,j)` 内气球的最大收益。枚举其中最后被戳破的 `k`，此时它的左右邻居一定还是 `i`、`j`，因此 `dp[i][j]=max(dp[i][k]+a[i]*a[k]*a[j]+dp[k][j])`。按区间长度从小到大填表。\n\n③ 例 `[3,1,5,8]` 补哨兵为 `[1,3,1,5,8,1]`，最终答案取 `dp[0][5]=167`。开区间设计保证哨兵不会被真正戳破，切分子问题互不干扰。\n\n④ 掌握度判定：没有算法提示或讨论，本地全过且力扣首次提交 Accepted，记 strong。"
     }
   ]
 }
