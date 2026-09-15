@@ -1,34 +1,50 @@
 // ============================================================
 // LeetCode 32. 最长有效括号 (Longest Valid Parentheses)
-// 难度：Hard | 分类：动态规划
+// 难度：Hard | 分类：动态规划（本次采用两遍计数贪心）
 // 链接：https://leetcode.cn/problems/longest-valid-parentheses/
-// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-06）
-// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
+// 复习日期：2026-09-15（第 3 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-09）
 //
-// 思路：一维 DP，dp[i] 表示以 i 结尾的最长有效括号长度；遇 ')' 按前一个字符分类，配对后拼接更前面的有效段。
-// 复杂度：时间 O(n)，空间 O(n)
+// 思路：左右各扫描一次，用 left/right 计数并在非法时清零。
+// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
+
+import java.util.*;
 
 public class LC0032_LongestValidParentheses {
 
     // ==== 提交代码开始 ====
     public int longestValidParentheses(String s) {
-        int[] dp = new int[s.length()];
-        int max = 0;
+        int left = 0, right = 0;
+        int leftMax = 0;
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == ')') {
-                if (i > 0 && s.charAt(i - 1) == '(') {
-                    dp[i] = i > 1 ? dp[i - 2] + 2 : 2;
-                } else if (i > 0 && s.charAt(i - 1) == ')') {
-                    int j = i - dp[i - 1] - 1;
-                    if (j >= 0 && s.charAt(j) == '(') {
-                        dp[i] = (j > 0 ? dp[j - 1] + 2 : 2) + dp[i - 1];
-                    }
-                }
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
             }
-            max = Math.max(max, dp[i]);
+            if (left == right) {
+                leftMax = Math.max(leftMax, left * 2);
+            } else if (right > left) {
+                left = 0;
+                right = 0;
+            }
         }
-        return max;
+        int rightMax = 0;
+        left = right = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                rightMax = Math.max(rightMax, left * 2);
+            } else if (left > right) {
+                left = 0;
+                right = 0;
+            }
+        }
+        return Math.max(leftMax, rightMax);
     }
     // ==== 提交代码结束 ====
 
