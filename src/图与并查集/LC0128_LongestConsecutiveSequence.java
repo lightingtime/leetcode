@@ -2,7 +2,7 @@
 // LeetCode 128. 最长连续序列 (Longest Consecutive Sequence)
 // 难度：Medium | 分类：图与并查集
 // 链接：https://leetcode.cn/problems/longest-consecutive-sequence/
-// 复习日期：2026-09-05（第 3 次复习 · 一刷 2026-08-08 · 上次 2026-09-02 较强）
+// 复习日期：2026-09-15（第 4 次复习 · 一刷 2026-08-08 · 上次 2026-09-05 较强）
 // 一刷/上次思路：HashSet 去重，只从「段起点」（不存在 x-1）向上延展计数，每段只数一次 O(n)
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
@@ -14,11 +14,9 @@ public class LC0128_LongestConsecutiveSequence {
     // ==== 提交代码开始 ====
     public int longestConsecutive(int[] nums) {
         Set<Integer> set = new HashSet<>();
-        for (int num : nums) {
-            set.add(num);
-        }
+        for(int num : nums) set.add(num);
         int max = 0;
-        for (Integer num : set) {
+        for (int num : set) {
             int x = num;
             if (set.contains(x - 1)) {
                 continue;

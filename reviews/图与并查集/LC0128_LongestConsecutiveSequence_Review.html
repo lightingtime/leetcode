@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>128. 最长连续序列 (Longest Consecutive Sequence)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-consecutive-sequence/" rel="noopener">https://leetcode.cn/problems/longest-consecutive-sequence/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：并查集、数组、哈希表</p><h2>题目描述</h2><p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p><p>请你设计并实现时间复杂度为 O(n) 的算法解决此问题。</p><p>示例 1：</p><p>输入：nums = [100,4,200,1,3,2]</p><p>输出：4</p><p>解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p><p>示例 2：</p><p>输入：nums = [0,3,7,2,5,8,4,6,0,1]</p><p>输出：9</p><p>示例 3：</p><p>输入：nums = [1,0,1,2]</p><p>输出：3</p><p>提示：</p><p>0 5</p><p>-109 9</p><h2>示例</h2><ol><li>输入：nums = [100,4,200,1,3,2]</li></ol><p>输出：4</p><p>解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</p><ol><li>输入：nums = [0,3,7,2,5,8,4,6,0,1]</li></ol><p>输出：9</p><ol><li>输入：nums = [1,0,1,2]</li></ol><p>输出：3</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ HashSet + 从段起点向上延展 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-05，strong）就是 <code>HashSet</code> 去重 + 从段起点向上延展；本轮同思路独立重写，逻辑与复杂度一致（O(n)/O(n)），仅统计去重用了 <code>for (int num : set)</code> 与更紧凑的加法写法。</li><li>相比一刷（08-08，非一次 AC、6 条错误习惯）：本轮没有出现 map value 语义错位、没有用「已处理集合」判前驱、也没有遍历 <code>nums</code>（回归用例「5000 个重复起点」一次通过）。</li></ul><p><strong>② 这次为什么稳</strong></p><ul><li>三个历史坑都有对应的显式防线：① 根本不用 map 存长度，只用 <code>Set</code> 存全集，<code>max</code> 单独维护，绕开 value 语义；② 前驱判断用全集 <code>set.contains(x - 1)</code>，与遍历顺序无关；③ 遍历去重后的 <code>set</code>，每个段只从起点扩展一次，无 O(n²) 风险。</li><li>提交前发现提交区残留模板的不可达 <code>return 0;</code>（javac 直接编译报错），属于脚手架残留、与逻辑无关，删除后本地 12 组用例一次全绿。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：本轮未给任何解法提示，本地 12 组（3 示例 + 8 边界 + 1 回归）一次全绿，力扣一次提交 Accepted 85/85。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>可顺带串练：并查集收尾的「连通性」视角（LC200 岛屿数量 / LC399 除法求值），对照本题「隐式相邻连通 + 只从段起点计数」的取舍。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（85/85）｜ 一次 AC ｜ HashSet + 从段起点向上延展 ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-02，strong）与本次同思路：HashSet 去重 + <strong>只从段起点（x-1 不存在）向上延展</strong>，每段只数一次。本轮写法基本一致（手写 for 建 set、起点剪枝 + while 延展），仅细节微调；09-02 版代码已存入 submissions prev_code。</li><li>一刷/09-01 曾用 <code>Arrays.stream(...).boxed().collect(toSet())</code> 建 set，本轮直接手写循环，更直白。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>锚点就是那个剪枝：「先问 <code>set.contains(x-1)</code>，有就 continue」——保证每段只从段首数一次，把「对每个元素都 while 延展」的 O(n²) 掐掉。TLE 回归用例（长连续段+重复起点）一次通过，没再踩。</li><li>这题分类挂「图与并查集」，但哈希段起点法才是 O(n) 正解，比并查集合并更简单，本轮直接选了它。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（未给提示），本地 11 组（示例 3 + 边界 8 + TLE 回归 1）一次全绿，力扣一次提交 Accepted 85/85。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>本题 O(n) 已达题设最优；可对比「排序后扫一遍」O(n log n) 写法，理解题设为什么卡 O(n)。</li><li>了解向：并查集做连续段合并是另一种思路（分类名来源），面试提一嘴即可，不必替代哈希法。</li></ul></div>
@@ -46,7 +50,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>HashSet + 从段起点向上延展</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
@@ -55,8 +59,24 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · HashSet + 从段起点向上延展</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.6 MB</span><span class="chip">用例 85/85</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 91.5 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
+        <span class="tk-k">for</span>(<span class="tk-k">int</span> num : nums) set.<span class="tk-f">add</span>(num);
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> num : set) {
+            <span class="tk-k">int</span> x = num;
+            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(x - <span class="tk-n">1</span>)) {
+                <span class="tk-k">continue</span>;
+            }
+            <span class="tk-k">while</span> (set.<span class="tk-f">contains</span>(x + <span class="tk-n">1</span>)) {
+                x++;
+            }
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
+        }
+        <span class="tk-k">return</span> max;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
             set.<span class="tk-f">add</span>(num);
@@ -73,25 +93,8 @@
             max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
         }
         <span class="tk-k">return</span> max;
-    }</pre></div>
-    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0128_LongestConsecutiveSequence.java · HashSet + 从段起点向上延展 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestConsecutive</span>(<span class="tk-k">int</span>[] nums) {
-    <span class="tk-t">Set</span>&lt;<span class="tk-t">Integer</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;();
-    <span class="tk-k">for</span> (<span class="tk-k">int</span> num : nums) {
-        set.<span class="tk-f">add</span>(num);
     }
-    <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
-    <span class="tk-k">for</span> (<span class="tk-t">Integer</span> num : set) {
-        <span class="tk-k">int</span> x = num;
-        <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(x - <span class="tk-n">1</span>)) {
-            <span class="tk-k">continue</span>;
-        }
-        <span class="tk-k">while</span> (set.<span class="tk-f">contains</span>(x + <span class="tk-n">1</span>)) {
-            x++;
-        }
-        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, x - num + <span class="tk-n">1</span>);
-    }
-    <span class="tk-k">return</span> max;
-}</pre></div></details>
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>找数组里最长「连续数值段」的长度（数字可乱序、可重复，重复不影响连续段）。朴素思路：排序后扫一遍找最长连续上升 → O(n log n)，但题目明确要求 O(n)。</p><p>要 O(n) 就得用哈希做 O(1) 的「存在性查询」：把全部数放进 <code>HashSet</code> 去重，然后对每个数尝试向 <code>+1</code> 方向延展计数。真正的难点是<strong>避免 O(n²)</strong>：如果对每个元素都向后延展，<code>[1..n]</code> 这种长段会被从每个位置重复数一遍 → TLE。剪枝办法：<strong>只从「段起点」开始数</strong>（<code>x-1</code> 不在集合里的 x 才是起点），这样每个连续段只被数一次。</p><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>理由</th></tr></thead><tbody><tr><td><code>Set&lt;Integer&gt; set</code> 去重</td><td>存在性查询 O(1)；重复值不影响段，天然去重</td></tr><tr><td>起点剪枝 <code>if (set.contains(x-1)) continue;</code></td><td>非起点跳过 → 每段只从段首数一次，整体 O(n)</td></tr><tr><td><code>while (set.contains(x+1)) x++;</code></td><td>从起点向后延展，长度 = x - num + 1</td></tr><tr><td>遍历 <code>for (Integer num : set)</code> 而非原数组</td><td>去重后遍历，避免对重复元素重复发起计数</td></tr></tbody></table></div><p><strong>具体 case 推演（示例1：<code>nums=[100,4,200,1,3,2]</code>）</strong></p><div class="table-wrap"><table><thead><tr><th>阶段</th><th>状态</th></tr></thead><tbody><tr><td>建 set</td><td>{1,2,3,4,100,200}</td></tr><tr><td>遍历 num=1</td><td>1-1=0 ∉ set → 是起点；延展：2,3,4 都在 → x 到 4，长度 4-1+1=4，max=4</td></tr><tr><td>遍历 num=2</td><td>2-1=1 ∈ set → continue（非起点，整段已在 1 处数过）</td></tr><tr><td>遍历 num=3</td><td>3-1=2 ∈ set → continue</td></tr><tr><td>遍历 num=4</td><td>4-1=3 ∈ set → continue</td></tr><tr><td>遍历 num=100</td><td>99 ∉ set → 起点；100+1=101 ∉ set → 长度 1，max 不变</td></tr><tr><td>遍历 num=200</td><td>同理长度 1</td></tr><tr><td>结果</td><td>4</td></tr></tbody></table></div><p>关键：段 [1,2,3,4] 只被 num=1 数了一次，2/3/4 全部被剪枝跳过——这就是 O(n) 而不是 O(n²) 的原因。</p><p><strong>边界与细节</strong></p><ul><li>空输入 <code>[]</code>：max 初值 0，直接返回 0。</li><li>单元素 / 全相同（去重后剩一个）：长度 1。</li><li>重复值如 <code>[1,1,2,2,3,3]</code>：set={1,2,3}，从 1 数到 3 → 3。</li><li>负数区间（-3..1）：起点 -3（-4 ∉ set），照常延展，int 加法安全。</li><li>极值相邻 <code>[1000000000, 999999999]</code>：x+1 不溢出（最大 10^9 + 1 仍在 int 范围）。</li><li>TLE 回归：长连续段 + 大量重复起点的用例，防「对每个原数组元素都发起延展」的写法。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：建 set O(n)；遍历 set 每个元素要么被 continue 剪枝、要么作为某段起点延展——每段延展总次数 = 段内元素数，所有段加起来 ≤ n，故总 O(n)。</li><li>空间 O(n)：HashSet 存全部去重元素。</li><li>为什么是最优：必须读完全部 n 个元素才能确定哪些数存在 → Ω(n) 时间下界，已达成；哈希去重是「O(1) 存在查询 + 线性扫描」的唯一途径（排序法 O(n log n) 不满足题设 O(n)）。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位：把『链起点再往前的数（left-1）』当长度存入并直接参与 max 比较，导致结果是无意义数值（示例1 得 198 而非 4）；跳链 while 用存储值做步长，存负值时 left 会振荡导致死循环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>map 值语义错位（同类第 2 次）：改成 num-left+1 后仍把『到边界的距离』当长度——无前驱的数基础值恒为 2（孤立点长度变 2）；跳链 left -= map.get(left) 仍用存储值当步长导致跳过头（示例2 得 8、示例3 得 4）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>存在性判断依赖处理顺序：单向遍历时用『已处理过』判断前驱 num-1 是否存在，输入乱序时前驱后到导致长度算不出（示例1 得 2、示例2 得 2、极值相邻得 1）；判断必须基于全集而非已处理集合</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>最长连续序列起点判断错位：用「已处理过的 map」判断 num-1 是否存在，而非「全量集合」——未处理的左邻居会漏判起点（中间元素被 continue 丢弃），且 while 跳变依赖的 map.get(x+1) 只对起点存过、不可靠，导致序列只统计一小段</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 踩坑<span class="tl-badge bug">已记录</span></span><p>区间合并跳跃依赖不可靠：while 里 map.get(x+1) 依赖遍历顺序——未处理的 x+1 不在 map 中直接 NPE，且 map 对中间元素存 1、对起点存长度，语义不一；正确区间合并应只维护区间两端点的长度并跳过已访问元素</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 踩坑<span class="tl-badge bug">已记录</span></span><p>最长连续序列遍历了原数组 nums 而非去重后的 set：重复的起点值（如大量 0）每个都触发一次完整 while 扩展，O(n²) 导致 TLE；必须遍历 set 保证每个序列只从起点统计一次</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">07 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">08 · 提交<span class="tl-badge ok">Accepted</span></span><p>85/85 用例。</p></div></div></div></section>
