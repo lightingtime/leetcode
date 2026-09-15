@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>215. 数组中的第K个最大元素 (Kth Largest Element in an Array)</h1><p>&gt; <a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/" rel="noopener">https://leetcode.cn/problems/kth-largest-element-in-an-array/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：数组、分治、快速选择、排序、堆（优先队列）</p><h2>题目描述</h2><p>给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。</p><p>请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。</p><p>你必须设计并实现时间复杂度为 O(n) 的算法解决此问题。</p><p>示例 1:</p><p>输入: [3,2,1,5,6,4], k = 2</p><p>输出: 5</p><p>示例 2:</p><p>输入: [3,2,3,1,2,4,5,5,6], k = 4</p><p>输出: 4</p><p>提示：</p><p>1 5</p><p>-104 4</p><h2>示例</h2><ol><li>输入：k = 2</li></ol><p>输出：5</p><ol><li>输入：k = 4</li></ol><p>输出：4</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（47/47）｜ 一次 AC ｜ 快速选择（Lomuto 分区） ｜ 平均 O(n) · 平均 O(log n)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是 Lomuto 分区的快速选择，上一轮已记 strong；本次未提问、未讨论，直接复写并一次提交 Accepted 47/47，继续记 strong。</p><p>② 关键逻辑：第 k 大等于升序下标 <code>n-k</code>。分区时以最右元素为 pivot，<code>i</code> 指向小于 pivot 区间的下一个位置；扫描结束后把 pivot 放到 <code>i</code>，只递归目标下标所在的一侧。</p><p>③ 重复值处理：判断条件使用严格小于，pivot 的相等值留在右侧，但分区位置仍保证左段全部小于 pivot、右段全部不小于 pivot，因此目标下标仍可唯一收缩。</p><p>④ 复杂度：平均时间 O(n)，平均递归栈 O(log n)；最坏 O(n²)/O(n)，属于快速选择的常见复杂度定义。本次无提示且一次通过，记 strong。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（47/47）｜ 一次 AC ｜ 快速选择（Lomuto 分区） ｜ O(n) 平均 · O(log n)</p>
       <div class="review-note md"><p>与上轮对比：上轮（09-01）即 Lomuto 分区快速选择，本次独立重写仍是同一写法（pivot=nums[r]，i 记小于区边界、j 扫描；k==i 返回 / k&lt;i 递归左半 / k&gt;i 递归右半），仅方法名与变量命名略异，复杂度、内存基本持平，写法无本质变化。</p><p>这次为什么能想起来：未翻一刷/上轮代码直接回忆——Top-K 类题先锁定快选或堆；两个关键点一次想清：k 用全局 0 基下标（n-k），递归不修改 k 只缩区间；分区固定一种（Lomuto）不混搭。上次三个坑（Hoare+Lomuto 混搭、k 语义混用、左递归含已归位 pivot 致区间不缩）这次均未再犯。</p><p>掌握度判定：strong——全程无探讨，本地 9 组（示例+边界）一次全过，力扣一次提交 Accepted 47/47。</p><p>下一步提醒：快选最坏 O(n²) 来自固定取 nums[r] 作 pivot，可试随机化 pivot（先交换随机下标再分区）摊平最坏概率；顺带可复习 347 前 K 高频（快选/桶排序）。</p></div>
@@ -46,10 +50,10 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>快速选择（Lomuto 分区）</b></li>
-        <li><span>复杂度</span><b>O(n) 平均 · O(log n)</b></li>
+        <li><span>复杂度</span><b>平均 O(n) · 平均 O(log n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
@@ -88,14 +92,14 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 快速选择（Lomuto 分区）</h3>
-    <p><span class="chip">时间 O(n) 平均</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 77.1 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0215_KthLargestElementInAnArray.java · 快速选择（Lomuto 分区）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findKthLargest</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
-        <span class="tk-k">return</span> <span class="tk-f">quickSelect</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>, nums.length - k);
+    <p><span class="chip">时间 平均 O(n)</span><span class="chip">空间 平均 O(log n)</span><span class="chip">内存 ≈ 77.2 MB</span><span class="chip">用例 47/47</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0215_KthLargestElementInAnArray.java · 快速选择（Lomuto 分区）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">findKthLargest</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> k) {
+        <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>, nums.length - k);
     }
 
-    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSelect</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSort</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
         <span class="tk-k">if</span> (l == r) {
-            <span class="tk-k">return</span> nums[r];
+            <span class="tk-k">return</span> nums[l];
         }
         <span class="tk-k">int</span> p = nums[r];
         <span class="tk-k">int</span> i = l, j = l;
@@ -106,15 +110,14 @@
             }
             j++;
         }
-        <span class="tk-f">swap</span>(nums, i , r);
-        <span class="tk-k">if</span> (k == i) {
-            <span class="tk-k">return</span> nums[i];
-        } <span class="tk-k">else</span> <span class="tk-k">if</span> (k &lt; i) {
-            <span class="tk-k">return</span> <span class="tk-f">quickSelect</span>(nums, l, i - <span class="tk-n">1</span>, k);
+        <span class="tk-f">swap</span>(nums, i, r);
+        <span class="tk-k">if</span> (i == k) {
+            <span class="tk-k">return</span> nums[k];
+        } <span class="tk-k">else</span> <span class="tk-k">if</span> (i &lt; k) {
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, i + <span class="tk-n">1</span>, r, k);
         } <span class="tk-k">else</span> {
-            <span class="tk-k">return</span> <span class="tk-f">quickSelect</span>(nums, i + <span class="tk-n">1</span>, r, k);
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, l, i - <span class="tk-n">1</span>, k);
         }
-
     }
 
     <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {

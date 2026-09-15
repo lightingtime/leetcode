@@ -2,9 +2,10 @@
 // LeetCode 215. 数组中的第K个最大元素 (Kth Largest Element in an Array)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/kth-largest-element-in-an-array/
-// 复习日期：2026-09-05（二刷复习 · 一刷 2026-08-07，上次复习 2026-09-01，较弱）
-// 一刷思路：快速选择（Hoare 分区），O(n) 平均 / O(log n)
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-15（第 4 次复习 · 一刷 2026-08-07 · 上次复习 2026-09-05）
+//
+// 思路：快速选择；把第 k 大转换成升序下标 n-k，按分区点只递归一侧。
+// 复杂度：平均时间 O(n)，平均递归栈 O(log n)
 // ============================================================
 
 import java.util.*;
@@ -31,7 +32,7 @@ public class LC0215_KthLargestElementInAnArray {
         }
         swap(nums, i, r);
         if (i == k) {
-            return nums[i];
+            return nums[k];
         } else if (i < k) {
             return quickSort(nums, i + 1, r, k);
         } else {

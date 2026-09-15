@@ -41,18 +41,18 @@
       "code": "public int findKthLargest(int[] nums, int k) {\n        int n = nums.length;\n        return quickSort(nums, 0, n - 1, n - k);\n    }\n\n    private int quickSort(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[k];\n        }\n        int x = nums[l], i = l - 1, j = r + 1;\n        while (i < j) {\n            do {\n                i++;\n            } while (nums[i] < x);\n            do {\n                j--;\n            } while ( nums[j] > x);\n            if (i < j) {\n                int temp = nums[j];\n                nums[j] = nums[i];\n                nums[i] = temp;\n            }\n        }\n        if (k <= j) {\n            return quickSort(nums, l, j, k);\n        }\n        return quickSort(nums, j + 1, r, k);\n    }\n"
     },
     {
-      "date": "2026-09-01",
+      "date": "2026-09-15",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "47/47",
       "approach": "快速选择（Lomuto 分区）",
-      "time_complexity": "O(n) 平均",
-      "space_complexity": "O(1)",
+      "time_complexity": "平均 O(n)",
+      "space_complexity": "平均 O(log n)",
       "optimal": true,
-      "notes": "",
+      "notes": "① 与上一轮对比：仍是 Lomuto 分区的快速选择，上一轮已记 strong；本次未提问、未讨论，直接复写并一次提交 Accepted 47/47，继续记 strong。\n\n② 关键逻辑：第 k 大等于升序下标 `n-k`。分区时以最右元素为 pivot，`i` 指向小于 pivot 区间的下一个位置；扫描结束后把 pivot 放到 `i`，只递归目标下标所在的一侧。\n\n③ 重复值处理：判断条件使用严格小于，pivot 的相等值留在右侧，但分区位置仍保证左段全部小于 pivot、右段全部不小于 pivot，因此目标下标仍可唯一收缩。\n\n④ 复杂度：平均时间 O(n)，平均递归栈 O(log n)；最坏 O(n²)/O(n)，属于快速选择的常见复杂度定义。本次无提示且一次通过，记 strong。",
       "mastery": "strong",
-      "pass": 2,
-      "memory_bytes": 80812000,
-      "code": "public int findKthLargest(int[] nums, int k) {\n        return quickSelect(nums, 0, nums.length - 1, nums.length - k);\n    }\n\n    private int quickSelect(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[r];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i , r);\n        if (k == i) {\n            return nums[i];\n        } else if (k < i) {\n            return quickSelect(nums, l, i - 1, k);\n        } else {\n            return quickSelect(nums, i + 1, r, k);\n        }\n\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
+      "pass": 4,
+      "memory_bytes": 80932000,
+      "code": "    public int findKthLargest(int[] nums, int k) {\n        return quickSort(nums, 0, nums.length - 1, nums.length - k);\n    }\n\n    private int quickSort(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[l];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i, r);\n        if (i == k) {\n            return nums[k];\n        } else if (i < k) {\n            return quickSort(nums, i + 1, r, k);\n        } else {\n            return quickSort(nums, l, i - 1, k);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
       "prev_code": "    public int findKthLargest(int[] nums, int k) {\n        // TODO: 在这里实现你的解法\n        return quickSelect(nums, 0, nums.length - 1, nums.length - k);\n    }\n\n    private int quickSelect(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[l];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i, r);\n        if (k == i) {\n            return nums[i];\n        } else if (k < i) {\n            return quickSelect(nums, l, i - 1, k);\n        } else {\n            return quickSelect(nums, i + 1, r, k);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }\n"
     }
   ],
@@ -95,6 +95,19 @@
       "space_complexity": "O(log n)",
       "optimal": true,
       "notes": "与上轮对比：上轮（09-01）即 Lomuto 分区快速选择，本次独立重写仍是同一写法（pivot=nums[r]，i 记小于区边界、j 扫描；k==i 返回 / k<i 递归左半 / k>i 递归右半），仅方法名与变量命名略异，复杂度、内存基本持平，写法无本质变化。\n\n这次为什么能想起来：未翻一刷/上轮代码直接回忆——Top-K 类题先锁定快选或堆；两个关键点一次想清：k 用全局 0 基下标（n-k），递归不修改 k 只缩区间；分区固定一种（Lomuto）不混搭。上次三个坑（Hoare+Lomuto 混搭、k 语义混用、左递归含已归位 pivot 致区间不缩）这次均未再犯。\n\n掌握度判定：strong——全程无探讨，本地 9 组（示例+边界）一次全过，力扣一次提交 Accepted 47/47。\n\n下一步提醒：快选最坏 O(n²) 来自固定取 nums[r] 作 pivot，可试随机化 pivot（先交换随机下标再分区）摊平最坏概率；顺带可复习 347 前 K 高频（快选/桶排序）。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "47/47",
+      "approach": "快速选择（Lomuto 分区）",
+      "time_complexity": "平均 O(n)",
+      "space_complexity": "平均 O(log n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是 Lomuto 分区的快速选择，上一轮已记 strong；本次未提问、未讨论，直接复写并一次提交 Accepted 47/47，继续记 strong。\n\n② 关键逻辑：第 k 大等于升序下标 `n-k`。分区时以最右元素为 pivot，`i` 指向小于 pivot 区间的下一个位置；扫描结束后把 pivot 放到 `i`，只递归目标下标所在的一侧。\n\n③ 重复值处理：判断条件使用严格小于，pivot 的相等值留在右侧，但分区位置仍保证左段全部小于 pivot、右段全部不小于 pivot，因此目标下标仍可唯一收缩。\n\n④ 复杂度：平均时间 O(n)，平均递归栈 O(log n)；最坏 O(n²)/O(n)，属于快速选择的常见复杂度定义。本次无提示且一次通过，记 strong。"
     }
   ],
   "approach_detail": "**问题本质与解法选择**\n- 求第 k 大 = 求升序下标 `target = n-k`（0 基）处的元素：第 1 大即升序最后一个。这是「无序数组中按排名取值」问题，不需要完整有序。\n- 候选思路：全排序 O(n log n)；容量 k 的小顶堆 O(n log k)；快速选择 O(n) 平均。本题单次查询，堆的 log k 常数为多余开销，且 k 接近 n 时堆更差；快选原地分区、每层只处理一侧，平均线性，为本题最优档。\n\n**关键设计决策**\n1. **目标下标固定**：`target = n-k` 是全局 0 基升序下标，递归全程不变、只缩区间——避免上轮「k 语义混用（全局 vs 相对）」的坑。\n2. **Lomuto 分区**：pivot 取 `nums[r]`；`i` 指向小于 pivot 段的下一位置，`j` 从 `l` 扫到 `r-1`，`nums[j] < pivot` 时与 `nums[i]` 交换并 `i++`；扫完把 pivot 换到 `i`。结果 `[l, i)` 全 < pivot、`nums[i] == pivot`、右侧 ≥ pivot。\n3. **只递归一侧**：`i == target` 命中返回；`target < i` 递归左半 `[l, i-1]`；否则递归右半 `[i+1, r]`，保证区间严格缩小，递归基 `l == r` 直接返回该元素。\n\n**具体 case 推演（示例 1：nums=[3,2,1,5,6,4], k=2）**\n`target = 6-2 = 4`，初始 `l=0, r=5`：\n1. pivot = `nums[5]=4`；`i=0, j=0` 扫描：\n   - `j=0`：`3<4` → 交换 `(0,0)`（无变化），`i=1`；\n   - `j=1`：`2<4` → 交换 `(1,1)`，`i=2`；`j=2`：`1<4` → 交换 `(2,2)`，`i=3`；\n   - `j=3`：`5≥4` 不动；`j=4`：`6≥4` 不动。\n2. 扫描结束 `swap(i=3, r=5)` → 数组 `[3,2,1,4,6,5]`，pivot 落位 `i=3`。\n3. `target=4 > i=3` → 递归右半 `[4,5]`：pivot = `nums[5]=5`，`j=4` 时 `6≥5` 不动 → `swap(i=4, r=5)` → `[3,2,1,4,5,6]`，`i=4 == target` → 返回 `5`。✓\n\n**重复值 case 推演（边界：nums=[2,2,2,2], k=2）**\n`target = 4-2 = 2`：\n1. 首轮 pivot=2，所有元素都不满足 `< 2` → `i=0` 不动，`swap(0,3)` 数组不变，pivot 落位 `i=0`。\n2. `target=2 > 0` → 递归右半 `[1,3]`，同理 pivot 落位 `i=1` → 再递归右半 `[2,3]`。\n3. 此时 `l==r==2`，返回 `nums[2]=2`。✓ 等于 pivot 的元素留在右侧（不交换），保证每层区间仍严格缩小、不会因等值元素死循环。\n\n**边界与细节**\n- 单元素：`l == r` 直接返回，无需分区。\n- `k = n`（第 n 大 = 最小）：`target = 0`，一路向左递归到左端。\n- 全相同数组：等于 pivot 不交换、留在右半，`i` 停在区间左端并逐层右移——不产生死循环，但属于最坏 O(n²) 退化情形之一。\n- 固定取 `nums[r]` 作 pivot：对有序/降序输入每层只削掉一个元素 → 退化为 O(n²)；本题 n ≤ 10^4，固定 pivot 平均可接受，随机化 pivot 可进一步摊平最坏概率。\n\n**复杂度与下限论证**\n- 时间：平均 O(n)——每层期望处理 n/2 规模，`n + n/2 + n/4 + ... = O(n)`；最坏 O(n²)（pivot 恒为极值）。\n- 空间：原地交换 O(1)，递归栈平均 O(log n)（只递归一侧，最坏 O(n)）。\n- 下限：本题只求第 k 个排名值、不求全序，故不受排序 Ω(n log n) 限制；任何正确算法每个元素至少要参与一次与 pivot 的比较才能被排除，比较下界 Ω(n)，快选平均 O(n) 达到该下界，是本题理论最优档。"
