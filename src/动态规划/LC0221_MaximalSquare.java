@@ -2,9 +2,9 @@
 // LeetCode 221. 最大正方形 (Maximal Square)
 // 难度：Medium | 分类：动态规划（二维网格 DP）
 // 链接：https://leetcode.cn/problems/maximal-square/
-// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-19 · 上次复习 2026-09-05）
+// 复习日期：2026-09-15（第 4 次复习 · 一刷 2026-08-19 · 上次复习 2026-09-12）
 //
-// 思路：二维网格 DP，滚动数组记录以当前格为右下角的最大正方形边长。
+// 思路：一维滚动 DP，按以当前格为右下角的最大正方形边长转移。
 // 复杂度：时间 O(mn)，空间 O(n)
 // ============================================================
 
@@ -19,11 +19,10 @@ public class LC0221_MaximalSquare {
             return 0;
         }
         int n = matrix[0].length;
-        int[] dp = new int[n];
-        for (int i = 0; i < n; i++) {
-            dp[i] = matrix[0][i] == '1' ? 1 : 0;
+        if (n == 0) {
+            return 0;
         }
-
+        int[] dp = new int[n];
         int max = 0;
         for (int i = 0; i < m; i++) {
             int leftTop = dp[0];
@@ -33,7 +32,7 @@ public class LC0221_MaximalSquare {
                     dp[j] = 0;
                 } else {
                     if (i > 0 && j > 0) {
-                        dp[j] = Math.min(dp[j - 1], Math.min(leftTop, pre)) + 1;
+                        dp[j] = Math.min(dp[j - 1], Math.min(pre, leftTop)) + 1;
                     } else {
                         dp[j] = 1;
                     }

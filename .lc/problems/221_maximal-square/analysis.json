@@ -51,18 +51,18 @@
       "code": "public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[][] dp = new int[m][n];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            dp[i][0] = matrix[i][0] == '1' ? 1 : 0;\n            max = Math.max(max, dp[i][0]);\n        }\n        for (int j = 0; j < n; j++) {\n            dp[0][j] = matrix[0][j] == '1' ? 1 : 0;\n            max = Math.max(max, dp[0][j]);\n        }\n        for (int i = 1; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                if (matrix[i][j] == '1') {\n                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;\n                } else {\n                    dp[i][j] = 0;\n                }\n                max = Math.max(max, dp[i][j]);\n            }\n        }\n        return max * max;\n    }\n"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-15",
       "verdict": "Accepted",
       "testcases": "81/81",
       "approach": "一维滚动 DP",
       "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是一维滚动 DP，复用上一行 `dp[j]`、当前行左值 `dp[j-1]` 和左上暂存 `leftTop` 计算三邻居最小值；本次额外在提交前讨论了 `i>0 && j>0` 边界判断，按规则记为 weak。复杂度 O(mn) / O(n)。\n\n② 边界判断原因：只有行列下标都大于 0 时，当前位置才同时拥有左、上、左上三个状态。`i==0` 时没有上一行，`j==0` 时没有左方，直接套三邻居转移会读取不存在的状态（`j==0` 还会访问 `dp[-1]`），所以第一行和第一列只能取基础边长 1。例：`[[\"1\",\"1\"],[\"1\",\"1\"]]` 中，第一行只能得到边长 1，第二行第一列也仍是 1，只有右下角才满足三邻居齐全并得到 `min(1,1,1)+1=2`，面积 4。\n\n③ 掌握度判定：虽然本次首次提交 Accepted 81/81，但提交前就边界分支进行了讨论，判为较弱。\n\n④ 下一步提醒：下次先自行说明第一行/第一列为什么是基础状态，再写滚动数组转移；尤其确认左、上、左上分别对应哪个变量。",
-      "mastery": "weak",
-      "pass": 3,
-      "memory_bytes": 79832000,
-      "code": "    public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        if (m == 0) {\n            return 0;\n        }\n        int n = matrix[0].length;\n        int[] dp = new int[n];\n        for (int i = 0; i < n; i++) {\n            dp[i] = matrix[0][i] == '1' ? 1 : 0;\n        }\n\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            int leftTop = dp[0];\n            for (int j = 0; j < n; j++) {\n                int pre = dp[j];\n                if (matrix[i][j] == '0') {\n                    dp[j] = 0;\n                } else {\n                    if (i > 0 && j > 0) {\n                        dp[j] = Math.min(dp[j - 1], Math.min(leftTop, pre)) + 1;\n                    } else {\n                        dp[j] = 1;\n                    }\n                }\n                leftTop = pre;\n                max = Math.max(max, dp[j]);\n            }\n        }\n        return max * max;\n    }",
+      "notes": "① 与上一轮对比：仍是 `一维滚动 DP`。上轮提交前就 `i>0 && j>0` 边界进行了讨论，因此记 weak；本轮未提问、未讨论，独立复写相同边界逻辑并一次提交 Accepted 81/81，因此改记 strong。\n\n② 状态与转移：`dp[j]` 表示上一行/当前行第 j 列作为右下角时的最大边长；`pre` 是正上方旧值，`dp[j-1]` 是当前行左方，`leftTop` 是左上方。第一行或第一列缺少三邻居，只能取 1；普通位置取三者的最小值加一。例 `[[\"1\",\"1\"],[\"1\",\"1\"]]`：第一行与第一列均为 1，右下角得到 `min(1,1,1)+1=2`，面积 4。\n\n③ 掌握度判定：没有算法提示或讨论，本地一次全过，力扣首次提交 Accepted，记 strong。\n\n④ 下一步提醒：继续固定三个邻居来源，并确保 `leftTop` 在使用后才更新为覆盖前的 `dp[j]`。",
+      "mastery": "strong",
+      "pass": 4,
+      "memory_bytes": 79636000,
+      "code": "    public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        if (m == 0) {\n            return 0;\n        }\n        int n = matrix[0].length;\n        if (n == 0) {\n            return 0;\n        }\n        int[] dp = new int[n];\n        for (int j = 0; j < n; j++) {\n            dp[j] = matrix[0][j] == '1' ? 1 : 0;\n        }\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            int leftTop = dp[0];\n            for (int j = 0; j < n; j++) {\n                int pre = dp[j];\n                if (matrix[i][j] == '0') {\n                    dp[j] = 0;\n                } else {\n                    if (i > 0 && j > 0) {\n                        dp[j] = Math.min(dp[j - 1], Math.min(pre, leftTop)) + 1;\n                    } else {\n                        dp[j] = 1;\n                    }\n                }\n                leftTop = pre;\n                max = Math.max(max, dp[j]);\n            }\n        }\n        return max * max;\n    }",
       "prev_code": "public int maximalSquare(char[][] matrix) {\n    int m = matrix.length;\n    int n = matrix[0].length;\n    int[] dp = new int[n];\n    for (int i = 0; i < n; i++) {\n        dp[i] = matrix[0][i] == '1' ? 1 :0;\n    }\n    int max = 0;\n    for (int i = 0; i < m; i++) {\n        int dig = dp[0];\n        for (int j = 0; j < n; j++) {\n            int pre = dp[j];\n            if (matrix[i][j] == '0') {\n                dp[j] = 0;\n            } else {\n                if (i > 0 && j > 0) {\n                    dp[j] = Math.min(dp[j - 1], Math.min(pre, dig)) + 1;\n                } else {\n                    dp[j] = 1;\n                }\n            }\n            dig = pre;\n            max = Math.max(max, dp[j]);\n        }\n    }\n    return max * max;\n}"
     }
   ],
@@ -109,6 +109,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是一维滚动 DP，复用上一行 `dp[j]`、当前行左值 `dp[j-1]` 和左上暂存 `leftTop` 计算三邻居最小值；本次额外在提交前讨论了 `i>0 && j>0` 边界判断，按规则记为 weak。复杂度 O(mn) / O(n)。\n\n② 边界判断原因：只有行列下标都大于 0 时，当前位置才同时拥有左、上、左上三个状态。`i==0` 时没有上一行，`j==0` 时没有左方，直接套三邻居转移会读取不存在的状态（`j==0` 还会访问 `dp[-1]`），所以第一行和第一列只能取基础边长 1。例：`[[\"1\",\"1\"],[\"1\",\"1\"]]` 中，第一行只能得到边长 1，第二行第一列也仍是 1，只有右下角才满足三邻居齐全并得到 `min(1,1,1)+1=2`，面积 4。\n\n③ 掌握度判定：虽然本次首次提交 Accepted 81/81，但提交前就边界分支进行了讨论，判为较弱。\n\n④ 下一步提醒：下次先自行说明第一行/第一列为什么是基础状态，再写滚动数组转移；尤其确认左、上、左上分别对应哪个变量。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "81/81",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是 `一维滚动 DP`。上轮提交前就 `i>0 && j>0` 边界进行了讨论，因此记 weak；本轮未提问、未讨论，独立复写相同边界逻辑并一次提交 Accepted 81/81，因此改记 strong。\n\n② 状态与转移：`dp[j]` 表示上一行/当前行第 j 列作为右下角时的最大边长；`pre` 是正上方旧值，`dp[j-1]` 是当前行左方，`leftTop` 是左上方。第一行或第一列缺少三邻居，只能取 1；普通位置取三者的最小值加一。例 `[[\"1\",\"1\"],[\"1\",\"1\"]]`：第一行与第一列均为 1，右下角得到 `min(1,1,1)+1=2`，面积 4。\n\n③ 掌握度判定：没有算法提示或讨论，本地一次全过，力扣首次提交 Accepted，记 strong。\n\n④ 下一步提醒：继续固定三个邻居来源，并确保 `leftTop` 在使用后才更新为覆盖前的 `dp[j]`。"
     }
   ]
 }

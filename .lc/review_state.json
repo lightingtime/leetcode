@@ -1255,12 +1255,12 @@
       "title": "最大正方形",
       "category": "动态规划",
       "first_pass_date": "2026-08-19",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-14",
-      "interval_days": 2,
-      "review_count": 3,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-15",
+      "next_review_date": "2026-09-20",
+      "interval_days": 5,
+      "review_count": 4,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "best-time-to-buy-and-sell-stock-with-cooldown": {
