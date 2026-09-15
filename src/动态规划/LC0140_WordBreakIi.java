@@ -2,14 +2,10 @@
 // LeetCode 140. 单词拆分 II (Word Break II)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/word-break-ii/
-// 刷题日期：2026-08-26
-//
-// 思路：后缀可拆预判（右往左的线性 DP）suffixOK[i]=s[i..n) 能否拼完 + 回溯枚举——
-//       DFS 入口用 !suffixOK[start] 剪掉到不了终点的子树；每段合法性由 set.contains 保证，
-//       词可重复使用；出口用 String.join 拼句子
-// DP 子类型：线性 DP（后缀可拆性预判 suffixOK[i]）+ 回溯枚举——suffixOK 从右往左算，
-//            回答「未来能否到终点」用于剪枝（前缀 dp 是冗余的，方向必须反过来）
-// 复杂度：时间 O(n·|dict| + 方案数·n) 空间 O(n + 方案数×n)
+// 复习日期：2026-09-15（第 1 次复习 · 一刷 2026-08-26 · 一刷非一次 AC）
+// 一刷思路：后缀可拆预判 suffixOK（右往左）+ 回溯，入口用 !suffixOK[start] 剪枝，set.contains 保证段合法
+// 子类型：线性 DP（前缀/后缀可达性）+ 回溯枚举方案
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -17,45 +13,41 @@ import java.util.*;
 public class LC0140_WordBreakIi {
 
     // ==== 提交代码开始 ====
-    boolean[] suffixOK;
-    Set<String> set;
     List<String> ans;
+    boolean[] canReach;
     public List<String> wordBreak(String s, List<String> wordDict) {
-        set = new HashSet<>(wordDict);
         ans = new ArrayList<>();
         int n = s.length();
-
-        // 后缀可拆预判：suffixOK[i] = s[i..n) 能否由字典词拼完（从右往左算）
-        suffixOK = new boolean[n + 1];
-        suffixOK[n] = true;
+        canReach = new boolean[n + 1];
+        canReach[n] = true;
+        Set<String> set = new HashSet<>(wordDict);
         for (int i = n - 1; i >= 0; i--) {
-            for (String word : set) {
-                int next = i + word.length();
-                if (next <= n && suffixOK[next] && s.startsWith(word, i)) {
-                    suffixOK[i] = true;
+            for (String str : set) {
+                if (i + str.length() <= n && canReach[i + str.length()]  && s.startsWith(str, i)) {
+                    canReach[i] = true;
                     break;
                 }
             }
         }
-        // DFS 从哪里出发，DP 就最好描述“从哪里能不能到终点”。
-        dfs(s, 0, new ArrayList<>());
+        dfs(s, 0, set, new ArrayList<>());
         return ans;
     }
 
-    private void dfs(String s, int start, List<String> path) {
-        if (start == s.length()) {
+    private void dfs(String s, int len, Set<String> wordDict, List<String> path) {
+        if (len == s.length()) {
             ans.add(String.join(" ", path));
             return;
         }
-        // 从start直接看后面能不能满足，不满足说明从start出发无论怎么拆都没有结果，直接剪枝
-        if (!suffixOK[start]) {
+        if (!canReach[len]) {
             return;
         }
-        for (int i = start; i <= s.length(); i++) {
-            String temp = s.substring(start, i);
-            if (set.contains(temp)) {           // 当前段是字典词
-                path.add(temp);
-                dfs(s, i, path);
+        for (String string : wordDict) {
+            if (len + string.length() > s.length()) {
+                continue;
+            }
+            if (s.startsWith(string, len)) {
+                path.add(string);
+                dfs(s, len + string.length(), wordDict, path);
                 path.remove(path.size() - 1);
             }
         }

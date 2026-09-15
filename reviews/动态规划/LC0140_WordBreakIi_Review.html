@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-26</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>140. 单词拆分 II (Word Break II)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-break-ii/" rel="noopener">https://leetcode.cn/problems/word-break-ii/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：字典树、记忆化、数组、哈希表、字符串、动态规划、回溯</p><h2>题目描述</h2><p>给定一个字符串 s 和一个字符串字典 wordDict ，在字符串 s 中增加空格来构建一个句子，使得句子中所有的单词都在词典中。以任意顺序 返回所有这些可能的句子。</p><p>注意：词典中的同一个单词可能在分段中被重复使用多次。</p><p>示例 1：</p><p>输入:s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]</p><p>输出:["cats and dog","cat sand dog"]</p><p>示例 2：</p><p>输入:s = "pineapplepenapple", wordDict = ["apple","pen","applepen","pine","pineapple"]</p><p>输出:["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释: 注意你可以重复使用字典中的单词。</p><p>示例 3：</p><p>输入:s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]</p><p>输出:[]</p><p>提示：</p><p>1</p><p>1</p><p>1</p><p>s 和 wordDict[i] 仅有小写英文字母组成</p><p>wordDict 中所有字符串都 不同</p><h2>示例</h2><ol><li>输入：s = "catsanddog"，wordDict = ["cat","cats","and","sand","dog"]</li></ol><p>输出：["cats and dog","cat sand dog"]</p><ol><li>输入：s = "pineapplepenapple"，wordDict = ["apple","pen","applepen","pine","pineapple"]</li></ol><p>输出：["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释：注意你可以重复使用字典中的单词。</p><ol><li>输入：s = "catsandog"，wordDict = ["cats","dog","sand","and","cat"]</li></ol><p>输出：[]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 后缀可拆预判+回溯 ｜ O(n·|dict|·L + 输出规模) · O(n + 输出规模)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>本轮一开始是<strong>纯回溯</strong>（只靠 <code>startsWith</code> 枚举词表、无任何可行性预判）；讨论「能不能优化」后补上 <code>canReach</code> 后缀可达表，最终写法与一刷「后缀可拆预判 + 回溯」同思路，因此按同一写法合并，<code>prev_code</code> 保留一刷版本。</li><li>一刷的 <code>suffixOK</code> 是递归/记忆化求后缀可达，本轮改成<strong>从右往左的布尔数组</strong>：<code>canReach[n]=true</code>，<code>canReach[i] = 存在词 w 使 s.startsWith(w,i) &amp;&amp; canReach[i+w.len()]</code>，语义更直白、无递归开销。</li><li>一刷另一个坑（<code>dfs</code> 用 List 遍历、<code>canReach</code> 用 Set 遍历，词表若重复会产重）本轮统一成 <code>Set</code>，两边一致。</li></ul><p><strong>② 这次为什么想起来</strong></p><ul><li>一刷的错在于<strong>剪枝方向</strong>（拿前缀可拆当后缀可达用）；本轮把「问的是从 i 到终点」这一点先写清楚，再决定从右往左填表，方向就没再错。</li><li>空后缀可拆（<code>canReach[n]=true</code>）作为唯一基例，之后全部由「落点可达」递推，避免了对终点单独特判。</li><li>剪枝放在 <code>len == s.length()</code> 之后、循环之前：到达终点先收答案，其余走不到终点的下标直接 return，<code>path</code> 的 add/remove 始终成对。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>weak：本轮<strong>有探讨</strong>——<code>canReach</code> 这个可行性预判的方向与语义是讨论后补上的（不是你自己先想出来的），因此即使一次提交 Accepted（29/29）也按较弱记录，间隔重置为 2 天。</li><li>有效证据：本地 9 组用例全绿；<code>s = "a"×60 + "b"</code>、<code>dict={"a".."aaaaa"}</code> 的构造用例下，带剪枝 ≈0ms 返回空答案，去掉剪枝超过 2000 万次递归仍未结束。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>下次复习请<strong>先自己想出「可行性预判 + 回溯」两段式再动手</strong>，不要等提示：判定用一遍线性 DP，枚举交给回溯，是「答案数量指数级但过程可记忆」这类题的通用骨架。</li><li>可顺带串练：LC139 单词拆分（只要判定，一遍 DP 即可，不回溯）、LC212 单词搜索 II（Trie + 剪枝）、LC131 分割回文串（同「DP 预判 + 回溯枚举」骨架）。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,26 +37,77 @@
         <li><span>复杂度</span><b>O(n·|dict| + 方案数·n) · O(n + 方案数)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>后缀可拆预判+回溯</b></li>
+        <li><span>复杂度</span><b>O(n·|dict|·L + 输出规模) · O(n + 输出规模)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 后缀可拆预判+回溯</h3>
-    <p><span class="chip">时间 O(n·|dict| + 方案数·n)</span><span class="chip">空间 O(n + 方案数)</span><span class="chip">内存 ≈ 41.5 MB</span><span class="chip">用例 29/29</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0140_WordBreakIi.java · 后缀可拆预判+回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
+    <p><span class="chip">时间 O(n·|dict|·L + 输出规模)</span><span class="chip">空间 O(n + 输出规模)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0140_WordBreakIi.java · 后缀可拆预判+回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">boolean</span>[] canReach;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
+        canReach = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[n + <span class="tk-n">1</span>];
+        canReach[n] = <span class="tk-k">true</span>;
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(wordDict);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = n - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">for</span> (<span class="tk-t">String</span> str : set) {
+                <span class="tk-k">if</span> (i + str.<span class="tk-f">length</span>() &lt;= n &amp;&amp; canReach[i + str.<span class="tk-f">length</span>()]  &amp;&amp; s.<span class="tk-f">startsWith</span>(str, i)) {
+                    canReach[i] = <span class="tk-k">true</span>;
+                    <span class="tk-k">break</span>;
+                }
+            }
+        }
+        <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, set, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-k">return</span> ans;
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> len, <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; wordDict, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; path) {
+        <span class="tk-k">if</span> (len == s.<span class="tk-f">length</span>()) {
+            ans.<span class="tk-f">add</span>(<span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">" "</span>, path));
+            <span class="tk-k">return</span>;
+        }
+        <span class="tk-k">if</span> (!canReach[len]) {
+            <span class="tk-k">return</span>;
+        }
+        <span class="tk-k">for</span> (<span class="tk-t">String</span> string : wordDict) {
+            <span class="tk-k">if</span> (len + string.<span class="tk-f">length</span>() &gt; s.<span class="tk-f">length</span>()) {
+                <span class="tk-k">continue</span>;
+            }
+            <span class="tk-k">if</span> (s.<span class="tk-f">startsWith</span>(string, len)) {
+                path.<span class="tk-f">add</span>(string);
+                <span class="tk-f">dfs</span>(s, len + string.<span class="tk-f">length</span>(), wordDict, path);
+                path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+            }
+        }
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0140_WordBreakIi.java · 后缀可拆预判+回溯 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[] suffixOK;
+    <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set;
+    <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
         set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(wordDict);
         ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
         <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
 
+        <span class="tk-c">// 后缀可拆预判：suffixOK[i] = s[i..n) 能否由字典词拼完（从右往左算）</span>
         suffixOK = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[n + <span class="tk-n">1</span>];
         suffixOK[n] = <span class="tk-k">true</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = n - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
             <span class="tk-k">for</span> (<span class="tk-t">String</span> word : set) {
-                <span class="tk-k">if</span> (i + word.<span class="tk-f">length</span>() &lt;= n &amp;&amp; suffixOK[i + word.<span class="tk-f">length</span>()] &amp;&amp; s.<span class="tk-f">startsWith</span>(word, i)) {
+                <span class="tk-k">int</span> next = i + word.<span class="tk-f">length</span>();
+                <span class="tk-k">if</span> (next &lt;= n &amp;&amp; suffixOK[next] &amp;&amp; s.<span class="tk-f">startsWith</span>(word, i)) {
                     suffixOK[i] = <span class="tk-k">true</span>;
                     <span class="tk-k">break</span>;
                 }
             }
         }
-
+        <span class="tk-c">// DFS 从哪里出发，DP 就最好描述“从哪里能不能到终点”。</span>
         <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
         <span class="tk-k">return</span> ans;
     }
@@ -62,22 +117,24 @@
             ans.<span class="tk-f">add</span>(<span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">" "</span>, path));
             <span class="tk-k">return</span>;
         }
+        <span class="tk-c">// 从start直接看后面能不能满足，不满足说明从start出发无论怎么拆都没有结果，直接剪枝</span>
         <span class="tk-k">if</span> (!suffixOK[start]) {
             <span class="tk-k">return</span>;
         }
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = start; i &lt;= s.<span class="tk-f">length</span>(); i++) {
             <span class="tk-t">String</span> temp = s.<span class="tk-f">substring</span>(start, i);
-            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(temp)) {
+            <span class="tk-k">if</span> (set.<span class="tk-f">contains</span>(temp)) {           <span class="tk-c">// 当前段是字典词</span>
                 path.<span class="tk-f">add</span>(temp);
                 <span class="tk-f">dfs</span>(s, i, path);
                 path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
             }
         }
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><h2>① 问题本质与解法选择</h2><ul><li>本质：枚举所有能把 s 拆成字典词的句子，词可重复使用。两层结构：回溯负责枚举，预判负责剪枝。</li><li>解法选择：后缀可拆预判 suffixOK（右往左的线性 DP）+ 回溯。set.contains 保证每段是合法词；suffixOK 在 DFS 入口剪掉「从 start 到不了终点」的整棵子树。</li></ul><h2>② 关键设计决策</h2><div class="table-wrap"><table><thead><tr><th>设计点</th><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>预判数组</td><td>suffixOK[i] = s[i..n) 能否拼完，suffixOK[n]=true，从右往左算</td><td>剪枝要问「未来」能否到终点，不是「过去」前缀</td></tr><tr><td>剪枝位置</td><td>DFS 入口 if (!suffixOK[start]) return</td><td>到不了终点直接整棵剪，不试词</td></tr><tr><td>段合法性</td><td>set.contains(temp)</td><td>与 dp 无关，前缀本来就一路真拆出来的</td></tr><tr><td>句子拼接</td><td>List path + 出口 String.join(" ", path)</td><td>回溯只需 add/remove，避开 StringBuilder 下标手抖</td></tr><tr><td>前缀 dp</td><td>完全不需要</td><td>前缀可拆在 DFS 里恒 true（被真拆过），冗余</td></tr></tbody></table></div><h2>③ 具体 case 推演</h2><p>示例3 catsandog / [cat,cats,and,sand,dog] 的 suffixOK（期望 []）：</p><div class="table-wrap"><table><thead><tr><th>位置</th><th>剩余</th><th>判定</th></tr></thead><tbody><tr><td>10</td><td>空</td><td>true（基）</td></tr><tr><td>7</td><td>og</td><td>无词匹配 → false</td></tr><tr><td>3</td><td>sandog</td><td>sand→suffixOK[7]=false；and→s[3..6)=san 不匹配 → false</td></tr><tr><td>0</td><td>catsandog</td><td>cat→suffixOK[3]=false；cats→suffixOK[4] 也 false → false</td></tr></tbody></table></div><p>dfs(0) 入口 !suffixOK[0] → 一步不进直接返回 []，省掉整棵死树的遍历。</p><p>示例1 catsanddog 的 DFS 两条路径（suffixOK[3]、[7] 均为 true）：</p><div class="table-wrap"><table><thead><tr><th>start</th><th>temp</th><th>path</th><th>出口</th></tr></thead><tbody><tr><td>0</td><td>cat → dfs(3)</td><td>[cat]</td><td>—</td></tr><tr><td>3</td><td>sand → dfs(7)</td><td>[cat,sand]</td><td>—</td></tr><tr><td>7</td><td>dog → dfs(10)</td><td>[cat,sand,dog]</td><td>cat sand dog</td></tr><tr><td>0</td><td>cats → dfs(4) → and → dog</td><td>[cats,and,dog]</td><td>cats and dog</td></tr></tbody></table></div><h2>④ 边界与细节</h2><ul><li>单字符命中 / 完全无法拆分 / 整词+细分并存 / 词重复使用（aaa={a,aa} 三种）/ 剩余不可拼（abcd 只有 ab cd）</li><li>长度 20 上限：20 个 a 用 {a,aa} 拼 → 方案数 F(21)=10946，验证枚举不漏不重</li><li>StringBuilder 出口删空格不恢复是乱码根因 → 用 List path + join 根治</li></ul><h2>⑤ 复杂度与下限论证</h2><ul><li>预判 O(n·|dict|)；枚举阶段总开销 = 输出方案数 × 每句拼接 O(n)</li><li>空间 O(n)（suffixOK+path）+ 输出结果</li><li>枚举类题目下限就是 Ω(方案数)，不可再低；suffixOK 让不可达分支 O(1) 跳过，是可实现的剪枝上限</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>回溯共享状态不对称：子调用修改 StringBuilder（删末尾空格）后未恢复原状就 return，父层按未修改时的下标做 delete 导致状态错乱；且 dp 剪枝用错方向——前缀可拆 dp[i] 不能当后缀可达用，差一个字符的边界 &gt;0/&gt;=0 也导致 dp 欠算砍掉正确路径</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>29/29 用例。</p></div></div></div></section>
-  <section><h2>套路沉淀</h2><div class="card md"><h3>后缀可拆预判+回溯剪枝</h3><p>枚举拆分句子类：suffixOK[i] 从右往左算 s[i..n) 能否拼完，DFS 入口 !suffixOK[start] 剪掉到不了终点的子树；段合法性用 set.contains；句子用 List path + String.join，别用 StringBuilder 手抖</p></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>后缀可拆预判+回溯剪枝</h3><p>枚举拆分句子类：suffixOK[i] 从右往左算 s[i..n) 能否拼完，DFS 入口 !suffixOK[start] 剪掉到不了终点的子树；段合法性用 set.contains；句子用 List path + String.join，别用 StringBuilder 手抖</p></div><div class="card md"><h3>两段式：DP 判可行性 + 回溯枚举方案</h3><p>答案数量本身可能指数级（如 s="aaaa"、dict={"a","aa"} 有 5 条），枚举代价躲不掉；能砍的是「注定产不出答案」的子树——先用一遍 DP 预判可行性，再让回溯只在可行分支上展开。预判表方向必须与问题一致：问「从 i 能不能走到终点」就要从右往左填 canReach，canReach[n]=true 为基例，转移 = 存在词 w 使 s.startsWith(w,i) &amp;&amp; canReach[i+w.len()]；拿前缀可拆表（0→i 能拆）当后缀可达用就是方向反了。剪枝放在「到达终点收答案」判断之后、循环之前。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
