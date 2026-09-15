@@ -36,6 +36,13 @@
       "category": "数组与矩阵",
       "problem": "median-of-two-sorted-arrays",
       "date": "2026-08-06"
+    },
+    {
+      "title": "划分二分：下标空间自洽 + 每轮必收缩",
+      "text": "划分法只在「下标空间」推理：left=-1/right=m 表示 nums1 左半边最后一个元素的下标，i 是切分点下标而非「第 k 小」的 1 基排名，从根上避免 0 基/1 基差 1。循环里成功分支只 left=i、失败分支只 right=i，保证区间每轮必收缩（把另一个数组的切分点 j 赋给 right 会下标空间混用导致死循环）。收尾用左半最大 maxInMin、右半最小 minInMax 定位答案，越界半边用 MIN/MAX 哨兵，空数组无需特判。",
+      "category": "数组与矩阵",
+      "problem": "median-of-two-sorted-arrays",
+      "date": "2026-09-15"
     }
   ],
   "submissions": [
@@ -54,19 +61,19 @@
       "prev_code": "    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        int len1 = nums1.length, len2 = nums2.length;\n        int totLen = len1 + len2;\n        // 中位数换算成「第 k 小」（1 基排名，不是数组下标）：\n        // 奇数总长 → 第 totLen/2 + 1 小；偶数总长 → 第 totLen/2 小与第 totLen/2 + 1 小取平均。\n        if (totLen % 2 == 1) {\n            return kthSmallest(nums1, nums2, totLen / 2 + 1);\n        }\n        int k1 = totLen / 2, k2 = totLen / 2 + 1;\n        return (kthSmallest(nums1, nums2, k1) + kthSmallest(nums1, nums2, k2)) / 2.0;\n    }\n\n    /**\n     * 返回两数组「剩余有效部分」合并后第 k 小的元素值。\n     * 约定：k 是 1 基排名（k=1 表示最小元素），不是数组下标。\n     * p1/p2 是两个数组当前的有效起点（0 基下标），下标小于 p1/p2 的元素已被排除。\n     */\n    private int kthSmallest(int[] nums1, int[] nums2, int k) {\n        int len1 = nums1.length, len2 = nums2.length;\n        int p1 = 0, p2 = 0; // 有效起点，只会向右移动，表示「前面有多少元素已被跳过」\n        while (true) {\n            // 出口：某一边已排空，答案在另一边的当前有效部分里\n            if (p1 >= len1) {\n                return nums2[p2 + k - 1];\n            } else if (p2 >= len2) {\n                return nums1[p1 + k - 1];\n            } else if (k == 1) {\n                return Math.min(nums1[p1], nums2[p2]);\n            }\n            // 候选下标 = 各自有效部分里第 k/2 个元素的下标；数组不够长时封顶到最后一个\n            int cand1 = Math.min(len1 - 1, p1 + k / 2 - 1);\n            int cand2 = Math.min(len2 - 1, p2 + k / 2 - 1);\n            if (nums1[cand1] <= nums2[cand2]) {\n                // 排除 nums1 从 p1 到 cand1（含候选），数量 = 候选下标 - 旧起点 + 1\n                int removed = cand1 - p1 + 1;\n                p1 = cand1 + 1;\n                k -= removed;\n            } else {\n                int removed = cand2 - p2 + 1;\n                p2 = cand2 + 1;\n                k -= removed;\n            }\n        }\n    }\n"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-15",
       "verdict": "Accepted",
-      "testcases": "2099/2099",
+      "testcases": "",
       "approach": "划分数组二分切分点（O(log(min(m,n)))）",
       "time_complexity": "O(log(min(m,n)))",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是划分数组二分切分点，在较短数组上二分 `i`，再同步计算 `j`；本次判题一次通过，但提交前讨论并解释了 `j` 的计算公式，按规则记 weak。复杂度 O(log(min(m,n))) / O(1)。\n\n② `j` 公式回顾：这里 `i`、`j` 是两数组左半部分最后一个元素的下标，因此左右计数分别为 `i+1`、`j+1`。令左半总数为 `half=(m+n+1)/2`，则 `(i+1)+(j+1)=half`，所以 `j=half-i-2`。例：`nums1=[1,2]`、`nums2=[3,4]`，`half=2`，当 `i=0` 时 `nums1` 左边已有 1 个元素，`nums2` 需要一个元素，故 `j=0`；公式给出 `2-0-2=0`。当 `i=1` 时 `nums2` 左侧为空，得到 `j=-1`。\n\n③ 掌握度判定：虽然首次提交 Accepted 2099/2099，但关键下标公式经讨论后才确认，判为较弱。\n\n④ 下一步提醒：下次先独立推导 `i+1+j+1=half` 再写代码，尤其分清“切分点下标”和“左半元素数量”，避免 `-2` 或 `-1` 混淆。",
-      "mastery": "weak",
-      "pass": 5,
-      "memory_bytes": 49196000,
-      "code": "    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        if (nums1.length > nums2.length) {\n            return findMedianSortedArrays(nums2, nums1);\n        }\n        int m = nums1.length;\n        int n = nums2.length;\n\n        int left = -1, right = m;\n        while (left + 1 < right) {\n            int i = left + (right - left) / 2;\n            int j = (m + n + 1) / 2 - i - 2;\n\n            if (nums1[i] <= nums2[j + 1]) {\n                left = i;\n            } else {\n                right = i;\n            }\n        }\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i - 2;\n        int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n        int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n        int aip1 = i < m - 1 ? nums1[i +1] : Integer.MAX_VALUE;\n        int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;\n        int maxInMin = Math.max(ai, bj);\n        int minInMax = Math.min(aip1, bjp1);\n        return (m + n) % 2 == 1 ? maxInMin : (maxInMin + minInMax) / 2.0;\n    }",
-      "prev_code": "public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n    if (nums1.length > nums2.length) {\n        return findMedianSortedArrays(nums2, nums1);\n    }\n\n    int m = nums1.length;\n    int n = nums2.length;\n\n    int left = -1;\n    int right = m;\n\n    while (left + 1 < right) {\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i -2;\n        if (nums1[i] <= nums2[j + 1]) {\n            left = i;\n        } else {\n            right = i;\n        }\n    }\n\n    int i = left;\n    int j = (m + n + 1) / 2 - i - 2;\n\n    int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n    int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n    int aip1 = i < m - 1 ? nums1[i + 1] : Integer.MAX_VALUE;\n    int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;\n    int maxInMin = Math.max(ai, bj);\n    int minInMax = Math.min(aip1, bjp1);\n    if (((m + n) & 1) == 1) {\n        return maxInMin;\n    } else {\n        return (maxInMin + minInMax) / 2.0;\n    }\n}"
+      "notes": "**① 与上一轮对比**\n\n- 上一轮及前三轮（09-03 / 09-06 / 09-12）都是「划分数组二分切分点」，但均判较弱；本轮同思路独立写出并**一次提交 Accepted**（2099/2099），是这条思路第一次在本轮拿到 strong。\n- 与一刷（08-06）的「两数组第 k 小、每轮排除较小侧 k/2」相比，本轮仍是 O(log(min(m,n))) 的划分法，比一刷的 O(log(m+n)) 更优，`optimal` 保持 true。\n\n**② 这次为什么稳**\n\n- 两个历史坑都避开了：① 划分法不再借用「1 基第 k 小」的辅助函数，切分点全程用**下标空间**（`left=-1, right=m`，`i` 是 nums1 左半边的最后一个下标），从根上消除了 0 基/1 基换算差 1；② 失败分支只改 `right = i`、成功分支只改 `left = i`，区间每轮必收缩，不会出现把 j 赋给 right 的下标空间混用死循环。\n- 收尾用「左半最大 maxInMin / 右半最小 minInMax」两句话定位答案：奇数取 maxInMin、偶数取两者均值；越界用 MIN/MAX 哨兵处理空半边，空数组用例不特判也能过。\n\n**③ 掌握度判定**\n\n- strong：本地 9 组用例一次全绿，另跑 30 万组随机小数组与暴力 `Arrays.sort` 对拍零差异（含 m 或 n 为 0 的全部情形）；力扣一次提交 Accepted 2099/2099。\n\n**④ 下一步提醒**\n\n- 可顺带串练：LC295 数据流的中位数（对顶堆，动态中位数）、LC33 搜索旋转排序数组（同样是「区间每轮必收缩」的二分范式）。",
+      "mastery": "strong",
+      "pass": 6,
+      "memory_bytes": 49028000,
+      "code": "public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        if (nums1.length > nums2.length) {\n            return findMedianSortedArrays(nums2, nums1);\n        }\n        int m = nums1.length;\n        int n = nums2.length;\n        int left = -1, right = m;\n        while (left + 1  <right) {\n            int i = left + (right - left) / 2;\n            int j = (m + n + 1) / 2 - i - 2;\n            if (nums1[i] <= nums2[j + 1]) {\n                left = i;\n            } else {\n                right = i;\n            }}\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i - 2;\n        int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n        int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n        int aip1 = i + 1 < m ? nums1[i + 1] : Integer.MAX_VALUE;\n        int bjp1 = j + 1 < n ? nums2[j + 1] : Integer.MAX_VALUE;\n        int maxInMin = Math.max(ai, bj);\n        int minInMax = Math.min(aip1, bjp1);\n        return (m + n) % 2 != 0 ? maxInMin : (maxInMin + minInMax) / 2.0;\n    }",
+      "prev_code": "public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        if (nums1.length > nums2.length) {\n            return findMedianSortedArrays(nums2, nums1);\n        }\n        int m = nums1.length;\n        int n = nums2.length;\n\n        int left = -1, right = m;\n        while (left + 1 < right) {\n            int i = left + (right - left) / 2;\n            int j = (m + n + 1) / 2 - i - 2;\n\n            if (nums1[i] <= nums2[j + 1]) {\n                left = i;\n            } else {\n                right = i;\n            }\n        }\n        int i = left + (right - left) / 2;\n        int j = (m + n + 1) / 2 - i - 2;\n        int ai = i >= 0 ? nums1[i] : Integer.MIN_VALUE;\n        int bj = j >= 0 ? nums2[j] : Integer.MIN_VALUE;\n        int aip1 = i < m - 1 ? nums1[i +1] : Integer.MAX_VALUE;\n        int bjp1 = j < n - 1 ? nums2[j + 1] : Integer.MAX_VALUE;\n        int maxInMin = Math.max(ai, bj);\n        int minInMax = Math.min(aip1, bjp1);\n        return (m + n) % 2 == 1 ? maxInMin : (maxInMin + minInMax) / 2.0;\n    }\n"
     }
   ],
   "approach_detail": "问题本质：两个有序数组合并后的中位数，要求 O(log(m+n))，所以不能真合并，只能用二分排除求第 k 小。\n关键设计：中位数换算成第 k 小：奇数总长取第 totLen/2+1 小，偶数取第 totLen/2 与第 totLen/2+1 小的平均。kthSmallest 维护两数组的有效起点 p1、p2，每轮从两侧各取第 k/2 个候选，比较后排除较小一侧的 k/2 个元素并让 k 减去实际排除数量——每轮 k 减半，达到 log 复杂度。\n边界：k==1 时取两侧有效区头部较小者；某一侧排空时答案在另一侧 p+k-1；候选下标超界时封顶到数组末尾（cand=min(len-1, p+k/2-1)），排除数量按实际移除计算；偶数长度要算两个 k。\n复杂度：O(log(m+n)) 时间、O(1) 空间，最优；合并法 O(m+n) 不满足题目要求。",
@@ -135,6 +142,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是划分数组二分切分点，在较短数组上二分 `i`，再同步计算 `j`；本次判题一次通过，但提交前讨论并解释了 `j` 的计算公式，按规则记 weak。复杂度 O(log(min(m,n))) / O(1)。\n\n② `j` 公式回顾：这里 `i`、`j` 是两数组左半部分最后一个元素的下标，因此左右计数分别为 `i+1`、`j+1`。令左半总数为 `half=(m+n+1)/2`，则 `(i+1)+(j+1)=half`，所以 `j=half-i-2`。例：`nums1=[1,2]`、`nums2=[3,4]`，`half=2`，当 `i=0` 时 `nums1` 左边已有 1 个元素，`nums2` 需要一个元素，故 `j=0`；公式给出 `2-0-2=0`。当 `i=1` 时 `nums2` 左侧为空，得到 `j=-1`。\n\n③ 掌握度判定：虽然首次提交 Accepted 2099/2099，但关键下标公式经讨论后才确认，判为较弱。\n\n④ 下一步提醒：下次先独立推导 `i+1+j+1=half` 再写代码，尤其分清“切分点下标”和“左半元素数量”，避免 `-2` 或 `-1` 混淆。"
+    },
+    {
+      "pass": 6,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "划分数组二分切分点（O(log(min(m,n)))）",
+      "time_complexity": "O(log(min(m,n)))",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n\n- 上一轮及前三轮（09-03 / 09-06 / 09-12）都是「划分数组二分切分点」，但均判较弱；本轮同思路独立写出并**一次提交 Accepted**（2099/2099），是这条思路第一次在本轮拿到 strong。\n- 与一刷（08-06）的「两数组第 k 小、每轮排除较小侧 k/2」相比，本轮仍是 O(log(min(m,n))) 的划分法，比一刷的 O(log(m+n)) 更优，`optimal` 保持 true。\n\n**② 这次为什么稳**\n\n- 两个历史坑都避开了：① 划分法不再借用「1 基第 k 小」的辅助函数，切分点全程用**下标空间**（`left=-1, right=m`，`i` 是 nums1 左半边的最后一个下标），从根上消除了 0 基/1 基换算差 1；② 失败分支只改 `right = i`、成功分支只改 `left = i`，区间每轮必收缩，不会出现把 j 赋给 right 的下标空间混用死循环。\n- 收尾用「左半最大 maxInMin / 右半最小 minInMax」两句话定位答案：奇数取 maxInMin、偶数取两者均值；越界用 MIN/MAX 哨兵处理空半边，空数组用例不特判也能过。\n\n**③ 掌握度判定**\n\n- strong：本地 9 组用例一次全绿，另跑 30 万组随机小数组与暴力 `Arrays.sort` 对拍零差异（含 m 或 n 为 0 的全部情形）；力扣一次提交 Accepted 2099/2099。\n\n**④ 下一步提醒**\n\n- 可顺带串练：LC295 数据流的中位数（对顶堆，动态中位数）、LC33 搜索旋转排序数组（同样是「区间每轮必收缩」的二分范式）。"
     }
   ]
 }
