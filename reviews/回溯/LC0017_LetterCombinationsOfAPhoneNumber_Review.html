@@ -26,9 +26,9 @@
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>17. 电话号码的字母组合 (Letter Combinations of a Phone Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/" rel="noopener">https://leetcode.cn/problems/letter-combinations-of-a-phone-number/</a></p><p>难度：Medium ｜ 分类：回溯</p><p>标签：哈希表、字符串、回溯</p><h2>题目描述</h2><p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。</p><p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p><p>示例 1：</p><p>输入：digits = "23"</p><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><p>示例 2：</p><p>输入：digits = "2"</p><p>输出：["a","b","c"]</p><p>提示：</p><p>1</p><p>digits[i] 是范围 ['2', '9'] 的一个数字。</p><h2>示例</h2><ol><li>输入：digits = "23"</li></ol><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><ol><li>输入：digits = "2"</li></ol><p>输出：["a","b","c"]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
-      <span class="tl-title">第 5 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
+      <span class="tl-title">第 5 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(n·4^n) · O(n)（不计结果集）</p>
-      <div class="review-note md"><p>① 与上一轮对比：上次 <code>dfs</code> 多了一层从<code>index</code>开始的冗余位置循环，本次已删除，只在当前层处理<code>digits.charAt(len)</code>；<code>append → dfs(len+1) → deleteCharAt</code>骨架完整，复杂度 O(n·4^n) / O(n)。</p><p>② 这次为什么想起来：递归参数<code>len</code>同时表示已选字母数和下一个待处理 digit 下标；候选字母只来自当前 digit，下一层由<code>len+1</code>推进，不再重复承担位置推进。</p><p>③ 掌握度判定：本次首次提交 Accepted 24/24，但提交前已明确提示上一轮的冗余循环问题，按规则记 weak。</p><p>④ 下一步提醒：继续维持“每层只处理当前下标、递归负责推进下标”的回溯结构；不要再用外层位置循环重复推进。</p></div>
+      <div class="review-note md"><p>① 与上一轮对比：上次 <code>dfs</code> 多了一层从<code>index</code>开始的冗余位置循环，本次已删除，只在当前层处理<code>digits.charAt(len)</code>；<code>append → dfs(len+1) → deleteCharAt</code>骨架完整，复杂度 O(n·4^n) / O(n)。</p><p>② 这次为什么想起来：递归参数<code>len</code>同时表示已选字母数和下一个待处理 digit 下标；候选字母只来自当前 digit，下一层由<code>len+1</code>推进，不再重复承担位置推进。</p><p>③ 掌握度判定：本次首次提交 Accepted 24/24；此前关于冗余循环的提醒并非用户主动求助，不应据此降级，按独立完成记 strong。</p><p>④ 下一步提醒：继续维持“每层只处理当前下标、递归负责推进下标”的回溯结构；不要再用外层位置循环重复推进。</p></div>
     </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-12 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(n·4^n) · O(n)（不计结果集）</p>
@@ -53,12 +53,12 @@
         <li><span>复杂度</span><b>O(4^n·n) · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
+    </div><div class="round-card strong">
       <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>回溯 DFS</b></li>
         <li><span>复杂度</span><b>O(n·4^n) · O(n)（不计结果集）</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
