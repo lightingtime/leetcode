@@ -3380,6 +3380,17 @@
         "贪心与双指针"
       ],
       "last_seen": "2026-09-15"
+    },
+    {
+      "habit": "表达式扫描状态机缺少上一运算符 sign 状态，按当前字符直接结算，导致数字未及时清零、末尾操作数未结算",
+      "count": 1,
+      "examples": [
+        "basic-calculator-ii"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-15"
     }
   ],
   "category_hints": {

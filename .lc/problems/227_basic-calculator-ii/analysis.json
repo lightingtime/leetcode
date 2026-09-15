@@ -19,6 +19,10 @@
     {
       "habit": "含减号的表达式在算子到达时才结算符号，容易把减号绑定到上一项而不是后一个操作数，导致负结果及后续乘除项符号整体错误",
       "count": 1
+    },
+    {
+      "habit": "表达式扫描状态机缺少上一运算符 sign 状态，按当前字符直接结算，导致数字未及时清零、末尾操作数未结算",
+      "count": 1
     }
   ],
   "hints": [
@@ -43,20 +47,20 @@
       "code": "    public int calculate(String s) {\n        int index = 0;\n        Deque<Integer> stack = new ArrayDeque<>();\n        int num = 0;\n        char sign = '+';\n        while (index < s.length()) {\n            if (Character.isDigit(s.charAt(index))) {\n                num = num * 10 + (s.charAt(index) - '0');\n            }\n            if (!Character.isDigit(s.charAt(index)) && s.charAt(index) != ' ' || index == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> {\n                        stack.push(num);\n                        break;\n                    }\n                    case '-' -> {\n                        stack.push(-num);\n                        break;\n                    }\n                    case '*' -> {\n                        stack.push(stack.pop() * num);\n                        break;\n                    }\n                    case '/' -> {\n                        stack.push(stack.pop() / num);\n                        break;\n                    }\n                }\n                sign = s.charAt(index);\n                num = 0;\n            }\n            index++;\n        }\n        int ans = 0;\n        while (!stack.isEmpty()) {\n            ans += stack.pop();\n        }\n        return ans;\n    }"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-15",
       "verdict": "Accepted",
       "testcases": "111/111",
       "runtime_ms": null,
-      "memory_bytes": 46828000,
+      "memory_bytes": 46816000,
       "approach": "O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍采用 `sum/last` 的 O(1) 空间写法，乘除合并进 `last`、加减结算进 `sum`。首版在处理减号时把负号绑定到了上一项，`\"1-2\"` 返回 1、`\"1-2*3\"` 返回 5；修正为让负号跟随当前操作数后，本地全过，力扣 Accepted 111/111。\n\n② 关键逻辑：`num` 是当前操作数，`sign` 是它前面的运算符；遇到新运算符时才结算旧项。加号令 `last=num`，减号令 `last=-num`，乘除令 `last=last*num` 或 `last=last/num`，已完成的加减项进入 `sum`。特别检查 `\"1-2*3+3\"`：应是 1 + (-2*3) + 3 = -2；测试中原先期望 -1 是测试本身写错，已修正为 -2。\n\n③ 掌握度判定：首版实际 WA、经具体用例分析后修复，非一次 AC，按规则记 weak。\n\n④ 下一步提醒：减号必须先绑定到后一个操作数，再让该带符号项参与后续乘除；至少保留 `1-2` 和 `1-2*3` 两个回归用例。",
-      "code": "    public int calculate(String s) {\n        int num = 0, last = 0, sum = 0;\n        char sign = '+';\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+' :\n                        sum += last;\n                        last = num;\n                        break;\n                    case '-':\n                        sum += last;\n                        last =- num;\n                        break;\n                    case '*':\n                        last *= num;\n                        break;\n                    case '/':\n                        last /= num;\n                        break;\n                }\n                num = 0;\n                sign = c;\n            }\n\n        }\n        return sum + last;\n    }",
+      "notes": "① 与上一轮对比：上轮已用 `sign` 延迟结算；本轮首版误改成按当前运算符直接结算，缺少“上一个运算符”，`\"3+2*2\"` 得到 96、`\"3/2\"` 得到 0。恢复 `sign` 状态后，先用旧运算符结算当前数字，再更新 `sign`、清零 `num`，最终通过 111/111。\n\n② 关键设计：`num` 是当前操作数，`sign` 是它前面的运算符；`last` 是正在等待加减结算的项，乘除直接更新 `last`，加减把旧 `last` 归入 `sum`。循环结束必须再用当前 `sign` 结算最后一个 `num`。减号通过 `last = -num` 绑定到后一个操作数。\n\n③ 掌握度判定：首版实际 WA、经具体用例分析后修正，非一次 AC，记 weak。\n\n④ 下一步提醒：扫描表达式时始终问“当前 num 前面的运算符是谁”；不能用刚读到的运算符反向结算它。",
+      "code": "    public int calculate(String s) {\n        char sign = '+';\n        int sum = 0, last = 0, num = 0;\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+':\n                        sum += last;\n                        last = num;\n                        break;\n                    case '-':\n                        sum += last;\n                        last = -num;\n                        break;\n                    case '*':\n                        last *= num;\n                        break;\n                    case '/':\n                        last /= num;\n                        break;\n                }\n                num = 0;\n                sign = c;\n            }\n        }\n        return sum + last;\n    }",
       "prev_code": "    public int calculate(String s) {\n        int num = 0, last = 0, sum = 0;\n        char sign = '+';\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> { sum += last; last = num; }\n                    case '-' -> { sum += last; last = -num; }\n                    case '*' -> { last *= num; }\n                    case '/' -> { last /= num; }\n                }\n                sign = c;\n                num = 0;\n            }\n        }\n        return sum + last;\n    }",
       "mastery": "weak",
-      "pass": 1
+      "pass": 2
     }
   ],
   "reviews": [
@@ -72,6 +76,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍采用 `sum/last` 的 O(1) 空间写法，乘除合并进 `last`、加减结算进 `sum`。首版在处理减号时把负号绑定到了上一项，`\"1-2\"` 返回 1、`\"1-2*3\"` 返回 5；修正为让负号跟随当前操作数后，本地全过，力扣 Accepted 111/111。\n\n② 关键逻辑：`num` 是当前操作数，`sign` 是它前面的运算符；遇到新运算符时才结算旧项。加号令 `last=num`，减号令 `last=-num`，乘除令 `last=last*num` 或 `last=last/num`，已完成的加减项进入 `sum`。特别检查 `\"1-2*3+3\"`：应是 1 + (-2*3) + 3 = -2；测试中原先期望 -1 是测试本身写错，已修正为 -2。\n\n③ 掌握度判定：首版实际 WA、经具体用例分析后修复，非一次 AC，按规则记 weak。\n\n④ 下一步提醒：减号必须先绑定到后一个操作数，再让该带符号项参与后续乘除；至少保留 `1-2` 和 `1-2*3` 两个回归用例。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-15",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "111/111",
+      "approach": "O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：上轮已用 `sign` 延迟结算；本轮首版误改成按当前运算符直接结算，缺少“上一个运算符”，`\"3+2*2\"` 得到 96、`\"3/2\"` 得到 0。恢复 `sign` 状态后，先用旧运算符结算当前数字，再更新 `sign`、清零 `num`，最终通过 111/111。\n\n② 关键设计：`num` 是当前操作数，`sign` 是它前面的运算符；`last` 是正在等待加减结算的项，乘除直接更新 `last`，加减把旧 `last` 归入 `sum`。循环结束必须再用当前 `sign` 结算最后一个 `num`。减号通过 `last = -num` 绑定到后一个操作数。\n\n③ 掌握度判定：首版实际 WA、经具体用例分析后修正，非一次 AC，记 weak。\n\n④ 下一步提醒：扫描表达式时始终问“当前 num 前面的运算符是谁”；不能用刚读到的运算符反向结算它。"
     }
   ]
 }
