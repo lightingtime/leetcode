@@ -23,6 +23,10 @@
     {
       "habit": "展开空列表后栈可能变空，却在下一轮循环条件继续 peek 栈顶导致 NPE",
       "count": 1
+    },
+    {
+      "habit": "Deque 混用不同端操作（offerLast 入栈却用 pop/peek 从头部，已失去栈语义）；同时 hasNext 把空栈判断方向写反",
+      "count": 1
     }
   ],
   "hints": [
@@ -42,20 +46,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-12",
+      "date": "2026-09-15",
       "verdict": "Accepted",
       "testcases": "43/43",
       "runtime_ms": null,
-      "memory_bytes": 48612000,
+      "memory_bytes": 48380000,
       "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
       "time_complexity": "构造+所有操作合计 O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与一刷对比：沿用了惰性栈思路——构造器从右向左压入初始元素，`hasNext()` 只在需要时展开列表，`next()` 弹出栈顶整数。首版本地用例`[[]]`触发空栈后仍`peekLast()`的 NPE；循环条件补上空栈保护后全过，力扣 Accepted 43/43。\n\n② 关键逻辑：栈顶是整数时可取；栈顶是列表时弹出并逆序压入其子元素；空列表展开后可能让栈直接变空，因此每次循环都必须先确认栈非空。构造器逆序压栈是为了让原列表最左元素位于栈顶。\n\n③ 掌握度判定：首版空列表边界 NPE，经分析后修正，非一次通过，记 weak。\n\n④ 下一步提醒：处理“弹出后可能变空”的循环时，循环条件必须把空栈检查放在最前面；空列表是本题必测边界。",
-      "code": "    static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> it;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            it = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >= 0; i--) {\n                it.offerLast(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return it.pollLast().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (it.isEmpty()) {\n                return false;\n            }\n            while (!it.isEmpty() && !it.peekLast().isInteger()) {\n                NestedInteger nestedInteger = it.pollLast();\n                for (int i = nestedInteger.getList().size() - 1; i >= 0; i--) {\n                    if (nestedInteger.getList().get(i).isInteger() || !nestedInteger.getList().get(i).getList().isEmpty()) {\n                        it.offerLast(nestedInteger.getList().get(i));\n                    }\n                }\n            }\n            return !it.isEmpty();\n        }\n    }",
+      "notes": "① 与上一轮对比：上轮 `hasNext()` 展开空列表后仍继续 `peek`，触发 NPE；本轮已保证循环条件先判断栈非空，并在结尾返回 `!stack.isEmpty()`。同时统一使用 `push/pop/peek` 操作栈顶，修正了 `offerLast` 与 `pop` 混用导致顺序错误的问题。\n\n② 关键逻辑：构造器从右向左 `push` 初始元素，让最左元素位于栈顶；`next()` 直接弹出整数；`hasNext()` 在栈顶为列表时弹出并逆序压入子元素，直到栈顶是整数或栈空。\n\n③ 掌握度判定：本次实现前对 Deque 两端和 hasNext 判断做了详细分析，按规则记 weak；力扣首次提交 Accepted 43/43。\n\n④ 下一步提醒：Deque 当作栈时，`push/pop/peek` 必须使用同一端；空列表展开后要重新检查栈空。",
+      "code": "    static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> stack;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >=0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (stack.isEmpty()) return false;\n            while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                NestedInteger it = stack.pop();\n                for (int i = it.getList().size() - 1; i >= 0; i--) {\n                    stack.push(it.getList().get(i));\n                }\n            }\n            return !stack.isEmpty();\n        }\n    }",
       "prev_code": "static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> stack;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >= 0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (stack.isEmpty()) {\n                return false;\n            }\n            if (stack.peek().isInteger()) {\n                return true;\n            } else {\n                while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                    NestedInteger pop = stack.pop();\n                    for (int i = pop.getList().size() - 1; i >= 0; i--) {\n                        stack.push(pop.getList().get(i));\n                    }\n                }\n            }\n            return !stack.isEmpty();\n        }\n    }\n",
       "mastery": "weak",
-      "pass": 1
+      "pass": 2
     }
   ],
   "reviews": [
@@ -71,6 +75,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与一刷对比：沿用了惰性栈思路——构造器从右向左压入初始元素，`hasNext()` 只在需要时展开列表，`next()` 弹出栈顶整数。首版本地用例`[[]]`触发空栈后仍`peekLast()`的 NPE；循环条件补上空栈保护后全过，力扣 Accepted 43/43。\n\n② 关键逻辑：栈顶是整数时可取；栈顶是列表时弹出并逆序压入其子元素；空列表展开后可能让栈直接变空，因此每次循环都必须先确认栈非空。构造器逆序压栈是为了让原列表最左元素位于栈顶。\n\n③ 掌握度判定：首版空列表边界 NPE，经分析后修正，非一次通过，记 weak。\n\n④ 下一步提醒：处理“弹出后可能变空”的循环时，循环条件必须把空栈检查放在最前面；空列表是本题必测边界。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-15",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "43/43",
+      "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
+      "time_complexity": "构造+所有操作合计 O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：上轮 `hasNext()` 展开空列表后仍继续 `peek`，触发 NPE；本轮已保证循环条件先判断栈非空，并在结尾返回 `!stack.isEmpty()`。同时统一使用 `push/pop/peek` 操作栈顶，修正了 `offerLast` 与 `pop` 混用导致顺序错误的问题。\n\n② 关键逻辑：构造器从右向左 `push` 初始元素，让最左元素位于栈顶；`next()` 直接弹出整数；`hasNext()` 在栈顶为列表时弹出并逆序压入子元素，直到栈顶是整数或栈空。\n\n③ 掌握度判定：本次实现前对 Deque 两端和 hasNext 判断做了详细分析，按规则记 weak；力扣首次提交 Accepted 43/43。\n\n④ 下一步提醒：Deque 当作栈时，`push/pop/peek` 必须使用同一端；空列表展开后要重新检查栈空。"
     }
   ]
 }

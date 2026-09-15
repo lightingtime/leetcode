@@ -3391,6 +3391,17 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-09-15"
+    },
+    {
+      "habit": "Deque 混用不同端操作（offerLast 入栈却用 pop/peek 从头部，已失去栈语义）；同时 hasNext 把空栈判断方向写反",
+      "count": 1,
+      "examples": [
+        "flatten-nested-list-iterator"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-15"
     }
   ],
   "category_hints": {
