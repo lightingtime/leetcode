@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-27</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>324. 摆动排序 II (Wiggle Sort II)</h1><p>&gt; <a href="https://leetcode.cn/problems/wiggle-sort-ii/" rel="noopener">https://leetcode.cn/problems/wiggle-sort-ii/</a></p><p>难度：Medium ｜ 分类：贪心与区间</p><p>标签：贪心、数组、分治、快速选择、排序</p><h2>题目描述</h2><p>给你一个整数数组 nums，将它重新排列成 nums[0] nums[2]  的顺序。</p><p>你可以假设所有输入数组都可以得到满足题目要求的结果。</p><p>示例 1：</p><p>输入：nums = [1,5,1,1,6,4]</p><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><p>示例 2：</p><p>输入：nums = [1,3,2,2,3,1]</p><p>输出：[2,3,1,3,1,2]</p><p>提示：</p><p>1 4</p><p>0</p><p>题目数据保证，对于给定的输入 nums ，总能产生满足题目要求的结果</p><p>进阶：你能用 O(n) 时间复杂度和 / 或原地 O(1) 额外空间来实现吗？</p><h2>示例</h2><ol><li>输入：nums = [1,5,1,1,6,4]</li></ol><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><ol><li>输入：nums = [1,3,2,2,3,1]</li></ol><p>输出：[2,3,1,3,1,2]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（52/52）｜ 多次提交 ｜ 快速选择中位数 + 虚拟下标三路划分 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>二刷：三路划分方向写反（小数被送进峰位）导致除单元素外全部失败，纠正方向后 AC；分区细节改用 Lomuto（pivot 取末尾）</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,72 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>快速选择中位数 + 虚拟下标三路划分</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快速选择中位数 + 虚拟下标三路划分</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 47.6 MB</span><span class="chip">用例 52/52</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/贪心与区间/LC0324_WiggleSortIi.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">wiggleSort</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 47.5 MB</span><span class="chip">用例 52/52</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0324_WiggleSortIi.java · 快速选择中位数 + 虚拟下标三路划分</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">wiggleSort</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> n = nums.length;
+        <span class="tk-k">int</span> mid = <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, n - <span class="tk-n">1</span>, n / <span class="tk-n">2</span>);
+        <span class="tk-c">// 虚拟下标上：lt: [0,lt) 全 &gt;mid；i: [lt,i) 全 ==mid；(gt,n) 全 &lt;mid；[i,gt] 未处理</span>
+        <span class="tk-k">int</span> lt = <span class="tk-n">0</span>, i = <span class="tk-n">0</span>, gt = n - <span class="tk-n">1</span>;
+        <span class="tk-c">// 未处理区是闭区间 [i, gt]，i == gt 时还剩最后一个元素，所以条件取 i &lt;= gt</span>
+        <span class="tk-k">while</span> (i &lt;= gt) {
+            <span class="tk-k">if</span> (nums[<span class="tk-f">f</span>(n, i)] &gt; mid) {
+                <span class="tk-f">swap</span>(nums, <span class="tk-f">f</span>(n, i), <span class="tk-f">f</span>(n, lt));
+                lt++;
+                i++;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[<span class="tk-f">f</span>(n, i)] &lt; mid) {
+                <span class="tk-f">swap</span>(nums, <span class="tk-f">f</span>(n, i), <span class="tk-f">f</span>(n, gt));
+                gt--;
+            } <span class="tk-k">else</span> {
+                i++;
+            }
+        }
+    }
+
+    <span class="tk-c">// 虚拟下标 i → 真实下标；前 n/2 个虚拟下标是全部峰位，其余是全部谷位</span>
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">f</span>(<span class="tk-k">int</span> n, <span class="tk-k">int</span> i) {
+        <span class="tk-k">return</span> (<span class="tk-n">1</span> + <span class="tk-n">2</span> * i) % (n | <span class="tk-n">1</span>);
+    }
+
+    <span class="tk-c">// 参数：nums[l..r] 为候选区间，k 为目标下标(0 基)；返回的是第 k+1 小的值</span>
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSort</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span> nums[l];
+        }
+        <span class="tk-k">int</span> p = nums[r];
+        <span class="tk-k">int</span> i = l, j = l;
+        <span class="tk-k">while</span> (j &lt; r) {
+            <span class="tk-k">if</span> (nums[j] &lt; p) {
+                <span class="tk-f">swap</span>(nums, i, j);
+                i++;
+            }
+            j++;
+        }
+        <span class="tk-f">swap</span>(nums, i, r);
+        <span class="tk-k">if</span> (i == k) {
+            <span class="tk-k">return</span> nums[k];
+        } <span class="tk-k">else</span> <span class="tk-k">if</span> (i &lt; k) {
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, i + <span class="tk-n">1</span>, r, k);
+        } <span class="tk-k">else</span> {
+            <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, l, i - <span class="tk-n">1</span>, k);
+        }
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">int</span> temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0324_WiggleSortIi.java · 快速选择中位数 + 虚拟下标三路划分 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">wiggleSort</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> mid = <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>);
         <span class="tk-k">int</span> lt = <span class="tk-n">0</span>, i = <span class="tk-n">0</span>, gt = nums.length - <span class="tk-n">1</span>;
         <span class="tk-k">while</span> (i &lt;= gt) {
@@ -86,11 +151,12 @@
         <span class="tk-k">int</span> temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>目标是把数组原地重排成 <code>nums[0] &lt; nums[1] &gt; nums[2] &lt; ...</code> 的摆动序列，要求 O(n) 时间、O(1) 空间。</p><p>直接想法是「排序后小的半段填谷位、大的半段填峰位」，但完整排序是 O(n log n) 且要 O(n) 辅助数组。两条路径都优化：</p><ul><li><strong>时间</strong>：只需中位数（而非全序），用快速选择 O(n) 平均；</li><li><strong>空间</strong>：不复制排序结果，用虚拟下标把「排序 + 奇偶分开」折叠成一次原地三路划分。</li></ul><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>写法</th><th>理由</th></tr></thead><tbody><tr><td>求中位数</td><td>Hoare 快速选择，<code>k=n/2</code>，返回 <code>nums[k]</code></td><td>摆动只需中位数值作为三路划分基准</td></tr><tr><td>虚拟下标映射</td><td>`f(i) = (1+2i) % (n\</td><td>1)`</td><td>把真实下标重排成「峰位在前、谷位在后」的虚拟顺序</td></tr><tr><td>三路划分</td><td>在虚拟空间上荷兰国旗：<code>&gt;mid</code> 换到左(峰)、<code>==mid</code> 留中、<code>&lt;mid</code> 换到右(谷)</td><td>峰位恒 &gt; 相邻谷位，摆动自动成立</td></tr></tbody></table></div><p><strong>虚拟下标为什么这么算</strong></p><p>映射 <code>f(i)=(1+2i)%(n\|1)</code> 的设计动机：</p><ul><li>摆动要求奇数位(1,3,5…)是峰放大值、偶数位(0,2,4…)是谷放小值；</li><li><code>1+2i</code> 恰好按步长 2 枚举峰位，但只有奇数时才能覆盖全下标，所以模数取 <code>n\|1</code>（n 偶时 = n+1）使步长 2 与模数互质，保证 <code>f</code> 是 0..n-1 上的单射（满覆盖、不重复）。</li></ul><p>n=6 时 <code>n\|1=7</code>：<code>f = [1,3,5,0,2,4]</code>，虚拟下标 0..2 对应峰位、3..5 对应谷位。</p><div class="table-wrap"><table><thead><tr><th>虚拟 i</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td>真实 f(i)</td><td>1</td><td>3</td><td>5</td><td>0</td><td>2</td><td>4</td></tr><tr><td>摆动角色</td><td>峰</td><td>峰</td><td>峰</td><td>谷</td><td>谷</td><td>谷</td></tr></tbody></table></div><p><strong>具体 case 逐层推演</strong></p><p><code>[1,5,1,1,6,4]</code>，快速选择得 mid=1，n=6：</p><ol><li>三路划分指针 lt=0, i=0, gt=5，每次读写真实下标 <code>nums[f(x)]</code>：</li></ol><ul><li>i=0，<code>nums[f(0)]=nums[1]=5 &gt; 1</code> → 与 flt(=f(0)=1) 自换，lt=1, i=1</li><li>i=1，<code>nums[f(1)]=nums[3]=1 == mid</code> → i=2</li><li>i=2，<code>nums[f(2)]=nums[5]=4 &gt; 1</code> → swap(f(2)=5, f(1)=3)，lt=2, i=3</li><li>i=3，<code>nums[f(3)]=nums[0]=1 == mid</code> → i=4</li><li>i=4，<code>nums[f(4)]=nums[2]=1 == mid</code> → i=5</li><li>i=5，<code>nums[f(5)]=nums[4]=6 &gt; 1</code> → swap(f(5)=4, f(2)=5)，lt=3, i=6</li></ul><ol><li>结束 i&gt;gt，结果 <code>[1,5,1,4,1,6]</code>：<code>1&lt;5&gt;1&lt;4&gt;1&lt;6</code> ✓</li></ol><p><strong>踩坑与修复</strong></p><ol><li><strong>虚拟下标定义域越界</strong>：<code>gt</code> 初始化为 <code>n</code> 时 <code>f(gt)</code> 越界（n 偶时 <code>f(n)=n</code>）。修复：<code>gt = n-1</code>，保证 f 的参数始终在 0..n-1。</li><li><strong>Hoare 分区点用错</strong>：partition 退出后 <code>i&gt;=j</code>，正确分界是 <code>j</code>（<code>nums[l..j]&lt;=x</code>），用 <code>i</code> 会在 <code>i==r</code> 时递归区间不缩小 → 栈溢出。修复：<code>k&lt;=j</code> 递归左半 <code>[l,j]</code>，否则右半 <code>[j+1,r]</code>。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：快速选择平均每次区间减半（n + n/2 + … = O(n)），三路划分单趟 O(n)。比较排序下限是 Ω(n log n)，但本题只要求中位数而非全序，快速选择能达到 Ω(n) 下界。</li><li>空间 O(1)：只用几个整型变量，原地交换，无辅助数组；相比「排序+拷贝」的 O(n) 空间，这是理论下限。</li></ul></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>虚拟下标映射定义域越界：映射函数 f(x)=(1+2x)%(n|1) 只对虚拟下标 0..n-1 有效，但三路划分把 gt 初始化为 n，f(n) 在偶数长度下算出真实下标 n 直接越界、奇数长度下读到错误位置；右端指针必须始终落在有效虚拟下标内</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>52/52 用例。</p></div></div></div></section>
-  <section><h2>套路沉淀</h2><div class="card md"><h3>虚拟下标 + 三路划分</h3><p>原地重排成摆动/奇偶交错序列：构造映射 f(i)=(1+2i)%(n|1) 把峰位排前谷位排后（步长 2 与模数互质保证单射），三路划分在虚拟空间上按 mid 归位即同时完成分区与摆位，O(n)时间O(1)空间；Hoare 分区必须用 j 分界保证递归收敛</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>目标是把数组原地重排成 <code>nums[0] &lt; nums[1] &gt; nums[2] &lt; ...</code>，要求 O(n) 时间、O(1) 空间。</p><p>朴素做法是「排序 → 前半填谷位、后半填峰位，两边都从末尾倒着取」，正确但 O(n log n) 且需要辅助数组。两条路都能省掉：</p><ul><li><strong>时间</strong>：摆动只需要「谁小于中位数 / 谁大于中位数」，不需要完整顺序 → 用快速选择平均 O(n) 拿到中位数；</li><li><strong>空间</strong>：用虚拟下标把「交错摆位」折叠成「按虚拟顺序填」，于是能在原数组上直接做三路划分。</li></ul><p><strong>关键设计决策</strong></p><div class="table-wrap"><table><thead><tr><th>决策</th><th>写法</th><th>理由</th></tr></thead><tbody><tr><td>求中位数</td><td>快速选择（Lomuto 分区，pivot 取 <code>nums[r]</code>），<code>k = n/2</code>，返回 <code>nums[k]</code></td><td>摆动只用到中位数值，作为三路划分的基准</td></tr><tr><td>虚拟下标</td><td>`f(i) = (1 + 2i) % (n \</td><td>1)`</td><td>把虚拟顺序折回真实下标，使虚拟前段恰好是全部峰位、后段是全部谷位</td></tr><tr><td>三路划分</td><td>在虚拟空间上荷兰国旗：<code>&gt; mid</code> 换到 <code>lt</code>（峰位侧）、<code>&lt; mid</code> 换到 <code>gt</code>（谷位侧）、<code>== mid</code> 留中</td><td>一趟同时完成「按中位数分区」与「按峰谷摆位」</td></tr></tbody></table></div><p><strong>为什么虚拟下标是 (1+2i) % (n|1)</strong></p><ul><li><code>1 + 2i</code> 是步长 2 的数列，天然只命中奇数下标（峰位），「先把峰位走完」正是我们要的填充顺序；</li><li>取模数必须是<strong>奇数</strong>才能与步长 2 互质，保证 <code>f</code> 是 <code>0..n-1</code> 上的单射；n 为偶数时用 <code>n | 1 = n+1</code> 把它变成奇数。</li><li>n=6：<code>1+2i = 1,3,5,7,9,11</code> mod 7 → <code>1,3,5,0,2,4</code>；虚拟 0..2 落在峰位 <code>1,3,5</code>，虚拟 3..5 落在谷位 <code>0,2,4</code> ✓</li><li>反例：写成 <code>% n</code> 时 n=6 得 <code>1,3,5,1,3,5</code>，撞车且永远取不到 <code>0,2,4</code>，谷位会留着旧数据。</li></ul><p><strong>具体 case 逐层推演</strong></p><p>case 1：<code>[1, 1, 2, 2]</code>（n=4，最容易暴露重复值撞车）</p><ul><li>快速选择 <code>k = 4/2 = 2</code>，Lomuto 一趟后 <code>i = 2 == k</code>，返回 <code>mid = nums[2] = 2</code>；</li><li><code>f = [1,3,0,2]</code>，初始 <code>lt=0, i=0, gt=3</code>：</li></ul><ol><li><code>i=0</code>，<code>nums[f(0)] = nums[1] = 1 &lt; 2</code> → 与 <code>f(gt=3) = 2</code> 交换 → 数组变 <code>[1,2,1,2]</code>，<code>gt=2</code>，<code>i</code> 不动</li><li><code>i=0</code>，<code>nums[f(0)] = nums[1] = 2 == mid</code> → <code>i=1</code></li><li><code>i=1</code>，<code>nums[f(1)] = nums[3] = 2 == mid</code> → <code>i=2</code></li><li><code>i=2</code>，<code>nums[f(2)] = nums[0] = 1 &lt; 2</code> → 与 <code>f(gt=2) = 0</code> 自换，<code>gt=1</code>，<code>i</code> 不动，此时 <code>i=2 &gt; gt=1</code> 退出</li></ol><ul><li>结果 <code>[1,2,1,2]</code>：<code>1 &lt; 2 &gt; 1 &lt; 2</code> ✓（两个 2 被分到真实下标 1、3，不相邻）</li></ul><p>case 2：<code>[1, 5, 1, 1, 6, 4]</code>（n=6，官方示例）</p><ul><li>快速选择 <code>k = 6/2 = 3</code>，Lomuto 后 <code>mid = nums[3] = 4</code>，数组被搅成 <code>[1,1,1,4,6,5]</code>；</li><li><code>f = [1,3,5,0,2,4]</code>，初始 <code>lt=0, i=0, gt=5</code>：</li></ul><ol><li><code>i=0</code>，<code>nums[f(0)] = nums[1] = 1 &lt; 4</code> → 与 <code>f(5) = 4</code> 交换 → <code>[1,6,1,4,1,5]</code>，<code>gt=4</code></li><li><code>i=0</code>，<code>nums[f(0)] = nums[1] = 6 &gt; 4</code> → 与 <code>f(lt=0) = 1</code> 自换，<code>lt=1, i=1</code></li><li><code>i=1</code>，<code>nums[f(1)] = nums[3] = 4 == mid</code> → <code>i=2</code></li><li><code>i=2</code>，<code>nums[f(2)] = nums[5] = 5 &gt; 4</code> → 与 <code>f(lt=1) = 3</code> 交换 → <code>[1,6,1,5,1,4]</code>，<code>lt=2, i=3</code></li><li><code>i=3</code>，<code>nums[f(3)] = nums[0] = 1 &lt; 4</code> → 与 <code>f(gt=4) = 2</code> 交换（两个 1 互换）→ <code>gt=3</code>，<code>i</code> 不动</li><li><code>i=3</code>，<code>nums[f(3)] = nums[0] = 1 &lt; 4</code> → 与 <code>f(gt=3) = 0</code> 自换 → <code>gt=2</code>，<code>i=3 &gt; gt=2</code> 退出</li></ol><ul><li>结果 <code>[1,6,1,5,1,4]</code>：<code>1 &lt; 6 &gt; 1 &lt; 5 &gt; 1 &lt; 4</code> ✓，正是官方示例给出的答案之一</li></ul><p><strong>边界与细节</strong></p><ul><li><code>gt</code> 必须初始化为 <code>n-1</code>，不能是 <code>n</code>：<code>f</code> 的定义域只有 <code>0..n-1</code>，n 为偶时 <code>f(n) = (1+2n) % (n+1) = n</code> 直接越界（一刷踩过）。</li><li>循环条件取 <code>i &lt;= gt</code>：未处理区是闭区间 <code>[i, gt]</code>，<code>i == gt</code> 时还剩最后一个元素必须处理。</li><li><code>&lt; mid</code> 分支交换后 <code>i</code> 不能前进（从 <code>gt</code> 换过来的元素尚未检查）；<code>&gt; mid</code> 分支换到 <code>lt</code> 后可以前进，因为 <code>[0, lt)</code> 已确认全是大于 mid 的元素。</li><li>划分方向不能反：虚拟前段是峰位（该放大值），把 <code>&lt; mid</code> 送进虚拟左段会让峰位拿到小数、谷位拿到大数，除单元素外全部用例失败（二刷踩过）。</li><li>n 为奇数时谷位比峰位多一个，虚拟分界点 <code>n/2</code> 恰好覆盖，不需要额外特判。</li><li>小规模：n=1 没有相邻对，任何排列都合法；n=2 只需比较一次。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：快速选择每层区间平均减半（<code>n + n/2 + n/4 + ... = O(n)</code>），三路划分一趟 O(n)。</li><li>空间 O(1)：只用常数个整型变量 + 原地 swap；递归写法的调用栈平均 O(log n)，若严格计入栈则是 O(log n)。</li><li>下限：比较排序的 Ω(n log n) 下界只针对「求全序」，本题只需要中位数，而求中位数必须先看每个元素，Ω(n) 下界不可绕过，所以 O(n) 已是理论最优；空间上不需要任何副本，O(1) 同样是下限。</li></ul></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>虚拟下标映射定义域越界：映射函数 f(x)=(1+2x)%(n|1) 只对虚拟下标 0..n-1 有效，但三路划分把 gt 初始化为 n，f(n) 在偶数长度下算出真实下标 n 直接越界、奇数长度下读到错误位置；右端指针必须始终落在有效虚拟下标内</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>虚拟下标方向搞反：映射 f(i)=(1+2i)%(n|1) 的虚拟前段 f(0..n/2-1) 落在峰位（该放大值），却在三路划分里把 &lt;mid 换到虚拟左侧 lt、把 &gt;mid 换到虚拟右侧 gt，峰谷整体颠倒，除单元素外全部用例失败</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>52/52 用例。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>虚拟下标 + 三路划分</h3><p>原地重排成摆动/奇偶交错序列：构造映射 f(i)=(1+2i)%(n|1) 把峰位排前谷位排后（步长 2 与模数互质保证单射），三路划分在虚拟空间上按 mid 归位即同时完成分区与摆位，O(n)时间O(1)空间；Hoare 分区必须用 j 分界保证递归收敛</p></div><div class="card md"><h3>虚拟下标映射：划分方向必须与虚拟分段的角色对齐</h3><p>映射 f(i)=(1+2i)%(n|1) 的虚拟前段 [0,n/2) 全部落在真实峰位（奇数下标）、后段 [n/2,n) 全部落在谷位；虚拟空间因此带角色语义，三路划分必须让 &gt;mid 进虚拟左段（峰位）、&lt;mid 进右段（谷位）。若反向（小的进左段），峰位会拿到小数、谷位拿到大数，输出呈「正确排列整体颠倒」，症状是除单元素外几乎全部用例失败——单元素永远通过，会掩盖问题。另注意方向反了也要保证分支自洽：换到 gt 的那支 i 不前进（换来的元素未检查）</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -103,7 +169,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 贪心与区间</h3><div class="quote">区间类题先按起点或终点排序，再贪心合并/选点。</div>
-      <h3>错误习惯复盘</h3><p><b>虚拟下标映射定义域越界：映射函数 f(x)=(1+2x)%(n|1) 只对虚拟下标 0..n-1 有效，但三路划分把 gt 初始化为 n，f(n) 在偶数长度下算出真实下标 n 直接越界、奇数长度下读到错误位置；右端指针必须始终落在有效虚拟下标内</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>虚拟下标映射定义域越界：映射函数 f(x)=(1+2x)%(n|1) 只对虚拟下标 0..n-1 有效，但三路划分把 gt 初始化为 n，f(n) 在偶数长度下算出真实下标 n 直接越界、奇数长度下读到错误位置；右端指针必须始终落在有效虚拟下标内</b>（累计 1 次）</p><p><b>虚拟下标方向搞反：映射 f(i)=(1+2i)%(n|1) 的虚拟前段 f(0..n/2-1) 落在峰位（该放大值），却在三路划分里把 &lt;mid 换到虚拟左侧 lt、把 &gt;mid 换到虚拟右侧 gt，峰谷整体颠倒，除单元素外全部用例失败</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 156 · wiggle-sort-ii</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>

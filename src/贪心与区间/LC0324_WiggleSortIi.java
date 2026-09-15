@@ -2,61 +2,65 @@
 // LeetCode 324. 摆动排序 II (Wiggle Sort II)
 // 难度：Medium | 分类：贪心与区间
 // 链接：https://leetcode.cn/problems/wiggle-sort-ii/
-// 刷题日期：2026-08-27
+// 复习日期：2026-09-15（第 1 次复习 · 一刷 2026-08-27 · 一刷非一次 AC）
+// 一刷思路：快速选择找中位数 + 虚拟下标映射 + 三路划分，O(n)/O(1)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 //
-// 思路：快速选择求中位数 mid + 虚拟下标三路划分（荷兰国旗）原地摆位——
-//       映射 f(i)=(1+2i)%(n|1) 把峰位(奇数下标)排在虚拟序列前段、谷位在后段，
-//       三路划分在虚拟空间上把 >mid / ==mid / <mid 归位到峰/中/谷，一次完成分区与摆位
-// 复杂度：时间 O(n)（快速选择平均）空间 O(1)
+// 思路：快速选择求第 n/2 小（只要中位数，不必全排序）+ 虚拟下标 f(i)=(1+2i)%(n|1) 把数组折成
+//       「虚拟前段=峰位、后段=谷位」的顺序，再在虚拟空间上三路划分：>mid 进前段(峰)、
+//       <mid 进后段(谷)、=mid 留中；lt: [0,lt) 全 >mid；i: [lt,i) 全 ==mid；(gt,n) 全 <mid
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
-
-import java.util.*;
 
 public class LC0324_WiggleSortIi {
 
     // ==== 提交代码开始 ====
     public void wiggleSort(int[] nums) {
-        int mid = quickSort(nums, 0, nums.length - 1);
-        int lt = 0, i = 0, gt = nums.length - 1;
+        int n = nums.length;
+        int mid = quickSort(nums, 0, n - 1, n / 2);
+        // 虚拟下标上：lt: [0,lt) 全 >mid；i: [lt,i) 全 ==mid；(gt,n) 全 <mid；[i,gt] 未处理
+        int lt = 0, i = 0, gt = n - 1;
+        // 未处理区是闭区间 [i, gt]，i == gt 时还剩最后一个元素，所以条件取 i <= gt
         while (i <= gt) {
-            int fi = (1 + 2 * i) % (nums.length | 1);
-            int flt = (1 + 2 * lt) % (nums.length | 1);
-            int fgt = (1 + 2 * gt) % (nums.length | 1);
-            if (nums[fi] > mid) {
-                swap(nums, fi, flt);
-                i++;
+            if (nums[f(n, i)] > mid) {
+                swap(nums, f(n, i), f(n, lt));
                 lt++;
-            } else if (nums[fi] == mid) {
                 i++;
-            } else {
-                swap(nums, fi, fgt);
+            } else if (nums[f(n, i)] < mid) {
+                swap(nums, f(n, i), f(n, gt));
                 gt--;
+            } else {
+                i++;
             }
         }
-
     }
 
-    private int quickSort(int[] nums, int l, int r) {
+    // 虚拟下标 i → 真实下标；前 n/2 个虚拟下标是全部峰位，其余是全部谷位
+    private int f(int n, int i) {
+        return (1 + 2 * i) % (n | 1);
+    }
+
+    // 参数：nums[l..r] 为候选区间，k 为目标下标(0 基)；返回的是第 k+1 小的值
+    private int quickSort(int[] nums, int l, int r, int k) {
         if (l == r) {
             return nums[l];
         }
-        int x = nums[l], i = l - 1, j = r + 1;
-        while (i < j) {
-            do {
-                i++;
-            } while (nums[i] < x);
-            do {
-                j--;
-            } while (nums[j] > x);
-            if (i < j) {
+        int p = nums[r];
+        int i = l, j = l;
+        while (j < r) {
+            if (nums[j] < p) {
                 swap(nums, i, j);
+                i++;
             }
+            j++;
         }
-        int k = nums.length / 2;
-        if (k <= j) {
-            return quickSort(nums, l, j);
+        swap(nums, i, r);
+        if (i == k) {
+            return nums[k];
+        } else if (i < k) {
+            return quickSort(nums, i + 1, r, k);
         } else {
-            return quickSort(nums, j + 1, r);
+            return quickSort(nums, l, i - 1, k);
         }
     }
 
