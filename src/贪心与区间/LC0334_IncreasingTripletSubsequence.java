@@ -2,28 +2,33 @@
 // LeetCode 334. 递增的三元子序列 (Increasing Triplet Subsequence)
 // 难度：Medium | 分类：贪心与区间
 // 链接：https://leetcode.cn/problems/increasing-triplet-subsequence/
-// 刷题日期：2026-08-27
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-27 · 一刷非一次 AC）
+// 一刷思路：双变量贪心（first / second 单链更新），时间 O(n) 空间 O(1)
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 //
-// 思路：双变量贪心——维护已见过的最小的 first 和「比 first 大且尽量小」的 second，
-//       遍历时 num>second 即找到三元组；first/second 只在更优时更新，恒保持 first<second
+// 思路：双变量贪心——first 记已扫描部分的最小值，second 记「前面存在比它更小的值」的最小候选；
+//       每个数只走一条 if/else 链：小于 first 就刷新 first，落在 (first, second) 就刷新 second，
+//       一旦出现比 second 大的数，说明前面那对 (更小值, second) 加上它构成递增三元组
 // 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
-
-import java.util.*;
 
 public class LC0334_IncreasingTripletSubsequence {
 
     // ==== 提交代码开始 ====
+    // 参数：nums 待判断数组；返回是否存在下标 i<j<k 使 nums[i] < nums[j] < nums[k]
+    // 不变量：first = 已扫描部分的最小值；second = 已扫描部分中「前面存在比它更小的值」的最小候选
+    // 循环：i 从 1 开始（first 已由 nums[0] 初始化），直到扫完整个数组
     public boolean increasingTriplet(int[] nums) {
-        int first = nums[0], second = Integer.MAX_VALUE;
+        if (nums.length < 3) return false;
+        int first = nums[0];
+        int second = Integer.MAX_VALUE;
         for (int i = 1; i < nums.length; i++) {
-            int num = nums[i];
-            if (num > second) {
+            if (nums[i] < first) {
+                first = nums[i];
+            } else if (nums[i] > first && nums[i] < second) {
+                second = nums[i];
+            } else if (nums[i] > second && second > first) {
                 return true;
-            } else if (num > first) {
-                second = num;
-            } else {
-                first = num;
             }
         }
         return false;
