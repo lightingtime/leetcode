@@ -2,21 +2,20 @@
 // LeetCode 41. 缺失的第一个正数 (First Missing Positive)
 // 难度：Hard | 分类：哈希表
 // 链接：https://leetcode.cn/problems/first-missing-positive/
-// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-21 · 上次复习 2026-09-06）
-// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
+// 复习日期：2026-09-15（第 3 次复习 · 一刷 2026-08-21 · 上次复习 2026-09-09）
 //
-// 思路：原地归位（cyclic sort）：值 v∈[1,n] 的家是下标 v-1；遍历时把 nums[i] 换回它的家，
-//       直到当前位置是无效值或家中已有相同值；第二遍找第一个 nums[i] != i+1 即答案。
-// 复杂度：时间 O(n)（每次交换都把某值送到正确位，最多 n 次），空间 O(1)
+// 思路：原地归位，把值 v 放到下标 v-1；再找第一个 nums[i] != i+1。
+// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
+
+import java.util.*;
 
 public class LC0041_FirstMissingPositive {
 
     // ==== 提交代码开始 ====
     public int firstMissingPositive(int[] nums) {
-        int n = nums.length;
-        for (int i = 0; i < n; i++) {
-            while (nums[i] > 0 && nums[i] <= n && nums[nums[i] - 1] != nums[i]) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] <= nums.length && nums[i] > 0 && nums[nums[i] - 1] != nums[i]) {
                 int temp = nums[nums[i] - 1];
                 nums[nums[i] - 1] = nums[i];
                 nums[i] = temp;
@@ -27,7 +26,7 @@ public class LC0041_FirstMissingPositive {
                 return i + 1;
             }
         }
-        return n + 1;
+        return nums.length + 1;
     }
     // ==== 提交代码结束 ====
 

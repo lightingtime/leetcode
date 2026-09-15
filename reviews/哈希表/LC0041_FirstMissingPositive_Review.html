@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-21</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>41. 缺失的第一个正数 (First Missing Positive)</h1><p>&gt; <a href="https://leetcode.cn/problems/first-missing-positive/" rel="noopener">https://leetcode.cn/problems/first-missing-positive/</a></p><p>难度：Hard ｜ 分类：哈希表</p><p>标签：数组、哈希表</p><h2>题目描述</h2><p>给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。</p><p>请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。</p><p>示例 1：</p><p>输入：nums = [1,2,0]</p><p>输出：3</p><p>解释：范围 [1,2] 中的数字都在数组中。</p><p>示例 2：</p><p>输入：nums = [3,4,-1,1]</p><p>输出：2</p><p>解释：1 在数组中，但 2 没有。</p><p>示例 3：</p><p>输入：nums = [7,8,9,11,12]</p><p>输出：1</p><p>解释：最小的正数 1 没有出现。</p><p>提示：</p><p>1 5</p><p>-231 31 - 1</p><h2>示例</h2><ol><li>输入：nums = [1,2,0]</li></ol><p>输出：3</p><p>解释：范围 [1,2] 中的数字都在数组中。</p><ol><li>输入：nums = [3,4,-1,1]</li></ol><p>输出：2</p><p>解释：1 在数组中，但 2 没有。</p><ol><li>输入：nums = [7,8,9,11,12]</li></ol><p>输出：1</p><p>解释：最小的正数 1 没有出现。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（179/179）｜ 一次 AC ｜ 原地归位（cyclic sort 值域偏移） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>① 与上一轮对比：仍是原地归位（cyclic sort 值域偏移）；本次在本地自行修正过交换写法后一次提交 Accepted 179/179，未发起思路讨论，记 strong。</p><p>② 状态与不变量：正数 <code>v</code> 应放在下标 <code>v-1</code>。交换前先暂存目标位置值，只对 <code>1..n</code> 范围内的数归位；若目标位置已经是相同值则不交换，避免重复值导致死循环。</p><p>③ 具体 case：<code>[3,4,-1,1]</code> 归位后变为 <code>[1,-1,3,4]</code>，扫描发现下标 1 处不是 2，因此答案为 2。</p><p>④ 掌握度判定：没有算法提示或讨论，本地全过，力扣首次提交 Accepted，记 strong。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-09 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（179/179）｜ 一次 AC ｜ 原地归位（cyclic sort 值域偏移） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p>① 与上一轮对比：与 09-06 复习同一思路（原地归位：值 v 放下标 v-1，第二遍找 nums[i]!=i+1）；本次写法与一刷基本一致，O(n)/O(1) 不变。</p><p>② 为什么能想起来：看到 O(1) 额外空间 + 答案值域被 n 限制，第一反应是「拿数组本身当哈希表」——把 x 是否出现编码成 nums[x-1] 是否已归位；回忆点是值域偏移 v→v-1，以及家中已有同值时跳过避免重复值死循环。</p><p>③ 掌握度判定：本地 14 个用例一次跑通，力扣一次提交 Accepted（179/179）；中途只问了一个关于自己已写代码的索引理解问题（为什么 -1 不是 +1），未索取解题提示 → strong。</p><p>④ 下一步提醒：同类「数组本身当哈希表」可迁移 442. 数组中重复的数据、448. 消失的数字（正负号标记）；cyclic sort 套路：值域 [1,n] 先归位再扫描。</p></div>
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>原地归位（cyclic sort 值域偏移）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -51,11 +55,10 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 原地归位（cyclic sort 值域偏移）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 68.1 MB</span><span class="chip">用例 179/179</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 68.2 MB</span><span class="chip">用例 179/179</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0041_FirstMissingPositive.java · 原地归位（cyclic sort 值域偏移）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">firstMissingPositive</span>(<span class="tk-k">int</span>[] nums) {
-        <span class="tk-k">int</span> n = nums.length;
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; n; i++) {
-            <span class="tk-k">while</span> (nums[i] &gt; <span class="tk-n">0</span> &amp;&amp; nums[i] &lt;= n &amp;&amp; nums[nums[i] - <span class="tk-n">1</span>] != nums[i]) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">while</span> (nums[i] &lt;= nums.length &amp;&amp; nums[i] &gt; <span class="tk-n">0</span> &amp;&amp; nums[nums[i] - <span class="tk-n">1</span>] != nums[i]) {
                 <span class="tk-k">int</span> temp = nums[nums[i] - <span class="tk-n">1</span>];
                 nums[nums[i] - <span class="tk-n">1</span>] = nums[i];
                 nums[i] = temp;
@@ -66,7 +69,7 @@
                 <span class="tk-k">return</span> i + <span class="tk-n">1</span>;
             }
         }
-        <span class="tk-k">return</span> n + <span class="tk-n">1</span>;
+        <span class="tk-k">return</span> nums.length + <span class="tk-n">1</span>;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0041_FirstMissingPositive.java · 原地归位（cyclic sort 值域偏移） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">firstMissingPositive</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
