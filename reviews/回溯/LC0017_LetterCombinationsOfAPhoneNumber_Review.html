@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×4</span>
+    <span class="badge plain">二刷 ×5</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>17. 电话号码的字母组合 (Letter Combinations of a Phone Number)</h1><p>&gt; <a href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/" rel="noopener">https://leetcode.cn/problems/letter-combinations-of-a-phone-number/</a></p><p>难度：Medium ｜ 分类：回溯</p><p>标签：哈希表、字符串、回溯</p><h2>题目描述</h2><p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。</p><p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p><p>示例 1：</p><p>输入：digits = "23"</p><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><p>示例 2：</p><p>输入：digits = "2"</p><p>输出：["a","b","c"]</p><p>提示：</p><p>1</p><p>digits[i] 是范围 ['2', '9'] 的一个数字。</p><h2>示例</h2><ol><li>输入：digits = "23"</li></ol><p>输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]</p><ol><li>输入：digits = "2"</li></ol><p>输出：["a","b","c"]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 5 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(n·4^n) · O(n)（不计结果集）</p>
+      <div class="review-note md"><p>① 与上一轮对比：上次 <code>dfs</code> 多了一层从<code>index</code>开始的冗余位置循环，本次已删除，只在当前层处理<code>digits.charAt(len)</code>；<code>append → dfs(len+1) → deleteCharAt</code>骨架完整，复杂度 O(n·4^n) / O(n)。</p><p>② 这次为什么想起来：递归参数<code>len</code>同时表示已选字母数和下一个待处理 digit 下标；候选字母只来自当前 digit，下一层由<code>len+1</code>推进，不再重复承担位置推进。</p><p>③ 掌握度判定：本次首次提交 Accepted 24/24，但提交前已明确提示上一轮的冗余循环问题，按规则记 weak。</p><p>④ 下一步提醒：继续维持“每层只处理当前下标、递归负责推进下标”的回溯结构；不要再用外层位置循环重复推进。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-12 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（24/24）｜ 一次 AC ｜ 回溯 DFS ｜ O(n·4^n) · O(n)（不计结果集）</p>
       <div class="review-note md"><p>① 与上一轮对比：上一轮归档写法在 <code>dfs(index)</code> 中只处理<code>digits.charAt(index)</code>；本次提交额外套了<code>for (int i = index; ...)</code>，虽然测试和判题均通过，但该循环会跳过当前 digit、产生永远到不了叶子条件的无效递归，属于不可接受的结构性冗余。</p><p>② 本次不计入有效写法：<code>analysis.json</code> 的 submissions 保留上一版精简代码，不保存本次带冗余循环的版本；源码也已回退为上一版。</p><p>③ 掌握度判定：冗余循环会叠加无效递归调用，且用户明确判定不可接受，本次记 weak，间隔重置。</p><p>④ 下一步提醒：递归参数已经负责推进 digit 下标时，循环只枚举当前 digit 的候选字母；不要再从<code>index</code>开始套位置循环。</p></div>
@@ -50,7 +54,7 @@
         
       </ul>
     </div><div class="round-card weak">
-      <h3>2. 第 4 轮（二刷）</h3>
+      <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>回溯 DFS</b></li>
         <li><span>复杂度</span><b>O(n·4^n) · O(n)（不计结果集）</b></li>
@@ -59,30 +63,30 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯 DFS</h3>
-    <p><span class="chip">时间 O(4^n·n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 24/24</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0017_LetterCombinationsOfAPhoneNumber.java · 回溯 DFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">String</span>[] numbers = <span class="tk-k">new</span> <span class="tk-t">String</span>[]{<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
-<span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
-<span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {
-    ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-    <span class="tk-k">if</span> (digits.<span class="tk-f">isEmpty</span>()) {
+    <p><span class="chip">时间 O(n·4^n)</span><span class="chip">空间 O(n)（不计结果集）</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 24/24</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0017_LetterCombinationsOfAPhoneNumber.java · 回溯 DFS</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-t">String</span>[] numbers = <span class="tk-k">new</span> <span class="tk-t">String</span>[]{<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
+    <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-k">if</span> (digits.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">return</span> ans;
+        }
+        <span class="tk-f">dfs</span>(digits, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>());
         <span class="tk-k">return</span> ans;
     }
-    <span class="tk-f">dfs</span>(digits, <span class="tk-n">0</span>, <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>());
-    <span class="tk-k">return</span> ans;
-}
 
-<span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> digits, <span class="tk-k">int</span> index, <span class="tk-t">StringBuilder</span> sb) {
-    <span class="tk-k">if</span> (sb.<span class="tk-f">length</span>() == digits.<span class="tk-f">length</span>()) {
-        ans.<span class="tk-f">add</span>(sb.<span class="tk-f">toString</span>());
-        <span class="tk-k">return</span>;
-    }
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> digits, <span class="tk-k">int</span> len, <span class="tk-t">StringBuilder</span> sb) {
+        <span class="tk-k">if</span> (len == digits.<span class="tk-f">length</span>()) {
+            ans.<span class="tk-f">add</span>(sb.<span class="tk-f">toString</span>());
+            <span class="tk-k">return</span>;
+        }
 
-    <span class="tk-k">for</span> (<span class="tk-k">char</span> c : numbers[digits.<span class="tk-f">charAt</span>(index) - <span class="tk-s">'0'</span>].<span class="tk-f">toCharArray</span>()) {
-        sb.<span class="tk-f">append</span>(c);
-        <span class="tk-f">dfs</span>(digits, index + <span class="tk-n">1</span>, sb);
-        sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
-    }
-}</pre></div>
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : numbers[digits.<span class="tk-f">charAt</span>(len) - <span class="tk-s">'0'</span>].<span class="tk-f">toCharArray</span>()) {
+            sb.<span class="tk-f">append</span>(c);
+            <span class="tk-f">dfs</span>(digits, len + <span class="tk-n">1</span>, sb);
+            sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
+        }
+    }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0017_LetterCombinationsOfAPhoneNumber.java · 回溯 DFS · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
     <span class="tk-t">String</span>[] map = {<span class="tk-s">""</span>, <span class="tk-s">""</span>, <span class="tk-s">"abc"</span>, <span class="tk-s">"def"</span>, <span class="tk-s">"ghi"</span>, <span class="tk-s">"jkl"</span>, <span class="tk-s">"mno"</span>, <span class="tk-s">"pqrs"</span>, <span class="tk-s">"tuv"</span>, <span class="tk-s">"wxyz"</span>};
     <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">letterCombinations</span>(<span class="tk-t">String</span> digits) {

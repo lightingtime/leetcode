@@ -625,10 +625,10 @@
       "title": "电话号码的字母组合",
       "category": "回溯",
       "first_pass_date": "2026-08-08",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-14",
+      "last_review_date": "2026-09-15",
+      "next_review_date": "2026-09-17",
       "interval_days": 2,
-      "review_count": 4,
+      "review_count": 5,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
