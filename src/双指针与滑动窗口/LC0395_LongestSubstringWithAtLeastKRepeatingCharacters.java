@@ -2,10 +2,10 @@
 // LeetCode 395. 至少有 K 个重复字符的最长子串 (Longest Substring with At Least K Repeating Characters)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/
-// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-22 · 上次复习 2026-09-06）
-//
-// 思路：分治；先统计当前区间字频，用第一个不足 k 的字符切分并跳过连续墙。
-// 复杂度：时间 O(n^2)，空间 O(n)（递归栈）
+// 复习日期：2026-09-15（第 3 次复习 · 一刷 2026-08-22 · 上次 2026-09-12 较弱）
+// 一刷/上次思路：分治（<k 的字符当墙切左右，跳过连续墙），O(n²) 最坏 —— 非最优
+// 复习目标：独立写出比一刷 O(n²) 更好的写法（能到 O(n)/O(26n) 更好），并说清正确性依据
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -25,23 +25,23 @@ public class LC0395_LongestSubstringWithAtLeastKRepeatingCharacters {
         for (int i = l; i <= r; i++) {
             counts[s.charAt(i) - 'a']++;
         }
-        int end = -1;
+        int p = -1;
         for (int i = l; i <= r; i++) {
             if (counts[s.charAt(i) - 'a'] < k) {
-                end = i;
+                p = i;
                 break;
             }
         }
-        if (end == -1) {
+        if (p == -1) {
             return r - l + 1;
         }
-        int start = end;
-        while (start <= r && counts[s.charAt(start) - 'a'] < k) {
-            start++;
+        int q = p;
+        while (q <= r && counts[s.charAt(q) - 'a'] < k) {
+            q++;
         }
-        return Math.max(dfs(s, l, end - 1, k), dfs(s, start, r, k));
-    }
 
+        return Math.max(dfs(s, l, p - 1, k), dfs(s, q, r, k));
+    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

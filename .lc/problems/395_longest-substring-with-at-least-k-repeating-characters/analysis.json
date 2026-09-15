@@ -38,24 +38,31 @@
       "category": "双指针与滑动窗口",
       "problem": "longest-substring-with-at-least-k-repeating-characters",
       "date": "2026-08-22"
+    },
+    {
+      "title": "墙的合法性单调：含墙必不合法 → 只递归墙两侧",
+      "text": "频率 < k 的字符是「墙」，任何包含它的子串都不合法，因此答案只可能在墙的左侧或右侧，递归两侧即可不重不漏；每层必须重扫当前区间统计频率（全局够≠段内够），找到第一堵墙后要跳过整段连续墙再递归（墙段本身不可能进答案）。找不到墙即整段合法，返回长度；l>r 返回 0。每层只剥第一段墙时最坏 O(n²)，改成一次按所有墙字符切分则深度 ≤ 26。",
+      "category": "双指针与滑动窗口",
+      "problem": "longest-substring-with-at-least-k-repeating-characters",
+      "date": "2026-09-15"
     }
   ],
   "submissions": [
     {
-      "date": "2026-09-12",
+      "date": "2026-09-15",
       "verdict": "Accepted",
-      "testcases": "38/38",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 42932000,
+      "memory_bytes": 43140000,
       "approach": "分治（第一堵墙切左右+跳过连续墙）",
-      "time_complexity": "O(n^2)",
+      "time_complexity": "O(n²) 最坏",
       "space_complexity": "O(n)",
-      "optimal": true,
-      "notes": "① 与上一轮对比：仍是分治切分；但首版错误地把整串`s`的频率用于每个递归区间，回归用例`\"aabacb\", k=2`得到 4（误把`\"aaba\"`当合法）而正确值为 2。改为只统计当前`[l,r]`后，本地 16 组全过，力扣 Accepted 38/38。\n\n② 分治逻辑：在当前区间内统计字符频率，找到第一个出现次数不足 k 的墙字符；墙一定不属于任何合法子串，因此切到左右两侧，并跳过连续墙后再递归。叶子区间若所有字符均达到 k，则整段长度可参与答案。\n\n③ 掌握度判定：首版存在实际 WA、经回归测试和分析修正后才通过，按规则记 weak。\n\n④ 下一步提醒：递归分治中所有“区间内属性”必须显式限定在`[l,r]`计算；整串全局状态只能用于全局不变量，不能直接替代子问题状态。",
-      "code": "    public int longestSubstring(String s, int k) {\n        return dfs(s, 0, s.length() - 1, k);\n    }\n\n    private int dfs(String s, int l, int r, int k) {\n        if (l > r) {\n            return 0;\n        }\n        int[] counts = new int[26];\n        for (int i = l; i <= r; i++) {\n            counts[s.charAt(i) - 'a']++;\n        }\n        int end = -1;\n        for (int i = l; i <= r; i++) {\n            if (counts[s.charAt(i) - 'a'] < k) {\n                end = i;\n                break;\n            }\n        }\n        if (end == -1) {\n            return r - l + 1;\n        }\n        int start = end;\n        while (start <= r && counts[s.charAt(start) - 'a'] < k) {\n            start++;\n        }\n        return Math.max(dfs(s, l, end - 1, k), dfs(s, start, r, k));\n    }",
-      "mastery": "weak",
-      "pass": 2,
-      "prev_code": "public int longestSubstring(String s, int k) {\n        return dfs(s.toCharArray(), 0, s.length(), k);\n    }\n\n    private int dfs(char[] ch, int start, int end, int k) {\n        if (end - start < k) {\n            return 0;\n        }\n        int[] count = new int[26];\n        for (int i = start; i < end; i++) {\n            count[ch[i] - 'a']++;\n        }\n        for (int i = start; i < end; i++) {\n            if (count[ch[i] - 'a'] < k) {\n                int j = i + 1;\n                while (j < end && count[ch[j] - 'a'] < k) {\n                    j++;\n                }\n                return Math.max(dfs(ch, start, i, k), dfs(ch, j, end, k));\n            }\n        }\n        return end - start;\n    }\n"
+      "optimal": false,
+      "notes": "**① 与上一轮对比**\n\n- 上一轮（09-12）同为主思路分治但**非一次 AC**、判较弱；本轮把主方法拆成 `longestSubstring` + 私有 `dfs(l, r)`，思路与上次一致：先统计当前区间频率 → 找**第一堵墙**（区间内频率 < k 的字符）→ 跳过整段连续墙 → 只递归墙体左右两侧。\n- 关键差异是历史坑这次都填上了：① 频率**每层区间内重新统计**，不再拿整串频率判区间内部（坑：全局够 ≠ 段内够）；② 找到墙后先跳过连续墙再递归，墙段本身不能进任何合法子串，所以左右两侧不重不漏（不会拿「两个切点之间的原始长度」当答案）。\n- 复杂度仍与一刷同级：最坏 O(n²)（每层只切掉第一段连续墙，可能退化成每次剥一小段再重扫），空间 O(n) 递归栈；因此 `optimal` 保持 false。\n\n**② 这次为什么一次过**\n\n- 正确性推理是「合法子串不含任何频率 < k 的字符」——这是**单调的性质**：墙字符在任何包含它的子串里都不合法，因此递归只保留左右两侧就覆盖全部候选，不需要再对段内做二次校验。\n- 边界都交给了「重扫 + 空区间返回 0」：k=1（所有字符都合法，直接返回整段）、k 大于串长（第一个墙就是 0 号位，两侧皆空）、连续墙（while 跳过整段）、答案在尾段（右递归负责）。\n\n**③ 掌握度判定**\n\n- strong：本轮无任何解法提示，一次提交 Accepted（38/38）；本地 17 组用例全绿，另跑 30 万组随机小串（字母表 1–3 个字符、k=1–4）与暴力枚举全部子串对拍零差异。\n\n**④ 下一步提醒**\n\n- 若想拿线性：本题可以枚举「窗口里恰好含 t 种字符」（t = 1..26），每种 t 用滑动窗口 O(n) 维护 `题目要求的每种字符都 ≥ k`，总计 O(26n)；或把分治改成「一次按所有墙字符切分」，每层至少消掉一种字符 → 深度 ≤ 26。\n- 同族可顺带串练：LC76 最小覆盖子串、LC159/340 至多 K 种字符的最长子串（都是「枚举窗口字符种类数」的滑窗套路）。",
+      "code": "public int longestSubstring(String s, int k) {\n        return dfs(s, 0, s.length() - 1, k);\n    }\n\n    private int dfs(String s, int l, int r, int k) {\n        if (l > r) {\n            return 0;\n        }\n        int[] counts = new int[26];\n        for (int i = l; i <= r; i++) {\n            counts[s.charAt(i) - 'a']++;\n        }\n        int p = -1;\n        for (int i = l; i <= r; i++) {\n            if (counts[s.charAt(i) - 'a'] < k) {\n                p = i;\n                break;\n            }\n        }\n        if (p == -1) {\n            return r - l + 1;\n        }\n        int q = p;\n        while (q <= r && counts[s.charAt(q) - 'a'] < k) {\n            q++;\n        }\n\n        return Math.max(dfs(s, l, p - 1, k), dfs(s, q, r, k));\n    }",
+      "mastery": "strong",
+      "pass": 3,
+      "prev_code": "public int longestSubstring(String s, int k) {\n        return dfs(s, 0, s.length() - 1, k);\n    }\n\n    private int dfs(String s, int l, int r, int k) {\n        if (l > r) {\n            return 0;\n        }\n        int[] counts = new int[26];\n        for (int i = l; i <= r; i++) {\n            counts[s.charAt(i) - 'a']++;\n        }\n        int end = -1;\n        for (int i = l; i <= r; i++) {\n            if (counts[s.charAt(i) - 'a'] < k) {\n                end = i;\n                break;\n            }\n        }\n        if (end == -1) {\n            return r - l + 1;\n        }\n        int start = end;\n        while (start <= r && counts[s.charAt(start) - 'a'] < k) {\n            start++;\n        }\n        return Math.max(dfs(s, l, end - 1, k), dfs(s, start, r, k));\n    }\n"
     }
   ],
   "reviews": [
@@ -84,6 +91,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是分治切分；但首版错误地把整串`s`的频率用于每个递归区间，回归用例`\"aabacb\", k=2`得到 4（误把`\"aaba\"`当合法）而正确值为 2。改为只统计当前`[l,r]`后，本地 16 组全过，力扣 Accepted 38/38。\n\n② 分治逻辑：在当前区间内统计字符频率，找到第一个出现次数不足 k 的墙字符；墙一定不属于任何合法子串，因此切到左右两侧，并跳过连续墙后再递归。叶子区间若所有字符均达到 k，则整段长度可参与答案。\n\n③ 掌握度判定：首版存在实际 WA、经回归测试和分析修正后才通过，按规则记 weak。\n\n④ 下一步提醒：递归分治中所有“区间内属性”必须显式限定在`[l,r]`计算；整串全局状态只能用于全局不变量，不能直接替代子问题状态。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "分治（第一堵墙切左右+跳过连续墙）",
+      "time_complexity": "O(n²) 最坏",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "**① 与上一轮对比**\n\n- 上一轮（09-12）同为主思路分治但**非一次 AC**、判较弱；本轮把主方法拆成 `longestSubstring` + 私有 `dfs(l, r)`，思路与上次一致：先统计当前区间频率 → 找**第一堵墙**（区间内频率 < k 的字符）→ 跳过整段连续墙 → 只递归墙体左右两侧。\n- 关键差异是历史坑这次都填上了：① 频率**每层区间内重新统计**，不再拿整串频率判区间内部（坑：全局够 ≠ 段内够）；② 找到墙后先跳过连续墙再递归，墙段本身不能进任何合法子串，所以左右两侧不重不漏（不会拿「两个切点之间的原始长度」当答案）。\n- 复杂度仍与一刷同级：最坏 O(n²)（每层只切掉第一段连续墙，可能退化成每次剥一小段再重扫），空间 O(n) 递归栈；因此 `optimal` 保持 false。\n\n**② 这次为什么一次过**\n\n- 正确性推理是「合法子串不含任何频率 < k 的字符」——这是**单调的性质**：墙字符在任何包含它的子串里都不合法，因此递归只保留左右两侧就覆盖全部候选，不需要再对段内做二次校验。\n- 边界都交给了「重扫 + 空区间返回 0」：k=1（所有字符都合法，直接返回整段）、k 大于串长（第一个墙就是 0 号位，两侧皆空）、连续墙（while 跳过整段）、答案在尾段（右递归负责）。\n\n**③ 掌握度判定**\n\n- strong：本轮无任何解法提示，一次提交 Accepted（38/38）；本地 17 组用例全绿，另跑 30 万组随机小串（字母表 1–3 个字符、k=1–4）与暴力枚举全部子串对拍零差异。\n\n**④ 下一步提醒**\n\n- 若想拿线性：本题可以枚举「窗口里恰好含 t 种字符」（t = 1..26），每种 t 用滑动窗口 O(n) 维护 `题目要求的每种字符都 ≥ k`，总计 O(26n)；或把分治改成「一次按所有墙字符切分」，每层至少消掉一种字符 → 深度 ≤ 26。\n- 同族可顺带串练：LC76 最小覆盖子串、LC159/340 至多 K 种字符的最长子串（都是「枚举窗口字符种类数」的滑窗套路）。"
     }
   ]
 }

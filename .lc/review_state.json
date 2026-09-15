@@ -1661,12 +1661,12 @@
       "title": "至少有 K 个重复字符的最长子串",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-22",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-14",
-      "interval_days": 2,
-      "review_count": 2,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-15",
+      "next_review_date": "2026-09-20",
+      "interval_days": 5,
+      "review_count": 3,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "find-median-from-data-stream": {
