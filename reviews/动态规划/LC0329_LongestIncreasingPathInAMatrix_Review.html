@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-26</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>329. 矩阵中的最长递增路径 (Longest Increasing Path in a Matrix)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/" rel="noopener">https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：深度优先搜索、广度优先搜索、图、拓扑排序、记忆化、数组、动态规划、有向无环图、矩阵</p><h2>题目描述</h2><p>给定一个 m x n 整数矩阵 matrix ，找出其中 最长递增路径 的长度。</p><p>对于每个单元格，你可以往上，下，左，右四个方向移动。 你 不能 在 对角线 方向上移动或移动到 边界外（即不允许环绕）。</p><p>示例 1：</p><p>输入：matrix = [[9,9,4],[6,6,8],[2,1,1]]</p><p>输出：4</p><p>解释：最长递增路径为 [1, 2, 6, 9]。</p><p>示例 2：</p><p>输入：matrix = [[3,4,5],[3,2,6],[2,2,1]]</p><p>输出：4</p><p>解释：最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。</p><p>示例 3：</p><p>输入：matrix = [[1]]</p><p>输出：1</p><p>提示：</p><p>m == matrix.length</p><p>n == matrix[i].length</p><p>1</p><p>0 31 - 1</p><h2>示例</h2><ol><li>输入：matrix = [[9,9,4],[6,6,8],[2,1,1]]</li></ol><p>输出：4</p><p>解释：最长递增路径为 [1, 2, 6, 9]。</p><ol><li>输入：matrix = [[3,4,5],[3,2,6],[2,2,1]]</li></ol><p>输出：4</p><p>解释：最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。</p><ol><li>输入：matrix = [[1]]</li></ol><p>输出：1</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 记忆化DFS(DAG最长路径) ｜ O(m·n) · O(m·n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-26，非一次 AC）踩了「DFS 未记忆化 → 指数爆炸」和「守卫写成 <code>&lt; pre</code> 放行等值 → 2-环 StackOverflow」；本轮两条都避开了：<code>matrix[i][j] &lt;= preValue</code> 直接返回 0（等值被拦下，图无环），并且每格只算一次。</li><li>写法与一刷同为「记忆化 DFS（DAG 最长路径）」，按同一写法合并，<code>prev_code</code> 保留一刷版本。本轮结构上做了简化：不需要额外 <code>suffix/visited</code> 结构，越界与递增守卫合并成一条 if 写在一起。</li><li>本轮把守卫的 <code>preValue</code> 显式做成参数（一刷版本也带 <code>pre</code>），外层入口传 <code>-1</code> 表示「无前驱约束」——在本题可行，因为约束里 <code>matrix[i][j] &gt;= 0</code>。</li></ul><p><strong>② 关键设计点：带 <code>pre</code> 参数的 DFS 为什么仍然能查 memo</strong></p><p>一般原则是「<code>memo[i][j]</code> 只在返回值不依赖调用方参数时成立」，本轮的写法满足这个条件：</p><ul><li>守卫 <code>matrix[i][j] &lt;= preValue</code> 的分支<strong>先返回 0，且不写 memo</strong>（0 也不是合法答案，天然当「未计算」哨兵）；</li><li>只有守卫通过后才计算并与 memo 打交道，而通过守卫后的返回值就是<strong>无条件</strong>的「从 (i,j) 出发的最长递增路径长度」，与 <code>pre</code> 具体是多少无关。</li></ul><p>小例子 <code>[[1,2],[4,3]]</code>：算 <code>dfs(0,0,pre=-1)</code> 时会依次算出 <code>dfs(0,1,-1)=3</code>、<code>dfs(1,1,-1)=2</code>、<code>dfs(1,0,-1)=1</code> 并写入 memo；外层循环再问 <code>dfs(0,1,-1)</code> 时直接命中缓存返回 3，不再重走 2→3→4 那一段。若把 memo 写在守卫<strong>之前</strong>（把 0 也缓存），就会把「因前驱太大而被切断」的错误答案固化下来。</p><p><strong>③ 掌握度判定</strong></p><ul><li>weak：本轮<strong>有探讨</strong>——「查缓存 / 写缓存 / 返回值语义」这三个位置是讨论后明确的，不算你自己的第一反应，因此即使一次提交 Accepted（139/139）仍记较弱，间隔重置 2 天。</li><li>证据：本地 9 组用例（含 200×200 上限网格）全绿；另跑 2 万组随机小网格与「无记忆化朴素 DFS」对拍零差异，确认 <code>pre</code> 与 memo 的组合没有破坏状态语义。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>下次复习请先把「状态 = 什么、返回值语义 = 什么、memo 命中/写入的位置」三句话自己写出来再动手；判断能否缓存只看一条：<strong>同一状态在不同调用下返回值是否恒定</strong>。</li><li>可顺带串练：LC329 的迭代版本（拓扑序 + DP，按值排序后逐个松弛）、LC64 最小路径和（网格 DP 的填表顺序）、LC207 课程表（DAG 判定）。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,51 @@
         <li><span>复杂度</span><b>O(m·n) · O(m·n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>记忆化DFS(DAG最长路径)</b></li>
+        <li><span>复杂度</span><b>O(m·n) · O(m·n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 记忆化DFS(DAG最长路径)</h3>
-    <p><span class="chip">时间 O(m·n)</span><span class="chip">空间 O(m·n)</span><span class="chip">内存 ≈ 45.5 MB</span><span class="chip">用例 139/139</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0329_LongestIncreasingPathInAMatrix.java · 记忆化DFS(DAG最长路径)</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestIncreasingPath</span>(<span class="tk-k">int</span>[][] matrix) {
+    <p><span class="chip">时间 O(m·n)</span><span class="chip">空间 O(m·n)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0329_LongestIncreasingPathInAMatrix.java · 记忆化DFS(DAG最长路径)</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> ans;
+    <span class="tk-k">int</span>[][] memo;
+
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestIncreasingPath</span>(<span class="tk-k">int</span>[][] matrix) {
+        ans = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> m = matrix.length;
+        <span class="tk-k">int</span> n = matrix[<span class="tk-n">0</span>].length;
+        memo = <span class="tk-k">new</span> <span class="tk-k">int</span>[m][n];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
+                ans = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(ans, <span class="tk-f">dfs</span>(matrix, i, j, -<span class="tk-n">1</span>));
+            }
+        }
+        <span class="tk-k">return</span> ans;
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span>[][] matrix, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j, <span class="tk-k">int</span> preValue) {
+        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || j &lt; <span class="tk-n">0</span> || i &gt;= matrix.length || j &gt;= matrix[<span class="tk-n">0</span>].length || matrix[i][j] &lt;= preValue) {
+            <span class="tk-k">return</span> <span class="tk-n">0</span>;
+        }
+        <span class="tk-k">if</span> (memo[i][j] != <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span> memo[i][j];
+        }
+        <span class="tk-k">int</span> count = <span class="tk-n">0</span>;
+        count = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(count, <span class="tk-f">dfs</span>(matrix, i + <span class="tk-n">1</span>, j, matrix[i][j]));
+        count = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(count, <span class="tk-f">dfs</span>(matrix, i - <span class="tk-n">1</span>, j, matrix[i][j]));
+        count = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(count, <span class="tk-f">dfs</span>(matrix, i, j - <span class="tk-n">1</span>, matrix[i][j]));
+        count = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(count, <span class="tk-f">dfs</span>(matrix, i, j + <span class="tk-n">1</span>, matrix[i][j]));
+        memo[i][j] = count + <span class="tk-n">1</span>;
+        <span class="tk-k">return</span> memo[i][j];
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0329_LongestIncreasingPathInAMatrix.java · 记忆化DFS(DAG最长路径) · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> max;
+    <span class="tk-k">int</span>[][] memo;
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestIncreasingPath</span>(<span class="tk-k">int</span>[][] matrix) {
         max = <span class="tk-n">0</span>;
         memo = <span class="tk-k">new</span> <span class="tk-k">int</span>[matrix.length][matrix[<span class="tk-n">0</span>].length];
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; matrix.length; i++) {
@@ -63,11 +107,12 @@
         count = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(count, <span class="tk-f">dfs</span>(matrix, i, j + <span class="tk-n">1</span>, matrix[i][j]));
         memo[i][j] = count + <span class="tk-n">1</span>;
         <span class="tk-k">return</span> count + <span class="tk-n">1</span>;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><h2>① 问题本质与解法选择</h2><ul><li>本质：网格 DAG 上的最长路径。严格递增（B&gt;A）让移动方向天然无环——每个格子是节点，四向边指向值更大的邻居。</li><li>解法选择：记忆化 DFS。dfs(i,j) 返回从该格出发的最长递增路径长度，每格只算一次，O(m·n)。</li><li>为什么不能朴素 DFS：无记忆化时不同起点反复展开同一段后缀路径，200x200 网格路径数指数爆炸（实测直接卡死超时）。</li></ul><h2>② 关键设计决策</h2><div class="table-wrap"><table><thead><tr><th>设计点</th><th>决策</th><th>理由</th></tr></thead><tbody><tr><td>memo[i][j]</td><td>从 (i,j) 出发的最长路径长度，0 表示未算</td><td>记忆化核心，每格算一次</td></tr><tr><td>dfs 转移</td><td>1 + max(四方向中值更大的邻居的 dfs)，无更大邻居为 1</td><td>DAG 最长路径标准形态</td></tr><tr><td>守卫</td><td>matrix[i][j] &lt;= pre 拦下</td><td>严格递增要求 B&gt;A；用 &lt; 会放行等值格，相邻等值互走成 2-环 → StackOverflowError</td></tr><tr><td>无环保证</td><td>严格递增 → DAG → 不需要 visited</td><td>值只增不回头，memo 足够</td></tr><tr><td>答案</td><td>主循环遍历每格取 memo 最大值</td><td>最长路径可从任意格出发</td></tr></tbody></table></div><h2>③ 具体 case 推演</h2><p>示例1 [[9,9,4],[6,6,8],[2,1,1]] → 4，最长路径 1(2,1)→2(2,0)→6(1,0)→9(0,0)。</p><div class="table-wrap"><table><thead><tr><th>格子</th><th>更大邻居</th><th>dfs 计算</th><th>memo</th></tr></thead><tbody><tr><td>(0,0)=9</td><td>无</td><td>1</td><td>1</td></tr><tr><td>(1,0)=6</td><td>(0,0)=9</td><td>1+dfs(0,0)=2</td><td>2</td></tr><tr><td>(2,0)=2</td><td>(1,0)=6</td><td>1+dfs(1,0)=3</td><td>3</td></tr><tr><td>(2,1)=1</td><td>(1,1)=6、(2,0)=2</td><td>1+max(dfs(1,1)=2, dfs(2,0)=3)=4</td><td>4</td></tr><tr><td>(1,1)=6</td><td>(0,1)=9、(0,0)=9、(1,2)=8</td><td>1+1=2</td><td>2</td></tr></tbody></table></div><p>max=4 ✓。等值格（两个 9、两个 6）在守卫 matrix[i][j]&lt;=pre 下互不可走，不会成环。</p><h2>④ 边界与细节</h2><ul><li>单行/单列：只能单向移动，答案 = n 或 m</li><li>全相同矩阵：等值不可走 → 每格 1，答案 1</li><li>2x2 螺旋递增 → 4（验证跨两行路径）</li><li>200x200 上限 matrix[i][j]=i+j → 单调右/下路径长 m+n-1=399（验证 O(m·n) 不超时）</li><li>取值上限 2^31-1：全程只比较不运算，无溢出</li><li>教训沉淀：记忆化入口必查 memo（只存不查等于白存）；严格递增守卫 &lt; 与 &lt;= 一个符号之差决定是否成环</li></ul><h2>⑤ 复杂度与下限论证</h2><ul><li>时间 O(m·n)：每格恰好计算一次，每次看 4 个邻居</li><li>空间 O(m·n)：memo 表 + 递归栈最坏 O(m·n)（最长递增路径可贯穿全图）</li><li>下限：每个格子至少要被考察一次（可能成为路径成员），O(m·n) 时间即为下限；记忆化让每格只算一次、不重复</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>路径枚举 DFS 未记忆化：从不同起点反复展开同一段后缀路径，网格路径数指数爆炸（200x200 直接卡死）；DAG 最长路径应 dfs 返回长度并用 memo 缓存每格只算一次，O(m·n) 而非指数</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>严格递增守卫比较符号反：matrix[i][j] &lt; pre 放行等值格，相邻等值格互走成 2-环导致无限递归 StackOverflowError；必须 &lt;= pre 才拦下等值（题目要求严格递增），同时保证 DAG 无环</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>139/139 用例。</p></div></div></div></section>
-  <section><h2>套路沉淀</h2><div class="card md"><h3>网格DAG最长路径：记忆化DFS</h3><p>严格递增的网格路径=DAG 最长路径：dfs(i,j)=1+max(更大邻居的 dfs)，入口必查 memo（只存不查=白存），守卫用 &lt;= pre 拦等值否则相邻等值互走成环 SOE</p></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>网格DAG最长路径：记忆化DFS</h3><p>严格递增的网格路径=DAG 最长路径：dfs(i,j)=1+max(更大邻居的 dfs)，入口必查 memo（只存不查=白存），守卫用 &lt;= pre 拦等值否则相邻等值互走成环 SOE</p></div><div class="card md"><h3>带 pre 参数的 DFS 何时还能记忆化：看返回值是否与 pre 无关</h3><p>memo 可用的判据只有一条：同一状态在不同调用下返回值是否恒定。写成 dfs(i,j,pre) 时，只要「pre 只用于提前拦截」——拦截分支 return 0 且不写 memo，通过拦截后算出的就是与 pre 无关的无条件值——(i,j) 仍是完整状态，memo 依然成立（本题等值被 &lt;= pre 拦下，既保证严格递增又保证无环）。危险写法是把 memo 写在守卫之前，把「被前驱切断」的 0 固化进缓存。外层入口用 -1 当无约束初始值需先确认值域下界（本题 matrix&gt;=0）。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

@@ -2,14 +2,10 @@
 // LeetCode 329. 矩阵中的最长递增路径 (Longest Increasing Path in a Matrix)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/
-// 刷题日期：2026-08-26
-//
-// 思路：记忆化 DFS（DAG 最长路径）——dfs(i,j) 返回从该格出发的最长递增路径长度：
-//       dfs = 1 + max(四个方向中值更大的邻居的 dfs)，无更大邻居为 1；
-//       守卫 matrix[i][j] <= pre 拦下等值与非增（严格递增保证无环），memo 每格只算一次
-// DP 子类型：DAG 最长路径（记忆化搜索/拓扑序 DP）——严格递增使移动方向天然无环，
-//            dfs(i,j) 返回从该格出发的最长递增路径，记忆化避免重复计算
-// 复杂度：时间 O(m·n)（每格算一次、看 4 邻居）空间 O(m·n)（memo + 递归栈最深 O(m·n)）
+// 复习日期：2026-09-15（第 1 次复习 · 一刷 2026-08-26 · 一刷非一次 AC）
+// 一刷思路：记忆化 DFS（DAG 最长路径），dfs(i,j) = 1 + max(更大邻居的 dfs)，memo 每格只算一次
+// 子类型：DAG 最长路径（记忆化 DFS / 网格上按值定向的 DP）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
 import java.util.*;
@@ -17,22 +13,24 @@ import java.util.*;
 public class LC0329_LongestIncreasingPathInAMatrix {
 
     // ==== 提交代码开始 ====
-    int max;
+    int ans;
     int[][] memo;
+
     public int longestIncreasingPath(int[][] matrix) {
-        max = 0;
-        memo = new int[matrix.length][matrix[0].length];
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                memo[i][j] = dfs(matrix, i, j, -1);
-                max = Math.max(max, memo[i][j]);
+        ans = 0;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        memo = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                ans = Math.max(ans, dfs(matrix, i, j, -1));
             }
         }
-        return max;
+        return ans;
     }
 
-    private int dfs(int[][] matrix, int i, int j, int pre) {
-        if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] <= pre) {
+    private int dfs(int[][] matrix, int i, int j, int preValue) {
+        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || matrix[i][j] <= preValue) {
             return 0;
         }
         if (memo[i][j] != 0) {
@@ -44,7 +42,7 @@ public class LC0329_LongestIncreasingPathInAMatrix {
         count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));
         count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));
         memo[i][j] = count + 1;
-        return count + 1;
+        return memo[i][j];
     }
     // ==== 提交代码结束 ====
 
