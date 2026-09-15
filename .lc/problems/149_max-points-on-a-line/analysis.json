@@ -37,18 +37,18 @@
       "code": "public int maxPoints(int[][] points) {\n        int ans = 1;\n        for (int i = 0; i < points.length; i++) {\n            int[] p1 = points[i];\n            for (int j = i + 1; j < points.length; j++) {\n                int[] p2 = points[j];\n                int count = 2;\n                for (int k = j + 1; k < points.length; k++) {\n                    int[] p = points[k];\n                    // p1 -> p2 (p2[1] - p1[1], p2[0] - p1[0])\n                    // p -> p2 (p[1] - p2[1], p[0] - p2[0])\n                    // 三点共线 ⇔ 这两个向量平行 ⇔ 叉积为 0：\n                    // P1P2 × P2P = (p2[1] - p1[1])*(p[0] - p2[0]) − (p[1] - p2[1])*(p2[0] - p1[0]) == 0\n                    int s1 = (p2[1] - p1[1]) * (p[0] - p2[0]);\n                    int s2 = (p[1] - p2[1]) * (p2[0] - p1[0]);\n                    if (s1 == s2) {\n                        count++;\n                    }\n                }\n                ans = Math.max(ans, count);\n            }\n        }\n        return ans;\n    }\n"
     },
     {
-      "date": "2026-09-09",
+      "date": "2026-09-15",
       "verdict": "Accepted",
       "testcases": "42/42",
       "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
-      "time_complexity": "O(n²)",
+      "time_complexity": "O(n^2)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：与 09-06 复习同思路（固定锚点 + 归一化斜率哈希 O(n²)），本次用 Long key = dx*400001+dy 编码代替字符串，gcd 用辗转相除迭代；比一刷 O(n³) 叉积已降一档，复杂度不变 O(n²)。\n② 为什么能想起来：code_notes 明确要求不退回 O(n³) 叉积；回忆点是「共线 ⇔ 相对锚点斜率相同」，浮点斜率有精度问题 → 用 (dx,dy) 除以 gcd 的整数对当 key，并先统一符号避免 (1,-1)/(-1,1) 判成不同线。\n③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（42/42），未探讨/未看归档 → strong。\n④ 下一步提醒：注意本题约束「点互不相同」，故无需处理重复点；若变体允许重复点，需额外统计 same 点并计入答案。",
+      "notes": "① 与上一轮对比：仍是固定锚点 + 归一化斜率哈希的 O(n²) 写法；本次未提问、未讨论，直接复写并一次提交 Accepted 42/42，继续记 strong。\n\n② 关键设计：对每个锚点只统计其他点相对它的方向；`dx,dy` 先通过 gcd 约分，再统一符号（`dx<0` 或 `dx==0 && dy<0` 时同时取反），保证同一方向得到同一 key。哈希值记录该斜率上的其他点数，锚点自身最后加 1。\n\n③ 边界与细节：单点返回 1；水平线 `dy=0`、垂直线 `dx=0` 都能归一化；坐标差最大约 2×10^4，key `dx*400001+dy` 在当前约束下避免碰撞；空间为 O(n)。\n\n④ 掌握度判定：没有算法提示或讨论，本地全过且力扣首次提交 Accepted，记 strong。",
       "mastery": "strong",
-      "pass": 2,
-      "memory_bytes": 47272000,
-      "code": "    public int maxPoints(int[][] points) {\n        int max = 0;\n        for (int i = 0; i < points.length; i++) {\n            Map<Long, Integer> map = new HashMap<>();\n            int[] a = points[i];\n            for (int j = 0; j < points.length; j++) {\n                if (i == j) {\n                    continue;\n                }\n                int[] b = points[j];\n                int dx = b[0] - a[0];\n                int dy = b[1] - a[1];\n                if (dx < 0 || (dx == 0 && dy < 0)) {\n                    dx = -dx;\n                    dy = -dy;\n                }\n                int m = gcd(Math.abs(dx), Math.abs(dy));\n                dx = dx / m;\n                dy = dy / m;\n                long key = dx * 400001L + dy;\n                map.merge(key, 1, Integer::sum);\n                max = Math.max(max, map.get(key));\n            }\n\n        }\n        // 最终答案需要 \n        return max + 1;\n    }\n\n    private int gcd(int a, int b) {\n        while (b != 0) {\n            int temp = a % b;\n            a = b;\n            b = temp;\n        }\n        return a;\n    }",
+      "pass": 3,
+      "memory_bytes": 47356000,
+      "code": "    public int maxPoints(int[][] points) {\n        int max = 0;\n        for (int i = 0; i < points.length; i++) {\n            Map<Integer, Integer> map = new HashMap<>();\n            int[] a = points[i];\n            for (int j = 0; j < points.length; j++) {\n                if (i == j) continue;\n                int[] b = points[j];\n                int dx = b[0] - a[0];\n                int dy = b[1] - a[1];\n                if (dx < 0 || (dx == 0 && dy < 0)) {\n                    dx = -dx;\n                    dy = -dy;\n                }\n                int gcd = getGcd(Math.abs(dx), Math.abs(dy));\n                dx /= gcd;\n                dy /= gcd;\n                int key = dx * 400001 + dy;\n                map.merge(key, 1, Integer::sum);\n                max = Math.max(max, map.get(key));\n            }\n        }\n        return max + 1;\n    }\n\n    private int getGcd(int x, int y) {\n        while (y != 0) {\n            int t = x % y;\n            x = y;\n            y = t;\n        }\n        return x;\n    }",
       "prev_code": "    public int maxPoints(int[][] points) {\n        int max = 0;\n        for (int i = 0; i < points.length; i++) {\n            Map<String, Integer> map = new HashMap<>();\n            int[] a = points[i];\n            int curMax = 0;\n            int same = 0;\n            for (int j = 0; j < points.length; j++) {\n                if (i == j) {\n                    continue;\n                }\n                int[] b = points[j];\n                int dx = a[0] - b[0];\n                int dy = a[1] - b[1];\n                if (dx == 0 && dy == 0) {\n                    same++;\n                    continue;\n                }\n                if (dx < 0 || (dx == 0 && dy < 0)) {\n                    dx = -dx;\n                    dy = -dy;\n                }\n                int g = gcd(Math.abs(dx), Math.abs(dy));\n                dx = dx / g;\n                dy = dy / g;\n                String key = dx + \",\" + dy;\n                map.merge(key, 1, Integer::sum);\n                curMax = Math.max(curMax, map.get(key));\n            }\n            max = Math.max(max, curMax + 1 + same);\n        }\n        return max;\n    }\n\n    private int gcd(int dx, int dy) {\n        while (dy != 0) {\n            int n = dx % dy;\n            dx = dy;\n            dy = n;\n        }\n        return dx;\n    }"
     }
   ],
@@ -81,6 +81,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：与 09-06 复习同思路（固定锚点 + 归一化斜率哈希 O(n²)），本次用 Long key = dx*400001+dy 编码代替字符串，gcd 用辗转相除迭代；比一刷 O(n³) 叉积已降一档，复杂度不变 O(n²)。\n② 为什么能想起来：code_notes 明确要求不退回 O(n³) 叉积；回忆点是「共线 ⇔ 相对锚点斜率相同」，浮点斜率有精度问题 → 用 (dx,dy) 除以 gcd 的整数对当 key，并先统一符号避免 (1,-1)/(-1,1) 判成不同线。\n③ 掌握度判定：本地 10 个用例一次跑通，力扣一次提交 Accepted（42/42），未探讨/未看归档 → strong。\n④ 下一步提醒：注意本题约束「点互不相同」，故无需处理重复点；若变体允许重复点，需额外统计 same 点并计入答案。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-15",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "42/42",
+      "approach": "固定锚点 + 归一化斜率哈希（O(n²)）",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍是固定锚点 + 归一化斜率哈希的 O(n²) 写法；本次未提问、未讨论，直接复写并一次提交 Accepted 42/42，继续记 strong。\n\n② 关键设计：对每个锚点只统计其他点相对它的方向；`dx,dy` 先通过 gcd 约分，再统一符号（`dx<0` 或 `dx==0 && dy<0` 时同时取反），保证同一方向得到同一 key。哈希值记录该斜率上的其他点数，锚点自身最后加 1。\n\n③ 边界与细节：单点返回 1；水平线 `dy=0`、垂直线 `dx=0` 都能归一化；坐标差最大约 2×10^4，key `dx*400001+dy` 在当前约束下避免碰撞；空间为 O(n)。\n\n④ 掌握度判定：没有算法提示或讨论，本地全过且力扣首次提交 Accepted，记 strong。"
     }
   ]
 }
