@@ -19,13 +19,17 @@
     
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
-    
-    
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-03</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>208. 实现 Trie (前缀树) (Implement Trie (Prefix Tree))</h1><p>&gt; <a href="https://leetcode.cn/problems/implement-trie-prefix-tree/" rel="noopener">https://leetcode.cn/problems/implement-trie-prefix-tree/</a></p><p>难度：Medium ｜ 分类：哈希表</p><p>标签：设计、字典树、哈希表、字符串</p><h2>题目描述</h2><p>Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补全和拼写检查。</p><p>请你实现 Trie 类：</p><p>Trie() 初始化前缀树对象。</p><p>void insert(String word) 向前缀树中插入字符串 word 。</p><p>boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。</p><p>boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。</p><p>示例：</p><p>输入</p><p>["Trie", "insert", "search", "search", "startsWith", "insert", "search"]</p><p>[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]</p><p>输出</p><p>[null, null, true, false, true, null, true]</p><p>解释</p><p>Trie trie = new Trie();</p><p>trie.insert("apple");</p><p>trie.search("apple"); // 返回 True</p><p>trie.search("app"); // 返回 False</p><p>trie.startsWith("app"); // 返回 True</p><p>trie.insert("app");</p><p>trie.search("app"); // 返回 True</p><p>提示：</p><p>1</p><p>word 和 prefix 仅由小写英文字母组成</p><p>insert、search 和 startsWith 调用次数 总计 不超过 3 * 104 次</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（16/16）｜ 一次 AC ｜ Trie（数组子节点 + 结束标记） ｜ O(len) · O(字符数 × 26)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>写法相同：<strong>Trie 数组子节点 + <code>end</code> 结束标记</strong>，insert/search/startsWith 都是逐字符下行 O(len)。与一刷归档代码有两处实质差异：</li><li>一刷把「沿字符串下行、走不通就返回 null」抽成了私有 <code>getCur</code>，search 与 startsWith 共用；本轮把它内联进两个方法，同样的 7 行循环写了两遍。</li><li>一刷用 <code>for (Character c : …)</code>（拆箱），本轮改成 <code>for (char c : …)</code>，省掉装箱。</li><li>功能与复杂度完全等价：空间是「已插入字符数 × 26 个指针」加上每个节点一个 <code>end</code> 布尔。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷一次 AC、没有沉淀错误习惯。本轮直接落对两条关键不变式：<code>end</code> 只标在<strong>词尾节点</strong>上（不是沿途每个节点），<code>search</code> 看 <code>cur.end</code>、<code>startsWith</code> 只看能否走通——正是边界 2（<code>"appl"</code> 能走通但不是单词）守的那条线。</li><li>先插 <code>"ab"</code> 再插 <code>"a"</code> 时只改短词末端节点的 <code>end</code>，长词的 <code>end</code> 不受影响，边界 4 通过。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（16/16），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>重复的下行循环建议抽回私有方法（只有最后一行判断不同），改一处不会漏另一处。</li><li>后续 212 单词搜索 II（Trie + 回溯剪枝）、211 添加与搜索单词（多一个 <code>.</code> 通配分支）都在这套结构上叠加约束，可对照复习。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,63 @@
         <li><span>复杂度</span><b>O(L) · O(N*26)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>Trie（数组子节点 + 结束标记）</b></li>
+        <li><span>复杂度</span><b>O(len) · O(字符数 × 26)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>Trie（数组子节点 + 结束标记）</p>
-    <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(N*26)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>Trie（数组子节点 + 结束标记）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Trie</span> {
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · Trie（数组子节点 + 结束标记）</h3>
+    <p><span class="chip">时间 O(len)</span><span class="chip">空间 O(字符数 × 26)</span><span class="chip">内存 ≈ 59.3 MB</span><span class="chip">用例 16/16</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0208_ImplementTriePrefixTree.java · Trie（数组子节点 + 结束标记）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Trie</span> {
+        <span class="tk-t">Trie</span>[] it;
+        <span class="tk-k">boolean</span> end;
+        <span class="tk-k">public</span> <span class="tk-t">Trie</span>() {
+            <span class="tk-k">this</span>.it = <span class="tk-k">new</span> <span class="tk-t">Trie</span>[<span class="tk-n">26</span>];
+            <span class="tk-k">this</span>.end = <span class="tk-k">false</span>;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">insert</span>(<span class="tk-t">String</span> word) {
+            <span class="tk-t">Trie</span> cur = <span class="tk-k">this</span>;
+            <span class="tk-k">for</span> (<span class="tk-k">char</span> c : word.<span class="tk-f">toCharArray</span>()) {
+                <span class="tk-k">if</span> (cur.it[c - <span class="tk-s">'a'</span>] != <span class="tk-k">null</span>) {
+                    cur = cur.it[c - <span class="tk-s">'a'</span>];
+                } <span class="tk-k">else</span> {
+                    cur.it[c - <span class="tk-s">'a'</span>] = <span class="tk-k">new</span> <span class="tk-t">Trie</span>();
+                    cur = cur.it[c - <span class="tk-s">'a'</span>];
+                }
+            }
+            cur.end = <span class="tk-k">true</span>;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">search</span>(<span class="tk-t">String</span> word) {
+            <span class="tk-t">Trie</span> cur = <span class="tk-k">this</span>;
+            <span class="tk-k">for</span> (<span class="tk-k">char</span> c : word.<span class="tk-f">toCharArray</span>()) {
+                <span class="tk-k">if</span> (cur.it[c - <span class="tk-s">'a'</span>] == <span class="tk-k">null</span>) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
+                } <span class="tk-k">else</span> {
+                    cur = cur.it[c - <span class="tk-s">'a'</span>];
+                }
+            }
+            <span class="tk-k">return</span> cur.end;
+        }
+
+        <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">startsWith</span>(<span class="tk-t">String</span> prefix) {
+            <span class="tk-t">Trie</span> cur = <span class="tk-k">this</span>;
+            <span class="tk-k">for</span> (<span class="tk-k">char</span> c : prefix.<span class="tk-f">toCharArray</span>()) {
+                <span class="tk-k">if</span> (cur.it[c - <span class="tk-s">'a'</span>] == <span class="tk-k">null</span>) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
+                } <span class="tk-k">else</span> {
+                    cur = cur.it[c - <span class="tk-s">'a'</span>];
+                }
+            }
+            <span class="tk-k">return</span> cur != <span class="tk-k">null</span>;
+        }
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0208_ImplementTriePrefixTree.java · Trie（数组子节点 + 结束标记） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Trie</span> {
         <span class="tk-t">Trie</span>[] sub;
         <span class="tk-k">boolean</span> end = <span class="tk-k">false</span>;
         <span class="tk-k">public</span> <span class="tk-t">Trie</span>() {
@@ -77,7 +133,8 @@
             <span class="tk-t">Trie</span> cur = <span class="tk-f">getCur</span>(prefix);
             <span class="tk-k">return</span> cur != <span class="tk-k">null</span>;
         }
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：实现支持 insert / search / startsWith 的字典树。Trie 的价值是把字符串的公共前缀合并存储，查询时按字符逐层走。</p><p>关键设计：每个节点是 Trie[26] 子指针数组 + end 结束标记。insert 从根沿字符路径走，缺子节点就 new；search 和 startsWith 共用一个 getCur 沿前缀走到终点，区别是 search 还要检查 end 标记——否则搜 app 会误命中已插入的 apple。</p><p>边界：空字符串应作为合法词支持（根节点 end 标记即可）；公共前缀是另一个完整词时必须靠 end 区分；题目限定小写字母，数组固定 26。</p><p>复杂度：insert / search / startsWith 均为 O(L)（L 为单词/前缀长度），空间 O(总字符数×26)；比哈希表多支持前缀查询，且共享公共前缀。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>游标起点与移动：insert 的游标从 new 出来的孤儿节点开始（应为根 this），且新建子节点后没有把游标移到新节点，导致插入的路径和树根断开</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>16/16 用例一次通过。</p></div></div></div></section>
@@ -95,7 +152,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
       <h3>错误习惯复盘</h3><p><b>游标起点与移动：insert 的游标从 new 出来的孤儿节点开始（应为根 this），且新建子节点后没有把游标移到新节点，导致插入的路径和树根断开</b>（累计 1 次）</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ search 与 startsWith 各写了一遍「沿字符下行、走不通就返回」的循环，建议抽回一个私有方法（一刷正是这么写的，旧代码已保留在复盘页「上一版写法」）；重复两遍容易只改一处。</div><div class="quote">★ `startsWith` 末尾的 `return cur != null;` 恒为 true（循环里要么提前 return false，要么成功下行），直接写 `return true;` 更能表达语义。</div><div class="quote">★ `insert` 的 if/else 两个分支最后都在做 `cur = cur.it[c - 'a']`，可以先补空节点再统一下行，少一段重复赋值。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 4 · implement-trie-prefix-tree</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">实现 Trie：数组子节点 + 结束标记，一次 Accepted（16/16）</div>
