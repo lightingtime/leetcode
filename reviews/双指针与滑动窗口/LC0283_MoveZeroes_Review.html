@@ -19,13 +19,17 @@
     
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
-    
-    
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>283. 移动零 (Move Zeroes)</h1><p>&gt; <a href="https://leetcode.cn/problems/move-zeroes/" rel="noopener">https://leetcode.cn/problems/move-zeroes/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针</p><h2>题目描述</h2><p>给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。</p><p>请注意 ，必须在不复制数组的情况下原地对数组进行操作。</p><p>示例 1:</p><p>输入: nums = [0,1,0,3,12]</p><p>输出: [1,3,12,0,0]</p><p>示例 2:</p><p>输入: nums = [0]</p><p>输出: [0]</p><p>提示:</p><p>1 4</p><p>-231 31 - 1</p><p>进阶：你能尽量减少完成的操作次数吗？</p><h2>示例</h2><ol><li>输入：nums = [0,1,0,3,12]</li></ol><p>输出：[1,3,12,0,0]</p><ol><li>输入：nums = [0]</li></ol><p>输出：[0]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（75/75）｜ 一次 AC ｜ 双指针 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>同一思路：<strong>数组双指针原地分区</strong>（慢指针 <code>l</code> 记非零写入口、快指针 <code>i</code> 扫描，边扫边换）。与一刷归档的差异在写法细节：</li><li>一刷变量叫 <code>unCheck</code>/<code>check</code>，且先判断「慢指针指的位置是不是 0」再决定交换，天然跳过了自交换；</li><li>本轮把判断换成「当前元素是不是非零」，逻辑更直白，但 <code>l == i</code> 时会产生一次<strong>自交换</strong>（无害的纯多余动作）。</li><li>最坏情况比较次数：一刷对每个非零元素可能多走一次 <code>check = unCheck</code> 的重置，本轮严格一趟扫完，都是 O(n)/O(1)。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷一次 AC、没有沉淀错误习惯。本轮直接落对两条不变式：<code>[0, l)</code> 全是已经排好的非零元素（且保持原相对顺序），<code>[l, i)</code> 全是 0。</li><li>交换而不是覆盖，保证零不会丢；<code>i</code> 每轮必进，保证一趟扫完不回头。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（75/75），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同一骨架的兄弟题：26 删除有序数组中的重复项、27 移除元素（「快慢指针原地分区」），75 颜色分类（升级成三路分区），回看时可连着过一遍。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,37 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双指针</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双指针</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 75/75</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/双指针与滑动窗口/LC0283_MoveZeroes.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">moveZeroes</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.9 MB</span><span class="chip">用例 75/75</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0283_MoveZeroes.java · 双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">moveZeroes</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> l = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (i &lt; nums.length) {
+            <span class="tk-k">if</span> (nums[i] != <span class="tk-n">0</span>) {
+                <span class="tk-f">swap</span>(nums, l, i);
+                l++;
+                i++;
+            } <span class="tk-k">else</span> {
+                i++;
+            }
+        }
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i , <span class="tk-k">int</span> j) {
+        <span class="tk-k">int</span> temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0283_MoveZeroes.java · 双指针 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">moveZeroes</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> unCheck = <span class="tk-n">0</span>, check = <span class="tk-n">0</span>;
         <span class="tk-k">while</span> (check &lt; nums.length) {
             <span class="tk-k">if</span> (nums[unCheck] == <span class="tk-n">0</span>) {
@@ -50,7 +80,8 @@
                 check = unCheck;
             }
         }
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：原地把 0 全部移到末尾，同时保持非零元素相对顺序。双指针一趟完成，不额外开数组。</p><p>关键设计：一个扫描位负责找 0，一个交换位指向当前要放置非零元素的位置：扫描位是 0 时与交换位交换并把交换位前移；扫描位非 0 时扫描位继续前移。这样每个非零元素都会被逐步换到前面、0 被推到后面，相对顺序不变。</p><p>边界：全 0（交换后无变化但必须保证不越界）；全非 0（扫描位一路前移）；0 在开头或结尾；交换用临时变量避免覆盖。</p><p>复杂度：O(n) 时间、O(1) 空间，原地最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>75/75 用例一次通过。</p></div></div></div></section>
@@ -68,7 +99,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ `l == i` 时 `swap` 是自交换，可以加 `if (l != i)` 跳过——不影响正确性，但省掉两次写。</div><div class="quote">★ `while` 的两个分支都在 `i++`，可改成 `for` 循环 + 单个 `if`，少一段重复语句。</div><div class="quote">★ `swap(int[] nums, int i , int j)` 逗号前多了一个空格。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 8 · move-zeroes</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">移动零：双指针原地交换，0 位置指针 + 扫描指针，O(n)/O(1)，一次 Accepted（75/75）</div>
