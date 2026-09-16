@@ -15,17 +15,14 @@ public class LC0141_LinkedListCycle {
     // ==== 提交代码开始 ====
     public boolean hasCycle(ListNode head) {
         ListNode fast = head, slow = head;
-        while (fast != null) {
+        while (fast != null && fast.next != null) {
             slow = slow.next;
-            fast = fast.next;
-            if (fast != null) {
-                fast = fast.next;
-            }
-            if (fast == slow) {
-                break;
+            fast = fast.next.next;
+            if (slow == fast) {
+                return true;
             }
         }
-        return fast != null;
+        return false;
     }
     // ==== 提交代码结束 ====
 

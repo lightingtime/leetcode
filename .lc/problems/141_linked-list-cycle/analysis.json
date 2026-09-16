@@ -25,8 +25,8 @@
       "date": "2026-09-16",
       "verdict": "Accepted",
       "approach": "快慢指针",
-      "code": "public boolean hasCycle(ListNode head) {\n        ListNode fast = head, slow = head;\n        while (fast != null) {\n            slow = slow.next;\n            fast = fast.next;\n            if (fast != null) {\n                fast = fast.next;\n            }\n            if (fast == slow) {\n                break;\n            }\n        }\n        return fast != null;\n    }",
-      "prev_code": "public boolean hasCycle(ListNode head) {\n        if (head == null || head.next == null) {\n            return false;\n        }\n        ListNode fast = head;\n        ListNode slow = head;\n        while (fast.next != null && fast.next.next != null) {\n            fast = fast.next.next;\n            slow = slow.next;\n            if (fast == slow) {\n                return true;\n            }\n        }\n        return false;\n    }\n",
+      "code": "public boolean hasCycle(ListNode head) {\n        ListNode fast = head, slow = head;\n        while (fast != null && fast.next != null) {\n            slow = slow.next;\n            fast = fast.next.next;\n            if (slow == fast) {\n                return true;\n            }\n        }\n        return false;\n    }\n",
+      "prev_code": "public boolean hasCycle(ListNode head) {\n        ListNode fast = head, slow = head;\n        while (fast != null) {\n            slow = slow.next;\n            fast = fast.next;\n            if (fast != null) {\n                fast = fast.next;\n            }\n            if (fast == slow) {\n                break;\n            }\n        }\n        return fast != null;\n    }",
       "testcases": "29/29",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
@@ -53,7 +53,6 @@
     }
   ],
   "code_notes": [
-    "循环条件可以收进 while（`fast != null && fast.next != null`），相遇就必然真有环；现在的写法里 `fast == slow` 在两者同为 null 时也成立，靠 `return fast != null` 兜底，读代码要多推一层。",
-    "把推进规则写进循环条件后，`if (fast != null) fast = fast.next;` 这层判空可以省掉。"
+    "2026-09-16 复习后把相遇判断收进循环条件：`while (fast != null && fast.next != null)`，相遇即可直接 `return true`，空链表/单节点由循环条件自然兜住，不再依赖「两个 null 相等」的兜底。本地 10 组用例通过，未重新提交力扣；上一版代码见复盘页「上一版写法」。"
   ]
 }

@@ -50,6 +50,18 @@
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 29/29</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0141_LinkedListCycle.java · 快慢指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-t">ListNode</span> fast = head, slow = head;
+        <span class="tk-k">while</span> (fast != <span class="tk-k">null</span> &amp;&amp; fast.next != <span class="tk-k">null</span>) {
+            slow = slow.next;
+            fast = fast.next.next;
+            <span class="tk-k">if</span> (slow == fast) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
+            }
+        }
+        <span class="tk-k">return</span> <span class="tk-k">false</span>;
+    }
+</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0141_LinkedListCycle.java · 快慢指针 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-t">ListNode</span> fast = head, slow = head;
         <span class="tk-k">while</span> (fast != <span class="tk-k">null</span>) {
             slow = slow.next;
             fast = fast.next;
@@ -61,23 +73,7 @@
             }
         }
         <span class="tk-k">return</span> fast != <span class="tk-k">null</span>;
-    }</pre></div>
-    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0141_LinkedListCycle.java · 快慢指针 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
-        <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
-            <span class="tk-k">return</span> <span class="tk-k">false</span>;
-        }
-        <span class="tk-t">ListNode</span> fast = head;
-        <span class="tk-t">ListNode</span> slow = head;
-        <span class="tk-k">while</span> (fast.next != <span class="tk-k">null</span> &amp;&amp; fast.next.next != <span class="tk-k">null</span>) {
-            fast = fast.next.next;
-            slow = slow.next;
-            <span class="tk-k">if</span> (fast == slow) {
-                <span class="tk-k">return</span> <span class="tk-k">true</span>;
-            }
-        }
-        <span class="tk-k">return</span> <span class="tk-k">false</span>;
-    }
-</pre></div></details>
+    }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：判断链表是否有环。哈希表记录访问过的节点可行但 O(n) 空间；快慢指针让 fast 每次走 2 步、slow 走 1 步，只花 O(1) 空间。</p><p>关键设计：若有环，fast 相对 slow 每轮靠近 1 步，必在环内相遇；无环则 fast 先走到 null。判断相遇要在移动之后立刻比较（代码在 fast 前进后检查 fast==slow）。</p><p>边界：空链表或单节点直接返回 false；循环条件 fast.next!=null &amp;&amp; fast.next.next!=null 保证 fast 前进前已有两个后继，不会空指针；自环节点也能正确检测（fast 先入环，slow 随后在环内被追上）。</p><p>复杂度：O(n) 时间（无环走 n/2 步；有环不超过 n+环长）、O(1) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>29/29 用例一次通过。</p></div></div></div></section>
@@ -95,7 +91,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
-      <h3>复习提醒</h3><div class="quote">★ 循环条件可以收进 while（`fast != null &amp;&amp; fast.next != null`），相遇就必然真有环；现在的写法里 `fast == slow` 在两者同为 null 时也成立，靠 `return fast != null` 兜底，读代码要多推一层。</div><div class="quote">★ 把推进规则写进循环条件后，`if (fast != null) fast = fast.next;` 这层判空可以省掉。</div>
+      <h3>复习提醒</h3><div class="quote">★ 2026-09-16 复习后把相遇判断收进循环条件：`while (fast != null &amp;&amp; fast.next != null)`，相遇即可直接 `return true`，空链表/单节点由循环条件自然兜住，不再依赖「两个 null 相等」的兜底。本地 10 组用例通过，未重新提交力扣；上一版代码见复盘页「上一版写法」。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 5 · linked-list-cycle</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">环形链表：Floyd 快慢指针判圈，O(n)/O(1)，一次 Accepted（29/29）</div>
