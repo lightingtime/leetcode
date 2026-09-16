@@ -27,20 +27,44 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-04",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "65/65",
       "runtime_ms": null,
-      "memory_bytes": 77552000,
+      "memory_bytes": 77580000,
       "approach": "相向双指针",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "盛最多水的容器：相向双指针，移动较矮一侧，O(n)/O(1)，一次 Accepted（65/65）"
+      "notes": "**① 与上一轮对比**\n- 写法与一刷完全一致（**相向双指针**：`left`/`right` 从两端向中间收，每轮移动较矮的一侧），逐行比对只差变量名 `max` → `ans`。核心三行（算面积、比面积、移动较矮侧）一字未改。\n- 复杂度 O(n) 时间 / O(1) 空间。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮落笔就带齐三要素：宽度取 `right - left`、高度取 `Math.min(height[left], height[right])`、**每轮只移动较矮的一侧**。\n- 关键的那句证明也在（不是「看起来该丢」）：以较矮的 `left` 为左端时，任何把右端往左挪的容器宽度更小、高度又不可能超过 `height[left]`，所以不可能更优 —— 丢掉它不丢解；等高的两侧移动哪边都不影响最优，代码走 `else` 分支（`right--`）。\n- 边界 6（长度 1e5 全 10000，面积 999,990,000）验证了 int 不溢出且一趟扫描够快。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同类「相向双指针 + 单调性剪枝」的题可一起对照：42 接雨水（双指针/单调栈）、167 两数之和 II（有序数组），共同点是「先证明能丢掉一侧，再动手收指针」。",
+      "code": "public int maxArea(int[] height) {\n        int left = 0, right = height.length - 1;\n        int ans = 0;\n        while (left < right) {\n            ans = Math.max(ans, Math.min(height[left], height[right]) * (right - left));\n            if (height[left] < height[right]) {\n                left++;\n            } else {\n                right--;\n            }\n        }\n        return ans;\n    }",
+      "prev_code": "public int maxArea(int[] height) {\n        int left = 0, right = height.length - 1;\n        int max = 0;\n        while (left < right) {\n            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));\n            if (height[left] < height[right]) {\n                left++;\n            } else {\n                right--;\n            }\n        }\n        return max;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ],
-  "approach_detail": "问题本质：选两条竖线使面积 min(h[l],h[r])×(r-l) 最大。暴力枚举 O(n²)；双指针从两端向中间收拢 O(n)。\n关键设计：每步计算当前左右两线的面积并更新最大值，然后移动较矮的那条。理由：移动较矮的一侧可能遇到更高边从而增大面积；移动较高的一侧，宽度一定变小、高度又被较矮的钳制，面积不可能变大，所以可以安全排除以矮边为界的全部候选。\n边界：只有两根线时即唯一候选；高度相等时移动任一侧都不漏最优（代码里 <= 时动右指针）；数组长度至少为 2。\n复杂度：O(n) 时间、O(1) 空间；正确性来自每步排除的候选不可能超过当前最优，最优。"
+  "approach_detail": "问题本质：选两条竖线使面积 min(h[l],h[r])×(r-l) 最大。暴力枚举 O(n²)；双指针从两端向中间收拢 O(n)。\n关键设计：每步计算当前左右两线的面积并更新最大值，然后移动较矮的那条。理由：移动较矮的一侧可能遇到更高边从而增大面积；移动较高的一侧，宽度一定变小、高度又被较矮的钳制，面积不可能变大，所以可以安全排除以矮边为界的全部候选。\n边界：只有两根线时即唯一候选；高度相等时移动任一侧都不漏最优（代码里 <= 时动右指针）；数组长度至少为 2。\n复杂度：O(n) 时间、O(1) 空间；正确性来自每步排除的候选不可能超过当前最优，最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-16",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "65/65",
+      "approach": "相向双指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 写法与一刷完全一致（**相向双指针**：`left`/`right` 从两端向中间收，每轮移动较矮的一侧），逐行比对只差变量名 `max` → `ans`。核心三行（算面积、比面积、移动较矮侧）一字未改。\n- 复杂度 O(n) 时间 / O(1) 空间。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮落笔就带齐三要素：宽度取 `right - left`、高度取 `Math.min(height[left], height[right])`、**每轮只移动较矮的一侧**。\n- 关键的那句证明也在（不是「看起来该丢」）：以较矮的 `left` 为左端时，任何把右端往左挪的容器宽度更小、高度又不可能超过 `height[left]`，所以不可能更优 —— 丢掉它不丢解；等高的两侧移动哪边都不影响最优，代码走 `else` 分支（`right--`）。\n- 边界 6（长度 1e5 全 10000，面积 999,990,000）验证了 int 不溢出且一趟扫描够快。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同类「相向双指针 + 单调性剪枝」的题可一起对照：42 接雨水（双指针/单调栈）、167 两数之和 II（有序数组），共同点是「先证明能丢掉一侧，再动手收指针」。"
+    }
+  ],
+  "code_notes": [
+    "面积那行可以先比 `height[left] < height[right]`，然后直接用较矮边 × 宽度，省掉一次 `Math.min`（两者本来就要比一次）。",
+    "`else` 分支同时兜住「右边更矮」和「两边等高」两种情形；等高时丢哪边都不影响最优，但这一层推理读者不易自己想到，值得加一行注释。",
+    "`(right - left)` 可以提成 `int width` 局部变量，长表达式更易读。"
+  ]
 }

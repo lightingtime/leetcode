@@ -2,8 +2,9 @@
 // LeetCode 11. 盛最多水的容器 (Container With Most Water)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/container-with-most-water/
-// 刷题日期：2026-08-04
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
+// 一刷写法：相向双指针，每轮移动较矮的一侧，O(n)/O(1)
+// 测试用例：示例 2 个 + 边界 8 个（原有 5 个，本次补齐：长度 1e5 全 10000 / 最优不在两端 / 山峰形）
 // ============================================================
 
 import java.util.*;
@@ -13,16 +14,16 @@ public class LC0011_ContainerWithMostWater {
     // ==== 提交代码开始 ====
     public int maxArea(int[] height) {
         int left = 0, right = height.length - 1;
-        int max = 0;
+        int ans = 0;
         while (left < right) {
-            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));
+            ans = Math.max(ans, Math.min(height[left], height[right]) * (right - left));
             if (height[left] < height[right]) {
                 left++;
             } else {
                 right--;
             }
         }
-        return max;
+        return ans;
     }
     // ==== 提交代码结束 ====
 
@@ -54,6 +55,17 @@ public class LC0011_ContainerWithMostWater {
         try {
             if (!TestUtil.checkEq(0, s.maxArea(new int[]{0, 0}), "边界5 全零")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
+        try {
+            int[] height = new int[100000];
+            Arrays.fill(height, 10000);
+            if (!TestUtil.checkEq(10000 * 99999, s.maxArea(height), "边界6 长度 1e5 全 10000")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+        try {
+            if (!TestUtil.checkEq(17, s.maxArea(new int[]{2, 3, 4, 5, 18, 17, 6}), "边界7 最优不在两端")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界7 异常: " + t); }
+        try {
+            if (!TestUtil.checkEq(12, s.maxArea(new int[]{1, 2, 3, 4, 5, 4, 3, 2, 1}), "边界8 山峰形")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界8 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
