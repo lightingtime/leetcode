@@ -2,8 +2,9 @@
 // LeetCode 160. 相交链表 (Intersection of Two Linked Lists)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/intersection-of-two-linked-lists/
-// 刷题日期：2026-08-04
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
+// 一刷写法：双指针各走完一条链后切到另一条链，消除长度差 O(m+n)/O(1)
+// 测试用例：示例 3 个（题目自带）+ 边界 7 个（原有双空/单空 2 个，本次补齐 5 个）
 // ============================================================
 
 import java.util.*;
@@ -12,21 +13,10 @@ public class LC0160_IntersectionOfTwoLinkedLists {
 
     // ==== 提交代码开始 ====
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) {
-            return null;
-        }
         ListNode p1 = headA, p2 = headB;
         while (p1 != p2) {
-            if (p1 != null) {
-                p1 = p1.next;
-            } else {
-                p1 = headB;
-            }
-            if (p2 != null) {
-                p2 = p2.next;
-            } else {
-                p2 = headA;
-            }
+            p1 = p1 == null ? headB : p1.next;
+            p2 = p2 == null ? headA : p2.next;
         }
         return p1;
     }
@@ -57,6 +47,31 @@ public class LC0160_IntersectionOfTwoLinkedLists {
         try {
             if (!checkEq(null, s.getIntersectionNode(listNode(1, 2, 3), null), "边界2 单空")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
+        try {
+            ListNode[] p = intersectList(new Object[]{1, 2}, 2, new Object[]{3, 4}, 2);
+            if (!checkEq(null, s.getIntersectionNode(p[0], p[1]), "边界3 等长不相交")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界3 异常: " + t); }
+        try {
+            ListNode[] p = intersectList(new Object[]{1, 2, 3}, 0, new Object[]{1, 2, 3}, 0);
+            if (!checkEq(p[0], s.getIntersectionNode(p[0], p[1]), "边界4 整条链共享，交于两链头")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界4 异常: " + t); }
+        try {
+            ListNode[] p = intersectList(new Object[]{9, 1, 2}, 1, new Object[]{1, 2}, 0);
+            if (!checkEq(p[1], s.getIntersectionNode(p[0], p[1]), "边界5 交于短链头（A 是 B 的延伸）")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
+        try {
+            Object[] longA = new Object[60];
+            for (int i = 0; i < longA.length; i++) longA[i] = i;
+            longA[59] = 7;                       // 最后一个节点与 B 共享
+            ListNode[] p = intersectList(longA, 59, new Object[]{7}, 0);
+            if (!checkEq(p[1], s.getIntersectionNode(p[0], p[1]), "边界6 长度差 59，共享尾节点")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+        try {
+            Object[] longA = new Object[60];
+            for (int i = 0; i < longA.length; i++) longA[i] = i;
+            ListNode[] p = intersectList(longA, 60, new Object[]{1, 2, 3}, 3);
+            if (!checkEq(null, s.getIntersectionNode(p[0], p[1]), "边界7 长度差 57 且不相交")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界7 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

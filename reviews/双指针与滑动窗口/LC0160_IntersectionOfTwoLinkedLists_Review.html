@@ -19,13 +19,17 @@
     
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
-    
-    
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>160. 相交链表 (Intersection of Two Linked Lists)</h1><p>&gt; <a href="https://leetcode.cn/problems/intersection-of-two-linked-lists/" rel="noopener">https://leetcode.cn/problems/intersection-of-two-linked-lists/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、链表、双指针</p><h2>题目描述</h2><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。</p><p>图示两个链表在节点 c1 开始相交：</p><p>题目数据 保证 整个链式结构中不存在环。</p><p>注意，函数返回结果后，链表必须 保持其原始结构 。</p><p>自定义评测：</p><p>评测系统 的输入如下（你设计的程序 不适用 此输入）：</p><p>intersectVal - 相交的起始节点的值。如果不存在相交节点，这一值为 0</p><p>listA - 第一个链表</p><p>listB - 第二个链表</p><p>skipA - 在 listA 中（从头节点开始）跳到交叉节点的节点数</p><p>skipB - 在 listB 中（从头节点开始）跳到交叉节点的节点数</p><p>评测系统将根据这些输入创建链式数据结构，并将两个头节点 headA 和 headB 传递给你的程序。如果程序能够正确返回相交节点，那么你的解决方案将被 视作正确答案 。</p><p>示例 1：</p><p>输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3</p><p>输出：Intersected at '8'</p><p>解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。</p><p>从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。</p><p>在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。</p><p>— 请注意相交节点的值不为 1，因为在链表 A 和链表 B 之中值为 1 的节点 (A 中第二个节点和 B 中第三个节点) 是不同的节点。换句话说，它们在内存中指向两个不同的位置，而链表 A 和链表 B 中值为 8 的节点 (A 中第三个节点，B 中第四个节点) 在内存中指向相同的位置。</p><p>示例 2：</p><p>输入：intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1</p><p>输出：Intersected at '2'</p><p>解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。</p><p>从各自的表头开始算起，链表 A 为 [1,9,1,2,4]，链表 B 为 [3,2,4]。</p><p>在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。</p><p>示例 3：</p><p>输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2</p><p>输出：No intersection</p><p>解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。</p><p>由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。</p><p>这两个链表不相交，因此返回 null 。</p><p>提示：</p><p>listA 中节点数目为 m</p><p>listB 中节点数目为 n</p><p>1 4</p><p>1 5</p><p>0</p><p>0</p><p>如果 listA 和 listB 没有交点，intersectVal 为 0</p><p>如果 listA 和 listB 有交点，intersectVal == listA[skipA] == listB[skipB]</p><p>进阶：你能否设计一个时间复杂度 O(m + n) 、仅用 O(1) 内存的解决方案？</p><h2>示例</h2><ol><li>输入：intersectVal = 8，listA = [4,1,8,4,5]，listB = [5,6,1,8,4,5]，skipA = 2，skipB = 3</li></ol><p>输出：Intersected at '8'</p><p>解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。</p><ol><li>输入：intersectVal = 2，listA = [1,9,1,2,4]，listB = [3,2,4]，skipA = 3，skipB = 1</li></ol><p>输出：Intersected at '2'</p><p>解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。</p><ol><li>输入：intersectVal = 0，listA = [2,6,4]，listB = [1,5]，skipA = 3，skipB = 2</li></ol><p>输出：No intersection</p><p>解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（41/41）｜ 多次提交 ｜ 双指针 ｜ O(m+n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>最终写法与一刷同思路：<strong>双指针换链对齐</strong>（p1 走完 A 从 B 头续走，p2 走完 B 从 A 头续走，总路程 a+y 与 b+x 相等）。与一刷归档的差异只是把入口空值守卫和 if/else 压成了三元表达式，核心一模一样。</li><li>复杂度 O(m+n) / O(1)，仍是本题下限。</li></ul><p><strong>② 这次为什么没一次写对（本轮真实过程）</strong></p><ul><li>第一版把两个次序都写反了，本地 10 组用例里挂了 5 组：</li><li>先解引用 <code>p.next</code> 再判空 → 空链表/单空链直接 NPE；</li><li>换链写在「比较之后」→ 相位错乱，长度差 59 那组两个指针以 <code>null == null</code> 相遇并返回 null；</li><li>循环先走一步再比较 → 漏掉第 0 步，两链从头共享（或某链头就是交点）时返回交点<strong>后面</strong>的节点。</li><li>定位靠的是回到「路程相等」这件事本身：p1 走 a+y、p2 走 b+x，两边node数一样，所以要么同时踩到交点、要么同时变成 null。次序只要保证「每轮开头先比、推进前先问自己是不是 null」，两种收尾就都自然成立。</li><li>一刷沉淀的套路「链表指针判空取舍：p != null vs p.next != null」正是本轮的坑源——这题换链必须用 <code>p == null</code>，因为指针要允许自己越界到 null 才能换链。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本地首跑 5 组失败、经多轮探讨（概念讲解 + 逐条定位 + 次序提示）才改对，非一次 AC → <strong>较弱</strong>，间隔重置 2 天。</li></ul><p><strong>④ 下一步提醒（两天后回访）</strong></p><ul><li>闭卷默写两条次序：① 每轮<strong>开头</strong>先 <code>p1 == p2</code>；② 推进时<strong>先问「我现在是 null 吗」</strong>，是则落到另一条链的头，否则走 <code>next</code>。</li><li>同一骨架可直接迁移到 142 环形链表 II 与 876 链表的中间结点，回访时三题一起过一遍更省力。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,26 @@
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双指针</b></li>
+        <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>双指针</p>
-    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">getIntersectionNode</span>(<span class="tk-t">ListNode</span> headA, <span class="tk-t">ListNode</span> headB) {
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 双指针</h3>
+    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 50.9 MB</span><span class="chip">用例 41/41</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0160_IntersectionOfTwoLinkedLists.java · 双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">getIntersectionNode</span>(<span class="tk-t">ListNode</span> headA, <span class="tk-t">ListNode</span> headB) {
+        <span class="tk-t">ListNode</span> p1 = headA, p2 = headB;
+        <span class="tk-k">while</span> (p1 != p2) {
+            p1 = p1 == <span class="tk-k">null</span> ? headB : p1.next;
+            p2 = p2 == <span class="tk-k">null</span> ? headA : p2.next;
+        }
+        <span class="tk-k">return</span> p1;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0160_IntersectionOfTwoLinkedLists.java · 双指针 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">getIntersectionNode</span>(<span class="tk-t">ListNode</span> headA, <span class="tk-t">ListNode</span> headB) {
         <span class="tk-k">if</span> (headA == <span class="tk-k">null</span> || headB == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
@@ -55,10 +74,11 @@
             }
         }
         <span class="tk-k">return</span> p1;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找两个链表的第一个相交节点。朴素做法先求长度差再对齐；更简洁的是双指针换链：p1 走完 A 后从 B 头继续，p2 走完 B 后从 A 头继续，两指针总路程相等（A+B 与 B+A），必然同时到达交点或同时走到 null。</p><p>关键设计：换链时机是「指针本身走到 null」时，而不是 next 为 null 时——只有指针为 null 才说明把整条链走完了。这样两指针在第二段路径上从相同剩余长度出发，交点处必然对齐。</p><p>边界：无交点时两指针同时为 null，返回 null（A+B 与 B+A 等长）；任一链表为空直接返回 null；有交点时第一次相遇处就是交点，直接返回。</p><p>复杂度：O(m+n) 时间、O(1) 空间，最优。本题历史踩坑就在换链时机上：在 next==null 时切换会导致无交点时死循环、有交点时错位。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 提交<span class="tl-badge ok">Accepted</span></span><p>41/41 用例一次通过。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>双指针换链三要素在复习轮再次写错：① 先解引用 p.next 再判空 → 空链表直接 NPE；② 换链写在「比较之后」，两指针相位错乱，长度差极大时以 null==null 相遇返回 null；③ 循环先走一步才比较，漏掉第 0 步——两链从头共享或某链头即交点时，返回交点后面的节点。正确次序：每轮开头先判 p1==p2，再按「指针自己是否为 null」决定落到另一条链的头还是自己的 next。（同类问题第 2 次：一刷已记「在 next==null 时换链」）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>41/41 用例一次通过。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>链表指针判空取舍：p != null vs p.next != null</h3><p>p != null 允许指针走出链表（完整遍历/换链对齐，如 160 相交链表换链必须在指针为 null 时）；p.next != null 让指针停在最后一个节点或提前看一步（找尾追加、快慢指针跳两步防越界、删除节点找前驱）。取舍标准：这一步之后指针是否应该越界。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -72,8 +92,8 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
-      <h3>错误习惯复盘</h3><p><b>守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null</b>（累计 1 次）</p><p><b>双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位</b>（累计 1 次）</p><p><b>双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null</b>（累计 1 次）</p>
-      
+      <h3>错误习惯复盘</h3><p><b>守卫条件写反/冗余：空值处理后又用 (a != null || b != null) 提前 return，该条件恒真，导致所有非空输入直接返回 null</b>（累计 1 次）</p><p><b>双指针换链时机：在 next==null（链表尾）时切到另一条链，而不是指针本身走到 null 时切换；无交点时指针永远到不了 null 而死循环，有交点时两指针对齐错位</b>（累计 1 次）</p><p><b>双指针换链死代码：null 判断写在恒真位置（else 内 while 刚保证非空），且循环条件 while(p1!=null) 不允许指针为 null，换链永不执行，p1 走完即返回 null</b>（累计 1 次）</p><p><b>双指针换链三要素在复习轮再次写错：① 先解引用 p.next 再判空 → 空链表直接 NPE；② 换链写在「比较之后」，两指针相位错乱，长度差极大时以 null==null 相遇返回 null；③ 循环先走一步才比较，漏掉第 0 步——两链从头共享或某链头即交点时，返回交点后面的节点。正确次序：每轮开头先判 p1==p2，再按「指针自己是否为 null」决定落到另一条链的头还是自己的 next。（同类问题第 2 次：一刷已记「在 next==null 时换链」）</b>（累计 1 次）</p>
+      <h3>复习提醒</h3><div class="quote">★ 换链的两条次序是本写法的全部要害：每轮开头先 `p1 == p2`，推进时先问「自己是不是 null」——顺序反了不会编译报错，只会让空链 NPE、或让两指针以 `null == null` 收尾。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 6 · intersection-of-two-linked-lists</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">相交链表：双指针各走完一条链后切到另一条链消除长度差，O(m+n)/O(1)，一次 Accepted（41/41）</div>
