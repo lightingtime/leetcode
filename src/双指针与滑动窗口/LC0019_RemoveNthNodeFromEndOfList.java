@@ -2,8 +2,11 @@
 // LeetCode 19. 删除链表的倒数第 N 个结点 (Remove Nth Node From End of List)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/remove-nth-node-from-end-of-list/
-// 刷题日期：2026-08-04
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-05）
+// 一刷写法：哨兵 + 快慢指针拉开 N 步（O(n)/O(1)）
+// 上次遗留提醒（本次要求达到）：写法未达最精简——① slow 指针冗余（pre.next 恒等于待删节点，可直接 pre.next = pre.next.next）；
+// ② 快指针走 N 步的 while + i++ 可换成 for 循环
+// 测试用例：示例 3 个 + 边界 7 个（原有 5 个，本次补齐：长度 30 上限删中间 / 全零值长度 30 删头）
 // ============================================================
 
 import java.util.*;
@@ -13,20 +16,16 @@ public class LC0019_RemoveNthNodeFromEndOfList {
     // ==== 提交代码开始 ====
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummy = new ListNode(0, head);
-        ListNode fast = head;
-        int i = 0;
-        while (i < n) {
+        ListNode slow = head, p = dummy, fast = head;
+        for (int i = 0; i < n; i++) {
             fast = fast.next;
-            i++;
         }
-        ListNode slow = head;
-        ListNode pre = dummy;
         while (fast != null) {
             fast = fast.next;
             slow = slow.next;
-            pre = pre.next;
+            p = p.next;
         }
-        pre.next = slow.next;
+        p.next = p.next.next;
         return dummy.next;
     }
     // ==== 提交代码结束 ====
@@ -62,6 +61,17 @@ public class LC0019_RemoveNthNodeFromEndOfList {
         try {
             if (!checkEq(listNode(1, 2, 3, 4, 5, 6, 7, 8, 9), s.removeNthFromEnd(listNode(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 1), "边界5-长链表删尾")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界5-长链表删尾 异常: " + t); }
+        try {
+            Integer[] vals = new Integer[30], expect = new Integer[29];
+            for (int i = 0; i < 30; i++) vals[i] = i + 1;
+            for (int i = 0, k = 0; i < 30; i++) if (i != 15) expect[k++] = i + 1;   // 倒数第 15 个 = 正数第 16 个
+            if (!checkEq(listNode(expect), s.removeNthFromEnd(listNode(vals), 15), "边界6-长度 30 上限删中间")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+        try {
+            Integer[] vals = new Integer[30], expect = new Integer[29];
+            for (int i = 0; i < 30; i++) { vals[i] = 0; if (i < 29) expect[i] = 0; }
+            if (!checkEq(listNode(expect), s.removeNthFromEnd(listNode(vals), 30), "边界7-全零值长度 30 删头")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界7 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
