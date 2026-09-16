@@ -36,20 +36,44 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-04",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "316/316",
       "runtime_ms": null,
-      "memory_bytes": 60640000,
+      "memory_bytes": 60652000,
       "approach": "排序+双指针夹逼",
-      "time_complexity": "O(n²)",
+      "time_complexity": "O(n^2)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "去重方向修正后排序+双指针一次过：重复值保留第一次出现，跳过后续重复"
+      "notes": "**① 与上一轮对比**\n- 同一思路：**排序 + 固定 i 后双指针夹逼**（k 从左、j 从右向中间收），O(n²) 时间 / O(1) 额外空间。写法上有两处结构差异：\n  - 外层：一刷是 `while (i < j) { … i++; }`，本轮改成 `for (int i = 0; i < nums.length - 2; i++)`——循环上界直接把「后面至少还要留两个位置」写进条件，比在体内手动 `i++` 更难写漏；\n  - 内层 j：一刷在外层末尾手动 `j = nums.length - 1` 重置，本轮把 `int j = nums.length - 1` 放进 i 循环内部，作用域更小、不会跨轮串味。\n- 相同之处：i 与 k 都做「保留第一次出现、跳过后续重复」，k 的去重带 `k > i + 1` 保护，相等时只 `k++`。\n\n**② 这次为什么能一次写对**\n- 一刷记下的两个坑一个都没复现：\n  - **去重方向**：`if (i > 0 && nums[i] == nums[i - 1]) continue;` 与 `if (k > i + 1 && nums[k] == nums[k - 1])` 都是跳「后续重复」，`-1,-1,2` 这种需要两个相同值的组合不会被误杀（示例1 覆盖）；\n  - **移动依据引用跑飞变量**：内层 j 每轮重新初始化，判断用的是当轮的 `nums[i] + nums[j] + nums[k]`，不会像一刷那样在 `k == j` 之后还拿同一个元素凑两次。\n- `j` 不做显式去重也不会重复输出：i、k 固定后第三个数被和为 0 唯一确定，边界6/7/8 的超多重复用例都通过。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（316/316），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 去重三件套可以固化成模板背下来：**i 去重（与前一个比）、k 去重（且必须带 `k > i + 1`）、j 无需去重**。\n- 同类延伸：16 最接近的三数之和（同骨架换比较目标）、18 四数之和（外层再加一层并去重）、167 两数之和 II（有序数组的两数问题）。",
+      "code": "public List<List<Integer>> threeSum(int[] nums) {\n        List<List<Integer>> ans = new ArrayList<>();\n        Arrays.sort(nums);\n        for (int i = 0; i < nums.length - 2; i++) {\n            if (i > 0 && nums[i] == nums[i - 1]) {\n                continue;\n            }\n            int j = nums.length - 1;\n            int k = i + 1;\n            while (k < j) {\n                if (k > i + 1 && nums[k] == nums[k - 1]) {\n                    k++;\n                    continue;\n                }\n                if (nums[i] + nums[j] + nums[k] == 0) {\n                    List<Integer> list = new ArrayList<>();\n                    list.add(nums[i]);\n                    list.add(nums[k]);\n                    list.add(nums[j]);\n                    ans.add(list);\n                    k++;\n                } else if (nums[i] + nums[j] + nums[k] < 0){\n                    k++;\n                } else {\n                    j--;\n                }\n            }\n        }\n        return ans;\n    }",
+      "prev_code": "public List<List<Integer>> threeSum(int[] nums) {\n        List<List<Integer>> ans = new ArrayList<>();\n        int i = 0, j = nums.length - 1;\n        Arrays.sort(nums);\n        while (i < j) {\n            if (i > 0 && nums[i] == nums[i - 1]) {\n                i++;\n                continue;\n            }\n            int k = i + 1;\n            j = nums.length - 1;\n            while (k < j) {\n                if (k > i + 1 && nums[k] == nums[k - 1]) {\n                    k++;\n                    continue;\n                }\n                if (nums[i] + nums[k] + nums[j] == 0) {\n                    List<Integer> list = new ArrayList<>();\n                    list.add(nums[i]);\n                    list.add(nums[k]);\n                    list.add(nums[j]);\n                    ans.add(list);\n                    k++;\n                } else if (nums[i] + nums[k] + nums[j] < 0) {\n                    k++;\n                } else {\n                    j--;\n                }\n            }\n            i++;\n        }\n        return ans;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ],
-  "approach_detail": "问题本质：找出所有和为 0 且不重复的三元组。排序 + 双指针把三数问题降维为「固定一个数 + 剩余区间内两数之和」。\n关键设计：排序后外层 i 固定第一个数，内层 k（左）、j（右）双指针：三数和 <0 左移 k，>0 右移 j，==0 记录三元组并把 k 前移。去重是关键：i 与 k 都跳过和前一位置相同的值（k 还要满足 k>i+1 防止与 i 混淆），j 不用显式去重——与 i、k 去重配合即可保证三元组不重复不遗漏。\n边界：长度不足 3 无解；全零数组只输出一个 [0,0,0]；每轮外层结束 j 必须重新置为末尾；负数与正数混合时双指针方向判断要仔细。\n复杂度：O(n²) 时间（排序 O(n log n) + 双指针 O(n²)）、O(1) 额外空间（忽略排序栈），最优。"
+  "approach_detail": "问题本质：找出所有和为 0 且不重复的三元组。排序 + 双指针把三数问题降维为「固定一个数 + 剩余区间内两数之和」。\n关键设计：排序后外层 i 固定第一个数，内层 k（左）、j（右）双指针：三数和 <0 左移 k，>0 右移 j，==0 记录三元组并把 k 前移。去重是关键：i 与 k 都跳过和前一位置相同的值（k 还要满足 k>i+1 防止与 i 混淆），j 不用显式去重——与 i、k 去重配合即可保证三元组不重复不遗漏。\n边界：长度不足 3 无解；全零数组只输出一个 [0,0,0]；每轮外层结束 j 必须重新置为末尾；负数与正数混合时双指针方向判断要仔细。\n复杂度：O(n²) 时间（排序 O(n log n) + 双指针 O(n²)）、O(1) 额外空间（忽略排序栈），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-16",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "316/316",
+      "approach": "排序+双指针夹逼",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 同一思路：**排序 + 固定 i 后双指针夹逼**（k 从左、j 从右向中间收），O(n²) 时间 / O(1) 额外空间。写法上有两处结构差异：\n  - 外层：一刷是 `while (i < j) { … i++; }`，本轮改成 `for (int i = 0; i < nums.length - 2; i++)`——循环上界直接把「后面至少还要留两个位置」写进条件，比在体内手动 `i++` 更难写漏；\n  - 内层 j：一刷在外层末尾手动 `j = nums.length - 1` 重置，本轮把 `int j = nums.length - 1` 放进 i 循环内部，作用域更小、不会跨轮串味。\n- 相同之处：i 与 k 都做「保留第一次出现、跳过后续重复」，k 的去重带 `k > i + 1` 保护，相等时只 `k++`。\n\n**② 这次为什么能一次写对**\n- 一刷记下的两个坑一个都没复现：\n  - **去重方向**：`if (i > 0 && nums[i] == nums[i - 1]) continue;` 与 `if (k > i + 1 && nums[k] == nums[k - 1])` 都是跳「后续重复」，`-1,-1,2` 这种需要两个相同值的组合不会被误杀（示例1 覆盖）；\n  - **移动依据引用跑飞变量**：内层 j 每轮重新初始化，判断用的是当轮的 `nums[i] + nums[j] + nums[k]`，不会像一刷那样在 `k == j` 之后还拿同一个元素凑两次。\n- `j` 不做显式去重也不会重复输出：i、k 固定后第三个数被和为 0 唯一确定，边界6/7/8 的超多重复用例都通过。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（316/316），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 去重三件套可以固化成模板背下来：**i 去重（与前一个比）、k 去重（且必须带 `k > i + 1`）、j 无需去重**。\n- 同类延伸：16 最接近的三数之和（同骨架换比较目标）、18 四数之和（外层再加一层并去重）、167 两数之和 II（有序数组的两数问题）。"
+    }
+  ],
+  "code_notes": [
+    "`nums[i] + nums[j] + nums[k]` 在本次代码里算了两遍（判等 + 判小于），提成局部变量 `sum` 更快也更易读——顺带避免你上次踩过的「移动依据引用跑飞变量」。",
+    "构造三元组可以一行 `Arrays.asList(nums[i], nums[k], nums[j])`（`java.util.Arrays` 已经 import）。",
+    "相等分支只 `k++`、不 `j--` 是正确的（下一轮 k 去重会把重复值跳掉），但与常见写法不同，建议补一行注释说明。"
+  ]
 }

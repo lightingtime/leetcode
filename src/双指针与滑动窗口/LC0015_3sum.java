@@ -2,8 +2,9 @@
 // LeetCode 15. 三数之和 (3Sum)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/3sum/
-// 刷题日期：2026-08-04
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
+// 一刷写法：排序 + 固定 i 后双指针夹逼（3 数和 <0 左指针右移，>0 右指针左移），O(n²)/O(1)（忽略排序栈）
+// 测试用例：示例 3 个 + 边界 8 个（原有 7 个，本次补齐长度 3000 混合重复；示例1 换用无序比较，与力扣判题口径一致）
 // ============================================================
 
 import java.util.*;
@@ -13,34 +14,31 @@ public class LC0015_3sum {
     // ==== 提交代码开始 ====
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> ans = new ArrayList<>();
-        int i = 0, j = nums.length - 1;
         Arrays.sort(nums);
-        while (i < j) {
+        for (int i = 0; i < nums.length - 2; i++) {
             if (i > 0 && nums[i] == nums[i - 1]) {
-                i++;
                 continue;
             }
+            int j = nums.length - 1;
             int k = i + 1;
-            j = nums.length - 1;
             while (k < j) {
                 if (k > i + 1 && nums[k] == nums[k - 1]) {
                     k++;
                     continue;
                 }
-                if (nums[i] + nums[k] + nums[j] == 0) {
+                if (nums[i] + nums[j] + nums[k] == 0) {
                     List<Integer> list = new ArrayList<>();
                     list.add(nums[i]);
                     list.add(nums[k]);
                     list.add(nums[j]);
                     ans.add(list);
                     k++;
-                } else if (nums[i] + nums[k] + nums[j] < 0) {
+                } else if (nums[i] + nums[j] + nums[k] < 0){
                     k++;
                 } else {
                     j--;
                 }
             }
-            i++;
         }
         return ans;
     }
@@ -52,7 +50,7 @@ public class LC0015_3sum {
 
         // ---- 示例测试（来自题目）----
         try {
-            if (!TestUtil.checkEq(Arrays.asList(Arrays.asList(-1, -1, 2), Arrays.asList(-1, 0, 1)), s.threeSum(new int[]{-1, 0, 1, 2, -1, -4}), "示例1")) failures++;
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-1, -1, 2), Arrays.asList(-1, 0, 1)), s.threeSum(new int[]{-1, 0, 1, 2, -1, -4}), "示例1")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
         try {
             if (!TestUtil.checkEq(Arrays.asList(), s.threeSum(new int[]{0, 1, 1}), "示例2")) failures++;
@@ -83,6 +81,11 @@ public class LC0015_3sum {
         try {
             if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(0, 0, 0)), s.threeSum(new int[]{0, 0, 0, 0}), "边界7-多个零去重")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界7-多个零去重 异常: " + t); }
+        try {
+            int[] nums = new int[3000];
+            for (int i = 0; i < 3000; i++) nums[i] = i % 3 - 1;      // 1000 个 -1、1000 个 0、1000 个 1
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-1, 0, 1), Arrays.asList(0, 0, 0)), s.threeSum(nums), "边界8-长度 3000 大量重复")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界8 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

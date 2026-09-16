@@ -149,12 +149,12 @@
       "title": "三数之和",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-04",
-      "last_review_date": null,
-      "next_review_date": null,
-      "interval_days": null,
-      "review_count": 0,
-      "mastery": null,
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-16",
+      "next_review_date": "2026-09-17",
+      "interval_days": 1,
+      "review_count": 1,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "remove-nth-node-from-end-of-list": {
