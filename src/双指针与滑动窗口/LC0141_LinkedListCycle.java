@@ -2,30 +2,30 @@
 // LeetCode 141. 环形链表 (Linked List Cycle)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/linked-list-cycle/
-// 刷题日期：2026-08-03
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
+// 一刷写法：Floyd 快慢指针判圈 O(n)/O(1)
+// 测试用例：示例 3 个（题目自带）+ 边界 7 个（一刷归档缺边界，本次补齐）
 // ============================================================
 
-import java.time.chrono.HijrahEra;
+
 import java.util.*;
 
 public class LC0141_LinkedListCycle {
 
     // ==== 提交代码开始 ====
     public boolean hasCycle(ListNode head) {
-        if (head == null || head.next == null) {
-            return false;
-        }
-        ListNode fast = head;
-        ListNode slow = head;
-        while (fast.next != null && fast.next.next != null) {
-            fast = fast.next.next;
+        ListNode fast = head, slow = head;
+        while (fast != null) {
             slow = slow.next;
+            fast = fast.next;
+            if (fast != null) {
+                fast = fast.next;
+            }
             if (fast == slow) {
-                return true;
+                break;
             }
         }
-        return false;
+        return fast != null;
     }
     // ==== 提交代码结束 ====
 
@@ -44,9 +44,28 @@ public class LC0141_LinkedListCycle {
             if (!checkEq(false, s.hasCycle(cycleList(-1, 1)), "示例3 [1] pos=-1")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
-        // ---- 边界测试（自己补充）----
-        // 例如： try { if (!checkEq(期望, s.hasCycle(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
-        // 若题目允许任意顺序返回（下标对 / 集合），用 checkEqUnordered 代替 checkEq
+        // ---- 边界测试 ----
+        try { if (!checkEq(false, s.hasCycle(null), "边界1-空链表")) failures++; }
+        catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
+        try { if (!checkEq(false, s.hasCycle(cycleList(-1, 7)), "边界2-单节点无环")) failures++; }
+        catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
+        try { if (!checkEq(true, s.hasCycle(cycleList(0, 7)), "边界3-单节点自环")) failures++; }
+        catch (Throwable t) { failures++; System.out.println("边界3 异常: " + t); }
+        try { if (!checkEq(true, s.hasCycle(cycleList(2, 1, 2, 3)), "边界4-尾节点自指")) failures++; }
+        catch (Throwable t) { failures++; System.out.println("边界4 异常: " + t); }
+        try { if (!checkEq(false, s.hasCycle(cycleList(-1, -100000, 100000)), "边界5-极值节点值无环")) failures++; }
+        catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
+        try {
+            ListNode head = new ListNode(0), cur = head;
+            for (int i = 1; i < 10000; i++) { cur.next = new ListNode(i); cur = cur.next; }
+            if (!checkEq(false, s.hasCycle(head), "边界6-长度 10000 无环")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+        try {
+            ListNode head = new ListNode(0), cur = head;
+            for (int i = 1; i < 10000; i++) { cur.next = new ListNode(i); cur = cur.next; }
+            cur.next = head;   // 整条链成环，回到头节点
+            if (!checkEq(true, s.hasCycle(head), "边界7-长度 10000 环回头节点")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界7 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

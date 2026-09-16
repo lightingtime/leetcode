@@ -19,5 +19,41 @@
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ],
-  "approach_detail": "问题本质：判断链表是否有环。哈希表记录访问过的节点可行但 O(n) 空间；快慢指针让 fast 每次走 2 步、slow 走 1 步，只花 O(1) 空间。\n关键设计：若有环，fast 相对 slow 每轮靠近 1 步，必在环内相遇；无环则 fast 先走到 null。判断相遇要在移动之后立刻比较（代码在 fast 前进后检查 fast==slow）。\n边界：空链表或单节点直接返回 false；循环条件 fast.next!=null && fast.next.next!=null 保证 fast 前进前已有两个后继，不会空指针；自环节点也能正确检测（fast 先入环，slow 随后在环内被追上）。\n复杂度：O(n) 时间（无环走 n/2 步；有环不超过 n+环长）、O(1) 空间，最优。"
+  "approach_detail": "问题本质：判断链表是否有环。哈希表记录访问过的节点可行但 O(n) 空间；快慢指针让 fast 每次走 2 步、slow 走 1 步，只花 O(1) 空间。\n关键设计：若有环，fast 相对 slow 每轮靠近 1 步，必在环内相遇；无环则 fast 先走到 null。判断相遇要在移动之后立刻比较（代码在 fast 前进后检查 fast==slow）。\n边界：空链表或单节点直接返回 false；循环条件 fast.next!=null && fast.next.next!=null 保证 fast 前进前已有两个后继，不会空指针；自环节点也能正确检测（fast 先入环，slow 随后在环内被追上）。\n复杂度：O(n) 时间（无环走 n/2 步；有环不超过 n+环长）、O(1) 空间，最优。",
+  "submissions": [
+    {
+      "date": "2026-09-16",
+      "verdict": "Accepted",
+      "approach": "快慢指针",
+      "code": "public boolean hasCycle(ListNode head) {\n        ListNode fast = head, slow = head;\n        while (fast != null) {\n            slow = slow.next;\n            fast = fast.next;\n            if (fast != null) {\n                fast = fast.next;\n            }\n            if (fast == slow) {\n                break;\n            }\n        }\n        return fast != null;\n    }",
+      "prev_code": "public boolean hasCycle(ListNode head) {\n        if (head == null || head.next == null) {\n            return false;\n        }\n        ListNode fast = head;\n        ListNode slow = head;\n        while (fast.next != null && fast.next.next != null) {\n            fast = fast.next.next;\n            slow = slow.next;\n            if (fast == slow) {\n                return true;\n            }\n        }\n        return false;\n    }\n",
+      "testcases": "29/29",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 写法同为 **Floyd 快慢指针判圈**（时间 O(n)、额外空间 O(1)），但循环骨架重写了：\n  - 一刷：先排除 `head == null || head.next == null`，再 `while (fast.next != null && fast.next.next != null)` 两跳推进，相遇就直接 `return true`。\n  - 本轮：`while (fast != null)` 内先让 slow 走 1 步、fast 走 1~2 步并分别判空，相遇只 `break`，最后 `return fast != null` 统一出口。\n- 两种骨架都正确，但本轮多了一个**隐含分支**：fast 与 slow 同时为 null 时 `fast == slow` 也成立会 break（单节点无环 `[7]` 就是这种情况），靠最后 `return fast != null` 把它兜成 false。本次 7 个边界用例里的「单节点无环」正好压在这条线上，通过。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、无沉淀错误习惯，本轮凭记忆直接给出「快走 2、慢走 1、相等即有环」的核心，并且每一跳前都做了判空，没有出现 `fast.next.next` 的空指针。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（29/29），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 回看时可把条件收进循环（`while (fast != null && fast.next != null)`）：这样「相遇」一定意味着真有环，不需要依赖 `null == null` 也成立的巧合，读代码的人不必自己推一遍边界。\n- 判圈只是第一步，142 环形链表 II 要求返回入环点，同一套快慢指针再加一段「从头出发的等速指针」即可。",
+      "mastery": "strong",
+      "pass": 1,
+      "memory_bytes": 46848000
+    }
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-16",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "29/29",
+      "approach": "快慢指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 写法同为 **Floyd 快慢指针判圈**（时间 O(n)、额外空间 O(1)），但循环骨架重写了：\n  - 一刷：先排除 `head == null || head.next == null`，再 `while (fast.next != null && fast.next.next != null)` 两跳推进，相遇就直接 `return true`。\n  - 本轮：`while (fast != null)` 内先让 slow 走 1 步、fast 走 1~2 步并分别判空，相遇只 `break`，最后 `return fast != null` 统一出口。\n- 两种骨架都正确，但本轮多了一个**隐含分支**：fast 与 slow 同时为 null 时 `fast == slow` 也成立会 break（单节点无环 `[7]` 就是这种情况），靠最后 `return fast != null` 把它兜成 false。本次 7 个边界用例里的「单节点无环」正好压在这条线上，通过。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、无沉淀错误习惯，本轮凭记忆直接给出「快走 2、慢走 1、相等即有环」的核心，并且每一跳前都做了判空，没有出现 `fast.next.next` 的空指针。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（29/29），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 回看时可把条件收进循环（`while (fast != null && fast.next != null)`）：这样「相遇」一定意味着真有环，不需要依赖 `null == null` 也成立的巧合，读代码的人不必自己推一遍边界。\n- 判圈只是第一步，142 环形链表 II 要求返回入环点，同一套快慢指针再加一段「从头出发的等速指针」即可。"
+    }
+  ],
+  "code_notes": [
+    "循环条件可以收进 while（`fast != null && fast.next != null`），相遇就必然真有环；现在的写法里 `fast == slow` 在两者同为 null 时也成立，靠 `return fast != null` 兜底，读代码要多推一层。",
+    "把推进规则写进循环条件后，`if (fast != null) fast = fast.next;` 这层判空可以省掉。"
+  ]
 }
