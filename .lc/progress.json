@@ -3435,6 +3435,17 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-09-16"
+    },
+    {
+      "habit": "维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 < min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里",
+      "count": 1,
+      "examples": [
+        "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-09-16"
     }
   ],
   "category_hints": {

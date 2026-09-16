@@ -15,9 +15,6 @@
   "time_complexity": "O(m+n)",
   "space_complexity": "O(1)",
   "notes": "滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）",
-  "code_notes": [
-    "写法微优化：for (Character c : t.toCharArray()) 逐个装箱，可用 for (char c : ...) 或按 charAt 下标访问避免装箱，复杂度不变"
-  ],
   "mistakes": [
     {
       "habit": "字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）",
@@ -30,7 +27,19 @@
     {
       "habit": "先减后判导致计数失效：need[c]-- 之后才判断 need[c] > 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 >= 0）",
       "count": 1
+    },
+    {
+      "habit": "维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 < min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里",
+      "count": 1
     }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
+  "code_notes": [
+    "`ans` 每次找到更短窗口就 `substring` 一次；改成只记 `bestStart` + `bestLen`、循环结束再截一次，可以少建一批临时字符串。",
+    "建议把一刷那几条关键注释带回来：`if (need[c] > 0)` 是「先判后减」、收缩到没有多余字符、记录后把最左必需字符还回去让窗口重新失效——这三步都不自解释。",
+    "`start` / `i` 命名成 `left` / `right` 更贴合滑动窗口语义。"
   ],
   "patterns": [
     {
@@ -39,24 +48,47 @@
       "category": "双指针与滑动窗口",
       "problem": "minimum-window-substring",
       "date": "2026-08-05"
+    },
+    {
+      "title": "维护最优值：比较与更新必须成对落在同一分支",
+      "text": "凡是「取最小/取最优」的写法，先检查更新语句是否存在：只比较不更新会让条件恒真、答案被后续更差的解覆盖（LC0076 的 min 声明成 MAX_VALUE 后从未赋值，ans 每遇到一个合法窗口就覆盖一次，最后返回最后一个窗口而不是最短窗口）。排查手法：对着「声明最优变量的那一行」问三句——谁给它赋初值、哪一行更新它、这个更新语句和比较语句是否在同一分支里。",
+      "category": "双指针与滑动窗口",
+      "problem": "minimum-window-substring",
+      "date": "2026-09-16"
     }
   ],
   "submissions": [
     {
-      "date": "2026-08-05",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "268/268",
       "runtime_ms": null,
-      "memory_bytes": 47124000,
+      "memory_bytes": 47088000,
       "approach": "滑动窗口+计数",
       "time_complexity": "O(m+n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "滑动窗口+128 计数：扩展先判后减、收缩只删多余、记录后三连前进，O(m+n)/O(1) 一次 Accepted（268/268）"
+      "notes": "**① 与上一轮对比**\n- 同一思路：**滑动窗口 + 128 计数**，骨架仍是「扩展时先判后减 → `count == 0` 时先收缩掉多余字符 → 记录答案 → 再把最左的必需字符还回去让窗口重新失效」。\n- 与一刷的两处差异：按遗留要求把 `for (Character c : …)` 换成了 `for (char c : …)`（去掉装箱）；但一刷代码里那几条关键行注释（先判后减、先收缩、记录答案、还回左边界字符）本轮没有带过来 —— 这几步都不自解释，建议补回去。\n\n**② 这次的真实过程（首版本地「全绿」但其实是错的）**\n- 首版能过原有 11 组用例，但都是「恰好最后一次记录的窗口就是最短」的输入。我补了边界9（`s = \"xxabxxa\", t = \"ab\"`）后暴露真 bug：`min` 声明成 `MAX_VALUE` 后**从未被赋值**，`if (i - start + 1 < min)` 恒真，`ans` 每遇到一个合法窗口就被覆盖一次，最后返回的是**最后一个**窗口（`\"bxxa\"`）而不是最短窗口（`\"ab\"`）。\n- 反例同因还有 `s = \"zabczzab\", t = \"abc\"` → 得到 `\"czzab\"`，正确是 `\"abc\"`。\n- 修法是让比较与更新成对出现（`min` 与 `ans` 在同一分支里一起更新），修后 268/268 一次通过。\n\n**③ 掌握度判定**\n- 中途就 `< min` 只比较不更新这个点讨论过、得到过定位与方向 → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 默写这条自检口诀：**凡是「取最小/取最优」，先问「谁更新它」** —— 只比较不更新的条件恒真，答案会被更差的解覆盖。\n- 顺带复习 `count` 的语义（还差几个必需字符）与「记录后把最左必需字符还回去」这步的必要性，这是覆盖型滑窗区别于普通滑窗的地方。",
+      "code": "public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (char c : t.toCharArray()) {\n            need[c]++;\n        }\n        int count = t.length();\n        String ans = \"\";\n        int start = 0;\n        int i = 0;\n        int min = Integer.MAX_VALUE;\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            if (need[c] > 0) {\n                count--;\n            }\n            need[c]--;\n            if (count == 0) {\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                need[s.charAt(start)]++;\n                count++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }",
+      "prev_code": "public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (Character c : t.toCharArray()) {\n            need[c]++;\n        }\n        int count = t.length();\n        int start = 0;\n        int i = 0;\n        int min = Integer.MAX_VALUE;\n        String ans = \"\";\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            // 该字符进入窗口前若仍缺，则未满足数 -1（先判后减）\n            if (need[c] > 0) {\n                count--;\n            }\n            need[c]--;\n            if (count == 0) {\n                // 先收缩：删掉左边多余字符，记录以 i 结尾的最短覆盖窗口\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                // 记录答案\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                // 还回左边界关键字符（need+1、count+1、start+1），覆盖被破坏，窗口继续右扩\n                need[s.charAt(start)]++;\n                count++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
-  ],
-  "approach_detail": "问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。\n关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]>0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]<0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。\n边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。\n复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。"
+  "approach_detail": "问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。\n关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]>0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]<0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。\n边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。\n复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-16",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "268/268",
+      "approach": "滑动窗口+计数",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 同一思路：**滑动窗口 + 128 计数**，骨架仍是「扩展时先判后减 → `count == 0` 时先收缩掉多余字符 → 记录答案 → 再把最左的必需字符还回去让窗口重新失效」。\n- 与一刷的两处差异：按遗留要求把 `for (Character c : …)` 换成了 `for (char c : …)`（去掉装箱）；但一刷代码里那几条关键行注释（先判后减、先收缩、记录答案、还回左边界字符）本轮没有带过来 —— 这几步都不自解释，建议补回去。\n\n**② 这次的真实过程（首版本地「全绿」但其实是错的）**\n- 首版能过原有 11 组用例，但都是「恰好最后一次记录的窗口就是最短」的输入。我补了边界9（`s = \"xxabxxa\", t = \"ab\"`）后暴露真 bug：`min` 声明成 `MAX_VALUE` 后**从未被赋值**，`if (i - start + 1 < min)` 恒真，`ans` 每遇到一个合法窗口就被覆盖一次，最后返回的是**最后一个**窗口（`\"bxxa\"`）而不是最短窗口（`\"ab\"`）。\n- 反例同因还有 `s = \"zabczzab\", t = \"abc\"` → 得到 `\"czzab\"`，正确是 `\"abc\"`。\n- 修法是让比较与更新成对出现（`min` 与 `ans` 在同一分支里一起更新），修后 268/268 一次通过。\n\n**③ 掌握度判定**\n- 中途就 `< min` 只比较不更新这个点讨论过、得到过定位与方向 → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 默写这条自检口诀：**凡是「取最小/取最优」，先问「谁更新它」** —— 只比较不更新的条件恒真，答案会被更差的解覆盖。\n- 顺带复习 `count` 的语义（还差几个必需字符）与「记录后把最左必需字符还回去」这步的必要性，这是覆盖型滑窗区别于普通滑窗的地方。"
+    }
+  ]
 }
