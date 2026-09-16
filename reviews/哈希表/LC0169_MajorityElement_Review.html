@@ -19,13 +19,17 @@
     
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
-    
-    
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-03</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>169. 多数元素 (Majority Element)</h1><p>&gt; <a href="https://leetcode.cn/problems/majority-element/" rel="noopener">https://leetcode.cn/problems/majority-element/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表、分治、计数、排序</p><h2>题目描述</h2><p>给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。</p><p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p><p>示例 1：</p><p>输入：nums = [3,2,3]</p><p>输出：3</p><p>示例 2：</p><p>输入：nums = [2,2,1,1,1,2,2]</p><p>输出：2</p><p>提示：</p><p>n == nums.length</p><p>1 4</p><p>-109 9</p><p>输入保证数组中一定有一个多数元素。</p><p>进阶：尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。</p><h2>示例</h2><ol><li>输入：nums = [3,2,3]</li></ol><p>输出：3</p><ol><li>输入：nums = [2,2,1,1,1,2,2]</li></ol><p>输出：2</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（57/57）｜ 一次 AC ｜ Boyer-Moore 投票 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li><strong>首次复习</strong>。写法与一刷同为 <strong>Boyer-Moore 投票</strong>（O(n) 时间 / O(1) 空间），但分支结构重写了一遍：一刷是「相等则加，不等才减且减到 ≤0 才换候选」，本轮是「相等加、不等减，减完再判 <code>times == 0</code> 换候选」。</li><li>两版语义完全相同（都是「候选的富余票数被抵消光时，用当前元素重新起头」）。用穷举对拍验证过：长度 ≤ 8、值域 {1,2,3} 且含严格多数的全部数组，新写法与经典「<code>count == 0</code> 先重置候选」变体结果一致，无一处偏差。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷一次 AC、没有沉淀错误习惯，本轮凭记忆直接给出投票三要素：候选 <code>a</code>、富余票数 <code>times</code>、抵消到 0 就换候选。</li><li>换候选时把 <code>times</code> 复位成 1 而不是 0——这一行如果写错（漏加当前元素），后面整段计数会整体偏移。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（57/57），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>投票法的前提是「多数元素一定存在」（本题由题目保证）。若题目不保证存在，必须用第二次扫描验证候选的出现次数是否 &gt; n/2。</li><li>可顺带对照 229 求众数 II：要求出现次数 &gt; n/3 的元素，需要<strong>两个候选 + 两个计数</strong>，抵消规则与本题同源。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,34 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>Boyer-Moore 投票</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>Boyer-Moore 投票</p>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>Boyer-Moore 投票</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · Boyer-Moore 投票</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 60.7 MB</span><span class="chip">用例 57/57</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0169_MajorityElement.java · Boyer-Moore 投票</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> a = nums[<span class="tk-n">0</span>];
+        <span class="tk-k">int</span> times = <span class="tk-n">1</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (nums[i] == a) {
+                times++;
+            } <span class="tk-k">else</span> {
+                times--;
+            }
+            <span class="tk-k">if</span> (times == <span class="tk-n">0</span>) {
+                a = nums[i];
+                times = <span class="tk-n">1</span>;
+            }
+        }
+        <span class="tk-k">return</span> a;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0169_MajorityElement.java · Boyer-Moore 投票 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {
 
         <span class="tk-k">int</span> cnt = <span class="tk-n">1</span>;
         <span class="tk-k">int</span> cur = nums[<span class="tk-n">0</span>];
@@ -53,7 +80,8 @@
             }
         }
         <span class="tk-k">return</span> cur;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找出现次数超过 n/2 的元素。排序后取中位数或哈希计数都能做，但最优是摩尔投票（Boyer-Moore）：O(n) 时间、O(1) 空间。</p><p>关键设计：把当前候选记为 cur、计数 cnt。遍历时遇到相同元素 cnt++，不同元素 cnt--；cnt 归零说明候选在已扫描区间内不占优势，放弃它并换当前元素重新计数。因为众数出现超过一半，正负相消之后最后留下的必是众数。</p><p>边界：cnt 归零后要立即重置为 1 再换候选（代码里 cnt&lt;=0 时 cur=nums[i]、cnt=1），否则计数起点错一位；结论依赖「严格多数」存在，题目已保证。</p><p>复杂度：O(n) 时间、O(1) 空间，是本题下限；不需要任何哈希表或排序。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>54/54 用例一次通过。</p></div></div></div></section>
@@ -71,7 +99,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ 变量名 `a` / `times` 建议改成 `candidate` / `count`：投票法的标准术语，回看时能直接对上思维模型。</div><div class="quote">★ `if (times == 0)` 只有在刚才走了 `else`（减票）时才可能成立，可以并进 `else` 里，少一次判断——纯风格取舍。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 2 · majority-element</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">多数元素：Boyer-Moore 投票，一次 Accepted（54/54），已是最优 O(n)/O(1)</div>
