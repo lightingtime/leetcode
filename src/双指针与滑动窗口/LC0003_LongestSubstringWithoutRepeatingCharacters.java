@@ -2,8 +2,12 @@
 // LeetCode 3. 无重复字符的最长子串 (Longest Substring Without Repeating Characters)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/longest-substring-without-repeating-characters/
-// 刷题日期：2026-08-04
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
+// 一刷写法：滑动窗口 + 哈希表记位置（O(n) 时间，字符集大小的额外空间）
+// 测试用例：示例 3 个 + 边界 9 个（原有 5 个，本次补齐：空格与标点 / 长度 5e4 周期串 / 重复在末尾 / 95 个可打印字符各不同）
 //
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -12,20 +16,20 @@ public class LC0003_LongestSubstringWithoutRepeatingCharacters {
 
     // ==== 提交代码开始 ====
     public int lengthOfLongestSubstring(String s) {
-        Map<Character, Integer> map = new HashMap<>();
-        int max = 0;
+        // TODO: 在这里实现你的解法
+        int[] map = new int[128];
+        Arrays.fill(map, -1);
         int start = 0;
+        int max = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (!map.containsKey(c) || map.get(c) < start) {
-                map.put(c, i);
-            } else {
+            if (map[c] != -1 && map[c] >= start) {
                 max = Math.max(max, i - start);
-                start = map.get(c) + 1;
-                map.put(c, i);
+                start = map[c] + 1;
             }
+            map[c] = i;
+            max = Math.max(max, i - start + 1);
         }
-        max = Math.max(max, s.length() - start);
         return max;
     }
     // ==== 提交代码结束 ====
@@ -61,6 +65,23 @@ public class LC0003_LongestSubstringWithoutRepeatingCharacters {
         try {
             if (!TestUtil.checkEq(3, s.lengthOfLongestSubstring("dvdf"), "边界5 跳跃式最长")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
+        try {
+            if (!TestUtil.checkEq(4, s.lengthOfLongestSubstring("a b!a"), "边界6 空格与标点")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+        try {
+            StringBuilder sb = new StringBuilder();
+            String cycle = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for (int i = 0; i < 50000; i++) sb.append(cycle.charAt(i % cycle.length()));
+            if (!TestUtil.checkEq(cycle.length(), s.lengthOfLongestSubstring(sb.toString()), "边界7 长度 5e4 周期串")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界7 异常: " + t); }
+        try {
+            if (!TestUtil.checkEq(6, s.lengthOfLongestSubstring("abcdefa"), "边界8 重复落在末尾")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界8 异常: " + t); }
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (char c = 32; c < 127; c++) sb.append(c);     // 95 个可打印字符，互不相同
+            if (!TestUtil.checkEq(95, s.lengthOfLongestSubstring(sb.toString()), "边界9 95 个可打印字符各不同")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界9 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

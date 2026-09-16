@@ -43,20 +43,44 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-04",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "1036/1036",
       "runtime_ms": null,
-      "memory_bytes": 48300000,
+      "memory_bytes": 48376000,
       "approach": "滑动窗口+哈希表",
       "time_complexity": "O(n)",
-      "space_complexity": "O(1)",
+      "space_complexity": "O(字符集)",
       "optimal": true,
-      "notes": "无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）"
+      "notes": "**① 与上一轮对比**\n- 同一思路（**滑动窗口 + 记录字符上次出现的位置**），但有四处实质改进：\n  - 数据结构：一刷用 `HashMap<Character,Integer>`，本轮改成 `int[128]`（本题字符集是 ASCII，定长数组更快、空间固定）；\n  - 结算时机：一刷是**延迟结算**（只在遇到重复时更新 `max`，循环后再补一次 `s.length() - start`），本轮**每轮都结算** `i - start + 1`，不会漏掉任何窗口；\n  - 一刷在「未重复」分支里也要 `map.put`，本轮把 `map[c] = i` 提到 if 之外，两个分支共用一句；\n  - 一刷用 `map.get(c) < start` 判断「上次出现是否还在窗口内」，本轮沿用同一判断，但数组下不用装箱。\n- 复杂度都是 O(n) 时间；空间从 O(字符集) 的哈希降到定长 128 数组。\n\n**② 这次为什么能一次写对**\n- 一刷沉淀的两个坑本轮一个都没踩：**结算时机**（每轮 `i - start + 1`，末尾窗口不会漏）、**窗口合法性**（重复分支里先用旧的 `start` 记下 `i - start`，再 `start = map[c] + 1`，绝不会把含重复的 `[start, i]` 当合法窗口）。\n- `map[c] >= start` 这个「上次出现还在窗口内」的判断写对了，`abba` 那种「重复点已经滑出窗口」的情况不会把 `start` 往回拉（边界 4 通过）。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（1036/1036），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同类「窗口 + 计数」题可一起对照：76 最小覆盖子串（需要 need/window 两张表 + `formed` 计数）、438 找所有字母异位词（窗口定长）。\n- 「字符集固定时用定长数组替 HashMap」这个技巧在本轮已经自然用上，后续遇到 [a-z]/[0-9]/ASCII 题目可以继续复用。",
+      "code": "public int lengthOfLongestSubstring(String s) {\n        // TODO: 在这里实现你的解法\n        int[] map = new int[128];\n        Arrays.fill(map, -1);\n        int start = 0;\n        int max = 0;\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (map[c] != -1 && map[c] >= start) {\n                max = Math.max(max, i - start);\n                start = map[c] + 1;\n            }\n            map[c] = i;\n            max = Math.max(max, i - start + 1);\n        }\n        return max;\n    }",
+      "prev_code": "public int lengthOfLongestSubstring(String s) {\n        Map<Character, Integer> map = new HashMap<>();\n        int max = 0;\n        int start = 0;\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (!map.containsKey(c) || map.get(c) < start) {\n                map.put(c, i);\n            } else {\n                max = Math.max(max, i - start);\n                start = map.get(c) + 1;\n                map.put(c, i);\n            }\n        }\n        max = Math.max(max, s.length() - start);\n        return max;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
   ],
-  "approach_detail": "问题本质：找不含重复字符的最长连续子串长度。滑动窗口：窗口 [start, i] 内保持无重复，右端逐个扩张，遇重复就把左端跳到重复位置之后。\n关键设计：HashMap 记录每个字符最近一次出现的下标。遇到 c 时若 c 出现过且位置 ≥ start（即在当前窗口内），窗口左端 start 跳到上次出现位置 +1；若旧位置 < start，说明在窗口外，不构成重复。每次更新 max = max(max, i-start+1)。\n边界：空串返回 0；整个串无重复时最后一次比较 s.length()-start 不能漏；重复字符恰在窗口左边界（如 abca）时 start 正确右移；「出现过」和「位置在窗口内」两个条件缺一不可。\n复杂度：O(n) 时间（每个字符至多进出窗口一次）、O(字符集大小) 空间，最优。"
+  "approach_detail": "问题本质：找不含重复字符的最长连续子串长度。滑动窗口：窗口 [start, i] 内保持无重复，右端逐个扩张，遇重复就把左端跳到重复位置之后。\n关键设计：HashMap 记录每个字符最近一次出现的下标。遇到 c 时若 c 出现过且位置 ≥ start（即在当前窗口内），窗口左端 start 跳到上次出现位置 +1；若旧位置 < start，说明在窗口外，不构成重复。每次更新 max = max(max, i-start+1)。\n边界：空串返回 0；整个串无重复时最后一次比较 s.length()-start 不能漏；重复字符恰在窗口左边界（如 abca）时 start 正确右移；「出现过」和「位置在窗口内」两个条件缺一不可。\n复杂度：O(n) 时间（每个字符至多进出窗口一次）、O(字符集大小) 空间，最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-16",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "1036/1036",
+      "approach": "滑动窗口+哈希表",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(字符集)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 同一思路（**滑动窗口 + 记录字符上次出现的位置**），但有四处实质改进：\n  - 数据结构：一刷用 `HashMap<Character,Integer>`，本轮改成 `int[128]`（本题字符集是 ASCII，定长数组更快、空间固定）；\n  - 结算时机：一刷是**延迟结算**（只在遇到重复时更新 `max`，循环后再补一次 `s.length() - start`），本轮**每轮都结算** `i - start + 1`，不会漏掉任何窗口；\n  - 一刷在「未重复」分支里也要 `map.put`，本轮把 `map[c] = i` 提到 if 之外，两个分支共用一句；\n  - 一刷用 `map.get(c) < start` 判断「上次出现是否还在窗口内」，本轮沿用同一判断，但数组下不用装箱。\n- 复杂度都是 O(n) 时间；空间从 O(字符集) 的哈希降到定长 128 数组。\n\n**② 这次为什么能一次写对**\n- 一刷沉淀的两个坑本轮一个都没踩：**结算时机**（每轮 `i - start + 1`，末尾窗口不会漏）、**窗口合法性**（重复分支里先用旧的 `start` 记下 `i - start`，再 `start = map[c] + 1`，绝不会把含重复的 `[start, i]` 当合法窗口）。\n- `map[c] >= start` 这个「上次出现还在窗口内」的判断写对了，`abba` 那种「重复点已经滑出窗口」的情况不会把 `start` 往回拉（边界 4 通过）。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（1036/1036），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同类「窗口 + 计数」题可一起对照：76 最小覆盖子串（需要 need/window 两张表 + `formed` 计数）、438 找所有字母异位词（窗口定长）。\n- 「字符集固定时用定长数组替 HashMap」这个技巧在本轮已经自然用上，后续遇到 [a-z]/[0-9]/ASCII 题目可以继续复用。"
+    }
+  ],
+  "code_notes": [
+    "`map[c] != -1 && map[c] >= start` 里前半段是冗余的：start 恒 ≥ 0，`map[c] >= start` 已经排除 -1。",
+    "重复分支里的 `max = Math.max(max, i - start);` 也是冗余的：同一个 start 下的窗口长度在上一轮已经被 `i - start + 1` 结算过。",
+    "`map` 存的是「字符上次出现的下标」，命名成 `lastSeen` / `lastIndex` 更贴合语义。"
+  ]
 }
