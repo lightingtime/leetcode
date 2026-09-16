@@ -2,11 +2,11 @@
 // LeetCode 234. 回文链表 (Palindrome Linked List)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/palindrome-linked-list/
-// 刷题日期：2026-08-04
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
+// 一刷写法：快慢指针找中点 + 原地反转后半段（O(n)/O(1)）；更早一版用栈存后半段，O(n) 空间已被淘汰
+// 测试用例：示例 2 个 + 边界 8 个（原有 4 个，本次补齐：两节点相同 / 偶数长度错位 / 长度 1e5 回文 / 长度 1e5 末对不匹配）
 // ============================================================
 
-import java.lang.annotation.Target;
 import java.util.*;
 
 public class LC0234_PalindromeLinkedList {
@@ -16,12 +16,9 @@ public class LC0234_PalindromeLinkedList {
         if (head == null) {
             return true;
         }
-
-        ListNode firstEnd = fastSlow(head);
-        ListNode secondStart = reverseLinkList(firstEnd.next);
-
-        ListNode p1 = head;
-        ListNode p2 = secondStart;
+        ListNode mid = getMid(head);
+        ListNode newHead = reverseList(mid);
+        ListNode p1 = head, p2 = newHead;
         while (p2 != null) {
             if (p1.val != p2.val) {
                 return false;
@@ -32,29 +29,28 @@ public class LC0234_PalindromeLinkedList {
         return true;
     }
 
-	private ListNode reverseLinkList(ListNode head) {
-        ListNode pre = null;
-        ListNode cur = head;
+    private ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode pre = null, cur = head;
         while (cur != null) {
             ListNode next = cur.next;
             cur.next = pre;
             pre = cur;
             cur = next;
         }
-		return pre;
-	}
+        return pre;
+    }
 
-    private ListNode fastSlow(ListNode head) {
-        ListNode fast = head;
-        ListNode slow = head;
-        while (fast.next != null && fast.next.next != null) {
+    private ListNode getMid(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
             fast = fast.next.next;
             slow = slow.next;
         }
         return slow;
     }
-
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
@@ -82,6 +78,27 @@ public class LC0234_PalindromeLinkedList {
         try {
             if (!checkEq(true, s.isPalindrome(listNode(1, 1, 1, 1)), "边界4 全相同")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界4 异常: " + t); }
+        try {
+            if (!checkEq(true, s.isPalindrome(listNode(1, 1)), "边界5 两节点相同")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
+        try {
+            if (!checkEq(false, s.isPalindrome(listNode(1, 2, 2, 3)), "边界6 偶数长度首尾错位")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界6 异常: " + t); }
+        try {
+            int half = 50000;
+            int[] vals = new int[half];
+            for (int i = 0; i < half; i++) vals[i] = i % 9 + 1;
+            ListNode head = new ListNode(vals[0]), cur = head;
+            for (int i = 1; i < half; i++) { cur.next = new ListNode(vals[i]); cur = cur.next; }
+            for (int i = half - 1; i >= 0; i--) { cur.next = new ListNode(vals[i]); cur = cur.next; }
+            if (!checkEq(true, s.isPalindrome(head), "边界7 长度 100000 回文")) failures++;
+
+            ListNode head2 = new ListNode(vals[0]), cur2 = head2, last2 = head2;
+            for (int i = 1; i < half; i++) { cur2.next = new ListNode(vals[i]); cur2 = cur2.next; }
+            for (int i = half - 1; i >= 0; i--) { cur2.next = new ListNode(vals[i]); cur2 = cur2.next; last2 = cur2; }
+            last2.val = vals[0] == 9 ? 1 : vals[0] + 1;    // 只弄坏最后一对
+            if (!checkEq(false, s.isPalindrome(head2), "边界8 长度 100000 末对不匹配")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界7/8 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

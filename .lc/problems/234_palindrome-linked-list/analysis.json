@@ -15,7 +15,15 @@
   "time_complexity": "O(n)",
   "space_complexity": "O(1)",
   "notes": "回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优",
-  "mistakes": [],
+  "mistakes": [
+    {
+      "habit": "回文链表比较循环的终止条件：用「两指针是否撞上」(p1 != p2) 只对奇数长度成立——奇数两段会在中间节点汇合；偶数长度前半段与反转后的后半段是两段不相交的链，p1、p2 永远落在不同节点上，p1 走完前半段继续前进而 p2 已经变成 null，下一轮取 p2.val 直接 NPE。终止条件应由「后半段是否走完」(p2 == null) 决定。隐蔽点：非回文用例会在 p2 变 null 之前就 return false，所以只有真回文用例才炸（示例1、全相同、两节点相同、长度 1e5 回文）",
+      "count": 1
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
   "patterns": [
     {
       "title": "快慢指针找中点后的奇偶判定",
@@ -54,20 +62,41 @@
       "code": "public boolean isPalindrome(ListNode head) {\n        if (head == null) {\n            return false;\n        }\n        ListNode fast = head, slow = head;\n        while (fast != null && fast.next != null) {\n            // 偶数情况slow 在第二部分的开头\n            // 奇数情况slow 在正中间\n            fast = fast.next.next;\n            slow = slow.next;\n        }\n        ListNode p1 = slow;\n        Stack<Integer> stack = new Stack<>();\n        // 奇数情况 fast不会为空\n        if (fast != null) {\n            slow = slow.next;\n        }\n        while (slow != null) {\n            stack.push(slow.val);\n            slow = slow.next;\n        }\n        fast = head;\n        while (fast != p1 && !stack.isEmpty()) {\n            if (fast.val != stack.peek()) {\n                return false;\n            }\n            stack.pop();\n            fast = fast.next;\n        }\n        return stack.isEmpty();\n    }"
     },
     {
-      "date": "2026-08-04",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "93/93",
       "runtime_ms": null,
-      "memory_bytes": 94584000,
+      "memory_bytes": 94548000,
       "approach": "快慢指针+原地反转",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "回文链表：快慢指针找中点 + 原地反转后半段，O(n)/O(1)，重写后再次 Accepted（93/93）达成进阶最优"
+      "notes": "**① 与上一轮对比**\n- 同一思路（**快慢指针找中点 + 原地反转后半段 + 双指针对称比较**，O(n)/O(1)），但切割点和终止条件的落笔差别值得记：\n  - 一刷把 slow 停在**前半段末尾**，反转 `firstEnd.next`；本轮把 slow 停在**后半段头（偶数）/正中间（奇数）**，直接反转 `mid`。奇数长度时本轮会把中点也纳入反转段，于是多比一次「中点 vs 自己」（无害，但多一次）。\n  - 一刷用 `while (fast.next != null && fast.next.next != null)`（提前一步停），本轮用 `while (fast != null && fast.next != null)`（走完整条链）——两种边界写法都能落对 mid。\n- 一刷的 `approach_detail` 里其实**早就写明**「比较循环以 p2 != null 为条件」，本轮却写成了别的条件，说明问题不在「不会」而在「没照自己沉淀的套路写」。\n\n**② 这次为什么没一次写对（本轮真实过程）**\n- 第一版用 `while (p1 != p2)` 收尾，本地 10 组里挂了 4 组，全是**真回文**用例且全是 NPE：\n  - 奇数长度：反转段含中点，两段在中点**重叠**，p1 与 p2 会撞在同一个节点上 → `p1 != p2` 恰好能退出（巧合）。\n  - 偶数长度：前半段与反转后的后半段是**两段不相交的链**，两指针永远落在不同节点；p1 继续前进而 p2 已经变成 null，下一轮 `p2.val` NPE。\n  - 隐蔽点：非回文用例在 p2 变 null 之前就 `return false` 了，所以只有真回文才炸。\n- 改成「只由后半段是否走完决定终止」后 10 组全过。\n\n**③ 掌握度判定**\n- 本地首跑 4 组失败、经分析定位（奇数/偶数两段是否重叠）才改对，非一次 AC → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 闭卷默写这条分界：**奇数长度两段在中点重叠、偶数长度两段不相交**——终止条件只能挂在「后半段走完」上。\n- 顺带对照 143 重排链表：同一套「找中点 + 反转后半段 + 交叉合并」，只是比较换成拼接。",
+      "code": "public boolean isPalindrome(ListNode head) {\n        if (head == null) {\n            return true;\n        }\n        ListNode mid = getMid(head);\n        ListNode newHead = reverseList(mid);\n        ListNode p1 = head, p2 = newHead;\n        while (p2 != null) {\n            if (p1.val != p2.val) {\n                return false;\n            }\n            p1 = p1.next;\n            p2 = p2.next;\n        }\n        return true;\n    }\n\n    private ListNode reverseList(ListNode head) {\n        if (head == null || head.next == null) {\n            return head;\n        }\n        ListNode pre = null, cur = head;\n        while (cur != null) {\n            ListNode next = cur.next;\n            cur.next = pre;\n            pre = cur;\n            cur = next;\n        }\n        return pre;\n    }\n\n    private ListNode getMid(ListNode head) {\n        ListNode fast = head, slow = head;\n        while (fast != null && fast.next != null) {\n            fast = fast.next.next;\n            slow = slow.next;\n        }\n        return slow;\n    }",
+      "prev_code": "public boolean isPalindrome(ListNode head) {\n        if (head == null) {\n            return true;\n        }\n\n        ListNode firstEnd = fastSlow(head);\n        ListNode secondStart = reverseLinkList(firstEnd.next);\n\n        ListNode p1 = head;\n        ListNode p2 = secondStart;\n        while (p2 != null) {\n            if (p1.val != p2.val) {\n                return false;\n            }\n            p1 = p1.next;\n            p2 = p2.next;\n        }\n        return true;\n    }\n\n\tprivate ListNode reverseLinkList(ListNode head) {\n        ListNode pre = null;\n        ListNode cur = head;\n        while (cur != null) {\n            ListNode next = cur.next;\n            cur.next = pre;\n            pre = cur;\n            cur = next;\n        }\n\t\treturn pre;\n\t}\n\n    private ListNode fastSlow(ListNode head) {\n        ListNode fast = head;\n        ListNode slow = head;\n        while (fast.next != null && fast.next.next != null) {\n            fast = fast.next.next;\n            slow = slow.next;\n        }\n        return slow;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  "approach_detail": "问题本质：判断链表是否回文。复制到数组比较是 O(n) 空间；O(1) 空间做法：快慢指针找中点 → 反转后半段 → 逐节点对称比较。\n关键设计：fastSlow 让 fast 走 2 步、slow 走 1 步，结束时 slow 停在（前半段的）末尾 firstEnd；反转 firstEnd.next 得到后半段头 secondStart；然后 p1 从头、p2 从 secondStart 同步比较。比较循环以 p2!=null 为条件，奇数长度时中间节点自然被跳过。\n边界：空链表返回 true；偶数长度 slow 恰在中点前、奇数长度 slow 在前半段末尾，反转后半段长度 ≤ 前半段，比较不会越界；比较完不要求恢复链表结构。\n复杂度：O(n) 时间、O(1) 额外空间（反转用迭代），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-16",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "93/93",
+      "approach": "快慢指针+原地反转",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 同一思路（**快慢指针找中点 + 原地反转后半段 + 双指针对称比较**，O(n)/O(1)），但切割点和终止条件的落笔差别值得记：\n  - 一刷把 slow 停在**前半段末尾**，反转 `firstEnd.next`；本轮把 slow 停在**后半段头（偶数）/正中间（奇数）**，直接反转 `mid`。奇数长度时本轮会把中点也纳入反转段，于是多比一次「中点 vs 自己」（无害，但多一次）。\n  - 一刷用 `while (fast.next != null && fast.next.next != null)`（提前一步停），本轮用 `while (fast != null && fast.next != null)`（走完整条链）——两种边界写法都能落对 mid。\n- 一刷的 `approach_detail` 里其实**早就写明**「比较循环以 p2 != null 为条件」，本轮却写成了别的条件，说明问题不在「不会」而在「没照自己沉淀的套路写」。\n\n**② 这次为什么没一次写对（本轮真实过程）**\n- 第一版用 `while (p1 != p2)` 收尾，本地 10 组里挂了 4 组，全是**真回文**用例且全是 NPE：\n  - 奇数长度：反转段含中点，两段在中点**重叠**，p1 与 p2 会撞在同一个节点上 → `p1 != p2` 恰好能退出（巧合）。\n  - 偶数长度：前半段与反转后的后半段是**两段不相交的链**，两指针永远落在不同节点；p1 继续前进而 p2 已经变成 null，下一轮 `p2.val` NPE。\n  - 隐蔽点：非回文用例在 p2 变 null 之前就 `return false` 了，所以只有真回文才炸。\n- 改成「只由后半段是否走完决定终止」后 10 组全过。\n\n**③ 掌握度判定**\n- 本地首跑 4 组失败、经分析定位（奇数/偶数两段是否重叠）才改对，非一次 AC → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 闭卷默写这条分界：**奇数长度两段在中点重叠、偶数长度两段不相交**——终止条件只能挂在「后半段走完」上。\n- 顺带对照 143 重排链表：同一套「找中点 + 反转后半段 + 交叉合并」，只是比较换成拼接。"
+    }
   ],
-  "approach_detail": "问题本质：判断链表是否回文。复制到数组比较是 O(n) 空间；O(1) 空间做法：快慢指针找中点 → 反转后半段 → 逐节点对称比较。\n关键设计：fastSlow 让 fast 走 2 步、slow 走 1 步，结束时 slow 停在（前半段的）末尾 firstEnd；反转 firstEnd.next 得到后半段头 secondStart；然后 p1 从头、p2 从 secondStart 同步比较。比较循环以 p2!=null 为条件，奇数长度时中间节点自然被跳过。\n边界：空链表返回 true；偶数长度 slow 恰在中点前、奇数长度 slow 在前半段末尾，反转后半段长度 ≤ 前半段，比较不会越界；比较完不要求恢复链表结构。\n复杂度：O(n) 时间、O(1) 额外空间（反转用迭代），最优。"
+  "code_notes": [
+    "入口 `if (head == null) return true;` 属于约束外防御（题目保证节点数 ≥ 1），留着无害但与 `while (p2 != null)` 的收尾重复。",
+    "`reverseList` 开头的 `head == null || head.next == null` 提前返回其实是冗余的：`while (cur != null)` 对 null / 单节点同样返回 pre（null / 原头）。",
+    "奇数长度时中点被纳入反转段，会多比较一次「中点 vs 自己」；若把 mid 定义成前半段末尾（一刷写法），这段冗余就消失了。"
+  ]
 }
