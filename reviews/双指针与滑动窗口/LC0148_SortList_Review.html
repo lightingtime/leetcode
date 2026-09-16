@@ -19,13 +19,17 @@
     
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
-    
-    <span class="badge plain">二刷 ×4</span>
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×5</span>
     <span class="badge">2026-08-05</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>148. 排序链表 (Sort List)</h1><p>&gt; <a href="https://leetcode.cn/problems/sort-list/" rel="noopener">https://leetcode.cn/problems/sort-list/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：链表、双指针、分治、排序、归并排序</p><h2>题目描述</h2><p>给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。</p><p>示例 1：</p><p>输入：head = [4,2,1,3]</p><p>输出：[1,2,3,4]</p><p>示例 2：</p><p>输入：head = [-1,5,3,4,0]</p><p>输出：[-1,0,3,4,5]</p><p>示例 3：</p><p>输入：head = []</p><p>输出：[]</p><p>提示：</p><p>链表中节点的数目在范围 [0, 5 * 104] 内</p><p>-105 5</p><p>进阶：你可以在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序吗？</p><h2>示例</h2><ol><li>输入：head = [4,2,1,3]</li></ol><p>输出：[1,2,3,4]</p><ol><li>输入：head = [-1,5,3,4,0]</li></ol><p>输出：[-1,0,3,4,5]</p><ol><li>输入：head = []</li></ol><p>输出：[]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 5 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（30/30）｜ 一次 AC ｜ 自底向上归并（迭代） ｜ O(n log n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>写法完全沿用上一轮：<strong>自底向上归并（迭代）</strong>，<code>for (i = 1; i &lt;= n; i &lt;&lt;= 1)</code> 逐层扩大段长。与上轮代码逐行比对只有两处字面差：外层变量 <code>maxLen</code> → <code>len</code>、<code>getLen</code> 挪到 <code>merge</code> 之前。</li><li>复杂度不变：时间 O(n log n)、<strong>额外空间 O(1)</strong>（只有几个游标指针，满足题目「常数级空间」的进阶要求）。</li></ul><p><strong>② 这次为什么能一次写出</strong></p><ul><li>一刷那批坑本轮一个都没复现：偶数长度找中点偏后、段间游标 <code>cur</code> 取段后不判空就取 <code>next</code>、第二段从 <code>head</code> 重走而不是从右段头续走。</li><li>最容易错的「取段步数」也稳住了：头节点已占第 0 个，凑够段长 i 只需再走 <code>i - 1</code> 步——<code>for (j = 1; j &lt; i &amp;&amp; …)</code>，文件里的 <code>回归-段长不翻倍</code> 用例正是守这一条，本次通过。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（30/30），全程无提示、无探讨 → 较强。这题近三轮（09-01、09-06、09-16）连续较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>这题的分治骨架可以和 23. 合并 K 个升序链表 对照：一个用「段长倍增」自底向上迭代、一个用堆/分治合并，取舍点是额外空间与实现复杂度。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-06 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（30/30）｜ 一次 AC ｜ 自底向上归并（迭代） ｜ O(n log n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-01，strong）与本次同思路：<strong>自底向上归并（迭代）</strong>——先算总长，<code>i</code> 从 1 开始每轮翻倍（subLen 翻倍取段），每轮把链表切成两段长为 i 的连续块 <code>merge</code> 回接，直到整表有序；空间 O(1)（只靠指针重排，不递归）。</li><li>与 09-01 版差异：循环上界从 <code>i &lt; len</code> 改为 <code>i &lt;= maxLen</code>（少跑一轮、语义更直白：i 翻到 ≥ 长度时最后一次合并已完成）；变量 rename。09-01 版代码已存入 submissions prev_code。</li><li>一刷/08-30 的自顶向下递归归并（空间 O(log n)）保留为独立条目；本轮写的是 O(1) 空间的最优档。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>踩坑记忆锚点：「<strong>段长必须每轮翻倍</strong>（<code>i &lt;&lt;= 1</code>），且取段时两段都走 <code>i-1</code> 步<strong>以内</strong>（<code>j &lt; i &amp;&amp; cur.next != null</code>）」，防 n 不整除时右段/末尾越界；09-01 之前 WA 根因就是段长 <code>i++</code> 没翻倍，导致 n=9 时右段跨块无序——回归用例「段长不翻倍」直接防这个，本轮一次通过。</li><li>切段后立即 <code>cur.next = null</code> 断开、<code>merge</code> 完把 pre 推进到段尾再接下一段，这套「取段-断开-合并-续接」节奏本轮直接写对，没有再踩断链/漏接的坑。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（未给思路提示），本地 10 组（示例 3 + 边界 6 + 回归 1：段长不翻倍）一次全绿，力扣一次提交 Accepted 30/30。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>自底向上迭代归并 O(n log n)/O(1) 是链表排序的达标最优档（链表不能随机访问，快排退化；归并是标准解）。</li><li>相关串练：21 合并两个有序链表（merge 子过程）、23 合并 K 个升序链表（多路归并/分治）、876 链表中点（自顶向下取中）、206 反转链表。</li></ul></div>
@@ -50,7 +54,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 4 轮（二刷）</h3>
+      <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>自底向上归并（迭代）</b></li>
         <li><span>复杂度</span><b>O(n log n) · O(1)</b></li>
@@ -108,14 +112,14 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 自底向上归并（迭代）</h3>
-    <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 56.7 MB</span><span class="chip">用例 30/30</span></p>
+    <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 56.8 MB</span><span class="chip">用例 30/30</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0148_SortList.java · 自底向上归并（迭代）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">sortList</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> head;
         }
-        <span class="tk-k">int</span> maxLen = <span class="tk-f">getLen</span>(head);
+        <span class="tk-k">int</span> len = <span class="tk-f">getLen</span>(head);
         <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(<span class="tk-n">0</span>, head);
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= maxLen; i &lt;&lt;= <span class="tk-n">1</span>) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= len; i &lt;&lt;= <span class="tk-n">1</span>) {
             <span class="tk-t">ListNode</span> pre = dummy, cur = dummy.next;
             <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
                 <span class="tk-t">ListNode</span> head1 = cur;
@@ -143,9 +147,19 @@
         <span class="tk-k">return</span> dummy.next;
     }
 
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">getLen</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-k">int</span> count = <span class="tk-n">0</span>;
+        <span class="tk-t">ListNode</span> p = head;
+        <span class="tk-k">while</span> (p != <span class="tk-k">null</span>) {
+            count++;
+            p = p.next;
+        }
+        <span class="tk-k">return</span> count;
+    }
+
     <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">merge</span>(<span class="tk-t">ListNode</span> head1, <span class="tk-t">ListNode</span> head2) {
         <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
-        <span class="tk-t">ListNode</span> p1 = head1, p2 = head2, p = dummy;
+        <span class="tk-t">ListNode</span> p1=  head1, p2 = head2, p = dummy;
         <span class="tk-k">while</span> (p1 != <span class="tk-k">null</span> &amp;&amp; p2 != <span class="tk-k">null</span>) {
             <span class="tk-k">if</span> (p1.val &lt; p2.val) {
                 p.next = p1;
@@ -163,16 +177,6 @@
             p.next = p2;
         }
         <span class="tk-k">return</span> dummy.next;
-    }
-
-    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">getLen</span>(<span class="tk-t">ListNode</span> head) {
-        <span class="tk-k">int</span> count = <span class="tk-n">0</span>;
-        <span class="tk-t">ListNode</span> p = head;
-        <span class="tk-k">while</span> (p != <span class="tk-k">null</span>) {
-            count++;
-            p = p.next;
-        }
-        <span class="tk-k">return</span> count;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0148_SortList.java · 自底向上归并（迭代） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">sortList</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span> || head.next == <span class="tk-k">null</span>) {
@@ -256,7 +260,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
       <h3>错误习惯复盘</h3><p><b>快慢指针探路先前进后判空：fast = fast.next 之后立刻访问 fast.next，fast 走到链表尾变成 null 时解引用空指针（NPE）；应先确认 fast 与 fast.next 都未到边界再前进</b>（累计 1 次）</p><p><b>归并排序切分后未递归排序两半直接合并（漏掉 sort(左)/sort(右) 分治结构）</b>（累计 1 次）</p><p><b>快慢指针找中点：dummy 起步+推进顺序导致偶数长度中点偏后（[1,2] 返回节点2而非1）</b>（累计 1 次）</p><p><b>merge 合并断链写错（else 分支断 p1 而非 p2；next 为 null 时 p 变 null 引发 NPE）</b>（累计 1 次）</p><p><b>快慢指针找中点第二次犯：循环条件 fast.next!=null 判停+slow 无条件前移，[1,2] 仍返回节点2 → second=null → sortList 无限递归栈溢出</b>（累计 1 次）</p><p><b>自底向上归并：段间游标 cur 推进混乱——取段后未判空就取 next（cur 为 null 时 NPE）、第二段从 head 重走而非从右段头续走、断链后 cur=tail.next 恒为 null、subLen 未翻倍（i++ 而非 i&lt;&lt;=1）、排序后返回原 head 而非 dummy.next</b>（累计 1 次）</p><p><b>自底向上归并取段步数：头节点已算第 0 个，要凑 subLen 个节点只需再走 subLen-1 步；for 循环从 j=0 起会多取一个节点（段长变 subLen+1），导致左段吞掉右段、head2 取空</b>（累计 1 次）</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ merge 若顺便返回合并后的尾节点，就能省掉每轮 `while (pre.next != null) pre = pre.next;` 的走链（复杂度不变，少一趟遍历）。</div><div class="quote">★ `ListNode p1=  head1` 等号后多了一个空格，格式可统一。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 14 · sort-list</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">自顶向下归并排序：快慢指针找中点 + 递归合并，时间 O(n log n) 最优；递归栈 O(log n) 未达进阶常数空间，可改迭代自底向上归并</div>

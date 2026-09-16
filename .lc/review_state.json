@@ -191,12 +191,12 @@
       "title": "排序链表",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-05",
-      "last_review_date": "2026-09-06",
-      "next_review_date": "2026-09-16",
-      "interval_days": 10,
-      "review_count": 4,
+      "last_review_date": "2026-09-16",
+      "next_review_date": "2026-10-13",
+      "interval_days": 27,
+      "review_count": 5,
       "mastery": "strong",
-      "consecutive_strong": 2,
+      "consecutive_strong": 3,
       "mastered": false
     },
     "find-the-duplicate-number": {

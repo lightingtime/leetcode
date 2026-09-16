@@ -2,8 +2,8 @@
 // LeetCode 148. 排序链表 (Sort List)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-list/
-// 复习日期：2026-09-06（第 4 次复习 · 一刷 2026-08-05 · 上次 2026-09-01 较强）
-// 一刷思路：自底向上归并 O(1) 空间（subLen 翻倍取段 + merge）；上次踩坑：段长 i++ 非翻倍、i<<=2 误乘4
+// 复习日期：2026-09-16（第 5 次复习 · 一刷 2026-08-05 · 上次 2026-09-06 较强 · 间隔 10 天到期）
+// 一刷写法：自顶向下归并（递归栈 O(log n)，未达进阶要求）；上次写法：自底向上归并（迭代，常数空间）
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
 
@@ -16,9 +16,9 @@ public class LC0148_SortList {
         if (head == null || head.next == null) {
             return head;
         }
-        int maxLen = getLen(head);
+        int len = getLen(head);
         ListNode dummy = new ListNode(0, head);
-        for (int i = 1; i <= maxLen; i <<= 1) {
+        for (int i = 1; i <= len; i <<= 1) {
             ListNode pre = dummy, cur = dummy.next;
             while (cur != null) {
                 ListNode head1 = cur;
@@ -46,9 +46,19 @@ public class LC0148_SortList {
         return dummy.next;
     }
 
+    private int getLen(ListNode head) {
+        int count = 0;
+        ListNode p = head;
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        return count;
+    }
+
     private ListNode merge(ListNode head1, ListNode head2) {
         ListNode dummy = new ListNode();
-        ListNode p1 = head1, p2 = head2, p = dummy;
+        ListNode p1=  head1, p2 = head2, p = dummy;
         while (p1 != null && p2 != null) {
             if (p1.val < p2.val) {
                 p.next = p1;
@@ -66,16 +76,6 @@ public class LC0148_SortList {
             p.next = p2;
         }
         return dummy.next;
-    }
-
-    private int getLen(ListNode head) {
-        int count = 0;
-        ListNode p = head;
-        while (p != null) {
-            count++;
-            p = p.next;
-        }
-        return count;
     }
     // ==== 提交代码结束 ====
 
