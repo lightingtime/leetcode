@@ -19,13 +19,17 @@
     
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
-    
-    
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-01</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>1. 两数之和 (Two Sum)</h1><p>&gt; <a href="https://leetcode.cn/problems/two-sum/" rel="noopener">https://leetcode.cn/problems/two-sum/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表</p><h2>题目描述</h2><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target 的那 两个 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p><p>你可以按任意顺序返回答案。</p><p>示例 1：</p><p>输入：nums = [2,7,11,15], target = 9</p><p>输出：[0,1]</p><p>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p><p>示例 2：</p><p>输入：nums = [3,2,4], target = 6</p><p>输出：[1,2]</p><p>示例 3：</p><p>输入：nums = [3,3], target = 6</p><p>输出：[0,1]</p><p>提示：</p><p>2 4</p><p>-109 9</p><p>-109 9</p><p>只会存在一个有效答案</p><p>进阶：你可以想出一个时间复杂度小于 O(n2) 的算法吗？</p><h2>示例</h2><ol><li>输入：nums = [2,7,11,15]，target = 9</li></ol><p>输出：[0,1]</p><p>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p><ol><li>输入：nums = [3,2,4]，target = 6</li></ol><p>输出：[1,2]</p><ol><li>输入：nums = [3,3]，target = 6</li></ol><p>输出：[0,1]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（65/65）｜ 一次 AC ｜ 单遍哈希表（边查边存） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li><strong>首次复习</strong>，没有上一轮可对比。写法与一刷一致：单遍哈希表，<code>map</code> 存「已见过的值 → 下标」。</li><li>与一刷归档代码的差异只有三处字面：把 <code>nums[i]</code> 提取成局部变量 <code>num</code>；返回顺序写成 <code>{i, map.get(...)}</code>；末尾返回空数组取代原来的 <code>null</code>（题目保证有解，这一行是死代码）。核心逻辑未变：查补数 → 返回 → 存当前值。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷时这题一次 AC，没有沉淀任何错误习惯，本轮也直接落对关键顺序：<strong>先查 <code>target - num</code>，再 <code>map.put(num, i)</code></strong>。</li><li>这个顺序是本写法的命门：若先存后查，<code>num * 2 == target</code> 时会拿自己的下标去配对，示例 3 的 <code>[3, 3]</code> 立刻暴露。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>已沉淀套路「单遍哈希：边查补数边存下标，先查后存天然处理重复值」，可与 15 三数之和 / 18 四数之和 的「外层循环 + 双指针」对照：那两题用双指针省空间，本题用哈希省时间，取舍点是数组是否有序。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,30 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>单遍哈希表（边查边存）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
-  <section><h2>我的解法</h2><div class="card">
-    <p><b>思路：</b>单遍哈希表（边查边存，重复值场景天然正确）</p>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span></p>
-    <div class="code-wrap"><div class="code-head"><span>单遍哈希表（边查边存，重复值场景天然正确）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 单遍哈希表（边查边存）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.4 MB</span><span class="chip">用例 65/65</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0001_TwoSum.java · 单遍哈希表（边查边存）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">int</span> num = nums[i];
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(target - num)) {
+                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[] {i , map.<span class="tk-f">get</span>(target - num)};
+            } <span class="tk-k">else</span> {
+                map.<span class="tk-f">put</span>(num, i);
+            }
+        }
+        <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[] {};
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0001_TwoSum.java · 单遍哈希表（边查边存） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
             <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(target - nums[i])) {
@@ -47,11 +70,12 @@
             }
         }
         <span class="tk-k">return</span> <span class="tk-k">null</span>;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在数组中找两个下标使元素之和等于 target。暴力枚举两两组合是 O(n²)；把「查补数」优化为哈希表 O(1) 查询，本质是空间换时间。</p><p>关键设计：边遍历边把 nums[i] → i 存入 HashMap；对每个元素先查 target-nums[i] 是否已存在，存在即返回 [已存下标, 当前下标]。顺序很重要：先查再存，保证同一个元素不会和自己配对（例如 target=6、数组只有一个 3，先查时 map 还没有 3，不会误返回 [i,i]）。</p><p>边界：题目保证恰好一个解，但实现仍返回 null 兜底；元素值重复时后存的下标覆盖先存的下标，先查后存确保返回的是靠前的那一对。</p><p>复杂度：O(n) 时间、O(n) 空间。相比 O(n²) 暴力是时间最优；空间是 O(1) 查询的必要代价，题目没有限制额外空间。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>65/65 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>单遍哈希：边查补数边存下标，先查后存天然处理重复值</h3><p>求「两数之和 = target」：map 存「已见过的值 → 下标」；单层循环里先用 map.containsKey(target - num) 查补数，命中即返回当前下标与补数下标，再登记当前值。先查后存保证不会用同一下标和自己配对，重复值 [3,3] 也能取到两个不同下标；写成先存后查时，num*2 == target 的情形会错用自己的下标。空间换时间，把暴力 O(n²) 降到 O(n)。出处：LC0001 两数之和。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -65,7 +89,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
       <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ `if` 分支里已经 return，紧跟的 `else` 可以去掉，循环体更扁平。</div><div class="quote">★ 末尾 `return new int[] {};` 在「题目保证恰有一个解」下是死代码，删掉或改成抛异常更能表达前提。</div><div class="quote">★ `new int[] {i , map.get(...)}` 逗号前多了空格，格式可统一。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 1 · two-sum</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">单遍哈希表 O(n)，一次 Accepted（65/65）</div>

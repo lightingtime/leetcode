@@ -2,8 +2,9 @@
 // LeetCode 1. 两数之和 (Two Sum)
 // 难度：Easy | 分类：哈希表
 // 链接：https://leetcode.cn/problems/two-sum/
-// 刷题日期：2026-08-01
-//
+// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-01）
+// 一刷写法：单遍哈希表（边查边存，重复值场景天然正确）
+// 测试用例：示例 3 个（题目自带）+ 边界 5 个（一刷归档缺边界，本次补齐）
 // ============================================================
 
 import java.util.*;
@@ -14,13 +15,14 @@ public class LC0001_TwoSum {
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            if (map.containsKey(target - nums[i])) {
-                return new int[]{map.get(target - nums[i]), i};
+            int num = nums[i];
+            if (map.containsKey(target - num)) {
+                return new int[] {i , map.get(target - num)};
             } else {
-                map.put(nums[i], i);
+                map.put(num, i);
             }
         }
-        return null;
+        return new int[] {};
     }
     // ==== 提交代码结束 ====
 
@@ -39,9 +41,22 @@ public class LC0001_TwoSum {
             if (!TestUtil.checkEqUnordered(new int[]{0, 1}, s.twoSum(new int[]{3, 3}, 6), "示例3")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
-        // ---- 边界测试（自己补充）----
-        // 例如： try { if (!TestUtil.checkEq(期望, s.twoSum(边界输入), "边界1")) failures++; } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
-        // 若题目允许任意顺序返回（下标对 / 集合），用 TestUtil.checkEqUnordered 代替 TestUtil.checkEq
+        // ---- 边界测试 ----
+        try {
+            if (!TestUtil.checkEqUnordered(new int[]{0, 1}, s.twoSum(new int[]{-3, 4}, 1), "边界1-最短数组含负数")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
+        try {
+            if (!TestUtil.checkEqUnordered(new int[]{0, 2}, s.twoSum(new int[]{3, 2, 3}, 6), "边界2-重复值取不同下标")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
+        try {
+            if (!TestUtil.checkEqUnordered(new int[]{2, 3}, s.twoSum(new int[]{1, 2, 3, 4}, 7), "边界3-答案在数组末尾")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界3 异常: " + t); }
+        try {
+            if (!TestUtil.checkEqUnordered(new int[]{1, 2}, s.twoSum(new int[]{-1, -2, -3}, -5), "边界4-全负数与负数目标")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界4 异常: " + t); }
+        try {
+            if (!TestUtil.checkEqUnordered(new int[]{0, 1}, s.twoSum(new int[]{1000000000, -1000000000, 5}, 0), "边界5-大数值防溢出")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界5 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
