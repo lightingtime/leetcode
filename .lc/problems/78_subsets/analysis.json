@@ -76,20 +76,20 @@
       "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> list) {\n        if (index >= nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n\n            list.add(nums[index]);\n            dfs(nums, index + 1, list);\n\n            list.remove(list.size() - 1);\n            dfs(nums, index + 1, list);\n    }"
     },
     {
-      "date": "2026-09-06",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "10/10",
       "runtime_ms": null,
-      "memory_bytes": 44604000,
+      "memory_bytes": 44644000,
       "approach": "回溯（起点推进）",
       "time_complexity": "O(n*2^n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**回溯·起点推进**——`dfs(index)` 每进一层先把当前 `path` 快照加入 ans（每个节点即一个子集，空集由根快照给出），再 `for i = index..n-1` 选一个元素、递归 `i+1`、回溯 remove。\n- 与 09-02 版差异：本轮去掉了 `if (nums.length == 0) return ans;` 守卫——那是 e54a3b4 复盘后的修正（题目约束 n≥1 不会触发，去掉更精简）；09-02 含守卫版代码已存入 submissions prev_code。一刷的「选/不选」写法保留为独立条目。\n\n**② 为什么这次能想起来**\n- 锚点：「**每个递归节点都先 ans.add(path 快照)**，然后循环推进起点」——这样天然覆盖空集（根节点）与全集（推进到末尾），且不重不漏；「不选」不需要显式分支，由循环把起点往后推隐式表达。\n- 上轮 strong 已内化，本轮一次写出，没再踩「只在叶子节点加 ans 导致漏中间子集/漏空集」的坑（长度10 关键成员校验含空集与全集，直接防这类漏解）。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 6 组（示例 2 + 归档边界 2 + 09-06 增补 2：长度10 含空集/全集成员校验、负数 8 子集）一次全绿，力扣一次提交 Accepted 10/10。\n\n**④ 下一步提醒**\n- 「起点推进」与「选/不选」两种子集写法都已掌握，回溯模板可迁移：90 子集 II（同层去重）、46 全排列（used 数组）、77 组合、39 组合总和（可重复选）。\n- 本题输出 2^n 个子集，O(n·2^n) 时间/拷贝是下界，无更优档。",
-      "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<Integer>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, ArrayList<Integer> path) {\n        ans.add(new ArrayList<>(path));\n\n        for (int i = index; i < nums.length; i++) {\n            path.add(nums[i]);\n            dfs(nums, i + 1, path);\n            path.remove(path.size() - 1);\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 思路与上一轮（09-06）完全一致：**回溯·起点推进**。代码逐行比对只差一处——`dfs` 的 `path` 形参从 `ArrayList<Integer>` 换成接口类型 `List<Integer>`，调用方 `new ArrayList<>()` 不变。\n- 复杂度不变：时间 O(n·2^n)（2^n 个子集 × 每个复制 O(n)），额外空间 O(n)（递归栈 + 当前 path，不含输出）。\n\n**② 这次为什么能一次写对**\n- 一刷的薄弱点是**框架混用**：`选/不选` 与 `起点推进` 两套搭在一起，于是踩了越界和答案重复两个坑。\n- 本轮落笔直接给全起点推进的三要素：`for (i = index; …)` 让起点前进、递归传 `i + 1`、进入节点就 `ans.add(new ArrayList<>(path))`；递归返回后还有 `path.remove(path.size() - 1)` 撤销，说明「不选由循环推进表达」这点已经不再需要现场推。\n\n**③ 掌握度判定**\n- 建题后独立写出，本地测试全绿，提交一次即 Accepted（10/10），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同一批「枚举所有解」的题可放在一起对照框架：46 全排列靠 used 数组去重、39 组合总和靠 start 推进 + 剩余和剪枝。\n- 本题的第三种等价写法是位掩码枚举 `0 .. 2^n-1`，不必现在补，留作需要时验证。",
+      "code": "List<List<Integer>> ans;\n    public List<List<Integer>> subsets(int[] nums) {\n        ans = new ArrayList<>();\n        dfs(nums, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, int index, List<Integer> path) {\n        ans.add(new ArrayList<>(path));\n\n        for (int i = index; i < nums.length; i++) {\n            path.add(nums[i]);\n            dfs(nums, i + 1, path);\n            path.remove(path.size() - 1);\n        }\n    }",
       "prev_code": "List<List<Integer>> ans;\npublic List<List<Integer>> subsets(int[] nums) {\n    ans = new ArrayList<>();\n    if (nums.length == 0) {\n        return ans;\n    }\n    dfs(nums, 0, new ArrayList<>());\n    return ans;\n}\n\nprivate void dfs(int[] nums, int index, ArrayList<Integer> path) {\n    ans.add(new ArrayList<>(path));\n\n    for (int i = index; i < nums.length; i++) {\n        path.add(nums[i]);\n        dfs(nums, i + 1, path);\n        path.remove(path.size() - 1);\n    }\n}",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "reviews": [
@@ -131,6 +131,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**回溯·起点推进**——`dfs(index)` 每进一层先把当前 `path` 快照加入 ans（每个节点即一个子集，空集由根快照给出），再 `for i = index..n-1` 选一个元素、递归 `i+1`、回溯 remove。\n- 与 09-02 版差异：本轮去掉了 `if (nums.length == 0) return ans;` 守卫——那是 e54a3b4 复盘后的修正（题目约束 n≥1 不会触发，去掉更精简）；09-02 含守卫版代码已存入 submissions prev_code。一刷的「选/不选」写法保留为独立条目。\n\n**② 为什么这次能想起来**\n- 锚点：「**每个递归节点都先 ans.add(path 快照)**，然后循环推进起点」——这样天然覆盖空集（根节点）与全集（推进到末尾），且不重不漏；「不选」不需要显式分支，由循环把起点往后推隐式表达。\n- 上轮 strong 已内化，本轮一次写出，没再踩「只在叶子节点加 ans 导致漏中间子集/漏空集」的坑（长度10 关键成员校验含空集与全集，直接防这类漏解）。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给思路提示），本地 6 组（示例 2 + 归档边界 2 + 09-06 增补 2：长度10 含空集/全集成员校验、负数 8 子集）一次全绿，力扣一次提交 Accepted 10/10。\n\n**④ 下一步提醒**\n- 「起点推进」与「选/不选」两种子集写法都已掌握，回溯模板可迁移：90 子集 II（同层去重）、46 全排列（used 数组）、77 组合、39 组合总和（可重复选）。\n- 本题输出 2^n 个子集，O(n·2^n) 时间/拷贝是下界，无更优档。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-16",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "10/10",
+      "approach": "回溯（起点推进）",
+      "time_complexity": "O(n*2^n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 思路与上一轮（09-06）完全一致：**回溯·起点推进**。代码逐行比对只差一处——`dfs` 的 `path` 形参从 `ArrayList<Integer>` 换成接口类型 `List<Integer>`，调用方 `new ArrayList<>()` 不变。\n- 复杂度不变：时间 O(n·2^n)（2^n 个子集 × 每个复制 O(n)），额外空间 O(n)（递归栈 + 当前 path，不含输出）。\n\n**② 这次为什么能一次写对**\n- 一刷的薄弱点是**框架混用**：`选/不选` 与 `起点推进` 两套搭在一起，于是踩了越界和答案重复两个坑。\n- 本轮落笔直接给全起点推进的三要素：`for (i = index; …)` 让起点前进、递归传 `i + 1`、进入节点就 `ans.add(new ArrayList<>(path))`；递归返回后还有 `path.remove(path.size() - 1)` 撤销，说明「不选由循环推进表达」这点已经不再需要现场推。\n\n**③ 掌握度判定**\n- 建题后独立写出，本地测试全绿，提交一次即 Accepted（10/10），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同一批「枚举所有解」的题可放在一起对照框架：46 全排列靠 used 数组去重、39 组合总和靠 start 推进 + 剩余和剪枝。\n- 本题的第三种等价写法是位掩码枚举 `0 .. 2^n-1`，不必现在补，留作需要时验证。"
     }
   ]
 }
