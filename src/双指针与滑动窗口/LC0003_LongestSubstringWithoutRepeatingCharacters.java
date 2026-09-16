@@ -16,19 +16,16 @@ public class LC0003_LongestSubstringWithoutRepeatingCharacters {
 
     // ==== 提交代码开始 ====
     public int lengthOfLongestSubstring(String s) {
-        // TODO: 在这里实现你的解法
-        int[] map = new int[128];
-        Arrays.fill(map, -1);
-        int start = 0;
-        int max = 0;
+        int[] lastSeen = new int[128];
+        Arrays.fill(lastSeen, -1);
+        int start = 0, max = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (map[c] != -1 && map[c] >= start) {
-                max = Math.max(max, i - start);
-                start = map[c] + 1;
+            if (lastSeen[c] >= start) {     // 上次出现还在当前窗口内 → 窗口左界跳到它后面
+                start = lastSeen[c] + 1;
             }
-            map[c] = i;
-            max = Math.max(max, i - start + 1);
+            lastSeen[c] = i;
+            max = Math.max(max, i - start + 1);   // [start, i] 此时一定合法，每轮都能结算
         }
         return max;
     }

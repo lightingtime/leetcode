@@ -49,6 +49,21 @@
     <h3 style="margin:0 0 8px">写法 1 · 滑动窗口+哈希表</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(字符集)</span><span class="chip">内存 ≈ 46.1 MB</span><span class="chip">用例 1036/1036</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0003_LongestSubstringWithoutRepeatingCharacters.java · 滑动窗口+哈希表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span>[] lastSeen = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];
+        <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(lastSeen, -<span class="tk-n">1</span>);
+        <span class="tk-k">int</span> start = <span class="tk-n">0</span>, max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
+            <span class="tk-k">if</span> (lastSeen[c] &gt;= start) {     <span class="tk-c">// 上次出现还在当前窗口内 → 窗口左界跳到它后面</span>
+                start = lastSeen[c] + <span class="tk-n">1</span>;
+            }
+            lastSeen[c] = i;
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, i - start + <span class="tk-n">1</span>);   <span class="tk-c">// [start, i] 此时一定合法，每轮都能结算</span>
+        }
+        <span class="tk-k">return</span> max;
+    }
+</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0003_LongestSubstringWithoutRepeatingCharacters.java · 滑动窗口+哈希表 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
         <span class="tk-c">// TODO: 在这里实现你的解法</span>
         <span class="tk-k">int</span>[] map = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];
         <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(map, -<span class="tk-n">1</span>);
@@ -64,25 +79,7 @@
             max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, i - start + <span class="tk-n">1</span>);
         }
         <span class="tk-k">return</span> max;
-    }</pre></div>
-    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0003_LongestSubstringWithoutRepeatingCharacters.java · 滑动窗口+哈希表 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
-        <span class="tk-t">Map</span>&lt;<span class="tk-t">Character</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
-        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
-        <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
-            <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
-            <span class="tk-k">if</span> (!map.<span class="tk-f">containsKey</span>(c) || map.<span class="tk-f">get</span>(c) &lt; start) {
-                map.<span class="tk-f">put</span>(c, i);
-            } <span class="tk-k">else</span> {
-                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, i - start);
-                start = map.<span class="tk-f">get</span>(c) + <span class="tk-n">1</span>;
-                map.<span class="tk-f">put</span>(c, i);
-            }
-        }
-        max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, s.<span class="tk-f">length</span>() - start);
-        <span class="tk-k">return</span> max;
-    }
-</pre></div></details>
+    }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找不含重复字符的最长连续子串长度。滑动窗口：窗口 [start, i] 内保持无重复，右端逐个扩张，遇重复就把左端跳到重复位置之后。</p><p>关键设计：HashMap 记录每个字符最近一次出现的下标。遇到 c 时若 c 出现过且位置 ≥ start（即在当前窗口内），窗口左端 start 跳到上次出现位置 +1；若旧位置 &lt; start，说明在窗口外，不构成重复。每次更新 max = max(max, i-start+1)。</p><p>边界：空串返回 0；整个串无重复时最后一次比较 s.length()-start 不能漏；重复字符恰在窗口左边界（如 abca）时 start 正确右移；「出现过」和「位置在窗口内」两个条件缺一不可。</p><p>复杂度：O(n) 时间（每个字符至多进出窗口一次）、O(字符集大小) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>滑动窗口长度更新时机与公式：max 只在遇到重复时更新，漏掉延伸到末尾的无重复窗口（如单字符串）；长度公式取决于窗口是否合法——窗口 [start,i] 无重复时为 i-start+1，else 里 i 是重复字符时应按 [start,i-1] 算 i-start</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>窗口长度公式先确认窗口合法性：else 分支里 i 是刚发现的重复字符，此刻 [start,i] 含重复、不是合法窗口，长度应为 i-start；只有把 start 跳到重复位置+1 之后，才能用 i-start+1</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>1036/1036 用例一次通过。</p></div></div></div></section>
@@ -100,7 +97,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
       <h3>错误习惯复盘</h3><p><b>滑动窗口长度更新时机与公式：max 只在遇到重复时更新，漏掉延伸到末尾的无重复窗口（如单字符串）；长度公式取决于窗口是否合法——窗口 [start,i] 无重复时为 i-start+1，else 里 i 是重复字符时应按 [start,i-1] 算 i-start</b>（累计 1 次）</p><p><b>窗口长度公式先确认窗口合法性：else 分支里 i 是刚发现的重复字符，此刻 [start,i] 含重复、不是合法窗口，长度应为 i-start；只有把 start 跳到重复位置+1 之后，才能用 i-start+1</b>（累计 1 次）</p>
-      <h3>复习提醒</h3><div class="quote">★ `map[c] != -1 &amp;&amp; map[c] &gt;= start` 里前半段是冗余的：start 恒 ≥ 0，`map[c] &gt;= start` 已经排除 -1。</div><div class="quote">★ 重复分支里的 `max = Math.max(max, i - start);` 也是冗余的：同一个 start 下的窗口长度在上一轮已经被 `i - start + 1` 结算过。</div><div class="quote">★ `map` 存的是「字符上次出现的下标」，命名成 `lastSeen` / `lastIndex` 更贴合语义。</div>
+      <h3>复习提醒</h3><div class="quote">★ 2026-09-16 复习后按精简建议改定：`map` → `lastSeen`（存的是字符上次出现的下标）、删掉 `!= -1` 的冗余判断（`start &gt;= 0` 已排除 -1）、删掉重复分支里那句重复结算的 `max`。本地 12 组用例通过，未重新提交力扣；上一版见「上一版写法」，一刷的 HashMap 版在 `git show 3db8ff5^:"src/双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters.java"`。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 9 · longest-substring-without-repeating-characters</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
       <div class="quote">无重复字符的最长子串：滑动窗口 + 哈希表记位置，延迟结算（重复点 + 结尾），O(n)/O(1)，一次 Accepted（1036/1036）</div>
