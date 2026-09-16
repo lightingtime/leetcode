@@ -40,7 +40,9 @@
   "hints": [
     "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
   ],
-  "code_notes": [],
+  "code_notes": [
+    "ans 仍是实例字段，dfs 不需要它，可以退化成 numIslands 内的局部变量；标记值用 0 比 2 更贴近「沉岛」的语义。"
+  ],
   "patterns": [
     {
       "title": "网格连通分量 DFS：四方向偏移 + 越界守卫 + 发现即计数",
@@ -52,20 +54,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-06",
+      "date": "2026-09-16",
       "verdict": "Accepted",
       "testcases": "49/49",
       "runtime_ms": null,
-      "memory_bytes": 52752000,
+      "memory_bytes": 52664000,
       "approach": "DFS 洪水填充",
       "time_complexity": "O(m*n)",
-      "space_complexity": "O(m*n)",
+      "space_complexity": "O(1) 额外空间（递归栈深 O(m*n)）",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**DFS 洪水填充**——扫描网格，遇到未访问的 `1` 就计数并从该格递归四方向淹没整座岛；`visited` 数组防重。本轮写法基本一致（字段顺序微调、`m==0` 提前返回位置不同），逻辑无变化；09-02 版代码已存入 submissions prev_code。\n- 相比一刷：一刷/09-01 用的是原地把 `1` 改 `0`（省 visited 数组）的变体，本轮选 `visited` 独立数组版，不修改入参，语义更清晰。\n\n**② 为什么这次能想起来**\n- 套路锚点：「扫到没访问过的陆地 = 新岛，计数 +1，然后递归四方向把它整片淹没」，visited 在进入格子时立刻置位防重复递归（避免同轮里反复入栈）。\n- 递归边界先判越界/已访问，再看值是否 `'0'` 提前返回——顺序写对就不容易栈溢出或漏数。本轮一次写成，未再踩「重复计数 / 忘记淹水」的坑。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给提示），本地 11 组（示例 2 + 边界 9：单行/单列/斜对角不相邻/环状岛等）一次全绿，力扣一次提交 Accepted 49/49。\n\n**④ 下一步提醒**\n- DFS 洪水填充 O(m·n) 已是本题最优档（每个格子访问常数次）；同款套路：130 被围绕的区域、695 岛屿的最大面积、剑指 13 机器人的运动范围。\n- 了解向：本题也可 BFS/并查集做连通块计数，面试可提并查集版本作为对比，不必替换 DFS。",
-      "code": "int ans;\n    boolean[][] visited;\n    public int numIslands(char[][] grid) {\n        ans = 0;\n        int m = grid.length;\n        if (m == 0) {\n            return ans;\n        }\n        int n = grid[0].length;\n        visited = new boolean[m][n];\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (!visited[i][j] && dfs(grid, i, j)) {\n                    ans++;\n                }\n            }\n        }\n        return ans;\n    }\n\n    private boolean dfs(char[][] grid, int i, int j) {\n        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || visited[i][j]) {\n            return false;\n        }\n        visited[i][j] = true;\n        if (grid[i][j] == '0') {\n            return false;\n        }\n        dfs(grid, i + 1, j);\n        dfs(grid, i - 1, j);\n        dfs(grid, i, j + 1);\n        dfs(grid, i, j - 1);\n        return true;\n    }",
+      "notes": "改为原地淹没：访问过的 1 直接置 2，去掉 visited 矩阵，额外空间降到 O(1)，dfs 改 void 由外层计数",
+      "code": "int ans;\n    public int numIslands(char[][] grid) {\n        ans = 0;\n        int m = grid.length;\n        int n = grid[0].length;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (grid[i][j] == '1') {\n                    dfs(grid, i, j);\n                    ans++;\n                }\n            }\n        }\n        return ans;\n    }\n\n    private void dfs(char[][] grid, int i, int j) {\n        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] != '1') {\n            return;\n        }\n        grid[i][j] = '2';\n        dfs(grid, i + 1, j);\n        dfs(grid, i - 1, j);\n        dfs(grid, i, j + 1);\n        dfs(grid, i, j - 1);\n    }",
       "prev_code": "boolean[][] visited;\nint ans;\npublic int numIslands(char[][] grid) {\n    int m = grid.length;\n    ans = 0;\n    if (m == 0) {\n        return ans;\n    }\n    int n = grid[0].length;\n    visited = new boolean[m][n];\n    for (int i = 0; i < m; i++) {\n        for (int j = 0; j < n; j++) {\n            if (!visited[i][j] && dfs(grid, i, j)) {\n                ans++;\n            }\n        }\n    }\n    return ans;\n}\n\nprivate boolean dfs(char[][] grid, int i, int j) {\n    if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || visited[i][j]) {\n        return false;\n    }\n    visited[i][j] = true;\n    if (grid[i][j] == '0') {\n        return false;\n    }\n    boolean has = true;\n    dfs(grid, i + 1, j);\n    dfs(grid, i - 1, j);\n    dfs(grid, i, j + 1);\n    dfs(grid, i, j - 1);\n    return has;\n}",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "reviews": [
@@ -107,7 +109,20 @@
       "space_complexity": "O(m*n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 上一轮（09-02，strong）与本次同思路：**DFS 洪水填充**——扫描网格，遇到未访问的 `1` 就计数并从该格递归四方向淹没整座岛；`visited` 数组防重。本轮写法基本一致（字段顺序微调、`m==0` 提前返回位置不同），逻辑无变化；09-02 版代码已存入 submissions prev_code。\n- 相比一刷：一刷/09-01 用的是原地把 `1` 改 `0`（省 visited 数组）的变体，本轮选 `visited` 独立数组版，不修改入参，语义更清晰。\n\n**② 为什么这次能想起来**\n- 套路锚点：「扫到没访问过的陆地 = 新岛，计数 +1，然后递归四方向把它整片淹没」，visited 在进入格子时立刻置位防重复递归（避免同轮里反复入栈）。\n- 递归边界先判越界/已访问，再看值是否 `'0'` 提前返回——顺序写对就不容易栈溢出或漏数。本轮一次写成，未再踩「重复计数 / 忘记淹水」的坑。\n\n**③ 掌握度判定**\n- strong：全程无探讨（未给提示），本地 11 组（示例 2 + 边界 9：单行/单列/斜对角不相邻/环状岛等）一次全绿，力扣一次提交 Accepted 49/49。\n\n**④ 下一步提醒**\n- DFS 洪水填充 O(m·n) 已是本题最优档（每个格子访问常数次）；同款套路：130 被围绕的区域、695 岛屿的最大面积、剑指 13 机器人的运动范围。\n- 了解向：本题也可 BFS/并查集做连通块计数，面试可提并查集版本作为对比，不必替换 DFS。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-16",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "49/49",
+      "approach": "DFS 洪水填充",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(1) 额外空间（递归栈深 O(m*n)）",
+      "optimal": true,
+      "notes": "改为原地淹没：访问过的 1 直接置 2，去掉 visited 矩阵，额外空间降到 O(1)，dfs 改 void 由外层计数"
     }
   ],
-  "approach_detail": "**问题本质**：网格上求「四连通陆地连通块」的个数。每个格子要么水要么陆地，陆地按上下左右连通，目标是统计连通分量数量。\n\n**解法选择理由**：连通分量计数有两类经典工具——DFS/BFS 洪水填充（标记访问过的陆地）和并查集。本题网格规模 m,n ≤ 300，DFS 洪水填充每个格子恰好访问一次，O(mn)，实现最直接；并查集需额外维护父子结构，适合「动态加边/多次查询连通性」场景，本题静态一次遍历用 DFS 更简洁，故选 DFS。\n\n**关键设计决策**：\n- 方向数组只放上下左右 4 组；放 8 组会把斜对角误连成同一块（边界6 专门验证）。\n- 主循环 `!visited[i][j] && dfs(i,j)`：只有「未访问的陆地」才进入计数，dfs 负责把整块连通陆地全部标记 visited，之后同块格子再被扫到直接跳过。\n- dfs 返回值语义 = 「当前格是不是陆地」：越界/已访问/是水 → false；是陆地 → 标记后 return true。注意 return true 在标记之后，且不依赖邻居返回值，单格陆地（边界2）也能正确计 1。\n- 空网格守卫：先判 m == 0 再取 grid[0].length，顺序反了直接 AIOOBE（边界1）。\n\n**边界与细节**：空网格 → 0；单格陆地 → 1；单格水 → 0；全水 → 0；全陆地 → 1；斜对角不相邻 → 5；单行/单列 → 按连通分段数；环状陆地（中间被水包围的 '1' 环）→ 1。以上全部在本地 main 测试区覆盖。\n\n**具体 case 推演**（grid = {{'1','0','1','1'}}，期望 2）：\n1. (0,0)：未访问陆地 → dfs：标记 visited[0][0]；是陆地 → return true → ans=1。\n2. (0,1)：水 → dfs 标记后 return false，不计数。\n3. (0,2)：未访问陆地 → dfs：标记；向右 dfs(0,3) 标记并 return true → 本格 return true → ans=2。\n4. (0,3)：已访问 → 主循环跳过。\n5. 最终 ans=2。两片陆地（[0] 与 [2,3]）分别由各自「第一个未访问陆地格」触发计数，连通性靠 visited 去重保证不会重复计。\n\n**复杂度与下限论证**：每个格子最多被 dfs 进入一次（visited 保证），每次进入做 O(1) 的越界/访问/水判断与 4 次邻居调用，总 O(mn)；任何算法都必须至少读一遍每个格子才能区分水陆，故 Ω(mn)，O(mn) 时间最优。空间 visited O(mn) + 递归栈最坏 O(mn)（全陆地时深度优先链），可优化为原地把 '1' 改 '0' 达到额外 O(1)。\n"
+  "approach_detail": "**问题本质**：网格上数「四连通陆地连通块」的个数——每个格子要么水要么陆地，陆地按上下左右相邻，答案是连通分量数量。\n\n**解法选择理由**：连通分量计数有 DFS/BFS 洪水填充与并查集两条路。本题 m,n ≤ 300、只做一次静态统计，DFS 洪水填充每格恰好访问一次即可，代码最短；并查集的父子结构适合「动态加边 / 反复查询连通性」的场景，这里是杀鸡用牛刀，故选 DFS。本轮把一刷的 `visited` 矩阵换成**原地淹没**：空间从 O(m·n) 降到 O(1) 额外空间，思路不变、写法更省。\n\n**关键设计决策**：\n\n| 决策 | 做法 | 理由 |\n| --- | --- | --- |\n| 方向 | 只取上下左右 4 组 | 放 8 组会把斜对角误连成一块（本地「斜对角」用例专门守这条） |\n| 访问标记 | 进入格子立刻 `grid[i][j] = '2'` | 一个判断 `grid[i][j] != '1'` 同时挡掉「水」「已淹没」两种格，省掉 visited 矩阵 |\n| 计数位置 | 主循环里 `ans++`，`dfs` 改 `void` | 一刷踩过的坑：让 `dfs` 返回值承载「这块是不是新岛」，语义一变整数就全错；现在 `dfs` 只负责淹没，计数由发现入口的主循环承担 |\n| 终止条件 | 越界或 `grid[i][j] != '1'` 立即返回 | 淹过的格子被改写成 '2'，天然终止，不会重复递归 |\n\n**边界与细节**：题目约束 `1 <= m, n <= 300`，空网格属于约束外输入，本地测试不再构造（越界用例不作数）；覆盖的有单格陆地 → 1、单格水 → 0、全水 → 0、全陆地 → 1、斜对角不相邻 → 5、单行/单列按连通分段、中间被水包围的环状陆地 → 1。原地标记会把入参 `grid` 改写成 '1'/'2'，题目只取返回值、不校验调用后的网格，因此安全。\n\n**具体 case 推演**（`grid = {{'1','0','1','1'}}`，期望 2）：\n\n1. (0,0) 是 `'1'`（仍未淹没）→ `ans = 1` → `dfs` 把 (0,0) 置 `'2'`，四个邻居分别是「越界」「水」，全部直接返回。\n2. (0,1) 是 `'0'` → 主循环跳过，不计数。\n3. (0,2) 是 `'1'` → `ans = 2` → `dfs` 置 `'2'`，向右递归到 (0,3)，(0,3) 也置 `'2'`。\n4. (0,3) 已是 `'2'` → 主循环跳过，不会重复计数。\n5. 遍历结束返回 `ans = 2`。两片陆地各由「自己最左边那个仍为 `'1'` 的格子」触发一次计数，连通靠原地标记去重。\n\n| 表达式 | 语义 |\n| --- | --- |\n| `grid[i][j] == '1'` | 尚未淹没的陆地 = 一个新连通块的入口，只有它才触发 `ans++` |\n| `grid[i][j] = '2'` | 访问标记；让后续 `!= '1'` 判断同时覆盖「水」和「已淹没」 |\n| `ans` | 主循环里新连通块入口的个数，即岛屿数 |\n\n**复杂度与下限论证**：时间 O(m·n)——每个格子最多被 `dfs` 进入一次，每次进入只做 O(1) 判断与 4 次递归调用；任何算法都必须至少读一遍每个格子才能区分水陆，故 Ω(m·n)，时间已达下限。空间：除递归栈外**额外 O(1)**（原地标记，无 visited 矩阵），这是本题能拿到的额外空间下限；递归栈最深可达格子数（全陆地且形状为长链时），要彻底消掉栈可以把 `dfs` 换成显式栈的迭代写法，但那是同一量级的等价方案。"
 }

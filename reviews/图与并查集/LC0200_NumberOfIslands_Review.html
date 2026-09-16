@@ -19,13 +19,17 @@
     
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
-    
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>200. 岛屿数量 (Number of Islands)</h1><p>&gt; <a href="https://leetcode.cn/problems/number-of-islands/" rel="noopener">https://leetcode.cn/problems/number-of-islands/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、并查集、数组、矩阵</p><h2>题目描述</h2><p>给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。</p><p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p><p>此外，你可以假设该网格的四条边均被水包围。</p><p>示例 1：</p><p>输入：grid = [</p><p>['1','1','1','1','0'],</p><p>['1','1','0','1','0'],</p><p>['1','1','0','0','0'],</p><p>['0','0','0','0','0']</p><p>]</p><p>输出：1</p><p>示例 2：</p><p>输入：grid = [</p><p>['1','1','0','0','0'],</p><p>['1','1','0','0','0'],</p><p>['0','0','1','0','0'],</p><p>['0','0','0','1','1']</p><p>]</p><p>输出：3</p><p>提示：</p><p>m == grid.length</p><p>n == grid[i].length</p><p>1</p><p>grid[i][j] 的值为 '0' 或 '1'</p><h2>示例</h2><ol><li>输入：grid = [</li></ol><p>输出：1</p><ol><li>输入：grid = [</li></ol><p>输出：3</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（49/49）｜ 一次 AC ｜ DFS 洪水填充 ｜ O(m*n) · O(1) 额外空间（递归栈深 O(m*n)）</p>
+      <div class="review-note md"><p>改为原地淹没：访问过的 1 直接置 2，去掉 visited 矩阵，额外空间降到 O(1)，dfs 改 void 由外层计数</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-06 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（49/49）｜ 一次 AC ｜ DFS 洪水填充 ｜ O(m*n) · O(m*n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-02，strong）与本次同思路：<strong>DFS 洪水填充</strong>——扫描网格，遇到未访问的 <code>1</code> 就计数并从该格递归四方向淹没整座岛；<code>visited</code> 数组防重。本轮写法基本一致（字段顺序微调、<code>m==0</code> 提前返回位置不同），逻辑无变化；09-02 版代码已存入 submissions prev_code。</li><li>相比一刷：一刷/09-01 用的是原地把 <code>1</code> 改 <code>0</code>（省 visited 数组）的变体，本轮选 <code>visited</code> 独立数组版，不修改入参，语义更清晰。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>套路锚点：「扫到没访问过的陆地 = 新岛，计数 +1，然后递归四方向把它整片淹没」，visited 在进入格子时立刻置位防重复递归（避免同轮里反复入栈）。</li><li>递归边界先判越界/已访问，再看值是否 <code>'0'</code> 提前返回——顺序写对就不容易栈溢出或漏数。本轮一次写成，未再踩「重复计数 / 忘记淹水」的坑。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（未给提示），本地 11 组（示例 2 + 边界 9：单行/单列/斜对角不相邻/环状岛等）一次全绿，力扣一次提交 Accepted 49/49。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>DFS 洪水填充 O(m·n) 已是本题最优档（每个格子访问常数次）；同款套路：130 被围绕的区域、695 岛屿的最大面积、剑指 13 机器人的运动范围。</li><li>了解向：本题也可 BFS/并查集做连通块计数，面试可提并查集版本作为对比，不必替换 DFS。</li></ul></div>
@@ -46,29 +50,25 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>DFS 洪水填充</b></li>
-        <li><span>复杂度</span><b>O(m*n) · O(m*n)</b></li>
+        <li><span>复杂度</span><b>O(m*n) · O(1) 额外空间（递归栈深 O(m*n)）</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DFS 洪水填充</h3>
-    <p><span class="chip">时间 O(m*n)</span><span class="chip">空间 O(m*n)</span><span class="chip">内存 ≈ 50.3 MB</span><span class="chip">用例 49/49</span></p>
+    <p><span class="chip">时间 O(m*n)</span><span class="chip">空间 O(1) 额外空间（递归栈深 O(m*n)）</span><span class="chip">内存 ≈ 50.2 MB</span><span class="chip">用例 49/49</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0200_NumberOfIslands.java · DFS 洪水填充</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> ans;
-    <span class="tk-k">boolean</span>[][] visited;
     <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numIslands</span>(<span class="tk-k">char</span>[][] grid) {
         ans = <span class="tk-n">0</span>;
         <span class="tk-k">int</span> m = grid.length;
-        <span class="tk-k">if</span> (m == <span class="tk-n">0</span>) {
-            <span class="tk-k">return</span> ans;
-        }
         <span class="tk-k">int</span> n = grid[<span class="tk-n">0</span>].length;
-        visited = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[m][n];
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
             <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
-                <span class="tk-k">if</span> (!visited[i][j] &amp;&amp; <span class="tk-f">dfs</span>(grid, i, j)) {
+                <span class="tk-k">if</span> (grid[i][j] == <span class="tk-s">'1'</span>) {
+                    <span class="tk-f">dfs</span>(grid, i, j);
                     ans++;
                 }
             }
@@ -76,19 +76,15 @@
         <span class="tk-k">return</span> ans;
     }
 
-    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] grid, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
-        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || j &lt; <span class="tk-n">0</span> || i &gt;= grid.length || j &gt;= grid[<span class="tk-n">0</span>].length || visited[i][j]) {
-            <span class="tk-k">return</span> <span class="tk-k">false</span>;
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] grid, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
+        <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || j &lt; <span class="tk-n">0</span> || i &gt;= grid.length || j &gt;= grid[<span class="tk-n">0</span>].length || grid[i][j] != <span class="tk-s">'1'</span>) {
+            <span class="tk-k">return</span>;
         }
-        visited[i][j] = <span class="tk-k">true</span>;
-        <span class="tk-k">if</span> (grid[i][j] == <span class="tk-s">'0'</span>) {
-            <span class="tk-k">return</span> <span class="tk-k">false</span>;
-        }
+        grid[i][j] = <span class="tk-s">'2'</span>;
         <span class="tk-f">dfs</span>(grid, i + <span class="tk-n">1</span>, j);
         <span class="tk-f">dfs</span>(grid, i - <span class="tk-n">1</span>, j);
         <span class="tk-f">dfs</span>(grid, i, j + <span class="tk-n">1</span>);
         <span class="tk-f">dfs</span>(grid, i, j - <span class="tk-n">1</span>);
-        <span class="tk-k">return</span> <span class="tk-k">true</span>;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0200_NumberOfIslands.java · DFS 洪水填充 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[][] visited;
 <span class="tk-k">int</span> ans;
@@ -126,7 +122,7 @@
     <span class="tk-k">return</span> has;
 }</pre></div></details>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：网格上求「四连通陆地连通块」的个数。每个格子要么水要么陆地，陆地按上下左右连通，目标是统计连通分量数量。</p><p><strong>解法选择理由</strong>：连通分量计数有两类经典工具——DFS/BFS 洪水填充（标记访问过的陆地）和并查集。本题网格规模 m,n ≤ 300，DFS 洪水填充每个格子恰好访问一次，O(mn)，实现最直接；并查集需额外维护父子结构，适合「动态加边/多次查询连通性」场景，本题静态一次遍历用 DFS 更简洁，故选 DFS。</p><p><strong>关键设计决策</strong>：</p><ul><li>方向数组只放上下左右 4 组；放 8 组会把斜对角误连成同一块（边界6 专门验证）。</li><li>主循环 <code>!visited[i][j] &amp;&amp; dfs(i,j)</code>：只有「未访问的陆地」才进入计数，dfs 负责把整块连通陆地全部标记 visited，之后同块格子再被扫到直接跳过。</li><li>dfs 返回值语义 = 「当前格是不是陆地」：越界/已访问/是水 → false；是陆地 → 标记后 return true。注意 return true 在标记之后，且不依赖邻居返回值，单格陆地（边界2）也能正确计 1。</li><li>空网格守卫：先判 m == 0 再取 grid[0].length，顺序反了直接 AIOOBE（边界1）。</li></ul><p><strong>边界与细节</strong>：空网格 → 0；单格陆地 → 1；单格水 → 0；全水 → 0；全陆地 → 1；斜对角不相邻 → 5；单行/单列 → 按连通分段数；环状陆地（中间被水包围的 '1' 环）→ 1。以上全部在本地 main 测试区覆盖。</p><p><strong>具体 case 推演</strong>（grid = {{'1','0','1','1'}}，期望 2）：</p><ol><li>(0,0)：未访问陆地 → dfs：标记 visited[0][0]；是陆地 → return true → ans=1。</li><li>(0,1)：水 → dfs 标记后 return false，不计数。</li><li>(0,2)：未访问陆地 → dfs：标记；向右 dfs(0,3) 标记并 return true → 本格 return true → ans=2。</li><li>(0,3)：已访问 → 主循环跳过。</li><li>最终 ans=2。两片陆地（[0] 与 [2,3]）分别由各自「第一个未访问陆地格」触发计数，连通性靠 visited 去重保证不会重复计。</li></ol><p><strong>复杂度与下限论证</strong>：每个格子最多被 dfs 进入一次（visited 保证），每次进入做 O(1) 的越界/访问/水判断与 4 次邻居调用，总 O(mn)；任何算法都必须至少读一遍每个格子才能区分水陆，故 Ω(mn)，O(mn) 时间最优。空间 visited O(mn) + 递归栈最坏 O(mn)（全陆地时深度优先链），可优化为原地把 '1' 改 '0' 达到额外 O(1)。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong>：网格上数「四连通陆地连通块」的个数——每个格子要么水要么陆地，陆地按上下左右相邻，答案是连通分量数量。</p><p><strong>解法选择理由</strong>：连通分量计数有 DFS/BFS 洪水填充与并查集两条路。本题 m,n ≤ 300、只做一次静态统计，DFS 洪水填充每格恰好访问一次即可，代码最短；并查集的父子结构适合「动态加边 / 反复查询连通性」的场景，这里是杀鸡用牛刀，故选 DFS。本轮把一刷的 <code>visited</code> 矩阵换成<strong>原地淹没</strong>：空间从 O(m·n) 降到 O(1) 额外空间，思路不变、写法更省。</p><p><strong>关键设计决策</strong>：</p><div class="table-wrap"><table><thead><tr><th>决策</th><th>做法</th><th>理由</th></tr></thead><tbody><tr><td>方向</td><td>只取上下左右 4 组</td><td>放 8 组会把斜对角误连成一块（本地「斜对角」用例专门守这条）</td></tr><tr><td>访问标记</td><td>进入格子立刻 <code>grid[i][j] = '2'</code></td><td>一个判断 <code>grid[i][j] != '1'</code> 同时挡掉「水」「已淹没」两种格，省掉 visited 矩阵</td></tr><tr><td>计数位置</td><td>主循环里 <code>ans++</code>，<code>dfs</code> 改 <code>void</code></td><td>一刷踩过的坑：让 <code>dfs</code> 返回值承载「这块是不是新岛」，语义一变整数就全错；现在 <code>dfs</code> 只负责淹没，计数由发现入口的主循环承担</td></tr><tr><td>终止条件</td><td>越界或 <code>grid[i][j] != '1'</code> 立即返回</td><td>淹过的格子被改写成 '2'，天然终止，不会重复递归</td></tr></tbody></table></div><p><strong>边界与细节</strong>：题目约束 <code>1 &lt;= m, n &lt;= 300</code>，空网格属于约束外输入，本地测试不再构造（越界用例不作数）；覆盖的有单格陆地 → 1、单格水 → 0、全水 → 0、全陆地 → 1、斜对角不相邻 → 5、单行/单列按连通分段、中间被水包围的环状陆地 → 1。原地标记会把入参 <code>grid</code> 改写成 '1'/'2'，题目只取返回值、不校验调用后的网格，因此安全。</p><p><strong>具体 case 推演</strong>（<code>grid = {{'1','0','1','1'}}</code>，期望 2）：</p><ol><li>(0,0) 是 <code>'1'</code>（仍未淹没）→ <code>ans = 1</code> → <code>dfs</code> 把 (0,0) 置 <code>'2'</code>，四个邻居分别是「越界」「水」，全部直接返回。</li><li>(0,1) 是 <code>'0'</code> → 主循环跳过，不计数。</li><li>(0,2) 是 <code>'1'</code> → <code>ans = 2</code> → <code>dfs</code> 置 <code>'2'</code>，向右递归到 (0,3)，(0,3) 也置 <code>'2'</code>。</li><li>(0,3) 已是 <code>'2'</code> → 主循环跳过，不会重复计数。</li><li>遍历结束返回 <code>ans = 2</code>。两片陆地各由「自己最左边那个仍为 <code>'1'</code> 的格子」触发一次计数，连通靠原地标记去重。</li></ol><div class="table-wrap"><table><thead><tr><th>表达式</th><th>语义</th></tr></thead><tbody><tr><td><code>grid[i][j] == '1'</code></td><td>尚未淹没的陆地 = 一个新连通块的入口，只有它才触发 <code>ans++</code></td></tr><tr><td><code>grid[i][j] = '2'</code></td><td>访问标记；让后续 <code>!= '1'</code> 判断同时覆盖「水」和「已淹没」</td></tr><tr><td><code>ans</code></td><td>主循环里新连通块入口的个数，即岛屿数</td></tr></tbody></table></div><p><strong>复杂度与下限论证</strong>：时间 O(m·n)——每个格子最多被 <code>dfs</code> 进入一次，每次进入只做 O(1) 判断与 4 次递归调用；任何算法都必须至少读一遍每个格子才能区分水陆，故 Ω(m·n)，时间已达下限。空间：除递归栈外<strong>额外 O(1)</strong>（原地标记，无 visited 矩阵），这是本题能拿到的额外空间下限；递归栈最深可达格子数（全陆地且形状为长链时），要彻底消掉栈可以把 <code>dfs</code> 换成显式栈的迭代写法，但那是同一量级的等价方案。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>网格 DFS 越界守卫写反：i&gt;=0 &amp;&amp; i&lt;len &amp;&amp; j&gt;=0 &amp;&amp; j&lt;len 为真表示在界内却 return 0，导致所有在界调用直接返回（示例全得 0）；同类问题第 2 次（先例：链表守卫写反恒真）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>空网格边界顺序：先取 grid[0].length 再判 m==0，空输入直接 AIOOBE；判空必须在取下标之前</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>统计口径混淆：用 max=Math.max(max, dfs面积) 求最大岛屿面积，而题目要岛屿个数；计数应在发现未访问陆地时 +1，且 dfs 返回值不参与计数</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DFS 返回值语义改错：让陆地格子的返回值依赖邻居是否还有未访问陆地（has |= dfs 邻居），叶子陆地/孤立陆地全部返回 false，导致整片永远 false、ans 恒为 0；正确做法是发现未访问陆地即计数、dfs 只负责标记（或返回『当前格是陆地』）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 踩坑<span class="tl-badge bug">已记录</span></span><p>空网格未处理：直接取 grid[0].length 越界；应先判 m==0 再取列数</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">07 · 提交<span class="tl-badge ok">Accepted</span></span><p>49/49 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>网格连通分量 DFS：四方向偏移 + 越界守卫 + 发现即计数</h3><p>网格连通题（岛屿/被围绕区域等）：方向偏移只放上下左右四组；dfs 开头先判越界（出界才返回）；主循环遇到未访问的陆地就计数+1 并整块标记，dfs 不需要返回值参与计数。常见坑：守卫条件写反（在界内却 return）、8 方向误连斜对角、用最大面积代替个数。</p></div></section>
   <section><h2>分析结果</h2>
@@ -142,7 +138,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 图与并查集</h3><div class="quote">连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。</div>
       <h3>错误习惯复盘</h3><p><b>网格 DFS 越界守卫写反：i&gt;=0 &amp;&amp; i&lt;len &amp;&amp; j&gt;=0 &amp;&amp; j&lt;len 为真表示在界内却 return 0，导致所有在界调用直接返回（示例全得 0）；同类问题第 2 次（先例：链表守卫写反恒真）</b>（累计 1 次）</p><p><b>空网格边界顺序：先取 grid[0].length 再判 m==0，空输入直接 AIOOBE；判空必须在取下标之前</b>（累计 1 次）</p><p><b>统计口径混淆：用 max=Math.max(max, dfs面积) 求最大岛屿面积，而题目要岛屿个数；计数应在发现未访问陆地时 +1，且 dfs 返回值不参与计数</b>（累计 1 次）</p><p><b>DFS 返回值语义改错：让陆地格子的返回值依赖邻居是否还有未访问陆地（has |= dfs 邻居），叶子陆地/孤立陆地全部返回 false，导致整片永远 false、ans 恒为 0；正确做法是发现未访问陆地即计数、dfs 只负责标记（或返回『当前格是陆地』）</b>（累计 1 次）</p><p><b>空网格未处理：直接取 grid[0].length 越界；应先判 m==0 再取列数</b>（累计 1 次）</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ ans 仍是实例字段，dfs 不需要它，可以退化成 numIslands 内的局部变量；标记值用 0 比 2 更贴近「沉岛」的语义。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 43 · number-of-islands</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
       <div class="quote">岛屿数量：DFS 洪水填充 + visited 标记，四方向从发现点计数，修复越界守卫写反与 8 方向误连后 Accepted（49/49）</div>

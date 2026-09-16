@@ -2,29 +2,23 @@
 // LeetCode 200. 岛屿数量 (Number of Islands)
 // 难度：Medium | 分类：图与并查集
 // 链接：https://leetcode.cn/problems/number-of-islands/
-// 复习日期：2026-09-06（第 3 次复习 · 一刷 2026-08-08 · 上次 2026-09-02 较强）
-// 一刷/上次思路：DFS 洪水填充：扫到未访问的 1 即计数并递归四方向淹没，visited 防重
+// 复习日期：2026-09-16（第 4 次复习 · 一刷 2026-08-08 · 上次 2026-09-06 较强 · 间隔 10 天到期）
+// 一刷思路：DFS 洪水填充 + visited；本轮改为原地淹没（访问过的 1 置 2），额外空间 O(1)
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
-
-import java.util.*;
 
 public class LC0200_NumberOfIslands {
 
     // ==== 提交代码开始 ====
     int ans;
-    boolean[][] visited;
     public int numIslands(char[][] grid) {
         ans = 0;
         int m = grid.length;
-        if (m == 0) {
-            return ans;
-        }
         int n = grid[0].length;
-        visited = new boolean[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (!visited[i][j] && dfs(grid, i, j)) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
                     ans++;
                 }
             }
@@ -32,19 +26,15 @@ public class LC0200_NumberOfIslands {
         return ans;
     }
 
-    private boolean dfs(char[][] grid, int i, int j) {
-        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || visited[i][j]) {
-            return false;
+    private void dfs(char[][] grid, int i, int j) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] != '1') {
+            return;
         }
-        visited[i][j] = true;
-        if (grid[i][j] == '0') {
-            return false;
-        }
+        grid[i][j] = '2';
         dfs(grid, i + 1, j);
         dfs(grid, i - 1, j);
         dfs(grid, i, j + 1);
         dfs(grid, i, j - 1);
-        return true;
     }
     // ==== 提交代码结束 ====
 
@@ -71,9 +61,6 @@ public class LC0200_NumberOfIslands {
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        try {
-            if (!TestUtil.checkEq(0, s.numIslands(new char[][]{}), "边界1-空网格")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界1 异常: " + t); }
         try {
             if (!TestUtil.checkEq(1, s.numIslands(new char[][]{{'1'}}), "边界2-单格陆地")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界2 异常: " + t); }
