@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-18</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>437. 路径总和 III (Path Sum III)</h1><p>&gt; <a href="https://leetcode.cn/problems/path-sum-iii/" rel="noopener">https://leetcode.cn/problems/path-sum-iii/</a></p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、二叉树</p><h2>题目描述</h2><p>给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。</p><p>路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。</p><p>示例 1：</p><p>输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8</p><p>输出：3</p><p>解释：和等于 8 的路径有 3 条，如图所示。</p><p>示例 2：</p><p>输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22</p><p>输出：3</p><p>提示:</p><p>二叉树的节点个数的范围是 [0,1000]</p><p>-109 9</p><p>-1000</p><h2>示例</h2><ol><li>输入：root = [10,5,-3,3,2,null,11,3,-2,null,1]，targetSum = 8</li></ol><p>输出：3</p><p>解释：和等于 8 的路径有 3 条，如图所示。</p><ol><li>输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1]，targetSum = 22</li></ol><p>输出：3</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-16 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（130/130）｜ 一次 AC ｜ 前缀和+回溯哈希 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>思路与数据结构完全沿用上一轮：<strong>前缀和 + 回溯哈希</strong>（<code>map</code> 登记已见前缀频次）。逐行比对只差两处字面：<code>dfs</code> 形参 <code>root</code> 改名 <code>node</code>、入口写 <code>0L</code>，逻辑一字未改。</li><li>复杂度保持 O(n) / O(n)：<code>map</code> 里最多 n 个不同前缀，递归栈 O(h)（最坏 O(n)）。</li><li>一刷的写法是双重 DFS O(n²)，本轮没有再退回枚举起点的老路。</li></ul><p><strong>② 这次为什么能直接写出</strong></p><ul><li>落笔就带齐三要素：<code>map</code> 预置 <code>0:1</code>（代表「起点在根之上」）、进入节点后<strong>先查后登记</strong>、左右子树都返回后 <code>map.merge(sum, -1, …)</code> 撤销。没有再把「路径和」下放到子递归入口去找。</li><li>前缀和一路用 <code>long</code>，正对文件里 <code>边界7-大数防溢出</code>（值域 ±1e9 × 1000 个节点）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（130/130）。</li><li>但提交前就「查询行与登记行能否互换」问过一次为什么，属于对核心不变量的探讨 → 按规则记<strong>较弱</strong>，间隔重置为 2 天。</li></ul><p><strong>④ 下一步（两天后回访重点）</strong></p><ul><li><strong>撤销时机</strong>：必须在左右子树都返回之后，提前撤销会让兄弟分支读到不属于它祖先链的前缀。</li><li><strong><code>targetSum = 0</code> 是唯一能暴露「先登记再查询」错误的取值</strong>：回访时用 <code>0(0,0)</code> 这种三节点全零树自测（正确 5，换序会得 8）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-06 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（130/130）｜ 一次 AC ｜ 前缀和+回溯哈希 ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（09-02，strong）与本次同思路：<strong>前缀和 + 回溯哈希</strong>——DFS 维护根到当前节点的前缀和 <code>sum</code>，用 <code>Map&lt;Long,Integer&gt;</code> 记录「某前缀和出现的次数」，每到一个节点先查 <code>map[sum - targetSum]</code> 累加答案，再把当前 <code>sum</code> 计数 +1 进子树，回溯时 -1 撤销。</li><li>相比一刷的「双重 DFS」（每个节点当起点再向下枚举，O(n²)），前缀和写法 O(n)，本轮直接写最优版；09-02 版代码已存入 submissions prev_code，一刷双重 DFS 保留为独立条目。</li><li>细节差异：本轮 <code>dfs</code> 入口用 <code>0</code>（int 自动拓宽为 long），与 09-02 的 <code>0L</code> 等价；<code>sum</code> 用 <code>long</code> 防溢出（大数防溢出回归用例覆盖）。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>锚点：「树上路径和 = 前缀和差」——<code>sum(子路径) = targetSum ⇔ 当前前缀和 - 某祖先前缀和 = targetSum</code>，所以只需在 DFS 中查「当前 sum - targetSum 出现过几次」。回溯时对 map 做 -1 撤销，保证只统计「从某个祖先到当前节点」的连续下向路径，不会跨分支串。</li><li>上轮 strong 已内化：map 里先放 <code>0 -&gt; 1</code>（整条根路径自身 = target 的情况）、<code>sum - targetSum</code> 先查再把自己入 map（避免把当前节点当祖先、统计到空路径），本轮一次写对。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（未给思路提示），本地 9 组（示例 2 + 边界 7：空树/单节点命中未命中/右链中间路径/负数回落/全零多路径/大数防溢出）一次全绿，力扣一次提交 Accepted 130/130。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>前缀和 + 回溯哈希 O(n)/O(n) 已是本题最优档（比双重 DFS O(n²) 好一个量级）；同套路：560 和为 K 的子数组（一维数组版前缀和哈希，先查再入、负数同样适用）。</li><li>相关题：124 二叉树最大路径和、543 直径——树形「向下路径」类可串练。</li></ul></div>
@@ -45,12 +49,12 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>前缀和+回溯哈希</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -90,24 +94,24 @@
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 130/130</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0437_PathSumIii.java · 前缀和+回溯哈希</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">int</span> ans;
     <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">pathSum</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">int</span> targetSum) {
+        ans = <span class="tk-n">0</span>;
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         map.<span class="tk-f">put</span>(<span class="tk-n">0L</span>, <span class="tk-n">1</span>);
-        ans = <span class="tk-n">0</span>;
-        <span class="tk-f">dfs</span>(root, <span class="tk-n">0</span>, targetSum, map);
+        <span class="tk-f">dfs</span>(root, <span class="tk-n">0L</span>, targetSum, map);
         <span class="tk-k">return</span> ans;
     }
 
-    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-k">long</span> sum, <span class="tk-k">int</span> targetSum, <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map) {
-        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">TreeNode</span> node, <span class="tk-k">long</span> sum, <span class="tk-k">int</span> targetSum, <span class="tk-t">Map</span>&lt;<span class="tk-t">Long</span>, <span class="tk-t">Integer</span>&gt; map) {
+        <span class="tk-k">if</span> (node == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span>;
         }
-        sum += root.val;
-        ans += map.<span class="tk-f">getOrDefault</span>(sum - targetSum, <span class="tk-n">0</span>);
 
+        sum += node.val;
+        ans += map.<span class="tk-f">getOrDefault</span>(sum - targetSum, <span class="tk-n">0</span>);
         map.<span class="tk-f">merge</span>(sum, <span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
 
-        <span class="tk-f">dfs</span>(root.left, sum, targetSum, map);
-        <span class="tk-f">dfs</span>(root.right, sum, targetSum, map);
+        <span class="tk-f">dfs</span>(node.left, sum, targetSum, map);
+        <span class="tk-f">dfs</span>(node.right, sum, targetSum, map);
 
         map.<span class="tk-f">merge</span>(sum, -<span class="tk-n">1</span>, <span class="tk-t">Integer</span>::sum);
     }</pre></div>

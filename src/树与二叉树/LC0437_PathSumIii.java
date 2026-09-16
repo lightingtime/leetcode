@@ -2,7 +2,7 @@
 // LeetCode 437. 路径总和 III (Path Sum III)
 // 难度：Medium | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/path-sum-iii/
-// 复习日期：2026-09-06（第 3 次复习 · 一刷 2026-08-18 · 上次 2026-09-02 较强）
+// 复习日期：2026-09-16（第 4 次复习 · 一刷 2026-08-18 · 上次 2026-09-06 较强 · 间隔 10 天到期）
 // 一刷写法：双重 DFS O(n²)（非最优）；上次写法：前缀和 + 回溯哈希 O(n)
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
 // ============================================================
@@ -14,24 +14,24 @@ public class LC0437_PathSumIii {
     // ==== 提交代码开始 ====
     int ans;
     public int pathSum(TreeNode root, int targetSum) {
+        ans = 0;
         Map<Long, Integer> map = new HashMap<>();
         map.put(0L, 1);
-        ans = 0;
-        dfs(root, 0, targetSum, map);
+        dfs(root, 0L, targetSum, map);
         return ans;
     }
 
-    private void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {
-        if (root == null) {
+    private void dfs(TreeNode node, long sum, int targetSum, Map<Long, Integer> map) {
+        if (node == null) {
             return;
         }
-        sum += root.val;
-        ans += map.getOrDefault(sum - targetSum, 0);
 
+        sum += node.val;
+        ans += map.getOrDefault(sum - targetSum, 0);
         map.merge(sum, 1, Integer::sum);
 
-        dfs(root.left, sum, targetSum, map);
-        dfs(root.right, sum, targetSum, map);
+        dfs(node.left, sum, targetSum, map);
+        dfs(node.right, sum, targetSum, map);
 
         map.merge(sum, -1, Integer::sum);
     }
