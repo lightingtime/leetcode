@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>11. 盛最多水的容器 (Container With Most Water)</h1><p>&gt; <a href="https://leetcode.cn/problems/container-with-most-water/" rel="noopener">https://leetcode.cn/problems/container-with-most-water/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：贪心、数组、双指针</p><h2>题目描述</h2><p>给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。</p><p>找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p><p>返回容器可以储存的最大水量。</p><p>说明：你不能倾斜容器。</p><p>示例 1：</p><p>输入：[1,8,6,2,5,4,8,3,7]</p><p>输出：49</p><p>解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。</p><p>示例 2：</p><p>输入：height = [1,1]</p><p>输出：1</p><p>提示：</p><p>n == height.length</p><p>2 5</p><p>0 4</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：49</p><p>解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。</p><ol><li>输入：height = [1,1]</li></ol><p>输出：1</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 相向双指针 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-04，一次 AC）：相向双指针，每轮结算面积后移动较矮一侧，65/65。</li><li>上次复习（09-16，strong）：与一刷逐行几乎一致，只差变量名 <code>max</code> → <code>ans</code>。</li><li>本轮（09-17）：思路相同，但<strong>丢弃方向反了一边</strong>——条件写成 <code>height[left] &gt; height[right]</code> 时 <code>right--</code>，否则 <code>left++</code>（上次归档是 <code>&lt;</code> 时 <code>left++</code>）。两版等价，唯一差别是两边等高时丢的是左还是右，而等高时丢哪边都不影响最优。按原 approach 合并、<code>prev_code</code> 保留上次版本；内存 77.5MB（上轮 77.6MB）。</li></ul><p><strong>② 这轮的过程</strong></p><ul><li>无讨论、无提示：本地 10 组用例（示例 2 + 边界 8：递增、递减、全等高、高边中间低、全零、长度 1e5 全 10000、最优不在两端、山峰形）一次全绿，力扣一次提交 Accepted（65/65）。</li><li>「移动较矮侧」的严格理由仍在：以较矮柱为界时宽度只会更小、高度又被它封顶，所以其余组合不可能超过当前值——这是算法正确的依据，不是启发式。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>上次留的两条精简这次没落地：面积行仍用 <code>Math.min(height[left], height[right])</code>，可以先比一次大小再拿较矮边乘宽度，省掉一次比较；<code>(right - left)</code> 也没提成 <code>width</code> 局部变量。再补一行注释说明「<code>else</code> 兜住右边更矮与两边等高两种情形」会更易读。</li><li>相关串练：42 接雨水（相向双指针 / 单调栈两解）、15 三数之和（有序数组相向双指针）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（65/65）｜ 一次 AC ｜ 相向双指针 ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>写法与一刷完全一致（<strong>相向双指针</strong>：<code>left</code>/<code>right</code> 从两端向中间收，每轮移动较矮的一侧），逐行比对只差变量名 <code>max</code> → <code>ans</code>。核心三行（算面积、比面积、移动较矮侧）一字未改。</li><li>复杂度 O(n) 时间 / O(1) 空间。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷一次 AC、没有沉淀错误习惯。本轮落笔就带齐三要素：宽度取 <code>right - left</code>、高度取 <code>Math.min(height[left], height[right])</code>、<strong>每轮只移动较矮的一侧</strong>。</li><li>关键的那句证明也在（不是「看起来该丢」）：以较矮的 <code>left</code> 为左端时，任何把右端往左挪的容器宽度更小、高度又不可能超过 <code>height[left]</code>，所以不可能更优 —— 丢掉它不丢解；等高的两侧移动哪边都不影响最优，代码走 <code>else</code> 分支（<code>right--</code>）。</li><li>边界 6（长度 1e5 全 10000，面积 999,990,000）验证了 int 不溢出且一趟扫描够快。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同类「相向双指针 + 单调性剪枝」的题可一起对照：42 接雨水（双指针/单调栈）、167 两数之和 II（有序数组），共同点是「先证明能丢掉一侧，再动手收指针」。</li></ul></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>相向双指针</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -47,19 +51,19 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 相向双指针</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 74.0 MB</span><span class="chip">用例 65/65</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0011_ContainerWithMostWater.java · 相向双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxArea</span>(<span class="tk-k">int</span>[] height) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 73.9 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0011_ContainerWithMostWater.java · 相向双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxArea</span>(<span class="tk-k">int</span>[] height) {
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-k">int</span> left = <span class="tk-n">0</span>, right = height.length - <span class="tk-n">1</span>;
-        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
         <span class="tk-k">while</span> (left &lt; right) {
-            ans = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(ans, <span class="tk-t">Math</span>.<span class="tk-f">min</span>(height[left], height[right]) * (right - left));
-            <span class="tk-k">if</span> (height[left] &lt; height[right]) {
-                left++;
-            } <span class="tk-k">else</span> {
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, <span class="tk-t">Math</span>.<span class="tk-f">min</span>(height[left], height[right]) * (right - left));
+            <span class="tk-k">if</span> (height[left] &gt; height[right]) {
                 right--;
+            } <span class="tk-k">else</span> {
+                left++;
             }
         }
-        <span class="tk-k">return</span> ans;
+        <span class="tk-k">return</span> max;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0011_ContainerWithMostWater.java · 相向双指针 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxArea</span>(<span class="tk-k">int</span>[] height) {
         <span class="tk-k">int</span> left = <span class="tk-n">0</span>, right = height.length - <span class="tk-n">1</span>;

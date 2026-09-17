@@ -2,9 +2,16 @@
 // LeetCode 11. 盛最多水的容器 (Container With Most Water)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/container-with-most-water/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：相向双指针，每轮移动较矮的一侧，O(n)/O(1)
-// 测试用例：示例 2 个 + 边界 8 个（原有 5 个，本次补齐：长度 1e5 全 10000 / 最优不在两端 / 山峰形）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-04 · 一刷一次 AC）
+// 一刷/上次复习写法：相向双指针——left/right 从两端往中间收，每轮结算面积后移动较矮的一侧，O(n)/O(1)
+// 要点：移动较矮侧是严格结论不是启发式——以较矮柱为界时，宽度只会更小、高度又被它封顶，所以其余组合不可能更大
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 上次复习留的精简提示：先比 height[left] < height[right] 再拿较矮边乘宽度，可省一次 Math.min；宽度提成 int 局部变量更易读；
+// 相等时丢哪边都不影响最优（else 分支同时兜住「右边更矮」和「两边等高」两种情形），值得补一行注释
+//
+// 思路：相向双指针——left/right 从两端往中间收，每轮用「较矮边 × 宽度」结算面积；随后丢掉较矮的一侧：
+//       以较矮柱为界时宽度只会更小、高度又被它封顶，其余组合不可能超过当前值，所以这样收不会漏掉最优
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -13,17 +20,17 @@ public class LC0011_ContainerWithMostWater {
 
     // ==== 提交代码开始 ====
     public int maxArea(int[] height) {
+        int max = 0;
         int left = 0, right = height.length - 1;
-        int ans = 0;
         while (left < right) {
-            ans = Math.max(ans, Math.min(height[left], height[right]) * (right - left));
-            if (height[left] < height[right]) {
-                left++;
-            } else {
+            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));
+            if (height[left] > height[right]) {
                 right--;
+            } else {
+                left++;
             }
         }
-        return ans;
+        return max;
     }
     // ==== 提交代码结束 ====
 

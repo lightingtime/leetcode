@@ -27,20 +27,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-17",
       "verdict": "Accepted",
-      "testcases": "65/65",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 77580000,
+      "memory_bytes": 77456000,
       "approach": "相向双指针",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 写法与一刷完全一致（**相向双指针**：`left`/`right` 从两端向中间收，每轮移动较矮的一侧），逐行比对只差变量名 `max` → `ans`。核心三行（算面积、比面积、移动较矮侧）一字未改。\n- 复杂度 O(n) 时间 / O(1) 空间。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮落笔就带齐三要素：宽度取 `right - left`、高度取 `Math.min(height[left], height[right])`、**每轮只移动较矮的一侧**。\n- 关键的那句证明也在（不是「看起来该丢」）：以较矮的 `left` 为左端时，任何把右端往左挪的容器宽度更小、高度又不可能超过 `height[left]`，所以不可能更优 —— 丢掉它不丢解；等高的两侧移动哪边都不影响最优，代码走 `else` 分支（`right--`）。\n- 边界 6（长度 1e5 全 10000，面积 999,990,000）验证了 int 不溢出且一趟扫描够快。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同类「相向双指针 + 单调性剪枝」的题可一起对照：42 接雨水（双指针/单调栈）、167 两数之和 II（有序数组），共同点是「先证明能丢掉一侧，再动手收指针」。",
-      "code": "public int maxArea(int[] height) {\n        int left = 0, right = height.length - 1;\n        int ans = 0;\n        while (left < right) {\n            ans = Math.max(ans, Math.min(height[left], height[right]) * (right - left));\n            if (height[left] < height[right]) {\n                left++;\n            } else {\n                right--;\n            }\n        }\n        return ans;\n    }",
+      "notes": "**① 与上一轮对比**\n\n- 一刷（08-04，一次 AC）：相向双指针，每轮结算面积后移动较矮一侧，65/65。\n- 上次复习（09-16，strong）：与一刷逐行几乎一致，只差变量名 `max` → `ans`。\n- 本轮（09-17）：思路相同，但**丢弃方向反了一边**——条件写成 `height[left] > height[right]` 时 `right--`，否则 `left++`（上次归档是 `<` 时 `left++`）。两版等价，唯一差别是两边等高时丢的是左还是右，而等高时丢哪边都不影响最优。按原 approach 合并、`prev_code` 保留上次版本；内存 77.5MB（上轮 77.6MB）。\n\n**② 这轮的过程**\n\n- 无讨论、无提示：本地 10 组用例（示例 2 + 边界 8：递增、递减、全等高、高边中间低、全零、长度 1e5 全 10000、最优不在两端、山峰形）一次全绿，力扣一次提交 Accepted（65/65）。\n- 「移动较矮侧」的严格理由仍在：以较矮柱为界时宽度只会更小、高度又被它封顶，所以其余组合不可能超过当前值——这是算法正确的依据，不是启发式。\n\n**③ 掌握度判定**\n\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\n\n**④ 下一步提醒**\n\n- 上次留的两条精简这次没落地：面积行仍用 `Math.min(height[left], height[right])`，可以先比一次大小再拿较矮边乘宽度，省掉一次比较；`(right - left)` 也没提成 `width` 局部变量。再补一行注释说明「`else` 兜住右边更矮与两边等高两种情形」会更易读。\n- 相关串练：42 接雨水（相向双指针 / 单调栈两解）、15 三数之和（有序数组相向双指针）。",
+      "code": "    public int maxArea(int[] height) {\n        int max = 0;\n        int left = 0, right = height.length - 1;\n        while (left < right) {\n            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));\n            if (height[left] > height[right]) {\n                right--;\n            } else {\n                left++;\n            }\n        }\n        return max;\n    }",
       "prev_code": "public int maxArea(int[] height) {\n        int left = 0, right = height.length - 1;\n        int max = 0;\n        while (left < right) {\n            max = Math.max(max, Math.min(height[left], height[right]) * (right - left));\n            if (height[left] < height[right]) {\n                left++;\n            } else {\n                right--;\n            }\n        }\n        return max;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -60,6 +60,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 写法与一刷完全一致（**相向双指针**：`left`/`right` 从两端向中间收，每轮移动较矮的一侧），逐行比对只差变量名 `max` → `ans`。核心三行（算面积、比面积、移动较矮侧）一字未改。\n- 复杂度 O(n) 时间 / O(1) 空间。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮落笔就带齐三要素：宽度取 `right - left`、高度取 `Math.min(height[left], height[right])`、**每轮只移动较矮的一侧**。\n- 关键的那句证明也在（不是「看起来该丢」）：以较矮的 `left` 为左端时，任何把右端往左挪的容器宽度更小、高度又不可能超过 `height[left]`，所以不可能更优 —— 丢掉它不丢解；等高的两侧移动哪边都不影响最优，代码走 `else` 分支（`right--`）。\n- 边界 6（长度 1e5 全 10000，面积 999,990,000）验证了 int 不溢出且一趟扫描够快。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同类「相向双指针 + 单调性剪枝」的题可一起对照：42 接雨水（双指针/单调栈）、167 两数之和 II（有序数组），共同点是「先证明能丢掉一侧，再动手收指针」。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "相向双指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n\n- 一刷（08-04，一次 AC）：相向双指针，每轮结算面积后移动较矮一侧，65/65。\n- 上次复习（09-16，strong）：与一刷逐行几乎一致，只差变量名 `max` → `ans`。\n- 本轮（09-17）：思路相同，但**丢弃方向反了一边**——条件写成 `height[left] > height[right]` 时 `right--`，否则 `left++`（上次归档是 `<` 时 `left++`）。两版等价，唯一差别是两边等高时丢的是左还是右，而等高时丢哪边都不影响最优。按原 approach 合并、`prev_code` 保留上次版本；内存 77.5MB（上轮 77.6MB）。\n\n**② 这轮的过程**\n\n- 无讨论、无提示：本地 10 组用例（示例 2 + 边界 8：递增、递减、全等高、高边中间低、全零、长度 1e5 全 10000、最优不在两端、山峰形）一次全绿，力扣一次提交 Accepted（65/65）。\n- 「移动较矮侧」的严格理由仍在：以较矮柱为界时宽度只会更小、高度又被它封顶，所以其余组合不可能超过当前值——这是算法正确的依据，不是启发式。\n\n**③ 掌握度判定**\n\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\n\n**④ 下一步提醒**\n\n- 上次留的两条精简这次没落地：面积行仍用 `Math.min(height[left], height[right])`，可以先比一次大小再拿较矮边乘宽度，省掉一次比较；`(right - left)` 也没提成 `width` 局部变量。再补一行注释说明「`else` 兜住右边更矮与两边等高两种情形」会更易读。\n- 相关串练：42 接雨水（相向双指针 / 单调栈两解）、15 三数之和（有序数组相向双指针）。"
     }
   ],
   "code_notes": [
