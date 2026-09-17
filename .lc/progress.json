@@ -3457,6 +3457,17 @@
         "双指针与滑动窗口"
       ],
       "last_seen": "2026-09-17"
+    },
+    {
+      "habit": "ArrayDeque 当栈用时栈端点不统一：数字与出栈都走队尾（offerLast/pollLast），但计算结果用 push 写进队头，下一次出栈取的仍是队尾的旧值，中间结果永远排不到栈顶，表达式算错（示例 [-11,6,*] 处应得 12*-11=-132，实际取到 6*-11=-66）；四个栈操作必须落在同一端点",
+      "count": 1,
+      "examples": [
+        "evaluate-reverse-polish-notation"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-17"
     }
   ],
   "category_hints": {
