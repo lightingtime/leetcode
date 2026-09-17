@@ -569,12 +569,12 @@
       "title": "二叉树的序列化与反序列化",
       "category": "树与二叉树",
       "first_pass_date": "2026-08-08",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-17",
-      "interval_days": 5,
-      "review_count": 4,
+      "last_review_date": "2026-09-17",
+      "next_review_date": "2026-10-02",
+      "interval_days": 15,
+      "review_count": 5,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "longest-consecutive-sequence": {

@@ -2,62 +2,65 @@
 // LeetCode 297. 二叉树的序列化与反序列化 (Serialize and Deserialize Binary Tree)
 // 难度：Hard | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/
-// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-08 · 上次复习 2026-09-07）
-// 一刷思路：层序 BFS 序列化（# 占位 null），反序列化队列 + 双指针下标重建
-// 测试用例与一刷归档保持一致（示例 + 边界，均验证 序列化→反序列化 往返一致）
+// 复习日期：2026-09-17（第 5 次复习 · 一刷 2026-08-08）
+// 一刷写法：层序 BFS + `#` 占位符（Deque FIFO 队列，O(n) 时间 / O(n) 空间）
+// 测试用例：与一刷归档保持一致（示例 4 + 边界 5 + 回归，原样同步）
+//
+// 思路：层序遍历（BFS）+ `#` 占位 null。序列化按层出队写值、非空节点把左右孩子（含 null）入队；
+//       反序列化按同一层序消费 token，每个非空队首固定吃两个 token 接左右孩子。
+// 复杂度：时间 O(n) 空间 O(n)
 // ============================================================
 
 import java.util.*;
 
 public class LC0297_SerializeAndDeserializeBinaryTree {
 
-    // 设计题：补全 Codec 的两个方法，类名 Codec 在提交时自动处理。
+    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 Codec 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class Codec {
         public String serialize(TreeNode root) {
             if (root == null) {
                 return "";
             }
-            Deque<TreeNode> stack = new LinkedList<>();
-            stack.offerLast(root);
+            Deque<TreeNode> queue = new LinkedList<>();
             List<String> list = new ArrayList<>();
-            while (!stack.isEmpty()) {
-                int size = stack.size();
+            queue.offerLast(root);
+            while (!queue.isEmpty()) {
+                int size = queue.size();
                 for (int i = 0; i < size; i++) {
-                    TreeNode node = stack.pollFirst();
-                    if (node != null) {
+                    TreeNode node = queue.pollFirst();
+                    if (node!= null) {
                         list.add(node.val + "");
-                        stack.offerLast(node.left);
-                        stack.offerLast(node.right);
+                        queue.offerLast(node.left);
+                        queue.offerLast(node.right);
                     } else {
                         list.add("#");
                     }
                 }
             }
-            return String.join(",", list);
+            return String.join(" ", list);
         }
-
         public TreeNode deserialize(String data) {
             if (data.isEmpty()) {
                 return null;
             }
-            String[] split = data.split(",");
+            String[] split = data.split(" ");
             TreeNode root = new TreeNode(Integer.parseInt(split[0]));
-            Deque<TreeNode> deque = new LinkedList<>();
-            deque.offerLast(root);
-            int index = 1;
-            while (index < split.length) {
-                TreeNode cur = deque.pollFirst();
-                if (!Objects.equals(split[index], "#")) {
-                    cur.left = new TreeNode(Integer.parseInt(split[index]));
-                    deque.offerLast(cur.left);
+            int i = 1;
+            Deque<TreeNode> queue = new ArrayDeque<>();
+            queue.offerLast(root);
+            while (i < split.length) {
+                TreeNode cur = queue.pollFirst();
+                if (!split[i].equals("#")) {
+                    cur.left = new TreeNode(Integer.parseInt(split[i]));
+                    queue.offerLast(cur.left);
                 }
-                index++;
-                if (!Objects.equals(split[index], "#")) {
-                    cur.right = new TreeNode(Integer.parseInt(split[index]));
-                    deque.offerLast(cur.right);
+                i++;
+                if (!split[i].equals("#")) {
+                    cur.right = new TreeNode(Integer.parseInt(split[i]));
+                    queue.offerLast(cur.right);
                 }
-                index++;
+                i++;
             }
             return root;
         }

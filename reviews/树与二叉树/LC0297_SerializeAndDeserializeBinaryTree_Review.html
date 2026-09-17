@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×4</span>
+    <span class="badge plain">二刷 ×5</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>297. 二叉树的序列化与反序列化 (Serialize and Deserialize Binary Tree)</h1><p>&gt; <a href="https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/" rel="noopener">https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/</a></p><p>难度：Hard ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、广度优先搜索、设计、字符串、二叉树</p><h2>题目描述</h2><p>序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。</p><p>请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。</p><p>提示: 输入输出格式与 LeetCode 目前使用的方式一致，详情请参阅 LeetCode 序列化二叉树的格式。你并非必须采取这种方式，你也可以采用其他的方法解决这个问题。</p><p>示例 1：</p><p>输入：root = [1,2,3,null,null,4,5]</p><p>输出：[1,2,3,null,null,4,5]</p><p>示例 2：</p><p>输入：root = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：root = [1]</p><p>输出：[1]</p><p>示例 4：</p><p>输入：root = [1,2]</p><p>输出：[1,2]</p><p>提示：</p><p>树中结点数在范围 [0, 104] 内</p><p>-1000</p><h2>示例</h2><ol><li>输入：root = [1,2,3,null,null,4,5]</li></ol><p>输出：[1,2,3,null,null,4,5]</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><ol><li>输入：root = [1]</li></ol><p>输出：[1]</p><ol><li>输入：root = [1,2]</li></ol><p>输出：[1,2]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 5 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（53/53）｜ 一次 AC ｜ 层序 BFS + 占位符 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比（09-12 较强）</strong></p><ul><li>思路完全相同：层序 BFS + <code>#</code> 占位 null，<code>offerLast</code> 配 <code>pollFirst</code> 的 FIFO 队列，O(n) / O(n)。</li><li>写法差异：本次序列化用空格分隔（<code>String.join(" ", list)</code> + <code>split(" ")</code>），上一版用逗号；分隔符本身不影响正确性，但写端与读端必须是同一个字符。</li><li>结构差异：反序列化队列用 <code>ArrayDeque</code>（上一版 <code>LinkedList</code>）；serialize 多了一层 <code>size</code> 分批。</li></ul><p><strong>② 这次为什么一次写对</strong></p><ul><li>一刷与 09-07 两次都栽在同一处：出队端写 <code>pollLast</code>，<code>offerLast + pollLast</code> 退化成栈（LIFO），token 顺序变成右先左后，读端按层序消费必然错位。</li><li>本次写 serialize 前先定死了顺序约定「层序、父先于子、左先于右」，出队只用 <code>pollFirst</code>，入队只用 <code>offerLast</code>，从根上避开配对错误。</li><li>两端空值处理对齐：<code>root == null → ""</code>、<code>data.isEmpty() → null</code>，空树往返走通。</li></ul><p><strong>③ 掌握度依据</strong></p><ul><li>本地 9 组用例（示例 4 + 边界 5）全部通过；力扣提交一次 Accepted（53/53，内存 48788000 字节）。</li><li>全程无提示、无探讨 → strong。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li><code>serialize</code> 里的 <code>size</code> 分批是多余的：队列逐个出队即可，不需要按层分组，去掉后少一层嵌套。</li><li>等价写法值得再练：先序 DFS 序列化 + 递归重建（用全局下标指针），与层序 BFS 都要会；LC449（BST 序列化）可只存前序、靠大小关系重建。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（53/53）｜ 一次 AC ｜ 层序 BFS + 占位符 ｜ O(n) · O(n)</p>
       <div class="review-note md"><p>① 与上一轮对比：仍是层序 BFS + <code>#</code> 占位 null，序列化按队列逐层输出；反序列化保持队列消费，但循环条件改为 <code>index &lt; split.length</code>，整体复杂度 O(n) / O(n)。</p><p>② 这次为什么想起来：序列化时对每个出队节点写值，再把左右孩子（含 null 占位）入队；反序列化时每个非空队列节点固定消费两个 token 连接左右孩子，利用同样的层序顺序恢复结构。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：当前写法已最优；若要把反序列化当作通用入口使用，可在右孩子 token 访问前补 <code>index &lt; split.length</code> 防护，但 LeetCode 输入由 <code>serialize</code> 产生时 token 成对，不影响当前正确性。</p></div>
@@ -50,7 +54,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 4 轮（二刷）</h3>
+      <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>层序 BFS + 占位符</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
@@ -59,56 +63,56 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 层序 BFS + 占位符</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.3 MB</span><span class="chip">用例 53/53</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.5 MB</span><span class="chip">用例 53/53</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0297_SerializeAndDeserializeBinaryTree.java · 层序 BFS + 占位符</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Codec</span> {
         <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">serialize</span>(<span class="tk-t">TreeNode</span> root) {
             <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
                 <span class="tk-k">return</span> <span class="tk-s">""</span>;
             }
-            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
-            stack.<span class="tk-f">offerLast</span>(root);
+            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
             <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; list = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-            <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>()) {
-                <span class="tk-k">int</span> size = stack.<span class="tk-f">size</span>();
+            queue.<span class="tk-f">offerLast</span>(root);
+            <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">int</span> size = queue.<span class="tk-f">size</span>();
                 <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; size; i++) {
-                    <span class="tk-t">TreeNode</span> node = stack.<span class="tk-f">pollFirst</span>();
-                    <span class="tk-k">if</span> (node != <span class="tk-k">null</span>) {
+                    <span class="tk-t">TreeNode</span> node = queue.<span class="tk-f">pollFirst</span>();
+                    <span class="tk-k">if</span> (node!= <span class="tk-k">null</span>) {
                         list.<span class="tk-f">add</span>(node.val + <span class="tk-s">""</span>);
-                        stack.<span class="tk-f">offerLast</span>(node.left);
-                        stack.<span class="tk-f">offerLast</span>(node.right);
+                        queue.<span class="tk-f">offerLast</span>(node.left);
+                        queue.<span class="tk-f">offerLast</span>(node.right);
                     } <span class="tk-k">else</span> {
                         list.<span class="tk-f">add</span>(<span class="tk-s">"#"</span>);
                     }
                 }
             }
-            <span class="tk-k">return</span> <span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">","</span>, list);
+            <span class="tk-k">return</span> <span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">" "</span>, list);
         }
-
         <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">deserialize</span>(<span class="tk-t">String</span> data) {
             <span class="tk-k">if</span> (data.<span class="tk-f">isEmpty</span>()) {
                 <span class="tk-k">return</span> <span class="tk-k">null</span>;
             }
-            <span class="tk-t">String</span>[] split = data.<span class="tk-f">split</span>(<span class="tk-s">","</span>);
+            <span class="tk-t">String</span>[] split = data.<span class="tk-f">split</span>(<span class="tk-s">" "</span>);
             <span class="tk-t">TreeNode</span> root = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[<span class="tk-n">0</span>]));
-            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; deque = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
-            deque.<span class="tk-f">offerLast</span>(root);
-            <span class="tk-k">int</span> index = <span class="tk-n">1</span>;
-            <span class="tk-k">while</span> (index &lt; split.length) {
-                <span class="tk-t">TreeNode</span> cur = deque.<span class="tk-f">pollFirst</span>();
-                <span class="tk-k">if</span> (!<span class="tk-t">Objects</span>.<span class="tk-f">equals</span>(split[index], <span class="tk-s">"#"</span>)) {
-                    cur.left = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[index]));
-                    deque.<span class="tk-f">offerLast</span>(cur.left);
+            <span class="tk-k">int</span> i = <span class="tk-n">1</span>;
+            <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+            queue.<span class="tk-f">offerLast</span>(root);
+            <span class="tk-k">while</span> (i &lt; split.length) {
+                <span class="tk-t">TreeNode</span> cur = queue.<span class="tk-f">pollFirst</span>();
+                <span class="tk-k">if</span> (!split[i].<span class="tk-f">equals</span>(<span class="tk-s">"#"</span>)) {
+                    cur.left = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[i]));
+                    queue.<span class="tk-f">offerLast</span>(cur.left);
                 }
-                index++;
-                <span class="tk-k">if</span> (!<span class="tk-t">Objects</span>.<span class="tk-f">equals</span>(split[index], <span class="tk-s">"#"</span>)) {
-                    cur.right = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[index]));
-                    deque.<span class="tk-f">offerLast</span>(cur.right);
+                i++;
+                <span class="tk-k">if</span> (!split[i].<span class="tk-f">equals</span>(<span class="tk-s">"#"</span>)) {
+                    cur.right = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(<span class="tk-t">Integer</span>.<span class="tk-f">parseInt</span>(split[i]));
+                    queue.<span class="tk-f">offerLast</span>(cur.right);
                 }
-                index++;
+                i++;
             }
             <span class="tk-k">return</span> root;
         }
-    }</pre></div>
+    }
+    </pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0297_SerializeAndDeserializeBinaryTree.java · 层序 BFS + 占位符 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Codec</span> {
         <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">serialize</span>(<span class="tk-t">TreeNode</span> root) {
             <span class="tk-t">StringBuilder</span> sb = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
@@ -160,7 +164,7 @@
     }
 </pre></div></details>
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><h3>反序列化参数 i 的作用：为什么下标能自动对应左右子树</h3><p><strong>i 的语义</strong>：<code>deserialize</code> 中 <code>i</code> 是指向 <code>vals</code>（序列化数组）的「下一个待消费槽位」下标；每处理完一个父节点的左右孩子，<code>i</code> 前进 2。</p><p><strong>为什么能对上</strong>：serialize 与 deserialize 是<strong>同一个 BFS 的「写」与「读」两个方向</strong>：</p><ul><li>serialize：每个节点出队时，把它 <code>left</code>、<code>right</code>（含 null）<strong>紧接着写入</strong>序列化串——所以每个节点都「消耗」2 个输出槽位；null 只写出、不入队。</li><li>deserialize：每个非空父节点出队时，从 <code>vals</code> 连续读取 2 个槽位作为左右孩子——同样每节点消耗 2 个输入槽位；<code>#</code> 跳过不建节点。</li></ul><p>两条 BFS 的「非空节点出队顺序」完全相同（都是层序），因此「读的位置」天然等于「写的位置」——<code>i</code> 不需要数学公式，它就是复刻 serialize 写入节奏的游标。</p><p><strong>case 推演</strong>（树 <code>[1,2,3,null,null,4,5]</code>）：serialize 产出 <code>1,2,3,#,#,4,5,#,#,#,#</code>（每个非空节点后紧跟左右两槽位）。</p><div class="table-wrap"><table><thead><tr><th>deserialize 出队父节点</th><th>消费 i</th><th>槽位内容</th><th>动作</th></tr></thead><tbody><tr><td>1</td><td>1, 2</td><td>2, 3</td><td>挂 left=2、right=3，2/3 入队</td></tr><tr><td>2</td><td>3, 4</td><td>#, #</td><td>左空、右空，不入队</td></tr><tr><td>3</td><td>5, 6</td><td>4, 5</td><td>挂 left=4、right=5，4/5 入队</td></tr><tr><td>4</td><td>7, 8</td><td>#, #</td><td>左空、右空</td></tr><tr><td>5</td><td>9, 10</td><td>#, #</td><td>左空、右空</td></tr></tbody></table></div><p>对照 serialize 的写入：1 出队时写 2,3；2 出队时写 #,#；3 出队时写 4,5……——<strong>读的顺序就是写的顺序</strong>，所以 <code>i</code> 每次 +2 就精确落在「当前父节点的左右孩子」上。</p><p><strong>一句话</strong>：<code>i</code> 不是靠 <code>2i</code>/<code>2i+1</code> 公式定位（那要求完全二叉树连续数组），而是靠「读写同节奏」——BFS 队列保证非空节点按层序处理，每个节点固定消费两个槽位，指针 <code>i</code> 自然与左右子树一一对应。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><h3>反序列化参数 i 的作用：为什么下标能自动对应左右子树</h3><p><strong>i 的语义</strong>：<code>deserialize</code> 中 <code>i</code> 是指向 <code>vals</code>（序列化数组）的「下一个待消费槽位」下标；每处理完一个父节点的左右孩子，<code>i</code> 前进 2。</p><p><strong>为什么能对上</strong>：serialize 与 deserialize 是<strong>同一个 BFS 的「写」与「读」两个方向</strong>：</p><ul><li>serialize：每个出队节点写 1 个 token——非空节点写值并把 <code>left</code>、<code>right</code>（含 null）<strong>依左先右后入队</strong>（每个非空节点消耗 2 个输出槽位）；null 节点写 <code>#</code> 且不再展开。</li><li>计数校验：串长 = 出队节点数 = <code>1 + 2n</code>（<code>n</code> 为非空节点数）——根节点 1 个，每个非空节点再补 2 个孩子 token。</li><li>deserialize：每个非空父节点出队时，从 <code>vals</code> 连续读取 2 个槽位作为左右孩子——同样每节点消耗 2 个输入槽位；<code>#</code> 跳过不建节点。</li></ul><p>两条 BFS 的「非空节点出队顺序」完全相同（都是层序），因此「读的位置」天然等于「写的位置」——<code>i</code> 不需要数学公式，它就是复刻 serialize 写入节奏的游标。</p><p><strong>case 推演</strong>（树 <code>[1,2,3,null,null,4,5]</code>）：serialize 产出 <code>1,2,3,#,#,4,5,#,#,#,#</code>（每个非空节点后紧跟左右两槽位）。</p><div class="table-wrap"><table><thead><tr><th>deserialize 出队父节点</th><th>消费 i</th><th>槽位内容</th><th>动作</th></tr></thead><tbody><tr><td>1</td><td>1, 2</td><td>2, 3</td><td>挂 left=2、right=3，2/3 入队</td></tr><tr><td>2</td><td>3, 4</td><td>#, #</td><td>左空、右空，不入队</td></tr><tr><td>3</td><td>5, 6</td><td>4, 5</td><td>挂 left=4、right=5，4/5 入队</td></tr><tr><td>4</td><td>7, 8</td><td>#, #</td><td>左空、右空</td></tr><tr><td>5</td><td>9, 10</td><td>#, #</td><td>左空、右空</td></tr></tbody></table></div><p>对照 serialize 的写入：1 出队时写 2,3；2 出队时写 #,#；3 出队时写 4,5……——<strong>读的顺序就是写的顺序</strong>，所以 <code>i</code> 每次 +2 就精确落在「当前父节点的左右孩子」上。</p><p><strong>一句话</strong>：<code>i</code> 不是靠 <code>2i</code>/<code>2i+1</code> 公式定位（那要求完全二叉树连续数组），而是靠「读写同节奏」——BFS 队列保证非空节点按层序处理，每个节点固定消费两个槽位，指针 <code>i</code> 自然与左右子树一一对应。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>Deque 当队列用但 offerLast 配 pollLast 实际是栈（LIFO）：遍历顺序变成后进先出（右子树先访问），与反序列化从左到右读的顺序约定不一致；序列化与反序列化必须使用同一种顺序</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>序列化/反序列化顺序不一致：serialize 用 pollLast（offerLast+pollLast=栈/LIFO）出队、deserialize 用 pollFirst（队列/FIFO）读取，写读顺序不匹配导致结构错乱；offerLast 配 pollFirst 才是队列，两个方法必须统一同一遍历语义</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>53/53 用例。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>序列化/反序列化顺序一致性 + 队列栈进出配对</h3><p>Deque 入队 offerLast 配出队 pollFirst 才是队列（FIFO）；offerLast 配 pollLast 实际是栈（LIFO）。序列化用哪种顺序生成字符串，反序列化就必须按同一种顺序消费：层序（先左后右）序列化就要层序重建，否则结构错位。</p></div></section>
   <section><h2>分析结果</h2>
