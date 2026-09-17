@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-03</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>169. 多数元素 (Majority Element)</h1><p>&gt; <a href="https://leetcode.cn/problems/majority-element/" rel="noopener">https://leetcode.cn/problems/majority-element/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表、分治、计数、排序</p><h2>题目描述</h2><p>给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。</p><p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p><p>示例 1：</p><p>输入：nums = [3,2,3]</p><p>输出：3</p><p>示例 2：</p><p>输入：nums = [2,2,1,1,1,2,2]</p><p>输出：2</p><p>提示：</p><p>n == nums.length</p><p>1 4</p><p>-109 9</p><p>输入保证数组中一定有一个多数元素。</p><p>进阶：尝试设计时间复杂度为 O(n)、空间复杂度为 O(1) 的算法解决此问题。</p><h2>示例</h2><ol><li>输入：nums = [3,2,3]</li></ol><p>输出：3</p><ol><li>输入：nums = [2,2,1,1,1,2,2]</li></ol><p>输出：2</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ Boyer-Moore 投票 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-03，一次 AC）：Boyer-Moore 投票，没有沉淀任何错误习惯。</li><li>上次复习（09-16，strong）：同为投票法，分支结构重写成「相等加票、不等减票，减完再判 count == 0 换候选」；当时用穷举对拍验证过它与经典变体等价。</li><li>本轮（09-17）：写法与上次完全一致，按原 approach 合并、prev_code 保留上次版本；内存 63.8MB（上轮 63.6MB）。</li></ul><p><strong>② 这轮的过程</strong></p><ul><li>无讨论、无提示：本地 7 组用例（示例 2 + 边界 5：单元素、两元素全相同、多数在末尾、多数为负数、±10⁹ 大数值）一次全绿，力扣一次提交 Accepted（57/57）。</li><li>投票不变量稳稳成立：同值加票、异值减票，count 减到 0 说明候选被完全抵消，用当前元素重新起头；多数元素出现次数 &gt; n/2，抵消到最后留下的必是它。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>上次留的两条精简项这次没落地（变量名还是 a、count == 0 的判断仍跟在 else 之后）：纯风格取舍、不影响正确性，下次顺手改掉即可。</li><li>相关串练：229 多数元素 II（阈值变成 &gt; n/3，最多两个候选）、面试题 17.10 主要元素。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（57/57）｜ 一次 AC ｜ Boyer-Moore 投票 ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li><strong>首次复习</strong>。写法与一刷同为 <strong>Boyer-Moore 投票</strong>（O(n) 时间 / O(1) 空间），但分支结构重写了一遍：一刷是「相等则加，不等才减且减到 ≤0 才换候选」，本轮是「相等加、不等减，减完再判 <code>times == 0</code> 换候选」。</li><li>两版语义完全相同（都是「候选的富余票数被抵消光时，用当前元素重新起头」）。用穷举对拍验证过：长度 ≤ 8、值域 {1,2,3} 且含严格多数的全部数组，新写法与经典「<code>count == 0</code> 先重置候选」变体结果一致，无一处偏差。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷一次 AC、没有沉淀错误习惯，本轮凭记忆直接给出投票三要素：候选 <code>a</code>、富余票数 <code>times</code>、抵消到 0 就换候选。</li><li>换候选时把 <code>times</code> 复位成 1 而不是 0——这一行如果写错（漏加当前元素），后面整段计数会整体偏移。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（57/57），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>投票法的前提是「多数元素一定存在」（本题由题目保证）。若题目不保证存在，必须用第二次扫描验证候选的出现次数是否 &gt; n/2。</li><li>可顺带对照 229 求众数 II：要求出现次数 &gt; n/3 的元素，需要<strong>两个候选 + 两个计数</strong>，抵消规则与本题同源。</li></ul></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>Boyer-Moore 投票</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -47,21 +51,22 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Boyer-Moore 投票</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 60.7 MB</span><span class="chip">用例 57/57</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0169_MajorityElement.java · Boyer-Moore 投票</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 60.9 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0169_MajorityElement.java · Boyer-Moore 投票</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> a = nums[<span class="tk-n">0</span>];
-        <span class="tk-k">int</span> times = <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> count = <span class="tk-n">1</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
             <span class="tk-k">if</span> (nums[i] == a) {
-                times++;
+                count++;
             } <span class="tk-k">else</span> {
-                times--;
+                count--;
             }
-            <span class="tk-k">if</span> (times == <span class="tk-n">0</span>) {
+            <span class="tk-k">if</span> (count == <span class="tk-n">0</span>) {
                 a = nums[i];
-                times = <span class="tk-n">1</span>;
+                count = <span class="tk-n">1</span>;
             }
         }
+
         <span class="tk-k">return</span> a;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0169_MajorityElement.java · Boyer-Moore 投票 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">majorityElement</span>(<span class="tk-k">int</span>[] nums) {

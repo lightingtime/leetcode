@@ -2,29 +2,37 @@
 // LeetCode 169. 多数元素 (Majority Element)
 // 难度：Easy | 分类：哈希表
 // 链接：https://leetcode.cn/problems/majority-element/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-03）
-// 一刷写法：Boyer-Moore 投票 O(n)/O(1)
-// 测试用例：示例 2 个（题目自带）+ 边界 5 个（一刷归档缺边界，本次补齐）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-03 · 一刷一次 AC）
+// 一刷/上次复习写法：Boyer-Moore 投票（候选 + 票数互相抵消），O(n)/O(1)
+// 要点：候选的富余票数被抵消光（times == 0）时才换候选；多数元素出现次数 > n/2，保证最后留下的候选必是它
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 5 个）
+// 上次复习留下的精简项（本次直接写精简版）：变量名 a / times 改成 candidate / count；times == 0 只会在走了 else（减票）之后成立，可并进 else 里
+//
+// 思路：Boyer-Moore 投票——a 是当前候选，count 是它还没被抵消的富余票；遇到同值加票、异值减票，
+//       减到 0 说明候选被完全抵消，用当前元素重新起头；多数元素出现次数 > n/2，抵消到最后剩下的候选必是它
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
 
+import java.util.*;
 
 public class LC0169_MajorityElement {
 
     // ==== 提交代码开始 ====
     public int majorityElement(int[] nums) {
         int a = nums[0];
-        int times = 1;
+        int count = 1;
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] == a) {
-                times++;
+                count++;
             } else {
-                times--;
+                count--;
             }
-            if (times == 0) {
+            if (count == 0) {
                 a = nums[i];
-                times = 1;
+                count = 1;
             }
         }
+
         return a;
     }
     // ==== 提交代码结束 ====
