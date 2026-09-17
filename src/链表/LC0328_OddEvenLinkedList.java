@@ -2,10 +2,11 @@
 // LeetCode 328. 奇偶链表 (Odd Even Linked List)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/odd-even-linked-list/
-// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-24 · 上次复习 2026-09-07）
-//
-// 思路：原地维护奇、偶两条链尾指针，交替越过下一个节点重连，最后拼接两条链。
-// 复杂度：时间 O(n)，空间 O(1)
+// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-24）
+// 一刷写法：先写「双哨兵拆链」（写法1）出错，改「原地交替」odd/even 各跳 next.next 重连（写法2）才 AC，O(n) / O(1)
+// 一刷问题：链表拆链时边遍历边覆盖原 next、被拆节点未断开，会在奇偶交替处成环（偶数长度碰巧通过、奇数长度 OOM）
+// 上次复习写法：仍用原地交替（odd/even 尾指针重连 + odd.next = evenHead），一次 AC
+// 测试用例：与一刷归档保持一致（示例 2 + 边界 6，含 10000 节点）
 // ============================================================
 
 import java.util.*;
@@ -15,14 +16,15 @@ public class LC0328_OddEvenLinkedList {
     // ==== 提交代码开始 ====
     public ListNode oddEvenList(ListNode head) {
         if (head == null) {
-            return null;
+            return head;
         }
+
         ListNode evenHead = head.next;
         ListNode odd = head, even = evenHead;
         while (even != null && even.next != null) {
             odd.next = even.next;
             odd = odd.next;
-            even.next = odd.next;
+            even.next =  odd.next;
             even = even.next;
         }
         odd.next = evenHead;

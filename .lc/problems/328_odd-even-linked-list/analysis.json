@@ -17,7 +17,10 @@
   "time_complexity": "O(n)",
   "space_complexity": "O(1)",
   "notes": "",
-  "code_notes": [],
+  "code_notes": [
+    "循环条件的不变量建议落成一行注释（项目约定）：odd 是奇数链尾、even 是偶数链尾、进入循环时二者相邻 → 条件 even != null && even.next != null 等价于「还剩一对（奇数位+偶数位）节点可搬」；方法上方再补一行参数语义（参数 head 原链头，返回重排后的链头）。",
+    "even.next =  odd.next; 等号后多了一个空格，IDEA ⌘⌥L 一键格式化可统一。"
+  ],
   "mistakes": [
     {
       "habit": "链表拆链时边遍历边覆盖原 next：把节点挂到哨兵链的 eP.next=p 覆盖了原链表指向该节点的边，但遍历仍依赖原 next 前进，且被拆节点未断开，导致奇偶交替处成环（偶数长度碰巧通过、奇数长度 OOM）；应先保存 p.next 再挂载并断开，或用 odd/even 跳 next.next 的原地法",
@@ -48,20 +51,20 @@
       "code": "public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return head;\n        }\n        ListNode evenHead = new ListNode();\n        ListNode eP = evenHead;\n        ListNode oddHead = new ListNode();\n        ListNode oP = oddHead;\n        int size = 1;\n        for (ListNode p = head; p != null;) {\n            ListNode next = p.next;\n            if ((size & 1) == 1) {\n                eP.next = p;\n                eP = eP.next;\n                eP.next = null;\n            } else {\n                oP.next = p;\n                oP = oP.next;\n                oP.next = null;\n            }\n            size++;\n            p = next;\n        }\n        eP.next = oddHead.next;\n        return evenHead.next;\n    }\n"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-17",
       "verdict": "Accepted",
       "testcases": "70/70",
       "runtime_ms": null,
-      "memory_bytes": 46644000,
+      "memory_bytes": 46860000,
       "approach": "原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍使用`odd`/`even`两个链尾指针原地交替重连，最后`odd.next = evenHead`；本次代码结构和上一轮一致，复杂度保持 O(n) / O(1)。\n\n② 这次为什么想起来：循环条件锁定为`even != null && even.next != null`，每轮先用`even.next`找回下一个奇数位节点，再由新的`odd`定位下一个偶数位节点，整个过程中不创建新节点。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：继续使用原地交替写法；比它更绕的双哨兵拆链曾在实现中因覆盖`next`而产生环，不优先考虑。",
-      "code": "    public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return null;\n        }\n        ListNode evenHead = head.next;\n        ListNode odd = head, even = evenHead;\n        while (even != null && even.next != null) {\n            odd.next = even.next;\n            odd = odd.next;\n            even.next = odd.next;\n            even = even.next;\n        }\n        odd.next = evenHead;\n        return head;\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC——先写「双哨兵拆链」（写法1）时边遍历边覆盖原 next、被拆节点没断开，奇偶交替处成环（偶数长度侥幸通过、奇数长度 OOM），改「原地交替」（写法2）才 AC。\n- 第 1、2 次复习（2026-09-07 / 09-12）：都直接写原地交替，一次 AC。\n- 本次（第 3 次复习）：仍是原地交替一次 AC，70/70，内存 46.9MB（上一轮同量级 46.6MB）。写法 2 已经是条件反射，写法 1 没有再被主动选用。\n\n**② 本次的讨论点：循环条件为什么够用**\n本次写完代码后追问了「为什么 `even != null && even.next != null` 之后，循环体内不必再判 odd/even 空」。这个问题的答案就是本写法的核心不变量：\n1. 进入每轮时 odd 是奇数链尾、even 是偶数链尾，二者相邻；odd 之所以非空，正是因为 even 挂在它后面那一格。\n2. `even != null` 保护 `even.next` 的读写；`even.next != null` 保证「下一个奇数位节点 X」真实存在，于是 `odd = X` 之后 odd 仍非空。\n3. 所有可能变成 null 的指针，要么在被解引用前被循环条件拦下，要么变成 null 之后只参与赋值、不再被解引用——比如末尾一轮 even 被置 null 后立刻退出，不会再读 `even.next`。\n4. 循环外唯一解引用 head 的地方是 `evenHead = head.next`，条件管不到，所以 `head == null` 必须在进循环前单独判一次。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（70/70）；代码在讨论之前已经完整写出，讨论内容只涉及「为什么这样写是对的」而非「该怎么写」，据此判为较强。\n- 间隔按 ×2.5 并按连续较强上浮，下次复习日期由脚本推算。\n\n**④ 下一步提醒**\n- 本写法的边界嗅觉点：奇数长度时最后一轮的 even 会变成 null 并正常退出；若把条件写成只判 `even != null`，偶数长度结尾会提前截断奇数链并 NPE。\n- 想彻底确认写法 1 的断链习惯已改，可以再手写一遍「双哨兵拆链」自测：关键顺序是先保存 p.next，再挂载到奇数/偶数链尾，最后拼接；本地通过即可，不必重新提交力扣。",
+      "code": "    // ==== 提交代码开始 ====\n    public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return head;\n        }\n\n        ListNode evenHead = head.next;\n        ListNode odd = head, even = evenHead;\n        while (even != null && even.next != null) {\n            odd.next = even.next;\n            odd = odd.next;\n            even.next =  odd.next;\n            even = even.next;\n        }\n        odd.next = evenHead;\n        return head;\n    }\n    // ==== 提交代码结束 ====",
       "prev_code": "\n    public ListNode oddEvenList(ListNode head) {\n        if (head == null) {\n            return head;\n        }\n        ListNode evenHead = head.next;\n        ListNode odd = head, even = evenHead;\n        while (even != null && even.next != null) {\n            odd.next = even.next;\n            odd = odd.next;\n            even.next = odd.next;\n            even = even.next;\n        }\n        odd.next = evenHead;\n        return head;\n    }",
       "mastery": "strong",
-      "pass": 2
+      "pass": 3
     }
   ],
   "hints": [
@@ -93,6 +96,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍使用`odd`/`even`两个链尾指针原地交替重连，最后`odd.next = evenHead`；本次代码结构和上一轮一致，复杂度保持 O(n) / O(1)。\n\n② 这次为什么想起来：循环条件锁定为`even != null && even.next != null`，每轮先用`even.next`找回下一个奇数位节点，再由新的`odd`定位下一个偶数位节点，整个过程中不创建新节点。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：继续使用原地交替写法；比它更绕的双哨兵拆链曾在实现中因覆盖`next`而产生环，不优先考虑。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "70/70",
+      "approach": "原地交替：odd/even 各跳 next.next 重连，odd.next 接 evenHead（写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC——先写「双哨兵拆链」（写法1）时边遍历边覆盖原 next、被拆节点没断开，奇偶交替处成环（偶数长度侥幸通过、奇数长度 OOM），改「原地交替」（写法2）才 AC。\n- 第 1、2 次复习（2026-09-07 / 09-12）：都直接写原地交替，一次 AC。\n- 本次（第 3 次复习）：仍是原地交替一次 AC，70/70，内存 46.9MB（上一轮同量级 46.6MB）。写法 2 已经是条件反射，写法 1 没有再被主动选用。\n\n**② 本次的讨论点：循环条件为什么够用**\n本次写完代码后追问了「为什么 `even != null && even.next != null` 之后，循环体内不必再判 odd/even 空」。这个问题的答案就是本写法的核心不变量：\n1. 进入每轮时 odd 是奇数链尾、even 是偶数链尾，二者相邻；odd 之所以非空，正是因为 even 挂在它后面那一格。\n2. `even != null` 保护 `even.next` 的读写；`even.next != null` 保证「下一个奇数位节点 X」真实存在，于是 `odd = X` 之后 odd 仍非空。\n3. 所有可能变成 null 的指针，要么在被解引用前被循环条件拦下，要么变成 null 之后只参与赋值、不再被解引用——比如末尾一轮 even 被置 null 后立刻退出，不会再读 `even.next`。\n4. 循环外唯一解引用 head 的地方是 `evenHead = head.next`，条件管不到，所以 `head == null` 必须在进循环前单独判一次。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（70/70）；代码在讨论之前已经完整写出，讨论内容只涉及「为什么这样写是对的」而非「该怎么写」，据此判为较强。\n- 间隔按 ×2.5 并按连续较强上浮，下次复习日期由脚本推算。\n\n**④ 下一步提醒**\n- 本写法的边界嗅觉点：奇数长度时最后一轮的 even 会变成 null 并正常退出；若把条件写成只判 `even != null`，偶数长度结尾会提前截断奇数链并 NPE。\n- 想彻底确认写法 1 的断链习惯已改，可以再手写一遍「双哨兵拆链」自测：关键顺序是先保存 p.next，再挂载到奇数/偶数链尾，最后拼接；本地通过即可，不必重新提交力扣。"
     }
   ]
 }
