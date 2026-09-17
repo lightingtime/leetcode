@@ -50,5 +50,5 @@
   ],
   "exampleTestcases": "\"3+2*2\"\n\" 3/2 \"\n\" 3+5 / 2 \"",
   "javaSnippet": "class Solution {\n    public int calculate(String s) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-24T12:59:36.404Z"
+  "fetchedAt": "2026-09-17T08:56:20.997Z"
 }

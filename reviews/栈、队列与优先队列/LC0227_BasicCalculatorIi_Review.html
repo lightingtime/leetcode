@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>227. 基本计算器 II (Basic Calculator II)</h1><p>&gt; <a href="https://leetcode.cn/problems/basic-calculator-ii/" rel="noopener">https://leetcode.cn/problems/basic-calculator-ii/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、数学、字符串</p><h2>题目描述</h2><p>给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。</p><p>整数除法仅保留整数部分。</p><p>你可以假设给定的表达式总是有效的。所有中间结果将在 [-231, 231 - 1] 的范围内。</p><p>注意：不允许使用任何将字符串作为数学表达式计算的内置函数，比如 eval() 。</p><p>示例 1：</p><p>输入：s = "3+2*2"</p><p>输出：7</p><p>示例 2：</p><p>输入：s = " 3/2 "</p><p>输出：1</p><p>示例 3：</p><p>输入：s = " 3+5 / 2 "</p><p>输出：5</p><p>提示：</p><p>1 5</p><p>s 由整数和算符 ('+', '-', '*', '/') 组成，中间由一些空格隔开</p><p>s 表示一个有效表达式</p><p>表达式中的所有整数都是非负整数，且在范围 [0, 231 - 1] 内</p><p>题目数据 保证 答案是一个 32-bit 整数</p><h2>示例</h2><ol><li>输入：s = "3+2*2"</li></ol><p>输出：7</p><ol><li>输入：s = " 3/2 "</li></ol><p>输出：1</p><ol><li>输入：s = " 3+5 / 2 "</li></ol><p>输出：5</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（111/111）｜ 一次 AC ｜ O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-24）：非一次 AC，用的是带符号栈（写法1）；踩的坑是减号被绑到上一项、以及扫描状态机缺「上一个运算符」状态导致末尾操作数漏结算。</li><li>第 1、2 次复习（2026-09-12 / 09-15）：都换成 O(1) 空间写法2，但两次都不是一次 AC（都是 weak）。</li><li>本次（第 3 次复习）：<strong>一次 AC</strong>，仍用写法2（<code>sum</code> / <code>last</code> 两变量 + <code>sign</code> 状态机），111/111，内存 46.6MB。历史那两个坑这次都没再出现。</li></ul><p><strong>② 这次写对的关键：<code>sign</code> 状态机、减号归属、末尾触发</strong></p><div class="table-wrap"><table><thead><tr><th>环节</th><th>这次的处理</th></tr></thead><tbody><tr><td>运算符状态</td><td><code>sign</code> 记住「上一个」运算符，初始 <code>'+'</code>（相当于表达式前面垫一个 0），遇到数字只累积 <code>num</code>，不结算</td></tr><tr><td>结算时机</td><td>遇到运算符字符才用 <code>sign</code> 结算上一段：<code>+</code>/<code>-</code> 把 <code>last</code> 定稿进 <code>sum</code>、把 <code>num</code> 变为新 <code>last</code>；<code>*</code>/<code>/</code> 直接并入 <code>last</code></td></tr><tr><td>减号归属</td><td><code>-</code> 分支先把旧 <code>last</code> 结算进 <code>sum</code>，再把 <code>-num</code> 作为新的 <code>last</code>，符号绑在<strong>后面</strong>这个操作数上</td></tr><tr><td>末尾操作数</td><td>触发条件里带 <code>i == s.length() - 1</code>，最后一项即使没有收尾运算符也会被结算</td></tr></tbody></table></div><p>具体推演（边界用例 <code>1-2*3+3</code>，期望 -2）：</p><div class="table-wrap"><table><thead><tr><th>读到</th><th>累积/结算</th><th>状态（sum / last / num / sign）</th></tr></thead><tbody><tr><td><code>1</code></td><td>只累积</td><td>0 / 0 / 1 / <code>+</code></td></tr><tr><td><code>-</code></td><td>结算 <code>+</code>：<code>sum += 0</code>，<code>last = 1</code></td><td>0 / 1 / 0 / <code>-</code></td></tr><tr><td><code>2</code></td><td>只累积</td><td>0 / 1 / 2 / <code>-</code></td></tr><tr><td><code>*</code></td><td>结算 <code>-</code>：<code>sum += 1</code>，<code>last = -2</code></td><td>1 / -2 / 0 / <code>*</code></td></tr><tr><td><code>3</code></td><td>只累积</td><td>1 / -2 / 3 / <code>*</code></td></tr><tr><td><code>+</code></td><td>结算 <code>*</code>：<code>last = -2 * 3 = -6</code></td><td>1 / -6 / 0 / <code>+</code></td></tr><tr><td><code>3</code>（末尾）</td><td>结算 <code>+</code>：<code>sum += -6</code>，<code>last = 3</code></td><td>-5 / 3 / 0 / <code>+</code></td></tr><tr><td>返回</td><td><code>sum + last = -5 + 3</code></td><td><strong>-2</strong> ✓</td></tr></tbody></table></div><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted，无失败轮次、无中途探讨 → strong。</li><li>（建题时按复习流程提示过这题历史上的两个坑位，与文件头记录的「一刷问题」同源，没有额外给过写法层面的提示。）</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>写法2 已稳定，写法1（带符号栈）自 2026-08-24 后再没重写过；想确认它也已内化，可手写一遍压栈版（本地通过即可，不必重提力扣）。</li><li>该写法的隐含依赖是 <code>i == s.length() - 1</code> 兜底；若日后改成「只在遇到运算符时结算」的常规写法，末尾必须单独补一次结算，否则最后一项会丢。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（111/111）｜ 多次提交 ｜ O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p>① 与上一轮对比：上轮已用 <code>sign</code> 延迟结算；本轮首版误改成按当前运算符直接结算，缺少“上一个运算符”，<code>"3+2*2"</code> 得到 96、<code>"3/2"</code> 得到 0。恢复 <code>sign</code> 状态后，先用旧运算符结算当前数字，再更新 <code>sign</code>、清零 <code>num</code>，最终通过 111/111。</p><p>② 关键设计：<code>num</code> 是当前操作数，<code>sign</code> 是它前面的运算符；<code>last</code> 是正在等待加减结算的项，乘除直接更新 <code>last</code>，加减把旧 <code>last</code> 归入 <code>sum</code>。循环结束必须再用当前 <code>sign</code> 结算最后一个 <code>num</code>。减号通过 <code>last = -num</code> 绑定到后一个操作数。</p><p>③ 掌握度判定：首版实际 WA、经具体用例分析后修正，非一次 AC，记 weak。</p><p>④ 下一步提醒：扫描表达式时始终问“当前 num 前面的运算符是谁”；不能用刚读到的运算符反向结算它。</p></div>
@@ -41,12 +45,12 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 2 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -94,29 +98,35 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 111/111</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0227_BasicCalculatorIi.java · O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">calculate</span>(<span class="tk-t">String</span> s) {
-        <span class="tk-k">char</span> sign = <span class="tk-s">'+'</span>;
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.4 MB</span><span class="chip">用例 111/111</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0227_BasicCalculatorIi.java · O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-c">// ==== 提交代码开始 ====</span>
+    <span class="tk-c">// 参数 s：合法中缀表达式（非负整数、+ - * / 与空格，无括号）；返回其整数值</span>
+    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">calculate</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span> sum = <span class="tk-n">0</span>, last = <span class="tk-n">0</span>, num = <span class="tk-n">0</span>;
+        <span class="tk-c">// sign：上一个运算符（初始 '+' 等价于表达式前面垫一个 0），决定 num 是定稿进 last 还是并入乘除</span>
+        <span class="tk-k">char</span> sign = <span class="tk-s">'+'</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
             <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
             <span class="tk-k">if</span> (<span class="tk-t">Character</span>.<span class="tk-f">isDigit</span>(c)) {
                 num = num * <span class="tk-n">10</span> + (c - <span class="tk-s">'0'</span>);
             }
+            <span class="tk-c">// 末尾必须单独触发一次结算，否则最后一个操作数只算进 num、没进 last/sum</span>
             <span class="tk-k">if</span> ((!<span class="tk-t">Character</span>.<span class="tk-f">isDigit</span>(c) &amp;&amp; c != <span class="tk-s">' '</span>) || i == s.<span class="tk-f">length</span>() - <span class="tk-n">1</span>) {
                 <span class="tk-k">switch</span> (sign) {
-                    <span class="tk-k">case</span> <span class="tk-s">'+'</span>:
+                    <span class="tk-k">case</span> <span class="tk-s">'+'</span> :
                         sum += last;
                         last = num;
                         <span class="tk-k">break</span>;
-                    <span class="tk-k">case</span> <span class="tk-s">'-'</span>:
+                    <span class="tk-k">case</span> <span class="tk-s">'-'</span> :
+                        <span class="tk-c">// 减号绑到后面这个操作数上：结算旧的 last 后，把 -num 作为新的 last</span>
                         sum += last;
                         last = -num;
                         <span class="tk-k">break</span>;
-                    <span class="tk-k">case</span> <span class="tk-s">'*'</span>:
+                    <span class="tk-k">case</span> <span class="tk-s">'*'</span> :
                         last *= num;
                         <span class="tk-k">break</span>;
-                    <span class="tk-k">case</span> <span class="tk-s">'/'</span>:
+
+                    <span class="tk-k">case</span> <span class="tk-s">'/'</span> :
                         last /= num;
                         <span class="tk-k">break</span>;
                 }
@@ -125,7 +135,8 @@
             }
         }
         <span class="tk-k">return</span> sum + last;
-    }</pre></div>
+    }
+    <span class="tk-c">// ==== 提交代码结束 ====</span></pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0227_BasicCalculatorIi.java · O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">calculate</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span> num = <span class="tk-n">0</span>, last = <span class="tk-n">0</span>, sum = <span class="tk-n">0</span>;
         <span class="tk-k">char</span> sign = <span class="tk-s">'+'</span>;
