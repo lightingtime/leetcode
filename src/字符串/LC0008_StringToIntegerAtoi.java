@@ -2,10 +2,17 @@
 // LeetCode 8. 字符串转换整数 (atoi) (String to Integer (atoi))
 // 难度：Medium | 分类：字符串
 // 链接：https://leetcode.cn/problems/string-to-integer-atoi/
-// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-23 · 上次复习 2026-09-06）
+// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-23）
+// 一刷写法：long 绝对值累加 + 累加前预判溢出 + 按符号截断，O(n) 时间 / O(1) 空间
+// 上次复习写法：int 带符号累加 + 乘加前双向溢出预判（不用 long）
+// 一刷问题：① 溢出漏判最后一位加法 ② 把数字中的 '0' 当终止符 ③ 负数边界 MIN_VALUE 比 -MAX_VALUE 差 1 ④ 溢出防护与累加变量符号设计不配套
+// 测试用例：与一刷归档保持一致（示例 5 + 边界 22，共 27 个断言，含 200 位超长输入）
 //
-// 思路：依次处理空白、符号和连续数字，逐位累加并在越界前截断。
-// 复杂度：时间 O(n)，空间 O(1)
+// 思路：按规范顺序线性扫：跳过前导空白 → 读可选的一个符号 → 连续读数字，遇到非数字立刻停。
+//       累加变量 num 直接带符号（正数正累加、负数负累加），乘加之前先做双向溢出预判：
+//       正向用 num > MAX/10 或 (num == MAX/10 且 digit > MAX%10) 判断；负向对称地用 MIN 的两条界。
+//       越界直接返回对应端的 MAX / MIN，能走到末尾说明没溢出。
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -14,33 +21,34 @@ public class LC0008_StringToIntegerAtoi {
 
     // ==== 提交代码开始 ====
     public int myAtoi(String s) {
+        if (s.isEmpty()) return 0;
         int index = 0;
         while (index < s.length() && s.charAt(index) == ' ') {
             index++;
         }
+
         int sign = 1;
         if (index < s.length() && (s.charAt(index) == '+' || s.charAt(index) == '-')) {
             sign = s.charAt(index) == '+' ? 1 : -1;
             index++;
         }
-        int ans = 0;
-        for (int i = index; i < s.length(); i++) {
-            if (Character.isDigit(s.charAt(index))) {
-                int c = s.charAt(index) - '0';
-                if (ans > Integer.MAX_VALUE / 10 ||( ans == Integer.MAX_VALUE / 10 && c >= Integer.MAX_VALUE % 10)) {
+        int num = 0;
+        while (index < s.length()) {
+            char c = s.charAt(index);
+            if (!Character.isDigit(c)) {
+                break;
+            } else {
+                if (num > Integer.MAX_VALUE / 10 || (num == Integer.MAX_VALUE / 10 && (c - '0') > Integer.MAX_VALUE % 10)) {
                     return Integer.MAX_VALUE;
                 }
-                if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && c >= (-1) * (Integer.MIN_VALUE % 10))) {
-
+                if (num < Integer.MIN_VALUE / 10 || (num == Integer.MIN_VALUE / 10 && (-1) * (c - '0') < Integer.MIN_VALUE % 10)) {
                     return Integer.MIN_VALUE;
                 }
-                ans = ans * 10 + sign * c;
-            } else {
-                break;
+                num = num * 10 + sign * (c - '0');
             }
             index++;
         }
-        return ans;
+        return num;
     }
     // ==== 提交代码结束 ====
 
