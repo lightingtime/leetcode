@@ -2,11 +2,16 @@
 // LeetCode 162. 寻找峰值 (Find Peak Element)
 // 难度：Medium | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/find-peak-element/
-// 复习日期：2026-09-09（第 2 次复习 · 一刷 2026-08-23 · 上次复习 2026-09-06）
-// 二刷重开：测试用例与一刷归档保持一致；先回忆思路再动笔，不查归档解法。
+// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-23）
+// 一刷写法：二分（比较 nums[mid] 与 nums[mid+1]，沿上升方向收拢），O(log n) 时间 / O(1) 空间
+// 一刷问题：① 方向依据错（拿 nums[mid] 和区间右端点比，丢失局部趋势）② 端点特判没有 else 推进导致死循环
+// 测试用例：与一刷归档保持一致（示例 2 + 边界 12，原样同步，共 14 个断言）
 //
-// 思路：二分，沿 nums[mid] 与 nums[mid + 1] 决定的上升方向收拢。
-// 复杂度：时间 O(log n)，空间 O(1)
+// 思路：二分开区间写法，把区间统一表示成 (left, right]：left = -1、right = n-1 当哨兵，
+//       候选集恒为 (left, right]。每轮取 mid，比较相邻的 nums[mid] 与 nums[mid+1]：
+//       上坡（nums[mid] < nums[mid+1]）说明右侧必有峰 → left = mid；下坡则 mid 本身可能就是峰 → right = mid。
+//       区间每次严格缩小，收敛到 left+1 == right 时 right 是唯一候选。
+// 复杂度：时间 O(log n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -15,16 +20,16 @@ public class LC0162_FindPeakElement {
 
     // ==== 提交代码开始 ====
     public int findPeakElement(int[] nums) {
-        int l = -1, r = nums.length - 1;
-        while (l + 1 < r) {
-            int mid = l + (r - l) / 2;
-            if (nums[mid] < nums[mid + 1]) {
-                l = mid;
+        int left = -1, right = nums.length - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] <= nums[mid + 1]) {
+                left = mid;
             } else {
-                r = mid;
+                right = mid;
             }
         }
-        return r;
+        return right;
     }
     // ==== 提交代码结束 ====
 
