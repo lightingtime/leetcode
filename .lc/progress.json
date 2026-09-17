@@ -2921,14 +2921,14 @@
     },
     {
       "habit": "路径枚举 DFS 未记忆化：从不同起点反复展开同一段后缀路径，网格路径数指数爆炸（200x200 直接卡死）；DAG 最长路径应 dfs 返回长度并用 memo 缓存每格只算一次，O(m·n) 而非指数",
-      "count": 1,
+      "count": 2,
       "examples": [
         "longest-increasing-path-in-a-matrix"
       ],
       "categories": [
         "动态规划"
       ],
-      "last_seen": "2026-08-26"
+      "last_seen": "2026-09-17"
     },
     {
       "habit": "严格递增守卫比较符号反：matrix[i][j] < pre 放行等值格，相邻等值格互走成 2-环导致无限递归 StackOverflowError；必须 <= pre 才拦下等值（题目要求严格递增），同时保证 DAG 无环",
@@ -3474,6 +3474,28 @@
       "count": 1,
       "examples": [
         "word-break-ii"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-17"
+    },
+    {
+      "habit": "方向枚举复制粘贴缺项：四个递归分支里 j-1（左邻）漏写、j+1 重复出现两次，导致必须往左一步的最长路径被截断（示例1 矩阵 [[9,9,4],[6,6,8],[2,1,1]] 返回 3，正确 4）；四方向写法要逐个核对上下左右各一次",
+      "count": 1,
+      "examples": [
+        "longest-increasing-path-in-a-matrix"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-17"
+    },
+    {
+      "habit": "可变状态字段未在方法入口重置，跨调用残留污染：ans 声明为字段且 longestIncreasingPath 开头没有清零，测试驱动复用同一个对象连续跑多组用例，上一组更大的答案被带进下一组（[[1]] 期望 1 实际 4、[[0,2^31-1]] 期望 2 实际 399）；字段状态要么入口重置，要么降为局部变量",
+      "count": 1,
+      "examples": [
+        "longest-increasing-path-in-a-matrix"
       ],
       "categories": [
         "动态规划"

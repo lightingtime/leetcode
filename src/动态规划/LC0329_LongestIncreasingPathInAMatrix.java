@@ -2,13 +2,16 @@
 // LeetCode 329. 矩阵中的最长递增路径 (Longest Increasing Path in a Matrix)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/
-// 复习日期：2026-09-15（第 1 次复习 · 一刷 2026-08-26 · 一刷非一次 AC）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-26 · 一刷非一次 AC）
 // 一刷思路：记忆化 DFS（DAG 最长路径），dfs(i,j) = 1 + max(更大邻居的 dfs)，memo 每格只算一次
+// 上一次复习：记忆化 DFS（DAG 最长路径），一次 AC 但有探讨（判较弱）；上次踩坑：DFS 未记忆化 → 指数爆炸、守卫写成 < pre 放行等值 → 2-环 StackOverflow
 // 子类型：DAG 最长路径（记忆化 DFS / 网格上按值定向的 DP）
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+//
+// 思路：记忆化 DFS（DAG 最长路径）——dfs(i,j) 返回「从 (i,j) 出发的最长递增路径长度」= 1 + 四个邻居中的最大值，
+//       memo 每格只算一次；守卫 matrix[i][j] <= pre 挡住等值（无环保证）与越界，外层枚举每个起点取最大值
+// 复杂度：时间 O(m·n)（每格只算一次），空间 O(m·n)（memo + 递归栈最深 m·n）
 // ============================================================
-
-import java.util.*;
 
 public class LC0329_LongestIncreasingPathInAMatrix {
 
@@ -17,9 +20,9 @@ public class LC0329_LongestIncreasingPathInAMatrix {
     int[][] memo;
 
     public int longestIncreasingPath(int[][] matrix) {
-        ans = 0;
         int m = matrix.length;
         int n = matrix[0].length;
+        ans = 0;
         memo = new int[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -29,18 +32,22 @@ public class LC0329_LongestIncreasingPathInAMatrix {
         return ans;
     }
 
-    private int dfs(int[][] matrix, int i, int j, int preValue) {
-        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || matrix[i][j] <= preValue) {
+    private int dfs(int[][] matrix, int i, int j, int pre) {
+        // 守卫兼防环：等值不通过（只有严格递增才继续展开），状态图必然无环；此分支直接 return 0 且不写 memo，
+        // 所以 memo[i][j] 存的值与调用方传入的 pre 无关，缓存才成立
+        if (i < 0 || j < 0 || i > matrix.length - 1 || j > matrix[0].length - 1 || matrix[i][j] <= pre) {
             return 0;
         }
-        if (memo[i][j] != 0) {
+        // 0 作「未计算」哨兵：能走到这里说明守卫已通过，合法答案至少为 1
+        if (memo[i][j] > 0) {
             return memo[i][j];
         }
         int count = 0;
+
         count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));
         count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));
-        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));
         count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));
+        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));
         memo[i][j] = count + 1;
         return memo[i][j];
     }

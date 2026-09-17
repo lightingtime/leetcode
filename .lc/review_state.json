@@ -2137,10 +2137,10 @@
       "title": "矩阵中的最长递增路径",
       "category": "动态规划",
       "first_pass_date": "2026-08-26",
-      "last_review_date": "2026-09-15",
-      "next_review_date": "2026-09-17",
+      "last_review_date": "2026-09-17",
+      "next_review_date": "2026-09-19",
       "interval_days": 2,
-      "review_count": 1,
+      "review_count": 2,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
