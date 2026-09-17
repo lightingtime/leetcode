@@ -15,7 +15,6 @@
   "time_complexity": "O(n)",
   "space_complexity": "O(k)",
   "notes": "单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（<= i-k），O(n)/O(k) 一次 Accepted（53/53）",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "单调队列缺少过期队头淘汰：只弹队尾小值，未弹出已滑出窗口的队头下标，递减数组/全负数用例中旧最大值一直占着队头导致答案不变；读取答案前需先弹出 peekFirst() 小于窗口左边界的下标",
@@ -24,8 +23,16 @@
     {
       "habit": "过期淘汰边界差一：窗口左边界是 i-k+1（闭区间 [i-k+1, i]），队头下标 < i-k+1（等价 ≤ i-k）才算过期；写成 < i-k 会漏掉恰好滑出窗口的那一格，递减/全负数用例仍错",
       "count": 1
+    },
+    {
+      "habit": "单调队列弹队尾用了 if 只弹一次：队列可能积压多个比新元素更小的候选，它们值更小又更早过期，必须用 while 连续弹到队尾不小于新元素；漏弹会让残留小值挡住真正的最大值——示例1 第三窗口输出 -1（应 5），最小回归 [2,1,3] k=3 输出 2（应 3）",
+      "count": 1
     }
   ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ],
+  "code_notes": [],
   "patterns": [
     {
       "title": "滑动窗口最值：单调队列（双端队列存下标）",
@@ -37,20 +44,35 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-05",
+      "date": "2026-09-17",
       "verdict": "Accepted",
-      "testcases": "53/53",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 156056000,
+      "memory_bytes": 144200000,
       "approach": "单调队列",
       "time_complexity": "O(n)",
       "space_complexity": "O(k)",
       "optimal": true,
-      "notes": "单调队列存下标：入队前弹队尾小值、读答案前弹过期队头（<= i-k），O(n)/O(k) 一次 Accepted（53/53）"
+      "notes": "ArrayDeque 存下标：入队前 while 弹队尾、窗口完整后弹过期队头再取队头；首轮把弹队尾写成 if 只弹一次，[2,1,3] k=3 输出 2（应 3），改 while 后 53/53 Accepted",
+      "code": "public int[] maxSlidingWindow(int[] nums, int k) {\n        LinkedList<Integer> queue = new LinkedList<>();\n        int[] ans = new int[nums.length - k + 1];\n        int start = 0;\n        int i = 0;\n        while (i < nums.length) {\n            // 入队前弹掉队尾比新元素小的：新元素更大且更晚，被弹者永远当不了最大值\n            while (!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {\n                queue.pollLast();\n            }\n            queue.offerLast(i);\n            // 弹出过期队头：窗口是闭区间 [i-k+1, i]，队头下标 <= i-k 说明已滑出窗口\n            while (!queue.isEmpty() && queue.peekFirst() <= i - k) {\n                queue.pollFirst();\n            }\n            if (i - start + 1 == k) {\n                ans[start] = nums[queue.peekFirst()];\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
-  ],
-  "approach_detail": "问题本质：每个固定长度 k 窗口的最大值。暴力 O(nk)；单调队列把每个窗口取最大值摊到 O(1)。\n关键设计：双端队列存下标，从队头到队尾保持数值单调递减。新元素入队前弹掉队尾所有比它小的——那些元素比新元素更小且更早过期，永远不可能再成为最大值；入队后弹掉队头中已滑出窗口的下标（≤ i-k）；此时队头就是当前窗口最大值。窗口形成后（i≥k-1）每次记录。\n边界：k=1 时每个窗口即单元素；k=n 只有一个窗口；形成窗口前的阶段只入队不记录；过期判断基于闭区间 [i-k+1, i]。\n复杂度：O(n) 时间（每个下标至多入队出队一次）、O(k) 空间，最优。"
+  "approach_detail": "问题本质：每个固定长度 k 窗口的最大值。暴力 O(nk)；单调队列把每个窗口取最大值摊到 O(1)。\n关键设计：双端队列存下标，从队头到队尾保持数值单调递减。新元素入队前弹掉队尾所有比它小的——那些元素比新元素更小且更早过期，永远不可能再成为最大值；入队后弹掉队头中已滑出窗口的下标（≤ i-k）；此时队头就是当前窗口最大值。窗口形成后（i≥k-1）每次记录。\n边界：k=1 时每个窗口即单元素；k=n 只有一个窗口；形成窗口前的阶段只入队不记录；过期判断基于闭区间 [i-k+1, i]。\n复杂度：O(n) 时间（每个下标至多入队出队一次）、O(k) 空间，最优。\n二刷补强（2026-09-17）：入队前弹队尾必须是 **while 连续弹**，写成 if 只弹一次会留下比新元素更小、却排在新元素前面的残留下标，它挡在队头把真正的最大值顶掉。\n\n- 最小复现 `[2,1,3]`、k=3：i=0 入队 [0]；i=1（值 1）比队尾 2 小，入队得 [0,1]；i=2（值 3）需要**连续弹掉下标 1 和 0 两个**（值 1、2 都 < 3），只弹一个则队列变 [0,2]，队头下标 0 的值 2 被当成窗口最大值，输出 2（正确 3）。\n- 示例1 的 i=4 轮同理：队列已积压 [1,2,3]（值 3、-1、-3），新值 5 只弹掉下标 3 就入队，队头残留下标 1（值 3），第三个窗口输出 -1（应 5）。\n- 递增数组用例压不出这个 bug（每轮队列里只有一个元素，弹一次恰好够），必须构造「队内先积压 ≥2 个候选、之后才来更大值」的输入。\n\n空间上二刷用 List 收集答案（一刷预开 int[n-k+1] 数组），两者同为 O(k)；时间仍是每个下标至多进出队一次 O(n)，已是本题下限（每个元素至少要读一次）。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-17",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "单调队列",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(k)",
+      "optimal": true,
+      "notes": "ArrayDeque 存下标：入队前 while 弹队尾、窗口完整后弹过期队头再取队头；首轮把弹队尾写成 if 只弹一次，[2,1,3] k=3 输出 2（应 3），改 while 后 53/53 Accepted"
+    }
+  ]
 }
