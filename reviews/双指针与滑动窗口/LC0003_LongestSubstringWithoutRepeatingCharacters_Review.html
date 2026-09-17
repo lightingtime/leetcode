@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>3. 无重复字符的最长子串 (Longest Substring Without Repeating Characters)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/" rel="noopener">https://leetcode.cn/problems/longest-substring-without-repeating-characters/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、字符串、滑动窗口</p><h2>题目描述</h2><p>给定一个字符串 s ，请你找出其中不含有重复字符的 最长 子串 的长度。</p><p>示例 1:</p><p>输入: s = "abcabcbb"</p><p>输出: 3</p><p>解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。注意 "bca" 和 "cab" 也是正确答案。</p><p>示例 2:</p><p>输入: s = "bbbbb"</p><p>输出: 1</p><p>解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。</p><p>示例 3:</p><p>输入: s = "pwwkew"</p><p>输出: 3</p><p>解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。</p><p>请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。</p><p>提示：</p><p>0 5</p><p>s 由英文字母、数字、符号和空格组成</p><h2>示例</h2><ol><li>输入：s = "abcabcbb"</li></ol><p>输出：3</p><p>解释：因为无重复字符的最长子串是 "abc"，所以其长度为 3。注意 "bca" 和 "cab" 也是正确答案。</p><ol><li>输入：s = "bbbbb"</li></ol><p>输出：1</p><p>解释：因为无重复字符的最长子串是 "b"，所以其长度为 1。</p><ol><li>输入：s = "pwwkew"</li></ol><p>输出：3</p><p>解释：因为无重复字符的最长子串是 "wke"，所以其长度为 3。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 滑动窗口+哈希表 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-04，一次 AC）：<code>HashMap&lt;Character,Integer&gt;</code> 记位置 + <strong>延迟结算</strong>（只在遇到重复时更新 <code>max</code>，循环外再补一次 <code>s.length() - start</code>）。</li><li>上次复习（09-16，strong）：四处改进——换成 <code>int[128]</code> 定长数组、改成每轮结算 <code>i - start + 1</code>、<code>lastSeen[c] = i</code> 提到分支外共用、判断条件换成 <code>lastSeen[c] &gt;= start</code>；复盘后又按精简建议定稿（命名改 <code>lastSeen</code>、去掉 <code>!= -1</code> 冗余判断、去掉重复分支里重复结算的 <code>max</code>），落在归档代码里（那一版没有重新提交力扣）。</li><li>本轮（09-17）：直接照定稿骨架写，按原 approach 合并、<code>prev_code</code> 保留上次提交版本；内存 48.4MB。</li></ul><p><strong>② 这轮的过程</strong></p><ul><li>无讨论、无提示：本地 12 组用例（示例 3 + 边界 9：空串、单字符、全相同、<code>abba</code>、<code>dvdf</code>、空格与标点、长度 5e4 周期串、重复落在末尾、95 个可打印字符各不同）一次全绿，力扣一次提交 Accepted（1036/1036）。</li><li>关键判断稳稳落对：窗口是 <code>[start, i]</code>，<code>lastSeen[c] &gt;= start</code> 才说明「上次出现仍落在窗口内」；写成 <code>!= -1</code> 会把已经滑出窗口的旧位置误判成重复，<code>abba</code> 正是暴露它的用例。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>空间用 <code>int[128]</code> 已经是本题最优（定长、与 n 无关）；这里 <code>char</code> 能直接当下标是因为题目字符集限定了 ASCII 可打印字符，换到 Unicode 场景这条就不成立。</li><li>相关串练：76 最小覆盖子串（窗口 + 需求量计数）、438 找到字符串中所有字母异位词、567 字符串的排列。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（1036/1036）｜ 一次 AC ｜ 滑动窗口+哈希表 ｜ O(n) · O(字符集)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>同一思路（<strong>滑动窗口 + 记录字符上次出现的位置</strong>），但有四处实质改进：</li><li>数据结构：一刷用 <code>HashMap&lt;Character,Integer&gt;</code>，本轮改成 <code>int[128]</code>（本题字符集是 ASCII，定长数组更快、空间固定）；</li><li>结算时机：一刷是<strong>延迟结算</strong>（只在遇到重复时更新 <code>max</code>，循环后再补一次 <code>s.length() - start</code>），本轮<strong>每轮都结算</strong> <code>i - start + 1</code>，不会漏掉任何窗口；</li><li>一刷在「未重复」分支里也要 <code>map.put</code>，本轮把 <code>map[c] = i</code> 提到 if 之外，两个分支共用一句；</li><li>一刷用 <code>map.get(c) &lt; start</code> 判断「上次出现是否还在窗口内」，本轮沿用同一判断，但数组下不用装箱。</li><li>复杂度都是 O(n) 时间；空间从 O(字符集) 的哈希降到定长 128 数组。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷沉淀的两个坑本轮一个都没踩：<strong>结算时机</strong>（每轮 <code>i - start + 1</code>，末尾窗口不会漏）、<strong>窗口合法性</strong>（重复分支里先用旧的 <code>start</code> 记下 <code>i - start</code>，再 <code>start = map[c] + 1</code>，绝不会把含重复的 <code>[start, i]</code> 当合法窗口）。</li><li><code>map[c] &gt;= start</code> 这个「上次出现还在窗口内」的判断写对了，<code>abba</code> 那种「重复点已经滑出窗口」的情况不会把 <code>start</code> 往回拉（边界 4 通过）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（1036/1036），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>同类「窗口 + 计数」题可一起对照：76 最小覆盖子串（需要 need/window 两张表 + <code>formed</code> 计数）、438 找所有字母异位词（窗口定长）。</li><li>「字符集固定时用定长数组替 HashMap」这个技巧在本轮已经自然用上，后续遇到 [a-z]/[0-9]/ASCII 题目可以继续复用。</li></ul></div>
@@ -38,31 +42,31 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>滑动窗口+哈希表</b></li>
-        <li><span>复杂度</span><b>O(n) · O(字符集)</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 滑动窗口+哈希表</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(字符集)</span><span class="chip">内存 ≈ 46.1 MB</span><span class="chip">用例 1036/1036</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0003_LongestSubstringWithoutRepeatingCharacters.java · 滑动窗口+哈希表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.2 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0003_LongestSubstringWithoutRepeatingCharacters.java · 滑动窗口+哈希表</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span>[] lastSeen = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];
         <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(lastSeen, -<span class="tk-n">1</span>);
-        <span class="tk-k">int</span> start = <span class="tk-n">0</span>, max = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
             <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
-            <span class="tk-k">if</span> (lastSeen[c] &gt;= start) {     <span class="tk-c">// 上次出现还在当前窗口内 → 窗口左界跳到它后面</span>
+            <span class="tk-k">if</span> (lastSeen[c] &gt;= start) {
                 start = lastSeen[c] + <span class="tk-n">1</span>;
             }
             lastSeen[c] = i;
-            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, i - start + <span class="tk-n">1</span>);   <span class="tk-c">// [start, i] 此时一定合法，每轮都能结算</span>
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, i - start + <span class="tk-n">1</span>);
         }
         <span class="tk-k">return</span> max;
-    }
-</pre></div>
+    }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0003_LongestSubstringWithoutRepeatingCharacters.java · 滑动窗口+哈希表 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLongestSubstring</span>(<span class="tk-t">String</span> s) {
         <span class="tk-c">// TODO: 在这里实现你的解法</span>
         <span class="tk-k">int</span>[] map = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];

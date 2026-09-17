@@ -2,12 +2,16 @@
 // LeetCode 3. 无重复字符的最长子串 (Longest Substring Without Repeating Characters)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/longest-substring-without-repeating-characters/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：滑动窗口 + 哈希表记位置（O(n) 时间，字符集大小的额外空间）
-// 测试用例：示例 3 个 + 边界 9 个（原有 5 个，本次补齐：空格与标点 / 长度 5e4 周期串 / 重复在末尾 / 95 个可打印字符各不同）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-04 · 一刷一次 AC）
+// 一刷写法：滑动窗口 + 哈希表记字符上次出现位置；上次复习已定型为 int[128] lastSeen（本题字符集是 ASCII，定长数组更快、空间固定）
+// 要点：窗口 [start, i] 始终无重复；lastSeen[c] >= start 说明重复落在当前窗口内 → start 跳到 lastSeen[c] + 1；
+//       每轮都能结算 i - start + 1（不必像一刷那样只在重复点延迟结算、循环外再补一次）
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 9 个，含 95 个可打印字符各不同）
+// 上次复习留的三条精简已落地，本次照这个骨架写：命名 lastSeen（存的是上次下标）；去掉 != -1 的冗余判断；去掉重复分支里重复结算的 max
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 思路：滑动窗口 + lastSeen[c] 记字符上次出现的下标——窗口 [start, i] 始终无重复；若 lastSeen[c] >= start
+//       （上次出现仍落在窗口内）就把 start 跳到 lastSeen[c] + 1，再登记 lastSeen[c] = i 并结算 i - start + 1
+// 复杂度：时间 O(n) 空间 O(1)（int[128] 定长数组）
 // ============================================================
 
 import java.util.*;
@@ -18,14 +22,15 @@ public class LC0003_LongestSubstringWithoutRepeatingCharacters {
     public int lengthOfLongestSubstring(String s) {
         int[] lastSeen = new int[128];
         Arrays.fill(lastSeen, -1);
-        int start = 0, max = 0;
+        int start = 0;
+        int max = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (lastSeen[c] >= start) {     // 上次出现还在当前窗口内 → 窗口左界跳到它后面
+            if (lastSeen[c] >= start) {
                 start = lastSeen[c] + 1;
             }
             lastSeen[c] = i;
-            max = Math.max(max, i - start + 1);   // [start, i] 此时一定合法，每轮都能结算
+            max = Math.max(max, i - start + 1);
         }
         return max;
     }
