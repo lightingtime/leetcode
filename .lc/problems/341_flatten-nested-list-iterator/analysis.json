@@ -46,20 +46,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-15",
+      "date": "2026-09-17",
       "verdict": "Accepted",
       "testcases": "43/43",
       "runtime_ms": null,
-      "memory_bytes": 48380000,
+      "memory_bytes": 48808000,
       "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
-      "time_complexity": "构造+所有操作合计 O(n)",
+      "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：上轮 `hasNext()` 展开空列表后仍继续 `peek`，触发 NPE；本轮已保证循环条件先判断栈非空，并在结尾返回 `!stack.isEmpty()`。同时统一使用 `push/pop/peek` 操作栈顶，修正了 `offerLast` 与 `pop` 混用导致顺序错误的问题。\n\n② 关键逻辑：构造器从右向左 `push` 初始元素，让最左元素位于栈顶；`next()` 直接弹出整数；`hasNext()` 在栈顶为列表时弹出并逆序压入子元素，直到栈顶是整数或栈空。\n\n③ 掌握度判定：本次实现前对 Deque 两端和 hasNext 判断做了详细分析，按规则记 weak；力扣首次提交 Accepted 43/43。\n\n④ 下一步提醒：Deque 当作栈时，`push/pop/peek` 必须使用同一端；空列表展开后要重新检查栈空。",
-      "code": "    static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> stack;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >=0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (stack.isEmpty()) return false;\n            while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                NestedInteger it = stack.pop();\n                for (int i = it.getList().size() - 1; i >= 0; i--) {\n                    stack.push(it.getList().get(i));\n                }\n            }\n            return !stack.isEmpty();\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC，惰性栈踩了四个坑——展开循环起点写成 `size()`、`hasNext` 只展开一次、空列表展开后栈已空却仍 `return true` / 继续 `peek`、`Deque` 混端点丢掉栈语义。\n- 第 1、2 次复习（09-12 / 09-15）：分别判较弱（一次非一次 AC、一次有探讨）。\n- 本次（第 3 次复习）：**一次 AC**，43/43，内存 48.8MB；四个历史坑这次全部避开——构造逆序压栈、`hasNext` 用 `while` 展开、返回值看 `!stack.isEmpty()`、栈操作统一 `push` / `pop` 同侧。\n\n**② 这次为什么能一次写对（两个结构 + 两个 case）**\n- 结构1：构造时**逆序**压栈（`i` 从 `size()-1` 到 0），栈顶即外层列表最左边的元素，`pop` 顺序天然是从左到右，不需要额外队列或反转。\n- 结构2：`hasNext` 用 `while (!stack.isEmpty() && !stack.peek().isInteger())` 展开——**每展开一层就把子列表逆序压回**，循环继续，直到栈顶是整数或栈空；最后返回 `!stack.isEmpty()` 而不是无条件 `true`。\n\ncase A（示例 2 `[1,[4,[6]]]`，栈顶写在左）：\n\n| 调用 | 栈 | 说明 |\n| --- | --- | --- |\n| hasNext #1 | `[1, [4,[6]]]` | 栈顶已是整数 → true |\n| next #1 | `[1, [4,[6]]]` | pop → 1 |\n| hasNext #2 | `[[4,[6]]]` → 展开 → `[4, [6]]` | while 继续展开到整数才停 → true |\n| next #2 | `[4, [6]]` | pop → 4 |\n| hasNext #3 | `[[6]]` → 展开 → `[6]` | true |\n| next #3 | `[6]` | pop → 6 |\n| hasNext #4 | `[]` | 栈空 → false |\n\ncase B（`[[],[3]]`，空列表在最前）：构造后栈为 `[[], 3]`。`hasNext` 先 pop 出空列表、压回 0 个元素，**while 不满足退出条件**，继续看栈顶 3 是整数才停 → `return !stack.isEmpty()` 得 true。这里正是两个历史坑的试金石：只展开一次就返回 true，或展开成空栈后仍无条件 true，都会错。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted、无失败轮次、无探讨 → strong。本次首轮提交曾因提交脚本的设计题包装问题报编译错误（与解法无关，重提后 43/43），按项目约定编译类问题不计入掌握度。\n- 间隔按 ×2.5 → 5 天（这是连续较强第 1 次，未触发上浮）。\n\n**④ 下一步提醒**\n- 这题的坑都集中在「惰性展开」：`while` 而非 `if`、展开后看栈状态、栈端点统一。\n- 当前实现依赖调用方先问 `hasNext`（`next` 直接 `pop().getInteger()`，栈顶是列表时会抛异常）；本题判题固定先调 `hasNext` 所以无影响，但这是本写法的契约前提，值得记一笔。",
+      "code": "    // ==== 提交代码开始 ====\n    // 参数 nestedList：外层嵌套列表；NestedIterator 按深度优先顺序惰性吐出其中所有整数\n    static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> stack;\n\n        public NestedIterator(List<NestedInteger> nestedList) {\n            // 逆序压栈：栈顶是外层列表最左边的元素，pop 顺序即从左到右\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >= 0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (stack.isEmpty()) {\n                return false;\n            }\n            // 必须 while 一直展开到栈顶是整数：只展开一层的话深层嵌套时 next 会取到列表\n            while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                List<NestedInteger> list = stack.pop().getList();\n                for (int i = list.size() - 1; i >= 0; i--) {\n                    stack.push(list.get(i));\n                }\n            }\n            // 展开后栈可能已经空了（整层都是空列表），所以返回值要看栈状态而不是无条件 true\n            return !stack.isEmpty();\n        }\n    }\n    // ==== 提交代码结束 ====",
       "prev_code": "static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> stack;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >= 0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (stack.isEmpty()) {\n                return false;\n            }\n            if (stack.peek().isInteger()) {\n                return true;\n            } else {\n                while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                    NestedInteger pop = stack.pop();\n                    for (int i = pop.getList().size() - 1; i >= 0; i--) {\n                        stack.push(pop.getList().get(i));\n                    }\n                }\n            }\n            return !stack.isEmpty();\n        }\n    }\n",
-      "mastery": "weak",
-      "pass": 2
+      "mastery": "strong",
+      "pass": 3
     }
   ],
   "reviews": [
@@ -88,6 +88,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：上轮 `hasNext()` 展开空列表后仍继续 `peek`，触发 NPE；本轮已保证循环条件先判断栈非空，并在结尾返回 `!stack.isEmpty()`。同时统一使用 `push/pop/peek` 操作栈顶，修正了 `offerLast` 与 `pop` 混用导致顺序错误的问题。\n\n② 关键逻辑：构造器从右向左 `push` 初始元素，让最左元素位于栈顶；`next()` 直接弹出整数；`hasNext()` 在栈顶为列表时弹出并逆序压入子元素，直到栈顶是整数或栈空。\n\n③ 掌握度判定：本次实现前对 Deque 两端和 hasNext 判断做了详细分析，按规则记 weak；力扣首次提交 Accepted 43/43。\n\n④ 下一步提醒：Deque 当作栈时，`push/pop/peek` 必须使用同一端；空列表展开后要重新检查栈空。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "43/43",
+      "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC，惰性栈踩了四个坑——展开循环起点写成 `size()`、`hasNext` 只展开一次、空列表展开后栈已空却仍 `return true` / 继续 `peek`、`Deque` 混端点丢掉栈语义。\n- 第 1、2 次复习（09-12 / 09-15）：分别判较弱（一次非一次 AC、一次有探讨）。\n- 本次（第 3 次复习）：**一次 AC**，43/43，内存 48.8MB；四个历史坑这次全部避开——构造逆序压栈、`hasNext` 用 `while` 展开、返回值看 `!stack.isEmpty()`、栈操作统一 `push` / `pop` 同侧。\n\n**② 这次为什么能一次写对（两个结构 + 两个 case）**\n- 结构1：构造时**逆序**压栈（`i` 从 `size()-1` 到 0），栈顶即外层列表最左边的元素，`pop` 顺序天然是从左到右，不需要额外队列或反转。\n- 结构2：`hasNext` 用 `while (!stack.isEmpty() && !stack.peek().isInteger())` 展开——**每展开一层就把子列表逆序压回**，循环继续，直到栈顶是整数或栈空；最后返回 `!stack.isEmpty()` 而不是无条件 `true`。\n\ncase A（示例 2 `[1,[4,[6]]]`，栈顶写在左）：\n\n| 调用 | 栈 | 说明 |\n| --- | --- | --- |\n| hasNext #1 | `[1, [4,[6]]]` | 栈顶已是整数 → true |\n| next #1 | `[1, [4,[6]]]` | pop → 1 |\n| hasNext #2 | `[[4,[6]]]` → 展开 → `[4, [6]]` | while 继续展开到整数才停 → true |\n| next #2 | `[4, [6]]` | pop → 4 |\n| hasNext #3 | `[[6]]` → 展开 → `[6]` | true |\n| next #3 | `[6]` | pop → 6 |\n| hasNext #4 | `[]` | 栈空 → false |\n\ncase B（`[[],[3]]`，空列表在最前）：构造后栈为 `[[], 3]`。`hasNext` 先 pop 出空列表、压回 0 个元素，**while 不满足退出条件**，继续看栈顶 3 是整数才停 → `return !stack.isEmpty()` 得 true。这里正是两个历史坑的试金石：只展开一次就返回 true，或展开成空栈后仍无条件 true，都会错。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted、无失败轮次、无探讨 → strong。本次首轮提交曾因提交脚本的设计题包装问题报编译错误（与解法无关，重提后 43/43），按项目约定编译类问题不计入掌握度。\n- 间隔按 ×2.5 → 5 天（这是连续较强第 1 次，未触发上浮）。\n\n**④ 下一步提醒**\n- 这题的坑都集中在「惰性展开」：`while` 而非 `if`、展开后看栈状态、栈端点统一。\n- 当前实现依赖调用方先问 `hasNext`（`next` 直接 `pop().getInteger()`，栈顶是列表时会抛异常）；本题判题固定先调 `hasNext` 所以无影响，但这是本写法的契约前提，值得记一笔。"
     }
   ]
 }

@@ -44,7 +44,8 @@ function helperClasses(fragment, provided) {
 // 设计题解包：把「static class 主类(可能带其余平级 static class)」恢复为顶层类。
 // 返回 null 表示 fragment 不是 static class 开头（交给其他分支处理）。
 function unwrapDesignClass(fragment) {
-  const m = fragment.match(/^static\s+class\s+(\w+)([^{]*)\{/);
+  // 允许类声明前有空白：提交区首行常是注释（如参数说明），去注释后还剩缩进
+  const m = fragment.match(/^\s*static\s+class\s+(\w+)([^{]*)\{/);
   if (!m) return null;
   const name = m[1], decl = m[2];
   const start = m[0].lastIndexOf('{');
@@ -104,7 +105,7 @@ async function main() {
   const marker = code.match(/\/\/ ==== 提交代码开始 ====\s*([\s\S]*?)\/\/ ==== 提交代码结束 ====/);
   let fragment = marker ? marker[1].trim() : code.trim();
   // 去掉提交区开头的纯注释行（模板提示语），避免影响设计题类解包判断
-  fragment = fragment.replace(/^(?:[ \t]*\/\/[^\n]*\n?)+/, '');
+  fragment = fragment.replace(/^(?:[ \t]*\/\/[^\n]*\n?)+/, '').trimStart();
 
   // 读取题目数据：判断判题环境是否已自带 ListNode/TreeNode，避免重复附带辅助类
   const probDirs = fs.readdirSync(path.join(LC_DIR, 'problems'));

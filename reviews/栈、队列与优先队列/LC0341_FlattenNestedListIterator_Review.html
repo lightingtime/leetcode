@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>341. 扁平化嵌套列表迭代器 (Flatten Nested List Iterator)</h1><p>&gt; <a href="https://leetcode.cn/problems/flatten-nested-list-iterator/" rel="noopener">https://leetcode.cn/problems/flatten-nested-list-iterator/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、设计、队列、迭代器</p><h2>题目描述</h2><p>给你一个嵌套的整数列表 nestedList 。每个元素要么是一个整数，要么是一个列表；该列表的元素也可能是整数或者是其他列表。请你实现一个迭代器将其扁平化，使之能够遍历这个列表中的所有整数。</p><p>实现扁平迭代器类 NestedIterator ：</p><p>NestedIterator(List nestedList) 用嵌套列表 nestedList 初始化迭代器。</p><p>int next() 返回嵌套列表的下一个整数。</p><p>boolean hasNext() 如果仍然存在待迭代的整数，返回 true ；否则，返回 false 。</p><p>你的代码将会用下述伪代码检测：</p><p>initialize iterator with nestedList</p><p>res = []</p><p>while iterator.hasNext()</p><p>append iterator.next() to the end of res</p><p>return res</p><p>如果 res 与预期的扁平化列表匹配，那么你的代码将会被判为正确。</p><p>示例 1：</p><p>输入：nestedList = [[1,1],2,[1,1]]</p><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><p>示例 2：</p><p>输入：nestedList = [1,[4,[6]]]</p><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p><p>提示：</p><p>1</p><p>嵌套列表中的整数值在范围 [-106, 106] 内</p><h2>示例</h2><ol><li>输入：nestedList = [[1,1],2,[1,1]]</li></ol><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><ol><li>输入：nestedList = [1,[4,[6]]]</li></ol><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（43/43）｜ 一次 AC ｜ 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（2026-08-24）：非一次 AC，惰性栈踩了四个坑——展开循环起点写成 <code>size()</code>、<code>hasNext</code> 只展开一次、空列表展开后栈已空却仍 <code>return true</code> / 继续 <code>peek</code>、<code>Deque</code> 混端点丢掉栈语义。</li><li>第 1、2 次复习（09-12 / 09-15）：分别判较弱（一次非一次 AC、一次有探讨）。</li><li>本次（第 3 次复习）：<strong>一次 AC</strong>，43/43，内存 48.8MB；四个历史坑这次全部避开——构造逆序压栈、<code>hasNext</code> 用 <code>while</code> 展开、返回值看 <code>!stack.isEmpty()</code>、栈操作统一 <code>push</code> / <code>pop</code> 同侧。</li></ul><p><strong>② 这次为什么能一次写对（两个结构 + 两个 case）</strong></p><ul><li>结构1：构造时<strong>逆序</strong>压栈（<code>i</code> 从 <code>size()-1</code> 到 0），栈顶即外层列表最左边的元素，<code>pop</code> 顺序天然是从左到右，不需要额外队列或反转。</li><li>结构2：<code>hasNext</code> 用 <code>while (!stack.isEmpty() &amp;&amp; !stack.peek().isInteger())</code> 展开——<strong>每展开一层就把子列表逆序压回</strong>，循环继续，直到栈顶是整数或栈空；最后返回 <code>!stack.isEmpty()</code> 而不是无条件 <code>true</code>。</li></ul><p>case A（示例 2 <code>[1,[4,[6]]]</code>，栈顶写在左）：</p><div class="table-wrap"><table><thead><tr><th>调用</th><th>栈</th><th>说明</th></tr></thead><tbody><tr><td>hasNext #1</td><td><code>[1, [4,[6]]]</code></td><td>栈顶已是整数 → true</td></tr><tr><td>next #1</td><td><code>[1, [4,[6]]]</code></td><td>pop → 1</td></tr><tr><td>hasNext #2</td><td><code>[[4,[6]]]</code> → 展开 → <code>[4, [6]]</code></td><td>while 继续展开到整数才停 → true</td></tr><tr><td>next #2</td><td><code>[4, [6]]</code></td><td>pop → 4</td></tr><tr><td>hasNext #3</td><td><code>[[6]]</code> → 展开 → <code>[6]</code></td><td>true</td></tr><tr><td>next #3</td><td><code>[6]</code></td><td>pop → 6</td></tr><tr><td>hasNext #4</td><td><code>[]</code></td><td>栈空 → false</td></tr></tbody></table></div><p>case B（<code>[[],[3]]</code>，空列表在最前）：构造后栈为 <code>[[], 3]</code>。<code>hasNext</code> 先 pop 出空列表、压回 0 个元素，<strong>while 不满足退出条件</strong>，继续看栈顶 3 是整数才停 → <code>return !stack.isEmpty()</code> 得 true。这里正是两个历史坑的试金石：只展开一次就返回 true，或展开成空栈后仍无条件 true，都会错。</p><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted、无失败轮次、无探讨 → strong。本次首轮提交曾因提交脚本的设计题包装问题报编译错误（与解法无关，重提后 43/43），按项目约定编译类问题不计入掌握度。</li><li>间隔按 ×2.5 → 5 天（这是连续较强第 1 次，未触发上浮）。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>这题的坑都集中在「惰性展开」：<code>while</code> 而非 <code>if</code>、展开后看栈状态、栈端点统一。</li><li>当前实现依赖调用方先问 <code>hasNext</code>（<code>next</code> 直接 <code>pop().getInteger()</code>，栈顶是列表时会抛异常）；本题判题固定先调 <code>hasNext</code> 所以无影响，但这是本写法的契约前提，值得记一笔。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（43/43）｜ 一次 AC ｜ 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶 ｜ 构造+所有操作合计 O(n) · O(n)</p>
       <div class="review-note md"><p>① 与上一轮对比：上轮 <code>hasNext()</code> 展开空列表后仍继续 <code>peek</code>，触发 NPE；本轮已保证循环条件先判断栈非空，并在结尾返回 <code>!stack.isEmpty()</code>。同时统一使用 <code>push/pop/peek</code> 操作栈顶，修正了 <code>offerLast</code> 与 <code>pop</code> 混用导致顺序错误的问题。</p><p>② 关键逻辑：构造器从右向左 <code>push</code> 初始元素，让最左元素位于栈顶；<code>next()</code> 直接弹出整数；<code>hasNext()</code> 在栈顶为列表时弹出并逆序压入子元素，直到栈顶是整数或栈空。</p><p>③ 掌握度判定：本次实现前对 Deque 两端和 hasNext 判断做了详细分析，按规则记 weak；力扣首次提交 Accepted 43/43。</p><p>④ 下一步提醒：Deque 当作栈时，<code>push/pop/peek</code> 必须使用同一端；空列表展开后要重新检查栈空。</p></div>
@@ -41,22 +45,26 @@
         <li><span>复杂度</span><b>O(n)（构造+均摊 O(1)/元素） · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 2 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</b></li>
-        <li><span>复杂度</span><b>构造+所有操作合计 O(n) · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</h3>
-    <p><span class="chip">时间 构造+所有操作合计 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.1 MB</span><span class="chip">用例 43/43</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0341_FlattenNestedListIterator.java · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">NestedIterator</span> <span class="tk-k">implements</span> <span class="tk-t">Iterator</span>&lt;<span class="tk-t">Integer</span>&gt; {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.5 MB</span><span class="chip">用例 43/43</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0341_FlattenNestedListIterator.java · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-c">// ==== 提交代码开始 ====</span>
+    <span class="tk-c">// 参数 nestedList：外层嵌套列表；NestedIterator 按深度优先顺序惰性吐出其中所有整数</span>
+    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">NestedIterator</span> <span class="tk-k">implements</span> <span class="tk-t">Iterator</span>&lt;<span class="tk-t">Integer</span>&gt; {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">NestedInteger</span>&gt; stack;
+
         <span class="tk-k">public</span> <span class="tk-t">NestedIterator</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">NestedInteger</span>&gt; nestedList) {
+            <span class="tk-c">// 逆序压栈：栈顶是外层列表最左边的元素，pop 顺序即从左到右</span>
             stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
-            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = nestedList.<span class="tk-f">size</span>() - <span class="tk-n">1</span>; i &gt;=<span class="tk-n">0</span>; i--) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = nestedList.<span class="tk-f">size</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
                 stack.<span class="tk-f">push</span>(nestedList.<span class="tk-f">get</span>(i));
             }
         }
@@ -68,16 +76,21 @@
 
         <span class="tk-a">@Override</span>
         <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasNext</span>() {
-            <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>()) <span class="tk-k">return</span> <span class="tk-k">false</span>;
+            <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">false</span>;
+            }
+            <span class="tk-c">// 必须 while 一直展开到栈顶是整数：只展开一层的话深层嵌套时 next 会取到列表</span>
             <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; !stack.<span class="tk-f">peek</span>().<span class="tk-f">isInteger</span>()) {
-                <span class="tk-t">NestedInteger</span> it = stack.<span class="tk-f">pop</span>();
-                <span class="tk-k">for</span> (<span class="tk-k">int</span> i = it.<span class="tk-f">getList</span>().<span class="tk-f">size</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
-                    stack.<span class="tk-f">push</span>(it.<span class="tk-f">getList</span>().<span class="tk-f">get</span>(i));
+                <span class="tk-t">List</span>&lt;<span class="tk-t">NestedInteger</span>&gt; list = stack.<span class="tk-f">pop</span>().<span class="tk-f">getList</span>();
+                <span class="tk-k">for</span> (<span class="tk-k">int</span> i = list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+                    stack.<span class="tk-f">push</span>(list.<span class="tk-f">get</span>(i));
                 }
             }
+            <span class="tk-c">// 展开后栈可能已经空了（整层都是空列表），所以返回值要看栈状态而不是无条件 true</span>
             <span class="tk-k">return</span> !stack.<span class="tk-f">isEmpty</span>();
         }
-    }</pre></div>
+    }
+    <span class="tk-c">// ==== 提交代码结束 ====</span></pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0341_FlattenNestedListIterator.java · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">NestedIterator</span> <span class="tk-k">implements</span> <span class="tk-t">Iterator</span>&lt;<span class="tk-t">Integer</span>&gt; {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">NestedInteger</span>&gt; stack;
         <span class="tk-k">public</span> <span class="tk-t">NestedIterator</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">NestedInteger</span>&gt; nestedList) {
