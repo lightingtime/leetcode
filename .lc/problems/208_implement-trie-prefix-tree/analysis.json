@@ -27,19 +27,19 @@
   "approach_detail": "问题本质：实现支持 insert / search / startsWith 的字典树。Trie 的价值是把字符串的公共前缀合并存储，查询时按字符逐层走。\n关键设计：每个节点是 Trie[26] 子指针数组 + end 结束标记。insert 从根沿字符路径走，缺子节点就 new；search 和 startsWith 共用一个 getCur 沿前缀走到终点，区别是 search 还要检查 end 标记——否则搜 app 会误命中已插入的 apple。\n边界：空字符串应作为合法词支持（根节点 end 标记即可）；公共前缀是另一个完整词时必须靠 end 区分；题目限定小写字母，数组固定 26。\n复杂度：insert / search / startsWith 均为 O(L)（L 为单词/前缀长度），空间 O(总字符数×26)；比哈希表多支持前缀查询，且共享公共前缀。",
   "submissions": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-17",
       "verdict": "Accepted",
       "approach": "Trie（数组子节点 + 结束标记）",
-      "code": "static class Trie {\n        Trie[] it;\n        boolean end;\n        public Trie() {\n            this.it = new Trie[26];\n            this.end = false;\n        }\n\n        public void insert(String word) {\n            Trie cur = this;\n            for (char c : word.toCharArray()) {\n                if (cur.it[c - 'a'] != null) {\n                    cur = cur.it[c - 'a'];\n                } else {\n                    cur.it[c - 'a'] = new Trie();\n                    cur = cur.it[c - 'a'];\n                }\n            }\n            cur.end = true;\n        }\n\n        public boolean search(String word) {\n            Trie cur = this;\n            for (char c : word.toCharArray()) {\n                if (cur.it[c - 'a'] == null) {\n                    return false;\n                } else {\n                    cur = cur.it[c - 'a'];\n                }\n            }\n            return cur.end;\n        }\n\n        public boolean startsWith(String prefix) {\n            Trie cur = this;\n            for (char c : prefix.toCharArray()) {\n                if (cur.it[c - 'a'] == null) {\n                    return false;\n                } else {\n                    cur = cur.it[c - 'a'];\n                }\n            }\n            return cur != null;\n        }\n    }",
+      "code": "    static class Trie {\n        Trie[] sub;\n        boolean end = false;\n        public Trie() {\n            sub = new Trie[26];\n        }\n        public void insert(String word) {\n            Trie it = this;\n            for (char c : word.toCharArray()) {\n                if (it.sub[c - 'a'] == null) {\n                    it.sub[c - 'a'] = new Trie();\n                }\n                it = it.sub[c - 'a'];\n            }\n            it.end = true;\n        }\n        public boolean search(String word) {\n            Trie it = this;\n            for (char c : word.toCharArray()) {\n                if (it.sub[c - 'a'] == null) {\n                    return false;\n                }\n                it = it.sub[c - 'a'];\n            }\n            return it.end;\n        }\n        public boolean startsWith(String prefix) {\n            Trie it = this;\n            for (char c : prefix.toCharArray()) {\n                if (it.sub[c - 'a'] == null) {\n                    return false;\n                }\n                it = it.sub[c - 'a'];\n            }\n            return it != null;\n        }\n    }",
       "prev_code": "static class Trie {\n        Trie[] sub;\n        boolean end = false;\n        public Trie() {\n            sub = new Trie[26];\n        }\n        public void insert(String word) {\n            Trie cur = this;\n            for (Character c : word.toCharArray()) {\n                if (cur.sub[c - 'a'] != null) {\n                    cur = cur.sub[c - 'a'];\n                } else {\n                    cur.sub[c - 'a'] = new Trie();\n                    cur = cur.sub[c - 'a'];\n                }\n            }\n            cur.end = true;\n        }\n        public boolean search(String word) {\n            Trie cur = getCur(word);\n            if (cur == null) return false;\n            return cur.end;\n        }\n\n        private Trie getCur(String word) {\n            Trie cur = this;\n            for (Character c : word.toCharArray()) {\n                if (cur.sub[c - 'a'] == null) {\n                    return null;\n                } else {\n                    cur = cur.sub[c - 'a'];\n                }\n            }\n            return cur;\n        }\n\n        public boolean startsWith(String prefix) {\n            Trie cur = getCur(prefix);\n            return cur != null;\n        }\n    }\n",
-      "testcases": "16/16",
+      "testcases": "",
       "time_complexity": "O(len)",
-      "space_complexity": "O(字符数 × 26)",
+      "space_complexity": "O(字符总数 × 26)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 写法相同：**Trie 数组子节点 + `end` 结束标记**，insert/search/startsWith 都是逐字符下行 O(len)。与一刷归档代码有两处实质差异：\n  - 一刷把「沿字符串下行、走不通就返回 null」抽成了私有 `getCur`，search 与 startsWith 共用；本轮把它内联进两个方法，同样的 7 行循环写了两遍。\n  - 一刷用 `for (Character c : …)`（拆箱），本轮改成 `for (char c : …)`，省掉装箱。\n- 功能与复杂度完全等价：空间是「已插入字符数 × 26 个指针」加上每个节点一个 `end` 布尔。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮直接落对两条关键不变式：`end` 只标在**词尾节点**上（不是沿途每个节点），`search` 看 `cur.end`、`startsWith` 只看能否走通——正是边界 2（`\"appl\"` 能走通但不是单词）守的那条线。\n- 先插 `\"ab\"` 再插 `\"a\"` 时只改短词末端节点的 `end`，长词的 `end` 不受影响，边界 4 通过。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（16/16），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 重复的下行循环建议抽回私有方法（只有最后一行判断不同），改一处不会漏另一处。\n- 后续 212 单词搜索 II（Trie + 回溯剪枝）、211 添加与搜索单词（多一个 `.` 通配分支）都在这套结构上叠加约束，可对照复习。",
+      "notes": "**① 与上一轮对比**\n\n- 一刷（08-03，一次 AC）：26 叉数组子节点 + `end` 标记，16/16。\n- 上次复习（09-16，strong）：同思路，相对一刷有两处差异——把「沿字符串下行、走不通返回 null」的 `getCur` 内联成 `search` / `startsWith` 各写一遍；`for` 从 `Character` 改成 `char`（省一次装箱）。\n- 本轮（09-17）：沿用了上次的内联版与 `char` 循环，按原 approach 合并、`prev_code` 保留上次版本；内存 62.1MB（上轮 62.2MB）。\n\n**② 这轮的过程**\n\n- 无讨论、无提示：本地 12 组用例（示例 4 + 边界 6：单字符、只是前缀不算单词、反向不存在、先插 `ab` 再插 `a`、重复插入、长度 2000 上限）一次全绿，力扣一次提交 Accepted（16/16）。\n- 一刷那个「行程起点 / 游标移动」的坏习惯没有复现：`insert` 从根 `this` 出发，建完子节点立刻把游标移进新节点，`end` 只标在词尾节点。\n\n**③ 掌握度判定**\n\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\n\n**④ 下一步提醒**\n\n- 可精简：`startsWith` 末尾的 `return it != null;` 是恒真表达式（循环里一旦取到 null 早就 `return false` 了），写成 `return true;` 更能表达「前缀走通即成立」；三处下行循环重复，想统一可以抽回一刷那个 `getCur` 辅助方法。\n- 相关串练：211 添加与搜索单词（Trie + `.` 通配 DFS）、212 单词搜索 II（Trie + 网格回溯剪枝）、648 单词替换。",
       "mastery": "strong",
-      "pass": 1,
-      "memory_bytes": 62200000
+      "pass": 2,
+      "memory_bytes": 62116000
     }
   ],
   "reviews": [
@@ -55,6 +55,19 @@
       "space_complexity": "O(字符数 × 26)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 写法相同：**Trie 数组子节点 + `end` 结束标记**，insert/search/startsWith 都是逐字符下行 O(len)。与一刷归档代码有两处实质差异：\n  - 一刷把「沿字符串下行、走不通就返回 null」抽成了私有 `getCur`，search 与 startsWith 共用；本轮把它内联进两个方法，同样的 7 行循环写了两遍。\n  - 一刷用 `for (Character c : …)`（拆箱），本轮改成 `for (char c : …)`，省掉装箱。\n- 功能与复杂度完全等价：空间是「已插入字符数 × 26 个指针」加上每个节点一个 `end` 布尔。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮直接落对两条关键不变式：`end` 只标在**词尾节点**上（不是沿途每个节点），`search` 看 `cur.end`、`startsWith` 只看能否走通——正是边界 2（`\"appl\"` 能走通但不是单词）守的那条线。\n- 先插 `\"ab\"` 再插 `\"a\"` 时只改短词末端节点的 `end`，长词的 `end` 不受影响，边界 4 通过。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（16/16），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 重复的下行循环建议抽回私有方法（只有最后一行判断不同），改一处不会漏另一处。\n- 后续 212 单词搜索 II（Trie + 回溯剪枝）、211 添加与搜索单词（多一个 `.` 通配分支）都在这套结构上叠加约束，可对照复习。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "Trie（数组子节点 + 结束标记）",
+      "time_complexity": "O(len)",
+      "space_complexity": "O(字符总数 × 26)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n\n- 一刷（08-03，一次 AC）：26 叉数组子节点 + `end` 标记，16/16。\n- 上次复习（09-16，strong）：同思路，相对一刷有两处差异——把「沿字符串下行、走不通返回 null」的 `getCur` 内联成 `search` / `startsWith` 各写一遍；`for` 从 `Character` 改成 `char`（省一次装箱）。\n- 本轮（09-17）：沿用了上次的内联版与 `char` 循环，按原 approach 合并、`prev_code` 保留上次版本；内存 62.1MB（上轮 62.2MB）。\n\n**② 这轮的过程**\n\n- 无讨论、无提示：本地 12 组用例（示例 4 + 边界 6：单字符、只是前缀不算单词、反向不存在、先插 `ab` 再插 `a`、重复插入、长度 2000 上限）一次全绿，力扣一次提交 Accepted（16/16）。\n- 一刷那个「行程起点 / 游标移动」的坏习惯没有复现：`insert` 从根 `this` 出发，建完子节点立刻把游标移进新节点，`end` 只标在词尾节点。\n\n**③ 掌握度判定**\n\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\n\n**④ 下一步提醒**\n\n- 可精简：`startsWith` 末尾的 `return it != null;` 是恒真表达式（循环里一旦取到 null 早就 `return false` 了），写成 `return true;` 更能表达「前缀走通即成立」；三处下行循环重复，想统一可以抽回一刷那个 `getCur` 辅助方法。\n- 相关串练：211 添加与搜索单词（Trie + `.` 通配 DFS）、212 单词搜索 II（Trie + 网格回溯剪枝）、648 单词替换。"
     }
   ],
   "code_notes": [

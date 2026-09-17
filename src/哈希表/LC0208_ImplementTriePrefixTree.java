@@ -2,59 +2,58 @@
 // LeetCode 208. 实现 Trie (前缀树) (Implement Trie (Prefix Tree))
 // 难度：Medium | 分类：哈希表
 // 链接：https://leetcode.cn/problems/implement-trie-prefix-tree/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-03）
-// 一刷写法：Trie（数组子节点 + 结束标记），insert/search/startsWith 都是逐字符下行 O(len)
-// 测试用例：示例 4 个（题目自带）+ 边界 6 个（一刷归档缺边界，本次补齐）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-03 · 一刷一次 AC）
+// 一刷/上次复习写法：Trie（26 叉数组子节点 + 词尾结束标记），insert/search/startsWith 都是逐字符下行 O(len)
+// 要点：end 只标在词尾节点（不是沿途每个节点）；search 要额外看 cur.end，startsWith 只看能否走通
+// 测试用例与一刷归档保持一致（示例 4 个 + 边界 6 个）
+// 上次复习留的精简提示：一刷把「下行、走不通返回 null」抽成私有 getCur 给 search/startsWith 共用，本轮内联成了两遍同样 7 行循环——想清楚要不要抽回去
+//
+// 思路：每个节点放 26 叉子节点数组 + 词尾标记 end；insert 从根 this 出发逐字符下行（缺则建），最后在词尾节点标 end；
+//       search 同样下行，走不通返回 false，走通后还要看 cur.end；startsWith 只看能否走通，不看 end
+// 复杂度：单次操作时间 O(len)；空间 O(已插入字符总数 × 26) 个指针 + 每节点一个 end
 // ============================================================
 
+import java.util.*;
 
 public class LC0208_ImplementTriePrefixTree {
 
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 Trie 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class Trie {
-        Trie[] it;
-        boolean end;
+        Trie[] sub;
+        boolean end = false;
         public Trie() {
-            this.it = new Trie[26];
-            this.end = false;
+            sub = new Trie[26];
         }
-
         public void insert(String word) {
-            Trie cur = this;
+            Trie it = this;
             for (char c : word.toCharArray()) {
-                if (cur.it[c - 'a'] != null) {
-                    cur = cur.it[c - 'a'];
-                } else {
-                    cur.it[c - 'a'] = new Trie();
-                    cur = cur.it[c - 'a'];
+                if (it.sub[c - 'a'] == null) {
+                    it.sub[c - 'a'] = new Trie();
                 }
+                it = it.sub[c - 'a'];
             }
-            cur.end = true;
+            it.end = true;
         }
-
         public boolean search(String word) {
-            Trie cur = this;
+            Trie it = this;
             for (char c : word.toCharArray()) {
-                if (cur.it[c - 'a'] == null) {
+                if (it.sub[c - 'a'] == null) {
                     return false;
-                } else {
-                    cur = cur.it[c - 'a'];
                 }
+                it = it.sub[c - 'a'];
             }
-            return cur.end;
+            return it.end;
         }
-
         public boolean startsWith(String prefix) {
-            Trie cur = this;
+            Trie it = this;
             for (char c : prefix.toCharArray()) {
-                if (cur.it[c - 'a'] == null) {
+                if (it.sub[c - 'a'] == null) {
                     return false;
-                } else {
-                    cur = cur.it[c - 'a'];
                 }
+                it = it.sub[c - 'a'];
             }
-            return cur != null;
+            return it != null;
         }
     }
     // ==== 提交代码结束 ====
