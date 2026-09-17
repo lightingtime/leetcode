@@ -2,9 +2,16 @@
 // LeetCode 15. 三数之和 (3Sum)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/3sum/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：排序 + 固定 i 后双指针夹逼（3 数和 <0 左指针右移，>0 右指针左移），O(n²)/O(1)（忽略排序栈）
-// 测试用例：示例 3 个 + 边界 8 个（原有 7 个，本次补齐长度 3000 混合重复；示例1 换用无序比较，与力扣判题口径一致）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-04 · 一刷改对去重方向后才过）
+// 一刷/上次复习写法：排序 + 固定 i 后双指针夹逼（k 从左、j 从右往中间收），O(n²)/O(1)
+// 要点：三层去重都要写对——外层 i 跳过与前一个相同的值；内层 k 跳过与 k-1 相同的值；命中后只 k++（下一轮 k 去重会跳过重复）
+// 历史坑（错误习惯库里有记录）：去重方向写反（跳过靠前的第一个而不是后续重复）会丢掉 -1,-1,2 这类合法组合；内层指针跑飞后再用 nums[k]/nums[j] 当移动依据会失真
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 8 个）
+// 上次复习留的精简提示：三次和算了两遍（判等 + 判小于）可提成局部变量 sum；三元组可一行 Arrays.asList(nums[i], nums[k], nums[j])；命中分支只 k++ 不 j-- 是正确的，建议补一行注释
+//
+// 思路：排序 + 固定 i 后双指针夹逼——外层 i 固定第一个数（i > 0 且与前一个相等就跳过去重），内层 k 从左、j 从右往中间收：
+//       三数和 < 0 就让 k++、> 0 就让 j--、== 0 就收答案并只 k++（下一轮 k 的去重会把重复值跳掉，等效于两侧去重）
+// 复杂度：时间 O(n²) 空间 O(1)（不计排序的栈开销）
 // ============================================================
 
 import java.util.*;
@@ -33,7 +40,7 @@ public class LC0015_3sum {
                     list.add(nums[j]);
                     ans.add(list);
                     k++;
-                } else if (nums[i] + nums[j] + nums[k] < 0){
+                } else if (nums[i] + nums[j] + nums[k] < 0) {
                     k++;
                 } else {
                     j--;
@@ -50,42 +57,83 @@ public class LC0015_3sum {
 
         // ---- 示例测试（来自题目）----
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-1, -1, 2), Arrays.asList(-1, 0, 1)), s.threeSum(new int[]{-1, 0, 1, 2, -1, -4}), "示例1")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例1 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-1, -1, 2), Arrays.asList(-1, 0, 1)), s.threeSum(new int[]{-1, 0, 1, 2, -1, -4}), "示例1"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例1 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEq(Arrays.asList(), s.threeSum(new int[]{0, 1, 1}), "示例2")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例2 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEq(Arrays.asList(Arrays.asList(0, 0, 0)), s.threeSum(new int[]{0, 0, 0}), "示例3")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
+            if (!TestUtil.checkEq(Arrays.asList(Arrays.asList(0, 0, 0)), s.threeSum(new int[]{0, 0, 0}), "示例3"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("示例3 异常: " + t);
+        }
 
         // ---- 边界测试（题目允许任意顺序返回，统一用 checkEqUnordered）----
         try {
             if (!TestUtil.checkEqUnordered(Arrays.asList(), s.threeSum(new int[]{}), "边界1-空输入")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界1-空输入 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界1-空输入 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(), s.threeSum(new int[]{1, 2}), "边界2-不足三个元素")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界2-不足三个元素 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(), s.threeSum(new int[]{1, 2}), "边界2-不足三个元素"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界2-不足三个元素 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(), s.threeSum(new int[]{1, 1, 1, 1}), "边界3-全相同但不为0")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界3-全相同但不为0 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(), s.threeSum(new int[]{1, 1, 1, 1}), "边界3-全相同但不为0"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界3-全相同但不为0 异常: " + t);
+        }
         try {
             if (!TestUtil.checkEqUnordered(Arrays.asList(), s.threeSum(new int[]{-2, -1, 1}), "边界4-无解")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界4-无解 异常: " + t); }
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界4-无解 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-100000, 0, 100000)), s.threeSum(new int[]{-100000, 0, 100000}), "边界5-大数")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界5-大数 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-100000, 0, 100000)), s.threeSum(new int[]{-100000, 0, 100000}), "边界5-大数"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界5-大数 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-2, 0, 2)), s.threeSum(new int[]{-2, 0, 0, 2, 2}), "边界6-重复元素去重")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界6-重复元素去重 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-2, 0, 2)), s.threeSum(new int[]{-2, 0, 0, 2, 2}), "边界6-重复元素去重"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界6-重复元素去重 异常: " + t);
+        }
         try {
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(0, 0, 0)), s.threeSum(new int[]{0, 0, 0, 0}), "边界7-多个零去重")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界7-多个零去重 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(0, 0, 0)), s.threeSum(new int[]{0, 0, 0, 0}), "边界7-多个零去重"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界7-多个零去重 异常: " + t);
+        }
         try {
             int[] nums = new int[3000];
             for (int i = 0; i < 3000; i++) nums[i] = i % 3 - 1;      // 1000 个 -1、1000 个 0、1000 个 1
-            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-1, 0, 1), Arrays.asList(0, 0, 0)), s.threeSum(nums), "边界8-长度 3000 大量重复")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界8 异常: " + t); }
+            if (!TestUtil.checkEqUnordered(Arrays.asList(Arrays.asList(-1, 0, 1), Arrays.asList(0, 0, 0)), s.threeSum(nums), "边界8-长度 3000 大量重复"))
+                failures++;
+        } catch (Throwable t) {
+            failures++;
+            System.out.println("边界8 异常: " + t);
+        }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
