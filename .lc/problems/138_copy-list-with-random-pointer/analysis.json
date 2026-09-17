@@ -26,7 +26,11 @@
   ],
   "dp_subtype": "",
   "approach_detail": "**问题本质**\n- 深拷贝带 random 的链表，难点在 random 映射：克隆节点的 random 必须指向「原 random 节点的克隆」。\n- 两条路线：① 用 Map<原节点,克隆节点> 显式记录映射（空间 O(n)）；② 把克隆节点插到原节点**后面**，让「原节点的克隆」天然就是「原节点.next」，无需额外映射（空间 O(1)）。\n\n**写法 1（哈希表单遍）**\n- `map`：原节点 → 克隆节点，保证一节点一克隆——创建前先 `map.getOrDefault(p, new ...)`，已存在则复用。\n- 踩坑：最初「无条件 new 再 put」导致同一原节点被创建两次（一次作为被 next/random 引用、一次作为主节点），put 覆盖后旧克隆成孤儿且其 random 未设置（示例 `[[1,1],[2,1]]` 的 B 被建两次、B₁'.random 为 null）。\n- 单遍完成 next/random 连接，时间 O(n)、空间 O(n)。\n\n**写法 2（原地穿插三遍，O(1) 空间）**\n- 第一遍：每个原节点后插入克隆：`nodeNew.next = node.next; node.next = nodeNew`。克隆与其原节点的位置关系即映射。\n- 第二遍：设克隆 random：`nodeNew.random = node.random != null ? node.random.next : null`（原 random 的克隆 = 原 random.next，因为克隆紧跟在原节点后）。\n- 第三遍：拆开两链表：原链表恢复 `node.next = nodeNew.next`（步进 `node = node.next`）；克隆链表连 `nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null`。\n- 时间 O(n)、空间 O(1)（不含返回值），满足进阶，为该题最优。\n\n**具体 case 推演（写法 2）：[[1,1],[2,1]]（A.random=B，B.random=B）**\n- 第一遍：A→A'→B→B'（A'.next=B、B'.next=null）。\n- 第二遍：A'.random = A.random(B).next = B'；B'.random = B.random(B).next = B'。\n- 第三遍：A.next=B（恢复原链表）；A'.next = B.next = B'；B.next=null；B'.next = null。\n- 结果：A'→B'，A'.random=B'、B'.random=B'，与原链表状态一致 ✅。\n\n**复杂度对比与最优性**\n| 写法 | 时间 | 空间 |\n| 哈希表单遍 | O(n) | O(n) |\n| 原地穿插三遍 | O(n) | O(1) |\n- 时间下限：每个节点都必须复制，至少访问全部节点 Ω(n)，两种都达到。\n- 空间下限：除返回的克隆链表外无需额外存储，O(1) 即最优；写法 2 是本题最优解。",
-  "code_notes": [],
+  "code_notes": [
+    "第三遍拆链多引入了一个 cur 变量（Node cur = copyHead; ... cur = cur.next），其实克隆节点自己就能做游标：copy = node.next; node.next = copy.next; copy.next = copy.next != null ? copy.next.next : null; 可以少维护一个指针（2026-09-17 复习时观察）。",
+    "赋值处空格：Node cur =copyHead; 等号后缺空格，IDEA ⌘⌥L 一键格式化可解决。",
+    "第二遍与第三遍的循环体都只用到一个临时变量，可把 copy = node.next 提前到循环首行，减少重复取表达式。"
+  ],
   "patterns": [
     {
       "title": "复制带引用结构：一原节点一克隆，先查后建",
@@ -34,6 +38,13 @@
       "category": "链表",
       "problem": "copy-list-with-random-pointer",
       "date": "2026-08-24"
+    },
+    {
+      "title": "省掉映射表：克隆紧跟原节点，映射天然等于 .next",
+      "text": "复制带引用（next/random）的链表时，若不想付 O(n) 哈希表空间：把每个克隆节点插到原节点正后方，此时「原节点的克隆 = 原节点.next」天然成立，random 直接取 node.random.next。三遍顺序固定：①插入克隆（步进 next.next 跳过克隆）②设经判空的 random ③拆两条链并同时恢复原链。前提是插入阶段的结构不被破坏，第二遍只读不写。时间 O(n)、额外空间 O(1)，是该题进阶要求的标准解法。",
+      "category": "链表",
+      "problem": "copy-list-with-random-pointer",
+      "date": "2026-09-17"
     }
   ],
   "submissions": [
@@ -51,20 +62,20 @@
       "code": "    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return head;\n        }\n        Map<Node, Node> map = new HashMap<>();\n        Node p = head;\n        while (p != null) {\n            Node node = map.getOrDefault(p, new Node(p.val));\n            map.put(p, node);\n            if (p.next != null) {\n                node.next = map.getOrDefault(p.next, new Node(p.next.val));\n                map.put(p.next, node.next);\n            }\n            if (p.random != null) {\n                node.random = map.getOrDefault(p.random, new Node(p.random.val));\n                map.put(p.random, node.random);\n            }\n            p = p.next;\n        }\n        return map.get(head);\n    }"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-17",
       "verdict": "Accepted",
       "testcases": "19/19",
       "runtime_ms": null,
-      "memory_bytes": 46948000,
+      "memory_bytes": 46444000,
       "approach": "原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：上轮先尝试 HashMap 单遍法失败、经提示后才切回原地穿插；本次一开始就直接使用原地穿插三遍，没有尝试有风险的哈希重建。结构仍是「插入克隆 → 设置 random → 拆开两链表」，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：第一遍沿 `node.next.next` 插入克隆；第二遍利用 `node.random.next` 直接定位对应克隆；第三遍同时恢复原链 next 并重建克隆链 next，三个循环的步进对象没有混淆。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：原地穿插写法已稳定；若之后改用 HashMap 写法，仍需坚持 key 使用原节点并先查后建，避免上一轮出现的多份克隆问题。",
-      "code": "    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return null;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node copy = new Node(node.val);\n            copy.next = node.next;\n            node.next = copy;\n        }\n\n        for (Node node = head; node != null; node = node.next.next) {\n            Node copy = node.next;\n            copy.random = node.random != null ? node.random.next : null;\n        }\n        Node copyHead = head.next;\n        for (Node node = head; node != null; node = node.next) {\n            Node copy = node.next;\n            node.next = node.next.next;\n            copy.next = node.next != null ? node.next.next : null;\n        }\n        return copyHead;\n    }",
+      "notes": "**① 本次过程与上一轮对比**\n- 一刷（2026-08-24）：先写「哈希表单遍法」失败，改「原地穿插三遍」才算过，两种写法都留档。\n- 上次复习（2026-09-12，第 2 次）：直接上原地穿插三遍，一次 AC，判较强。\n- 本次（第 3 次复习）：同样一上来就选原地穿插三遍，一次 AC 19/19，内存 46.4MB（与上轮 46.8MB 基本持平）。**有风险的哈希表路线这次没有被主动选用**，第 1 次复习暴露的「先查后建/多余克隆」盲区没有再出现，说明「带引用结构优先用原地穿插省掉映射表」已经形成条件反射。\n\n**② 为什么这次能一次写对（三段循环各自的职责与步进）**\n- 第一遍插克隆：`copy.next = p.next; p.next = copy`，步进必须是 `p = p.next.next`。步进跳过克隆是整题第一个易错点：若写成 `p = p.next`，会把刚插入的克隆当成原节点继续处理，链表长度翻倍并错乱。\n- 第二遍设 random：`copy.random = p.random != null ? p.random.next : null`。这一步依赖不变量「原节点的克隆 = 该原节点的 next」，所以 `p.random.next` 就是 `p.random` 的克隆；`p.random == null` 必须显式判空，否则空指针。\n- 第三遍拆两条链：一次遍历同时干两件事——恢复原链 `p.next = p.next.next`，接克隆链 `cur.next = p.next != null ? p.next.next : null`。用 `cur` 单独记录克隆链的尾部，是因为 `p` 始终在原链上走，两个指针各管一条链。\n- 三个循环都成立的前提是「插入阶段结束后，克隆紧跟原节点」这一结构不被破坏：第一遍只改 next，第二遍只读结构，所以第三遍才能安全地连续取 `next`。\n\n**③ 具体 case 推演**\n以 A→B→C 为例（A.random = C、B.random = null、C.random = B）：\n1. 第一遍后结构变成 `A→A'→B→B'→C→C'`，A' 是 A 的克隆（B'、C' 同理）。\n2. 第二遍：A'.random = A.random.next = C'；B.random 为 null → 判空后 B'.random 保持 null（漏判空这里会直接 NPE）；C'.random = C.random.next = B'。\n3. 第三遍（p 走原链、cur 走克隆链）：p=A、cur=A' → `A.next = A'.next = B`，`A'.next = B.next.next = B'`；p=B、cur=B' → `B.next = B'.next = C`，`B'.next = C.next.next = C'`；p=C、cur=C' → `C.next = C'.next = null`，`C'.next = null`。\n4. 结果：原链恢复成 A→B→C（val 与 random 关系不变），返回链 A'→B'→C'，且 A'.random=C'、B'.random=null、C'.random=B'，与期望一致。\n\n**④ 掌握度判定**\n- 一次提交即 Accepted、无提示无探讨 → strong；间隔按 ×2.5 拉长，连续较强计数继续累加。\n\n**⑤ 下一步提醒**\n- 写法已经稳定，剩余缺口只在「哈希表路线」上：想彻底补掉，可用 HashMap 两遍法（第一遍全量建映射、第二遍只连指针）自己重写一次，并用自环、后向 random（random 指回更前面的节点）自测。\n- 记忆锚点：整题只靠一条不变量——「原节点的克隆 = 原节点.next」，三遍循环都围绕它展开。",
+      "code": "    // ==== 提交代码开始 ====\n    public Node copyRandomList(Node head) {\n        if (head == null) return null;\n        for (Node p = head; p != null; p = p.next.next) {\n            Node copy = new Node(p.val);\n            copy.next = p.next;\n            p.next = copy;\n        }\n\n        for (Node p = head; p != null; p = p.next.next) {\n            Node copy = p.next;\n            copy.random = p.random != null ? p.random.next : null;\n        }\n\n        Node copyHead = head.next;\n        Node cur =copyHead;\n        for (Node p = head; p != null; p = p.next) {\n            p.next = p.next.next;\n            cur.next = p.next != null ? p.next.next : null;\n            cur = cur.next;\n        }\n        return copyHead;\n    }\n    // ==== 提交代码结束 ====",
       "prev_code": "\n    public Node copyRandomList(Node head) {\n        if (head == null) {\n            return head;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = new Node(node.val);\n            nodeNew.next = node.next;\n            node.next = nodeNew;\n        }\n        for (Node node = head; node != null; node = node.next.next) {\n            Node nodeNew = node.next;\n            nodeNew.random = node.random != null ? node.random.next : null;\n        }\n        Node newHead = head.next;\n        for (Node node = head; node != null; node = node.next) {\n            Node nodeNew = node.next;\n            node.next = nodeNew.next;\n            nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null;\n        }\n        return newHead;\n    }",
       "mastery": "strong",
-      "pass": 2
+      "pass": 3
     }
   ],
   "reviews": [
@@ -93,6 +104,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：上轮先尝试 HashMap 单遍法失败、经提示后才切回原地穿插；本次一开始就直接使用原地穿插三遍，没有尝试有风险的哈希重建。结构仍是「插入克隆 → 设置 random → 拆开两链表」，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：第一遍沿 `node.next.next` 插入克隆；第二遍利用 `node.random.next` 直接定位对应克隆；第三遍同时恢复原链 next 并重建克隆链 next，三个循环的步进对象没有混淆。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：原地穿插写法已稳定；若之后改用 HashMap 写法，仍需坚持 key 使用原节点并先查后建，避免上一轮出现的多份克隆问题。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "19/19",
+      "approach": "原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 本次过程与上一轮对比**\n- 一刷（2026-08-24）：先写「哈希表单遍法」失败，改「原地穿插三遍」才算过，两种写法都留档。\n- 上次复习（2026-09-12，第 2 次）：直接上原地穿插三遍，一次 AC，判较强。\n- 本次（第 3 次复习）：同样一上来就选原地穿插三遍，一次 AC 19/19，内存 46.4MB（与上轮 46.8MB 基本持平）。**有风险的哈希表路线这次没有被主动选用**，第 1 次复习暴露的「先查后建/多余克隆」盲区没有再出现，说明「带引用结构优先用原地穿插省掉映射表」已经形成条件反射。\n\n**② 为什么这次能一次写对（三段循环各自的职责与步进）**\n- 第一遍插克隆：`copy.next = p.next; p.next = copy`，步进必须是 `p = p.next.next`。步进跳过克隆是整题第一个易错点：若写成 `p = p.next`，会把刚插入的克隆当成原节点继续处理，链表长度翻倍并错乱。\n- 第二遍设 random：`copy.random = p.random != null ? p.random.next : null`。这一步依赖不变量「原节点的克隆 = 该原节点的 next」，所以 `p.random.next` 就是 `p.random` 的克隆；`p.random == null` 必须显式判空，否则空指针。\n- 第三遍拆两条链：一次遍历同时干两件事——恢复原链 `p.next = p.next.next`，接克隆链 `cur.next = p.next != null ? p.next.next : null`。用 `cur` 单独记录克隆链的尾部，是因为 `p` 始终在原链上走，两个指针各管一条链。\n- 三个循环都成立的前提是「插入阶段结束后，克隆紧跟原节点」这一结构不被破坏：第一遍只改 next，第二遍只读结构，所以第三遍才能安全地连续取 `next`。\n\n**③ 具体 case 推演**\n以 A→B→C 为例（A.random = C、B.random = null、C.random = B）：\n1. 第一遍后结构变成 `A→A'→B→B'→C→C'`，A' 是 A 的克隆（B'、C' 同理）。\n2. 第二遍：A'.random = A.random.next = C'；B.random 为 null → 判空后 B'.random 保持 null（漏判空这里会直接 NPE）；C'.random = C.random.next = B'。\n3. 第三遍（p 走原链、cur 走克隆链）：p=A、cur=A' → `A.next = A'.next = B`，`A'.next = B.next.next = B'`；p=B、cur=B' → `B.next = B'.next = C`，`B'.next = C.next.next = C'`；p=C、cur=C' → `C.next = C'.next = null`，`C'.next = null`。\n4. 结果：原链恢复成 A→B→C（val 与 random 关系不变），返回链 A'→B'→C'，且 A'.random=C'、B'.random=null、C'.random=B'，与期望一致。\n\n**④ 掌握度判定**\n- 一次提交即 Accepted、无提示无探讨 → strong；间隔按 ×2.5 拉长，连续较强计数继续累加。\n\n**⑤ 下一步提醒**\n- 写法已经稳定，剩余缺口只在「哈希表路线」上：想彻底补掉，可用 HashMap 两遍法（第一遍全量建映射、第二遍只连指针）自己重写一次，并用自环、后向 random（random 指回更前面的节点）自测。\n- 记忆锚点：整题只靠一条不变量——「原节点的克隆 = 原节点.next」，三遍循环都围绕它展开。"
     }
   ]
 }

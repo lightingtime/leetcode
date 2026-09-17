@@ -2,10 +2,11 @@
 // LeetCode 138. 随机链表的复制 (Copy List with Random Pointer)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/copy-list-with-random-pointer/
-// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-24 · 上次复习 2026-09-07）
-//
-// 一刷/上次思路：原地穿插三遍——复制节点插入原节点后 → 设置 random → 拆开两链表
-// 测试用例与一刷归档保持一致
+// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-24）
+// 一刷写法：原地穿插三遍（克隆插到原节点后 → 用 node.random.next 设 random → 拆开两条链表），O(n) 时间 / O(1) 空间
+// 一刷问题：哈希表单遍法里「先无条件 new 再 put」，同一原节点被创建两次、map 覆盖后旧节点成孤儿（该习惯累计 2 次）
+// 上次复习写法：直接上原地穿插三遍，没有再去碰有风险的哈希重建
+// 测试用例：与一刷归档保持一致（示例 3 + 边界 4，含 1000 节点；verify 校验「节点全新 + val/next/random 映射一致」）
 // ============================================================
 
 import java.util.*;
@@ -26,24 +27,24 @@ public class LC0138_CopyListWithRandomPointer {
 
     // ==== 提交代码开始 ====
     public Node copyRandomList(Node head) {
-        if (head == null) {
-            return null;
-        }
-        for (Node node = head; node != null; node = node.next.next) {
-            Node copy = new Node(node.val);
-            copy.next = node.next;
-            node.next = copy;
+        if (head == null) return null;
+        for (Node p = head; p != null; p = p.next.next) {
+            Node copy = new Node(p.val);
+            copy.next = p.next;
+            p.next = copy;
         }
 
-        for (Node node = head; node != null; node = node.next.next) {
-            Node copy = node.next;
-            copy.random = node.random != null ? node.random.next : null;
+        for (Node p = head; p != null; p = p.next.next) {
+            Node copy = p.next;
+            copy.random = p.random != null ? p.random.next : null;
         }
+
         Node copyHead = head.next;
-        for (Node node = head; node != null; node = node.next) {
-            Node copy = node.next;
-            node.next = node.next.next;
-            copy.next = node.next != null ? node.next.next : null;
+        Node cur =copyHead;
+        for (Node p = head; p != null; p = p.next) {
+            p.next = p.next.next;
+            cur.next = p.next != null ? p.next.next : null;
+            cur = cur.next;
         }
         return copyHead;
     }

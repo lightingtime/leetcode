@@ -1815,12 +1815,12 @@
       "title": "随机链表的复制",
       "category": "链表",
       "first_pass_date": "2026-08-24",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-17",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-17",
+      "next_review_date": "2026-10-02",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "delete-node-in-a-linked-list": {

@@ -19,13 +19,17 @@
     
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
-    
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge hard">重点复习</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>138. 随机链表的复制 (Copy List with Random Pointer)</h1><p>&gt; <a href="https://leetcode.cn/problems/copy-list-with-random-pointer/" rel="noopener">https://leetcode.cn/problems/copy-list-with-random-pointer/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：哈希表、链表</p><h2>题目描述</h2><p>给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。</p><p>构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。</p><p>例如，如果原链表中有 X 和 Y 两个节点，其中 X.random --&gt; Y 。那么在复制链表中对应的两个节点 x 和 y ，同样有 x.random --&gt; y 。</p><p>返回复制链表的头节点。</p><p>用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：</p><p>val：一个表示 Node.val 的整数。</p><p>random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为 null 。</p><p>你的代码 只 接受原链表的头节点 head 作为传入参数。</p><p>示例 1：</p><p>输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]</p><p>输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]</p><p>示例 2：</p><p>输入：head = [[1,1],[2,1]]</p><p>输出：[[1,1],[2,1]]</p><p>示例 3：</p><p>输入：head = [[3,null],[3,0],[3,null]]</p><p>输出：[[3,null],[3,0],[3,null]]</p><p>提示：</p><p>0</p><p>-104 4</p><p>Node.random 为 null 或指向链表中的节点。</p><h2>示例</h2><ol><li>输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]</li></ol><p>输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]</p><ol><li>输入：head = [[1,1],[2,1]]</li></ol><p>输出：[[1,1],[2,1]]</p><ol><li>输入：head = [[3,null],[3,0],[3,null]]</li></ol><p>输出：[[3,null],[3,0],[3,null]]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（19/19）｜ 一次 AC ｜ 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 本次过程与上一轮对比</strong></p><ul><li>一刷（2026-08-24）：先写「哈希表单遍法」失败，改「原地穿插三遍」才算过，两种写法都留档。</li><li>上次复习（2026-09-12，第 2 次）：直接上原地穿插三遍，一次 AC，判较强。</li><li>本次（第 3 次复习）：同样一上来就选原地穿插三遍，一次 AC 19/19，内存 46.4MB（与上轮 46.8MB 基本持平）。<strong>有风险的哈希表路线这次没有被主动选用</strong>，第 1 次复习暴露的「先查后建/多余克隆」盲区没有再出现，说明「带引用结构优先用原地穿插省掉映射表」已经形成条件反射。</li></ul><p><strong>② 为什么这次能一次写对（三段循环各自的职责与步进）</strong></p><ul><li>第一遍插克隆：<code>copy.next = p.next; p.next = copy</code>，步进必须是 <code>p = p.next.next</code>。步进跳过克隆是整题第一个易错点：若写成 <code>p = p.next</code>，会把刚插入的克隆当成原节点继续处理，链表长度翻倍并错乱。</li><li>第二遍设 random：<code>copy.random = p.random != null ? p.random.next : null</code>。这一步依赖不变量「原节点的克隆 = 该原节点的 next」，所以 <code>p.random.next</code> 就是 <code>p.random</code> 的克隆；<code>p.random == null</code> 必须显式判空，否则空指针。</li><li>第三遍拆两条链：一次遍历同时干两件事——恢复原链 <code>p.next = p.next.next</code>，接克隆链 <code>cur.next = p.next != null ? p.next.next : null</code>。用 <code>cur</code> 单独记录克隆链的尾部，是因为 <code>p</code> 始终在原链上走，两个指针各管一条链。</li><li>三个循环都成立的前提是「插入阶段结束后，克隆紧跟原节点」这一结构不被破坏：第一遍只改 next，第二遍只读结构，所以第三遍才能安全地连续取 <code>next</code>。</li></ul><p><strong>③ 具体 case 推演</strong></p><p>以 A→B→C 为例（A.random = C、B.random = null、C.random = B）：</p><ol><li>第一遍后结构变成 <code>A→A'→B→B'→C→C'</code>，A' 是 A 的克隆（B'、C' 同理）。</li><li>第二遍：A'.random = A.random.next = C'；B.random 为 null → 判空后 B'.random 保持 null（漏判空这里会直接 NPE）；C'.random = C.random.next = B'。</li><li>第三遍（p 走原链、cur 走克隆链）：p=A、cur=A' → <code>A.next = A'.next = B</code>，<code>A'.next = B.next.next = B'</code>；p=B、cur=B' → <code>B.next = B'.next = C</code>，<code>B'.next = C.next.next = C'</code>；p=C、cur=C' → <code>C.next = C'.next = null</code>，<code>C'.next = null</code>。</li><li>结果：原链恢复成 A→B→C（val 与 random 关系不变），返回链 A'→B'→C'，且 A'.random=C'、B'.random=null、C'.random=B'，与期望一致。</li></ol><p><strong>④ 掌握度判定</strong></p><ul><li>一次提交即 Accepted、无提示无探讨 → strong；间隔按 ×2.5 拉长，连续较强计数继续累加。</li></ul><p><strong>⑤ 下一步提醒</strong></p><ul><li>写法已经稳定，剩余缺口只在「哈希表路线」上：想彻底补掉，可用 HashMap 两遍法（第一遍全量建映射、第二遍只连指针）自己重写一次，并用自环、后向 random（random 指回更前面的节点）自测。</li><li>记忆锚点：整题只靠一条不变量——「原节点的克隆 = 原节点.next」，三遍循环都围绕它展开。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（19/19）｜ 一次 AC ｜ 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p>① 与上一轮对比：上轮先尝试 HashMap 单遍法失败、经提示后才切回原地穿插；本次一开始就直接使用原地穿插三遍，没有尝试有风险的哈希重建。结构仍是「插入克隆 → 设置 random → 拆开两链表」，复杂度 O(n) / O(1)。</p><p>② 这次为什么想起来：第一遍沿 <code>node.next.next</code> 插入克隆；第二遍利用 <code>node.random.next</code> 直接定位对应克隆；第三遍同时恢复原链 next 并重建克隆链 next，三个循环的步进对象没有混淆。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：原地穿插写法已稳定；若之后改用 HashMap 写法，仍需坚持 key 使用原节点并先查后建，避免上一轮出现的多份克隆问题。</p></div>
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -76,29 +80,31 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.8 MB</span><span class="chip">用例 19/19</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0138_CopyListWithRandomPointer.java · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">copyRandomList</span>(<span class="tk-t">Node</span> head) {
-        <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
-            <span class="tk-k">return</span> <span class="tk-k">null</span>;
-        }
-        <span class="tk-k">for</span> (<span class="tk-t">Node</span> node = head; node != <span class="tk-k">null</span>; node = node.next.next) {
-            <span class="tk-t">Node</span> copy = <span class="tk-k">new</span> <span class="tk-t">Node</span>(node.val);
-            copy.next = node.next;
-            node.next = copy;
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.3 MB</span><span class="chip">用例 19/19</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0138_CopyListWithRandomPointer.java · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-c">// ==== 提交代码开始 ====</span>
+    <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">copyRandomList</span>(<span class="tk-t">Node</span> head) {
+        <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) <span class="tk-k">return</span> <span class="tk-k">null</span>;
+        <span class="tk-k">for</span> (<span class="tk-t">Node</span> p = head; p != <span class="tk-k">null</span>; p = p.next.next) {
+            <span class="tk-t">Node</span> copy = <span class="tk-k">new</span> <span class="tk-t">Node</span>(p.val);
+            copy.next = p.next;
+            p.next = copy;
         }
 
-        <span class="tk-k">for</span> (<span class="tk-t">Node</span> node = head; node != <span class="tk-k">null</span>; node = node.next.next) {
-            <span class="tk-t">Node</span> copy = node.next;
-            copy.random = node.random != <span class="tk-k">null</span> ? node.random.next : <span class="tk-k">null</span>;
+        <span class="tk-k">for</span> (<span class="tk-t">Node</span> p = head; p != <span class="tk-k">null</span>; p = p.next.next) {
+            <span class="tk-t">Node</span> copy = p.next;
+            copy.random = p.random != <span class="tk-k">null</span> ? p.random.next : <span class="tk-k">null</span>;
         }
+
         <span class="tk-t">Node</span> copyHead = head.next;
-        <span class="tk-k">for</span> (<span class="tk-t">Node</span> node = head; node != <span class="tk-k">null</span>; node = node.next) {
-            <span class="tk-t">Node</span> copy = node.next;
-            node.next = node.next.next;
-            copy.next = node.next != <span class="tk-k">null</span> ? node.next.next : <span class="tk-k">null</span>;
+        <span class="tk-t">Node</span> cur =copyHead;
+        <span class="tk-k">for</span> (<span class="tk-t">Node</span> p = head; p != <span class="tk-k">null</span>; p = p.next) {
+            p.next = p.next.next;
+            cur.next = p.next != <span class="tk-k">null</span> ? p.next.next : <span class="tk-k">null</span>;
+            cur = cur.next;
         }
         <span class="tk-k">return</span> copyHead;
-    }</pre></div>
+    }
+    <span class="tk-c">// ==== 提交代码结束 ====</span></pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0138_CopyListWithRandomPointer.java · 原地穿插三遍：复制节点插入原节点后，设 random，再拆开两链表（O(1) 空间，写法2） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>
     <span class="tk-k">public</span> <span class="tk-t">Node</span> <span class="tk-f">copyRandomList</span>(<span class="tk-t">Node</span> head) {
         <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
@@ -124,7 +130,7 @@
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质</strong></p><ul><li>深拷贝带 random 的链表，难点在 random 映射：克隆节点的 random 必须指向「原 random 节点的克隆」。</li><li>两条路线：① 用 Map&lt;原节点,克隆节点&gt; 显式记录映射（空间 O(n)）；② 把克隆节点插到原节点<strong>后面</strong>，让「原节点的克隆」天然就是「原节点.next」，无需额外映射（空间 O(1)）。</li></ul><p><strong>写法 1（哈希表单遍）</strong></p><ul><li><code>map</code>：原节点 → 克隆节点，保证一节点一克隆——创建前先 <code>map.getOrDefault(p, new ...)</code>，已存在则复用。</li><li>踩坑：最初「无条件 new 再 put」导致同一原节点被创建两次（一次作为被 next/random 引用、一次作为主节点），put 覆盖后旧克隆成孤儿且其 random 未设置（示例 <code>[[1,1],[2,1]]</code> 的 B 被建两次、B₁'.random 为 null）。</li><li>单遍完成 next/random 连接，时间 O(n)、空间 O(n)。</li></ul><p><strong>写法 2（原地穿插三遍，O(1) 空间）</strong></p><ul><li>第一遍：每个原节点后插入克隆：<code>nodeNew.next = node.next; node.next = nodeNew</code>。克隆与其原节点的位置关系即映射。</li><li>第二遍：设克隆 random：<code>nodeNew.random = node.random != null ? node.random.next : null</code>（原 random 的克隆 = 原 random.next，因为克隆紧跟在原节点后）。</li><li>第三遍：拆开两链表：原链表恢复 <code>node.next = nodeNew.next</code>（步进 <code>node = node.next</code>）；克隆链表连 <code>nodeNew.next = nodeNew.next != null ? nodeNew.next.next : null</code>。</li><li>时间 O(n)、空间 O(1)（不含返回值），满足进阶，为该题最优。</li></ul><p><strong>具体 case 推演（写法 2）：[[1,1],[2,1]]（A.random=B，B.random=B）</strong></p><ul><li>第一遍：A→A'→B→B'（A'.next=B、B'.next=null）。</li><li>第二遍：A'.random = A.random(B).next = B'；B'.random = B.random(B).next = B'。</li><li>第三遍：A.next=B（恢复原链表）；A'.next = B.next = B'；B.next=null；B'.next = null。</li><li>结果：A'→B'，A'.random=B'、B'.random=B'，与原链表状态一致 ✅。</li></ul><p><strong>复杂度对比与最优性</strong></p><p>| 写法 | 时间 | 空间 |</p><p>| 哈希表单遍 | O(n) | O(n) |</p><p>| 原地穿插三遍 | O(n) | O(1) |</p><ul><li>时间下限：每个节点都必须复制，至少访问全部节点 Ω(n)，两种都达到。</li><li>空间下限：除返回的克隆链表外无需额外存储，O(1) 即最优；写法 2 是本题最优解。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>复制结构题先无条件 new 再 put：同一原节点被创建两次（一次作为被引用对象、一次作为主节点），map 覆盖后旧节点成孤儿、其指针未设置；应「先查 map 已存在则复用、不存在才创建」，保证一原节点对应一新节点</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>19/19 用例。</p></div></div></div></section>
-  <section><h2>套路沉淀</h2><div class="card md"><h3>复制带引用结构：一原节点一克隆，先查后建</h3><p>复制带 next/random 等引用的结构：用 Map&lt;原节点,新节点&gt; 保证一一对应；创建前先 map.get 判存在，已存在则复用、不存在才 new，禁止无条件 new 后 put（会覆盖旧登记、产生孤儿节点且孤儿指针未设置）；或两遍法：第一遍建全量映射、第二遍只连指针。O(n) 时间 O(n) 空间。</p></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>复制带引用结构：一原节点一克隆，先查后建</h3><p>复制带 next/random 等引用的结构：用 Map&lt;原节点,新节点&gt; 保证一一对应；创建前先 map.get 判存在，已存在则复用、不存在才 new，禁止无条件 new 后 put（会覆盖旧登记、产生孤儿节点且孤儿指针未设置）；或两遍法：第一遍建全量映射、第二遍只连指针。O(n) 时间 O(n) 空间。</p></div><div class="card md"><h3>省掉映射表：克隆紧跟原节点，映射天然等于 .next</h3><p>复制带引用（next/random）的链表时，若不想付 O(n) 哈希表空间：把每个克隆节点插到原节点正后方，此时「原节点的克隆 = 原节点.next」天然成立，random 直接取 node.random.next。三遍顺序固定：①插入克隆（步进 next.next 跳过克隆）②设经判空的 random ③拆两条链并同时恢复原链。前提是插入阶段的结构不被破坏，第二遍只读不写。时间 O(n)、额外空间 O(1)，是该题进阶要求的标准解法。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -138,7 +144,7 @@
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 链表</h3><div class="quote">看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。</div>
       <h3>错误习惯复盘</h3><p><b>复制结构题先无条件 new 再 put：同一原节点被创建两次（一次作为被引用对象、一次作为主节点），map 覆盖后旧节点成孤儿、其指针未设置；应「先查 map 已存在则复用、不存在才创建」，保证一原节点对应一新节点</b>（累计 2 次）</p>
-      
+      <h3>复习提醒</h3><div class="quote">★ 第三遍拆链多引入了一个 cur 变量（Node cur = copyHead; ... cur = cur.next），其实克隆节点自己就能做游标：copy = node.next; node.next = copy.next; copy.next = copy.next != null ? copy.next.next : null; 可以少维护一个指针（2026-09-17 复习时观察）。</div><div class="quote">★ 赋值处空格：Node cur =copyHead; 等号后缺空格，IDEA ⌘⌥L 一键格式化可解决。</div><div class="quote">★ 第二遍与第三遍的循环体都只用到一个临时变量，可把 copy = node.next 提前到循环首行，减少重复取表达式。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 130 · copy-list-with-random-pointer</span><span class="chip">firstPass: false</span><span class="chip">optimal: true</span></p>
       <div class="quote"></div>
