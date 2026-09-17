@@ -2,11 +2,17 @@
 // LeetCode 141. 环形链表 (Linked List Cycle)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/linked-list-cycle/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：Floyd 快慢指针判圈 O(n)/O(1)
-// 测试用例：示例 3 个（题目自带）+ 边界 7 个（一刷归档缺边界，本次补齐）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-04 · 一刷一次 AC）
+// 一刷/上次复习写法：Floyd 快慢指针判圈，O(n)/O(1)
+// 要点：有环则快指针每轮净追 1 步，必然在环内追上慢指针；无环时快指针先走到 null，循环必须同时判 fast 和 fast.next
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 7 个）
+// 上次复习留的精简提示：把相遇判断并进循环条件 `while (fast != null && fast.next != null)`，相遇直接 return true——
+// 空链表/单节点由循环条件自然兜住，不再依赖「两个 null 相等」的兜底（本地 10 组用例验证过，未重新提交力扣）
+//
+// 思路：Floyd 快慢指针——slow 每轮走 1 步、fast 走 2 步；有环时 fast 每轮净追 1 步必然在环内追上，无环时 fast 先到 null。
+//       循环条件同时判 fast 与 fast.next，相遇即 return true；空链表与单节点由循环条件自然兜住
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
-
 
 import java.util.*;
 
@@ -16,12 +22,13 @@ public class LC0141_LinkedListCycle {
     public boolean hasCycle(ListNode head) {
         ListNode fast = head, slow = head;
         while (fast != null && fast.next != null) {
-            slow = slow.next;
             fast = fast.next.next;
-            if (slow == fast) {
+            slow = slow.next;
+            if (fast == slow) {
                 return true;
             }
         }
+
         return false;
     }
     // ==== 提交代码结束 ====

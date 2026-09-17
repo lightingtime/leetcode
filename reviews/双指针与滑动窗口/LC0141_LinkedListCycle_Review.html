@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>141. 环形链表 (Linked List Cycle)</h1><p>&gt; <a href="https://leetcode.cn/problems/linked-list-cycle/" rel="noopener">https://leetcode.cn/problems/linked-list-cycle/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、链表、双指针</p><h2>题目描述</h2><p>给你一个链表的头节点 head ，判断链表中是否有环。</p><p>如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。</p><p>如果链表中存在环 ，则返回 true 。 否则，返回 false 。</p><p>示例 1：</p><p>输入：head = [3,2,0,-4], pos = 1</p><p>输出：true</p><p>解释：链表中有一个环，其尾部连接到第二个节点。</p><p>示例 2：</p><p>输入：head = [1,2], pos = 0</p><p>输出：true</p><p>解释：链表中有一个环，其尾部连接到第一个节点。</p><p>示例 3：</p><p>输入：head = [1], pos = -1</p><p>输出：false</p><p>解释：链表中没有环。</p><p>提示：</p><p>链表中节点的数目范围是 [0, 104]</p><p>-105 5</p><p>pos 为 -1 或者链表中的一个 有效索引 。</p><p>进阶：你能用 O(1)（即，常量）内存解决此问题吗？</p><h2>示例</h2><ol><li>输入：head = [3,2,0,-4]，pos = 1</li></ol><p>输出：true</p><p>解释：链表中有一个环，其尾部连接到第二个节点。</p><ol><li>输入：head = [1,2]，pos = 0</li></ol><p>输出：true</p><p>解释：链表中有一个环，其尾部连接到第一个节点。</p><ol><li>输入：head = [1]，pos = -1</li></ol><p>输出：false</p><p>解释：链表中没有环。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 快慢指针 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-04，一次 AC）：Floyd 快慢指针判圈，29/29。</li><li>上次复习（09-16，strong）：同为 Floyd，但循环骨架写成了「<code>while (fast != null)</code> 内让 slow / fast 分别推进、相遇只 <code>break</code>、最后 <code>return fast != null</code>」——多了「fast 与 slow 同时为 null 也算相遇」的隐含分支；当时复盘后你自己又改回 <code>while (fast != null &amp;&amp; fast.next != null)</code> 的紧凑骨架（本地 10 组验证过，未重新提交力扣）。</li><li>本轮（09-17）：直接写下紧凑骨架，相遇即 <code>return true</code>；按原 approach 合并、<code>prev_code</code> 保留 09-16 提交版本；内存 47.2MB（上轮 46.8MB）。</li></ul><p><strong>② 这轮的过程</strong></p><ul><li>无讨论、无提示（<code>code-notes</code> 里那条精简提示是你上次自己改出来的版本，本次直接采用）：本地 10 组用例（示例 3 + 边界 7：空链表、单节点无环、单节点自环、尾节点自指、±10⁵ 节点值、长度 10000 有环/无环）一次全绿，力扣一次提交 Accepted（29/29）。</li><li>两个不变量都写对：fast 每轮净追 1 步 → 有环必追上；无环时 fast 先触 null，所以循环条件必须同时判 <code>fast</code> 与 <code>fast.next</code> 才不会 NPE。空链表与单节点由循环条件自然兜住。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>这版把上一轮「两个 null 相等」的兜底彻底去掉了，骨架比一刷还短；同一套判圈手法可迁移到 142 环形链表 II（要求返回环入口：追上后把一个指针放回 head，两指针同步走，再次相遇处即入口）。</li><li>相关串练：287 寻找重复数（把值域当链表下标，同 Floyd 判圈 + 找入口）、202 快乐数（判环）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（29/29）｜ 一次 AC ｜ 快慢指针 ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>写法同为 <strong>Floyd 快慢指针判圈</strong>（时间 O(n)、额外空间 O(1)），但循环骨架重写了：</li><li>一刷：先排除 <code>head == null || head.next == null</code>，再 <code>while (fast.next != null &amp;&amp; fast.next.next != null)</code> 两跳推进，相遇就直接 <code>return true</code>。</li><li>本轮：<code>while (fast != null)</code> 内先让 slow 走 1 步、fast 走 1~2 步并分别判空，相遇只 <code>break</code>，最后 <code>return fast != null</code> 统一出口。</li><li>两种骨架都正确，但本轮多了一个<strong>隐含分支</strong>：fast 与 slow 同时为 null 时 <code>fast == slow</code> 也成立会 break（单节点无环 <code>[7]</code> 就是这种情况），靠最后 <code>return fast != null</code> 把它兜成 false。本次 7 个边界用例里的「单节点无环」正好压在这条线上，通过。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷一次 AC、无沉淀错误习惯，本轮凭记忆直接给出「快走 2、慢走 1、相等即有环」的核心，并且每一跳前都做了判空，没有出现 <code>fast.next.next</code> 的空指针。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（29/29），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>回看时可把条件收进循环（<code>while (fast != null &amp;&amp; fast.next != null)</code>）：这样「相遇」一定意味着真有环，不需要依赖 <code>null == null</code> 也成立的巧合，读代码的人不必自己推一遍边界。</li><li>判圈只是第一步，142 环形链表 II 要求返回入环点，同一套快慢指针再加一段「从头出发的等速指针」即可。</li></ul></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>快慢指针</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -47,19 +51,19 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快慢指针</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.7 MB</span><span class="chip">用例 29/29</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0141_LinkedListCycle.java · 快慢指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 45.0 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0141_LinkedListCycle.java · 快慢指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-t">ListNode</span> fast = head, slow = head;
         <span class="tk-k">while</span> (fast != <span class="tk-k">null</span> &amp;&amp; fast.next != <span class="tk-k">null</span>) {
-            slow = slow.next;
             fast = fast.next.next;
-            <span class="tk-k">if</span> (slow == fast) {
+            slow = slow.next;
+            <span class="tk-k">if</span> (fast == slow) {
                 <span class="tk-k">return</span> <span class="tk-k">true</span>;
             }
         }
+
         <span class="tk-k">return</span> <span class="tk-k">false</span>;
-    }
-</pre></div>
+    }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0141_LinkedListCycle.java · 快慢指针 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">hasCycle</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-t">ListNode</span> fast = head, slow = head;
         <span class="tk-k">while</span> (fast != <span class="tk-k">null</span>) {
