@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-01</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>1. 两数之和 (Two Sum)</h1><p>&gt; <a href="https://leetcode.cn/problems/two-sum/" rel="noopener">https://leetcode.cn/problems/two-sum/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：数组、哈希表</p><h2>题目描述</h2><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target 的那 两个 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。</p><p>你可以按任意顺序返回答案。</p><p>示例 1：</p><p>输入：nums = [2,7,11,15], target = 9</p><p>输出：[0,1]</p><p>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p><p>示例 2：</p><p>输入：nums = [3,2,4], target = 6</p><p>输出：[1,2]</p><p>示例 3：</p><p>输入：nums = [3,3], target = 6</p><p>输出：[0,1]</p><p>提示：</p><p>2 4</p><p>-109 9</p><p>-109 9</p><p>只会存在一个有效答案</p><p>进阶：你可以想出一个时间复杂度小于 O(n2) 的算法吗？</p><h2>示例</h2><ol><li>输入：nums = [2,7,11,15]，target = 9</li></ol><p>输出：[0,1]</p><p>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</p><ol><li>输入：nums = [3,2,4]，target = 6</li></ol><p>输出：[1,2]</p><ol><li>输入：nums = [3,3]，target = 6</li></ol><p>输出：[0,1]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 单遍哈希表（边查边存，重复值场景天然正确） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-01）：一次 AC，没有沉淀任何错误习惯。</li><li>上次复习（09-16，strong）：写法与一刷一致，差异只在字面（提出局部变量 num、返回顺序写成 <code>{i, map.get(...)}</code>、末尾用空数组代替 null）。</li><li>本轮（09-17）：仍是同一写法，按原 approach 合并、<code>prev_code</code> 保留上次版本；并吸收了上次留下的精简项——去掉 <code>if</code> 里的 <code>else</code> 分支、修正逗号前空格；内存 47.5MB。</li></ul><p><strong>② 这轮的过程</strong></p><ul><li>无讨论、无提示：本地 8 组用例（示例 3 + 边界 5：最短数组含负数、重复值取不同下标、答案在末尾、全负数、大数防溢出）一次全绿，力扣一次提交 Accepted（65/65）。</li><li>本写法的命门仍然是「先查后存」：先 <code>map.containsKey(target - num)</code> 命中即返回，再 <code>put(num, i)</code>，保证配到的是更早的下标，<code>num * 2 == target</code>（如 <code>[3,3]</code>）不会拿自己配自己。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>唯一还能再压的点：<code>containsKey</code> + <code>get</code> 把哈希表查了两次，可以改成一次 <code>Integer j = map.get(target - num)</code> 判 null（存进去的是下标，null 语义安全）。</li><li>相关串练：167 两数之和 II（有序输入 + 双指针，O(1) 额外空间）、15 三数之和、454 四数相加 II。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（65/65）｜ 一次 AC ｜ 单遍哈希表（边查边存） ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li><strong>首次复习</strong>，没有上一轮可对比。写法与一刷一致：单遍哈希表，<code>map</code> 存「已见过的值 → 下标」。</li><li>与一刷归档代码的差异只有三处字面：把 <code>nums[i]</code> 提取成局部变量 <code>num</code>；返回顺序写成 <code>{i, map.get(...)}</code>；末尾返回空数组取代原来的 <code>null</code>（题目保证有解，这一行是死代码）。核心逻辑未变：查补数 → 返回 → 存当前值。</li></ul><p><strong>② 这次为什么能一次写对</strong></p><ul><li>一刷时这题一次 AC，没有沉淀任何错误习惯，本轮也直接落对关键顺序：<strong>先查 <code>target - num</code>，再 <code>map.put(num, i)</code></strong>。</li><li>这个顺序是本写法的命门：若先存后查，<code>num * 2 == target</code> 时会拿自己的下标去配对，示例 3 的 <code>[3, 3]</code> 立刻暴露。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>一次提交即 Accepted（65/65），全程无提示、无探讨 → 较强。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>已沉淀套路「单遍哈希：边查补数边存下标，先查后存天然处理重复值」，可与 15 三数之和 / 18 四数之和 的「外层循环 + 双指针」对照：那两题用双指针省空间，本题用哈希省时间，取舍点是数组是否有序。</li></ul></div>
@@ -38,25 +42,24 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
-        <li><span>思路</span><b>单遍哈希表（边查边存）</b></li>
+        <li><span>思路</span><b>单遍哈希表（边查边存，重复值场景天然正确）</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单遍哈希表（边查边存）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.4 MB</span><span class="chip">用例 65/65</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0001_TwoSum.java · 单遍哈希表（边查边存）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 65/65</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0001_TwoSum.java · 单遍哈希表（边查边存）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> target) {
         <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
-            <span class="tk-k">int</span> num = nums[i];
-            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(target - num)) {
-                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[] {i , map.<span class="tk-f">get</span>(target - num)};
-            } <span class="tk-k">else</span> {
-                map.<span class="tk-f">put</span>(num, i);
+            <span class="tk-c">// 先查后存：配对必须是更早出现的下标；若先 put，num * 2 == target 时会拿自己的下标配自己</span>
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(target - nums[i])) {
+                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[]{i, map.<span class="tk-f">get</span>(target - nums[i])};
             }
+            map.<span class="tk-f">put</span>(nums[i], i);
         }
         <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[] {};
     }</pre></div>

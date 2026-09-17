@@ -2,9 +2,15 @@
 // LeetCode 1. 两数之和 (Two Sum)
 // 难度：Easy | 分类：哈希表
 // 链接：https://leetcode.cn/problems/two-sum/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-01）
-// 一刷写法：单遍哈希表（边查边存，重复值场景天然正确）
-// 测试用例：示例 3 个（题目自带）+ 边界 5 个（一刷归档缺边界，本次补齐）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-01 · 一刷一次 AC）
+// 一刷/上次复习写法：单遍哈希表（先查 target - num，再存 num → i），O(n)/O(n)
+// 子类型：哈希表「边查边存」——顺序是本写法的命门，先存后查会让 num * 2 == target 时拿自己的下标配自己
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 5 个）
+// 上次复习留下的精简项（本次重写请直接写成精简版）：if 分支里已 return、else 可去掉；末尾 return new int[]{} 是死代码；逗号前多余空格
+//
+// 思路：单遍哈希表——map 存「已见过的值 → 下标」；每个 num 先查 target - num 是否已在 map 里，
+//       命中即刻返回 {i, map.get(target - num)}，查不到才把 num 存进去
+// 复杂度：时间 O(n) 空间 O(n)
 // ============================================================
 
 import java.util.*;
@@ -15,12 +21,11 @@ public class LC0001_TwoSum {
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            int num = nums[i];
-            if (map.containsKey(target - num)) {
-                return new int[] {i , map.get(target - num)};
-            } else {
-                map.put(num, i);
+            // 先查后存：配对必须是更早出现的下标；若先 put，num * 2 == target 时会拿自己的下标配自己
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{i, map.get(target - nums[i])};
             }
+            map.put(nums[i], i);
         }
         return new int[] {};
     }
