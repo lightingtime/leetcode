@@ -2,9 +2,15 @@
 // LeetCode 283. 移动零 (Move Zeroes)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/move-zeroes/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：双指针原地交换（慢指针记非零写入位置，快指针扫描），O(n)/O(1)
-// 测试用例：示例 2 个 + 边界 9 个（原有 5 个，本次补齐：负数 / 极值 / 首尾皆零 / 长度 1e4 保序）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-04 · 一刷一次 AC）
+// 一刷/上次复习写法：双指针原地交换（慢指针 l 记「已排好的非零区」右边界，快指针 i 扫描），O(n)/O(1)
+// 要点：不变量 [0, l) 全是已就位的非零元素且保持原相对顺序；i 扫到非零就换到 l 处，扫完 0 自然全被挤到尾部
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 9 个）
+// 上次复习留的精简提示：l == i 时 swap 是自交换，可加 if (l != i) 跳过；两个分支都在 i++，可改成 for 循环 + 单个 if；swap 签名里逗号前多了空格
+//
+// 思路：双指针原地分区——lt 是「已就位的非零区」右边界（[0, lt) 全非零且保序），i 逐个扫描；
+//       遇到非零就与 nums[lt] 交换并让 lt 前进，零则原地跳过；扫完非零全在头部且保序，零自然被挤到尾部
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -13,20 +19,19 @@ public class LC0283_MoveZeroes {
 
     // ==== 提交代码开始 ====
     public void moveZeroes(int[] nums) {
-        int l = 0;
-        int i = 0;
+        int lt = 0, i = 0;
         while (i < nums.length) {
-            if (nums[i] != 0) {
-                swap(nums, l, i);
-                l++;
-                i++;
-            } else {
-                i++;
-            }
+           if (nums[i] != 0) {
+               swap(nums, lt, i);
+               lt++;
+               i++;
+           } else {
+               i++;
+           }
         }
     }
 
-    private void swap(int[] nums, int i , int j) {
+    private void swap(int[] nums, int i, int j) {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;

@@ -27,20 +27,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-17",
       "verdict": "Accepted",
-      "testcases": "75/75",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 48160000,
+      "memory_bytes": 48272000,
       "approach": "双指针",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 同一思路：**数组双指针原地分区**（慢指针 `l` 记非零写入口、快指针 `i` 扫描，边扫边换）。与一刷归档的差异在写法细节：\n  - 一刷变量叫 `unCheck`/`check`，且先判断「慢指针指的位置是不是 0」再决定交换，天然跳过了自交换；\n  - 本轮把判断换成「当前元素是不是非零」，逻辑更直白，但 `l == i` 时会产生一次**自交换**（无害的纯多余动作）。\n- 最坏情况比较次数：一刷对每个非零元素可能多走一次 `check = unCheck` 的重置，本轮严格一趟扫完，都是 O(n)/O(1)。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮直接落对两条不变式：`[0, l)` 全是已经排好的非零元素（且保持原相对顺序），`[l, i)` 全是 0。\n- 交换而不是覆盖，保证零不会丢；`i` 每轮必进，保证一趟扫完不回头。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（75/75），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同一骨架的兄弟题：26 删除有序数组中的重复项、27 移除元素（「快慢指针原地分区」），75 颜色分类（升级成三路分区），回看时可连着过一遍。",
-      "code": "public void moveZeroes(int[] nums) {\n        int l = 0;\n        int i = 0;\n        while (i < nums.length) {\n            if (nums[i] != 0) {\n                swap(nums, l, i);\n                l++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private void swap(int[] nums, int i , int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
+      "notes": "**① 与上一轮对比**\n\n- 一刷（08-04，一次 AC）：变量叫 `unCheck` / `check`，先判断「慢指针所指位置是不是 0」再决定交换，天然跳过自交换。\n- 上次复习（09-16，strong）：判断换成「当前元素是不是非零」，逻辑更直白，代价是 `lt == i` 时会有一次自交换（无害的多余动作）。\n- 本轮（09-17）：沿用上次的「判当前元素非零」版本，按原 approach 合并、`prev_code` 保留上次版本；顺手修掉了 `swap` 签名里逗号前的空格；内存 48.3MB（上轮 48.2MB）。\n\n**② 这轮的过程**\n\n- 无讨论、无提示：本地 11 组用例（示例 2 + 边界 9：全零、无零、首非零尾零、首零后非零、单元素、负数混合、`MIN_VALUE`/`MAX_VALUE`、首尾皆零、长度 1e4 保序）一次全绿，力扣一次提交 Accepted（75/75）。\n- 不变量写对：`[0, lt)` 全是已就位且保序的非零元素；`i` 扫到非零就换到 `lt` 处并双双前进，扫到零只跳 `i`，扫完零自然被挤到尾部。\n\n**③ 掌握度判定**\n\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\n\n**④ 下一步提醒**\n\n- 上次留的两条精简这次只落地了空格那条：`while` 两个分支末尾都在 `i++`，可并成 `for` + 单个 `if`；`lt == i` 时仍是自交换，加 `if (lt != i)` 可省两次写（都不影响正确性，按口味取舍）。\n- 相关串练：27 移除元素（同款慢指针覆盖写法）、26 删除有序数组中的重复项、75 颜色分类（三路分区）。",
+      "code": "    public void moveZeroes(int[] nums) {\n        int lt = 0, i = 0;\n        while (i < nums.length) {\n           if (nums[i] != 0) {\n               swap(nums, lt, i);\n               lt++;\n               i++;\n           } else {\n               i++;\n           }\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
       "prev_code": "public void moveZeroes(int[] nums) {\n        int unCheck = 0, check = 0;\n        while (check < nums.length) {\n            if (nums[unCheck] == 0) {\n                int temp = nums[check];\n                nums[check] = nums[unCheck];\n                nums[unCheck] = temp;\n                check++;\n            } else {\n                unCheck++;\n                check = unCheck;\n            }\n        }\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -60,6 +60,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 同一思路：**数组双指针原地分区**（慢指针 `l` 记非零写入口、快指针 `i` 扫描，边扫边换）。与一刷归档的差异在写法细节：\n  - 一刷变量叫 `unCheck`/`check`，且先判断「慢指针指的位置是不是 0」再决定交换，天然跳过了自交换；\n  - 本轮把判断换成「当前元素是不是非零」，逻辑更直白，但 `l == i` 时会产生一次**自交换**（无害的纯多余动作）。\n- 最坏情况比较次数：一刷对每个非零元素可能多走一次 `check = unCheck` 的重置，本轮严格一趟扫完，都是 O(n)/O(1)。\n\n**② 这次为什么能一次写对**\n- 一刷一次 AC、没有沉淀错误习惯。本轮直接落对两条不变式：`[0, l)` 全是已经排好的非零元素（且保持原相对顺序），`[l, i)` 全是 0。\n- 交换而不是覆盖，保证零不会丢；`i` 每轮必进，保证一趟扫完不回头。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（75/75），全程无提示、无探讨 → 较强。\n\n**④ 下一步提醒**\n- 同一骨架的兄弟题：26 删除有序数组中的重复项、27 移除元素（「快慢指针原地分区」），75 颜色分类（升级成三路分区），回看时可连着过一遍。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "双指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n\n- 一刷（08-04，一次 AC）：变量叫 `unCheck` / `check`，先判断「慢指针所指位置是不是 0」再决定交换，天然跳过自交换。\n- 上次复习（09-16，strong）：判断换成「当前元素是不是非零」，逻辑更直白，代价是 `lt == i` 时会有一次自交换（无害的多余动作）。\n- 本轮（09-17）：沿用上次的「判当前元素非零」版本，按原 approach 合并、`prev_code` 保留上次版本；顺手修掉了 `swap` 签名里逗号前的空格；内存 48.3MB（上轮 48.2MB）。\n\n**② 这轮的过程**\n\n- 无讨论、无提示：本地 11 组用例（示例 2 + 边界 9：全零、无零、首非零尾零、首零后非零、单元素、负数混合、`MIN_VALUE`/`MAX_VALUE`、首尾皆零、长度 1e4 保序）一次全绿，力扣一次提交 Accepted（75/75）。\n- 不变量写对：`[0, lt)` 全是已就位且保序的非零元素；`i` 扫到非零就换到 `lt` 处并双双前进，扫到零只跳 `i`，扫完零自然被挤到尾部。\n\n**③ 掌握度判定**\n\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\n\n**④ 下一步提醒**\n\n- 上次留的两条精简这次只落地了空格那条：`while` 两个分支末尾都在 `i++`，可并成 `for` + 单个 `if`；`lt == i` 时仍是自交换，加 `if (lt != i)` 可省两次写（都不影响正确性，按口味取舍）。\n- 相关串练：27 移除元素（同款慢指针覆盖写法）、26 删除有序数组中的重复项、75 颜色分类（三路分区）。"
     }
   ],
   "code_notes": [
