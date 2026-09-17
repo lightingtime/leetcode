@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-27</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>324. 摆动排序 II (Wiggle Sort II)</h1><p>&gt; <a href="https://leetcode.cn/problems/wiggle-sort-ii/" rel="noopener">https://leetcode.cn/problems/wiggle-sort-ii/</a></p><p>难度：Medium ｜ 分类：贪心与区间</p><p>标签：贪心、数组、分治、快速选择、排序</p><h2>题目描述</h2><p>给你一个整数数组 nums，将它重新排列成 nums[0] nums[2]  的顺序。</p><p>你可以假设所有输入数组都可以得到满足题目要求的结果。</p><p>示例 1：</p><p>输入：nums = [1,5,1,1,6,4]</p><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><p>示例 2：</p><p>输入：nums = [1,3,2,2,3,1]</p><p>输出：[2,3,1,3,1,2]</p><p>提示：</p><p>1 4</p><p>0</p><p>题目数据保证，对于给定的输入 nums ，总能产生满足题目要求的结果</p><p>进阶：你能用 O(n) 时间复杂度和 / 或原地 O(1) 额外空间来实现吗？</p><h2>示例</h2><ol><li>输入：nums = [1,5,1,1,6,4]</li></ol><p>输出：[1,6,1,5,1,4]</p><p>解释：[1,4,1,5,1,6] 同样是符合题目要求的结果，可以被判题程序接受。</p><ol><li>输入：nums = [1,3,2,2,3,1]</li></ol><p>输出：[2,3,1,3,1,2]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 快速选择中位数 + 虚拟下标三路划分 ｜ 平均 O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-27，非一次 AC）：虚拟下标定义域越界（gt 初始化成 n 时 f(n) 落到真实下标 n）、quickselect 分区点选错（Hoare 分区该用 j 分界）。</li><li>上次复习（09-15，weak）：三路划分方向写反（小数被送进峰位）→ 除单元素外全部失败，纠正后 AC；分区细节从 Hoare 改成 Lomuto（pivot 取右端）。</li><li>本轮（09-17）：骨架与上次一致（quickselect 定位中位数 + 虚拟下标三路划分），按原 approach 合并、<code>prev_code</code> 保留 09-15 版本；复杂度 O(n)/O(1)，内存 49.8MB。</li></ul><p><strong>② 这轮的过程与错在哪</strong></p><ul><li>本地一次跑通 10 组用例（示例 + 边界 1–8，含 <code>[1,1,2,2]</code>、全部相等、0/5000 极值、5×10⁴ 交替 0/1 大输入），力扣一次提交 52/52；一刷与上次复习踩过的四个坑这次都没再犯。</li><li>唯一一次讨论是你对「<code>&lt; mid</code> 为什么送去 gt 侧」提出疑问：虚拟下标顺序不是真实下标顺序，虚拟前段 <code>[0,lt)</code> 映到奇数位（峰）所以收大值、虚拟后段 <code>(gt,n)</code> 映到偶数位（谷）所以收小值。代码当时已是正确方向，讨论没有改动解法。</li><li>卡点记录：这个方向正是上次写反的同一处，这次要确认后才敢定，说明「虚拟顺序 ≠ 真实下标顺序」还没固化，下次复习重点仍是这套映射而不是 quickselect。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>weak：本轮<strong>有探讨</strong>——方向语义是问过才确认（且正是上次翻车的那一处）；其余环节（本地一次全绿、提交一次 AC）都属较强表现，按较弱记录、间隔重置 2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>可精简处：<code>quickSort</code> 实为 quickselect（只定位第 k 小、不做排序），名字有误导，建议改 <code>kthSmallest</code>/<code>select</code>；循环里 <code>f(i, n)</code> 三个分支各算一遍，可提一个局部变量 <code>idx</code>；<code>swap</code> 中 <code>int temp =nums[i]</code> 等号后缺空格。</li><li>相关串练：334 递增的三元子序列（同为线性扫描 + 不变量构造）、215 数组中的第 K 个最大元素（同 quickselect 骨架）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-15 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（52/52）｜ 多次提交 ｜ 快速选择中位数 + 虚拟下标三路划分 ｜ O(n) · O(1)</p>
       <div class="review-note md"><p>二刷：三路划分方向写反（小数被送进峰位）导致除单元素外全部失败，纠正方向后 AC；分区细节改用 Lomuto（pivot 取末尾）</p></div>
@@ -38,42 +42,42 @@
         
       </ul>
     </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>快速选择中位数 + 虚拟下标三路划分</b></li>
-        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>复杂度</span><b>平均 O(n) · O(1)</b></li>
         <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 快速选择中位数 + 虚拟下标三路划分</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 47.5 MB</span><span class="chip">用例 52/52</span></p>
+    <p><span class="chip">时间 平均 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 47.5 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0324_WiggleSortIi.java · 快速选择中位数 + 虚拟下标三路划分</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">wiggleSort</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> n = nums.length;
         <span class="tk-k">int</span> mid = <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, n - <span class="tk-n">1</span>, n / <span class="tk-n">2</span>);
-        <span class="tk-c">// 虚拟下标上：lt: [0,lt) 全 &gt;mid；i: [lt,i) 全 ==mid；(gt,n) 全 &lt;mid；[i,gt] 未处理</span>
         <span class="tk-k">int</span> lt = <span class="tk-n">0</span>, i = <span class="tk-n">0</span>, gt = n - <span class="tk-n">1</span>;
-        <span class="tk-c">// 未处理区是闭区间 [i, gt]，i == gt 时还剩最后一个元素，所以条件取 i &lt;= gt</span>
         <span class="tk-k">while</span> (i &lt;= gt) {
-            <span class="tk-k">if</span> (nums[<span class="tk-f">f</span>(n, i)] &gt; mid) {
-                <span class="tk-f">swap</span>(nums, <span class="tk-f">f</span>(n, i), <span class="tk-f">f</span>(n, lt));
-                lt++;
-                i++;
-            } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[<span class="tk-f">f</span>(n, i)] &lt; mid) {
-                <span class="tk-f">swap</span>(nums, <span class="tk-f">f</span>(n, i), <span class="tk-f">f</span>(n, gt));
+            <span class="tk-c">// 虚拟左侧 [0,lt) 映到奇数下标（峰位）→ 收 &gt;mid；虚拟右侧 (gt,n) 映到偶数下标（谷位）→ 收 &lt;mid。</span>
+            <span class="tk-c">// 方向与真实下标的「小 大 小 大」相反，写反会除单元素外全部失败</span>
+            <span class="tk-k">if</span> (nums[<span class="tk-f">f</span>(i, n)] &lt; mid) {
+                <span class="tk-c">// (gt,n) 已确定为 &lt;mid，i..gt 是待处理闭区间：换进来的是 gt 侧未检查的值，故 i 原地重看</span>
+                <span class="tk-f">swap</span>(nums, <span class="tk-f">f</span>(i, n), <span class="tk-f">f</span>(gt, n));
                 gt--;
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[<span class="tk-f">f</span>(i, n)] &gt; mid) {
+                <span class="tk-c">// 换进来的是 [lt,i) 上已知 ==mid 的值，落位即定，可以直接 i++</span>
+                <span class="tk-f">swap</span>(nums, <span class="tk-f">f</span>(i, n), <span class="tk-f">f</span>(lt, n));
+                i++;
+                lt++;
             } <span class="tk-k">else</span> {
                 i++;
             }
         }
     }
 
-    <span class="tk-c">// 虚拟下标 i → 真实下标；前 n/2 个虚拟下标是全部峰位，其余是全部谷位</span>
-    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">f</span>(<span class="tk-k">int</span> n, <span class="tk-k">int</span> i) {
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">f</span>(<span class="tk-k">int</span> i, <span class="tk-k">int</span> n) {
         <span class="tk-k">return</span> (<span class="tk-n">1</span> + <span class="tk-n">2</span> * i) % (n | <span class="tk-n">1</span>);
     }
 
-    <span class="tk-c">// 参数：nums[l..r] 为候选区间，k 为目标下标(0 基)；返回的是第 k+1 小的值</span>
     <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">quickSort</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-k">int</span> k) {
         <span class="tk-k">if</span> (l == r) {
             <span class="tk-k">return</span> nums[l];
@@ -88,7 +92,7 @@
             j++;
         }
         <span class="tk-f">swap</span>(nums, i, r);
-        <span class="tk-k">if</span> (i == k) {
+        <span class="tk-k">if</span> (i == k){
             <span class="tk-k">return</span> nums[k];
         } <span class="tk-k">else</span> <span class="tk-k">if</span> (i &lt; k) {
             <span class="tk-k">return</span> <span class="tk-f">quickSort</span>(nums, i + <span class="tk-n">1</span>, r, k);
@@ -100,7 +104,7 @@
     <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">swap</span>(<span class="tk-k">int</span>[] nums, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j) {
         <span class="tk-k">int</span> temp = nums[i];
         nums[i] = nums[j];
-        nums[j] = temp;
+        nums[j] =temp;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0324_WiggleSortIi.java · 快速选择中位数 + 虚拟下标三路划分 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">wiggleSort</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> mid = <span class="tk-f">quickSort</span>(nums, <span class="tk-n">0</span>, nums.length - <span class="tk-n">1</span>);

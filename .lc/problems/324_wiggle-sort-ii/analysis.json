@@ -49,20 +49,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-15",
+      "date": "2026-09-17",
       "verdict": "Accepted",
-      "testcases": "52/52",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 49836000,
+      "memory_bytes": 49768000,
       "approach": "快速选择中位数 + 虚拟下标三路划分",
-      "time_complexity": "O(n)",
+      "time_complexity": "平均 O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "二刷：三路划分方向写反（小数被送进峰位）导致除单元素外全部失败，纠正方向后 AC；分区细节改用 Lomuto（pivot 取末尾）",
-      "code": "    public void wiggleSort(int[] nums) {\n        int n = nums.length;\n        int mid = quickSort(nums, 0, n - 1, n / 2);\n        // 虚拟下标上：lt: [0,lt) 全 >mid；i: [lt,i) 全 ==mid；(gt,n) 全 <mid；[i,gt] 未处理\n        int lt = 0, i = 0, gt = n - 1;\n        // 未处理区是闭区间 [i, gt]，i == gt 时还剩最后一个元素，所以条件取 i <= gt\n        while (i <= gt) {\n            if (nums[f(n, i)] > mid) {\n                swap(nums, f(n, i), f(n, lt));\n                lt++;\n                i++;\n            } else if (nums[f(n, i)] < mid) {\n                swap(nums, f(n, i), f(n, gt));\n                gt--;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    // 虚拟下标 i → 真实下标；前 n/2 个虚拟下标是全部峰位，其余是全部谷位\n    private int f(int n, int i) {\n        return (1 + 2 * i) % (n | 1);\n    }\n\n    // 参数：nums[l..r] 为候选区间，k 为目标下标(0 基)；返回的是第 k+1 小的值\n    private int quickSort(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[l];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i, r);\n        if (i == k) {\n            return nums[k];\n        } else if (i < k) {\n            return quickSort(nums, i + 1, r, k);\n        } else {\n            return quickSort(nums, l, i - 1, k);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
+      "notes": "**① 与上一轮对比**\\n\\n- 一刷（08-27，非一次 AC）：虚拟下标定义域越界（gt 初始化成 n 时 f(n) 落到真实下标 n）、quickselect 分区点选错（Hoare 分区该用 j 分界）。\\n- 上次复习（09-15，weak）：三路划分方向写反（小数被送进峰位）→ 除单元素外全部失败，纠正后 AC；分区细节从 Hoare 改成 Lomuto（pivot 取右端）。\\n- 本轮（09-17）：骨架与上次一致（quickselect 定位中位数 + 虚拟下标三路划分），按原 approach 合并、`prev_code` 保留 09-15 版本；复杂度 O(n)/O(1)，内存 49.8MB。\\n\\n**② 这轮的过程与错在哪**\\n\\n- 本地一次跑通 10 组用例（示例 + 边界 1–8，含 `[1,1,2,2]`、全部相等、0/5000 极值、5×10⁴ 交替 0/1 大输入），力扣一次提交 52/52；一刷与上次复习踩过的四个坑这次都没再犯。\\n- 唯一一次讨论是你对「`< mid` 为什么送去 gt 侧」提出疑问：虚拟下标顺序不是真实下标顺序，虚拟前段 `[0,lt)` 映到奇数位（峰）所以收大值、虚拟后段 `(gt,n)` 映到偶数位（谷）所以收小值。代码当时已是正确方向，讨论没有改动解法。\\n- 卡点记录：这个方向正是上次写反的同一处，这次要确认后才敢定，说明「虚拟顺序 ≠ 真实下标顺序」还没固化，下次复习重点仍是这套映射而不是 quickselect。\\n\\n**③ 掌握度判定**\\n\\n- weak：本轮**有探讨**——方向语义是问过才确认（且正是上次翻车的那一处）；其余环节（本地一次全绿、提交一次 AC）都属较强表现，按较弱记录、间隔重置 2 天。\\n\\n**④ 下一步提醒**\\n\\n- 可精简处：`quickSort` 实为 quickselect（只定位第 k 小、不做排序），名字有误导，建议改 `kthSmallest`/`select`；循环里 `f(i, n)` 三个分支各算一遍，可提一个局部变量 `idx`；`swap` 中 `int temp =nums[i]` 等号后缺空格。\\n- 相关串练：334 递增的三元子序列（同为线性扫描 + 不变量构造）、215 数组中的第 K 个最大元素（同 quickselect 骨架）。",
+      "code": "    public void wiggleSort(int[] nums) {\n        int n = nums.length;\n        int mid = quickSort(nums, 0, n - 1, n / 2);\n        int lt = 0, i = 0, gt = n - 1;\n        while (i <= gt) {\n            // 虚拟左侧 [0,lt) 映到奇数下标（峰位）→ 收 >mid；虚拟右侧 (gt,n) 映到偶数下标（谷位）→ 收 <mid。\n            // 方向与真实下标的「小 大 小 大」相反，写反会除单元素外全部失败\n            if (nums[f(i, n)] < mid) {\n                // (gt,n) 已确定为 <mid，i..gt 是待处理闭区间：换进来的是 gt 侧未检查的值，故 i 原地重看\n                swap(nums, f(i, n), f(gt, n));\n                gt--;\n            } else if (nums[f(i, n)] > mid) {\n                // 换进来的是 [lt,i) 上已知 ==mid 的值，落位即定，可以直接 i++\n                swap(nums, f(i, n), f(lt, n));\n                i++;\n                lt++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private int f(int i, int n) {\n        return (1 + 2 * i) % (n | 1);\n    }\n\n    private int quickSort(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[l];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i, r);\n        if (i == k){\n            return nums[k];\n        } else if (i < k) {\n            return quickSort(nums, i + 1, r, k);\n        } else {\n            return quickSort(nums, l, i - 1, k);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] =temp;\n    }",
       "prev_code": "public void wiggleSort(int[] nums) {\n        int mid = quickSort(nums, 0, nums.length - 1);\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            int fi = (1 + 2 * i) % (nums.length | 1);\n            int flt = (1 + 2 * lt) % (nums.length | 1);\n            int fgt = (1 + 2 * gt) % (nums.length | 1);\n            if (nums[fi] > mid) {\n                swap(nums, fi, flt);\n                i++;\n                lt++;\n            } else if (nums[fi] == mid) {\n                i++;\n            } else {\n                swap(nums, fi, fgt);\n                gt--;\n            }\n        }\n\n    }\n\n    private int quickSort(int[] nums, int l, int r) {\n        if (l == r) {\n            return nums[l];\n        }\n        int x = nums[l], i = l - 1, j = r + 1;\n        while (i < j) {\n            do {\n                i++;\n            } while (nums[i] < x);\n            do {\n                j--;\n            } while (nums[j] > x);\n            if (i < j) {\n                swap(nums, i, j);\n            }\n        }\n        int k = nums.length / 2;\n        if (k <= j) {\n            return quickSort(nums, l, j);\n        } else {\n            return quickSort(nums, j + 1, r);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }\n",
       "mastery": "weak",
-      "pass": 1
+      "pass": 2
     }
   ],
   "reviews": [
@@ -78,6 +78,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "二刷：三路划分方向写反（小数被送进峰位）导致除单元素外全部失败，纠正方向后 AC；分区细节改用 Lomuto（pivot 取末尾）"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-17",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "快速选择中位数 + 虚拟下标三路划分",
+      "time_complexity": "平均 O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\\n\\n- 一刷（08-27，非一次 AC）：虚拟下标定义域越界（gt 初始化成 n 时 f(n) 落到真实下标 n）、quickselect 分区点选错（Hoare 分区该用 j 分界）。\\n- 上次复习（09-15，weak）：三路划分方向写反（小数被送进峰位）→ 除单元素外全部失败，纠正后 AC；分区细节从 Hoare 改成 Lomuto（pivot 取右端）。\\n- 本轮（09-17）：骨架与上次一致（quickselect 定位中位数 + 虚拟下标三路划分），按原 approach 合并、`prev_code` 保留 09-15 版本；复杂度 O(n)/O(1)，内存 49.8MB。\\n\\n**② 这轮的过程与错在哪**\\n\\n- 本地一次跑通 10 组用例（示例 + 边界 1–8，含 `[1,1,2,2]`、全部相等、0/5000 极值、5×10⁴ 交替 0/1 大输入），力扣一次提交 52/52；一刷与上次复习踩过的四个坑这次都没再犯。\\n- 唯一一次讨论是你对「`< mid` 为什么送去 gt 侧」提出疑问：虚拟下标顺序不是真实下标顺序，虚拟前段 `[0,lt)` 映到奇数位（峰）所以收大值、虚拟后段 `(gt,n)` 映到偶数位（谷）所以收小值。代码当时已是正确方向，讨论没有改动解法。\\n- 卡点记录：这个方向正是上次写反的同一处，这次要确认后才敢定，说明「虚拟顺序 ≠ 真实下标顺序」还没固化，下次复习重点仍是这套映射而不是 quickselect。\\n\\n**③ 掌握度判定**\\n\\n- weak：本轮**有探讨**——方向语义是问过才确认（且正是上次翻车的那一处）；其余环节（本地一次全绿、提交一次 AC）都属较强表现，按较弱记录、间隔重置 2 天。\\n\\n**④ 下一步提醒**\\n\\n- 可精简处：`quickSort` 实为 quickselect（只定位第 k 小、不做排序），名字有误导，建议改 `kthSmallest`/`select`；循环里 `f(i, n)` 三个分支各算一遍，可提一个局部变量 `idx`；`swap` 中 `int temp =nums[i]` 等号后缺空格。\\n- 相关串练：334 递增的三元子序列（同为线性扫描 + 不变量构造）、215 数组中的第 K 个最大元素（同 quickselect 骨架）。"
     }
   ]
 }
