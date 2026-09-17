@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-27</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>334. 递增的三元子序列 (Increasing Triplet Subsequence)</h1><p>&gt; <a href="https://leetcode.cn/problems/increasing-triplet-subsequence/" rel="noopener">https://leetcode.cn/problems/increasing-triplet-subsequence/</a></p><p>难度：Medium ｜ 分类：贪心与区间</p><p>标签：贪心、数组、最长上升子序列</p><h2>题目描述</h2><p>给你一个整数数组 nums ，判断这个数组中是否存在长度为 3 的递增子序列。</p><p>如果存在这样的三元组下标 (i, j, k) 且满足 i ，使得 nums[i] ，返回 true ；否则，返回 false 。</p><p>示例 1：</p><p>输入：nums = [1,2,3,4,5]</p><p>输出：true</p><p>解释：任何 i</p><p>示例 2：</p><p>输入：nums = [5,4,3,2,1]</p><p>输出：false</p><p>解释：不存在满足题意的三元组</p><p>示例 3：</p><p>输入：nums = [2,1,5,0,4,6]</p><p>输出：true</p><p>解释：其中一个满足题意的三元组是 (1, 4, 5)，因为 nums[1] == 1</p><p>提示：</p><p>1 5</p><p>-231 31 - 1</p><p>进阶：你能实现时间复杂度为 O(n) ，空间复杂度为 O(1) 的解决方案吗？</p><h2>示例</h2><ol><li>输入：nums = [1,2,3,4,5]</li></ol><p>输出：true</p><p>解释：任何 i &lt; j &lt; k 的三元组都满足题意</p><ol><li>输入：nums = [5,4,3,2,1]</li></ol><p>输出：false</p><p>解释：不存在满足题意的三元组</p><ol><li>输入：nums = [2,1,5,0,4,6]</li></ol><p>输出：true</p><p>解释：其中一个满足题意的三元组是 (1, 4, 5)，因为 nums[1] == 1 &lt; nums[4] == 4 &lt; nums[5] == 6</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-17 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 双变量贪心（first/second 单链更新） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>一刷（08-27，非一次 AC）：双变量各自更新破坏不变量（<code>second</code> 被写成 ≤ <code>first</code>、<code>first</code> 被更大值无条件覆盖），靠 3 轮随机对拍才收敛到单链写法。</li><li>上次复习（09-16，strong）：改成显式条件版（长度 &lt; 3 提前返回 + 分支里写明 <code>num &gt; first &amp;&amp; num &lt; second</code>），本地 32 组用例一次全绿、力扣 86/86 一次 AC。</li><li>本轮（09-17）：写法与上次完全一致，按原 approach 合并、<code>prev_code</code> 保留上次版本；复杂度同为 O(n)/O(1)，内存 122.9MB（上轮 123.0MB）。</li></ul><p><strong>② 这轮的过程</strong></p><ul><li>无讨论无提示：独立写出双变量单链，本地 32 组用例（含 10~32 号对拍沉淀的回归例：<code>[0,-8,-8,-7]</code>、<code>[3,3,3,-2,-8,10,-2]</code>、负数重复、MAX 重复等）一次全绿，力扣一次提交 Accepted（86/86）。</li><li>一刷的不变量破坏问题已固化：<code>first</code> 只在更小时刷新、<code>second</code> 只在 <code>(first, second)</code> 区间刷新，每个数只进一条分支，等号不落任何分支（严格递增靠 <code>&gt;</code> 保证）。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>可精简：第三分支里的 <code>second &gt; first</code> 在当前不变量下是冗余的（<code>second</code> 初始为 <code>Integer.MAX_VALUE</code>，而 <code>num &gt; second</code> 又要求 <code>num &gt; MAX</code> 不可能），留作防御可读性更好、去掉也不影响正确性，按自己口味取舍。</li><li>相关串练：300 最长递增子序列（同族但要求长度，需二分维护 tails）、324 摆动排序 II（同为「一次扫描 + 不变量」型构造）。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（86/86）｜ 一次 AC ｜ 双变量贪心（first/second 单链更新） ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>与上一轮对比</strong></p><p>一刷最终版是紧凑的 3 分支单链（先判命中，再刷 <code>second</code>，最后刷 <code>first</code>）；本次重写成「显式条件版」：加了长度 &lt; 3 的提前返回，分支里也显式写了 <code>num &gt; first &amp;&amp; num &lt; second</code>、<code>num &gt; second &amp;&amp; second &gt; first</code>。两版逻辑等价（严格递增靠 <code>&gt;</code> 保证，等号不进任何分支），复杂度同为 O(n)/O(1)，内存 123.0MB。</p><p><strong>为什么这次写对了</strong></p><p>一刷的坑是双变量各自更新破坏不变量：<code>second</code> 被写成 ≤ <code>first</code>，或 <code>first</code> 被更大值无条件覆盖。这次改成一条 if/else 链、每个数只进一个分支，条件顺序天然保证 <code>second</code> 只在 <code>num &gt; first</code> 时刷新、<code>first</code> 只在更小时刷新——一刷靠 3 轮随机对拍才收敛的不变量，这次在写的时候就立住了。</p><p><strong>掌握度判定</strong></p><p>本地 32 个用例（示例 + 边界 + 一刷对拍沉淀的回归例）一次全绿，全程未讨论未提示，力扣 86/86 一次 AC → 较强。</p><p><strong>下一步提醒</strong></p><p>本次多写的条件可以合并：把「相等」并入更小值分支后，后两个分支的条件就能同时简化，最终回到一刷那种 3 分支单链（更短且等价）。相关题：seq=60 的 300. 最长递增子序列（同一「上升序列」家族，DP/贪心二分），复习时可对照本体的 O(1) 双变量思路。</p></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>双变量贪心（first/second 单链更新）</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -47,15 +51,14 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双变量贪心（first/second 单链更新）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 117.3 MB</span><span class="chip">用例 86/86</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0334_IncreasingTripletSubsequence.java · 双变量贪心（first/second 单链更新）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-c">// 参数：nums 待判断数组；返回是否存在下标 i&lt;j&lt;k 使 nums[i] &lt; nums[j] &lt; nums[k]</span>
-    <span class="tk-c">// 不变量：first = 已扫描部分的最小值；second = 已扫描部分中「前面存在比它更小的值」的最小候选</span>
-    <span class="tk-c">// 循环：i 从 1 开始（first 已由 nums[0] 初始化），直到扫完整个数组</span>
-    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">increasingTriplet</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 117.2 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0334_IncreasingTripletSubsequence.java · 双变量贪心（first/second 单链更新）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">increasingTriplet</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">if</span> (nums.length &lt; <span class="tk-n">3</span>) <span class="tk-k">return</span> <span class="tk-k">false</span>;
         <span class="tk-k">int</span> first = nums[<span class="tk-n">0</span>];
         <span class="tk-k">int</span> second = <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
+            <span class="tk-c">// 不变量：first 是已扫描部分的最小值；second 只在「num &gt; first」时刷新，所以恒有 second &gt; first，</span>
+            <span class="tk-c">// 且 second 的前驱 first 必定出现在它之前 —— 每个数只进一条分支，等号不落任何分支（严格递增）</span>
             <span class="tk-k">if</span> (nums[i] &lt; first) {
                 first = nums[i];
             } <span class="tk-k">else</span> <span class="tk-k">if</span> (nums[i] &gt; first &amp;&amp; nums[i] &lt; second) {

@@ -35,20 +35,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-17",
       "verdict": "Accepted",
-      "testcases": "86/86",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 123040000,
+      "memory_bytes": 122928000,
       "approach": "双变量贪心（first/second 单链更新）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与上一轮对比**\n\n一刷最终版是紧凑的 3 分支单链（先判命中，再刷 `second`，最后刷 `first`）；本次重写成「显式条件版」：加了长度 < 3 的提前返回，分支里也显式写了 `num > first && num < second`、`num > second && second > first`。两版逻辑等价（严格递增靠 `>` 保证，等号不进任何分支），复杂度同为 O(n)/O(1)，内存 123.0MB。\n\n**为什么这次写对了**\n\n一刷的坑是双变量各自更新破坏不变量：`second` 被写成 ≤ `first`，或 `first` 被更大值无条件覆盖。这次改成一条 if/else 链、每个数只进一个分支，条件顺序天然保证 `second` 只在 `num > first` 时刷新、`first` 只在更小时刷新——一刷靠 3 轮随机对拍才收敛的不变量，这次在写的时候就立住了。\n\n**掌握度判定**\n\n本地 32 个用例（示例 + 边界 + 一刷对拍沉淀的回归例）一次全绿，全程未讨论未提示，力扣 86/86 一次 AC → 较强。\n\n**下一步提醒**\n\n本次多写的条件可以合并：把「相等」并入更小值分支后，后两个分支的条件就能同时简化，最终回到一刷那种 3 分支单链（更短且等价）。相关题：seq=60 的 300. 最长递增子序列（同一「上升序列」家族，DP/贪心二分），复习时可对照本体的 O(1) 双变量思路。",
-      "code": "    // 参数：nums 待判断数组；返回是否存在下标 i<j<k 使 nums[i] < nums[j] < nums[k]\n    // 不变量：first = 已扫描部分的最小值；second = 已扫描部分中「前面存在比它更小的值」的最小候选\n    // 循环：i 从 1 开始（first 已由 nums[0] 初始化），直到扫完整个数组\n    public boolean increasingTriplet(int[] nums) {\n        if (nums.length < 3) return false;\n        int first = nums[0];\n        int second = Integer.MAX_VALUE;\n        for (int i = 1; i < nums.length; i++) {\n            if (nums[i] < first) {\n                first = nums[i];\n            } else if (nums[i] > first && nums[i] < second) {\n                second = nums[i];\n            } else if (nums[i] > second && second > first) {\n                return true;\n            }\n        }\n        return false;\n    }",
+      "notes": "**① 与上一轮对比**\\n\\n- 一刷（08-27，非一次 AC）：双变量各自更新破坏不变量（`second` 被写成 ≤ `first`、`first` 被更大值无条件覆盖），靠 3 轮随机对拍才收敛到单链写法。\\n- 上次复习（09-16，strong）：改成显式条件版（长度 < 3 提前返回 + 分支里写明 `num > first && num < second`），本地 32 组用例一次全绿、力扣 86/86 一次 AC。\\n- 本轮（09-17）：写法与上次完全一致，按原 approach 合并、`prev_code` 保留上次版本；复杂度同为 O(n)/O(1)，内存 122.9MB（上轮 123.0MB）。\\n\\n**② 这轮的过程**\\n\\n- 无讨论无提示：独立写出双变量单链，本地 32 组用例（含 10~32 号对拍沉淀的回归例：`[0,-8,-8,-7]`、`[3,3,3,-2,-8,10,-2]`、负数重复、MAX 重复等）一次全绿，力扣一次提交 Accepted（86/86）。\\n- 一刷的不变量破坏问题已固化：`first` 只在更小时刷新、`second` 只在 `(first, second)` 区间刷新，每个数只进一条分支，等号不落任何分支（严格递增靠 `>` 保证）。\\n\\n**③ 掌握度判定**\\n\\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\\n\\n**④ 下一步提醒**\\n\\n- 可精简：第三分支里的 `second > first` 在当前不变量下是冗余的（`second` 初始为 `Integer.MAX_VALUE`，而 `num > second` 又要求 `num > MAX` 不可能），留作防御可读性更好、去掉也不影响正确性，按自己口味取舍。\\n- 相关串练：300 最长递增子序列（同族但要求长度，需二分维护 tails）、324 摆动排序 II（同为「一次扫描 + 不变量」型构造）。",
+      "code": "    public boolean increasingTriplet(int[] nums) {\n        if (nums.length < 3) return false;\n        int first = nums[0];\n        int second = Integer.MAX_VALUE;\n        for (int i = 1; i < nums.length; i++) {\n            // 不变量：first 是已扫描部分的最小值；second 只在「num > first」时刷新，所以恒有 second > first，\n            // 且 second 的前驱 first 必定出现在它之前 —— 每个数只进一条分支，等号不落任何分支（严格递增）\n            if (nums[i] < first) {\n                first = nums[i];\n            } else if (nums[i] > first && nums[i] < second) {\n                second = nums[i];\n            } else if (nums[i] > second && second > first) {\n                return true;\n            }\n        }\n        return false;\n    }",
       "prev_code": "public boolean increasingTriplet(int[] nums) {\n        int first = nums[0], second = Integer.MAX_VALUE;\n        for (int i = 1; i < nums.length; i++) {\n            int num = nums[i];\n            if (num > second) {\n                return true;\n            } else if (num > first) {\n                second = num;\n            } else {\n                first = num;\n            }\n        }\n        return false;\n    }",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -67,6 +67,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**与上一轮对比**\n\n一刷最终版是紧凑的 3 分支单链（先判命中，再刷 `second`，最后刷 `first`）；本次重写成「显式条件版」：加了长度 < 3 的提前返回，分支里也显式写了 `num > first && num < second`、`num > second && second > first`。两版逻辑等价（严格递增靠 `>` 保证，等号不进任何分支），复杂度同为 O(n)/O(1)，内存 123.0MB。\n\n**为什么这次写对了**\n\n一刷的坑是双变量各自更新破坏不变量：`second` 被写成 ≤ `first`，或 `first` 被更大值无条件覆盖。这次改成一条 if/else 链、每个数只进一个分支，条件顺序天然保证 `second` 只在 `num > first` 时刷新、`first` 只在更小时刷新——一刷靠 3 轮随机对拍才收敛的不变量，这次在写的时候就立住了。\n\n**掌握度判定**\n\n本地 32 个用例（示例 + 边界 + 一刷对拍沉淀的回归例）一次全绿，全程未讨论未提示，力扣 86/86 一次 AC → 较强。\n\n**下一步提醒**\n\n本次多写的条件可以合并：把「相等」并入更小值分支后，后两个分支的条件就能同时简化，最终回到一刷那种 3 分支单链（更短且等价）。相关题：seq=60 的 300. 最长递增子序列（同一「上升序列」家族，DP/贪心二分），复习时可对照本体的 O(1) 双变量思路。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-17",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "双变量贪心（first/second 单链更新）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\\n\\n- 一刷（08-27，非一次 AC）：双变量各自更新破坏不变量（`second` 被写成 ≤ `first`、`first` 被更大值无条件覆盖），靠 3 轮随机对拍才收敛到单链写法。\\n- 上次复习（09-16，strong）：改成显式条件版（长度 < 3 提前返回 + 分支里写明 `num > first && num < second`），本地 32 组用例一次全绿、力扣 86/86 一次 AC。\\n- 本轮（09-17）：写法与上次完全一致，按原 approach 合并、`prev_code` 保留上次版本；复杂度同为 O(n)/O(1)，内存 122.9MB（上轮 123.0MB）。\\n\\n**② 这轮的过程**\\n\\n- 无讨论无提示：独立写出双变量单链，本地 32 组用例（含 10~32 号对拍沉淀的回归例：`[0,-8,-8,-7]`、`[3,3,3,-2,-8,10,-2]`、负数重复、MAX 重复等）一次全绿，力扣一次提交 Accepted（86/86）。\\n- 一刷的不变量破坏问题已固化：`first` 只在更小时刷新、`second` 只在 `(first, second)` 区间刷新，每个数只进一条分支，等号不落任何分支（严格递增靠 `>` 保证）。\\n\\n**③ 掌握度判定**\\n\\n- strong：一次提交 Accepted 且全程无探讨、无提示 → 判较强；连续较强计数 2，间隔按 ×2.5 再上浮 +2 天。\\n\\n**④ 下一步提醒**\\n\\n- 可精简：第三分支里的 `second > first` 在当前不变量下是冗余的（`second` 初始为 `Integer.MAX_VALUE`，而 `num > second` 又要求 `num > MAX` 不可能），留作防御可读性更好、去掉也不影响正确性，按自己口味取舍。\\n- 相关串练：300 最长递增子序列（同族但要求长度，需二分维护 tails）、324 摆动排序 II（同为「一次扫描 + 不变量」型构造）。"
     }
   ]
 }
