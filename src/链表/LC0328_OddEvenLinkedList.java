@@ -14,17 +14,20 @@ import java.util.*;
 public class LC0328_OddEvenLinkedList {
 
     // ==== 提交代码开始 ====
+    // 参数 head：原链头；返回重排后的链表头（仍是 head）
     public ListNode oddEvenList(ListNode head) {
         if (head == null) {
             return head;
         }
 
+        // evenHead：原链第二个节点，即偶链头，最后挂到奇链尾之后
         ListNode evenHead = head.next;
         ListNode odd = head, even = evenHead;
+        // odd：奇链尾；even：偶链尾；条件 = 还剩一对（奇数位 + 偶数位）可搬，odd 非空由 even 必然挂在它后面保证
         while (even != null && even.next != null) {
             odd.next = even.next;
             odd = odd.next;
-            even.next =  odd.next;
+            even.next = odd.next;
             even = even.next;
         }
         odd.next = evenHead;
