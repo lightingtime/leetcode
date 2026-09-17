@@ -3468,6 +3468,17 @@
         "栈、队列与优先队列"
       ],
       "last_seen": "2026-09-17"
+    },
+    {
+      "habit": "DP 可达表基例位置与递推语义不匹配（同一根因第 2 次，一刷也犯过）：canReach[i] 语义是「s[i..n) 能否走到终点」（后缀），而递推检查的落点是 i+word.length()，会取到下标 n，因此基例必须放在末端 canReach[n]=true；写成 canReach[0]=true 后，除下标 0（初始化值）外整张表永远填不出 true，剪枝把「整串恰好是一个词」以外的所有正确路径全砍掉（s=\"abc\"、dict={abc,a,bc} 只剩 abc，丢了 a bc）",
+      "count": 1,
+      "examples": [
+        "word-break-ii"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-17"
     }
   ],
   "category_hints": {

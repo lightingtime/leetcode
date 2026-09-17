@@ -2,10 +2,16 @@
 // LeetCode 140. 单词拆分 II (Word Break II)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/word-break-ii/
-// 复习日期：2026-09-15（第 1 次复习 · 一刷 2026-08-26 · 一刷非一次 AC）
-// 一刷思路：后缀可拆预判 suffixOK（右往左）+ 回溯，入口用 !suffixOK[start] 剪枝，set.contains 保证段合法
-// 子类型：线性 DP（前缀/后缀可达性）+ 回溯枚举方案
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-26）
+// 子类型：线性 DP（序列分割）——dp[i] = s 的后缀 s[i..n) 能否被拆成词典里的单词
+// 一刷写法：先用 dp 预判「后缀可拆」（从右往左填），再回溯枚举所有切分；dp 剪枝掉不可达分支，避免指数级搜索
+// 一刷问题：回溯里共享 StringBuilder 状态不对称（子层删了末尾空格没恢复就 return，父层按下标 delete 导致错乱）；dp 方向用错——前缀可拆 dp[i] 不能当后缀可达用，差一个字符的边界 >0/>=0 也导致 dp 欠算、砍掉正确路径
+// 上次复习写法：后缀可拆预判+回溯，一次通过但过程有探讨（判较弱）
+// 测试用例：与一刷归档保持一致（示例 3 + 边界（含无解、单字符、长串与重复词））
+//
+// 思路：后缀可达 DP 预判 + 回溯枚举——canReach[i] = s[i..n) 能否拆成词典单词，从右往左填（基例 canReach[n]=true）；
+//       回溯到下标 len 时先用 canReach[len] 剪掉到不了终点的分支，再枚举命中词典的词继续切
+// 复杂度：时间 O(n · |dict| · L + 输出规模)，空间 O(n + 输出规模)（L 为单词长度，startsWith 比较代价）
 // ============================================================
 
 import java.util.*;
@@ -13,17 +19,18 @@ import java.util.*;
 public class LC0140_WordBreakIi {
 
     // ==== 提交代码开始 ====
-    List<String> ans;
     boolean[] canReach;
+    List<String> ans;
     public List<String> wordBreak(String s, List<String> wordDict) {
         ans = new ArrayList<>();
-        int n = s.length();
-        canReach = new boolean[n + 1];
-        canReach[n] = true;
+        canReach = new boolean[s.length() + 1];
+        // 基例对齐后缀语义：canReach[i] 问的是 s[i..n) 能否走到终点，故唯一初始可达状态是空后缀 s[n..n)
+        canReach[s.length()] = true;
         Set<String> set = new HashSet<>(wordDict);
-        for (int i = n - 1; i >= 0; i--) {
-            for (String str : set) {
-                if (i + str.length() <= n && canReach[i + str.length()]  && s.startsWith(str, i)) {
+        for (int i = s.length() - 1; i >= 0; i--) {
+            for (String word : set) {
+
+                if (i + word.length() <= s.length() && s.startsWith(word, i) && canReach[i + word.length()]) {
                     canReach[i] = true;
                     break;
                 }
@@ -33,21 +40,23 @@ public class LC0140_WordBreakIi {
         return ans;
     }
 
-    private void dfs(String s, int len, Set<String> wordDict, List<String> path) {
+    private void dfs(String s, int len, Set<String> set, List<String> path) {
         if (len == s.length()) {
             ans.add(String.join(" ", path));
             return;
         }
+
         if (!canReach[len]) {
             return;
         }
-        for (String string : wordDict) {
-            if (len + string.length() > s.length()) {
+
+        for (String word : set) {
+            if (len + word.length() > s.length()) {
                 continue;
             }
-            if (s.startsWith(string, len)) {
-                path.add(string);
-                dfs(s, len + string.length(), wordDict, path);
+            if (s.startsWith(word, len)) {
+                path.add(word);
+                dfs(s, len + word.length(), set, path);
                 path.remove(path.size() - 1);
             }
         }
