@@ -2,11 +2,18 @@
 // LeetCode 116. 填充每个节点的下一个右侧节点指针 (Populating Next Right Pointers in Each Node)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/
-// 复习日期：2026-09-12（第 2 次复习 · 一刷 2026-08-24 · 上次复习 2026-09-06）
-// 一刷思路：递归（前序 DFS）——先连 root.left.next=root.right、root.right.next=root.next.left，再递归左右子树
+// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-24）
+// 一刷写法：递归（前序 DFS）——先连 root.left.next=root.right、root.right.next=root.next.left，再递归左右子树
 // 一刷复杂度：时间 O(n)，空间 O(log n) 递归栈（完美二叉树高 log n）
-// 测试用例与一刷归档保持一致
+// 上次复习写法：迭代按层连接（借上层已连好的 next 遍历当前层并连下一层），额外空间 O(1)
+// 测试用例：与一刷归档保持一致（示例 2 + 边界 3，含 4095 节点 12 层满树）
 //
+// 思路：利用上一层已经连好的 next 指针做「免队列的层序遍历」，额外空间 O(1)。
+//       mostLeft 指向当前层最左节点；内层沿 cur = cur.next 扫完这一层，同时把下一层连好：
+//       cur.left.next = cur.right（同一个父节点下）；当 cur.next != null 时再补跨子树的边
+//       cur.right.next = cur.next.left。层尾节点的 cur.next 为 null，所以它右孩子的 next 自然保持 null。
+//       内层扫完把 mostLeft 下移到 mostLeft.left，直到该节点没有左孩子（说明已经是最后一层）。
+// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -35,22 +42,18 @@ public class LC0116_PopulatingNextRightPointersInEachNode {
 
     // ==== 提交代码开始 ====
     public Node connect(Node root) {
-        if (root == null) {
-            return null;
-        }
+        if (root == null) return null;
         Node mostLeft = root;
-        // mostLeft.left 是下一层存在的充要条件，是一切循环的开始
+
         while (mostLeft.left != null) {
-            // node 拿到 当前层的起点，通过遍历当前层来连接下一层的next
-            Node node = mostLeft;
-            while (node != null) {
-                node.left.next = node.right;
-                if (node.next != null) {
-                    node.right.next = node.next.left;
+            Node cur = mostLeft;
+            while (cur != null) {
+                cur.left.next = cur.right;
+                if (cur.next != null) {
+                    cur.right.next = cur.next.left;
                 }
-                node = node.next;
+                cur = cur.next;
             }
-            // 当前层链接完下一层的next后，可以切换到下一层继续链接下下一层
             mostLeft = mostLeft.left;
         }
         return root;
