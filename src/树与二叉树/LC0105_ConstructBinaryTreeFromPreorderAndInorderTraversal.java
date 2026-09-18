@@ -2,8 +2,13 @@
 // LeetCode 105. 从前序与中序遍历序列构造二叉树 (Construct Binary Tree from Preorder and Inorder Traversal)
 // 难度：Medium | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
-// 刷题日期：2026-08-08
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-08 · 一刷一次 Accepted）
+// 一刷写法：前序定根 + 中序哈希定位 + 递归分治——前序的第一个值就是当前子树的根；在中序里找到它的位置即可知道左子树有几个节点，据此切分两段区间递归；中序的位置用哈希表预存，避免每层线性查找。O(n)/O(n)
+// 本题易错点：① 前序区间与中序区间的「长度相同」是切分的依据（左子树大小 = 中序根下标 − 中序左端点），切错会静默构造出错误的树；② 递归出口是区间为空（preL > preR 或 inL > inR），不是下标越界判断；③ 不用哈希表也能写，但每层都线性扫中序会退化到 O(n²)；④ 两个数组长度不一致或为空要能兜住
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 6 个：空输入/全左链/全右链/不平衡混合/极值/完全二叉树）
 //
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -17,21 +22,22 @@ public class LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal {
         for (int i = 0; i < inorder.length; i++) {
             map.put(inorder[i], i);
         }
-        return buildTreeHelper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length);
-    }
-
-    private TreeNode buildTreeHelper(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
-        if (preStart > preEnd) {
-            return null;
-        }
-        TreeNode root = new TreeNode(preorder[preStart]);
-        int index = map.get(preorder[preStart]);
-        int leftLength = index - inStart;
-        root.left = buildTreeHelper(preorder, preStart + 1, preStart + leftLength, inorder, inStart, index - 1);
-        root.right = buildTreeHelper(preorder, preStart + leftLength + 1, preEnd, inorder, index + 1, inEnd);
+        TreeNode root = buildHelper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
         return root;
     }
 
+    private TreeNode buildHelper(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+        if (preStart > preEnd) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preorder[preStart]);
+        int index = map.get(root.val);
+        int leftLen = index - inStart;
+        root.left = buildHelper(preorder, preStart + 1, preStart + leftLen, inorder, inStart, index - 1);
+        root.right = buildHelper(preorder, preStart + 1 + leftLen, preEnd, inorder, index + 1, inEnd);
+        return root;
+    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-08",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "203/203",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 47048000,
+      "memory_bytes": 46796000,
       "approach": "前序定根+哈希定位+递归分治",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "从前序与中序遍历构造二叉树：前序定根、中序哈希定位划分左右子树，递归分治，一次 Accepted（203/203）"
+      "notes": "**与一刷对比**：思路与写法一致（前序定根 + 中序哈希定位 + 递归分治）。\n\n**关键点都处理对了**：① 用 `preorder[preStart]` 取当前子树的根，靠哈希表拿到它在 `inorder` 中的下标 `index`；② 左子树大小 `leftLen = index - inStart`，前序左区间 `[preStart+1, preStart+leftLen]`、右区间 `[preStart+1+leftLen, preEnd]`，中序左右区间是 `[inStart, index-1]` 与 `[index+1, inEnd]`——两边的区间长度严格对应，所以不会切错；③ 递归出口判的是区间为空（`preStart > preEnd`），空输入与单节点都自然兜住。本地示例 2 + 边界 6（空输入/全左链/全右链/不平衡混合/极值/完全二叉树）全过，一次提交 Accepted（203/203）。\n\n**可精简点**：① `map` 写成实例字段、每次调用重建——虽然本题只会调用一次没问题，但换成局部变量 + 传参更安全（避免多次调用/并发时的状态残留）；② `map.get(root.val)` 里的 `root.val` 就是 `preorder[preStart]`，可以直接用后者，少一次字段读取。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    Map<Integer, Integer> map;\n    public TreeNode buildTree(int[] preorder, int[] inorder) {\n        map = new HashMap<>();\n        for (int i = 0; i < inorder.length; i++) {\n            map.put(inorder[i], i);\n        }\n        TreeNode root = buildHelper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);\n        return root;\n    }\n\n    private TreeNode buildHelper(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {\n        if (preStart > preEnd) {\n            return null;\n        }\n\n        TreeNode root = new TreeNode(preorder[preStart]);\n        int index = map.get(root.val);\n        int leftLen = index - inStart;\n        root.left = buildHelper(preorder, preStart + 1, preStart + leftLen, inorder, inStart, index - 1);\n        root.right = buildHelper(preorder, preStart + 1 + leftLen, preEnd, inorder, index + 1, inEnd);\n        return root;\n    }",
+      "prev_code": "Map<Integer, Integer> map;\n    public TreeNode buildTree(int[] preorder, int[] inorder) {\n        map = new HashMap<>();\n        for (int i = 0; i < inorder.length; i++) {\n            map.put(inorder[i], i);\n        }\n        return buildTreeHelper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length);\n    }\n\n    private TreeNode buildTreeHelper(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {\n        if (preStart > preEnd) {\n            return null;\n        }\n        TreeNode root = new TreeNode(preorder[preStart]);\n        int index = map.get(preorder[preStart]);\n        int leftLength = index - inStart;\n        root.left = buildTreeHelper(preorder, preStart + 1, preStart + leftLength, inorder, inStart, index - 1);\n        root.right = buildTreeHelper(preorder, preStart + leftLength + 1, preEnd, inorder, index + 1, inEnd);\n        return root;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
   ],
-  "approach_detail": "问题本质：前序第一个元素是根，中序中根的位置把左右子树区间一分为二 → 递归分治重建整棵树。\n关键设计：先用 HashMap 存中序值→下标，实现 O(1) 查根位置；递归参数是前序区间 [preStart, preEnd] 与中序区间 [inStart, inEnd)：根 = preorder[preStart]，rootIndex = map.get(根)，左子树长度 leftLength = rootIndex - inStart；左子树前序区间 [preStart+1, preStart+leftLength]，右子树 [preStart+leftLength+1, preEnd]。\n边界：区间为空（preStart>preEnd）返回 null；单节点；只有左子树或只有右子树的斜树；题目保证节点值互异，map 不会冲突。\n复杂度：O(n) 时间（每个节点一次、map 查询 O(1)）、O(n) 空间（map + 递归栈），最优。"
+  "approach_detail": "问题本质：前序第一个元素是根，中序中根的位置把左右子树区间一分为二 → 递归分治重建整棵树。\n关键设计：先用 HashMap 存中序值→下标，实现 O(1) 查根位置；递归参数是前序区间 [preStart, preEnd] 与中序区间 [inStart, inEnd)：根 = preorder[preStart]，rootIndex = map.get(根)，左子树长度 leftLength = rootIndex - inStart；左子树前序区间 [preStart+1, preStart+leftLength]，右子树 [preStart+leftLength+1, preEnd]。\n边界：区间为空（preStart>preEnd）返回 null；单节点；只有左子树或只有右子树的斜树；题目保证节点值互异，map 不会冲突。\n复杂度：O(n) 时间（每个节点一次、map 查询 O(1)）、O(n) 空间（map + 递归栈），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "前序定根+哈希定位+递归分治",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路与写法一致（前序定根 + 中序哈希定位 + 递归分治）。\n\n**关键点都处理对了**：① 用 `preorder[preStart]` 取当前子树的根，靠哈希表拿到它在 `inorder` 中的下标 `index`；② 左子树大小 `leftLen = index - inStart`，前序左区间 `[preStart+1, preStart+leftLen]`、右区间 `[preStart+1+leftLen, preEnd]`，中序左右区间是 `[inStart, index-1]` 与 `[index+1, inEnd]`——两边的区间长度严格对应，所以不会切错；③ 递归出口判的是区间为空（`preStart > preEnd`），空输入与单节点都自然兜住。本地示例 2 + 边界 6（空输入/全左链/全右链/不平衡混合/极值/完全二叉树）全过，一次提交 Accepted（203/203）。\n\n**可精简点**：① `map` 写成实例字段、每次调用重建——虽然本题只会调用一次没问题，但换成局部变量 + 传参更安全（避免多次调用/并发时的状态残留）；② `map.get(root.val)` 里的 `root.val` 就是 `preorder[preStart]`，可以直接用后者，少一次字段读取。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
