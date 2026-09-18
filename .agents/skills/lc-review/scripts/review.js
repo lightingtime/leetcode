@@ -2,7 +2,7 @@
 // LC 复习调度：抽题 / 记录 / 统计（第二遍 + 间隔复习）
 // 用法:
 //   node review.js init               从 progress.json 初始化/补齐 review_state.json（幂等）
-//   node review.js next [--count N]   今日复习队列与配额
+//   node review.js next [--count N] [--show N | --all]   今日复习队列与配额（默认只列前 6 题，避免长输出）
 //   node review.js done --seq N --mastery strong|weak [--firstTry true] [--approach "..."] [--time O(n)] [--space O(n)] [--optimal true] [--memory <字节>] [--notes "..."] [--dry-run]
 //   node review.js stats              二刷进度 / 掌握度分布 / 今日到期
 // 数据模型（面向后续 app 消费）:
@@ -151,7 +151,11 @@ if (cmd === 'init') {
     (due.length ? `（到期 ${due.length} 题优先，与配额一起推荐）` : ''));
   if (!todayList.length) { console.log('今日队列为空：全部已完成或未到期，进入间隔复习等待。'); process.exit(0); }
   console.log('今日推荐（按优先级）：');
-  todayList.forEach((st, i) => console.log(`  ${i + 1}. ${fmt(st)}`));
+  // 默认只打印前几题（队列可能上百条，全量输出会白烧上下文）；--show N / --all 可展开
+  const showArg = arg('--show', '');
+  const showN = has('--all') ? todayList.length : (parseInt(showArg, 10) > 0 ? parseInt(showArg, 10) : 6);
+  todayList.slice(0, showN).forEach((st, i) => console.log(`  ${i + 1}. ${fmt(st)}`));
+  if (todayList.length > showN) console.log(`  …… 今日推荐还有 ${todayList.length - showN} 题（看全量加 --all 或 --show N）`);
   if (queue.length > todayList.length) console.log(`  …… 队列中还有 ${queue.length - todayList.length} 题（今日做不完顺延）`);
 } else if (cmd === 'skip') {
   const seq = parseInt(arg('--seq', ''), 10);

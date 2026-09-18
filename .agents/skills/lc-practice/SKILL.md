@@ -20,6 +20,14 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 - 若当前模式是 `review`（二刷复习），「下一题」改走 lc-review，不要走本 skill。
 - **题库新增题目会自动回到本 skill**：只要 `order.json` 出现未完成一刷的新题，`next` 自动切回刷题模式，无需手动切换。
 
+## 上下文纪律（省 token，必守）
+
+- 查状态一律走脚本，**禁止** `cat` / `node -e require()` 直读 `.lc/progress.json`（129KB）、`.lc/order.json`（44KB）、`.lc/review_state.json`（66KB）：进度与下一题用 `update_state.js next|stats|plan`，单题用 `update_state.js show --seq N`，分类提示用 `update_state.js hint --seq N`，复习队列用 `review.js next|stats`。
+- 单题明细默认 `update_state.js show --seq N`（约 0.5KB）；确需全量字段才 `analysis --slug S`；要某写法代码时用 `show --seq N --code latest`，不要整篇读 analysis.json。
+- 本地测试用 `run_tests.js --file <路径>`（默认紧凑：通过 1 行、失败只回失败行）；确需 Java 完整输出才加 `--full`。
+- 读源码/文档用 `rg -n` + `sed -n 'a,bp'` 定位片段，**禁止 cat 整文件**；复盘页与 `reviews/index.html` 只给链接，不读内容。
+- `references/*.md` 按需读小节：先 `rg -n '^#{1,2} '` 定位，再读对应段落，不要整篇读。
+
 ## 流程
 
 1. 运行 `node ".agents/skills/lc-practice/scripts/update_state.js" next` 查看进度与下一题，记录其 seq、slug、分类。
@@ -37,7 +45,7 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 4. 读取生成的 .java 与 `problems/.../problem.md`，向用户展示：题目链接、难度、分类、题目简述、需要在 IDEA 里打开哪个文件。
    - 分类是「动态规划」时，展示中必须包含**子类型**（如「区间 DP」），并给用户一句话说明为什么是这一子类型。
 5. **思路确认（用户先讲，Codex 再评）**：展示后先让用户口述解题思路，Codex 不要先给方向。评估思路是否可行：可行则指出关键边界与注意点（只给宽泛提示，不写代码）；不可行则指出哪一步假设/写法会有问题，引导修正，不直接给正确思路。
-6. 分类宽泛提示：从 progress.json 的 `category_hints` 取当前题分类的提示，告诉用户「这类题应该先想到……」；只给方向，不给具体算法或代码。分类是「动态规划」时，改用 `references/dp-subtypes.md` 中对应子类型的宽泛提示（如区间 DP 的「正着做会破坏相邻关系，倒过来想最后一步处理谁」），category_hints 的通用提示只作兜底。
+6. 分类宽泛提示：用 `node ".agents/skills/lc-practice/scripts/update_state.js" hint --seq <seq>` 取当前题分类提示（不要直读 progress.json），告诉用户「这类题应该先想到……」；只给方向，不给具体算法或代码。分类是「动态规划」时，改用 `references/dp-subtypes.md` 中对应子类型的宽泛提示（如区间 DP 的「正着做会破坏相邻关系，倒过来想最后一步处理谁」），category_hints 的通用提示只作兜底。
 7. 告知用户流程：补全 `// ==== 提交代码开始 ====` 与 `// ==== 提交代码结束 ====` 之间的方法体，运行 main 测试；测试失败说「帮我分析」（lc-analyze），通过后说「提交」（lc-submit）。
 
 ## 注意

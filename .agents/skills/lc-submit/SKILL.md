@@ -10,10 +10,18 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 - 项目：仓库根目录；状态目录：`仓库根目录\.lc`
 - 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js`、`update_state.js`
 
+## 上下文纪律（省 token，必守）
+
+- 查状态一律走脚本，**禁止** `cat` / `node -e require()` 直读 `.lc/progress.json`（129KB）、`.lc/order.json`（44KB）、`.lc/review_state.json`（66KB）：本题信息用 `update_state.js show --seq N`，判题/复习调度都在脚本输出里。
+- 单题明细默认 `update_state.js show --seq N`（约 0.5KB，含一刷结论、每种写法摘要、二刷记录、下次复习日期）；需要某写法代码时 `show --seq N --code latest`；**只有确需全量字段**（如 approach_detail 原文）才 `analysis --slug S`。
+- 本地测试用 `run_tests.js --file <路径>`（默认紧凑：通过 1 行、失败只回失败行）；确需 Java 完整输出才加 `--full`。
+- 生成复盘页/主页后**不要读回 HTML 内容**（`reviews/**/*.html`、`index.html` 只给链接）；核对用 `rg -n` 查关键词即可。
+- 读源码用 `sed -n 'a,bp'` / `rg -n` 定位片段；git 历史取旧代码用 `git show <commit>:<path>` 只取需要的片段，不要整篇 diff 刷屏。
+
 ## 流程
 
-1. 确认当前题：用户指定的文件，或 `src/` 最新的 `LC*.java`；从 `progress.json` 找到对应 seq/slug。
-2. 先跑本地测试：`node ".agents/skills/lc-practice/scripts/run_tests.js" --file <文件路径>`。
+1. 确认当前题：用户指定的文件，或 `src/` 最新的 `LC*.java`；用 `node ".agents/skills/lc-practice/scripts/update_state.js" show --seq <seq>`（或 `--slug`）确认 seq/slug 与一刷情况，不要直读 progress.json。
+2. 先跑本地测试：`node ".agents/skills/lc-practice/scripts/run_tests.js" --file <文件路径>`（默认紧凑输出；失败时会自动展开失败行）。
    - 若未全部通过：回到 lc-analyze 流程，不提交。
    - **提交前复查边界测试（必做）**：确认 main 测试区包含针对本题具体逻辑的边界用例（lc-practice 建题时应已写入）；若缺失或只有示例测试，先按本题易错点补齐再跑测试，禁止以「只有示例测试」提交。
    - **复查用例范围（必做）**：对照 `problem.md` 的约束段逐条检查测试输入是否越界（如约束非负却有负数、约束长度下限却有空输入）；发现越界用例先修正再提交，禁止用范围外输入当测试。
@@ -40,7 +48,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
   - **讨论中形成的关键注释由 Codex 在归档时自行补进代码（用户明确要求）**：讲解/探讨（lc-guide、lc-analyze）过程中确认过的参数语义、循环与边界不变量、易错点理由，归档前由 Codex 直接补进提交区代码，不必等用户自己写——一行一条「精确定义」式注释（变量不变量 / 参数与返回值语义 / 循环条件成立的理由），只加在易错与曾错点，正确直白的代码保持无注释，禁止行尾注释与成段解释。补完跑一次本地 `main` 测试通过即视为完成，**不要求用户重新提交力扣**；补注释必须在写 analysis.json 的 `code` 之前完成（一刷 `done --code`、复习 `review.js done --code` 存的都是补好注释的版本），保证复盘页代码与归档文件一致。
    - **Accepted 后代码变更同步分析（必做）**：用户在任何时候重写/微调已 Accepted 的解法（等价精简、换写法等），只要本地测试通过对拍确认正确，就**必须把最新代码同步进该题 `.lc/problems/{题号}_{slug}/analysis.json` 的 `submissions` 记录（用 `--code` 保存最新提交区代码）**，并重新生成复盘页让代码块展示最新写法；若仅代码微调不换思路，不追加新 submission，直接覆盖旧代码字段；同时向用户确认「本地通过即视为完成、无需再提交力扣」。
    - 记录完成：`node ".agents/skills/lc-practice/scripts/update_state.js" done --seq <seq> --firstPass <是否一次通过> --optimal <是否最优> --notes "<一句话复盘>" --verdict Accepted --testcases 65/65 --memory <内存字节> --approach "解法名" --time O(n) --space O(n)`。
-   - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，`update_state.js analysis --slug <slug>` 可查看）。
+   - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（`done` 命令自动生成/合并，查看用 `update_state.js show --seq <seq>`，不要整篇 dump）。
   - 提交历史规则：解法不同才追加到 analysis.json 的 `submissions`；相似解法（仅代码微调）只保留最优解（按 optimal 与内存比较，`done` 自动处理）；复盘报告体现不同解法的提交。
   - 多写法等待约定（用户明确要求）：用户说「先提交 X 写法」等表述表明后续还要尝试其他写法时，Accepted 后只记录判题结果与最优性，**暂缓归档 / 复盘 / 打卡 / 收尾**；等用户所有写法写完并各自提交后，再统一整理——analysis.json 的 `submissions` 记录每种不同解法，**每个解法都要有独立的思路/复杂度/代码分析（`done` 加 `--code "<解法代码>"` 保存，旧写法代码被覆盖前先从 git 历史取回）**，复盘页按「写法 1 / 写法 2 …」逐一呈现（`generate_review.js` 已支持），最后才归档 + build_site + commit。
   - 自动打卡（无需用户提醒）：`node ".agents/skills/lc-practice/scripts/update_state.js" checkin --seq <seq>`，重新生成训练主页「reviews/index.html」（打卡表 + 进度 + 复盘列表，数据源 progress.json）。
@@ -51,7 +59,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
      解题过程时间线只记录真实环节（如 独立实现 → 本地测试 → 提交 Accepted），**不包含「选题建题」**。
    - 报告内容只记录与算法学习相关的东西：解题思路、踩坑与修复、判题结果、错误习惯、复杂度分析。工具/环境问题（提交脚本 bug、cookie、IDE 配置、判题包装、编译包装等）**一律不写进报告**，也不出现在 analysis.json / progress.json 的笔记文字里。
    - 收尾（每次 Accepted 必做）：先把本题源码归档到分类目录 `git mv src/LC{题号}_{题名}.java src/{分类}/LC{题号}_{题名}.java`（与 `reviews/{分类}/` 一致），确认 `main` 测试在归档路径仍通过；提交前清理文件内无用 import（只删 import 行，不动逻辑）；再重新运行 `node ".agents/skills/lc-practice/scripts/build_site.js"` 让主页复盘列表指向新报告；随后用 git add + commit 提交当前分支的全部改动，至少包含：归档后的本题源码 `src/{分类}/LC{题号}_{题名}.java`、`.lc/progress.json`、`.lc/problems/{题号}_{slug}/analysis.json`、`reviews/index.html` 与本期复盘报告，其余相关状态文件一并提交，不留未提交的工作区改动；汇报时把复盘报告链接主动发给用户。
-   - 类似题型提醒：分类是「动态规划」时，读取本题 `analysis.json` 的 `dp_subtype`，用 `references/dp-subtypes.md` 对应子类型的宽泛提示强调（如「区间 DP 先想最后一步处理谁、按区间长度填表」）；其他分类读 `progress.json` 的 `category_hints`。
+   - 类似题型提醒：分类是「动态规划」时，从 `update_state.js show --seq <seq>` 的输出拿 `DP子类型`，用 `references/dp-subtypes.md` 对应子类型的宽泛提示强调（如「区间 DP 先想最后一步处理谁、按区间长度填表」）；其他分类用 `update_state.js hint --seq <seq>` 取分类提示。
 
    **Wrong Answer / Time Limit Exceeded / Runtime Error / Compile Error**
    - 拿到失败用例（必做）：判题结果里的 `last_testcase`（输入）与 `expected_output`（期望输出）就是最可靠的回归用例；若脚本没打印出来，通过判题接口重新查询取回。
@@ -76,7 +84,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 - **归档覆盖（必做）**：复习文件在 `src/` 根，Accepted 后用其内容覆盖 `src/{分类}/LC{题号}_{题名}.java`（git 历史保留一刷版），删除根目录新文件与建题时产生的 `src/{分类}/LC{题号}_{题名}.java.bak`（若有）；analysis.json / 复盘页里指向旧位置结构的链接同步更新。
 - **原写法强制保留（必做，删 .bak 前核对）**：删除 `.java.bak` / 覆盖归档前，先核对 `analysis.json` 的 `submissions`——所有既有写法条目的 `code` 已保存（建题时已自动固化；若仍缺 code，用 `git show <归档commit>:src/{分类}/LC{题号}_{题名}.java` 找回提交区代码补上），同思路被覆盖的旧版存 `prev_code`。任何情况下不得让原写法/中间版本代码只存在于 git 历史而 analysis.json 缺失。
 - **打卡与收尾**：照常 `checkin --seq` + `build_site.js` + commit（含 review_state.json）。
-- **复习提交失败（WA/TLE/RE）**：按下方失败分支分析，但提示标准更高——先读 `analysis.json` 的一刷 `approach`/`submissions`，指出「一刷用的 XX，这次为什么没想起来」，再给宽泛提示；错误习惯照常记录。
+- **复习提交失败（WA/TLE/RE）**：按下方失败分支分析，但提示标准更高——先用 `update_state.js show --seq <seq>` 看一刷 `解法`/写法摘要（需要代码再 `--code`），指出「一刷用的 XX，这次为什么没想起来」，再给宽泛提示；错误习惯照常记录。
 
 ## 红线
 

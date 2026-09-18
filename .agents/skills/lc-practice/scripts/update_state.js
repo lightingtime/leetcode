@@ -6,9 +6,12 @@
 //   node update_state.js habit list
 //   node update_state.js pattern add --slug S --title "套路名" --text "套路总结" [--category cat]
 //   node update_state.js pattern list [--slug S]
-//   node update_state.js analysis --slug two-sum | --seq 1
+//   node update_state.js show --seq 1 | --slug two-sum [--code latest|序号]   ← 查题默认用这个（精简输出）
+//   node update_state.js analysis --slug two-sum | --seq 1                    ← 整篇 dump，只在确需全量字段时用
 //   node update_state.js checkin --seq 1
-//   node update_state.js hint --category "哈希表"
+//   node update_state.js hint --category "哈希表" | --seq 1
+//   node update_state.js code-notes [--show N | --all]   「写法未达最精简」清单（默认只列前 5 题）
+//   node update_state.js stats | plan | mode           进度 / 目标计划 / 当前模式
 //   node update_state.js stats
 // 约定: progress.json 只存精简索引；每题详细分析存 .lc/problems/{id}_{slug}/analysis.json
 //       打卡表并入训练主页 reviews/index.html，由 checkin 命令自动重新生成，无需用户提醒
@@ -303,6 +306,52 @@ if (cmd === 'next') {
   const ap = path.join(LC_DIR, 'problems', `${q.id}_${q.slug}`, 'analysis.json');
   if (!fs.existsSync(ap)) { console.log(`暂无分析记录：${q.id}. ${q.title}`); process.exit(0); }
   console.log(JSON.stringify(readJson(ap), null, 2));
+} else if (cmd === 'show') {
+  // 精简查询：只回关键结论（不整篇输出 analysis.json，省 token）；--full 等价于 analysis
+  const slug = arg('--slug', '');
+  const seqRaw = arg('--seq', '');
+  let q = null;
+  if (seqRaw) q = order.find(o => o.seq === parseInt(seqRaw, 10));
+  else if (slug) q = order.find(o => o.slug === slug);
+  if (!q) { console.error('请用 --slug <slug> 或 --seq <seq> 指定题目'); process.exit(1); }
+  const ap = path.join(LC_DIR, 'problems', `${q.id}_${q.slug}`, 'analysis.json');
+  if (!fs.existsSync(ap)) {
+    console.log(`暂无分析记录：${q.id}. ${q.title}（seq=${q.seq}，分类=${q.category}）`);
+    process.exit(0);
+  }
+  const a = readJson(ap);
+  if (has('--full')) { console.log(JSON.stringify(a, null, 2)); process.exit(0); }
+  const subs = Array.isArray(a.submissions) ? a.submissions : [];
+  const revs = Array.isArray(a.reviews) ? a.reviews : [];
+  console.log(`${q.id}. ${q.title}（${q.category}）| seq=${q.seq} slug=${q.slug}`);
+  console.log(`一刷：${a.date || '—'} ${a.verdict || '—'} 一次AC=${a.firstPass ? '是' : '否'} 最优=${a.optimal ? '是' : '否'} 复杂度=${a.time_complexity || '—'}/${a.space_complexity || '—'} 解法=${a.approach || '—'}${a.dp_subtype ? ' DP子类型=' + a.dp_subtype : ''}`);
+  if (a.notes) console.log(`一刷复盘：${a.notes}`);
+  if (subs.length) {
+    console.log(`写法 ${subs.length} 种：`);
+    subs.forEach((s, i) => {
+      const codeLen = s.code ? `${String(s.code).length} 字符` : '未存';
+      console.log(`  ${i + 1}. ${s.approach || '—'} | ${s.date || '—'} | ${s.verdict || '—'} | 最优=${s.optimal ? '是' : '否'} | ${s.time_complexity || '—'}/${s.space_complexity || '—'} | 代码 ${codeLen}${s.prev_code ? '（另有旧版）' : ''}`);
+    });
+  }
+  if (revs.length) {
+    console.log('二刷：' + revs.map(r => `${r.date || '—'} ${r.mastery === 'strong' ? '较强' : r.mastery === 'weak' ? '较弱' : (r.mastery || '—')}${r.firstTry ? '·一次AC' : ''}`).join(' → '));
+  }
+  // 复习调度在脚本内读取（避免把 66KB 的 review_state.json 读进上下文）
+  try {
+    const st = (readJson(path.join(LC_DIR, 'review_state.json')).problems || {})[q.slug];
+    if (st) console.log(`复习调度：下次 ${st.next_review_date || '—'} | 间隔 ${st.interval ?? '—'} 天 | 已掌握=${st.mastered ? '是' : '否'}`);
+  } catch {}
+  const pats = Array.isArray(a.patterns) ? a.patterns : [];
+  const cn = Array.isArray(a.code_notes) ? a.code_notes : [];
+  const habits = (progress.error_habits || []).filter(h => (h.examples || []).includes(q.slug) || (h.problem || '') === q.slug);
+  console.log(`沉淀：套路 ${pats.length} 条 | 精简提示 ${cn.length} 条 | 相关错误习惯 ${habits.length} 条`);
+  if (has('--code')) {
+    const idxArg = arg('--code', 'latest');
+    const idx = idxArg === 'latest' ? subs.length - 1 : parseInt(idxArg, 10) - 1;
+    const s = subs[idx];
+    if (s && s.code) console.log(`--- 写法 ${idx + 1} 代码 ---\n${s.code}`);
+    else console.log('（该写法没有保存代码）');
+  }
 } else if (cmd === 'checkin') {
   const seq = parseInt(arg('--seq', '0'), 10);
   const q = order.find(o => o.seq === seq);
@@ -318,23 +367,48 @@ if (cmd === 'next') {
   console.log(`已打卡并更新主页：${q.id}. ${q.title}（一次AC=${doneRec.firstPass ? '是' : '否'}，最优=${doneRec.optimal ? '是' : '否'}）`);
   planReport(progress).forEach(l => console.log(l));
 } else if (cmd === 'hint') {
-  const cat = arg('--category', '');
-  console.log((progress.category_hints || {})[cat] || '暂无该分类提示');
+  // 用 --seq N 或 --category 查询，避免为拿分类提示而整篇读 progress.json（129KB）
+  let cat = arg('--category', '');
+  const seqRaw = arg('--seq', '');
+  if (!cat && seqRaw) {
+    const q = order.find(o => o.seq === parseInt(seqRaw, 10));
+    if (!q) { console.error(`找不到 seq=${seqRaw}`); process.exit(1); }
+    cat = q.category;
+  }
+  if (!cat) { console.error('请用 --seq <seq> 或 --category <分类> 指定'); process.exit(1); }
+  console.log(`[${cat}] ${(progress.category_hints || {})[cat] || '暂无该分类提示'}`);
+  if (cat === '动态规划') {
+    console.log('子类型提示（线性/区间/树形/背包/状态机/数位/状压）按需查 references/dp-subtypes.md 中对应小节，不要整篇读。');
+  }
 } else if (cmd === 'code-notes') {
   const problemsDir = path.join(LC_DIR, 'problems');
   const dirs = fs.existsSync(problemsDir) ? fs.readdirSync(problemsDir) : [];
   const out = [];
+  let hitProblems = 0, hitNotes = 0;
   for (const d of dirs) {
     const ap = path.join(problemsDir, d, 'analysis.json');
     if (!fs.existsSync(ap)) continue;
     let a = {};
     try { a = readJson(ap); } catch { continue; }
     if (!Array.isArray(a.code_notes) || a.code_notes.length === 0) continue;
+    hitProblems++; hitNotes += a.code_notes.length;
     out.push(`${a.id}. ${a.title}（${a.category || ''}）:`);
     a.code_notes.forEach(n => out.push(`  - ${n}`));
   }
-  if (!out.length) console.log('暂无「写法未达最精简」的记录');
-  else console.log(out.join('\n'));
+  if (!out.length) { console.log('暂无「写法未达最精简」的记录'); process.exit(0); }
+  // 默认只列前几题（全量可能几十题、几千字节），--all / --show N 展开
+  const showArg = arg('--show', '');
+  const showN = has('--all') ? hitProblems : (parseInt(showArg, 10) > 0 ? parseInt(showArg, 10) : 5);
+  let shown = 0;
+  for (const line of out) {
+    const isHead = !line.startsWith('  - ');
+    if (isHead) {
+      if (shown >= showN) break;
+      shown++;
+    }
+    console.log(line);
+  }
+  console.log(`共 ${hitProblems} 题 / ${hitNotes} 条精简提示${hitProblems > shown ? `（已列前 ${shown} 题，看全量加 --all）` : ''}`);
 } else if (cmd === 'stats') {
   const done = progress.done || [];
   console.log(`已完成：${done.length}/${order.length}`);

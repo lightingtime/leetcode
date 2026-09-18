@@ -11,10 +11,17 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 - 本 skill 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js` 与 `update_state.js`
 - 套路沉淀库：`.agents/skills/lc-analyze/references/patterns.md`（分析时先查套路是否已收录；新增套路时按同样格式追加）
 
+## 上下文纪律（省 token，必守）
+
+- 查状态一律走脚本，**禁止** `cat` / `node -e require()` 直读 `.lc/progress.json`（129KB）、`.lc/order.json`（44KB）、`.lc/review_state.json`（66KB）；单题信息用 `update_state.js show --seq N`，分类提示用 `update_state.js hint --seq N`。
+- 单题明细默认 `update_state.js show --seq N`（约 0.5KB），需要某写法代码时加 `--code latest`；只有确需全量字段才 `analysis --slug S`。
+- 读用户代码用 `sed -n 'a,bp'` / `rg -n` 取片段（提交区通常几十行），不要为核对行号把整个文件读两遍。
+- `references/patterns.md` 按需查小节，禁止整篇读；复盘页只给链接，不读 HTML 内容。
+
 ## 流程
 
-1. 定位当前题：优先取用户指定的文件；否则取 `src/` 下最新的 `LC*.java`，并从 `progress.json` 确认它对应顺序中的哪一题（seq/slug），再读对应 `problems/{id}_{slug}/problem.md`。
-2. 运行测试拿到具体报错：`node ".agents/skills/lc-practice/scripts/run_tests.js" --file <文件路径>`。
+1. 定位当前题：优先取用户指定的文件；否则取 `src/` 下最新的 `LC*.java`，再用 `node ".agents/skills/lc-practice/scripts/update_state.js" show --seq <seq>`（或 `--slug`）确认题目信息与一刷情况——**不要直读 progress.json / analysis.json**；需要题目细节时再读对应 `problems/{id}_{slug}/problem.md`。
+2. 运行测试拿到具体报错：`node ".agents/skills/lc-practice/scripts/run_tests.js" --file <文件路径>`（默认紧凑：通过只回 1 行、失败只回失败行；确需完整输出再加 `--full`）。
    - 若本机 javac 不可用或用户已在 IDEA 里运行过，可让用户直接粘贴 IDEA 的报错信息，同样可分析。
    - **测试过程中发现的任何失败用例（含随机对拍/bug 用例）必须补进代码的 main 测试区（必做）**：只要某个输入让当前代码跑出错误结果（WA/越界/栈溢出等），且该输入不在现有测试里，立即转成 Java 测试加进本题文件的示例或边界区（注明来源与期望），让本地先能稳定复现；多次迭代中出现的每个新失败用例都要持续补充，禁止「只在分析里口头提到、代码里不落用例」。
 3. 阅读题目与用户代码（重点看 `// ==== 提交代码开始 ====` 到 `// ==== 提交代码结束 ====` 之间的方法体）。
@@ -27,7 +34,7 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 5. 记录错误习惯：`node ".agents/skills/lc-practice/scripts/update_state.js" habit add --text "<习惯描述，例如：边界为空时未处理>" --problem <slug> --category <分类>`。明细会同步写入该题 `.lc/problems/{题号}_{slug}/analysis.json`（按题存储），`progress.json` 只保留聚合索引。
    - **不记录**：环境/工程配置问题（IDE、Sources Root、SDK 等）、编译类错误（语法、缺 return 等）、占位未实现（return null 等）这类非算法问题；错误习惯只记录算法思路、边界、逻辑类问题。
 6. 套路沉淀（本轮用到或暴露可复用套路时必做）：
-   - 查 `references/patterns.md` 判断该写法/取舍是否已收录；已收录直接引用，未收录则新增。
+   - 查 `references/patterns.md`（68KB，**禁止整篇读**）判断该写法/取舍是否已收录：先 `rg -n '<关键词>|^## '` 定位小节，再只读命中段落；已收录直接引用，未收录则新增。
    - 新增套路：`node ".agents/skills/lc-practice/scripts/update_state.js" pattern add --slug <slug> --title "<套路名>" --text "<对照/取舍总结>"` 写入该题 `analysis.json` 的 `patterns` 字段；同时按本文件相同格式追加到 `references/patterns.md`（含对照表、要点、出处题）。
    - 复盘报告用「套路沉淀」小节呈现该套路，供后续选题/分析复用。
 7. 结束时告诉用户：改好后重新运行 main；若想直接看当前思路的正确写法，需要明确说「给我当前思路的正确答案」。
@@ -45,6 +52,6 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 - 用户说「你来改 / 你帮我改」时：改完**先展示改动代码片段**并说明改动点，等待用户确认与讨论；**未经用户确认，不得直接进入提交流程**（用户后续明确说「提交」才算授权）。
 - 编译错误（语法错误）可以指出出错行号和错误类别（括号不匹配/分号缺失/类型不匹配等），但仍不代写整行修复。
 - 分析要具体：引用用户代码中的变量/行，而不是泛泛而谈。
-- 行号必须真实：引用文件行号前先用 `cat -n <文件>` 核对，行号必须与用户文件当前真实行号一致；禁止用截取片段后的相对行号冒充真实行号。
+- 行号必须真实：引用行号前先用 `rg -n '<关键片段>' <文件>` 或 `sed -n 'a,bp'` 核对，行号必须与用户文件当前真实行号一致；禁止用截取片段后的相对行号冒充真实行号（单文件必要时可用 `cat -n`，但不要复制整篇到对话里）。
 - 说明循环条件/边界指针时，必须明确说出该指针当前指向的元素是否已处理干净，并说清区间是闭还是开——闭区间（如 `mid <= end`）表示 end 指向的元素**尚未处理、仍属扫描范围**；开区间（如 `mid < end`）表示 end 指向的元素**已处理或不属于扫描范围**，mid 走到 end 即停。
 - 解释必须贴用户实际代码结构（其分支、变量、行号）讲解——无论是复盘文档还是与用户讨论/分析时都适用；禁止用假设的通用写法替代用户写法，禁止拿「常见写法」的思维框架套用户代码；用户写法合法但与常见写法不同时，先按用户的设计解释清楚，再决定是否对比常见写法。

@@ -10,6 +10,12 @@ description: 力扣解题思路引导。当用户说「不懂」「不会写」�
 - 用户处于「理解概念 / 不知道怎么写 / 写到一半卡住」阶段，还没有稳定的失败用例；若已经跑测试报错/失败，走 lc-analyze。
 - 默认不给完整答案；只有用户明确说「给我当前思路的正确答案」才给。
 
+## 上下文纪律（省 token，必守）
+
+- 需要题目/一刷信息时用 `node ".agents/skills/lc-practice/scripts/update_state.js" show --seq <seq>`（约 0.5KB），不要读 `analysis.json`/`progress.json` 原文；要某写法代码时才加 `--code latest`。
+- `references/*.md`（dp-subtypes、stack-index-semantics、example-lc4）都按需读对应小节，禁止整篇读；`lc-analyze/references/patterns.md` 是 68KB，只用 `rg -n` 查关键词定位。
+- 读用户代码用 `sed -n 'a,bp'` / `rg -n` 取片段，不要整篇 cat；引用行号必须与文件真实行号一致（用 `rg -n` 或 `sed -n` 的带行号输出核对）。
+
 ## 流程（严格按序，用户没跟上就停）
 
 0. **先识别子类型（DP 题必做）**：题目分类是「动态规划」时，先判断子类型（线性/区间/树形/背包/状态机/数位/状压），对照 `lc-practice/references/dp-subtypes.md` 决定引导方向；区间 DP 从「正着做会破坏相邻关系」讲起，树形 DP 从「自底向上汇总子节点」讲起，不要只笼统说「这是 DP」。
@@ -25,7 +31,7 @@ description: 力扣解题思路引导。当用户说「不懂」「不会写」�
    - **行号必须与真实代码对应**：引用文件行号前先用 `cat -n <文件>`（或 IDEA 编辑器行号）核对，行号必须与用户文件当前真实行号一致；禁止用 sed/截取片段后的相对行号冒充真实行号，否则用户无法定位到所指代码。
 5. **收尾**：所有块完成后让用户跑本地测试；失败转 lc-analyze，通过转 lc-submit。
 
-- 行号引用（lc-guide / lc-analyze 通用红线）：给行号前必须 `cat -n` 核对，与文件真实行号一致；行号错位时先纠正再继续讨论。
+- 行号引用（lc-guide / lc-analyze 通用红线）：给行号前必须核对（`rg -n '<关键片段>' <文件>` 或 `sed -n 'a,bp'`），与文件真实行号一致；行号错位时先纠正再继续讨论，核对时不要把整个文件贴进对话。
 
 ## 引导顺序（用户明确要求）
 

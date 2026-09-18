@@ -23,4 +23,5 @@ description: 显示力扣刷题/复习状态面板。当用户在力扣刷题项
 ## 注意
 
 - 只读操作，不修改任何状态文件。
+- 面板数据由脚本读取 `.lc/*.json` 后汇总输出；**不要让模型去 `cat` 这些文件**（progress.json 129KB / review_state.json 66KB），需要单项信息时用 `update_state.js show --seq N`。
 - 用户想看实时面板（单独终端）时，提示可运行 `node "plugins/lc-dashboard/scripts/lc_status.mjs" --watch`。

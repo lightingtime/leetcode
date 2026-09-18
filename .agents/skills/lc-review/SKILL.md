@@ -12,6 +12,13 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
 - `analysis.json` 的 `reviews` 数组：每次复习的事件明细（append-only），供复盘页与后续 App 使用
 - `progress.json`：只保留一刷索引，复习数据不写入；`done` 的 `optimal` 可更新为当前最优
 
+## 上下文纪律（省 token，必守）
+
+- 查状态一律走脚本，**禁止** `cat` / `node -e require()` 直读 `.lc/review_state.json`（66KB）、`.lc/progress.json`（129KB）、`.lc/order.json`（44KB）：队列用 `review.js next`，进度/掌握度分布用 `review.js stats`，单题信息用 `update_state.js show --seq N`。
+- 抽题展示所需字段（一刷日期、是否薄弱、复杂度、下次复习日期）从 `review.js next` 与 `update_state.js show --seq N` 的输出里取，不要为拿这些字段去读 analysis.json。
+- 本地测试用 `run_tests.js --file <路径>`（默认紧凑输出，失败才展开）；确需完整输出才加 `--full`。
+- 复盘页与 `reviews/index.html` 只给链接、不读内容；读源码用 `rg -n` / `sed -n 'a,bp'` 取片段。
+
 ## 调度模型（写死，不要用户记数值）
 
 - Ebbinghaus 遗忘曲线 + SM-2（EF = 2.5）
@@ -32,6 +39,7 @@ description: 力扣二刷复习主流程。当用户说「开始复习」「二�
 
 1. 抽题：`node ".agents/skills/lc-review/scripts/review.js" next`（或复习模式下直接 `update_state.js next`）。
    - 读取今日推荐（含配额）与队列；同时跑 `update_state.js code-notes`，把「当时写法未达最精简」的题合并进今日清单，重写时要求达到精简写法。
+     - 两者默认都只列前几题（`next` 前 6、`code-notes` 前 5）；队列/清单很长时不要加 `--all` 全量刷屏，按本次要做的题用 `--show N` 或 `show --seq N` 取需要的部分。
    - 展示时给出：题目链接、难度、分类、一刷完成日期、是否薄弱（⚠）、需要在 IDEA 打开的文件。
 2. 重开题目：复用 `lc-practice` 的拉题/建题脚本生成新的 `src/LC{题号}_{题名}.java`。
    - **重复类自动处理（必做）**：建题脚本 `create_problem.js` 检测到 `src/{分类}/` 下已有同名一刷归档时，会把它临时改名为 `.java.bak`（IDEA 不编译），避免根目录二刷文件与归档类重复导致编译失败；提交收尾（lc-submit 归档覆盖）时恢复为归档文件。
