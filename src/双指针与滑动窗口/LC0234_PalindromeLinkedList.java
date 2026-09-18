@@ -2,9 +2,10 @@
 // LeetCode 234. 回文链表 (Palindrome Linked List)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/palindrome-linked-list/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：快慢指针找中点 + 原地反转后半段（O(n)/O(1)）；更早一版用栈存后半段，O(n) 空间已被淘汰
-// 测试用例：示例 2 个 + 边界 8 个（原有 4 个，本次补齐：两节点相同 / 偶数长度错位 / 长度 1e5 回文 / 长度 1e5 末对不匹配）
+// 复习日期：2026-09-18（第 2 次复习 · 一刷 2026-08-04 · 一刷一次 Accepted）
+// 一刷写法：快慢指针找中点 + 原地反转后半段——slow 每轮一步、fast 每轮两步；从 slow 起把后半段反转，再与 head 逐节点比较，O(n)/O(1)
+// 一刷踩过的坑（错误习惯库有记录）：比较循环的终止条件写成「两指针撞上」(p1 != p2) 只对奇数长度成立——偶数长度的真回文里反转后的后半段走完就变成 null，再取 p2.val 直接 NPE；非回文用例会在那之前 return false，把这个漏洞盖住。终止条件应由「后半段是否走完」决定
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 8 个）
 // ============================================================
 
 import java.util.*;
@@ -13,12 +14,10 @@ public class LC0234_PalindromeLinkedList {
 
     // ==== 提交代码开始 ====
     public boolean isPalindrome(ListNode head) {
-        if (head == null) {
-            return true;
-        }
+        if (head == null) return true;
         ListNode mid = getMid(head);
         ListNode newHead = reverseList(mid);
-        ListNode p1 = head, p2 = newHead;
+        ListNode p1 =head, p2 = newHead;
         while (p2 != null) {
             if (p1.val != p2.val) {
                 return false;
@@ -45,7 +44,7 @@ public class LC0234_PalindromeLinkedList {
 
     private ListNode getMid(ListNode head) {
         ListNode fast = head, slow = head;
-        while (fast != null && fast.next != null) {
+        while (fast!= null && fast.next != null) {
             fast = fast.next.next;
             slow = slow.next;
         }

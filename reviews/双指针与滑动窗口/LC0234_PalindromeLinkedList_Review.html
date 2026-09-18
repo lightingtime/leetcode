@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>234. 回文链表 (Palindrome Linked List)</h1><p>&gt; <a href="https://leetcode.cn/problems/palindrome-linked-list/" rel="noopener">https://leetcode.cn/problems/palindrome-linked-list/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：栈、递归、链表、双指针</p><h2>题目描述</h2><p>给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。</p><p>示例 1：</p><p>输入：head = [1,2,2,1]</p><p>输出：true</p><p>示例 2：</p><p>输入：head = [1,2]</p><p>输出：false</p><p>提示：</p><p>链表中节点数目在范围[1, 105] 内</p><p>0</p><p>进阶：你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？</p><h2>示例</h2><ol><li>输入：head = [1,2,2,1]</li></ol><p>输出：true</p><ol><li>输入：head = [1,2]</li></ol><p>输出：false</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 快慢指针+原地反转 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：思路与一刷一致（快慢指针找中点 + 原地反转后半段），这次把中点和反转拆成 <code>getMid</code> / <code>reverseList</code> 两个辅助方法，主流程只剩「取中点 → 反转后半 → 逐节点比较」三步。</p><p><strong>这次规避了一刷的坑</strong>：一刷把比较循环的终止条件写成「两指针撞上」(<code>p1 != p2</code>)，那只对奇数长度成立；偶数长度的真回文里反转后的后半段走完会变成 null，再取 <code>p2.val</code> 直接 NPE（非回文用例会提前 return false，掩盖这个问题）。这次终止条件写成 <code>while (p2 != null)</code>——由「后半段是否走完」决定，奇数长度时中间那个节点不参与比较，天然正确。边界 7/8 的两个 10 万长度用例正好覆盖这个场景，全过。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（93/93）｜ 多次提交 ｜ 快慢指针+原地反转 ｜ O(n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>同一思路（<strong>快慢指针找中点 + 原地反转后半段 + 双指针对称比较</strong>，O(n)/O(1)），但切割点和终止条件的落笔差别值得记：</li><li>一刷把 slow 停在<strong>前半段末尾</strong>，反转 <code>firstEnd.next</code>；本轮把 slow 停在<strong>后半段头（偶数）/正中间（奇数）</strong>，直接反转 <code>mid</code>。奇数长度时本轮会把中点也纳入反转段，于是多比一次「中点 vs 自己」（无害，但多一次）。</li><li>一刷用 <code>while (fast.next != null &amp;&amp; fast.next.next != null)</code>（提前一步停），本轮用 <code>while (fast != null &amp;&amp; fast.next != null)</code>（走完整条链）——两种边界写法都能落对 mid。</li><li>一刷的 <code>approach_detail</code> 里其实<strong>早就写明</strong>「比较循环以 p2 != null 为条件」，本轮却写成了别的条件，说明问题不在「不会」而在「没照自己沉淀的套路写」。</li></ul><p><strong>② 这次为什么没一次写对（本轮真实过程）</strong></p><ul><li>第一版用 <code>while (p1 != p2)</code> 收尾，本地 10 组里挂了 4 组，全是<strong>真回文</strong>用例且全是 NPE：</li><li>奇数长度：反转段含中点，两段在中点<strong>重叠</strong>，p1 与 p2 会撞在同一个节点上 → <code>p1 != p2</code> 恰好能退出（巧合）。</li><li>偶数长度：前半段与反转后的后半段是<strong>两段不相交的链</strong>，两指针永远落在不同节点；p1 继续前进而 p2 已经变成 null，下一轮 <code>p2.val</code> NPE。</li><li>隐蔽点：非回文用例在 p2 变 null 之前就 <code>return false</code> 了，所以只有真回文才炸。</li><li>改成「只由后半段是否走完决定终止」后 10 组全过。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本地首跑 4 组失败、经分析定位（奇数/偶数两段是否重叠）才改对，非一次 AC → <strong>较弱</strong>，间隔重置 2 天。</li></ul><p><strong>④ 下一步提醒（两天后回访）</strong></p><ul><li>闭卷默写这条分界：<strong>奇数长度两段在中点重叠、偶数长度两段不相交</strong>——终止条件只能挂在「后半段走完」上。</li><li>顺带对照 143 重排链表：同一套「找中点 + 反转后半段 + 交叉合并」，只是比较换成拼接。</li></ul></div>
@@ -37,12 +41,12 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>快慢指针+原地反转</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -82,14 +86,12 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 快慢指针+原地反转</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.2 MB</span><span class="chip">用例 93/93</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0234_PalindromeLinkedList.java · 快慢指针+原地反转</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isPalindrome</span>(<span class="tk-t">ListNode</span> head) {
-        <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) {
-            <span class="tk-k">return</span> <span class="tk-k">true</span>;
-        }
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.2 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0234_PalindromeLinkedList.java · 快慢指针+原地反转</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isPalindrome</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-k">if</span> (head == <span class="tk-k">null</span>) <span class="tk-k">return</span> <span class="tk-k">true</span>;
         <span class="tk-t">ListNode</span> mid = <span class="tk-f">getMid</span>(head);
         <span class="tk-t">ListNode</span> newHead = <span class="tk-f">reverseList</span>(mid);
-        <span class="tk-t">ListNode</span> p1 = head, p2 = newHead;
+        <span class="tk-t">ListNode</span> p1 =head, p2 = newHead;
         <span class="tk-k">while</span> (p2 != <span class="tk-k">null</span>) {
             <span class="tk-k">if</span> (p1.val != p2.val) {
                 <span class="tk-k">return</span> <span class="tk-k">false</span>;
@@ -116,7 +118,7 @@
 
     <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">getMid</span>(<span class="tk-t">ListNode</span> head) {
         <span class="tk-t">ListNode</span> fast = head, slow = head;
-        <span class="tk-k">while</span> (fast != <span class="tk-k">null</span> &amp;&amp; fast.next != <span class="tk-k">null</span>) {
+        <span class="tk-k">while</span> (fast!= <span class="tk-k">null</span> &amp;&amp; fast.next != <span class="tk-k">null</span>) {
             fast = fast.next.next;
             slow = slow.next;
         }
