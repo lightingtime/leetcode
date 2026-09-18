@@ -21,19 +21,38 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-09",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "88/88",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 47152000,
+      "memory_bytes": 43172000,
       "approach": "DFS 回溯 + visited 剪枝",
-      "time_complexity": "O(m*n*3^L)",
-      "space_complexity": "O(L+m*n)",
+      "time_complexity": "O(m·n·3^L)",
+      "space_complexity": "O(L+m·n)",
       "optimal": true,
-      "notes": "网格 DFS + visited 剪枝，选择/撤销对称"
+      "notes": "**与一刷对比**：思路与写法一致（外层枚举起点 + 网格 DFS 回溯 + visited 标记）。\n\n**关键点都处理对了**：① 外层双重循环枚举每个格子当起点，不会只在 (0,0) 起搜；② 越界与 visited 的判断写在同一个 if 里靠 `||` 短路——先判下标再访问 `visited[i][j]`，不会越界访问；③ 字符匹配放在占位之前，匹配失败直接返回，不污染状态；④ 选择/撤销对称（`visited[i][j]=true` 进、`false` 出），四个方向用 `ans = ans || dfs(...)` 串联，短路后一旦命中就不再搜其余方向。本地示例 3 + 边界 7（单格命中/未命中/词过长/斜向不可达/竖直可达/同格不可复用/全相同长路径）全过，一次提交 Accepted（88/88）。\n\n**可精简点**：① `int index = 0;` 配合 `dfs(board, i, j, index, word)` 可以直接传字面量 0；② dfs 里 `boolean ans; ans = dfs(...);` 两行可以并成一行；③ 另一种常用写法是「把走过的格子临时改成特殊字符、回溯时还原」，能省掉 visited 数组（空间降到 O(L)）；④ `visited` 作为实例字段每次重建，改成局部变量或作为参数传递更安全。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    boolean[][] visited;\n    public boolean exist(char[][] board, String word) {\n        int m = board.length;\n        int n = board[0].length;\n        visited = new boolean[m][n];\n        boolean ans = false;\n        int index = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                ans = ans || dfs(board, i, j, index, word);\n            }\n        }\n        return ans;\n    }\n\n    private boolean dfs(char[][] board, int i, int j, int index, String word) {\n        if (index == word.length()) {\n            return true;\n        }\n        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || visited[i][j]) {\n            return false;\n        }\n        if (board[i][j] != word.charAt(index)) {\n            return false;\n        }\n        visited[i][j] = true;\n        boolean ans;\n        ans = dfs(board, i + 1, j, index + 1, word);\n        ans = ans || dfs(board, i - 1, j, index + 1, word);\n        ans = ans || dfs(board, i, j - 1, index + 1, word);\n        ans = ans || dfs(board, i, j + 1, index + 1, word);\n        visited[i][j] = false;\n        return ans;\n    }",
+      "prev_code": "boolean[][] visited;\n\n    public boolean exist(char[][] board, String word) {\n        int m = board.length;\n        int n = board[0].length;\n        visited = new boolean[m][n];\n        boolean ans = false;\n        int index = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                ans = ans || dfs(board, i, j, index, word);\n            }\n        }\n        return ans;\n    }\n\n    private boolean dfs(char[][] board, int i, int j, int index, String word) {\n        if (index == word.length()) {\n            return true;\n        }\n        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) {\n            return false;\n        }\n        if (visited[i][j]) {\n            return false;\n        }\n        if (board[i][j] != word.charAt(index)) {\n            return false;\n        }\n        visited[i][j] = true;\n        int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};\n        boolean ans = false;\n        for (int[] dir : dirs) {\n            int x = i + dir[0];\n            int y = j + dir[1];\n            ans = ans || dfs(board, x, y, index + 1, word);\n        }\n        visited[i][j] = false;\n        return ans;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "DFS 回溯 + visited 剪枝",
+      "time_complexity": "O(m·n·3^L)",
+      "space_complexity": "O(L+m·n)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路与写法一致（外层枚举起点 + 网格 DFS 回溯 + visited 标记）。\n\n**关键点都处理对了**：① 外层双重循环枚举每个格子当起点，不会只在 (0,0) 起搜；② 越界与 visited 的判断写在同一个 if 里靠 `||` 短路——先判下标再访问 `visited[i][j]`，不会越界访问；③ 字符匹配放在占位之前，匹配失败直接返回，不污染状态；④ 选择/撤销对称（`visited[i][j]=true` 进、`false` 出），四个方向用 `ans = ans || dfs(...)` 串联，短路后一旦命中就不再搜其余方向。本地示例 3 + 边界 7（单格命中/未命中/词过长/斜向不可达/竖直可达/同格不可复用/全相同长路径）全过，一次提交 Accepted（88/88）。\n\n**可精简点**：① `int index = 0;` 配合 `dfs(board, i, j, index, word)` 可以直接传字面量 0；② dfs 里 `boolean ans; ans = dfs(...);` 两行可以并成一行；③ 另一种常用写法是「把走过的格子临时改成特殊字符、回溯时还原」，能省掉 visited 数组（空间降到 O(L)）；④ `visited` 作为实例字段每次重建，改成局部变量或作为参数传递更安全。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
   ]
 }
