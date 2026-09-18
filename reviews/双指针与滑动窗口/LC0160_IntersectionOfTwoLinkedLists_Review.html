@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-04</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>160. 相交链表 (Intersection of Two Linked Lists)</h1><p>&gt; <a href="https://leetcode.cn/problems/intersection-of-two-linked-lists/" rel="noopener">https://leetcode.cn/problems/intersection-of-two-linked-lists/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、链表、双指针</p><h2>题目描述</h2><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。</p><p>图示两个链表在节点 c1 开始相交：</p><p>题目数据 保证 整个链式结构中不存在环。</p><p>注意，函数返回结果后，链表必须 保持其原始结构 。</p><p>自定义评测：</p><p>评测系统 的输入如下（你设计的程序 不适用 此输入）：</p><p>intersectVal - 相交的起始节点的值。如果不存在相交节点，这一值为 0</p><p>listA - 第一个链表</p><p>listB - 第二个链表</p><p>skipA - 在 listA 中（从头节点开始）跳到交叉节点的节点数</p><p>skipB - 在 listB 中（从头节点开始）跳到交叉节点的节点数</p><p>评测系统将根据这些输入创建链式数据结构，并将两个头节点 headA 和 headB 传递给你的程序。如果程序能够正确返回相交节点，那么你的解决方案将被 视作正确答案 。</p><p>示例 1：</p><p>输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3</p><p>输出：Intersected at '8'</p><p>解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。</p><p>从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。</p><p>在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。</p><p>— 请注意相交节点的值不为 1，因为在链表 A 和链表 B 之中值为 1 的节点 (A 中第二个节点和 B 中第三个节点) 是不同的节点。换句话说，它们在内存中指向两个不同的位置，而链表 A 和链表 B 中值为 8 的节点 (A 中第三个节点，B 中第四个节点) 在内存中指向相同的位置。</p><p>示例 2：</p><p>输入：intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1</p><p>输出：Intersected at '2'</p><p>解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。</p><p>从各自的表头开始算起，链表 A 为 [1,9,1,2,4]，链表 B 为 [3,2,4]。</p><p>在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。</p><p>示例 3：</p><p>输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2</p><p>输出：No intersection</p><p>解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。</p><p>由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。</p><p>这两个链表不相交，因此返回 null 。</p><p>提示：</p><p>listA 中节点数目为 m</p><p>listB 中节点数目为 n</p><p>1 4</p><p>1 5</p><p>0</p><p>0</p><p>如果 listA 和 listB 没有交点，intersectVal 为 0</p><p>如果 listA 和 listB 有交点，intersectVal == listA[skipA] == listB[skipB]</p><p>进阶：你能否设计一个时间复杂度 O(m + n) 、仅用 O(1) 内存的解决方案？</p><h2>示例</h2><ol><li>输入：intersectVal = 8，listA = [4,1,8,4,5]，listB = [5,6,1,8,4,5]，skipA = 2，skipB = 3</li></ol><p>输出：Intersected at '8'</p><p>解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。</p><ol><li>输入：intersectVal = 2，listA = [1,9,1,2,4]，listB = [3,2,4]，skipA = 3，skipB = 1</li></ol><p>输出：Intersected at '2'</p><p>解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。</p><ol><li>输入：intersectVal = 0，listA = [2,6,4]，listB = [1,5]，skipA = 3，skipB = 2</li></ol><p>输出：No intersection</p><p>解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 双指针 ｜ O(m+n) · O(1)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：思路与一刷一致（双指针换链）。写法上这次是 <code>p1 = p1 != null ? p1.next : headB</code>（先判非空取 next，空了才切链），归档版本是 <code>p1 = p1 == null ? headB : p1.next</code>，两者等价。</p><p><strong>这次为什么没踩历史坑</strong>：① 换链按「指针自己 == null」判定而不是 next == null，走满 m+n 步后两指针同相位，无交点时同时落到 null；② 循环条件就是 <code>while (p1 != p2)</code>，先比较再移动，交点正好在链头的用例（边界4/5）不会被跳过；③ 没有在判空前解引用 next。本地示例 3 + 边界 7（双空、单空、整条链共享、长度差 59/57）全过，一次提交 Accepted（41/41）。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（41/41）｜ 多次提交 ｜ 双指针 ｜ O(m+n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>最终写法与一刷同思路：<strong>双指针换链对齐</strong>（p1 走完 A 从 B 头续走，p2 走完 B 从 A 头续走，总路程 a+y 与 b+x 相等）。与一刷归档的差异只是把入口空值守卫和 if/else 压成了三元表达式，核心一模一样。</li><li>复杂度 O(m+n) / O(1)，仍是本题下限。</li></ul><p><strong>② 这次为什么没一次写对（本轮真实过程）</strong></p><ul><li>第一版把两个次序都写反了，本地 10 组用例里挂了 5 组：</li><li>先解引用 <code>p.next</code> 再判空 → 空链表/单空链直接 NPE；</li><li>换链写在「比较之后」→ 相位错乱，长度差 59 那组两个指针以 <code>null == null</code> 相遇并返回 null；</li><li>循环先走一步再比较 → 漏掉第 0 步，两链从头共享（或某链头就是交点）时返回交点<strong>后面</strong>的节点。</li><li>定位靠的是回到「路程相等」这件事本身：p1 走 a+y、p2 走 b+x，两边node数一样，所以要么同时踩到交点、要么同时变成 null。次序只要保证「每轮开头先比、推进前先问自己是不是 null」，两种收尾就都自然成立。</li><li>一刷沉淀的套路「链表指针判空取舍：p != null vs p.next != null」正是本轮的坑源——这题换链必须用 <code>p == null</code>，因为指针要允许自己越界到 null 才能换链。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本地首跑 5 组失败、经多轮探讨（概念讲解 + 逐条定位 + 次序提示）才改对，非一次 AC → <strong>较弱</strong>，间隔重置 2 天。</li></ul><p><strong>④ 下一步提醒（两天后回访）</strong></p><ul><li>闭卷默写两条次序：① 每轮<strong>开头</strong>先 <code>p1 == p2</code>；② 推进时<strong>先问「我现在是 null 吗」</strong>，是则落到另一条链的头，否则走 <code>next</code>。</li><li>同一骨架可直接迁移到 142 环形链表 II 与 876 链表的中间结点，回访时三题一起过一遍更省力。</li></ul></div>
@@ -37,22 +41,22 @@
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>双指针</b></li>
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双指针</h3>
-    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 50.9 MB</span><span class="chip">用例 41/41</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0160_IntersectionOfTwoLinkedLists.java · 双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">getIntersectionNode</span>(<span class="tk-t">ListNode</span> headA, <span class="tk-t">ListNode</span> headB) {
+    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 50.6 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0160_IntersectionOfTwoLinkedLists.java · 双指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">getIntersectionNode</span>(<span class="tk-t">ListNode</span> headA, <span class="tk-t">ListNode</span> headB) {
         <span class="tk-t">ListNode</span> p1 = headA, p2 = headB;
         <span class="tk-k">while</span> (p1 != p2) {
-            p1 = p1 == <span class="tk-k">null</span> ? headB : p1.next;
-            p2 = p2 == <span class="tk-k">null</span> ? headA : p2.next;
+            p1 = p1 != <span class="tk-k">null</span> ? p1.next : headB;
+            p2 = p2 != <span class="tk-k">null</span> ? p2.next : headA;
         }
         <span class="tk-k">return</span> p1;
     }</pre></div>

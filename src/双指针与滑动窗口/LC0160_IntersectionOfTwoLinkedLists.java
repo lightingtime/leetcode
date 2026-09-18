@@ -2,9 +2,13 @@
 // LeetCode 160. 相交链表 (Intersection of Two Linked Lists)
 // 难度：Easy | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/intersection-of-two-linked-lists/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-04）
-// 一刷写法：双指针各走完一条链后切到另一条链，消除长度差 O(m+n)/O(1)
-// 测试用例：示例 3 个（题目自带）+ 边界 7 个（原有双空/单空 2 个，本次补齐 5 个）
+// 复习日期：2026-09-18（第 2 次复习 · 一刷 2026-08-04 · 一刷一次 Accepted）
+// 一刷写法：双指针换链——两个指针各走完自己那条链后切到对方链头，走满 m+n 步后同相位；有交点必相遇，无交点同时落到 null。O(m+n)/O(1)
+// 这题的历史坑（错误习惯库有记录，上一轮复习还犯过一次）：① 换链要按「指针自己走到 null」切到另一条链头，写成「next == null 时切」会相位错乱甚至死循环；② 每轮先判 p1 == p2 再移动，先走一步再比会漏掉「交点正好在链头」；③ 判空之前别解引用 p.next
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 7 个）
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -15,8 +19,8 @@ public class LC0160_IntersectionOfTwoLinkedLists {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode p1 = headA, p2 = headB;
         while (p1 != p2) {
-            p1 = p1 == null ? headB : p1.next;
-            p2 = p2 == null ? headA : p2.next;
+            p1 = p1 != null ? p1.next : headB;
+            p2 = p2 != null ? p2.next : headA;
         }
         return p1;
     }
