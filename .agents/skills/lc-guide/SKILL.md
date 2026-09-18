@@ -13,7 +13,7 @@ description: 力扣解题思路引导。当用户说「不懂」「不会写」�
 ## 上下文纪律（省 token，必守）
 
 - 需要题目/一刷信息时用 `node ".agents/skills/lc-practice/scripts/update_state.js" show --seq <seq>`（约 0.5KB），不要读 `analysis.json`/`progress.json` 原文；要某写法代码时才加 `--code latest`。
-- `references/*.md`（dp-subtypes、stack-index-semantics、example-lc4）都按需读对应小节，禁止整篇读；`lc-analyze/references/patterns.md` 是 68KB，只用 `rg -n` 查关键词定位。
+- `references/*.md`（dp-subtypes、stack-index-semantics、example-lc4）都按需读对应小节，禁止整篇读；套路库改用 `node ".agents/skills/lc-analyze/scripts/patterns.js" find <关键词>` 查，不要通读 `references/patterns/`。
 - 读用户代码用 `sed -n 'a,bp'` / `rg -n` 取片段，不要整篇 cat；引用行号必须与文件真实行号一致（用 `rg -n` 或 `sed -n` 的带行号输出核对）。
 
 ## 流程（严格按序，用户没跟上就停）

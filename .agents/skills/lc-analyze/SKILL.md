@@ -9,14 +9,14 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 
 - 项目：仓库根目录；状态目录：`仓库根目录\.lc`
 - 本 skill 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js` 与 `update_state.js`
-- 套路沉淀库：`.agents/skills/lc-analyze/references/patterns.md`（分析时先查套路是否已收录；新增套路时按同样格式追加）
+- 套路沉淀库：`.agents/skills/lc-analyze/references/patterns/`（索引 `index.md` + 按分类拆分的正文；查询/新增都走 `scripts/patterns.js`，不要手改编号）
 
 ## 上下文纪律（省 token，必守）
 
 - 查状态一律走脚本，**禁止** `cat` / `node -e require()` 直读 `.lc/progress.json`（129KB）、`.lc/order.json`（44KB）、`.lc/review_state.json`（66KB）；单题信息用 `update_state.js show --seq N`，分类提示用 `update_state.js hint --seq N`。
 - 单题明细默认 `update_state.js show --seq N`（约 0.5KB），需要某写法代码时加 `--code latest`；只有确需全量字段才 `analysis --slug S`。
 - 读用户代码用 `sed -n 'a,bp'` / `rg -n` 取片段（提交区通常几十行），不要为核对行号把整个文件读两遍。
-- `references/patterns.md` 按需查小节，禁止整篇读；复盘页只给链接，不读 HTML 内容。
+- 套路库用 `node ".agents/skills/lc-analyze/scripts/patterns.js" find <关键词>` 查（一次只回命中条目），不要 `ls`/`cat` 整个 `references/patterns/` 目录；复盘页只给链接，不读 HTML 内容。
 
 ## 流程
 
@@ -34,8 +34,8 @@ description: 力扣解题代码分析。当用户测试报错/失败、说「帮
 5. 记录错误习惯：`node ".agents/skills/lc-practice/scripts/update_state.js" habit add --text "<习惯描述，例如：边界为空时未处理>" --problem <slug> --category <分类>`。明细会同步写入该题 `.lc/problems/{题号}_{slug}/analysis.json`（按题存储），`progress.json` 只保留聚合索引。
    - **不记录**：环境/工程配置问题（IDE、Sources Root、SDK 等）、编译类错误（语法、缺 return 等）、占位未实现（return null 等）这类非算法问题；错误习惯只记录算法思路、边界、逻辑类问题。
 6. 套路沉淀（本轮用到或暴露可复用套路时必做）：
-   - 查 `references/patterns.md`（68KB，**禁止整篇读**）判断该写法/取舍是否已收录：先 `rg -n '<关键词>|^## '` 定位小节，再只读命中段落；已收录直接引用，未收录则新增。
-   - 新增套路：`node ".agents/skills/lc-practice/scripts/update_state.js" pattern add --slug <slug> --title "<套路名>" --text "<对照/取舍总结>"` 写入该题 `analysis.json` 的 `patterns` 字段；同时按本文件相同格式追加到 `references/patterns.md`（含对照表、要点、出处题）。
+   - 查套路：`node ".agents/skills/lc-analyze/scripts/patterns.js" find <关键词>`（先 `--titles` 看命中标题，确认后再 `show <编号>` 读正文）；命中就直接引用，未命中才新增。
+   - 新增套路（两步，缺一不可）：① `node ".agents/skills/lc-analyze/scripts/patterns.js" add --title "<套路名>" --text "<对照/取舍总结>" --source LC0141` 写入分类文件并更新索引（脚本自动编号）；② `node ".agents/skills/lc-practice/scripts/update_state.js" pattern add --slug <slug> --title "<套路名>" --text "<对照/取舍总结>"` 写进该题 `analysis.json` 的 `patterns` 字段，复盘页「套路沉淀」区块由此呈现。
    - 复盘报告用「套路沉淀」小节呈现该套路，供后续选题/分析复用。
 7. 结束时告诉用户：改好后重新运行 main；若想直接看当前思路的正确写法，需要明确说「给我当前思路的正确答案」。
 
