@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>53. 最大子数组和 (Maximum Subarray)</h1><p>&gt; <a href="https://leetcode.cn/problems/maximum-subarray/" rel="noopener">https://leetcode.cn/problems/maximum-subarray/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、分治、动态规划</p><h2>题目描述</h2><p>给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p><p>子数组 是数组中的一个连续部分。</p><p>示例 1：</p><p>输入：nums = [-2,1,-3,4,-1,2,1,-5,4]</p><p>输出：6</p><p>解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</p><p>示例 2：</p><p>输入：nums = [1]</p><p>输出：1</p><p>示例 3：</p><p>输入：nums = [5,4,-1,7,8]</p><p>输出：23</p><p>提示：</p><p>1 5</p><p>-104 4</p><p>进阶：如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的 分治法 求解。</p><h2>示例</h2><ol><li>输入：nums = [-2,1,-3,4,-1,2,1,-5,4]</li></ol><p>输出：6</p><p>解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</p><ol><li>输入：nums = [1]</li></ol><p>输出：1</p><ol><li>输入：nums = [5,4,-1,7,8]</li></ol><p>输出：23</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（210/210）｜ 一次 AC ｜ Kadane（一维滚动） ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p><strong>① 与一刷对比</strong>：一刷即为 Kadane（一维滚动）O(n)/O(1)，这次思路一致；写法差别是把 i==0 单独用 if 分支处理，复杂度与内存量级无变化。</p><p><strong>② 为什么能想起来</strong>：一刷沉淀的关键句「状态 = 以 i 结尾的最大子数组和」直接决定了转移形式，先定结尾状态、再写「接上 or 重启」两个候选，没有退回枚举区间的做法。</p><p><strong>③ 掌握度依据</strong>：全程无提示、无探讨，本地 8 组用例一次通过，提交一次 AC（210/210），判 strong。</p><p><strong>④ 下一步提醒</strong>：写法可再压缩——preMax 初值取 nums[0]、循环从 1 开始，就能省掉循环体内的 i==0 分支。紧接着复习的 152 乘积最大子数组（seq=57）同属线性 DP，但负负得正，必须同时维护 max 与 min 两个状态。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>Kadane（一维滚动）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Kadane（一维滚动）</h3>
     <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 74.1 MB</span><span class="chip">用例 210/210</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0053_MaximumSubarray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxSubArray</span>(<span class="tk-k">int</span>[] nums) {
+    <div class="code-wrap"><div class="code-head"><span>LC0053_MaximumSubarray.java · Kadane（一维滚动）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxSubArray</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> max = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
         <span class="tk-k">int</span> preMax = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
@@ -50,10 +61,24 @@
         }
         <span class="tk-k">return</span> max;
     }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0053_MaximumSubarray.java · Kadane（一维滚动） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxSubArray</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> max = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
+        <span class="tk-k">int</span> preMax = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">if</span> (i == <span class="tk-n">0</span>) {
+                preMax = nums[i];
+            } <span class="tk-k">else</span> {
+                preMax = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(preMax + nums[i], nums[i]);
+            }
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, preMax);
+        }
+        <span class="tk-k">return</span> max;
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找和最大的连续子数组。暴力枚举所有起止点 O(n²)；Kadane 用「以 i 结尾的最大子数组和」这个状态把每个元素只处理一次，O(n)。</p><p>为什么状态定义成「以 i 结尾」：</p><ul><li>连续子数组的边界一旦固定（右端必须是 i），组合规则就唯一：要么 nums[i] 单独开一段，要么接在以 i-1 结尾的那段后面；</li><li>「区间内最大和」不能由子区间直接拼（两个子数组可能不相邻），所以不能用二维区间 DP。</li></ul><p>关键设计：</p><ol><li>dp[i] = 以 nums[i] 结尾的最大连续子数组和，转移 dp[i] = max(nums[i], dp[i-1] + nums[i])；</li><li>只依赖前一个状态，滚动为两个变量：preMax（当前结尾最大和）与 max（历史最大值）；</li><li>max 初始化为最小整数，保证全负数数组也能取到最大单元素。</li></ol><p>具体 case 推演（nums = [-2,1,-3,4,-1,2,1,-5,4]）：</p><ul><li>i=0：-2 单独开段 → preMax=-2，max=-2；</li><li>i=1：max(-2+1, 1)=1 → preMax=1，max=1；</li><li>i=2：max(1-3, -3)=-2 → preMax=-2，max=1；</li><li>i=3：max(-2+4, 4)=4 → max=4；</li><li>i=4：max(4-1, -1)=3；</li><li>i=5：max(3+2, 2)=5；</li><li>i=6：max(5+1, 1)=6 → max=6（对应子数组 [4,-1,2,1]）；</li><li>i=7：max(6-5, -5)=1；i=8：max(1+4, 4)=5；</li><li>答案 6。</li></ul><p>边界与细节：</p><ul><li>全负数：每个位置都是「自己开段」，返回最大单元素（如 [-1,-2,-3] → -1）；</li><li>单元素直接返回自身；含 0 不影响结果；</li><li>10^5 个 10^4 的和是 10^9，恰好不溢出 int（本地测试已覆盖）。</li></ul><p>复杂度分析：</p><ul><li>时间 O(n)：一趟；</li><li>空间 O(1)：两个变量。</li></ul><p>为什么是最优：每个元素至少要读一次才能确定答案，O(n) 是下限；转移只依赖前一个状态，O(1) 空间也是下限。进阶分治解法 O(n log n) 不如 Kadane，本题 Kadane 即最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>210/210 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>Kadane 滚动（以位置结尾的最优）</h3><p>当题目要求「连续区间最优最大值」时，把状态定为「以 i 结尾的最优值」，转移 = max(接上一段, 从当前重启)，一遍扫描只保留上一位置的状态 → O(n)/O(1)。对照：乘积版（152）不能只留一个状态，因为负负得正，要同时维护以 i 结尾的 max 与 min。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

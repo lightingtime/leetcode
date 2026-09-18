@@ -18,22 +18,49 @@
   "notes": "Kadane：以 i 结尾的最大子数组和 + 全局最大值",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "Kadane 滚动（以位置结尾的最优）",
+      "text": "当题目要求「连续区间最优最大值」时，把状态定为「以 i 结尾的最优值」，转移 = max(接上一段, 从当前重启)，一遍扫描只保留上一位置的状态 → O(n)/O(1)。对照：乘积版（152）不能只留一个状态，因为负负得正，要同时维护以 i 结尾的 max 与 min。",
+      "category": "动态规划",
+      "problem": "maximum-subarray",
+      "date": "2026-09-18"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-08-09",
+      "date": "2026-09-18",
       "verdict": "Accepted",
       "testcases": "210/210",
       "runtime_ms": null,
-      "memory_bytes": 77720000,
+      "memory_bytes": 77660000,
       "approach": "Kadane（一维滚动）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "Kadane：以 i 结尾的最大子数组和 + 全局最大值"
+      "notes": "**① 与一刷对比**：一刷即为 Kadane（一维滚动）O(n)/O(1)，这次思路一致；写法差别是把 i==0 单独用 if 分支处理，复杂度与内存量级无变化。\n\n**② 为什么能想起来**：一刷沉淀的关键句「状态 = 以 i 结尾的最大子数组和」直接决定了转移形式，先定结尾状态、再写「接上 or 重启」两个候选，没有退回枚举区间的做法。\n\n**③ 掌握度依据**：全程无提示、无探讨，本地 8 组用例一次通过，提交一次 AC（210/210），判 strong。\n\n**④ 下一步提醒**：写法可再压缩——preMax 初值取 nums[0]、循环从 1 开始，就能省掉循环体内的 i==0 分支。紧接着复习的 152 乘积最大子数组（seq=57）同属线性 DP，但负负得正，必须同时维护 max 与 min 两个状态。",
+      "code": "public int maxSubArray(int[] nums) {\n        int max = Integer.MIN_VALUE;\n        int preMax = Integer.MIN_VALUE;\n        for (int i = 0; i < nums.length; i++) {\n            if (i == 0) {\n                preMax = nums[i];\n            } else {\n                preMax = Math.max(preMax + nums[i], nums[i]);\n            }\n            max = Math.max(max, preMax);\n        }\n        return max;\n    }",
+      "prev_code": "public int maxSubArray(int[] nums) {\n        int max = Integer.MIN_VALUE;\n        int preMax = Integer.MIN_VALUE;\n        for (int i = 0; i < nums.length; i++) {\n            if (i == 0) {\n                preMax = nums[i];\n            } else {\n                preMax = Math.max(preMax + nums[i], nums[i]);\n            }\n            max = Math.max(max, preMax);\n        }\n        return max;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "210/210",
+      "approach": "Kadane（一维滚动）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**① 与一刷对比**：一刷即为 Kadane（一维滚动）O(n)/O(1)，这次思路一致；写法差别是把 i==0 单独用 if 分支处理，复杂度与内存量级无变化。\n\n**② 为什么能想起来**：一刷沉淀的关键句「状态 = 以 i 结尾的最大子数组和」直接决定了转移形式，先定结尾状态、再写「接上 or 重启」两个候选，没有退回枚举区间的做法。\n\n**③ 掌握度依据**：全程无提示、无探讨，本地 8 组用例一次通过，提交一次 AC（210/210），判 strong。\n\n**④ 下一步提醒**：写法可再压缩——preMax 初值取 nums[0]、循环从 1 开始，就能省掉循环体内的 i==0 分支。紧接着复习的 152 乘积最大子数组（seq=57）同属线性 DP，但负负得正，必须同时维护 max 与 min 两个状态。"
+    }
   ]
 }

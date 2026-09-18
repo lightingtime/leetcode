@@ -2,8 +2,9 @@
 // LeetCode 53. 最大子数组和 (Maximum Subarray)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/maximum-subarray/
-// 刷题日期：2026-08-09
-//
+// 二刷日期：2026-09-18 | 一刷：2026-08-09（Accepted，一次 AC，O(n)/O(1)）
+// 一刷思路：Kadane —— 以 i 结尾的最大子数组和 + 全局最大值
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归）
 // ============================================================
 
 import java.util.*;
