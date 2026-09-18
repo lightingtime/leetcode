@@ -18,22 +18,49 @@
   "notes": "完全背包一维DP（外层金额内层硬币），一次通过",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "一维完全背包（容量从小到大、物品在内层）",
+      "text": "识别信号：物品可无限次选取 + 求最优值（最少个数/最大价值）。与 0/1 背包的唯一分水岭是容量维枚举方向——完全背包容量从小到大，使得 dp[i-c] 是「本轮已更新」的状态，同一物品可复用；0/1 背包必须从大到小，避免同一件物品被重复计入。本题把「求装满的最小代价」直接建模成 min 转移，无需额外记录选取方案。",
+      "category": "动态规划",
+      "problem": "coin-change",
+      "date": "2026-09-18"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-08-10",
+      "date": "2026-09-18",
       "verdict": "Accepted",
       "testcases": "189/189",
       "runtime_ms": null,
-      "memory_bytes": 46584000,
+      "memory_bytes": 46632000,
       "approach": "一维DP（完全背包）",
       "time_complexity": "O(amount·coins)",
       "space_complexity": "O(amount)",
       "optimal": true,
-      "notes": "完全背包一维DP（外层金额内层硬币），一次通过"
+      "notes": "**与上一轮对比**：一刷（2026-08-10）用的就是「一维 DP，外层金额内层硬币」，本次重写思路一致，没有换写法；差别只在不可达哨兵——一刷填 `amount + 1` 并用 `dp[amount] > amount` 判定，这次写死 `100001` 并用 `== 100001` 判定。两轮复杂度同为 O(amount·coins)/O(amount)，本次内存 46.6MB。\n\n**为什么能想起来**：看到「每种硬币数量无限 + 求凑出金额的最少枚数」，直接定位到完全背包（金额是容量、硬币是可重复取的物品、每用一枚记 1 的代价）。填充顺序上抓住了关键不变量：一维完全背包从小到大枚举容量 i，dp[i - c] 才是本轮已更新过的状态，因此同一种硬币能无限次复用。\n\n**掌握度判定**：一次提交即 Accepted（189/189），全程没有询问提示或参与讨论，按规则记为较强。\n\n**下一步提醒**：哨兵建议回到 `amount + 1`，把「不可达」表达成 `dp[amount] > amount`，就不必依赖题面 amount ≤ 10000 这个约束，语义也更自洽。内层 `if (i - coins[j] >= 0)` 可写成 `coins[j] <= i`，并把下标遍历换成增强 for，读起来更直白。相关题顺带复习 279. 完全平方数（同是完全背包求最小个数）。",
+      "code": "public int coinChange(int[] coins, int amount) {\n        int[] dp = new int[amount + 1];\n        Arrays.fill(dp, 100001);\n        dp[0] = 0;\n        for (int i = 1; i <= amount; i++) {\n            for (int j = 0; j < coins.length; j++) {\n                if (i - coins[j] >= 0) {\n                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);\n                }\n            }\n        }\n        return dp[amount] == 100001 ? -1 : dp[amount];\n    }",
+      "prev_code": "public int coinChange(int[] coins, int amount) {\n        int[] dp = new int[amount + 1];\n        Arrays.fill(dp, amount + 1);\n        dp[0] = 0;\n        for (int i = 1; i <= amount; i++) {\n            for (int c : coins) {\n                if (c <= i) {\n                    dp[i] = Math.min(dp[i], dp[i - c] + 1);\n                }\n            }\n        }\n        return dp[amount] > amount ? -1 : dp[amount];\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "189/189",
+      "approach": "一维DP（完全背包）",
+      "time_complexity": "O(amount·coins)",
+      "space_complexity": "O(amount)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：一刷（2026-08-10）用的就是「一维 DP，外层金额内层硬币」，本次重写思路一致，没有换写法；差别只在不可达哨兵——一刷填 `amount + 1` 并用 `dp[amount] > amount` 判定，这次写死 `100001` 并用 `== 100001` 判定。两轮复杂度同为 O(amount·coins)/O(amount)，本次内存 46.6MB。\n\n**为什么能想起来**：看到「每种硬币数量无限 + 求凑出金额的最少枚数」，直接定位到完全背包（金额是容量、硬币是可重复取的物品、每用一枚记 1 的代价）。填充顺序上抓住了关键不变量：一维完全背包从小到大枚举容量 i，dp[i - c] 才是本轮已更新过的状态，因此同一种硬币能无限次复用。\n\n**掌握度判定**：一次提交即 Accepted（189/189），全程没有询问提示或参与讨论，按规则记为较强。\n\n**下一步提醒**：哨兵建议回到 `amount + 1`，把「不可达」表达成 `dp[amount] > amount`，就不必依赖题面 amount ≤ 10000 这个约束，语义也更自洽。内层 `if (i - coins[j] >= 0)` 可写成 `coins[j] <= i`，并把下标遍历换成增强 for，读起来更直白。相关题顺带复习 279. 完全平方数（同是完全背包求最小个数）。"
+    }
   ]
 }
