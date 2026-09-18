@@ -359,12 +359,12 @@
       "title": "两数相加",
       "category": "链表",
       "first_pass_date": "2026-08-06",
-      "last_review_date": null,
-      "next_review_date": null,
-      "interval_days": null,
-      "review_count": 0,
-      "mastery": null,
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-18",
+      "next_review_date": "2026-09-19",
+      "interval_days": 1,
+      "review_count": 1,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "lru-cache": {

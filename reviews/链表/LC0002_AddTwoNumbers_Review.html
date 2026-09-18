@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-06</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>2. 两数相加 (Add Two Numbers)</h1><p>&gt; <a href="https://leetcode.cn/problems/add-two-numbers/" rel="noopener">https://leetcode.cn/problems/add-two-numbers/</a></p><p>难度：Medium ｜ 分类：链表</p><p>标签：递归、链表、数学</p><h2>题目描述</h2><p>给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。</p><p>请你将两个数相加，并以相同形式返回一个表示和的链表。</p><p>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p><p>示例 1：</p><p>输入：l1 = [2,4,3], l2 = [5,6,4]</p><p>输出：[7,0,8]</p><p>解释：342 + 465 = 807.</p><p>示例 2：</p><p>输入：l1 = [0], l2 = [0]</p><p>输出：[0]</p><p>示例 3：</p><p>输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]</p><p>输出：[8,9,9,9,0,0,0,1]</p><p>提示：</p><p>每个链表中的节点数在范围 [1, 100] 内</p><p>0</p><p>题目数据保证列表表示的数字不含前导零</p><h2>示例</h2><ol><li>输入：l1 = [2,4,3]，l2 = [5,6,4]</li></ol><p>输出：[7,0,8]</p><p>解释：342 + 465 = 807.</p><ol><li>输入：l1 = [0]，l2 = [0]</li></ol><p>输出：[0]</p><ol><li>输入：l1 = [9,9,9,9,9,9,9]，l2 = [9,9,9,9]</li></ol><p>输出：[8,9,9,9,0,0,0,1]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ dummy+双指针逐位相加维护进位 ｜ O(max(m,n)) · O(1)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路一致（dummy 哨兵 + 单循环逐位相加、进位参与循环条件），写法和归档版本几乎逐行相同。</p><p><strong>关键点都处理对了</strong>：① 取位前先判空（<code>p1 == null ? 0 : p1.val</code>），两链等长不了也能跑；② 循环条件写成 <code>p1 != null || p2 != null || next != 0</code>，把最高位进位收进来（只写前两个条件时 999+1 这类输入会丢一位）；③ 新节点存 <code>sum % 10</code>、进位存 <code>sum / 10</code>；④ 指针只在非空时前移，避免越界；⑤ 数字倒序存储，正好从低位往高位接，全程不用反转链表。本地示例 3 + 边界 5（单元素进位/长度不同/连续进位/结果多一位/大数混合）全过，一次提交 Accepted（1569/1569）。</p><p><strong>可精简点</strong>：进位变量叫 <code>next</code>，在链表题里和「下一个节点」的语义撞车，建议改叫 <code>carry</code>；<code>p1 = p1 == null ? p1 : p1.next;</code> 写成 <code>if (p1 != null) p1 = p1.next;</code> 更直白。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>dummy+双指针逐位相加维护进位</b></li>
+        <li><span>复杂度</span><b>O(max(m,n)) · O(1)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · dummy+双指针逐位相加维护进位</h3>
-    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.5 MB</span><span class="chip">用例 1569/1569</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0002_AddTwoNumbers.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">addTwoNumbers</span>(<span class="tk-t">ListNode</span> l1, <span class="tk-t">ListNode</span> l2) {
+    <p><span class="chip">时间 O(max(m,n))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.8 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0002_AddTwoNumbers.java · dummy+双指针逐位相加维护进位</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">addTwoNumbers</span>(<span class="tk-t">ListNode</span> l1, <span class="tk-t">ListNode</span> l2) {
         <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
         <span class="tk-t">ListNode</span> p1 = l1, p2 = l2, p = dummy;
         <span class="tk-k">int</span> next = <span class="tk-n">0</span>;
@@ -54,6 +65,24 @@
         }
         <span class="tk-k">return</span> dummy.next;
     }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0002_AddTwoNumbers.java · dummy+双指针逐位相加维护进位 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">addTwoNumbers</span>(<span class="tk-t">ListNode</span> l1, <span class="tk-t">ListNode</span> l2) {
+        <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
+        <span class="tk-t">ListNode</span> p1 = l1, p2 = l2, p = dummy;
+        <span class="tk-k">int</span> next = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (p1 != <span class="tk-k">null</span> || p2 != <span class="tk-k">null</span> || next != <span class="tk-n">0</span>) {
+            <span class="tk-k">int</span> a = p1 == <span class="tk-k">null</span> ? <span class="tk-n">0</span> : p1.val;
+            <span class="tk-k">int</span> b = p2 == <span class="tk-k">null</span> ? <span class="tk-n">0</span> : p2.val;
+            <span class="tk-k">int</span> sum = a + b + next;
+            <span class="tk-t">ListNode</span> node = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(sum % <span class="tk-n">10</span>);
+            next = sum / <span class="tk-n">10</span>;
+            p.next = node;
+            p = p.next;
+            p1 = p1 == <span class="tk-k">null</span> ? p1 : p1.next;
+            p2 = p2 == <span class="tk-k">null</span> ? p2 : p2.next;
+        }
+        <span class="tk-k">return</span> dummy.next;
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：链表按逆序存数字（头节点是个位），相加就是模拟竖式：逐位求和 + 进位。</p><p>关键设计：循环条件 p1!=null || p2!=null || carry!=0 三个都要判断——最高位产生进位时还要再生成一个节点；短链补 0（p1==null ? 0 : p1.val）；每位存 sum%10、进位 sum/10。</p><p>边界：两链长度不等；最高位连续进位（如 999+1 结果多一位）；一条链为空；9+9 的进位要带进下一位。</p><p>复杂度：O(max(m,n)) 时间、O(1) 额外空间（输出链不算），最优；逆序存储让加法天然从左到右。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>1569/1569 用例一次通过。</p></div></div></div></section>

@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-06",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "1569/1569",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 46672000,
+      "memory_bytes": 46948000,
       "approach": "dummy+双指针逐位相加维护进位",
-      "time_complexity": "O(m+n)",
+      "time_complexity": "O(max(m,n))",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "两数相加：dummy 哨兵 + 单循环逐位相加，链表为空按 0 处理，循环条件含 next != 0 统一收尾进位；一次 Accepted（1569/1569），后精简为单循环写法再次提交 Accepted。"
+      "notes": "**与一刷对比**：思路一致（dummy 哨兵 + 单循环逐位相加、进位参与循环条件），写法和归档版本几乎逐行相同。\n\n**关键点都处理对了**：① 取位前先判空（`p1 == null ? 0 : p1.val`），两链等长不了也能跑；② 循环条件写成 `p1 != null || p2 != null || next != 0`，把最高位进位收进来（只写前两个条件时 999+1 这类输入会丢一位）；③ 新节点存 `sum % 10`、进位存 `sum / 10`；④ 指针只在非空时前移，避免越界；⑤ 数字倒序存储，正好从低位往高位接，全程不用反转链表。本地示例 3 + 边界 5（单元素进位/长度不同/连续进位/结果多一位/大数混合）全过，一次提交 Accepted（1569/1569）。\n\n**可精简点**：进位变量叫 `next`，在链表题里和「下一个节点」的语义撞车，建议改叫 `carry`；`p1 = p1 == null ? p1 : p1.next;` 写成 `if (p1 != null) p1 = p1.next;` 更直白。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode();\n        ListNode p1 = l1, p2 = l2, p = dummy;\n        int next = 0;\n        while (p1 != null || p2 != null || next != 0) {\n            int a = p1 == null ? 0 : p1.val;\n            int b = p2 == null ? 0 : p2.val;\n            int sum = a + b + next;\n            ListNode node = new ListNode(sum % 10);\n            next = sum / 10;\n            p.next = node;\n            p = p.next;\n            p1 = p1 == null ? p1 : p1.next;\n            p2 = p2 == null ? p2 : p2.next;\n        }\n        return dummy.next;\n    }",
+      "prev_code": "public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode();\n        ListNode p1 = l1, p2 = l2, p = dummy;\n        int next = 0;\n        while (p1 != null || p2 != null || next != 0) {\n            int a = p1 == null ? 0 : p1.val;\n            int b = p2 == null ? 0 : p2.val;\n            int sum = a + b + next;\n            ListNode node = new ListNode(sum % 10);\n            next = sum / 10;\n            p.next = node;\n            p = p.next;\n            p1 = p1 == null ? p1 : p1.next;\n            p2 = p2 == null ? p2 : p2.next;\n        }\n        return dummy.next;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
   ],
-  "approach_detail": "问题本质：链表按逆序存数字（头节点是个位），相加就是模拟竖式：逐位求和 + 进位。\n关键设计：循环条件 p1!=null || p2!=null || carry!=0 三个都要判断——最高位产生进位时还要再生成一个节点；短链补 0（p1==null ? 0 : p1.val）；每位存 sum%10、进位 sum/10。\n边界：两链长度不等；最高位连续进位（如 999+1 结果多一位）；一条链为空；9+9 的进位要带进下一位。\n复杂度：O(max(m,n)) 时间、O(1) 额外空间（输出链不算），最优；逆序存储让加法天然从左到右。"
+  "approach_detail": "问题本质：链表按逆序存数字（头节点是个位），相加就是模拟竖式：逐位求和 + 进位。\n关键设计：循环条件 p1!=null || p2!=null || carry!=0 三个都要判断——最高位产生进位时还要再生成一个节点；短链补 0（p1==null ? 0 : p1.val）；每位存 sum%10、进位 sum/10。\n边界：两链长度不等；最高位连续进位（如 999+1 结果多一位）；一条链为空；9+9 的进位要带进下一位。\n复杂度：O(max(m,n)) 时间、O(1) 额外空间（输出链不算），最优；逆序存储让加法天然从左到右。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "dummy+双指针逐位相加维护进位",
+      "time_complexity": "O(max(m,n))",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（dummy 哨兵 + 单循环逐位相加、进位参与循环条件），写法和归档版本几乎逐行相同。\n\n**关键点都处理对了**：① 取位前先判空（`p1 == null ? 0 : p1.val`），两链等长不了也能跑；② 循环条件写成 `p1 != null || p2 != null || next != 0`，把最高位进位收进来（只写前两个条件时 999+1 这类输入会丢一位）；③ 新节点存 `sum % 10`、进位存 `sum / 10`；④ 指针只在非空时前移，避免越界；⑤ 数字倒序存储，正好从低位往高位接，全程不用反转链表。本地示例 3 + 边界 5（单元素进位/长度不同/连续进位/结果多一位/大数混合）全过，一次提交 Accepted（1569/1569）。\n\n**可精简点**：进位变量叫 `next`，在链表题里和「下一个节点」的语义撞车，建议改叫 `carry`；`p1 = p1 == null ? p1 : p1.next;` 写成 `if (p1 != null) p1 = p1.next;` 更直白。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
