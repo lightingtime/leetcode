@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-06",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "208/208",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 44784000,
+      "memory_bytes": 44868000,
       "approach": "迭代合并：dummy哨兵+双指针",
       "time_complexity": "O(m+n)",
-      "space_complexity": "O(1)",
-      "optimal": true,
-      "notes": "合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。"
+      "space_complexity": "O(m+n)",
+      "optimal": false,
+      "notes": "**与一刷对比**：算法思路一致（dummy 哨兵 + 双指针迭代合并），但节点处理方式退化了——一刷是**原地复用原节点**（额外空间 O(1)），这次在交错合并阶段每次都 `new ListNode(p1.val)` 复制节点，只有最后剩余的那一段是直接拼接，所以额外空间变成 O(m+n)。结果是正确的、Accepted（208/208），但空间没有达最优。\n\n**写对的地方**：dummy 哨兵 + `while (p1 != null && p2 != null)` 逐轮接较小节点、每轮接完指针前移；退出循环后剩余链整段拼接（`p.next = p1/p2`），没有再逐节点接。\n\n**可优化点**：① 交错阶段直接接原节点（把当前节点挂上、指针后移）就能把额外空间压回 O(1)——本题不要求新链表副本，复用节点是标准写法；② 开头两个 null 判断冗余，dummy 结构本身能兜住空链；③ 拼接剩余段用的两个 if 可以保留其一（两者必有一个为 null）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强（但写法未达空间最优，已按 optimal=false 记录）。",
+      "code": "    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {\n        if (list1 == null) {\n            return list2;\n        }\n        if (list2 == null) {\n            return list1;\n        }\n        ListNode dummy = new ListNode();\n        ListNode p1 = list1, p2 = list2, p = dummy;\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                ListNode node = new ListNode(p1.val);\n                p.next = node;\n                p1 = p1.next;\n            } else {\n                ListNode node = new ListNode(p2.val);\n                p.next = node;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) {\n            p.next = p1;\n        }\n        if (p2 != null) {\n            p.next = p2;\n        }\n        return dummy.next;\n    }",
+      "prev_code": "public ListNode mergeTwoLists(ListNode list1, ListNode list2) {\n        if (list1 == null) {\n            return list2;\n        }\n        if (list2 == null) {\n            return list1;\n        }\n        ListNode dummy = new ListNode();\n        ListNode p1 = list1, p2 = list2, p = dummy;\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                ListNode node = new ListNode(p1.val);\n                p.next = node;\n                p1 = p1.next;\n            } else {\n                ListNode node = new ListNode(p2.val);\n                p.next = node;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) {\n            p.next = p1;\n        }\n        if (p2 != null) {\n            p.next = p2;\n        }\n        return dummy.next;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
   ],
-  "approach_detail": "问题本质：两个有序链表合并成一个。归并式双指针：每步取较小节点接在结果链尾。\n关键设计：p1、p2 比较取小者接在 p 后并前移；一方走完时把另一方的剩余链整体续接（链表天然 O(1) 续接）。dummy 哑节点避免头节点特判，最后返回 dummy.next。\n边界：一方为空时直接返回另一方；两链长度不等；值相等时取哪边都行。\n复杂度：O(n+m) 时间、O(1) 额外空间，最优。代码里相等值用 new ListNode 复制节点而非直接续接，正确但可简化——直接续接原节点更省空间。"
+  "approach_detail": "问题本质：两个有序链表合并成一个。归并式双指针：每步取较小节点接在结果链尾。\n关键设计：p1、p2 比较取小者接在 p 后并前移；一方走完时把另一方的剩余链整体续接（链表天然 O(1) 续接）。dummy 哑节点避免头节点特判，最后返回 dummy.next。\n边界：一方为空时直接返回另一方；两链长度不等；值相等时取哪边都行。\n复杂度：O(n+m) 时间、O(1) 额外空间，最优。代码里相等值用 new ListNode 复制节点而非直接续接，正确但可简化——直接续接原节点更省空间。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "迭代合并：dummy哨兵+双指针",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(m+n)",
+      "optimal": false,
+      "notes": "**与一刷对比**：算法思路一致（dummy 哨兵 + 双指针迭代合并），但节点处理方式退化了——一刷是**原地复用原节点**（额外空间 O(1)），这次在交错合并阶段每次都 `new ListNode(p1.val)` 复制节点，只有最后剩余的那一段是直接拼接，所以额外空间变成 O(m+n)。结果是正确的、Accepted（208/208），但空间没有达最优。\n\n**写对的地方**：dummy 哨兵 + `while (p1 != null && p2 != null)` 逐轮接较小节点、每轮接完指针前移；退出循环后剩余链整段拼接（`p.next = p1/p2`），没有再逐节点接。\n\n**可优化点**：① 交错阶段直接接原节点（把当前节点挂上、指针后移）就能把额外空间压回 O(1)——本题不要求新链表副本，复用节点是标准写法；② 开头两个 null 判断冗余，dummy 结构本身能兜住空链；③ 拼接剩余段用的两个 if 可以保留其一（两者必有一个为 null）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强（但写法未达空间最优，已按 optimal=false 记录）。"
+    }
+  ]
 }
