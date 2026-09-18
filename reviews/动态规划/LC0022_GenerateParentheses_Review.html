@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>22. 括号生成 (Generate Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/generate-parentheses/" rel="noopener">https://leetcode.cn/problems/generate-parentheses/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：字符串、动态规划、回溯、括号序列</p><h2>题目描述</h2><p>数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。</p><p>示例 1：</p><p>输入：n = 3</p><p>输出：["((()))","(()())","(())()","()(())","()()()"]</p><p>示例 2：</p><p>输入：n = 1</p><p>输出：["()"]</p><p>提示：</p><p>1</p><h2>示例</h2><ol><li>输入：n = 3</li></ol><p>输出：["((()))","(()())","(())()","()(())","()()()"]</p><ol><li>输入：n = 1</li></ol><p>输出：["()"]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（8/8）｜ 一次 AC ｜ 回溯（剩余计数剪枝） ｜ O(C_n·n) · O(n)</p>
+      <div class="review-note md"><h3>与上一轮对比</h3><ul><li>思路未变：仍是一刷的「剩余左右括号计数 + 前缀非法剪枝」；实现上把一刷的 String 拼接换成 StringBuilder 追加 + 撤销末字符，属于同一写法内的微调，复杂度同为 O(C_n·n)/O(n)。</li></ul><h3>这次为什么能直接想起来</h3><ul><li>本题核心约束是「任意前缀中 ( 不少于 )」；这次没有走先枚举 2^(2n) 再过滤的老路，而是直接构造式回溯：剩余左 &gt; 剩余右 就意味着已放下的 ) 已超过 (，这条分支立刻回退。</li></ul><h3>掌握度判定依据</h3><ul><li>提交一次即 Accepted（8/8），全程无提示、无讨论 → strong。</li></ul><h3>下一步提醒</h3><ul><li>代码还能更精简：<code>l&lt;0 || r&lt;0</code> 的负值守卫与 <code>l==r &amp;&amp; l==0</code> 的终止判断可以合并成「只在 l&gt;0 / r&gt;0 时才继续递归」，省掉负值分支；终止条件也可直接写成 <code>l==0 &amp;&amp; r==0</code>。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,46 @@
         <li><span>复杂度</span><b>O(C_n*n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>回溯（剩余计数剪枝）</b></li>
+        <li><span>复杂度</span><b>O(C_n·n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 回溯（剩余计数剪枝）</h3>
-    <p><span class="chip">时间 O(C_n*n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.3 MB</span><span class="chip">用例 8/8</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0022_GenerateParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <p><span class="chip">时间 O(C_n·n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 8/8</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0022_GenerateParentheses.java · 回溯（剩余计数剪枝）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
+    <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">generateParenthesis</span>(<span class="tk-k">int</span> n) {
+        ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        <span class="tk-f">dfs</span>(n, n, <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>());
+        <span class="tk-k">return</span> ans;
+    }
+
+    <span class="tk-c">// l/r：还剩几个左/右括号</span>
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-k">int</span> l, <span class="tk-k">int</span> r, <span class="tk-t">StringBuilder</span> sb) {
+        <span class="tk-k">if</span> (l &lt; <span class="tk-n">0</span> || r &lt; <span class="tk-n">0</span>) {
+            <span class="tk-k">return</span>;
+        }
+        <span class="tk-k">if</span> (l == r &amp;&amp; l == <span class="tk-n">0</span>) {
+            ans.<span class="tk-f">add</span>(sb.<span class="tk-f">toString</span>());
+            <span class="tk-k">return</span>;
+        }
+        <span class="tk-c">// 剩余左括号比右括号多 ⇒ 已放下的 ')' 已经超过 '('，前缀非法</span>
+        <span class="tk-k">if</span> (l &gt; r) {
+            <span class="tk-k">return</span>;
+        }
+        sb.<span class="tk-f">append</span>(<span class="tk-s">"("</span>);
+        <span class="tk-f">dfs</span>(l - <span class="tk-n">1</span>, r, sb);
+        sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
+
+        sb.<span class="tk-f">append</span>(<span class="tk-s">")"</span>);
+        <span class="tk-f">dfs</span>(l, r - <span class="tk-n">1</span>, sb);
+        sb.<span class="tk-f">deleteCharAt</span>(sb.<span class="tk-f">length</span>() - <span class="tk-n">1</span>);
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0022_GenerateParentheses.java · 回溯（剩余计数剪枝） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
     <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">generateParenthesis</span>(<span class="tk-k">int</span> n) {
         ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
         <span class="tk-f">dfs</span>(n, n, <span class="tk-s">""</span>);
@@ -58,11 +97,12 @@
         <span class="tk-f">dfs</span>(left - <span class="tk-n">1</span>, right, sb + <span class="tk-s">"("</span>);
 
         <span class="tk-f">dfs</span>(left, right - <span class="tk-n">1</span>, sb + <span class="tk-s">")"</span>);
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：生成 n 对括号的所有合法组合，数量是卡特兰数 C_n = (2n)!/((n+1)!·n!)。枚举每个位置放 ( 还是 )，用「已用右括号 ≤ 已用左括号」保证每一步前缀都合法。</p><p>为什么用回溯：</p><ul><li>每个位置只有两种选择，但 () 的合法组合不能靠排列硬凑，必须边生成边校验；</li><li>回溯天然支持「生成一条路径 → 到底 → 撤销 → 换分支」的完整枚举。</li></ul><p>关键设计：</p><ol><li>状态：剩余左括号数 left、剩余右括号数 right、当前串 sb；</li><li>终止条件：left==0 &amp;&amp; right==0 时当前串完整，加入答案；</li><li>剪枝：right &lt; left 时说明已用右括号超过已用左括号，前缀已非法，直接返回；负数守卫防止 left 为 0 时仍递归减成 -1；</li><li>两条分支对称：加 ( → dfs(left-1, right)，加 ) → dfs(left, right-1)，各自递归后删除末尾字符撤销。</li></ol><p>具体 case 推演（n=2，dfs(2,2)）：</p><ul><li>加 ( → (1,2)：加 ( → (0,2)：只能加 ) → (0,1) → 加 ) → (0,0) → 得到 (())；</li><li>回溯回 (1,2)：改加 ) → (1,1)：加 ( → (0,1) → 加 ) → (0,0) → 得到 ()()；</li><li>从 (2,2) 直接加 ) 的分支变成 (2,1)，right&lt;left 剪枝，非法分支不产生。</li></ul><p>边界与细节：</p><ul><li>n=1 只有 ()；n=2 两个；n=4 14 个；n=8 1430 个（本地测试逐个校验合法性并检查去重）；</li><li>StringBuilder 加入答案时必须 toString 复制，否则后续撤销会改坏已存结果；</li><li>题目约束 n &gt;= 1，无需处理空输入。</li></ul><p>复杂度分析：</p><ul><li>时间 O(C_n · n)：C_n 个合法串，每个长 2n；剪枝后的递归树只含合法前缀；</li><li>空间 O(n)：递归深度 2n + 当前串（不含输出）。</li></ul><p>为什么是最优：答案数量本身就是卡特兰数，任何算法至少要输出 C_n 个长度为 2n 的串；回溯让每个合法串恰好生成一次、无重复枚举，已达下限。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>8/8 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>括号生成回溯：剩余计数 + 前缀合法性剪枝</h3><p>适用信号：列出所有受前缀约束的串（括号、表达式、路径），答案数本身指数级。用「还剩多少」代替「已用多少」：l/r 为剩余左/右括号数，剪枝条件就写成 l &gt; r（已放下的 ) 已多于 (，前缀非法）。两种分支各带前提：放 ( 需 l&gt;0，放 ) 需 r&gt;l；共享 StringBuilder 在递归返回后立刻撤销末字符。终止在 l==r==0 收结果，剪枝放在终止判断之后，已完整的合法串不会被误剪。复杂度下限：答案 C_n 个、每个长 2n，输出开销本身 Ω(C_n·n)。对照 LC0301：那题先算最小删除预算再删，本题构造时维护剩余计数，共同点是把非法前缀的整棵子树砍掉。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

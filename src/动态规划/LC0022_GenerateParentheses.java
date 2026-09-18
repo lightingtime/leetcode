@@ -2,8 +2,13 @@
 // LeetCode 22. 括号生成 (Generate Parentheses)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/generate-parentheses/
-// 刷题日期：2026-08-09
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-09 · 一刷一次 AC）
+// 一刷/本次写法：回溯（剩余计数剪枝）——dfs(剩余左, 剩余右, StringBuilder)，剩余左 > 剩余右 即前缀非法直接剪枝，O(C_n·n)/O(n)
+// 测试用例与一刷归档保持一致（示例 n=3/1 + 边界 n=2/4/8）
 //
+// 思路：l/r 是「还剩几个左/右括号」，每一步只有放 '(' 或 ')' 两种选择；剩余数走负说明这条分支已经走过头，直接返回；
+//       剩余左 > 剩余右 说明已放下的 ')' 多于 '('、前缀已经非法，剪掉；l==r==0 时产生一个合法串，StringBuilder 追加后立即撤销
+// 复杂度：时间 O(C_n·n) 空间 O(n)
 // ============================================================
 
 import java.util.*;
@@ -14,24 +19,30 @@ public class LC0022_GenerateParentheses {
     List<String> ans;
     public List<String> generateParenthesis(int n) {
         ans = new ArrayList<>();
-        dfs(n, n, "");
+        dfs(n, n, new StringBuilder());
         return ans;
     }
 
-    private void dfs(int left, int right, String sb) {
-        if (left < 0 || right < 0) {
+    // l/r：还剩几个左/右括号
+    private void dfs(int l, int r, StringBuilder sb) {
+        if (l < 0 || r < 0) {
             return;
         }
-        if (left == right && left == 0) {
-            ans.add(sb);
+        if (l == r && l == 0) {
+            ans.add(sb.toString());
             return;
         }
-        if (right < left) {
+        // 剩余左括号比右括号多 ⇒ 已放下的 ')' 已经超过 '('，前缀非法
+        if (l > r) {
             return;
         }
-        dfs(left - 1, right, sb + "(");
+        sb.append("(");
+        dfs(l - 1, r, sb);
+        sb.deleteCharAt(sb.length() - 1);
 
-        dfs(left, right - 1, sb + ")");
+        sb.append(")");
+        dfs(l, r - 1, sb);
+        sb.deleteCharAt(sb.length() - 1);
     }
     // ==== 提交代码结束 ====
 
