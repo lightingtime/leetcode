@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>236. 二叉树的最近公共祖先 (Lowest Common Ancestor of a Binary Tree)</h1><p>&gt; <a href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/" rel="noopener">https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/</a></p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、二叉树、最近公共祖先、Binary Lifting</p><h2>题目描述</h2><p>给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。</p><p>百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”</p><p>示例 1：</p><p>输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1</p><p>输出：3</p><p>解释：节点 5 和节点 1 的最近公共祖先是节点 3 。</p><p>示例 2：</p><p>输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4</p><p>输出：5</p><p>解释：节点 5 和节点 4 的最近公共祖先是节点 5 。因为根据定义最近公共祖先节点可以为节点本身。</p><p>示例 3：</p><p>输入：root = [1,2], p = 1, q = 2</p><p>输出：1</p><p>提示：</p><p>树中节点数目在范围 [2, 105] 内。</p><p>-109 9</p><p>所有 Node.val 互不相同 。</p><p>p != q</p><p>p 和 q 均存在于给定的二叉树中。</p><h2>示例</h2><ol><li>输入：root = [3,5,1,6,2,0,8,null,null,7,4]，p = 5，q = 1</li></ol><p>输出：3</p><p>解释：节点 5 和节点 1 的最近公共祖先是节点 3 。</p><ol><li>输入：root = [3,5,1,6,2,0,8,null,null,7,4]，p = 5，q = 4</li></ol><p>输出：5</p><p>解释：节点 5 和节点 4 的最近公共祖先是节点 5 。因为根据定义最近公共祖先节点可以为节点本身。</p><ol><li>输入：root = [1,2]，p = 1，q = 2</li></ol><p>输出：1</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 递归分治：两侧搜索合并 ｜ O(n) · O(h)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路与写法一致（后序递归分治：左右两侧搜索结果合并），和归档版本代码基本相同。</p><p><strong>关键点都处理对了</strong>：① 返回值语义是「这棵子树里找到的 p、q 或已确定的 LCA」；② 三个出口齐备——<code>root == null</code> 返回 null、<code>root == p || root == q</code> 立刻返回 root（找到就停，不往子树里钻）；③ 递归回来后先判 <code>left != null &amp;&amp; right != null</code> → 当前节点即答案，否则把非空的那一侧往上带。本地示例 3 + 边界 5（左链祖先/右链自身/不平衡/极值/空树）全过，一次提交 Accepted（33/33）。</p><p><strong>掌握度依据</strong>：提交前你问了「为什么不能把『两边都不为空』放在最前面」，我把递归出口与后序判断的时机差异完整讲了一遍（含具体调用顺序推演），属于探讨过 → 按较弱记，2 天后再见。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,33 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>递归分治：两侧搜索合并</b></li>
+        <li><span>复杂度</span><b>O(n) · O(h)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 递归分治：两侧搜索合并</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 66.9 MB</span><span class="chip">用例 33/33</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/树与二叉树/LC0236_LowestCommonAncestorOfABinaryTree.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">lowestCommonAncestor</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-t">TreeNode</span> p, <span class="tk-t">TreeNode</span> q) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(h)</span><span class="chip">内存 ≈ 66.9 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0236_LowestCommonAncestorOfABinaryTree.java · 递归分治：两侧搜索合并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">lowestCommonAncestor</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-t">TreeNode</span> p, <span class="tk-t">TreeNode</span> q) {
+        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">null</span>;
+        }
+        <span class="tk-k">if</span> (root == p || root == q) {
+            <span class="tk-k">return</span> root;
+        }
+        <span class="tk-t">TreeNode</span> left = <span class="tk-f">lowestCommonAncestor</span>(root.left, p, q);
+        <span class="tk-t">TreeNode</span> right = <span class="tk-f">lowestCommonAncestor</span>(root.right, p, q);
+        <span class="tk-k">if</span> (left != <span class="tk-k">null</span> &amp;&amp; right != <span class="tk-k">null</span>) <span class="tk-k">return</span> root;
+        <span class="tk-k">if</span> (left == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> right;
+        }
+        <span class="tk-k">return</span> left;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0236_LowestCommonAncestorOfABinaryTree.java · 递归分治：两侧搜索合并 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">lowestCommonAncestor</span>(<span class="tk-t">TreeNode</span> root, <span class="tk-t">TreeNode</span> p, <span class="tk-t">TreeNode</span> q) {
         <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
             <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
@@ -53,7 +79,8 @@
             <span class="tk-k">return</span> left;
         }
         <span class="tk-k">return</span> root;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：p、q 的最近公共祖先 = 从根往下找第一个「自身是 p/q，或左右子树分别找到 p 和 q」的节点。</p><p>关键设计：后序递归：root 为 null 返回 null；root 是 p 或 q 直接返回 root（自己就是祖先，不必再往下找）；然后分别在左、右子树递归找；左空返回右、右空返回左、两边都非空说明 p、q 分居两侧，root 就是 LCA。</p><p>边界：题目保证 p、q 存在且互异；p 是 q 的祖先时递归在 p 处提前返回，另一侧不会误判；树只有单节点。</p><p>复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（递归栈），最优；不需要 parent 指针或路径记录。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>33/33 用例一次通过。</p></div></div></div></section>
