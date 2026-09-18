@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>152. 乘积最大子数组 (Maximum Product Subarray)</h1><p>&gt; <a href="https://leetcode.cn/problems/maximum-product-subarray/" rel="noopener">https://leetcode.cn/problems/maximum-product-subarray/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续 子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。</p><p>测试用例的答案是一个 32-位 整数。</p><p>请注意，一个只包含一个元素的数组的乘积是这个元素的值。</p><p>示例 1:</p><p>输入: nums = [2,3,-2,4]</p><p>输出: 6</p><p>解释: 子数组 [2,3] 有最大乘积 6。</p><p>示例 2:</p><p>输入: nums = [-2,0,-1]</p><p>输出: 0</p><p>解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。</p><p>提示:</p><p>1 4</p><p>-10</p><p>nums 的任何子数组的乘积都 保证 是一个 32-位 整数</p><h2>示例</h2><ol><li>输入：nums = [2,3,-2,4]</li></ol><p>输出：6</p><p>解释：子数组 [2,3] 有最大乘积 6。</p><ol><li>输入：nums = [-2,0,-1]</li></ol><p>输出：0</p><p>解释：结果不能为 2, 因为 [-2,-1] 不是子数组。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（191/191）｜ 一次 AC ｜ 双状态DP（最大/最小乘积） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><p>一刷（2026-08-10）同样是「双状态DP（最大/最小乘积）」，当时记录 O(n)/O(n)，之后按精简提示改出了 O(1) 滚动版并归档。本轮思路与状态定义完全一致：dp[i][0]=以 i 结尾的最大乘积、dp[i][1]=以 i 结尾的最小乘积，时间仍是最优的 O(n)；写法上换了 dp[n+1][2] 二维表，用 dp[0][0]=dp[0][1]=1 充当空状态基准，代价是空间回到 O(n)，相对归档的滚动版退了一档。</p><p><strong>② 这次怎么想起来的</strong></p><p>一刷的核心洞察——负号会让「乘积最小」在下一轮翻成「乘积最大」，所以每个位置必须同时留住 max 与 min 两个状态——这轮是直接想起来的，没回看一刷代码。两条与本题相关的旧错误习惯也没重犯：本轮 dp[i+1] 只读 dp[i]，不存在滚动变量原地更新的污染；答案是取 max(dp[i+1][0], dp[i+1][1])，跟踪对象没有选错。</p><p><strong>③ 掌握度判定依据</strong></p><p>提交一次即 Accepted（191/191，一次 AC）。但建题时我已提前点出本题相关的两条历史错误习惯（滚动 DP 原地更新、答案跟踪对象选错），按「被提示过即较弱」的规则，用户确认记为较弱。</p><p><strong>④ 下一步提醒</strong></p><p>转移只用得到上一轮的 max/min，二维表可以压回 O(1) 空间。若改写滚动版，注意两点：空状态基准 1 在滚动版里不再单独占一格，它的作用等价于「以 nums[i] 自身另起一段」这一候选，必须显式写进 max/min 的候选集合；更新 min 前要先保存上一轮的 max，否则会重犯本轮刚好避开的那条旧习惯。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,31 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双状态DP（最大/最小乘积）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 双状态DP（最大/最小乘积）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.2 MB</span><span class="chip">用例 191/191</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0152_MaximumProductSubarray.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProduct</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 191/191</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0152_MaximumProductSubarray.java · 双状态DP（最大/最小乘积）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProduct</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span> n = nums.length;
+        <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>][<span class="tk-n">2</span>];
+        dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = <span class="tk-n">1</span>;
+        dp[<span class="tk-n">0</span>][<span class="tk-n">1</span>] = <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> max = <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            dp[i + <span class="tk-n">1</span>][<span class="tk-n">0</span>] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(nums[i], <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i][<span class="tk-n">0</span>] * nums[i], dp[i][<span class="tk-n">1</span>] * nums[i]));
+            dp[i + <span class="tk-n">1</span>][<span class="tk-n">1</span>] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(nums[i], <span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i][<span class="tk-n">0</span>] * nums[i], dp[i][<span class="tk-n">1</span>] * nums[i]));
+            max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max,<span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i + <span class="tk-n">1</span>][<span class="tk-n">0</span>], dp[i + <span class="tk-n">1</span>][<span class="tk-n">1</span>]));
+        }
+        <span class="tk-k">return</span> max;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0152_MaximumProductSubarray.java · 双状态DP（最大/最小乘积） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProduct</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span> max = nums[<span class="tk-n">0</span>], min = nums[<span class="tk-n">0</span>];
         <span class="tk-k">int</span> ans = nums[<span class="tk-n">0</span>];
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt; nums.length; i++) {
@@ -47,7 +71,8 @@
             ans = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, ans);
         }
         <span class="tk-k">return</span> ans;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>在连续子数组中找乘积最大值。乘积与加法最大的区别是符号会反转：负数×负数得正数，且遇到 0 会归零重来，所以「以 i 结尾的最大乘积」不能只由一个状态决定——最大值可能来自上一轮的最小值（负负得正）。这正好构成最优子结构：以 i 结尾的连续子数组要么只有 nums[i]，要么由「以 i-1 结尾的某个子数组」接上 nums[i]，因此双状态一维 DP 能覆盖全部情况，无需回溯或枚举所有子数组。</p><p><strong>关键设计决策</strong></p><ol><li>状态定义：dpMax[i] = 以 i 结尾的连续子数组的最大乘积；dpMin[i] = 以 i 结尾的最小乘积。初始 dpMax[0]=dpMin[0]=nums[0]。</li><li>转移：每个位置有三种候选——nums[i]（重新开始）、nums[i]×dpMax[i-1]、nums[i]×dpMin[i-1]；dpMax 取三者最大、dpMin 取三者最小。必须同时维护两个状态，因为当前 nums[i] 为负时，乘以更负的上一轮值反而得到最大。</li><li>答案：所有 dpMax[i] 的最大值，初始化取 nums[0]，不能从 0 开始，否则全负数组会错。</li><li>实现用 int[n][2] 存两列；每轮只依赖 i-1，实际可以滚动成两个变量把空间降到 O(1)。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：直接返回 nums[0]，正负都适用。</li><li>全负：如 [-2,-3,-1] 答案是 6（子数组 [-2,-3]），靠负负得正；若答案初始化为 0 会错。</li><li>含 0：0 会切断子数组，「重新开始」的候选 nums[i] 保证 0 之后能重来，单个 0 也是合法答案。</li><li>32 位保证：乘积不溢出 int，直接用 int 即可。</li><li>推演 case：nums=[2,-5,-2,-4,3]。</li></ul><ol><li>i=0：max=min=2，ans=2。</li><li>i=1(-5)：候选 -5、-10、-10 → max=-5，min=-10，ans=2。</li><li>i=2(-2)：候选 -2、10、20 → max=20，min=-2，ans=20。</li><li>i=3(-4)：候选 -4、-80、8 → max=8，min=-80，ans=20（此处必须用 i=2 的 min=-2，若错用更早的 -10 会拼出非连续子数组）。</li><li>i=4(3)：候选 3、24、-240 → max=24，min=-240，ans=24 ✓。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个位置常数次运算，一次扫描完成；任何解法都至少要读一遍数组（Ω(n)），已达下限。</li><li>空间：本实现 O(n)（dp 数组）；转移只依赖 i-1，可滚动为两个变量达到 O(1)，是该问题的最优空间。</li><li>无法更优的论证：答案依赖每个元素，且负号传播要求同时知道最大与最小，单状态（只记 max）无法处理负负得正，双状态是最小的必要信息集。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>滚动 DP 原地更新：先更新 max 再算 min，后算的状态读到了本轮新值（未保存上一轮快照），状态被污染</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>答案跟踪对象错误：滚动后 ans 与 min 比较而不是与 max 比较，丢失已出现的最大值</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>191/191 用例一次通过。</p></div></div></div></section>
