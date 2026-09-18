@@ -1698,5 +1698,15 @@
     "difficulty": "MEDIUM",
     "category": "链表",
     "url": "https://leetcode.cn/problems/design-twitter/"
+  },
+  {
+    "seq": 171,
+    "phase": 3,
+    "id": "25",
+    "title": "K 个一组翻转链表",
+    "slug": "reverse-nodes-in-k-group",
+    "difficulty": "HARD",
+    "category": "链表",
+    "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/"
   }
 ]

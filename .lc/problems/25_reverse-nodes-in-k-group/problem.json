@@ -1,0 +1,50 @@
+{
+  "id": "25",
+  "slug": "reverse-nodes-in-k-group",
+  "title": "Reverse Nodes in k-Group",
+  "titleCn": "K 个一组翻转链表",
+  "difficulty": "Hard",
+  "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/",
+  "tags": [
+    "Recursion",
+    "Linked List"
+  ],
+  "tagsCn": [
+    "递归",
+    "链表"
+  ],
+  "category": "链表",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,3,4,5]"
+        },
+        {
+          "name": "k",
+          "value": "2"
+        }
+      ],
+      "output": "[2,1,4,3,5]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,3,4,5]"
+        },
+        {
+          "name": "k",
+          "value": "3"
+        }
+      ],
+      "output": "[3,2,1,4,5]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4,5]\n2\n[1,2,3,4,5]\n3",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode reverseKGroup(ListNode head, int k) {\n        \n    }\n}",
+  "fetchedAt": "2026-09-18T10:08:47.046Z"
+}
