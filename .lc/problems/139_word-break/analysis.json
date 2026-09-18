@@ -18,22 +18,49 @@
   "notes": "前缀DP（枚举词典单词），修复 dp 覆盖 bug 后一次通过",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "线性 DP · 字符串切分可行性",
+      "text": "切分/拼接可行性题先想「位置就是阶段」：状态定义为某端开头（或结尾）的剩余串能否拼出，转移只写「当前这一段取词典里的哪个词」。\n- 正向 vs 倒向只是镜像，选哪个看哪端更好写边界；空串（下标 n 或 0）永远是 true 的终点。\n- 可行性只要一个见证，命中即 break，不要写成计数 DP。\n- 词典先去重；若词很长很多，再考虑 Trie 把公共前缀的重复比较省掉。",
+      "category": "动态规划",
+      "problem": "word-break",
+      "date": "2026-09-18"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-08-10",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "48/48",
+      "testcases": "49/49",
       "runtime_ms": null,
-      "memory_bytes": 45008000,
+      "memory_bytes": 43324000,
       "approach": "前缀DP",
       "time_complexity": "O(n·m·L)",
       "space_complexity": "O(n + m·L)",
       "optimal": true,
-      "notes": "前缀DP（枚举词典单词），修复 dp 覆盖 bug 后一次通过"
+      "notes": "**与上一轮对比**：一刷是正序（dp[i] = 前缀 s[0, i) 能否拼出，从 dp[i - len] 转移），这次改成倒序（canReach[i] = 后缀 s[i..n) 能否拼出，从 canReach[i + len] 转移），是同一条递推的镜像写法；字典同样用 HashSet 去重，复杂度同级 O(n·m·L) / O(n + m·L)，变量名换成 canReach 更贴合「可达」语义。\n\n**这次为什么能想起来**：骨架（按位置切分 + 枚举词典）记牢了，直接从「最后一段从哪开始」倒推状态；一刷复盘里记的 dp 覆盖问题这次用「命中即 break」规避，倒着填表也不会被更长词覆盖。\n\n**掌握度判定依据**：本地 9 项用例先过，提交第一次即 Accepted（49/49），写码与调试全程独立、没有针对做法展开讨论，判 strong。\n\n**下一步提醒**：想再快一步可以用 Trie 建词典、DP 时沿树走（省掉 m 个词的重复前缀比较）；同族题 140 单词拆分 II 是它的「输出所有方案」版本，回看时注意回溯 + 记忆化的剪枝。",
+      "code": "public boolean wordBreak(String s, List<String> wordDict) {\n        int n = s.length();\n        boolean[] canReach = new boolean[n + 1];\n        canReach[n] = true;\n        Set<String> set = new HashSet<>(wordDict);\n        for (int i = s.length() - 1; i >= 0; i--) {\n            for (String word : set) {\n                if (i + word.length() <= n && canReach[i + word.length()]) {\n                    if (s.startsWith(word, i)) {\n                        canReach[i] = true;\n                        break;\n                    }\n                }\n            }\n        }\n\n        return canReach[0];\n    }",
+      "prev_code": "public boolean wordBreak(String s, List<String> wordDict) {\n        Set<String> set = new HashSet<>(wordDict);\n        boolean[] dp = new boolean[s.length() + 1];\n        dp[0] = true;\n        for (int i = 1; i < dp.length; i++) {\n            for (String word : set) {\n                if (i >= word.length() && dp[i - word.length()] && s.startsWith(word, i - word.length())) {\n                    dp[i] = true;\n                    break;\n                }\n            }\n        }\n        return dp[s.length()];\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "49/49",
+      "approach": "前缀DP",
+      "time_complexity": "O(n·m·L)",
+      "space_complexity": "O(n + m·L)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：一刷是正序（dp[i] = 前缀 s[0, i) 能否拼出，从 dp[i - len] 转移），这次改成倒序（canReach[i] = 后缀 s[i..n) 能否拼出，从 canReach[i + len] 转移），是同一条递推的镜像写法；字典同样用 HashSet 去重，复杂度同级 O(n·m·L) / O(n + m·L)，变量名换成 canReach 更贴合「可达」语义。\n\n**这次为什么能想起来**：骨架（按位置切分 + 枚举词典）记牢了，直接从「最后一段从哪开始」倒推状态；一刷复盘里记的 dp 覆盖问题这次用「命中即 break」规避，倒着填表也不会被更长词覆盖。\n\n**掌握度判定依据**：本地 9 项用例先过，提交第一次即 Accepted（49/49），写码与调试全程独立、没有针对做法展开讨论，判 strong。\n\n**下一步提醒**：想再快一步可以用 Trie 建词典、DP 时沿树走（省掉 m 个词的重复前缀比较）；同族题 140 单词拆分 II 是它的「输出所有方案」版本，回看时注意回溯 + 记忆化的剪枝。"
+    }
   ]
 }

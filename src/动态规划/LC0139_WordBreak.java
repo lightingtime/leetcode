@@ -2,7 +2,9 @@
 // LeetCode 139. 单词拆分 (Word Break)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/word-break/
-// 刷题日期：2026-08-09
+// 二刷日期：2026-09-18 | 一刷：2026-08-10（Accepted，一次 AC，最优写法）
+// 一刷思路与代码见复盘页 reviews/动态规划/…，此处不写以保留回忆空间
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归），请勿删改
 // ============================================================
 
 import java.util.*;
@@ -11,18 +13,22 @@ public class LC0139_WordBreak {
 
     // ==== 提交代码开始 ====
     public boolean wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        boolean[] canReach = new boolean[n + 1];
+        canReach[n] = true;
         Set<String> set = new HashSet<>(wordDict);
-        boolean[] dp = new boolean[s.length() + 1];
-        dp[0] = true;
-        for (int i = 1; i < dp.length; i++) {
+        for (int i = s.length() - 1; i >= 0; i--) {
             for (String word : set) {
-                if (i >= word.length() && dp[i - word.length()] && s.startsWith(word, i - word.length())) {
-                    dp[i] = true;
-                    break;
+                if (i + word.length() <= n && canReach[i + word.length()]) {
+                    if (s.startsWith(word, i)) {
+                        canReach[i] = true;
+                        break;
+                    }
                 }
             }
         }
-        return dp[s.length()];
+
+        return canReach[0];
     }
     // ==== 提交代码结束 ====
 

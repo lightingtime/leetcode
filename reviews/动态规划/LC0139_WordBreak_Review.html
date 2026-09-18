@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>139. 单词拆分 (Word Break)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-break/" rel="noopener">https://leetcode.cn/problems/word-break/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：字典树、记忆化、数组、哈希表、字符串、动态规划、Brute-Force Search</p><h2>题目描述</h2><p>给你一个字符串 s 和一个字符串列表 wordDict 作为字典。如果可以利用字典中出现的一个或多个单词拼接出 s 则返回 true。</p><p>注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。</p><p>示例 1：</p><p>输入: s = "leetcode", wordDict = ["leet", "code"]</p><p>输出: true</p><p>解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。</p><p>示例 2：</p><p>输入: s = "applepenapple", wordDict = ["apple", "pen"]</p><p>输出: true</p><p>解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。</p><p>注意，你可以重复使用字典中的单词。</p><p>示例 3：</p><p>输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]</p><p>输出: false</p><p>提示：</p><p>1</p><p>1</p><p>1</p><p>s 和 wordDict[i] 仅由小写英文字母组成</p><p>wordDict 中的所有字符串 互不相同</p><h2>示例</h2><ol><li>输入：s = "leetcode"，wordDict = ["leet", "code"]</li></ol><p>输出：true</p><p>解释：返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。</p><ol><li>输入：s = "applepenapple"，wordDict = ["apple", "pen"]</li></ol><p>输出：true</p><p>解释：返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。</p><ol><li>输入：s = "catsandog"，wordDict = ["cats", "dog", "sand", "and", "cat"]</li></ol><p>输出：false</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（49/49）｜ 一次 AC ｜ 前缀DP ｜ O(n·m·L) · O(n + m·L)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：一刷是正序（dp[i] = 前缀 s[0, i) 能否拼出，从 dp[i - len] 转移），这次改成倒序（canReach[i] = 后缀 s[i..n) 能否拼出，从 canReach[i + len] 转移），是同一条递推的镜像写法；字典同样用 HashSet 去重，复杂度同级 O(n·m·L) / O(n + m·L)，变量名换成 canReach 更贴合「可达」语义。</p><p><strong>这次为什么能想起来</strong>：骨架（按位置切分 + 枚举词典）记牢了，直接从「最后一段从哪开始」倒推状态；一刷复盘里记的 dp 覆盖问题这次用「命中即 break」规避，倒着填表也不会被更长词覆盖。</p><p><strong>掌握度判定依据</strong>：本地 9 项用例先过，提交第一次即 Accepted（49/49），写码与调试全程独立、没有针对做法展开讨论，判 strong。</p><p><strong>下一步提醒</strong>：想再快一步可以用 Trie 建词典、DP 时沿树走（省掉 m 个词的重复前缀比较）；同族题 140 单词拆分 II 是它的「输出所有方案」版本，回看时注意回溯 + 记忆化的剪枝。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,36 @@
         <li><span>复杂度</span><b>O(n·m·L) · O(n + m·L)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>前缀DP</b></li>
+        <li><span>复杂度</span><b>O(n·m·L) · O(n + m·L)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前缀DP</h3>
-    <p><span class="chip">时间 O(n·m·L)</span><span class="chip">空间 O(n + m·L)</span><span class="chip">内存 ≈ 42.9 MB</span><span class="chip">用例 48/48</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0139_WordBreak.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
+    <p><span class="chip">时间 O(n·m·L)</span><span class="chip">空间 O(n + m·L)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 49/49</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0139_WordBreak.java · 前缀DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
+        <span class="tk-k">boolean</span>[] canReach = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[n + <span class="tk-n">1</span>];
+        canReach[n] = <span class="tk-k">true</span>;
+        <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(wordDict);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = s.<span class="tk-f">length</span>() - <span class="tk-n">1</span>; i &gt;= <span class="tk-n">0</span>; i--) {
+            <span class="tk-k">for</span> (<span class="tk-t">String</span> word : set) {
+                <span class="tk-k">if</span> (i + word.<span class="tk-f">length</span>() &lt;= n &amp;&amp; canReach[i + word.<span class="tk-f">length</span>()]) {
+                    <span class="tk-k">if</span> (s.<span class="tk-f">startsWith</span>(word, i)) {
+                        canReach[i] = <span class="tk-k">true</span>;
+                        <span class="tk-k">break</span>;
+                    }
+                }
+            }
+        }
+
+        <span class="tk-k">return</span> canReach[<span class="tk-n">0</span>];
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0139_WordBreak.java · 前缀DP · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
         <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(wordDict);
         <span class="tk-k">boolean</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
         dp[<span class="tk-n">0</span>] = <span class="tk-k">true</span>;
@@ -50,11 +79,12 @@
             }
         }
         <span class="tk-k">return</span> dp[s.<span class="tk-f">length</span>()];
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>题目等价于：能否把 s 切成若干段，每段都出现在词典中，且词典单词可无限重复使用。这是典型的前缀可拆分性判定：前 i 个字符能否拆分，只取决于某个更短前缀 j 是否可拆分、以及 s[j,i) 是否在词典中，满足最优子结构，所以用一维 DP 而不是回溯（回溯在 n=300 时是指数级）。</p><p><strong>关键设计决策</strong></p><ol><li>状态定义：dp[i] 表示 s 的前 i 个字符 s[0,i) 能否由词典单词拼接；dp[0]=true（空前缀可拆），答案取 dp[n]。</li><li>转移：枚举词典中每个单词 word，若 s 从 i-word.length() 开始、长度等于 word.length() 的子串恰好等于 word，且 dp[i-word.length()] 为 true，则 dp[i] 为 true。关键点：这个成立条件要<strong>累积</strong>（一旦 true 就保持 true），不能赋值覆盖，否则后匹配的单词可能用 dp 为 false 的起点把已成立的 dp[i] 冲掉。</li><li>词典转 HashSet：单词匹配查重 O(1)；单词可重复使用，遍历集合即可，不用记录使用次数。</li><li>枚举顺序：外层按位置 i 递增，内层遍历词典单词；与「外层位置、内层枚举起点 j」等价，本题规模下都足够。</li></ol><p><strong>边界与细节</strong></p><ul><li>空串起点：dp[0]=true 是递推基础，不代表词典含空串。</li><li>防负下标：word.length() &gt; i 时跳过（i - word.length() &gt;= 0 守卫）。</li><li>必须整串覆盖：例如 s="abc"、词典 ["ab","b"]，dp[2]=true 但 "c" 不在词典，dp[3] 仍为 false，不能因为中间某段可拆就提前返回 true。</li><li>回归用例推演：s="ab"、词典 ["ab","b"]。</li></ul><ol><li>i=1：只可能匹配 "b"（起点 0 的子串 "a" 不匹配），dp[1]=false。</li><li>i=2："ab" 匹配 s[0,2) 且 dp[0]=true → dp[2] 置 true；随后 "b" 匹配 s[1,2) 但 dp[1]=false，若用赋值覆盖，dp[2] 会被写成 false，最终错误返回 false；用累积后 dp[2] 保持 true，正确。</li></ol><ul><li>性能边界：s 为 300 个 "a"、词典 ["a"] 时仍快速通过，验证 O(n·m·L) 在该规模下无压力。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n·m·L)：外层 n 个位置 × 内层 m 个不同单词 × 每次子串比较最长 L 个字符；n≤300、m≤1000、L≤20 时约数百万字符操作，这也是力扣官方 DP 解法的标准形式之一。任何解法至少要读一遍 s（Ω(n)），本解没有指数级搜索，处于该问题可接受的复杂度档位。</li><li>空间 O(n + m·L)：dp 数组 O(n)，HashSet 存词典 O(m·L)。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>48/48 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>线性 DP · 字符串切分可行性</h3><p>切分/拼接可行性题先想「位置就是阶段」：状态定义为某端开头（或结尾）的剩余串能否拼出，转移只写「当前这一段取词典里的哪个词」。</p><ul><li>正向 vs 倒向只是镜像，选哪个看哪端更好写边界；空串（下标 n 或 0）永远是 true 的终点。</li><li>可行性只要一个见证，命中即 break，不要写成计数 DP。</li><li>词典先去重；若词很长很多，再考虑 Trie 把公共前缀的重复比较省掉。</li></ul></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
