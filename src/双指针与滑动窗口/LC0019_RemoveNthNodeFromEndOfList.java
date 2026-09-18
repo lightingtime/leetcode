@@ -2,11 +2,13 @@
 // LeetCode 19. 删除链表的倒数第 N 个结点 (Remove Nth Node From End of List)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/remove-nth-node-from-end-of-list/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-05）
-// 一刷写法：哨兵 + 快慢指针拉开 N 步（O(n)/O(1)）
-// 上次遗留提醒（本次要求达到）：写法未达最精简——① slow 指针冗余（pre.next 恒等于待删节点，可直接 pre.next = pre.next.next）；
-// ② 快指针走 N 步的 while + i++ 可换成 for 循环
-// 测试用例：示例 3 个 + 边界 7 个（原有 5 个，本次补齐：长度 30 上限删中间 / 全零值长度 30 删头）
+// 复习日期：2026-09-18（第 2 次复习 · 一刷 2026-08-05 · 一刷一次 Accepted）
+// 一刷写法：哨兵 + 快慢指针——dummy 挂在 head 前，快指针先走 n 步，再快慢同步走；快指针走到链表尾时慢指针正好停在待删节点的前驱，改慢指针的 next 完成删除。O(n)/O(1)
+// 这题的易错点：删头节点时没哨兵就要单独判头；快指针先走 n 步（不是 n-1）；快指针停在尾节点（fast.next == null）而不是 null
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 7 个）
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -15,15 +17,15 @@ public class LC0019_RemoveNthNodeFromEndOfList {
 
     // ==== 提交代码开始 ====
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode dummy = new ListNode(0, head);
-        ListNode slow = head, p = dummy, fast = head;
+        ListNode fast = head, slow = head, dummy = new ListNode(0, head);
+        ListNode p = dummy;
         for (int i = 0; i < n; i++) {
             fast = fast.next;
         }
         while (fast != null) {
-            fast = fast.next;
-            slow = slow.next;
             p = p.next;
+            slow = slow.next;
+            fast = fast.next;
         }
         p.next = p.next.next;
         return dummy.next;

@@ -31,20 +31,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "208/208",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 43856000,
+      "memory_bytes": 43744000,
       "approach": "哨兵+快慢指针",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 同写法（**哨兵 + 快慢指针拉开 N 步**），本轮把一刷遗留的两个「不够精简」点都改掉了：\n  - 拉开 N 步从 `while (i < n) { fast = fast.next; i++; }` 换成 `for (int i = 0; i < n; i++) fast = fast.next;`；\n  - 删除不用再持有待删节点：从 `pre.next = slow.next` 改成 `p.next = p.next.next`（`p.next` 恒等于待删节点）。\n- 复杂度不变：O(n) 时间、O(1) 空间。\n- 遗留一点没改干净：`slow` 变量还在声明、还在循环里自增，但**已经没有任何地方读它**——现在是死变量，可以整行删掉。\n\n**② 这次为什么要想一遍才写出来**\n- 卡点是「只扫一趟怎么知道倒数第 N 个」，靠把不变量说清楚才落笔：**slow 与 fast 的间距恒为 n**；拉开后两人锁步前进，所以 fast 第一次变成 null 时，slow 距离 null 也正好是 n 步 ⇒ slow 就是倒数第 n 个。\n- 哨兵的作用也被这次推演钉牢了：删头时 slow 停在 head、p 停在 dummy，边界不用特判（边界7 全零长度 30 删头通过）。\n\n**③ 掌握度判定**\n- 提交一次 Accepted（208/208），但中途就核心不变量问过、并得到完整推演 → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 闭卷默写不变量那句话（间距恒定 ⇒ fast 撞到 null 时 slow 就是倒数第 n 个），不要背「先走 N 步」这种操作口诀。\n- 同一骨架的 876 链表的中间结点（fast 走 2、slow 走 1）与本轮直接相关，可连着过。",
-      "code": "public ListNode removeNthFromEnd(ListNode head, int n) {\n        ListNode dummy = new ListNode(0, head);\n        ListNode slow = head, p = dummy, fast = head;\n        for (int i = 0; i < n; i++) {\n            fast = fast.next;\n        }\n        while (fast != null) {\n            fast = fast.next;\n            slow = slow.next;\n            p = p.next;\n        }\n        p.next = p.next.next;\n        return dummy.next;\n    }",
+      "notes": "**与上一轮对比**：思路与一刷一致（dummy 哨兵 + fast 先走 n 步 + 双指针同步走），只是把 `p` / `slow` 的推进顺序和变量声明顺序调了一下，等价。\n\n**这次为什么一次过**：`fast` 先走 n 步（不是 n-1），之后 `while (fast != null)` 让 p、slow、fast 同步前进；fast 变成 null 时 `p` 正好停在待删节点的前驱，`p.next = p.next.next` 一句完成删除，`return dummy.next` 让「删头」和「删中间」走同一条路径，不需要额外判 head。本地示例 3 + 边界 7（删头/删尾/删中间、n 等于长度、长链表）全过，一次提交 Accepted（208/208）。\n\n**可精简点**：`slow` 是冗余变量——它与 `p` 始终差一个节点，待删节点就是 `p.next`，只留一个 `p` 从 dummy 出发即可（少维护一个指针，复杂度不变）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public ListNode removeNthFromEnd(ListNode head, int n) {\n        ListNode fast = head, slow = head, dummy = new ListNode(0, head);\n        ListNode p = dummy;\n        for (int i = 0; i < n; i++) {\n            fast = fast.next;\n        }\n        while (fast != null) {\n            p = p.next;\n            slow = slow.next;\n            fast = fast.next;\n        }\n        p.next = p.next.next;\n        return dummy.next;\n    }",
       "prev_code": "public ListNode removeNthFromEnd(ListNode head, int n) {\n        ListNode dummy = new ListNode(0, head);\n        ListNode fast = head;\n        int i = 0;\n        while (i < n) {\n            fast = fast.next;\n            i++;\n        }\n        ListNode slow = head;\n        ListNode pre = dummy;\n        while (fast != null) {\n            fast = fast.next;\n            slow = slow.next;\n            pre = pre.next;\n        }\n        pre.next = slow.next;\n        return dummy.next;\n    }\n",
-      "mastery": "weak",
-      "pass": 1
+      "mastery": "strong",
+      "pass": 2
     }
   ],
   "hints": [
@@ -64,6 +64,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 同写法（**哨兵 + 快慢指针拉开 N 步**），本轮把一刷遗留的两个「不够精简」点都改掉了：\n  - 拉开 N 步从 `while (i < n) { fast = fast.next; i++; }` 换成 `for (int i = 0; i < n; i++) fast = fast.next;`；\n  - 删除不用再持有待删节点：从 `pre.next = slow.next` 改成 `p.next = p.next.next`（`p.next` 恒等于待删节点）。\n- 复杂度不变：O(n) 时间、O(1) 空间。\n- 遗留一点没改干净：`slow` 变量还在声明、还在循环里自增，但**已经没有任何地方读它**——现在是死变量，可以整行删掉。\n\n**② 这次为什么要想一遍才写出来**\n- 卡点是「只扫一趟怎么知道倒数第 N 个」，靠把不变量说清楚才落笔：**slow 与 fast 的间距恒为 n**；拉开后两人锁步前进，所以 fast 第一次变成 null 时，slow 距离 null 也正好是 n 步 ⇒ slow 就是倒数第 n 个。\n- 哨兵的作用也被这次推演钉牢了：删头时 slow 停在 head、p 停在 dummy，边界不用特判（边界7 全零长度 30 删头通过）。\n\n**③ 掌握度判定**\n- 提交一次 Accepted（208/208），但中途就核心不变量问过、并得到完整推演 → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 闭卷默写不变量那句话（间距恒定 ⇒ fast 撞到 null 时 slow 就是倒数第 n 个），不要背「先走 N 步」这种操作口诀。\n- 同一骨架的 876 链表的中间结点（fast 走 2、slow 走 1）与本轮直接相关，可连着过。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "哨兵+快慢指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：思路与一刷一致（dummy 哨兵 + fast 先走 n 步 + 双指针同步走），只是把 `p` / `slow` 的推进顺序和变量声明顺序调了一下，等价。\n\n**这次为什么一次过**：`fast` 先走 n 步（不是 n-1），之后 `while (fast != null)` 让 p、slow、fast 同步前进；fast 变成 null 时 `p` 正好停在待删节点的前驱，`p.next = p.next.next` 一句完成删除，`return dummy.next` 让「删头」和「删中间」走同一条路径，不需要额外判 head。本地示例 3 + 边界 7（删头/删尾/删中间、n 等于长度、长链表）全过，一次提交 Accepted（208/208）。\n\n**可精简点**：`slow` 是冗余变量——它与 `p` 始终差一个节点，待删节点就是 `p.next`，只留一个 `p` 从 dummy 出发即可（少维护一个指针，复杂度不变）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
     }
   ]
 }
