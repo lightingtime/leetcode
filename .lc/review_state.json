@@ -1129,10 +1129,10 @@
       "title": "路径总和 III",
       "category": "树与二叉树",
       "first_pass_date": "2026-08-18",
-      "last_review_date": "2026-09-16",
-      "next_review_date": "2026-09-18",
+      "last_review_date": "2026-09-18",
+      "next_review_date": "2026-09-20",
       "interval_days": 2,
-      "review_count": 4,
+      "review_count": 5,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false

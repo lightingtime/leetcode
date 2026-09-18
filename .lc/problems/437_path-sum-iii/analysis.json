@@ -47,20 +47,20 @@
       "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        dfs(root, targetSum);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        countFrom(root, 0, targetSum);\n        dfs(root.left, targetSum);\n        dfs(root.right, targetSum);\n\n    }\n\n    private void countFrom(TreeNode root, long cur, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        cur += root.val;\n        if (cur == targetSum) {\n            ans++;\n        }\n        countFrom(root.left, cur, targetSum);\n        countFrom(root.right, cur, targetSum);\n    }"
     },
     {
-      "date": "2026-09-16",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "130/130",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 46916000,
+      "memory_bytes": 46944000,
       "approach": "前缀和+回溯哈希",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 思路与数据结构完全沿用上一轮：**前缀和 + 回溯哈希**（`map` 登记已见前缀频次）。逐行比对只差两处字面：`dfs` 形参 `root` 改名 `node`、入口写 `0L`，逻辑一字未改。\n- 复杂度保持 O(n) / O(n)：`map` 里最多 n 个不同前缀，递归栈 O(h)（最坏 O(n)）。\n- 一刷的写法是双重 DFS O(n²)，本轮没有再退回枚举起点的老路。\n\n**② 这次为什么能直接写出**\n- 落笔就带齐三要素：`map` 预置 `0:1`（代表「起点在根之上」）、进入节点后**先查后登记**、左右子树都返回后 `map.merge(sum, -1, …)` 撤销。没有再把「路径和」下放到子递归入口去找。\n- 前缀和一路用 `long`，正对文件里 `边界7-大数防溢出`（值域 ±1e9 × 1000 个节点）。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（130/130）。\n- 但提交前就「查询行与登记行能否互换」问过一次为什么，属于对核心不变量的探讨 → 按规则记**较弱**，间隔重置为 2 天。\n\n**④ 下一步（两天后回访重点）**\n- **撤销时机**：必须在左右子树都返回之后，提前撤销会让兄弟分支读到不属于它祖先链的前缀。\n- **`targetSum = 0` 是唯一能暴露「先登记再查询」错误的取值**：回访时用 `0(0,0)` 这种三节点全零树自测（正确 5，换序会得 8）。",
-      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, 0L, targetSum, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode node, long sum, int targetSum, Map<Long, Integer> map) {\n        if (node == null) {\n            return;\n        }\n\n        sum += node.val;\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(node.left, sum, targetSum, map);\n        dfs(node.right, sum, targetSum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }",
+      "notes": "**与上一轮对比**：写法与一刷一致（前缀和 + 回溯哈希），`long sum` 防溢出、`map.merge(sum, ±1, Integer::sum)` 一进一出维护计数；复杂度仍 O(n)/O(n)。\n\n**这次为什么没踩一刷的坑**：一刷把计数挂到左右孩子入口，每条路径被数两遍（示例 3→6），且入口处 `cur=0` 在 target=0 时会把空路径算成命中；这次把计数放在「当前节点值已累加进 sum」之后、每条路径只数一次，回溯时 `map.merge(sum, -1, ...)` 撤销，兄弟分支不串扰。\n\n**掌握度依据**：一次提交 Accepted、无探讨；但本次提交区与二刷前归档的 `src/树与二叉树/LC0437_PathSumIii.java` 逐行对比只差一个空格和一个空行，据此按较弱记录（2 天后再见）。",
+      "code": "    int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, 0L, targetSum, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode node, long sum, int targetSum, Map<Long, Integer> map) {\n        if (node == null) {\n            return;\n        }\n\n        sum += node.val;\n        ans += map.getOrDefault(sum - targetSum, 0);\n\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(node.left, sum, targetSum, map);\n        dfs(node.right,sum, targetSum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }",
       "prev_code": "int ans;\npublic int pathSum(TreeNode root, int targetSum) {\n    Map<Long, Integer> map = new HashMap<>();\n    map.put(0L, 1);\n    ans = 0;\n    dfs(root, 0L, targetSum, map);\n    return ans;\n}\n\nprivate void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n    if (root == null) {\n        return;\n    }\n\n    sum += root.val;\n    ans += map.getOrDefault(sum - targetSum, 0);\n    map.merge(sum, 1, Integer::sum);\n\n    dfs(root.left, sum, targetSum, map);\n    dfs(root.right, sum, targetSum, map);\n\n    map.merge(sum, -1, Integer::sum);\n}",
       "mastery": "weak",
-      "pass": 4
+      "pass": 5
     }
   ],
   "hints": [
@@ -118,6 +118,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 思路与数据结构完全沿用上一轮：**前缀和 + 回溯哈希**（`map` 登记已见前缀频次）。逐行比对只差两处字面：`dfs` 形参 `root` 改名 `node`、入口写 `0L`，逻辑一字未改。\n- 复杂度保持 O(n) / O(n)：`map` 里最多 n 个不同前缀，递归栈 O(h)（最坏 O(n)）。\n- 一刷的写法是双重 DFS O(n²)，本轮没有再退回枚举起点的老路。\n\n**② 这次为什么能直接写出**\n- 落笔就带齐三要素：`map` 预置 `0:1`（代表「起点在根之上」）、进入节点后**先查后登记**、左右子树都返回后 `map.merge(sum, -1, …)` 撤销。没有再把「路径和」下放到子递归入口去找。\n- 前缀和一路用 `long`，正对文件里 `边界7-大数防溢出`（值域 ±1e9 × 1000 个节点）。\n\n**③ 掌握度判定**\n- 一次提交即 Accepted（130/130）。\n- 但提交前就「查询行与登记行能否互换」问过一次为什么，属于对核心不变量的探讨 → 按规则记**较弱**，间隔重置为 2 天。\n\n**④ 下一步（两天后回访重点）**\n- **撤销时机**：必须在左右子树都返回之后，提前撤销会让兄弟分支读到不属于它祖先链的前缀。\n- **`targetSum = 0` 是唯一能暴露「先登记再查询」错误的取值**：回访时用 `0(0,0)` 这种三节点全零树自测（正确 5，换序会得 8）。"
+    },
+    {
+      "pass": 5,
+      "date": "2026-09-18",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "前缀和+回溯哈希",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：写法与一刷一致（前缀和 + 回溯哈希），`long sum` 防溢出、`map.merge(sum, ±1, Integer::sum)` 一进一出维护计数；复杂度仍 O(n)/O(n)。\n\n**这次为什么没踩一刷的坑**：一刷把计数挂到左右孩子入口，每条路径被数两遍（示例 3→6），且入口处 `cur=0` 在 target=0 时会把空路径算成命中；这次把计数放在「当前节点值已累加进 sum」之后、每条路径只数一次，回溯时 `map.merge(sum, -1, ...)` 撤销，兄弟分支不串扰。\n\n**掌握度依据**：一次提交 Accepted、无探讨；但本次提交区与二刷前归档的 `src/树与二叉树/LC0437_PathSumIii.java` 逐行对比只差一个空格和一个空行，据此按较弱记录（2 天后再见）。"
     }
   ]
 }
