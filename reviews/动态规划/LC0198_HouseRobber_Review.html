@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>198. 打家劫舍 (House Robber)</h1><p>&gt; <a href="https://leetcode.cn/problems/house-robber/" rel="noopener">https://leetcode.cn/problems/house-robber/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。</p><p>给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。</p><p>示例 1：</p><p>输入：[1,2,3,1]</p><p>输出：4</p><p>解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。</p><p>偷窃到的最高金额 = 1 + 3 = 4 。</p><p>示例 2：</p><p>输入：[2,7,9,3,1]</p><p>输出：12</p><p>解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。</p><p>偷窃到的最高金额 = 2 + 9 + 1 = 12 。</p><p>提示：</p><p>1</p><p>0</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：4</p><p>解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。</p><ol><li>输入：</li></ol><p>输出：12</p><p>解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（70/70）｜ 一次 AC ｜ 二维交替链DP ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：这次复用的是一刷同一套写法（approach 保持「二维交替链DP」），仍是两列交替推进、末行两列取大，时间 O(n) / 空间 O(n)，与一刷完全一致，没有换更省空间的滚动写法。</p><p><strong>这次为什么能想起来</strong>：一刷把「相邻不能同偷」编码成两列互相推进的结构，比标准一维 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 更难记；这次是凭记忆把两列结构写回来的，写完先确认第 1 行两列（偷 1 号 / 只偷 0 号）都在，本地 [2,1,1,2] 这类隔位取大的用例一次通过，没有再犯一刷「初始化漏候选」的老毛病。</p><p><strong>掌握度判定依据</strong>：力扣一次提交 Accepted（70/70，内存 43056000B，用时未回传；本地 7 项全部通过），但写完后我们就 dp[1][1] = nums[0] 这条初始化的含义讨论过，按较弱规则记录。</p><p><strong>下一步提醒</strong>：标准一维写法 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 比两列结构短得多，再用两个滚动变量可把空间降到 O(1)；下次复习直接写滚动版。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,30 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>二维交替链DP</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二维交替链DP</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 70/70</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0198_HouseRobber.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">rob</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.1 MB</span><span class="chip">用例 70/70</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0198_HouseRobber.java · 二维交替链DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">rob</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">if</span> (nums.length &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> nums[<span class="tk-n">0</span>];
+        <span class="tk-k">int</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length][<span class="tk-n">2</span>];
+        <span class="tk-c">// 第 1 行两列要覆盖前两间的全部决策：dp[1][0]=nums[1]（偷 1 号）、dp[1][1]=nums[0]（只偷 0 号）</span>
+        dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = dp[<span class="tk-n">1</span>][<span class="tk-n">1</span>] = nums[<span class="tk-n">0</span>];
+        dp[<span class="tk-n">1</span>][<span class="tk-n">0</span>] = nums[<span class="tk-n">1</span>];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">2</span>; i &lt; nums.length; i++) {
+            dp[i][<span class="tk-n">0</span>] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i - <span class="tk-n">2</span>][<span class="tk-n">1</span>] + nums[i], dp[i - <span class="tk-n">1</span>][<span class="tk-n">1</span>]);
+            dp[i][<span class="tk-n">1</span>] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i - <span class="tk-n">2</span>][<span class="tk-n">0</span>] + nums[i], dp[i - <span class="tk-n">1</span>][<span class="tk-n">0</span>]);
+        }
+        <span class="tk-k">return</span> <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[nums.length - <span class="tk-n">1</span>][<span class="tk-n">0</span>], dp[nums.length - <span class="tk-n">1</span>][<span class="tk-n">1</span>]);
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0198_HouseRobber.java · 二维交替链DP · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">rob</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">if</span> (nums.length &lt; <span class="tk-n">2</span>) <span class="tk-k">return</span> nums[<span class="tk-n">0</span>];
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
         dp[<span class="tk-n">0</span>] = nums[<span class="tk-n">0</span>];
@@ -46,7 +69,8 @@
             dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(dp[i - <span class="tk-n">1</span>], dp[i - <span class="tk-n">2</span>] + nums[i]);
         }
         <span class="tk-k">return</span> dp[nums.length - <span class="tk-n">1</span>];
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>在「相邻房屋不能同时偷」的约束下选择若干下标，使金额和最大。每间房子只有偷/不偷两种决策，且合法方案存在明显的重叠子结构（前缀最优可复用到更长前缀），适合 DP；贪心不可行，因为局部金额大不代表全局最优，例如 [2,1,1,2] 先偷金额 2 会丢掉「偷 0 号和 3 号得 4」的全局最优。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>状态：dp[i][0] 与 dp[i][1] 是两条交替推进的链——列 0 只能由列 1 的旧值推进，列 1 只能由列 0 的旧值推进，把「相邻不可同偷」编码进交替结构。</li><li>转移：dp[i][0] = max(dp[i-2][1] + nums[i], dp[i-1][1])：偷第 i 间从两行前的另一列跳接（直接跳过 i-1，天然保证不触发警报），不偷则从上一行另一列继承；dp[i][1] 对称地由列 0 推进。</li><li>初始化：dp[0][0]=nums[0]（只偷 0 号）、dp[0][1]=0（默认，不偷）、dp[1][0]=nums[1]、dp[1][1]=nums[0]；n&lt;2 直接返回 nums[0] 避免越界。</li><li>答案：最后一行的两列取大，覆盖「最后偷在奇/偶相位」两种模式。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：n&lt;2 提前返回，dp[1] 不存在。</li><li>两元素：初始化即答案 max(nums[0], nums[1])。</li><li>含 0：金额非负，继承不偷的候选不会变差。</li><li>全相同：如 [3,3,3,3]，交替结构只能隔间取，得 3+3=6。</li><li>推演 case：nums=[2,1,1,2]。</li></ul><ol><li>初始化：dp[0][0]=2，dp[0][1]=0，dp[1][0]=1，dp[1][1]=2。</li><li>i=2：dp[2][0]=max(dp[0][1]+1=1, dp[1][1]=2)=2（不偷 2 号，继承偷 0 号的 2）；dp[2][1]=max(dp[0][0]+1=3, dp[1][0]=1)=3（偷 2 号：2+1，跳过 1 号）。</li><li>i=3：dp[3][0]=max(dp[1][1]+2=4, dp[2][1]=3)=4（偷 3 号：偷 0 号的 2 再 +2）；dp[3][1]=max(dp[1][0]+2=3, dp[2][0]=2)=3。</li><li>答案 = max(4,3) = 4 ✓（偷 0 号和 3 号）。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n)：每个下标常数次比较与加法，单遍扫描；任何解法都必须读一遍所有房屋（Ω(n)），已达下限。</li><li>空间 O(n)：dp 数组两列；转移只依赖前两行的两列，可滚动为 4 个变量降到 O(1)。</li><li>信息量下限：相邻约束下每间房子只需知道「前两间的最优」，本结构与标准一维 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 等价，没有引入多余维度。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 初始化遗漏候选：dp[1] 只存 nums[1]，丢掉了「只偷第 0 间」的 max(nums[0], nums[1])，起点状态未覆盖该下标所有合法决策</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>70/70 用例一次通过。</p></div></div></div></section>

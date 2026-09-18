@@ -2,21 +2,26 @@
 // LeetCode 198. 打家劫舍 (House Robber)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/house-robber/
-// 刷题日期：2026-08-10
+// 刷题日期：2026-09-18（二刷 · 复习轮，一刷完成于 2026-08-10）
+// 说明：测试用例与一刷归档 src/动态规划/LC0198_HouseRobber.java 保持一致。
 // ============================================================
+
+import java.util.*;
 
 public class LC0198_HouseRobber {
 
     // ==== 提交代码开始 ====
     public int rob(int[] nums) {
         if (nums.length < 2) return nums[0];
-        int[] dp = new int[nums.length];
-        dp[0] = nums[0];
-        dp[1] = Math.max(nums[0], nums[1]);
+        int[][] dp = new int[nums.length][2];
+        // 第 1 行两列要覆盖前两间的全部决策：dp[1][0]=nums[1]（偷 1 号）、dp[1][1]=nums[0]（只偷 0 号）
+        dp[0][0] = dp[1][1] = nums[0];
+        dp[1][0] = nums[1];
         for (int i = 2; i < nums.length; i++) {
-            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+            dp[i][0] = Math.max(dp[i - 2][1] + nums[i], dp[i - 1][1]);
+            dp[i][1] = Math.max(dp[i - 2][0] + nums[i], dp[i - 1][0]);
         }
-        return dp[nums.length - 1];
+        return Math.max(dp[nums.length - 1][0], dp[nums.length - 1][1]);
     }
     // ==== 提交代码结束 ====
 

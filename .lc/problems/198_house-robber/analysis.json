@@ -37,16 +37,35 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-10",
+      "date": "2026-09-18",
       "verdict": "Accepted",
       "testcases": "70/70",
       "runtime_ms": null,
-      "memory_bytes": 43308000,
+      "memory_bytes": 43056000,
       "approach": "二维交替链DP",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "二维交替链DP（两列互相推进），穷举核对后一次通过"
+      "notes": "**与上一轮对比**：这次复用的是一刷同一套写法（approach 保持「二维交替链DP」），仍是两列交替推进、末行两列取大，时间 O(n) / 空间 O(n)，与一刷完全一致，没有换更省空间的滚动写法。\n\n**这次为什么能想起来**：一刷把「相邻不能同偷」编码成两列互相推进的结构，比标准一维 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 更难记；这次是凭记忆把两列结构写回来的，写完先确认第 1 行两列（偷 1 号 / 只偷 0 号）都在，本地 [2,1,1,2] 这类隔位取大的用例一次通过，没有再犯一刷「初始化漏候选」的老毛病。\n\n**掌握度判定依据**：力扣一次提交 Accepted（70/70，内存 43056000B，用时未回传；本地 7 项全部通过），但写完后我们就 dp[1][1] = nums[0] 这条初始化的含义讨论过，按较弱规则记录。\n\n**下一步提醒**：标准一维写法 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 比两列结构短得多，再用两个滚动变量可把空间降到 O(1)；下次复习直接写滚动版。",
+      "code": "public int rob(int[] nums) {\n        if (nums.length < 2) return nums[0];\n        int[][] dp = new int[nums.length][2];\n        // 第 1 行两列要覆盖前两间的全部决策：dp[1][0]=nums[1]（偷 1 号）、dp[1][1]=nums[0]（只偷 0 号）\n        dp[0][0] = dp[1][1] = nums[0];\n        dp[1][0] = nums[1];\n        for (int i = 2; i < nums.length; i++) {\n            dp[i][0] = Math.max(dp[i - 2][1] + nums[i], dp[i - 1][1]);\n            dp[i][1] = Math.max(dp[i - 2][0] + nums[i], dp[i - 1][0]);\n        }\n        return Math.max(dp[nums.length - 1][0], dp[nums.length - 1][1]);\n    }",
+      "prev_code": "public int rob(int[] nums) {\n        if (nums.length < 2) return nums[0];\n        int[] dp = new int[nums.length];\n        dp[0] = nums[0];\n        dp[1] = Math.max(nums[0], nums[1]);\n        for (int i = 2; i < nums.length; i++) {\n            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);\n        }\n        return dp[nums.length - 1];\n    }\n",
+      "mastery": "weak",
+      "pass": 1
+    }
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "70/70",
+      "approach": "二维交替链DP",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：这次复用的是一刷同一套写法（approach 保持「二维交替链DP」），仍是两列交替推进、末行两列取大，时间 O(n) / 空间 O(n)，与一刷完全一致，没有换更省空间的滚动写法。\n\n**这次为什么能想起来**：一刷把「相邻不能同偷」编码成两列互相推进的结构，比标准一维 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 更难记；这次是凭记忆把两列结构写回来的，写完先确认第 1 行两列（偷 1 号 / 只偷 0 号）都在，本地 [2,1,1,2] 这类隔位取大的用例一次通过，没有再犯一刷「初始化漏候选」的老毛病。\n\n**掌握度判定依据**：力扣一次提交 Accepted（70/70，内存 43056000B，用时未回传；本地 7 项全部通过），但写完后我们就 dp[1][1] = nums[0] 这条初始化的含义讨论过，按较弱规则记录。\n\n**下一步提醒**：标准一维写法 dp[i]=max(dp[i-1], dp[i-2]+nums[i]) 比两列结构短得多，再用两个滚动变量可把空间降到 O(1)；下次复习直接写滚动版。"
     }
   ]
 }
