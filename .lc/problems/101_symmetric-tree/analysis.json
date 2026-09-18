@@ -33,21 +33,39 @@
       "code": "public boolean isSymmetric(TreeNode root) {\n    return isSymmetricHelper(root, root);\n}\n\nprivate boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n    if (left == null && right == null) {\n        return true;\n    }\n    if (left == null || right == null) {\n        return false;\n    }\n    if (left.val != right.val) {\n        return false;\n    }\n    return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n}"
     },
     {
-      "date": "2026-08-07",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "201/201",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 43852000,
+      "memory_bytes": 43908000,
       "approach": "迭代栈成对比较",
       "time_complexity": "O(n)",
-      "space_complexity": "O(树宽)",
+      "space_complexity": "O(h)",
       "optimal": true,
-      "notes": "迭代栈（LinkedList 成对比较）：初始 push root 两次对应 helper(root,root)，每轮取一对做双 null/单 null/值判断，再把 (left.left,right.right) 与 (left.right,right.left) 两对入栈；曾用 ArrayDeque 不允许 null 入栈导致 NPE，换 LinkedList 后通过；力扣 201/201 Accepted",
-      "code": "    public boolean isSymmetric(TreeNode root) {\n        Deque<TreeNode> stack = new LinkedList<>();\n        stack.push(root);\n        stack.push(root);\n        while (!stack.isEmpty()) {\n            TreeNode left = stack.pop(), right = stack.pop();\n            if (left == null && right == null) {\n                continue;\n            }\n            if (left == null || right == null) {\n                return false;\n            }\n            if (left.val != right.val) {\n                return false;\n            }\n            stack.push(left.left);\n            stack.push(right.right);\n            stack.push(left.right);\n            stack.push(right.left);\n        }\n        return stack.isEmpty();\n    }\n\n    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n        if (left == null && right == null) {\n            return true;\n        }\n        if (left == null || right == null) {\n            return false;\n        }\n        if (left.val != right.val) {\n            return false;\n        }\n        return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n    }"
+      "notes": "**与一刷对比**：一刷用的是迭代栈（LinkedList 成对比较），这次改成**递归**版：`isSymmetricHelper(root, root)` 把「自己和自己比」直接当成一对镜像节点传入，结构比迭代版更短。\n\n**关键点都处理对了**：① 镜像配对关系正确——递归的两对是 `(left.left, right.right)` 与 `(left.right, right.left)`，不是同侧的左左/右右；② 空值判断顺序正确——先双 null（对称）→ 再单 null（不对称）→ 最后比 val，避免了先取 val 造成空指针；③ 根节点用 `helper(root, root)` 传入，空树与单节点自然为 true。本地示例 2 + 边界 6（单节点/左右值不同/结构对称值错位/四层全对称/负值对称/极值对称）全过，一次提交 Accepted（201/201）。这次也自动绕开了一刷那个 ArrayDeque 不能存 null 的坑（递归不建集合）。\n\n**可精简点**：辅助方法名 `isSymmetricHelper` 可以短一些（如 `check`/`mirror`）；递归深度是树高，链状树最坏 O(n)，如果要避免深递归可以用显式栈（同样要注意 null 不能进 ArrayDeque）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public boolean isSymmetric(TreeNode root) {\n        return isSymmetricHelper(root, root);\n    }\n\n    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n        if (left == null && right == null) {\n            return true;\n        }\n        if (left == null || right == null) {\n            return false;\n        }\n        if (left.val != right.val) {\n            return false;\n        }\n        return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n    }",
+      "prev_code": "    public boolean isSymmetric(TreeNode root) {\n        Deque<TreeNode> stack = new LinkedList<>();\n        stack.push(root);\n        stack.push(root);\n        while (!stack.isEmpty()) {\n            TreeNode left = stack.pop(), right = stack.pop();\n            if (left == null && right == null) {\n                continue;\n            }\n            if (left == null || right == null) {\n                return false;\n            }\n            if (left.val != right.val) {\n                return false;\n            }\n            stack.push(left.left);\n            stack.push(right.right);\n            stack.push(left.right);\n            stack.push(right.left);\n        }\n        return stack.isEmpty();\n    }\n\n    private boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n        if (left == null && right == null) {\n            return true;\n        }\n        if (left == null || right == null) {\n            return false;\n        }\n        if (left.val != right.val) {\n            return false;\n        }\n        return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n    }",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
   ],
-  "approach_detail": "问题本质：树关于根镜像对称 ⟺ 左子树与右子树互为镜像。比较两棵子树时要交叉：p 的左对 q 的右、p 的右对 q 的左。\n关键设计：递归 helper(left, right)：都空返回 true、一空返回 false、值不等返回 false，否则递归 (left.left, right.right) && (left.right, right.left)；入口调用 isSymmetricHelper(root, root)。代码里同时有迭代栈版本（成对压入再成对弹出比较）和递归版本，思路一致。\n边界：空树 true；单节点 true；结构对称但值不对称；值对称但结构不对称（null 位置不同）——必须同时检查空与值。\n复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（h 为树高），最优。"
+  "approach_detail": "问题本质：树关于根镜像对称 ⟺ 左子树与右子树互为镜像。比较两棵子树时要交叉：p 的左对 q 的右、p 的右对 q 的左。\n关键设计：递归 helper(left, right)：都空返回 true、一空返回 false、值不等返回 false，否则递归 (left.left, right.right) && (left.right, right.left)；入口调用 isSymmetricHelper(root, root)。代码里同时有迭代栈版本（成对压入再成对弹出比较）和递归版本，思路一致。\n边界：空树 true；单节点 true；结构对称但值不对称；值对称但结构不对称（null 位置不同）——必须同时检查空与值。\n复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（h 为树高），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "迭代栈成对比较",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": true,
+      "notes": "**与一刷对比**：一刷用的是迭代栈（LinkedList 成对比较），这次改成**递归**版：`isSymmetricHelper(root, root)` 把「自己和自己比」直接当成一对镜像节点传入，结构比迭代版更短。\n\n**关键点都处理对了**：① 镜像配对关系正确——递归的两对是 `(left.left, right.right)` 与 `(left.right, right.left)`，不是同侧的左左/右右；② 空值判断顺序正确——先双 null（对称）→ 再单 null（不对称）→ 最后比 val，避免了先取 val 造成空指针；③ 根节点用 `helper(root, root)` 传入，空树与单节点自然为 true。本地示例 2 + 边界 6（单节点/左右值不同/结构对称值错位/四层全对称/负值对称/极值对称）全过，一次提交 Accepted（201/201）。这次也自动绕开了一刷那个 ArrayDeque 不能存 null 的坑（递归不建集合）。\n\n**可精简点**：辅助方法名 `isSymmetricHelper` 可以短一些（如 `check`/`mirror`）；递归深度是树高，链状树最坏 O(n)，如果要避免深递归可以用显式栈（同样要注意 null 不能进 ArrayDeque）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }

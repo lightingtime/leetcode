@@ -20,18 +20,29 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>101. 对称二叉树 (Symmetric Tree)</h1><p>&gt; <a href="https://leetcode.cn/problems/symmetric-tree/" rel="noopener">https://leetcode.cn/problems/symmetric-tree/</a></p><p>难度：Easy ｜ 分类：树与二叉树</p><p>标签：树、深度优先搜索、广度优先搜索、二叉树</p><h2>题目描述</h2><p>给你一个二叉树的根节点 root ， 检查它是否轴对称。</p><p>示例 1：</p><p>输入：root = [1,2,2,3,4,4,3]</p><p>输出：true</p><p>示例 2：</p><p>输入：root = [1,2,2,null,3,null,3]</p><p>输出：false</p><p>提示：</p><p>树中节点数目在范围 [1, 1000] 内</p><p>-100</p><p>进阶：你可以运用递归和迭代两种方法解决这个问题吗？</p><h2>示例</h2><ol><li>输入：root = [1,2,2,3,4,4,3]</li></ol><p>输出：true</p><ol><li>输入：root = [1,2,2,null,3,null,3]</li></ol><p>输出：false</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 迭代栈成对比较 ｜ O(n) · O(h)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：一刷用的是迭代栈（LinkedList 成对比较），这次改成<strong>递归</strong>版：<code>isSymmetricHelper(root, root)</code> 把「自己和自己比」直接当成一对镜像节点传入，结构比迭代版更短。</p><p><strong>关键点都处理对了</strong>：① 镜像配对关系正确——递归的两对是 <code>(left.left, right.right)</code> 与 <code>(left.right, right.left)</code>，不是同侧的左左/右右；② 空值判断顺序正确——先双 null（对称）→ 再单 null（不对称）→ 最后比 val，避免了先取 val 造成空指针；③ 根节点用 <code>helper(root, root)</code> 传入，空树与单节点自然为 true。本地示例 2 + 边界 6（单节点/左右值不同/结构对称值错位/四层全对称/负值对称/极值对称）全过，一次提交 Accepted（201/201）。这次也自动绕开了一刷那个 ArrayDeque 不能存 null 的坑（递归不建集合）。</p><p><strong>可精简点</strong>：辅助方法名 <code>isSymmetricHelper</code> 可以短一些（如 <code>check</code>/<code>mirror</code>）；递归深度是树高，链状树最坏 O(n)，如果要避免深递归可以用显式栈（同样要注意 null 不能进 ArrayDeque）。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>迭代栈成对比较</b></li>
         <li><span>复杂度</span><b>O(n) · O(树宽)</b></li>
         
+      </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>迭代栈成对比较</b></li>
+        <li><span>复杂度</span><b>O(n) · O(h)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -53,10 +64,27 @@
     }
     <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(left.left, right.right) &amp;&amp; <span class="tk-f">isSymmetricHelper</span>(left.right, right.left);
 }</pre></div>
+    
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈成对比较</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(树宽)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 201/201</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(h)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 —</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0101_SymmetricTree.java · 迭代栈成对比较</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetric</span>(<span class="tk-t">TreeNode</span> root) {
+        <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(root, root);
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetricHelper</span>(<span class="tk-t">TreeNode</span> left, <span class="tk-t">TreeNode</span> right) {
+        <span class="tk-k">if</span> (left == <span class="tk-k">null</span> &amp;&amp; right == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">true</span>;
+        }
+        <span class="tk-k">if</span> (left == <span class="tk-k">null</span> || right == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
+        }
+        <span class="tk-k">if</span> (left.val != right.val) {
+            <span class="tk-k">return</span> <span class="tk-k">false</span>;
+        }
+        <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(left.left, right.right) &amp;&amp; <span class="tk-f">isSymmetricHelper</span>(left.right, right.left);
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0101_SymmetricTree.java · 迭代栈成对比较 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isSymmetric</span>(<span class="tk-t">TreeNode</span> root) {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">LinkedList</span>&lt;&gt;();
         stack.<span class="tk-f">push</span>(root);
         stack.<span class="tk-f">push</span>(root);
@@ -90,7 +118,7 @@
             <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
         <span class="tk-k">return</span> <span class="tk-f">isSymmetricHelper</span>(left.left, right.right) &amp;&amp; <span class="tk-f">isSymmetricHelper</span>(left.right, right.left);
-    }</pre></div>
+    }</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：树关于根镜像对称 ⟺ 左子树与右子树互为镜像。比较两棵子树时要交叉：p 的左对 q 的右、p 的右对 q 的左。</p><p>关键设计：递归 helper(left, right)：都空返回 true、一空返回 false、值不等返回 false，否则递归 (left.left, right.right) &amp;&amp; (left.right, right.left)；入口调用 isSymmetricHelper(root, root)。代码里同时有迭代栈版本（成对压入再成对弹出比较）和递归版本，思路一致。</p><p>边界：空树 true；单节点 true；结构对称但值不对称；值对称但结构不对称（null 位置不同）——必须同时检查空与值。</p><p>复杂度：O(n) 时间（每个节点访问一次）、O(h) 空间（h 为树高），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>201/201 用例一次通过。</p></div></div></div></section>
