@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "45/45",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 101416000,
+      "memory_bytes": 101216000,
       "approach": "单栈+Node（值+当前最小）",
       "time_complexity": "O(1)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "单栈 + Node（存值+入栈时最小）：空栈首元素 min=value，之后 min=min(value,getMin())；所有操作 O(1)，空间 O(n)。7 组本地用例一次全过，力扣 45/45 一次 Accepted"
+      "notes": "**与一刷对比**：思路一致（单栈 + 每个节点自带「入栈时的最小值」），写法与归档版本基本相同。\n\n**关键点都处理对了**：① 每个操作 O(1)——push 时算好 `min(value, 栈顶.min)` 存进新节点，getMin 直接读栈顶的 min 字段；② 空栈的首个节点用 `new Node(value, value)`（此时没有栈顶可参考），之后才有 min 的递推；③ pop 直接弹顶层即可，最小值随节点一起回退，不会出现「最小值提前丢失」的两栈同步问题（这也是选单栈写法的好处）。本地示例 1 + 边界 6（单元素与后压更大值/新最小后 pop 回退/重复最小值/降序压栈逐层回退/升序压栈最小在底/int 极值）全过，一次提交 Accepted（45/45）。\n\n**可精简点**：① `Node` 里那个无参构造器没人用，可以删；② 字段建议写成 `private final Deque<Node> stack`（构造器里唯一赋值、外部不需要访问）；③ `push` 的 if/else 可以合并成一句三元：空栈时 `stack.peek()` 不可用，所以要么保留分支、要么用最后一次 min 变量兜住。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    static class MinStack {\n        Deque<Node> stack;\n        public MinStack() {\n            stack = new ArrayDeque<>();\n        }\n        public void push(int value) {\n            if (stack.isEmpty()) {\n                stack.push(new Node(value, value));\n            } else {\n                stack.push(new Node(value, Math.min(value, stack.peek().min)));\n            }\n        }\n        public void pop() {\n            stack.pop();\n        }\n        public int top() {\n            return stack.peek().cur;\n        }\n        public int getMin() {\n            return stack.peek().min;\n        }\n    }\n\n    static class Node {\n        int cur;\n        int min;\n\n        public Node() {\n        }\n\n        public Node(int cur, int min) {\n            this.cur = cur;\n            this.min = min;\n        }\n    }",
+      "prev_code": "static class MinStack {\n        Deque<Node> stack;\n        public MinStack() {\n            stack = new ArrayDeque<>();\n        }\n        public void push(int value) {\n            if (stack.isEmpty()) {\n                stack.push(new Node(value, value));\n            } else {\n                int min = Math.min(value, getMin());\n                stack.push(new Node(value, min));\n            }\n        }\n        public void pop() {\n            stack.pop();\n        }\n        public int top() {\n            return stack.peek().cur;\n        }\n        public int getMin() {\n            return stack.peek().min;\n        }\n\n        class Node {\n            int cur;\n            int min;\n\n            public Node() {\n            }\n\n            public Node(int cur, int min) {\n                this.cur = cur;\n                this.min = min;\n            }\n        }\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
   ],
-  "approach_detail": "问题本质：O(1) 取最小值。普通栈做不到，做法是让每个元素入栈时记录「当时的栈内最小值」，空间换时间。\n关键设计：栈内元素是 (cur, min) 二元组：push 时 min=Math.min(value, 当前栈顶 min)，栈空时 min=value；getMin 直接读栈顶的 min。因为 min 是入栈时刻的快照，元素弹出后历史最小值自然保留，不需要额外结构。\n边界：题目约定不会对空栈调用 top/pop/getMin；连续 push 递减序列后逐次 pop，min 要能正确回退到上一状态；重复最小值不影响。\n复杂度：push/pop/top/getMin 全部 O(1) 时间、O(n) 空间，满足题目全部要求。"
+  "approach_detail": "问题本质：O(1) 取最小值。普通栈做不到，做法是让每个元素入栈时记录「当时的栈内最小值」，空间换时间。\n关键设计：栈内元素是 (cur, min) 二元组：push 时 min=Math.min(value, 当前栈顶 min)，栈空时 min=value；getMin 直接读栈顶的 min。因为 min 是入栈时刻的快照，元素弹出后历史最小值自然保留，不需要额外结构。\n边界：题目约定不会对空栈调用 top/pop/getMin；连续 push 递减序列后逐次 pop，min 要能正确回退到上一状态；重复最小值不影响。\n复杂度：push/pop/top/getMin 全部 O(1) 时间、O(n) 空间，满足题目全部要求。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "单栈+Node（值+当前最小）",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（单栈 + 每个节点自带「入栈时的最小值」），写法与归档版本基本相同。\n\n**关键点都处理对了**：① 每个操作 O(1)——push 时算好 `min(value, 栈顶.min)` 存进新节点，getMin 直接读栈顶的 min 字段；② 空栈的首个节点用 `new Node(value, value)`（此时没有栈顶可参考），之后才有 min 的递推；③ pop 直接弹顶层即可，最小值随节点一起回退，不会出现「最小值提前丢失」的两栈同步问题（这也是选单栈写法的好处）。本地示例 1 + 边界 6（单元素与后压更大值/新最小后 pop 回退/重复最小值/降序压栈逐层回退/升序压栈最小在底/int 极值）全过，一次提交 Accepted（45/45）。\n\n**可精简点**：① `Node` 里那个无参构造器没人用，可以删；② 字段建议写成 `private final Deque<Node> stack`（构造器里唯一赋值、外部不需要访问）；③ `push` 的 if/else 可以合并成一句三元：空栈时 `stack.peek()` 不可用，所以要么保留分支、要么用最后一次 min 变量兜住。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }

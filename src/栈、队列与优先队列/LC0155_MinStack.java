@@ -2,7 +2,13 @@
 // LeetCode 155. 最小栈 (Min Stack)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/min-stack/
-// 刷题日期：2026-08-07
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-07 · 一刷一次 Accepted）
+// 一刷写法：单栈 + 节点自带「入栈时的最小値」——push 时把 min(value, 栈顶节点的 min) 一起存进新节点，getMin 直接读栈顶节点的 min 字段；push/pop/top/getMin 全部 O(1)，空间 O(n)
+// 本题易错点：① 只用 Stack/Deque 存值的话 getMin 得 O(n) 扫描，不满足「每个操作 O(1)」的要求；② 用「主栈 + 辅助最小栈」两栈写法时，弹出必须同步维护辅助栈（只有弹出的正是当前最小值才弹它），否则最小值提前丢失；③ 重复最小值要一起处理（边界3 专门测这个）；④ 空栈时 pop/top/getMin 的行为
+// 测试用例与一刷归档保持一致（示例 1 个 + 边界 6 个：单元素与后压更大值/新最小后 pop 回退/重复最小值/降序压栈逐层回退/升序压栈最小在底/int 极值）
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -20,8 +26,7 @@ public class LC0155_MinStack {
             if (stack.isEmpty()) {
                 stack.push(new Node(value, value));
             } else {
-                int min = Math.min(value, getMin());
-                stack.push(new Node(value, min));
+                stack.push(new Node(value, Math.min(value, stack.peek().min)));
             }
         }
         public void pop() {
@@ -33,18 +38,18 @@ public class LC0155_MinStack {
         public int getMin() {
             return stack.peek().min;
         }
+    }
 
-        class Node {
-            int cur;
-            int min;
+    static class Node {
+        int cur;
+        int min;
 
-            public Node() {
-            }
+        public Node() {
+        }
 
-            public Node(int cur, int min) {
-                this.cur = cur;
-                this.min = min;
-            }
+        public Node(int cur, int min) {
+            this.cur = cur;
+            this.min = min;
         }
     }
     // ==== 提交代码结束 ====
