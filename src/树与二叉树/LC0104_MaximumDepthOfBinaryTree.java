@@ -2,7 +2,13 @@
 // LeetCode 104. 二叉树的最大深度 (Maximum Depth of Binary Tree)
 // 难度：Easy | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/maximum-depth-of-binary-tree/
-// 刷题日期：2026-08-07
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-07 · 一刷一次 Accepted）
+// 一刷写法：递归 DFS——空节点返回 0，非空返回 1 + max(左深度, 右深度)。O(n)/O(树高)
+// 本题易错点：① 叶子节点不需要特判（1 + max(0, 0) 自然等于 1，一刷笔记里已标出这条冗余）；② 深度是「节点数」而不是边数，空树是 0；③ 递归栈深度最坏为 n（链状树），需要时可用 BFS 层序迭代替代；④ 求「最小深度」时才需要特判单边为空，本题取 max 不受影响
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 7 个：空树/单节点/全左链/全右链/不平衡混合/负值/极值）
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,8 +20,9 @@ public class LC0104_MaximumDepthOfBinaryTree {
         if (root == null) {
             return 0;
         }
-        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
     }
+
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

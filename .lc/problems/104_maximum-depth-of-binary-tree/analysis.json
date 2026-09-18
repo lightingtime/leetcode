@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "40/40",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 47820000,
+      "memory_bytes": 47176000,
       "approach": "递归 DFS",
       "time_complexity": "O(n)",
-      "space_complexity": "O(树高)",
+      "space_complexity": "O(h)",
       "optimal": true,
-      "notes": "递归 DFS：空节点返回 0，否则 1+max(左右深度)，O(n)/O(树高)。9 组本地一次全过，力扣 40/40 一次 Accepted。叶子特判冗余可删（1+max(0,0)=1）"
+      "notes": "**与一刷对比**：思路与写法一致（递归 DFS，空节点返回 0），没有任何冗余分支。\n\n**关键点都处理对了**：① 出口 `root == null → 0`（深度按节点数算，空树为 0）；② 非空节点 `1 + max(左深度, 右深度)`，加 1 表示把自己这一层算进去；③ 没有给叶子写特判——`1 + max(0, 0) = 1` 自然成立（一刷笔记里也标过这条冗余）。本地示例 2 + 边界 7（空树/单节点/全左链/全右链/不平衡混合/负值/极值）全过，一次提交 Accepted（40/40）。\n\n**写法评价**：三行的递归写法已经是这道题最精简的形式，没有可删的冗余；唯一需要注意的是递归深度最坏为 n（链状树），若遇到超深用例可以换层序 BFS 迭代（额外空间也是 O(宽度)）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public int maxDepth(TreeNode root) {\n        if (root == null) {\n            return 0;\n        }\n        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;\n    }",
+      "prev_code": "public int maxDepth(TreeNode root) {\n        if (root == null) {\n            return 0;\n        }\n        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
   ],
-  "approach_detail": "问题本质：二叉树最大深度 = 1 + max(左子树深度, 右子树深度)。树的分治结构让递归成为最自然的表达。\n关键设计：递归终止条件为空节点返回 0；每深入一层加 1；取左右子树的较大者。也可以层序遍历计数，但递归最简洁。\n边界：空树深度 0；单节点 1；斜树（退化成链）深度为 n，递归栈深度 O(n)，注意不要爆栈。\n复杂度：O(n) 时间、O(h) 空间（h 为树高，最坏 O(n)），最优。"
+  "approach_detail": "问题本质：二叉树最大深度 = 1 + max(左子树深度, 右子树深度)。树的分治结构让递归成为最自然的表达。\n关键设计：递归终止条件为空节点返回 0；每深入一层加 1；取左右子树的较大者。也可以层序遍历计数，但递归最简洁。\n边界：空树深度 0；单节点 1；斜树（退化成链）深度为 n，递归栈深度 O(n)，注意不要爆栈。\n复杂度：O(n) 时间、O(h) 空间（h 为树高，最坏 O(n)），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "递归 DFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路与写法一致（递归 DFS，空节点返回 0），没有任何冗余分支。\n\n**关键点都处理对了**：① 出口 `root == null → 0`（深度按节点数算，空树为 0）；② 非空节点 `1 + max(左深度, 右深度)`，加 1 表示把自己这一层算进去；③ 没有给叶子写特判——`1 + max(0, 0) = 1` 自然成立（一刷笔记里也标过这条冗余）。本地示例 2 + 边界 7（空树/单节点/全左链/全右链/不平衡混合/负值/极值）全过，一次提交 Accepted（40/40）。\n\n**写法评价**：三行的递归写法已经是这道题最精简的形式，没有可删的冗余；唯一需要注意的是递归深度最坏为 n（链状树），若遇到超深用例可以换层序 BFS 迭代（额外空间也是 O(宽度)）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
