@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>300. 最长递增子序列 (Longest Increasing Subsequence)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-increasing-subsequence/" rel="noopener">https://leetcode.cn/problems/longest-increasing-subsequence/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：数组、二分查找、动态规划、最长上升子序列</p><h2>题目描述</h2><p>给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。</p><p>子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。</p><p>示例 1：</p><p>输入：nums = [10,9,2,5,3,7,101,18]</p><p>输出：4</p><p>解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。</p><p>示例 2：</p><p>输入：nums = [0,1,0,3,2,3]</p><p>输出：4</p><p>示例 3：</p><p>输入：nums = [7,7,7,7,7,7,7]</p><p>输出：1</p><p>提示：</p><p>1</p><p>-104 4</p><p>进阶：</p><p>你能将算法的时间复杂度降低到 O(n log(n)) 吗?</p><h2>示例</h2><ol><li>输入：nums = [10,9,2,5,3,7,101,18]</li></ol><p>输出：4</p><p>解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。</p><ol><li>输入：nums = [0,1,0,3,2,3]</li></ol><p>输出：4</p><ol><li>输入：nums = [7,7,7,7,7,7,7]</li></ol><p>输出：1</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（57/57）｜ 一次 AC ｜ 贪心+二分（tails数组） ｜ O(n log n) · O(n)</p>
+      <div class="review-note md"><h2>本轮情况</h2><ul><li>思路与一刷完全一致：贪心维护 tails 数组，做 binary search 找到第一个不小于当前数的位置；落在数组末尾则长度加一。</li><li>复杂度与一刷持平：O(n log n)/O(n)，本次提交 57/57 一次通过（内存 46.3 MB）。</li></ul><h2>为什么这次能直接写出来</h2><ul><li>关键不变量被完整复现：把当前位置替换成更小的结尾值，只会让该长度的最优结尾更小，不会破坏后续接续的可能性；二分的 l = -1 / r = end + 1 边界写法也与一刷一致，说明「找第一个大于等于 nums[i] 的位置」这步已经内化。</li><li>与一刷唯一差异是辅助函数名（findNumIndex 改成 find），属于命名层面，不构成新写法，因此按同一 approach 合并记录。</li></ul><h2>掌握度判定</h2><ul><li>一次提交即 Accepted，全程无提示、无正误探讨，判定 strong，间隔按上次乘 2.5 拉长。</li></ul><h2>下一步提醒</h2><ul><li>提交区 if / else 两支各写了一次赋值，可合并为：先写入 tails[index]，再判断 index == tail 时长度加一，省掉重复赋值；tail 的语义是长度而非下标，命名成 len 更贴切。</li><li>同一不变量还有两个变形值得顺带复习：673 最长递增子序列的个数（计数）、354 俄罗斯套娃信封问题（二维排序后化为一维）。</li></ul></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,45 @@
         <li><span>复杂度</span><b>O(n log n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>贪心+二分（tails数组）</b></li>
+        <li><span>复杂度</span><b>O(n log n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 贪心+二分（tails数组）</h3>
-    <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.2 MB</span><span class="chip">用例 56/56</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0300_LongestIncreasingSubsequence.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLIS</span>(<span class="tk-k">int</span>[] nums) {
+    <p><span class="chip">时间 O(n log n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.2 MB</span><span class="chip">用例 57/57</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0300_LongestIncreasingSubsequence.java · 贪心+二分（tails数组）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLIS</span>(<span class="tk-k">int</span>[] nums) {
+        <span class="tk-k">int</span>[] tails = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
+        <span class="tk-k">int</span> tail = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
+            <span class="tk-k">int</span> index = <span class="tk-f">find</span>(tails, tail, nums[i]);
+            <span class="tk-k">if</span> (index &lt; tail) {
+                tails[index] = nums[i];
+            } <span class="tk-k">else</span> {
+                tails[tail] = nums[i];
+                tail++;
+            }
+        }
+        <span class="tk-k">return</span> tail;
+    }
+
+    <span class="tk-k">private</span> <span class="tk-k">int</span> <span class="tk-f">find</span>(<span class="tk-k">int</span>[] tails, <span class="tk-k">int</span> end, <span class="tk-k">int</span> num) {
+        <span class="tk-k">int</span> l = -<span class="tk-n">1</span>, r = end + <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (l + <span class="tk-n">1</span> &lt; r) {
+            <span class="tk-k">int</span> mid = l + (r - l) / <span class="tk-n">2</span>;
+            <span class="tk-k">if</span> (tails[mid] &lt; num) {
+                l = mid;
+            } <span class="tk-k">else</span> {
+                r = mid;
+            }
+        }
+        <span class="tk-k">return</span> r;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0300_LongestIncreasingSubsequence.java · 贪心+二分（tails数组） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">lengthOfLIS</span>(<span class="tk-k">int</span>[] nums) {
         <span class="tk-k">int</span>[] tails = <span class="tk-k">new</span> <span class="tk-k">int</span>[nums.length];
         <span class="tk-k">int</span> tail = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; nums.length; i++) {
@@ -63,7 +101,8 @@
             }
         }
         <span class="tk-k">return</span> r;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>求最长严格递增子序列长度。朴素 O(n²) DP（dp[i]=以 i 结尾的最长长度，枚举 j&lt;i 且 nums[j]&lt;nums[i]）可行，但题目进阶要求 O(n log n)。核心观察：长度相同的递增子序列，尾值越小越有延展潜力，所以只需保留「每个长度下的最小尾值」——即 patience sorting 的 tails 数组，配合二分把单个元素处理降到 O(log n)。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>tails[k] = 长度为 k+1 的递增子序列的最小尾值，严格递增；tail 变量记录有效长度，只读写 tails[0..tail-1]。</li><li>对每个 nums[i]，二分找第一个 ≥ nums[i] 的下标 index（lower_bound）：index &lt; tail 则替换 tails[index]（长度不变、尾值改小）；否则追加 tails[tail]=nums[i]、tail++（长度 +1）。</li><li>双开区间二分：l=-1、r=end+1，循环 l+1&lt;r；tails[mid] &lt; num → l=mid（mid 及左边都 &lt; num，成为左排除边界），否则 r=mid（mid 及右边都 ≥ num）。返回 r 即 lower_bound。</li><li>哨兵细节：r 初始 end+1 可能让 mid 读到 tails[end]（从未写入、恒为 0 的位置）；只有「全部真实尾巴 &lt; num」时才会访问它——num&gt;0 得 r=end+1、num≤0 得 r=end，主调用都走 append 分支，等价于追加。</li><li>答案：tail。</li></ol><p><strong>边界与细节</strong></p><ul><li>单元素：直接追加，tail=1。</li><li>严格递减/全相等：每元素都替换到前部（lower_bound 很小），tail 保持 1；相等元素因替换条件是 ≥ 而不能续长，[7,7,7] → 1。</li><li>负数：二分只比大小，与符号无关；穷举（长度 1-9、值 -2..2）与 O(n²) 参考实现全部一致。</li><li>推演 case：nums=[1,3,4,2,5,6,7]。</li></ul><ol><li>1 → tails[0]=1，tail=1。</li><li>3 → 追加 [1,3]，tail=2。</li><li>4 → 追加 [1,3,4]，tail=3。</li><li>2 → lower_bound=1（tails[1]=3≥2）→ 替换 [1,2,4]，tail 仍 3——长度信息不丢，这是与「弹光更大元素」写法的关键区别。</li><li>5 → 追加 [1,2,4,5]，tail=4；6 → 5；7 → 6。</li><li>答案 6 ✓（真实 LIS 为 1,3,4,5,6,7）。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n log n)：外层 n 次 × 每次二分 O(log n)，满足进阶要求。</li><li>空间 O(n)：tails 数组。</li><li>下限：LIS 在比较模型下需要 Ω(n log n)，本解已达最优；O(n²) DP 是正确但非最优的对照。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>56/56 用例一次通过。</p></div></div></div></section>

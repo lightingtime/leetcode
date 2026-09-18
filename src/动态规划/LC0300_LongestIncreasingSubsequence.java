@@ -2,8 +2,12 @@
 // LeetCode 300. 最长递增子序列 (Longest Increasing Subsequence)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-increasing-subsequence/
-// 刷题日期：2026-08-10
+// 刷题日期：2026-09-18
+// 二刷 · 一刷 2026-08-10（贪心 + 二分，tails 数组，O(n log n)/O(n)）｜测试用例与一刷归档保持一致
+// DP 子类型：线性 DP（阶段是「处理到第 i 位」，状态要能描述「已选序列的结尾」）
 // ============================================================
+
+import java.util.*;
 
 public class LC0300_LongestIncreasingSubsequence {
 
@@ -12,7 +16,7 @@ public class LC0300_LongestIncreasingSubsequence {
         int[] tails = new int[nums.length];
         int tail = 0;
         for (int i = 0; i < nums.length; i++) {
-            int index = findNumIndex(tails, tail, nums[i]);
+            int index = find(tails, tail, nums[i]);
             if (index < tail) {
                 tails[index] = nums[i];
             } else {
@@ -23,7 +27,7 @@ public class LC0300_LongestIncreasingSubsequence {
         return tail;
     }
 
-    private int findNumIndex(int[] tails, int end, int num) {
+    private int find(int[] tails, int end, int num) {
         int l = -1, r = end + 1;
         while (l + 1 < r) {
             int mid = l + (r - l) / 2;
@@ -35,7 +39,6 @@ public class LC0300_LongestIncreasingSubsequence {
         }
         return r;
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
