@@ -37,12 +37,12 @@
       "title": "字母异位词分组",
       "category": "哈希表",
       "first_pass_date": "2026-08-03",
-      "last_review_date": "2026-09-03",
-      "next_review_date": "2026-09-18",
-      "interval_days": 15,
-      "review_count": 3,
+      "last_review_date": "2026-09-18",
+      "next_review_date": "2026-10-28",
+      "interval_days": 40,
+      "review_count": 4,
       "mastery": "strong",
-      "consecutive_strong": 3,
+      "consecutive_strong": 4,
       "mastered": false
     },
     "implement-trie-prefix-tree": {
