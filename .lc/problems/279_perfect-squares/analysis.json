@@ -18,22 +18,49 @@
   "notes": "一维DP枚举最后一块平方数，一次通过",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "完全背包一维压缩（正序枚举）",
+      "text": "物品可无限次使用时，一维 dp 按容量从小到大正序填表，dp[c] 才能复用本轮刚更新的 dp[c-w]；改成倒序就退化成 0-1 背包。本题 w=j²、每件代价 1，求恰好装满容量 n 的最小代价。",
+      "category": "动态规划",
+      "problem": "perfect-squares",
+      "date": "2026-09-18"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-08-10",
+      "date": "2026-09-18",
       "verdict": "Accepted",
       "testcases": "589/589",
       "runtime_ms": null,
-      "memory_bytes": 44908000,
+      "memory_bytes": 44840000,
       "approach": "一维DP（枚举最后一块平方数）",
       "time_complexity": "O(n·√n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "一维DP枚举最后一块平方数，一次通过"
+      "notes": "**思路拆解（状态与转移）**\n- 状态：dp[i] = 恰好凑成 i 的最少完全平方数个数；容量维度就是 i 本身，物品是 1²、2²、3²…，每件可无限次使用，属完全背包（DP 子类型：背包DP）。\n- 转移：dp[i] = min(dp[i - j²] + 1)，j 取 1..√i；正序枚举平方数保证同一件可重复使用。\n- 结束：返回 dp[n]；dp[0]=0，其余初值 Integer.MAX_VALUE。\n\n**用具体输入逐层走一遍**\n- 从 dp[0]=0 出发：i=1 时只有 j=1，dp[1]=dp[0]+1=1。\n- i=4：j=1 得 dp[3]+1=4，j=2 得 dp[0]+1=1，取较小值 dp[4]=1，对应 4=2²。\n- i=12：j=1 得 dp[11]+1=4，j=2 得 dp[8]+1=3，j=3 得 dp[3]+1=4，最小 3，对应 12=4+4+4。\n- i=13：j=1 得 dp[12]+1=4，j=2 得 dp[9]+1=2，j=3 得 dp[4]+1=2，最小 2，对应 13=4+9。\n\n**与上一轮对比**\n思路与一刷完全一致（一维 DP 枚举最后一块平方数），复杂度同为 O(n·√n)/O(n)；本轮没有换写法，代码骨架与一刷等价。\n\n**这次为什么能想起来**\n一刷一次 AC 留下的状态定义仍然清晰，重写时直接锁定「以容量 i 为阶段、枚举最后一块平方数 j²」，没有退化成二维 DP 或 BFS。\n\n**掌握度判定**\n本次一次提交 Accepted，全程没有提示、没有探讨，判为较强。\n\n**下一步提醒**\nDP 主线已是标准解。若想再深一层：拉格朗日四平方定理下答案只可能是 1..4，先用 Legendre 判定 n=4^a(8b+7) 时答案为 4，再依次判完全平方数（1）与两平方和（2），可把 O(n·√n) 降到 O(√n)；这属于数论特判，不是通用 DP，不必现在追。",
+      "code": "public int numSquares(int n) {\n        int[] dp = new int[n + 1];\n        Arrays.fill(dp, Integer.MAX_VALUE);\n        dp[0] = 0;\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= Math.sqrt(i); j++) {\n                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);\n            }\n        }\n        return dp[n];\n    }",
+      "prev_code": "public int numSquares(int n) {\n        int[] dp = new int[n + 1];\n        Arrays.fill(dp, Integer.MAX_VALUE);\n        dp[0] = 0;\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j * j <= i; j++) {\n                dp[i] = Math.min(dp[i], dp[i - j * j ] + 1);\n            }\n        }\n        return dp[n];\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "DP 先想状态定义和转移方程，拿小例子手推；想不出就写暴力递归再改记忆化。"
+  ],
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "589/589",
+      "approach": "一维DP（枚举最后一块平方数）",
+      "time_complexity": "O(n·√n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**思路拆解（状态与转移）**\n- 状态：dp[i] = 恰好凑成 i 的最少完全平方数个数；容量维度就是 i 本身，物品是 1²、2²、3²…，每件可无限次使用，属完全背包（DP 子类型：背包DP）。\n- 转移：dp[i] = min(dp[i - j²] + 1)，j 取 1..√i；正序枚举平方数保证同一件可重复使用。\n- 结束：返回 dp[n]；dp[0]=0，其余初值 Integer.MAX_VALUE。\n\n**用具体输入逐层走一遍**\n- 从 dp[0]=0 出发：i=1 时只有 j=1，dp[1]=dp[0]+1=1。\n- i=4：j=1 得 dp[3]+1=4，j=2 得 dp[0]+1=1，取较小值 dp[4]=1，对应 4=2²。\n- i=12：j=1 得 dp[11]+1=4，j=2 得 dp[8]+1=3，j=3 得 dp[3]+1=4，最小 3，对应 12=4+4+4。\n- i=13：j=1 得 dp[12]+1=4，j=2 得 dp[9]+1=2，j=3 得 dp[4]+1=2，最小 2，对应 13=4+9。\n\n**与上一轮对比**\n思路与一刷完全一致（一维 DP 枚举最后一块平方数），复杂度同为 O(n·√n)/O(n)；本轮没有换写法，代码骨架与一刷等价。\n\n**这次为什么能想起来**\n一刷一次 AC 留下的状态定义仍然清晰，重写时直接锁定「以容量 i 为阶段、枚举最后一块平方数 j²」，没有退化成二维 DP 或 BFS。\n\n**掌握度判定**\n本次一次提交 Accepted，全程没有提示、没有探讨，判为较强。\n\n**下一步提醒**\nDP 主线已是标准解。若想再深一层：拉格朗日四平方定理下答案只可能是 1..4，先用 Legendre 判定 n=4^a(8b+7) 时答案为 4，再依次判完全平方数（1）与两平方和（2），可把 O(n·√n) 降到 O(√n)；这属于数论特判，不是通用 DP，不必现在追。"
+    }
   ]
 }

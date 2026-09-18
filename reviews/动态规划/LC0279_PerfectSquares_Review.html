@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>279. 完全平方数 (Perfect Squares)</h1><p>&gt; <a href="https://leetcode.cn/problems/perfect-squares/" rel="noopener">https://leetcode.cn/problems/perfect-squares/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：广度优先搜索、数学、动态规划、背包问题、完全背包</p><h2>题目描述</h2><p>给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。</p><p>完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。</p><p>示例 1：</p><p>输入：n = 12</p><p>输出：3</p><p>解释：12 = 4 + 4 + 4</p><p>示例 2：</p><p>输入：n = 13</p><p>输出：2</p><p>解释：13 = 4 + 9</p><p>提示：</p><p>1 4</p><h2>示例</h2><ol><li>输入：n = 12</li></ol><p>输出：3</p><p>解释：12 = 4 + 4 + 4</p><ol><li>输入：n = 13</li></ol><p>输出：2</p><p>解释：13 = 4 + 9</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（589/589）｜ 一次 AC ｜ 一维DP（枚举最后一块平方数） ｜ O(n·√n) · O(n)</p>
+      <div class="review-note md"><p><strong>思路拆解（状态与转移）</strong></p><ul><li>状态：dp[i] = 恰好凑成 i 的最少完全平方数个数；容量维度就是 i 本身，物品是 1²、2²、3²…，每件可无限次使用，属完全背包（DP 子类型：背包DP）。</li><li>转移：dp[i] = min(dp[i - j²] + 1)，j 取 1..√i；正序枚举平方数保证同一件可重复使用。</li><li>结束：返回 dp[n]；dp[0]=0，其余初值 Integer.MAX_VALUE。</li></ul><p><strong>用具体输入逐层走一遍</strong></p><ul><li>从 dp[0]=0 出发：i=1 时只有 j=1，dp[1]=dp[0]+1=1。</li><li>i=4：j=1 得 dp[3]+1=4，j=2 得 dp[0]+1=1，取较小值 dp[4]=1，对应 4=2²。</li><li>i=12：j=1 得 dp[11]+1=4，j=2 得 dp[8]+1=3，j=3 得 dp[3]+1=4，最小 3，对应 12=4+4+4。</li><li>i=13：j=1 得 dp[12]+1=4，j=2 得 dp[9]+1=2，j=3 得 dp[4]+1=2，最小 2，对应 13=4+9。</li></ul><p><strong>与上一轮对比</strong></p><p>思路与一刷完全一致（一维 DP 枚举最后一块平方数），复杂度同为 O(n·√n)/O(n)；本轮没有换写法，代码骨架与一刷等价。</p><p><strong>这次为什么能想起来</strong></p><p>一刷一次 AC 留下的状态定义仍然清晰，重写时直接锁定「以容量 i 为阶段、枚举最后一块平方数 j²」，没有退化成二维 DP 或 BFS。</p><p><strong>掌握度判定</strong></p><p>本次一次提交 Accepted，全程没有提示、没有探讨，判为较强。</p><p><strong>下一步提醒</strong></p><p>DP 主线已是标准解。若想再深一层：拉格朗日四平方定理下答案只可能是 1..4，先用 Legendre 判定 n=4^a(8b+7) 时答案为 4，再依次判完全平方数（1）与两平方和（2），可把 O(n·√n) 降到 O(√n)；这属于数论特判，不是通用 DP，不必现在追。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,29 @@
         <li><span>复杂度</span><b>O(n·√n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>一维DP（枚举最后一块平方数）</b></li>
+        <li><span>复杂度</span><b>O(n·√n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维DP（枚举最后一块平方数）</h3>
     <p><span class="chip">时间 O(n·√n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.8 MB</span><span class="chip">用例 589/589</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0279_PerfectSquares.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numSquares</span>(<span class="tk-k">int</span> n) {
+    <div class="code-wrap"><div class="code-head"><span>LC0279_PerfectSquares.java · 一维DP（枚举最后一块平方数）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numSquares</span>(<span class="tk-k">int</span> n) {
+        <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>];
+        <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(dp, <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>);
+        dp[<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= n; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= <span class="tk-t">Math</span>.<span class="tk-f">sqrt</span>(i); j++) {
+                dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i], dp[i - j * j] + <span class="tk-n">1</span>);
+            }
+        }
+        <span class="tk-k">return</span> dp[n];
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0279_PerfectSquares.java · 一维DP（枚举最后一块平方数） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numSquares</span>(<span class="tk-k">int</span> n) {
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>];
         <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(dp, <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>);
         dp[<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
@@ -47,11 +69,12 @@
             }
         }
         <span class="tk-k">return</span> dp[n];
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>求 n 的完全平方数最少数量，本质是「物品无限可用、凑总和最小化物品数」的完全背包/最短路问题：物品是 1、4、9、16…，要凑出总和 n 使个数最少。任何合法拆法都可以看成「最后一块 j² + 剩余 n−j² 的最优拆法」，剩余部分与整体同构且更小，满足最优子结构；枚举所有组合是指数级，DP 自底向上填表避免重复计算。</p><p><strong>关键设计决策</strong></p><ol><li>状态：dp[i] = 和为 i 所需的最少平方数个数；dp[0]=0（和为 0 用 0 个），dp[1..n] 初始化成一个足够大的值（如 n+1），防止 min 把未计算的 0 当成候选。</li><li>转移：dp[i] = min over j=1..⌊√i⌋ (dp[i−j²] + 1)：枚举最后一块 j²，前面部分用已算好的最优子解，+1 数上这一块本身。</li><li>填表顺序：i 从小到大，保证任何候选 dp[i−j²]（下标更小）先就绪——自底向上原则。</li><li>答案：dp[n]。</li></ol><p><strong>边界与细节</strong></p><ul><li>n=1：内层只试 1²，dp[1]=dp[0]+1=1。</li><li>n 本身是平方数：如 4，试到 2² 时 dp[0]+1=1。</li><li>上限大数：n=10000=100²，答案 1；O(n·√n) 约 10^6 次操作，很快。</li><li>溢出安全：dp[i−j²] 下标更小、必已算好，不会拿 MAX_VALUE 参与加法。</li><li>推演 case：n=13。</li></ul><ol><li>dp[0]=0；i=1：j=1 → dp[0]+1=1。</li><li>i=4：j=1 → dp[3]+1=4；j=2 → dp[0]+1=1 → dp[4]=1。</li><li>i=8：j=1 → dp[7]+1=4；j=2 → dp[4]+1=2 → dp[8]=2（4+4）。</li><li>i=13：j=1 → dp[12]+1=4；j=2 → dp[9]+1=2；j=3 → dp[4]+1=2 → dp[13]=2（4+9 或 9+4）✓。</li></ol><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(n·√n)：外层 n 个 i，内层最多 ⌊√i⌋ 个候选，Σ√i = O(n·√n)；n≤10^4 时约百万次，可接受。</li><li>空间 O(n)：dp 数组长度 n+1。</li><li>为什么可接受/下限：每个 i 必须比较其全部可用平方数候选才能保证不漏最优（贪心取最大块会错，如 12 取 9 得 4 个而最优 3 个），「枚举最后一块取 min」是这类拆分数 DP 的自然复杂度；另有四平方和定理的数学解法可常数级判定（答案为 1/2/4 的判断），属于特例延伸，DP 是通用可迁移的做法。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>589/589 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>完全背包一维压缩（正序枚举）</h3><p>物品可无限次使用时，一维 dp 按容量从小到大正序填表，dp[c] 才能复用本轮刚更新的 dp[c-w]；改成倒序就退化成 0-1 背包。本题 w=j²、每件代价 1，求恰好装满容量 n 的最小代价。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>

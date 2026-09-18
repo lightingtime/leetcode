@@ -2,7 +2,9 @@
 // LeetCode 279. 完全平方数 (Perfect Squares)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/perfect-squares/
-// 刷题日期：2026-08-10
+// 刷题日期：2026-09-18
+// 二刷 · 一刷 2026-08-10 · 一维 DP 枚举最后一块平方数
+// 测试用例与一刷归档保持一致
 // ============================================================
 
 import java.util.*;
@@ -15,8 +17,8 @@ public class LC0279_PerfectSquares {
         Arrays.fill(dp, Integer.MAX_VALUE);
         dp[0] = 0;
         for (int i = 1; i <= n; i++) {
-            for (int j = 1; j * j <= i; j++) {
-                dp[i] = Math.min(dp[i], dp[i - j * j ] + 1);
+            for (int j = 1; j <= Math.sqrt(i); j++) {
+                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
             }
         }
         return dp[n];
