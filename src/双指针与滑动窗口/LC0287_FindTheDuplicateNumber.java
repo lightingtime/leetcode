@@ -2,15 +2,13 @@
 // LeetCode 287. 寻找重复数 (Find the Duplicate Number)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/find-the-duplicate-number/
-// 复习日期：2026-09-17（第 1 次复习 · 一刷 2026-08-05 · 一刷一次 AC）
-// 一刷写法：Floyd 判圈——把数组当下标链表（i → nums[i]），重复值就是「有多个前驱」的节点、也就是环入口；
-//       快慢指针在值上跳，相遇后 slow 复位到 0 再同速前进，再次相遇处即重复值，O(n)/O(1)
-// 要点：相遇阶段必须先移动再比较（do-while 或让两指针初始错开），同起点时 fast != slow 一开始就不成立，循环体会一次都不执行
-// 测试用例与一刷归档保持一致（示例 3 个 + 边界 4 个：n=1、重复最小值、重复在中间、n=10^5 大数组）
+// 复习日期：2026-09-18（第 2 次复习 · 一刷 2026-08-05 · 一刷一次 Accepted）
+// 一刷写法：把数组当下标链表（i → nums[i]），重复值 = 环入口；Floyd 判圈——第一阶段快慢指针先移动后比较找到相遇点，第二阶段一个指针回起点、两指针同速前进，相遇处即环入口。O(n)/O(1)
+// 一刷踩过的坑（错误习惯库有记录）：相遇阶段用 while 先判后走，两指针同起点时 fast != slow 一开始就为 false，循环体一次不执行、指针从未移动；必须 do-while 或初始错开，保证「先移动再比较」
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 4 个）
 //
-// 思路：Floyd 判圈（把值域当下标链）——slow 走一格 nums[slow]，fast 走两格 nums[nums[fast]]，do-while 先走再比；
-//       相遇后把 slow 复位到 0，两指针改同速前进，第二次相遇处就是环入口（即重复值）。不改数组、额外空间 O(1)
-// 复杂度：时间 O(n) 空间 O(1)
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -26,9 +24,9 @@ public class LC0287_FindTheDuplicateNumber {
             slow = nums[slow];
         } while (fast != slow);
         slow = 0;
-        while (fast != slow) {
-            fast = nums[fast];
+        while (slow != fast) {
             slow = nums[slow];
+            fast = nums[fast];
         }
         return fast;
     }

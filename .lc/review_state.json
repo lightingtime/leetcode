@@ -205,12 +205,12 @@
       "title": "寻找重复数",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-05",
-      "last_review_date": "2026-09-17",
-      "next_review_date": "2026-09-18",
-      "interval_days": 1,
-      "review_count": 1,
-      "mastery": "strong",
-      "consecutive_strong": 1,
+      "last_review_date": "2026-09-18",
+      "next_review_date": "2026-09-20",
+      "interval_days": 2,
+      "review_count": 2,
+      "mastery": "weak",
+      "consecutive_strong": 0,
       "mastered": false
     },
     "minimum-window-substring": {

@@ -33,20 +33,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-17",
+      "date": "2026-09-18",
       "verdict": "Accepted",
       "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 83356000,
+      "memory_bytes": 83076000,
       "approach": "Floyd 判圈",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n\n- **首次复习**，没有上一轮可对比。写法与一刷完全一致（Floyd 判圈：do-while 先走再比 + 复位后同速），差异只是把变量声明拆成两行、删掉 TODO 占位。\n- 复杂度不变：O(n) 时间 / O(1) 额外空间，且不改动数组——这正是本题的两条硬约束。\n\n**② 这次为什么能一次写对**\n\n- 一刷一次 AC，没有沉淀新的错误习惯（但一刷过程中那条坏写法仍留在错误习惯库里：相遇检测写成 while 导致先判后走）。本轮直接把两个关键点落对：相遇阶段必须是「先移动再比较」（同起点时 fast != slow 一开始就不成立，写成 while 循环体一次都不会执行），复位阶段 slow 从 0 出发、两指针同速，第二次相遇处即环入口。\n- 前提也写对：值为 1..n、下标 0 当入口，数组当链后永远不会越界——边界 4（n=10^5）验证了这条。\n\n**③ 掌握度判定**\n\n- strong：本地 7 组用例（示例 3 + 边界 4：n=1、重复最小值、重复在中间、n=10^5）一次全绿，全程无探讨无提示，力扣一次提交 Accepted（59/59，83.4MB）→ 判较强；首次复习按 ×2.5 拉长间隔。\n\n**④ 下一步提醒**\n\n- 这套判圈骨架覆盖「值域当链」整族题：142 环形链表 II（要求返回入口）、202 快乐数；若允许改数组，还有「把 nums[i] 归位到下标 nums[i]、撞到已归位即重复」的写法，可对比取舍。\n- 二分值域法（对 count(mid) 二分）也是本题合法解，O(n log n)/O(1)，可以顺手复习。",
-      "code": "    public int findDuplicate(int[] nums) {\n        int fast = 0;\n        int slow = 0;\n        do {\n            fast = nums[nums[fast]];\n            slow = nums[slow];\n        } while (fast != slow);\n        slow = 0;\n        while (fast != slow) {\n            fast = nums[fast];\n            slow = nums[slow];\n        }\n        return fast;\n    }",
+      "notes": "**与上一轮/一刷对比**：思路一致（数组当下标链 + Floyd 判圈）；第二阶段循环体里两句赋值顺序与归档版相反，因为两个指针互不依赖、各自只读数组，顺序无所谓，语义等价。\n\n**这次为什么没踩一刷的坑**：相遇阶段用 `do-while`——先移动再比较，避免了两指针同起点时 `fast != slow` 一开始就为假、循环体一次都不执行的问题。起点取 `0`（而不是常见写法的 `nums[0]`）同样成立：下标 0 只有出边没有入边（任何位置的取值都 ≥ 1），所以它必然在环外，第二阶段把它当起点、和相遇点同速走，仍然同时落到环入口。\n\n**掌握度依据**：一次提交 Accepted，但这次提交前我按你的要求把「第二阶段为什么相遇在环入口」完整讲了一遍（含 `a + x ≡ 0 (mod b)` 的推导和具体数字推演），按「探讨过 → 较弱」记，2 天后再见。",
+      "code": "    public int findDuplicate(int[] nums) {\n        int fast = 0;\n        int slow = 0;\n        do {\n            fast = nums[nums[fast]];\n            slow = nums[slow];\n        } while (fast != slow);\n        slow = 0;\n        while (slow != fast) {\n            slow = nums[slow];\n            fast = nums[fast];\n        }\n        return fast;\n    }",
       "prev_code": "    public int findDuplicate(int[] nums) {\n        int fast = 0, slow = 0;\n        do {\n            fast = nums[nums[fast]];\n            slow = nums[slow];\n        } while ( fast != slow);\n        slow = 0;\n        while (fast != slow) {\n            fast = nums[fast];\n            slow = nums[slow];\n        }\n        return fast;\n    }",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
   ],
   "hints": [
@@ -66,6 +66,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n\n- **首次复习**，没有上一轮可对比。写法与一刷完全一致（Floyd 判圈：do-while 先走再比 + 复位后同速），差异只是把变量声明拆成两行、删掉 TODO 占位。\n- 复杂度不变：O(n) 时间 / O(1) 额外空间，且不改动数组——这正是本题的两条硬约束。\n\n**② 这次为什么能一次写对**\n\n- 一刷一次 AC，没有沉淀新的错误习惯（但一刷过程中那条坏写法仍留在错误习惯库里：相遇检测写成 while 导致先判后走）。本轮直接把两个关键点落对：相遇阶段必须是「先移动再比较」（同起点时 fast != slow 一开始就不成立，写成 while 循环体一次都不会执行），复位阶段 slow 从 0 出发、两指针同速，第二次相遇处即环入口。\n- 前提也写对：值为 1..n、下标 0 当入口，数组当链后永远不会越界——边界 4（n=10^5）验证了这条。\n\n**③ 掌握度判定**\n\n- strong：本地 7 组用例（示例 3 + 边界 4：n=1、重复最小值、重复在中间、n=10^5）一次全绿，全程无探讨无提示，力扣一次提交 Accepted（59/59，83.4MB）→ 判较强；首次复习按 ×2.5 拉长间隔。\n\n**④ 下一步提醒**\n\n- 这套判圈骨架覆盖「值域当链」整族题：142 环形链表 II（要求返回入口）、202 快乐数；若允许改数组，还有「把 nums[i] 归位到下标 nums[i]、撞到已归位即重复」的写法，可对比取舍。\n- 二分值域法（对 count(mid) 二分）也是本题合法解，O(n log n)/O(1)，可以顺手复习。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-18",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "Floyd 判圈",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与上一轮/一刷对比**：思路一致（数组当下标链 + Floyd 判圈）；第二阶段循环体里两句赋值顺序与归档版相反，因为两个指针互不依赖、各自只读数组，顺序无所谓，语义等价。\n\n**这次为什么没踩一刷的坑**：相遇阶段用 `do-while`——先移动再比较，避免了两指针同起点时 `fast != slow` 一开始就为假、循环体一次都不执行的问题。起点取 `0`（而不是常见写法的 `nums[0]`）同样成立：下标 0 只有出边没有入边（任何位置的取值都 ≥ 1），所以它必然在环外，第二阶段把它当起点、和相遇点同速走，仍然同时落到环入口。\n\n**掌握度依据**：一次提交 Accepted，但这次提交前我按你的要求把「第二阶段为什么相遇在环入口」完整讲了一遍（含 `a + x ≡ 0 (mod b)` 的推导和具体数字推演），按「探讨过 → 较弱」记，2 天后再见。"
     }
   ]
 }
