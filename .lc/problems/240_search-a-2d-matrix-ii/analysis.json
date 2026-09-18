@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-06",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "130/130",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 48644000,
+      "memory_bytes": 48780000,
       "approach": "右上角消行消列",
       "time_complexity": "O(m+n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）"
+      "notes": "**与一刷对比**：思路一致（右上角出发的消行消列）。\n\n**关键点都处理对了**：① 起点 (0, n-1) 是右上角——它是所在行的最大值、所在列的最小值，所以 `matrix[x][y] > target` 时 y-- 能一次排除整列，`< target` 时 x++ 能一次排除整行；② 空矩阵与空行先判，避免 `matrix[0]` 越界；③ 命中就返回 true，越界退出循环后返回 false。本地示例 2 + 边界 16（空矩阵/空行/单元素/单行/单列/极值/四个角/负数/重复值）全过，一次提交 Accepted（130/130）。\n\n**可精简点**：循环条件里 `x >= 0` 与 `y < n` 是冗余的——x 从 0 出发只增、y 从 n-1 出发只减，永远不会反向越界，`while (x < m && y >= 0)` 就够。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix.length == 0 || matrix[0].length == 0) {\n            return false;\n        }\n        int m = matrix.length;\n        int n = matrix[0].length;\n\n        int x = 0, y = n - 1;\n        while (x >= 0 && x < m && y >= 0 && y < n) {\n            if (matrix[x][y] == target) {\n                return true;\n            } else if (matrix[x][y] > target) {\n                y--;\n            } else {\n                x++;\n            }\n        }\n        return false;\n    }",
+      "prev_code": "public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix.length == 0 || matrix[0].length == 0) {\n            return false;\n        }\n        int m = matrix.length;\n        int n = matrix[0].length;\n\n        int x = 0, y = n - 1;\n        while (x >= 0 && x < m && y >= 0 && y < n) {\n            if (matrix[x][y] == target) {\n                return true;\n            } else if (matrix[x][y] > target) {\n                y--;\n            } else {\n                x++;\n            }\n        }\n        return false;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
   ],
-  "approach_detail": "问题本质：行递增、列递增的矩阵中查找 target。每行二分是 O(m log n)；从右上角出发每次排除一整行或一整列，O(m+n)。\n关键设计：起点 (0, n-1)（右上角）。matrix[x][y] > target 时，本列下方所有元素都更大，排除本列 y--；< target 时，本行左边所有元素都更小，排除本行 x++；相等返回 true。每步确定排除一行或一列，所以最多走 m+n 步。\n边界：空矩阵或空行直接 false；target 小于左上角或大于右下角时快速从边界走出去退出循环；单行退化为线性扫描、单列退化为竖扫。\n复杂度：O(m+n) 时间、O(1) 空间，最优。"
+  "approach_detail": "问题本质：行递增、列递增的矩阵中查找 target。每行二分是 O(m log n)；从右上角出发每次排除一整行或一整列，O(m+n)。\n关键设计：起点 (0, n-1)（右上角）。matrix[x][y] > target 时，本列下方所有元素都更大，排除本列 y--；< target 时，本行左边所有元素都更小，排除本行 x++；相等返回 true。每步确定排除一行或一列，所以最多走 m+n 步。\n边界：空矩阵或空行直接 false；target 小于左上角或大于右下角时快速从边界走出去退出循环；单行退化为线性扫描、单列退化为竖扫。\n复杂度：O(m+n) 时间、O(1) 空间，最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "右上角消行消列",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（右上角出发的消行消列）。\n\n**关键点都处理对了**：① 起点 (0, n-1) 是右上角——它是所在行的最大值、所在列的最小值，所以 `matrix[x][y] > target` 时 y-- 能一次排除整列，`< target` 时 x++ 能一次排除整行；② 空矩阵与空行先判，避免 `matrix[0]` 越界；③ 命中就返回 true，越界退出循环后返回 false。本地示例 2 + 边界 16（空矩阵/空行/单元素/单行/单列/极值/四个角/负数/重复值）全过，一次提交 Accepted（130/130）。\n\n**可精简点**：循环条件里 `x >= 0` 与 `y < n` 是冗余的——x 从 0 出发只增、y 从 n-1 出发只减，永远不会反向越界，`while (x < m && y >= 0)` 就够。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
