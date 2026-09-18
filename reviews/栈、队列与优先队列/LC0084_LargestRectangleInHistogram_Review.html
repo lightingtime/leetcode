@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>84. 柱状图中最大的矩形 (Largest Rectangle in Histogram)</h1><p>&gt; <a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/" rel="noopener">https://leetcode.cn/problems/largest-rectangle-in-histogram/</a></p><p>难度：Hard ｜ 分类：栈、队列与优先队列</p><p>标签：栈、数组、单调栈、区间最值查询</p><h2>题目描述</h2><p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p><p>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p><p>示例 1:</p><p>输入：heights = [2,1,5,6,2,3]</p><p>输出：10</p><p>解释：最大的矩形为图中红色区域，面积为 10</p><p>示例 2：</p><p>输入： heights = [2,4]</p><p>输出： 4</p><p>提示：</p><p>1 5</p><p>0 4</p><h2>示例</h2><ol><li>输入：heights = [2,1,5,6,2,3]</li></ol><p>输出：10</p><p>解释：最大的矩形为图中红色区域，面积为 10</p><ol><li>输入：heights = [2,4]</li></ol><p>输出：4</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 单调递增栈+哨兵 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路一致（首尾加 0 哨兵 + 单调递增栈，栈存下标），写法与归档版本基本相同。</p><p><strong>关键点都处理对了</strong>：① 栈里存的是下标（宽度要靠下标差算，存高度算不出宽度）；② 弹栈结算用 <code>height = heights[栈顶下标]</code>、<code>width = i - 弹栈后的新栈顶 - 1</code>——新栈顶就是左边界、i 就是右边界；③ 首尾两个 0 哨兵同时解决了两件事：左端不用判空（下标 0 高度为 0，永远不会被弹出，所以 <code>stack.peekLast()</code> 安全）、右端不用在循环后再清一次栈（最后那个 0 会把剩下的柱子全部结算掉）。本地示例 2 + 边界 8（单元素/递增/递减/全相同/含零分隔/全零/V形/极值）全过，一次提交 Accepted（99/99）。</p><p><strong>可精简点</strong>：把入参 <code>heights</code> 重新赋值成加了哨兵的新数组（<code>heights = newHeights;</code>）读起来有点绕，换成独立局部变量（如 <code>h = newHeights</code>）语义更清楚；哨兵数组也可以直接分配后用 <code>for</code> 逐个搬。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,34 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>单调递增栈+哨兵</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单调递增栈+哨兵</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 85.4 MB</span><span class="chip">用例 99/99</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0084_LargestRectangleInHistogram.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">largestRectangleArea</span>(<span class="tk-k">int</span>[] heights) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 85.6 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0084_LargestRectangleInHistogram.java · 单调递增栈+哨兵</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">largestRectangleArea</span>(<span class="tk-k">int</span>[] heights) {
+        <span class="tk-k">int</span>[] newHeights = <span class="tk-k">new</span> <span class="tk-k">int</span>[heights.length + <span class="tk-n">2</span>];
+        <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(heights, <span class="tk-n">0</span>, newHeights, <span class="tk-n">1</span>, heights.length);
+        heights = newHeights;
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; heights.length; i++) {
+            <span class="tk-k">while</span> (!stack.<span class="tk-f">isEmpty</span>() &amp;&amp; heights[stack.<span class="tk-f">peekLast</span>()] &gt; heights[i]) {
+                <span class="tk-k">int</span> height = heights[stack.<span class="tk-f">pollLast</span>()];
+                <span class="tk-k">int</span> width = i - stack.<span class="tk-f">peekLast</span>() -<span class="tk-n">1</span>;
+                max = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(max, height * width);
+            }
+            stack.<span class="tk-f">offerLast</span>(i);
+        }
+        <span class="tk-k">return</span> max;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0084_LargestRectangleInHistogram.java · 单调递增栈+哨兵 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">largestRectangleArea</span>(<span class="tk-k">int</span>[] heights) {
         <span class="tk-k">int</span>[] newHeights = <span class="tk-k">new</span> <span class="tk-k">int</span>[heights.length + <span class="tk-n">2</span>];
         <span class="tk-t">System</span>.<span class="tk-f">arraycopy</span>(heights, <span class="tk-n">0</span>, newHeights, <span class="tk-n">1</span>, heights.length);
         heights = newHeights;
@@ -52,7 +79,8 @@
             stack.<span class="tk-f">offerLast</span>(i);
         }
         <span class="tk-k">return</span> max;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：每个柱子能形成的最大矩形 = 柱高 × 左右第一个更矮柱子之间的宽度。暴力枚举每对边界 O(n²)；单调栈让每个柱子只结算一次。</p><p>关键设计：单调递增栈存下标。遇到比栈顶矮的柱子时，栈顶柱子作为高被弹出结算：其左边界是栈内前一个下标、右边界是当前 i，宽度 = i - 栈内前一个 - 1。在数组两端补高度 0 的哨兵，保证所有柱子最终必然出栈、且结算时栈不为空。</p><p>边界：全部递增时靠末尾哨兵逐个结算；全部相等（用 &gt; 弹出，相等延后结算但宽度照样覆盖整个区间）；单柱；连续多个可弹出的柱子依次结算。</p><p>复杂度：O(n) 时间（每个下标入栈出栈各一次）、O(n) 空间，最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>99/99 用例一次通过。</p></div></div></div></section>

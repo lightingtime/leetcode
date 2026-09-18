@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "99/99",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 89592000,
+      "memory_bytes": 89724000,
       "approach": "单调递增栈+哨兵",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "单调递增栈 + 左右高度0哨兵：弹栈结算（左边界=新栈顶，右边界=i），O(n)。思路从朴素 O(n²)（每根柱子左右扫更矮）引导到单调栈；10 组本地用例一次全过，力扣 99/99 一次 Accepted"
+      "notes": "**与一刷对比**：思路一致（首尾加 0 哨兵 + 单调递增栈，栈存下标），写法与归档版本基本相同。\n\n**关键点都处理对了**：① 栈里存的是下标（宽度要靠下标差算，存高度算不出宽度）；② 弹栈结算用 `height = heights[栈顶下标]`、`width = i - 弹栈后的新栈顶 - 1`——新栈顶就是左边界、i 就是右边界；③ 首尾两个 0 哨兵同时解决了两件事：左端不用判空（下标 0 高度为 0，永远不会被弹出，所以 `stack.peekLast()` 安全）、右端不用在循环后再清一次栈（最后那个 0 会把剩下的柱子全部结算掉）。本地示例 2 + 边界 8（单元素/递增/递减/全相同/含零分隔/全零/V形/极值）全过，一次提交 Accepted（99/99）。\n\n**可精简点**：把入参 `heights` 重新赋值成加了哨兵的新数组（`heights = newHeights;`）读起来有点绕，换成独立局部变量（如 `h = newHeights`）语义更清楚；哨兵数组也可以直接分配后用 `for` 逐个搬。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public int largestRectangleArea(int[] heights) {\n        int[] newHeights = new int[heights.length + 2];\n        System.arraycopy(heights, 0, newHeights, 1, heights.length);\n        heights = newHeights;\n        Deque<Integer> stack = new ArrayDeque<>();\n        int max = 0;\n        for (int i = 0; i < heights.length; i++) {\n            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {\n                int height = heights[stack.pollLast()];\n                int width = i - stack.peekLast() -1;\n                max = Math.max(max, height * width);\n            }\n            stack.offerLast(i);\n        }\n        return max;\n    }",
+      "prev_code": "public int largestRectangleArea(int[] heights) {\n        int[] newHeights = new int[heights.length + 2];\n        System.arraycopy(heights, 0, newHeights, 1, heights.length);\n        heights = newHeights;\n        int max = 0;\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (int i = 0; i < heights.length; i++) {\n            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {\n                int height = heights[stack.pollLast()];\n                int width = i - stack.peekLast() - 1;\n                max = Math.max(max, height * width);\n            }\n            stack.offerLast(i);\n        }\n        return max;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
   ],
-  "approach_detail": "问题本质：每个柱子能形成的最大矩形 = 柱高 × 左右第一个更矮柱子之间的宽度。暴力枚举每对边界 O(n²)；单调栈让每个柱子只结算一次。\n关键设计：单调递增栈存下标。遇到比栈顶矮的柱子时，栈顶柱子作为高被弹出结算：其左边界是栈内前一个下标、右边界是当前 i，宽度 = i - 栈内前一个 - 1。在数组两端补高度 0 的哨兵，保证所有柱子最终必然出栈、且结算时栈不为空。\n边界：全部递增时靠末尾哨兵逐个结算；全部相等（用 > 弹出，相等延后结算但宽度照样覆盖整个区间）；单柱；连续多个可弹出的柱子依次结算。\n复杂度：O(n) 时间（每个下标入栈出栈各一次）、O(n) 空间，最优。"
+  "approach_detail": "问题本质：每个柱子能形成的最大矩形 = 柱高 × 左右第一个更矮柱子之间的宽度。暴力枚举每对边界 O(n²)；单调栈让每个柱子只结算一次。\n关键设计：单调递增栈存下标。遇到比栈顶矮的柱子时，栈顶柱子作为高被弹出结算：其左边界是栈内前一个下标、右边界是当前 i，宽度 = i - 栈内前一个 - 1。在数组两端补高度 0 的哨兵，保证所有柱子最终必然出栈、且结算时栈不为空。\n边界：全部递增时靠末尾哨兵逐个结算；全部相等（用 > 弹出，相等延后结算但宽度照样覆盖整个区间）；单柱；连续多个可弹出的柱子依次结算。\n复杂度：O(n) 时间（每个下标入栈出栈各一次）、O(n) 空间，最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "单调递增栈+哨兵",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（首尾加 0 哨兵 + 单调递增栈，栈存下标），写法与归档版本基本相同。\n\n**关键点都处理对了**：① 栈里存的是下标（宽度要靠下标差算，存高度算不出宽度）；② 弹栈结算用 `height = heights[栈顶下标]`、`width = i - 弹栈后的新栈顶 - 1`——新栈顶就是左边界、i 就是右边界；③ 首尾两个 0 哨兵同时解决了两件事：左端不用判空（下标 0 高度为 0，永远不会被弹出，所以 `stack.peekLast()` 安全）、右端不用在循环后再清一次栈（最后那个 0 会把剩下的柱子全部结算掉）。本地示例 2 + 边界 8（单元素/递增/递减/全相同/含零分隔/全零/V形/极值）全过，一次提交 Accepted（99/99）。\n\n**可精简点**：把入参 `heights` 重新赋值成加了哨兵的新数组（`heights = newHeights;`）读起来有点绕，换成独立局部变量（如 `h = newHeights`）语义更清楚；哨兵数组也可以直接分配后用 `for` 逐个搬。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }

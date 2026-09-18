@@ -2,7 +2,13 @@
 // LeetCode 84. 柱状图中最大的矩形 (Largest Rectangle in Histogram)
 // 难度：Hard | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/largest-rectangle-in-histogram/
-// 刷题日期：2026-08-07
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-07 · 一刷一次 Accepted）
+// 一刷写法：单调递增栈 + 首尾哨兵——栈里存**下标**且高度递增；当前高度比栈顶矮时弹栈结算（高度=被弹出的下标对应高度，右边界=i，左边界=弹栈后的新栈顶），高度还原成哨兵 0 收尾。O(n)/O(n)
+// 本题易错点：① 朴素做法是「每根柱子向左右各扫到更矮的柱子」O(n²)，单调栈把它降成 O(n)；② 栈存下标而不是高度，否则算不出宽度；③ 宽度公式 = 右边界 − 左边界 − 1（新栈顶就是左边界，i 就是右边界）；④ 循环结束后栈里可能还剩递增的柱子，要么补一个高度 0 的哨兵、要么再跑一遍清栈
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 8 个：单元素/递增/递减/全相同/含零分隔/全零/V形/极值）
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -14,12 +20,12 @@ public class LC0084_LargestRectangleInHistogram {
         int[] newHeights = new int[heights.length + 2];
         System.arraycopy(heights, 0, newHeights, 1, heights.length);
         heights = newHeights;
-        int max = 0;
         Deque<Integer> stack = new ArrayDeque<>();
+        int max = 0;
         for (int i = 0; i < heights.length; i++) {
             while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {
                 int height = heights[stack.pollLast()];
-                int width = i - stack.peekLast() - 1;
+                int width = i - stack.peekLast() -1;
                 max = Math.max(max, height * width);
             }
             stack.offerLast(i);
