@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>20. 有效的括号 (Valid Parentheses)</h1><p>&gt; <a href="https://leetcode.cn/problems/valid-parentheses/" rel="noopener">https://leetcode.cn/problems/valid-parentheses/</a></p><p>难度：Easy ｜ 分类：栈、队列与优先队列</p><p>标签：栈、字符串、括号序列</p><h2>题目描述</h2><p>给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。</p><p>有效字符串需满足：</p><p>左括号必须用相同类型的右括号闭合。</p><p>左括号必须以正确的顺序闭合。</p><p>每个右括号都有一个对应的相同类型的左括号。</p><p>示例 1：</p><p>输入：s = "()"</p><p>输出：true</p><p>示例 2：</p><p>输入：s = "()[]{}"</p><p>输出：true</p><p>示例 3：</p><p>输入：s = "(]"</p><p>输出：false</p><p>示例 4：</p><p>输入：s = "([])"</p><p>输出：true</p><p>示例 5：</p><p>输入：s = "([)]"</p><p>输出：false</p><p>提示：</p><p>1 4</p><p>s 仅由括号 '()[]{}' 组成</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 栈（Deque） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路一致（栈匹配，压入的是配对右括号），写法与归档版本相同。</p><p><strong>关键点都处理对了</strong>：① 遇左括号压入「对应的右括号」，遇到右括号时只需一次 <code>stack.pollLast() != c</code> 比较，不用写两套映射分支；② 两处早退都写全了——栈空时的多余右括号、弹出元素不匹配；③ 扫完用 <code>stack.isEmpty()</code> 收口，"(((" 这类只有左括号的输入不会被误判为有效。本地示例 5 + 边界 7（单个左/右括号、全左未闭合、多余右括号、深层嵌套、正确嵌套、交叉错配）全过，一次提交 Accepted（103/103）。</p><p><strong>可精简点</strong>：压栈/弹栈混用了 <code>offer</code> 与 <code>pollLast</code>（一个从尾进、一个从尾出，语义上是对的但读起来绕），<code>Deque</code> 当栈用建议直接 <code>push/pop</code> 成对使用。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>栈（Deque）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 栈（Deque）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.9 MB</span><span class="chip">用例 103/103</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/栈、队列与优先队列/LC0020_ValidParentheses.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValid</span>(<span class="tk-t">String</span> s) {
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.6 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0020_ValidParentheses.java · 栈（Deque）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValid</span>(<span class="tk-t">String</span> s) {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">Character</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-k">char</span> c : s.<span class="tk-f">toCharArray</span>()) {
             <span class="tk-k">if</span> (c == <span class="tk-s">'('</span>) {
@@ -57,6 +68,27 @@
         }
         <span class="tk-k">return</span> stack.<span class="tk-f">isEmpty</span>();
     }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0020_ValidParentheses.java · 栈（Deque） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isValid</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Character</span>&gt; stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : s.<span class="tk-f">toCharArray</span>()) {
+            <span class="tk-k">if</span> (c == <span class="tk-s">'('</span>) {
+                stack.<span class="tk-f">offer</span>(<span class="tk-s">')'</span>);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">'{'</span>) {
+                stack.<span class="tk-f">offer</span>(<span class="tk-s">'}'</span>);
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">'['</span>) {
+                stack.<span class="tk-f">offer</span>(<span class="tk-s">']'</span>);
+            } <span class="tk-k">else</span> {
+                <span class="tk-k">if</span> (stack.<span class="tk-f">isEmpty</span>()) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
+                }
+                <span class="tk-k">if</span> (stack.<span class="tk-f">pollLast</span>() != c) {
+                    <span class="tk-k">return</span> <span class="tk-k">false</span>;
+                }
+            }
+        }
+        <span class="tk-k">return</span> stack.<span class="tk-f">isEmpty</span>();
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：括号匹配是「后出现的先闭合」，天然用栈：左括号入栈，右括号与栈顶配对。</p><p>关键设计：优化写法是左括号入栈时直接压入对应的右括号，这样遇到右括号只需比较是否等于栈顶，省去配对的 switch/if；不匹配或栈空直接 false；遍历结束栈空才是合法串。</p><p>边界：空串返回 true；只有左括号（结束栈非空 false）；只有右括号（栈空即 false）；多层嵌套；右括号多余与左括号多余要分别拦截。</p><p>复杂度：O(n) 时间、O(n) 空间（栈），最优。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>103/103 用例一次通过。</p></div></div></div></section>

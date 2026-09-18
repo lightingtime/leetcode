@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "103/103",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 43916000,
+      "memory_bytes": 43664000,
       "approach": "栈（Deque）",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "栈匹配：遇到左括号把对应右括号压栈，遇右括号弹栈比对，最后栈空即有效；O(n)/O(n)。12 组本地用例一次全过，力扣 103/103 一次 Accepted"
+      "notes": "**与一刷对比**：思路一致（栈匹配，压入的是配对右括号），写法与归档版本相同。\n\n**关键点都处理对了**：① 遇左括号压入「对应的右括号」，遇到右括号时只需一次 `stack.pollLast() != c` 比较，不用写两套映射分支；② 两处早退都写全了——栈空时的多余右括号、弹出元素不匹配；③ 扫完用 `stack.isEmpty()` 收口，\"(((\" 这类只有左括号的输入不会被误判为有效。本地示例 5 + 边界 7（单个左/右括号、全左未闭合、多余右括号、深层嵌套、正确嵌套、交叉错配）全过，一次提交 Accepted（103/103）。\n\n**可精简点**：压栈/弹栈混用了 `offer` 与 `pollLast`（一个从尾进、一个从尾出，语义上是对的但读起来绕），`Deque` 当栈用建议直接 `push/pop` 成对使用。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public boolean isValid(String s) {\n        Deque<Character> stack = new ArrayDeque<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                stack.offer(')');\n            } else if (c == '{') {\n                stack.offer('}');\n            } else if (c == '[') {\n                stack.offer(']');\n            } else {\n                if (stack.isEmpty()) {\n                    return false;\n                }\n                if (stack.pollLast() != c) {\n                    return false;\n                }\n            }\n        }\n        return stack.isEmpty();\n    }",
+      "prev_code": "public boolean isValid(String s) {\n        Deque<Character> stack = new ArrayDeque<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                stack.offer(')');\n            } else if (c == '{') {\n                stack.offer('}');\n            } else if (c == '[') {\n                stack.offer(']');\n            } else {\n                if (stack.isEmpty()) {\n                    return false;\n                }\n                if (stack.pollLast() != c) {\n                    return false;\n                }\n            }\n        }\n        return stack.isEmpty();\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
   ],
-  "approach_detail": "问题本质：括号匹配是「后出现的先闭合」，天然用栈：左括号入栈，右括号与栈顶配对。\n关键设计：优化写法是左括号入栈时直接压入对应的右括号，这样遇到右括号只需比较是否等于栈顶，省去配对的 switch/if；不匹配或栈空直接 false；遍历结束栈空才是合法串。\n边界：空串返回 true；只有左括号（结束栈非空 false）；只有右括号（栈空即 false）；多层嵌套；右括号多余与左括号多余要分别拦截。\n复杂度：O(n) 时间、O(n) 空间（栈），最优。"
+  "approach_detail": "问题本质：括号匹配是「后出现的先闭合」，天然用栈：左括号入栈，右括号与栈顶配对。\n关键设计：优化写法是左括号入栈时直接压入对应的右括号，这样遇到右括号只需比较是否等于栈顶，省去配对的 switch/if；不匹配或栈空直接 false；遍历结束栈空才是合法串。\n边界：空串返回 true；只有左括号（结束栈非空 false）；只有右括号（栈空即 false）；多层嵌套；右括号多余与左括号多余要分别拦截。\n复杂度：O(n) 时间、O(n) 空间（栈），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "栈（Deque）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（栈匹配，压入的是配对右括号），写法与归档版本相同。\n\n**关键点都处理对了**：① 遇左括号压入「对应的右括号」，遇到右括号时只需一次 `stack.pollLast() != c` 比较，不用写两套映射分支；② 两处早退都写全了——栈空时的多余右括号、弹出元素不匹配；③ 扫完用 `stack.isEmpty()` 收口，\"(((\" 这类只有左括号的输入不会被误判为有效。本地示例 5 + 边界 7（单个左/右括号、全左未闭合、多余右括号、深层嵌套、正确嵌套、交叉错配）全过，一次提交 Accepted（103/103）。\n\n**可精简点**：压栈/弹栈混用了 `offer` 与 `pollLast`（一个从尾进、一个从尾出，语义上是对的但读起来绕），`Deque` 当栈用建议直接 `push/pop` 成对使用。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
