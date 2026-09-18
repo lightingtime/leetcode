@@ -15,25 +15,49 @@
   "time_complexity": "O(V+E)",
   "space_complexity": "O(V+E)",
   "notes": "课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）",
-  "code_notes": [],
-  "mistakes": [],
-  "patterns": [],
-  "submissions": [
+  "mistakes": [
     {
-      "date": "2026-08-08",
-      "verdict": "Accepted",
-      "testcases": "54/54",
-      "runtime_ms": null,
-      "memory_bytes": 47800000,
-      "approach": "Kahn 拓扑排序",
-      "time_complexity": "O(V+E)",
-      "space_complexity": "O(V+E)",
-      "optimal": true,
-      "notes": "课程表：Kahn 拓扑排序（入度 0 入队 + 减入度），processed==numCourses 判无环，一次 Accepted（54/54）"
+      "habit": "拓扑排序入队时放错值：第 36 行写 queue.offer(inDegree[i]) 把「0」当成课程编号入队（应为节点编号 i）。后果是① 队列里所有初值都是 0，节点 0 的边被重复减、真实入度为 0 的节点从未被处理；② solve 计数虚增/漏计——LC207 二刷实测：numCourses=3 且 {{1,0},{0,2}}（合法 DAG）返回 false，{{1,0},{0,1}}（含环）返回 true。危险点是原 8 个边界用例恰好都让「入度 0 的节点就是下标 0」，所以本地全绿",
+      "count": 1
     }
   ],
   "hints": [
     "连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。"
   ],
-  "approach_detail": "问题本质：能否学完全部课程 ⟺ 依赖图无环 ⟺ 存在覆盖全部节点的拓扑序。Kahn 拓扑排序（BFS 版）。\n关键设计：邻接表建图（prereq[1] → prereq[0]）+ 入度数组；把所有入度为 0 的课入队；出队时 processed++，并把它的后继入度 -1，减到 0 就入队；最后 processed==numCourses 说明拓扑序覆盖全部节点，无环可完成。\n边界：无依赖时所有课初始入度 0，一趟全处理；自环（一课依赖自己）永远无法入队，processed<numCourses 返回 false；多个独立连通分量各自处理；空 prerequisites 直接 true。\n复杂度：O(V+E) 时间（每个节点每条边各访问一次）、O(V+E) 空间（图 + 入度 + 队列），最优。"
+  "code_notes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-09-18",
+      "verdict": "Accepted",
+      "testcases": "",
+      "runtime_ms": null,
+      "memory_bytes": 47600000,
+      "approach": "Kahn 拓扑排序",
+      "time_complexity": "O(V+E)",
+      "space_complexity": "O(V+E)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（Kahn 拓扑排序：邻接表 + 入度数组 + 队列 + processed 计数），复杂度相同。\n\n**这次踩的坑（本地补例后暴露）**：初始化入队时写成了 `queue.offer(inDegree[i])`，把入度值 0 当成课程编号塞进队列，于是真正入度为 0 的课从未作为起点被处理、节点 0 的后继被反复减入度。原来 8 个边界用例恰好都让「入度为 0 的节点就是下标 0」（如 `{1,2},{2,1}` 里的空链节点就是课程 0），所以本地全绿掩盖了它。补两个用例后立刻现形：`{{1,0},{0,2}}`（合法 DAG，2→0→1）被判 false，`{{1,0},{0,1}}`（0↔1 成环）被判 true。改成入队节点编号 `i` 后 12 个用例全过，提交 Accepted（54/54）。\n\n**这个坑的方法论**：拓扑排序里队列装的是**节点编号**，因为后面要拿它当 `graph[course]` 的下标；凡是「下标编号」和「数值」都是 int 的地方，写 `a[i]` 还是 `i` 要念一遍语义。同类更隐蔽的一点：边界用例如果只覆盖「零入度点恰好是 0 号节点」，就测不出这类错误。\n\n**掌握度依据**：本地先失败、经提示后自己改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。",
+      "code": "    public boolean canFinish(int numCourses, int[][] prerequisites) {\n        List<Integer>[] graph = new List[numCourses];\n        int[] inDegree = new int[numCourses];\n        for (int i = 0; i < numCourses; i++) {\n            graph[i] = new ArrayList<>();\n        }\n        for (int[] prereq :prerequisites) {\n            int before = prereq[1];\n            int after = prereq[0];\n            graph[before].add(after);\n            inDegree[after]++;\n        }\n        int solve = 0;\n        Queue<Integer> queue = new ArrayDeque<>();\n        for (int i = 0; i < inDegree.length; i++) {\n            if (inDegree[i] == 0) {\n                queue.offer(i);\n            }\n        }\n        while (!queue.isEmpty()) {\n            int course = queue.poll();\n            solve++;\n            if (!graph[course].isEmpty()) {\n                for (Integer after : graph[course]) {\n                    inDegree[after]--;\n                    if (inDegree[after] == 0) {\n                        queue.offer(after);\n                    }\n                }\n            }\n        }\n        return solve == numCourses;\n    }",
+      "prev_code": "public boolean canFinish(int numCourses, int[][] prerequisites) {\n        List<List<Integer>> graph = new ArrayList<>();\n        int[] inDegree = new int[numCourses];\n        for (int i = 0; i < numCourses; i++) {\n            graph.add(new ArrayList<>());\n        }\n\n        for (int[] prereq : prerequisites) {\n            graph.get(prereq[1]).add(prereq[0]);\n            inDegree[prereq[0]]++;\n        }\n        int processed = 0;\n        Queue<Integer> queue = new ArrayDeque<>();\n        for (int i = 0; i < numCourses; i++) {\n            if (inDegree[i] == 0) {\n                queue.offer(i);\n            }\n        }\n        while (!queue.isEmpty()) {\n            int course = queue.poll();\n            processed++;\n            for (int nextCourse : graph.get(course)) {\n                inDegree[nextCourse]--;\n                if (inDegree[nextCourse] == 0) {\n                    queue.offer(nextCourse);\n                }\n            }\n        }\n        return processed == numCourses;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
+    }
+  ],
+  "approach_detail": "问题本质：能否学完全部课程 ⟺ 依赖图无环 ⟺ 存在覆盖全部节点的拓扑序。Kahn 拓扑排序（BFS 版）。\n关键设计：邻接表建图（prereq[1] → prereq[0]）+ 入度数组；把所有入度为 0 的课入队；出队时 processed++，并把它的后继入度 -1，减到 0 就入队；最后 processed==numCourses 说明拓扑序覆盖全部节点，无环可完成。\n边界：无依赖时所有课初始入度 0，一趟全处理；自环（一课依赖自己）永远无法入队，processed<numCourses 返回 false；多个独立连通分量各自处理；空 prerequisites 直接 true。\n复杂度：O(V+E) 时间（每个节点每条边各访问一次）、O(V+E) 空间（图 + 入度 + 队列），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "Kahn 拓扑排序",
+      "time_complexity": "O(V+E)",
+      "space_complexity": "O(V+E)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（Kahn 拓扑排序：邻接表 + 入度数组 + 队列 + processed 计数），复杂度相同。\n\n**这次踩的坑（本地补例后暴露）**：初始化入队时写成了 `queue.offer(inDegree[i])`，把入度值 0 当成课程编号塞进队列，于是真正入度为 0 的课从未作为起点被处理、节点 0 的后继被反复减入度。原来 8 个边界用例恰好都让「入度为 0 的节点就是下标 0」（如 `{1,2},{2,1}` 里的空链节点就是课程 0），所以本地全绿掩盖了它。补两个用例后立刻现形：`{{1,0},{0,2}}`（合法 DAG，2→0→1）被判 false，`{{1,0},{0,1}}`（0↔1 成环）被判 true。改成入队节点编号 `i` 后 12 个用例全过，提交 Accepted（54/54）。\n\n**这个坑的方法论**：拓扑排序里队列装的是**节点编号**，因为后面要拿它当 `graph[course]` 的下标；凡是「下标编号」和「数值」都是 int 的地方，写 `a[i]` 还是 `i` 要念一遍语义。同类更隐蔽的一点：边界用例如果只覆盖「零入度点恰好是 0 号节点」，就测不出这类错误。\n\n**掌握度依据**：本地先失败、经提示后自己改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。"
+    }
+  ]
 }

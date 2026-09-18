@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>207. 课程表 (Course Schedule)</h1><p>&gt; <a href="https://leetcode.cn/problems/course-schedule/" rel="noopener">https://leetcode.cn/problems/course-schedule/</a></p><p>难度：Medium ｜ 分类：图与并查集</p><p>标签：深度优先搜索、广度优先搜索、图、拓扑排序、有向无环图</p><h2>题目描述</h2><p>你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。</p><p>在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程 bi 。</p><p>例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。</p><p>请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。</p><p>示例 1：</p><p>输入：numCourses = 2, prerequisites = [[1,0]]</p><p>输出：true</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。</p><p>示例 2：</p><p>输入：numCourses = 2, prerequisites = [[1,0],[0,1]]</p><p>输出：false</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。</p><p>提示：</p><p>1</p><p>0</p><p>prerequisites[i].length == 2</p><p>0 i, bi</p><p>prerequisites[i] 中的所有课程对 互不相同</p><h2>示例</h2><ol><li>输入：numCourses = 2，prerequisites = [[1,0]]</li></ol><p>输出：true</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。</p><ol><li>输入：numCourses = 2，prerequisites = [[1,0],[0,1]]</li></ol><p>输出：false</p><p>解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 多次提交 ｜ Kahn 拓扑排序 ｜ O(V+E) · O(V+E)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路一致（Kahn 拓扑排序：邻接表 + 入度数组 + 队列 + processed 计数），复杂度相同。</p><p><strong>这次踩的坑（本地补例后暴露）</strong>：初始化入队时写成了 <code>queue.offer(inDegree[i])</code>，把入度值 0 当成课程编号塞进队列，于是真正入度为 0 的课从未作为起点被处理、节点 0 的后继被反复减入度。原来 8 个边界用例恰好都让「入度为 0 的节点就是下标 0」（如 <code>{1,2},{2,1}</code> 里的空链节点就是课程 0），所以本地全绿掩盖了它。补两个用例后立刻现形：<code>{{1,0},{0,2}}</code>（合法 DAG，2→0→1）被判 false，<code>{{1,0},{0,1}}</code>（0↔1 成环）被判 true。改成入队节点编号 <code>i</code> 后 12 个用例全过，提交 Accepted（54/54）。</p><p><strong>这个坑的方法论</strong>：拓扑排序里队列装的是<strong>节点编号</strong>，因为后面要拿它当 <code>graph[course]</code> 的下标；凡是「下标编号」和「数值」都是 int 的地方，写 <code>a[i]</code> 还是 <code>i</code> 要念一遍语义。同类更隐蔽的一点：边界用例如果只覆盖「零入度点恰好是 0 号节点」，就测不出这类错误。</p><p><strong>掌握度依据</strong>：本地先失败、经提示后自己改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,51 @@
         <li><span>复杂度</span><b>O(V+E) · O(V+E)</b></li>
         
       </ul>
+    </div><div class="round-card weak">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>Kahn 拓扑排序</b></li>
+        <li><span>复杂度</span><b>O(V+E) · O(V+E)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · Kahn 拓扑排序</h3>
-    <p><span class="chip">时间 O(V+E)</span><span class="chip">空间 O(V+E)</span><span class="chip">内存 ≈ 45.6 MB</span><span class="chip">用例 54/54</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/图与并查集/LC0207_CourseSchedule.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">canFinish</span>(<span class="tk-k">int</span> numCourses, <span class="tk-k">int</span>[][] prerequisites) {
+    <p><span class="chip">时间 O(V+E)</span><span class="chip">空间 O(V+E)</span><span class="chip">内存 ≈ 45.4 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0207_CourseSchedule.java · Kahn 拓扑排序</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">canFinish</span>(<span class="tk-k">int</span> numCourses, <span class="tk-k">int</span>[][] prerequisites) {
+        <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;[] graph = <span class="tk-k">new</span> <span class="tk-t">List</span>[numCourses];
+        <span class="tk-k">int</span>[] inDegree = <span class="tk-k">new</span> <span class="tk-k">int</span>[numCourses];
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; numCourses; i++) {
+            graph[i] = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
+        }
+        <span class="tk-k">for</span> (<span class="tk-k">int</span>[] prereq :prerequisites) {
+            <span class="tk-k">int</span> before = prereq[<span class="tk-n">1</span>];
+            <span class="tk-k">int</span> after = prereq[<span class="tk-n">0</span>];
+            graph[before].<span class="tk-f">add</span>(after);
+            inDegree[after]++;
+        }
+        <span class="tk-k">int</span> solve = <span class="tk-n">0</span>;
+        <span class="tk-t">Queue</span>&lt;<span class="tk-t">Integer</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; inDegree.length; i++) {
+            <span class="tk-k">if</span> (inDegree[i] == <span class="tk-n">0</span>) {
+                queue.<span class="tk-f">offer</span>(i);
+            }
+        }
+        <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>()) {
+            <span class="tk-k">int</span> course = queue.<span class="tk-f">poll</span>();
+            solve++;
+            <span class="tk-k">if</span> (!graph[course].<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">for</span> (<span class="tk-t">Integer</span> after : graph[course]) {
+                    inDegree[after]--;
+                    <span class="tk-k">if</span> (inDegree[after] == <span class="tk-n">0</span>) {
+                        queue.<span class="tk-f">offer</span>(after);
+                    }
+                }
+            }
+        }
+        <span class="tk-k">return</span> solve == numCourses;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0207_CourseSchedule.java · Kahn 拓扑排序 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">canFinish</span>(<span class="tk-k">int</span> numCourses, <span class="tk-k">int</span>[][] prerequisites) {
         <span class="tk-t">List</span>&lt;<span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt;&gt; graph = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
         <span class="tk-k">int</span>[] inDegree = <span class="tk-k">new</span> <span class="tk-k">int</span>[numCourses];
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; numCourses; i++) {
@@ -66,10 +110,11 @@
             }
         }
         <span class="tk-k">return</span> processed == numCourses;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：能否学完全部课程 ⟺ 依赖图无环 ⟺ 存在覆盖全部节点的拓扑序。Kahn 拓扑排序（BFS 版）。</p><p>关键设计：邻接表建图（prereq[1] → prereq[0]）+ 入度数组；把所有入度为 0 的课入队；出队时 processed++，并把它的后继入度 -1，减到 0 就入队；最后 processed==numCourses 说明拓扑序覆盖全部节点，无环可完成。</p><p>边界：无依赖时所有课初始入度 0，一趟全处理；自环（一课依赖自己）永远无法入队，processed&lt;numCourses 返回 false；多个独立连通分量各自处理；空 prerequisites 直接 true。</p><p>复杂度：O(V+E) 时间（每个节点每条边各访问一次）、O(V+E) 空间（图 + 入度 + 队列），最优。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>54/54 用例一次通过。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>拓扑排序入队时放错值：第 36 行写 queue.offer(inDegree[i]) 把「0」当成课程编号入队（应为节点编号 i）。后果是① 队列里所有初值都是 0，节点 0 的边被重复减、真实入度为 0 的节点从未被处理；② solve 计数虚增/漏计——LC207 二刷实测：numCourses=3 且 {{1,0},{0,2}}（合法 DAG）返回 false，{{1,0},{0,1}}（含环）返回 true。危险点是原 8 个边界用例恰好都让「入度 0 的节点就是下标 0」，所以本地全绿</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>54/54 用例一次通过。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -83,7 +128,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 图与并查集</h3><div class="quote">连通性/环先想并查集；分层最短路径想 BFS；依赖顺序想拓扑排序。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>拓扑排序入队时放错值：第 36 行写 queue.offer(inDegree[i]) 把「0」当成课程编号入队（应为节点编号 i）。后果是① 队列里所有初值都是 0，节点 0 的边被重复减、真实入度为 0 的节点从未被处理；② solve 计数虚增/漏计——LC207 二刷实测：numCourses=3 且 {{1,0},{0,2}}（合法 DAG）返回 false，{{1,0},{0,1}}（含环）返回 true。危险点是原 8 个边界用例恰好都让「入度 0 的节点就是下标 0」，所以本地全绿</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 44 · course-schedule</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>

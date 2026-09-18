@@ -2,8 +2,13 @@
 // LeetCode 207. 课程表 (Course Schedule)
 // 难度：Medium | 分类：图与并查集
 // 链接：https://leetcode.cn/problems/course-schedule/
-// 刷题日期：2026-08-08
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-08 · 一刷一次 Accepted）
+// 一刷写法：Kahn 拓扑排序（BFS 出度法）——邻接表存「先修 → 后继」，统计每个节点的入度；入度为 0 的课先入队，出队时把它指向的后继入度减 1，减到 0 就入队；最后统计出队数量是否等于课程总数，够则无环。O(V+E)/O(V+E)
+// 本题易错点：① 依赖方向不能反——prerequisites[i] = [a, b] 表示「修 a 前要先修 b」，所以边是 b → a（入度记在 a 上）；② 判无环用「出队数量 == numCourses」而不是「队列空」；③ 自环（a 依赖 a）与局部环都要能识别；④ 也可以用 DFS 三色标记判环，但要注意「访问中」状态不能漏（只记 visited 会把环当合法）
+// 测试用例与一刷归档保持一致（示例 2 个 + 边界 8 个：无先修/单课自环/三角环/线性依赖/局部环/共享先修/深链/带环深链）
 //
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -12,34 +17,37 @@ public class LC0207_CourseSchedule {
 
     // ==== 提交代码开始 ====
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> graph = new ArrayList<>();
+        List<Integer>[] graph = new List[numCourses];
         int[] inDegree = new int[numCourses];
         for (int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<>());
+            graph[i] = new ArrayList<>();
         }
-
-        for (int[] prereq : prerequisites) {
-            graph.get(prereq[1]).add(prereq[0]);
-            inDegree[prereq[0]]++;
+        for (int[] prereq :prerequisites) {
+            int before = prereq[1];
+            int after = prereq[0];
+            graph[before].add(after);
+            inDegree[after]++;
         }
-        int processed = 0;
+        int solve = 0;
         Queue<Integer> queue = new ArrayDeque<>();
-        for (int i = 0; i < numCourses; i++) {
+        for (int i = 0; i < inDegree.length; i++) {
             if (inDegree[i] == 0) {
                 queue.offer(i);
             }
         }
         while (!queue.isEmpty()) {
             int course = queue.poll();
-            processed++;
-            for (int nextCourse : graph.get(course)) {
-                inDegree[nextCourse]--;
-                if (inDegree[nextCourse] == 0) {
-                    queue.offer(nextCourse);
+            solve++;
+            if (!graph[course].isEmpty()) {
+                for (Integer after : graph[course]) {
+                    inDegree[after]--;
+                    if (inDegree[after] == 0) {
+                        queue.offer(after);
+                    }
                 }
             }
         }
-        return processed == numCourses;
+        return solve == numCourses;
     }
     // ==== 提交代码结束 ====
 
@@ -80,6 +88,14 @@ public class LC0207_CourseSchedule {
         try {
             if (!TestUtil.checkEq(false, s.canFinish(4, new int[][]{{3, 2}, {2, 1}, {1, 0}, {0, 3}}), "边界8-带环深链")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界8 异常: " + t); }
+        try {
+            // 二刷分析补入：环外还有孤立节点（入度为 0 的点不止一个，且不一定在下标 0）
+            if (!TestUtil.checkEq(false, s.canFinish(3, new int[][]{{1, 0}, {0, 1}}), "边界9-环外孤立节点")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界9 异常: " + t); }
+        try {
+            // 二刷分析补入：零入度点在别的下标（2 → 0 → 1 是合法顺序）
+            if (!TestUtil.checkEq(true, s.canFinish(3, new int[][]{{1, 0}, {0, 2}}), "边界10-零入度点不在下标0")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界10 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");
