@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>23. 合并 K 个升序链表 (Merge k Sorted Lists)</h1><p>&gt; <a href="https://leetcode.cn/problems/merge-k-sorted-lists/" rel="noopener">https://leetcode.cn/problems/merge-k-sorted-lists/</a></p><p>难度：Hard ｜ 分类：链表</p><p>标签：链表、分治、堆（优先队列）、归并排序、锦标赛排序</p><h2>题目描述</h2><p>给你一个链表数组，每个链表都已经按升序排列。</p><p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p><p>示例 1：</p><p>输入：lists = [[1,4,5],[1,3,4],[2,6]]</p><p>输出：[1,1,2,3,4,4,5,6]</p><p>解释：链表数组如下：</p><p>[</p><p>1-&gt;4-&gt;5,</p><p>1-&gt;3-&gt;4,</p><p>2-&gt;6</p><p>]</p><p>将它们合并到一个有序链表中得到。</p><p>1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</p><p>示例 2：</p><p>输入：lists = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：lists = [[]]</p><p>输出：[]</p><p>提示：</p><p>k == lists.length</p><p>0</p><p>0</p><p>-10^4</p><p>lists[i] 按 升序 排列</p><p>lists[i].length 的总和不超过 10^4</p><h2>示例</h2><ol><li>输入：lists = [[1,4,5],[1,3,4],[2,6]]</li></ol><p>输出：[1,1,2,3,4,4,5,6]</p><p>解释：链表数组如下：</p><ol><li>输入：lists = []</li></ol><p>输出：[]</p><ol><li>输入：lists = [[]]</li></ol><p>输出：[]</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（—）｜ 一次 AC ｜ 分治两两合并 ｜ O(N log k) · O(N)</p>
+      <div class="review-note md"><p><strong>与一刷对比</strong>：思路与写法都一致（分治递归两两合并 + <code>mergeTowList</code> 子过程），复杂度也相同。时间 O(N log k) 是本题最优档，但<strong>空间未达最优</strong>：子过程每接一个节点都 <code>new ListNode()</code> 复制值，额外分配 O(N)；一刷笔记里自己也标了这个微调点。</p><p><strong>写对的地方</strong>：① 分治的递归出口同时管住了「空区间」（<code>start &gt;= lists.length</code>）与「单链」（<code>start == end</code>）；② 每层只把所有节点各走一遍，共 log k 层，所以是 O(N log k) 而不是 O(N·k)；③ 子过程里某条链走空后把另一条整段接上（两个 if 只会命中一个）。</p><p><strong>可优化点</strong>：① 交错阶段直接接原节点（挂上后指针后移）即可省掉全部分配，额外空间回到 O(log k)（递归栈）；② <code>mergeTowList</code> 拼写应为 <code>mergeTwoList</code>；③ 末尾两个 if 可合并成 <code>p.next = (p1 != null) ? p1 : p2;</code>。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强（写法未达空间最优，按 optimal=false 记录）。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,64 @@
         <li><span>复杂度</span><b>O(N log k) · O(N)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>分治两两合并</b></li>
+        <li><span>复杂度</span><b>O(N log k) · O(N)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 分治两两合并</h3>
-    <p><span class="chip">时间 O(N log k)</span><span class="chip">空间 O(N)</span><span class="chip">内存 ≈ 45.7 MB</span><span class="chip">用例 134/134</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/链表/LC0023_MergeKSortedLists.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists) {
+    <p><span class="chip">时间 O(N log k)</span><span class="chip">空间 O(N)</span><span class="chip">内存 ≈ 45.5 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0023_MergeKSortedLists.java · 分治两两合并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists) {
+        <span class="tk-k">return</span> <span class="tk-f">mergeKLists</span>(lists, <span class="tk-n">0</span>, lists.length - <span class="tk-n">1</span>);
+    }
+
+    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists, <span class="tk-k">int</span> start, <span class="tk-k">int</span> end) {
+        <span class="tk-k">if</span> (start &gt;= lists.length) {
+            <span class="tk-k">return</span> <span class="tk-k">null</span>;
+        }
+        <span class="tk-k">if</span> (start == end) {
+            <span class="tk-k">return</span> lists[start];
+        }
+        <span class="tk-k">int</span> mid = start + (end - start) / <span class="tk-n">2</span>;
+        <span class="tk-t">ListNode</span> first = <span class="tk-f">mergeKLists</span>(lists, start, mid);
+        <span class="tk-t">ListNode</span> second = <span class="tk-f">mergeKLists</span>(lists, mid + <span class="tk-n">1</span>, end);
+        <span class="tk-k">return</span> <span class="tk-f">mergeTowList</span>(first, second);
+    }
+
+    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeTowList</span>(<span class="tk-t">ListNode</span> first, <span class="tk-t">ListNode</span> second) {
+        <span class="tk-k">if</span> (first == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> second;
+        }
+        <span class="tk-k">if</span> (second == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> first;
+        }
+        <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
+        <span class="tk-t">ListNode</span> p1 = first, p2 = second, p = dummy;
+        <span class="tk-k">while</span> (p1 != <span class="tk-k">null</span> &amp;&amp; p2 != <span class="tk-k">null</span>) {
+            <span class="tk-t">ListNode</span> node = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
+            <span class="tk-k">if</span> (p1.val &gt; p2.val) {
+                node.val = p2.val;
+                p2 = p2.next;
+            } <span class="tk-k">else</span> {
+                node.val = p1.val;
+                p1 = p1.next;
+            }
+            p.next = node;
+            p = p.next;
+        }
+        <span class="tk-k">if</span> (p1 == <span class="tk-k">null</span>) {
+            p.next = p2;
+        }
+        <span class="tk-k">if</span> (p2 == <span class="tk-k">null</span>) {
+            p.next = p1;
+        }
+        <span class="tk-k">return</span> dummy.next;
+    }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0023_MergeKSortedLists.java · 分治两两合并 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists) {
         <span class="tk-k">return</span> <span class="tk-f">mergeKLists</span>(lists, <span class="tk-n">0</span>, lists.length - <span class="tk-n">1</span>);
     }
 
@@ -75,7 +132,8 @@
         }
         p.next = p1 == <span class="tk-k">null</span> ? p2 : p1;
         <span class="tk-k">return</span> dummy.next;
-    }</pre></div>
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：K 个有序链表合成一个。逐个两两合并是 O(k·n)；用分治把复杂度降到 O(n log k)。</p><p>关键设计：递归对半切分 lists[start..end]，两半各自合并成有序链，再 merge 两个有序链表（复用归并：dummy + 双指针 + 剩余链续接）。每轮把所有链表合并一轮，共 log k 轮。</p><p>边界：lists 为空或长度 0 返回 null；单链表直接返回；链表中含 null 元素时 merge 要处理；链表长度参差不齐不影响分治正确性。</p><p>复杂度：O(n log k) 时间（n 为总节点数）、O(log k) 递归栈；与优先队列解法同为时间最优，空间更省。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>134/134 用例一次通过。</p></div></div></div></section>

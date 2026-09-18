@@ -2,7 +2,13 @@
 // LeetCode 23. 合并 K 个升序链表 (Merge k Sorted Lists)
 // 难度：Hard | 分类：链表
 // 链接：https://leetcode.cn/problems/merge-k-sorted-lists/
-// 刷题日期：2026-08-07
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-07 · 一刷一次 Accepted）
+// 一刷写法：分治两两合并——每轮把相邻两条链两两合并，链表数量减半，重复到只剩一条；每层总共只走 N 个节点，共 log k 层。O(N log k)/O(log k)（递归栈）
+// 本题易错点：① 不用堆也能做到 O(N log k)，关键在「每轮两两合并」而不是「每次从头扫 k 条链取最小」（后者是 O(N·k)）；② 递归出口要同时管住 start > end（空区间）与 start == end（单链直接返回）；③ 本轮合并结果要写回 lists[i]，下一轮读的是合并后的链；④ 一刷的合并子过程每次 new 节点复制值，可改成原地复用节点改 next，省掉全部分配
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 6 个：单条单节点链/空链混入/全相同/负数与大数/单条长链夹短链/多条单节点链）
+//
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -16,7 +22,7 @@ public class LC0023_MergeKSortedLists {
 
     private ListNode mergeKLists(ListNode[] lists, int start, int end) {
         if (start >= lists.length) {
-           return null;
+            return null;
         }
         if (start == end) {
             return lists[start];
@@ -37,19 +43,25 @@ public class LC0023_MergeKSortedLists {
         ListNode dummy = new ListNode();
         ListNode p1 = first, p2 = second, p = dummy;
         while (p1 != null && p2 != null) {
+            ListNode node = new ListNode();
             if (p1.val > p2.val) {
-                p.next = p2;
+                node.val = p2.val;
                 p2 = p2.next;
             } else {
-                p.next = p1;
+                node.val = p1.val;
                 p1 = p1.next;
             }
+            p.next = node;
             p = p.next;
         }
-        p.next = p1 == null ? p2 : p1;
+        if (p1 == null) {
+            p.next = p2;
+        }
+        if (p2 == null) {
+            p.next = p1;
+        }
         return dummy.next;
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {
