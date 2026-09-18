@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-05</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>76. 最小覆盖子串 (Minimum Window Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/minimum-window-substring/" rel="noopener">https://leetcode.cn/problems/minimum-window-substring/</a></p><p>难度：Hard ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、字符串、滑动窗口</p><h2>题目描述</h2><p>给定两个字符串 s 和 t，长度分别是 m 和 n，返回 s 中的 最短窗口 子串，使得该子串包含 t 中的每一个字符（包括重复字符）。如果没有这样的子串，返回空字符串 ""。</p><p>测试用例保证答案唯一。</p><p>示例 1：</p><p>输入：s = "ADOBECODEBANC", t = "ABC"</p><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><p>示例 2：</p><p>输入：s = "a", t = "a"</p><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><p>示例 3:</p><p>输入: s = "a", t = "aa"</p><p>输出: ""</p><p>解释: t 中两个字符 'a' 均应包含在 s 的子串中，</p><p>因此没有符合条件的子字符串，返回空字符串。</p><p>提示：</p><p>m == s.length</p><p>n == t.length</p><p>1 5</p><p>s 和 t 由英文字母组成</p><p>进阶：你能设计一个在 O(m + n) 时间内解决此问题的算法吗？</p><h2>示例</h2><ol><li>输入：s = "ADOBECODEBANC"，t = "ABC"</li></ol><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><ol><li>输入：s = "a"，t = "a"</li></ol><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><ol><li>输入：s = "a"，t = "aa"</li></ol><p>输出：""</p><p>解释：t 中两个字符 'a' 均应包含在 s 的子串中，</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-18 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（—）｜ 多次提交 ｜ 滑动窗口+计数 ｜ O(m+n) · O(1)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：思路与一刷一致（滑动窗口 + need 计数 + counts 归零判覆盖），但<strong>扩展阶段两行的门控写反了</strong>，本地 8 个边界用例挂（示例全绿，是典型的「错误条件恰好被示例满足」）。</p><p><strong>错在哪、怎么修的</strong>：一刷的结构是「判断只决定计数器，need 的减法无条件执行」；这次写成 <code>if (need[c] &gt; 0) need[c]--;</code> + 外面 <code>counts--;</code>，于是 ① counts 与 t 脱钩，扫满 t.length() 个字符就误判覆盖（XYZABC/ABC 记成 XYZ；最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 <code>while (need[start] &lt; 0)</code> 收不动左端（xxabxxa/ab 给 xx 而非 ab）。把两行门控调回正确位置后 12 个用例全绿，提交 268/268 Accepted。</p><p><strong>掌握度依据</strong>：本地先失败、经提示后才改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-16 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（268/268）｜ 多次提交 ｜ 滑动窗口+计数 ｜ O(m+n) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>同一思路：<strong>滑动窗口 + 128 计数</strong>，骨架仍是「扩展时先判后减 → <code>count == 0</code> 时先收缩掉多余字符 → 记录答案 → 再把最左的必需字符还回去让窗口重新失效」。</li><li>与一刷的两处差异：按遗留要求把 <code>for (Character c : …)</code> 换成了 <code>for (char c : …)</code>（去掉装箱）；但一刷代码里那几条关键行注释（先判后减、先收缩、记录答案、还回左边界字符）本轮没有带过来 —— 这几步都不自解释，建议补回去。</li></ul><p><strong>② 这次的真实过程（首版本地「全绿」但其实是错的）</strong></p><ul><li>首版能过原有 11 组用例，但都是「恰好最后一次记录的窗口就是最短」的输入。我补了边界9（<code>s = "xxabxxa", t = "ab"</code>）后暴露真 bug：<code>min</code> 声明成 <code>MAX_VALUE</code> 后<strong>从未被赋值</strong>，<code>if (i - start + 1 &lt; min)</code> 恒真，<code>ans</code> 每遇到一个合法窗口就被覆盖一次，最后返回的是<strong>最后一个</strong>窗口（<code>"bxxa"</code>）而不是最短窗口（<code>"ab"</code>）。</li><li>反例同因还有 <code>s = "zabczzab", t = "abc"</code> → 得到 <code>"czzab"</code>，正确是 <code>"abc"</code>。</li><li>修法是让比较与更新成对出现（<code>min</code> 与 <code>ans</code> 在同一分支里一起更新），修后 268/268 一次通过。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>中途就 <code>&lt; min</code> 只比较不更新这个点讨论过、得到过定位与方向 → <strong>较弱</strong>，间隔重置 2 天。</li></ul><p><strong>④ 下一步提醒（两天后回访）</strong></p><ul><li>默写这条自检口诀：<strong>凡是「取最小/取最优」，先问「谁更新它」</strong> —— 只比较不更新的条件恒真，答案会被更差的解覆盖。</li><li>顺带复习 <code>count</code> 的语义（还差几个必需字符）与「记录后把最左必需字符还回去」这步的必要性，这是覆盖型滑窗区别于普通滑窗的地方。</li></ul></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card weak">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>滑动窗口+计数</b></li>
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
@@ -47,24 +51,28 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 滑动窗口+计数</h3>
-    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.9 MB</span><span class="chip">用例 268/268</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0076_MinimumWindowSubstring.java · 滑动窗口+计数</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">minWindow</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
+    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.8 MB</span><span class="chip">用例 —</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0076_MinimumWindowSubstring.java · 滑动窗口+计数</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">minWindow</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
         <span class="tk-k">int</span>[] need = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];
         <span class="tk-k">for</span> (<span class="tk-k">char</span> c : t.<span class="tk-f">toCharArray</span>()) {
             need[c]++;
         }
-        <span class="tk-k">int</span> count = t.<span class="tk-f">length</span>();
+        <span class="tk-c">// counts：还差几个必需字符没被满足；0 表示当前窗口已覆盖 t</span>
+        <span class="tk-k">int</span> counts = t.<span class="tk-f">length</span>();
         <span class="tk-t">String</span> ans = <span class="tk-s">""</span>;
+        <span class="tk-k">int</span> min = <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
         <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
         <span class="tk-k">int</span> i = <span class="tk-n">0</span>;
-        <span class="tk-k">int</span> min = <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
         <span class="tk-k">while</span> (i &lt; s.<span class="tk-f">length</span>()) {
             <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
+            <span class="tk-c">// 判断只决定计数器：只有「还没被满足的必需字符」才让 counts 减 1</span>
             <span class="tk-k">if</span> (need[c] &gt; <span class="tk-n">0</span>) {
-                count--;
+                counts--;
             }
+            <span class="tk-c">// 减法无条件执行：多余字符与不在 t 里的字符被减成负数，收缩时才有「可删」的凭证</span>
             need[c]--;
-            <span class="tk-k">if</span> (count == <span class="tk-n">0</span>) {
+            <span class="tk-k">if</span> (counts == <span class="tk-n">0</span>) {
+                <span class="tk-c">// 收缩只删多余（need &lt; 0），恰好满足的字符留着</span>
                 <span class="tk-k">while</span> (need[s.<span class="tk-f">charAt</span>(start)] &lt; <span class="tk-n">0</span>) {
                     need[s.<span class="tk-f">charAt</span>(start)]++;
                     start++;
@@ -73,8 +81,9 @@
                     min = i - start + <span class="tk-n">1</span>;
                     ans = s.<span class="tk-f">substring</span>(start, i + <span class="tk-n">1</span>);
                 }
+                <span class="tk-c">// 记录后把左端必需字符还回去，窗口整体前移继续找</span>
                 need[s.<span class="tk-f">charAt</span>(start)]++;
-                count++;
+                counts++;
                 start++;
             }
             i++;
@@ -121,8 +130,8 @@
 </pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。</p><p>关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]&gt;0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]&lt;0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。</p><p>边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。</p><p>复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>窗口收缩状态失真：用 need&lt;=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>先减后判导致计数失效：need[c]-- 之后才判断 need[c] &gt; 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 &gt;= 0）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 &lt; min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>268/268 用例一次通过。</p></div></div></div></section>
-  <section><h2>套路沉淀</h2><div class="card md"><h3>滑动窗口覆盖子串：收缩只删多余、记录后整体前移</h3><p>覆盖判定用计数 + 未满足数 count；收缩时只能删多余字符（need&lt;0），need==0 表示恰好满足不能再删；记录答案后要把左边界关键字符还回（need[left]++、count++、left++）让窗口整体前进，否则覆盖状态与 count 脱节</p></div><div class="card md"><h3>维护最优值：比较与更新必须成对落在同一分支</h3><p>凡是「取最小/取最优」的写法，先检查更新语句是否存在：只比较不更新会让条件恒真、答案被后续更差的解覆盖（LC0076 的 min 声明成 MAX_VALUE 后从未赋值，ans 每遇到一个合法窗口就覆盖一次，最后返回最后一个窗口而不是最短窗口）。排查手法：对着「声明最优变量的那一行」问三句——谁给它赋初值、哪一行更新它、这个更新语句和比较语句是否在同一分支里。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>窗口收缩状态失真：用 need&lt;=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>先减后判导致计数失效：need[c]-- 之后才判断 need[c] &gt; 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 &gt;= 0）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 &lt; min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 踩坑<span class="tl-badge bug">已记录</span></span><p>覆盖计数的自减没和「字符是否必需」绑定：count-- 写在 if 外面，导致 count 与 t 的覆盖无关——扫满 t.length() 个字符就误判成覆盖完成（LC0076 二刷：s=XYZABC/t=ABC 记成 XYZ；最小复现 s=xa/t=a 得 x）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 踩坑<span class="tl-badge bug">已记录</span></span><p>滑动窗口 need 的减法被塞进 if 里：一刷是「if (need[c] &gt; 0) count--; need[c]--;」（判断只决定 count，减法必须无条件执行），二刷写成了「if (need[c] &gt; 0) need[c]--; count--;」。need 因此永不为负，标记「多余字符」的负值消失了，收缩循环 while (need[start] &lt; 0) 收不动窗口左端（左端是无关字符时 need==0 也停），窗口永远收不到最短（s=xxabxxa/t=ab 给出 xx 而非 ab）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">07 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">08 · 提交<span class="tl-badge ok">Accepted</span></span><p>268/268 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>滑动窗口覆盖子串：收缩只删多余、记录后整体前移</h3><p>覆盖判定用计数 + 未满足数 count；收缩时只能删多余字符（need&lt;0），need==0 表示恰好满足不能再删；记录答案后要把左边界关键字符还回（need[left]++、count++、left++）让窗口整体前进，否则覆盖状态与 count 脱节</p></div><div class="card md"><h3>维护最优值：比较与更新必须成对落在同一分支</h3><p>凡是「取最小/取最优」的写法，先检查更新语句是否存在：只比较不更新会让条件恒真、答案被后续更差的解覆盖（LC0076 的 min 声明成 MAX_VALUE 后从未赋值，ans 每遇到一个合法窗口就覆盖一次，最后返回最后一个窗口而不是最短窗口）。排查手法：对着「声明最优变量的那一行」问三句——谁给它赋初值、哪一行更新它、这个更新语句和比较语句是否在同一分支里。</p></div><div class="card md"><h3>覆盖类滑动窗口：count 由判断决定，need 的减法必须无条件执行</h3><p>覆盖型滑动窗口的扩展阶段有两行，门控位置极易写反：<strong>判断决定 count，减法无条件执行</strong>。正确顺序是先 if (need[c] &gt; 0) count--; 再 need[c]--;（无条件）。写反成 if (need[c] &gt; 0) need[c]--; count--; 会同时崩掉两处：① count 与 t 无关，扫满 t.length() 个字符就误判覆盖完成（XYZABC/ABC 记成 XYZ，最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 while (need[start] &lt; 0) 收不动左端（左端是无关字符时 need==0 也停），窗口收不到最短（xxabxxa/ab 给 xx 而非 ab）。口诀：判断管计数器，减法管状态；need 的负值就是「可以删」的凭证。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -135,7 +144,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
-      <h3>错误习惯复盘</h3><p><b>字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）</b>（累计 1 次）</p><p><b>窗口收缩状态失真：用 need&lt;=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录</b>（累计 1 次）</p><p><b>先减后判导致计数失效：need[c]-- 之后才判断 need[c] &gt; 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 &gt;= 0）</b>（累计 1 次）</p><p><b>维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 &lt; min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>字符到数组下标映射错误：c - 'a' 只对小写有效，大写字母得到负下标导致 ArrayIndexOutOfBoundsException；含大小写字母的题目要分别映射（如小写 0-25、大写 26-51）</b>（累计 1 次）</p><p><b>窗口收缩状态失真：用 need&lt;=0 收缩会把恰好满足（need==0）的必需字符也还回去，却不移动 start、不更新 count，导致覆盖状态与 count 脱节（count 可能变负数），后续窗口不再记录</b>（累计 1 次）</p><p><b>先减后判导致计数失效：need[c]-- 之后才判断 need[c] &gt; 0，首次遇到的必需字符减完已是 0，count 永不更新（示例1 count 恒为 3）；判断必须用减之前的值（先判后减，或减后判断 &gt;= 0）</b>（累计 1 次）</p><p><b>维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 &lt; min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里</b>（累计 1 次）</p><p><b>覆盖计数的自减没和「字符是否必需」绑定：count-- 写在 if 外面，导致 count 与 t 的覆盖无关——扫满 t.length() 个字符就误判成覆盖完成（LC0076 二刷：s=XYZABC/t=ABC 记成 XYZ；最小复现 s=xa/t=a 得 x）</b>（累计 1 次）</p><p><b>滑动窗口 need 的减法被塞进 if 里：一刷是「if (need[c] &gt; 0) count--; need[c]--;」（判断只决定 count，减法必须无条件执行），二刷写成了「if (need[c] &gt; 0) need[c]--; count--;」。need 因此永不为负，标记「多余字符」的负值消失了，收缩循环 while (need[start] &lt; 0) 收不动窗口左端（左端是无关字符时 need==0 也停），窗口永远收不到最短（s=xxabxxa/t=ab 给出 xx 而非 ab）</b>（累计 1 次）</p>
       <h3>复习提醒</h3><div class="quote">★ `ans` 每次找到更短窗口就 `substring` 一次；改成只记 `bestStart` + `bestLen`、循环结束再截一次，可以少建一批临时字符串。</div><div class="quote">★ 建议把一刷那几条关键注释带回来：`if (need[c] &gt; 0)` 是「先判后减」、收缩到没有多余字符、记录后把最左必需字符还回去让窗口重新失效——这三步都不自解释。</div><div class="quote">★ `start` / `i` 命名成 `left` / `right` 更贴合滑动窗口语义。</div>
       <h3>完成记录</h3>
       <p><span class="chip">seq 16 · minimum-window-substring</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>

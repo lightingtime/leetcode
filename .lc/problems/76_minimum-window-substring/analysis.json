@@ -31,6 +31,14 @@
     {
       "habit": "维护最小值的变量只比较、从不赋值：min 声明成 Integer.MAX_VALUE 后从未更新，于是 if (i - start + 1 < min) 永远成立、ans 每遇到一个合法窗口就被覆盖，最终留下的是最后一次找到的窗口而不是最短窗口（示例1 恰好最后一次最短，所以本地全绿）；反例 s=xxabxxa, t=ab 返回 bxxa 而正确是 ab。写「取最优」的逻辑时，必须成对检查：比较和更新是否落在同一个分支里",
       "count": 1
+    },
+    {
+      "habit": "覆盖计数的自减没和「字符是否必需」绑定：count-- 写在 if 外面，导致 count 与 t 的覆盖无关——扫满 t.length() 个字符就误判成覆盖完成（LC0076 二刷：s=XYZABC/t=ABC 记成 XYZ；最小复现 s=xa/t=a 得 x）",
+      "count": 1
+    },
+    {
+      "habit": "滑动窗口 need 的减法被塞进 if 里：一刷是「if (need[c] > 0) count--; need[c]--;」（判断只决定 count，减法必须无条件执行），二刷写成了「if (need[c] > 0) need[c]--; count--;」。need 因此永不为负，标记「多余字符」的负值消失了，收缩循环 while (need[start] < 0) 收不动窗口左端（左端是无关字符时 need==0 也停），窗口永远收不到最短（s=xxabxxa/t=ab 给出 xx 而非 ab）",
+      "count": 1
     }
   ],
   "hints": [
@@ -55,24 +63,31 @@
       "category": "双指针与滑动窗口",
       "problem": "minimum-window-substring",
       "date": "2026-09-16"
+    },
+    {
+      "title": "覆盖类滑动窗口：count 由判断决定，need 的减法必须无条件执行",
+      "text": "覆盖型滑动窗口的扩展阶段有两行，门控位置极易写反：**判断决定 count，减法无条件执行**。正确顺序是先 if (need[c] > 0) count--; 再 need[c]--;（无条件）。写反成 if (need[c] > 0) need[c]--; count--; 会同时崩掉两处：① count 与 t 无关，扫满 t.length() 个字符就误判覆盖完成（XYZABC/ABC 记成 XYZ，最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 while (need[start] < 0) 收不动左端（左端是无关字符时 need==0 也停），窗口收不到最短（xxabxxa/ab 给 xx 而非 ab）。口诀：判断管计数器，减法管状态；need 的负值就是「可以删」的凭证。",
+      "category": "双指针与滑动窗口",
+      "problem": "minimum-window-substring",
+      "date": "2026-09-18"
     }
   ],
   "submissions": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "268/268",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 47088000,
+      "memory_bytes": 46944000,
       "approach": "滑动窗口+计数",
       "time_complexity": "O(m+n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 同一思路：**滑动窗口 + 128 计数**，骨架仍是「扩展时先判后减 → `count == 0` 时先收缩掉多余字符 → 记录答案 → 再把最左的必需字符还回去让窗口重新失效」。\n- 与一刷的两处差异：按遗留要求把 `for (Character c : …)` 换成了 `for (char c : …)`（去掉装箱）；但一刷代码里那几条关键行注释（先判后减、先收缩、记录答案、还回左边界字符）本轮没有带过来 —— 这几步都不自解释，建议补回去。\n\n**② 这次的真实过程（首版本地「全绿」但其实是错的）**\n- 首版能过原有 11 组用例，但都是「恰好最后一次记录的窗口就是最短」的输入。我补了边界9（`s = \"xxabxxa\", t = \"ab\"`）后暴露真 bug：`min` 声明成 `MAX_VALUE` 后**从未被赋值**，`if (i - start + 1 < min)` 恒真，`ans` 每遇到一个合法窗口就被覆盖一次，最后返回的是**最后一个**窗口（`\"bxxa\"`）而不是最短窗口（`\"ab\"`）。\n- 反例同因还有 `s = \"zabczzab\", t = \"abc\"` → 得到 `\"czzab\"`，正确是 `\"abc\"`。\n- 修法是让比较与更新成对出现（`min` 与 `ans` 在同一分支里一起更新），修后 268/268 一次通过。\n\n**③ 掌握度判定**\n- 中途就 `< min` 只比较不更新这个点讨论过、得到过定位与方向 → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 默写这条自检口诀：**凡是「取最小/取最优」，先问「谁更新它」** —— 只比较不更新的条件恒真，答案会被更差的解覆盖。\n- 顺带复习 `count` 的语义（还差几个必需字符）与「记录后把最左必需字符还回去」这步的必要性，这是覆盖型滑窗区别于普通滑窗的地方。",
-      "code": "public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (char c : t.toCharArray()) {\n            need[c]++;\n        }\n        int count = t.length();\n        String ans = \"\";\n        int start = 0;\n        int i = 0;\n        int min = Integer.MAX_VALUE;\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            if (need[c] > 0) {\n                count--;\n            }\n            need[c]--;\n            if (count == 0) {\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                need[s.charAt(start)]++;\n                count++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }",
+      "notes": "**与上一轮对比**：思路与一刷一致（滑动窗口 + need 计数 + counts 归零判覆盖），但**扩展阶段两行的门控写反了**，本地 8 个边界用例挂（示例全绿，是典型的「错误条件恰好被示例满足」）。\n\n**错在哪、怎么修的**：一刷的结构是「判断只决定计数器，need 的减法无条件执行」；这次写成 `if (need[c] > 0) need[c]--;` + 外面 `counts--;`，于是 ① counts 与 t 脱钩，扫满 t.length() 个字符就误判覆盖（XYZABC/ABC 记成 XYZ；最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 `while (need[start] < 0)` 收不动左端（xxabxxa/ab 给 xx 而非 ab）。把两行门控调回正确位置后 12 个用例全绿，提交 268/268 Accepted。\n\n**掌握度依据**：本地先失败、经提示后才改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。",
+      "code": "    public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (char c : t.toCharArray()) {\n            need[c]++;\n        }\n        // counts：还差几个必需字符没被满足；0 表示当前窗口已覆盖 t\n        int counts = t.length();\n        String ans = \"\";\n        int min = Integer.MAX_VALUE;\n        int start = 0;\n        int i = 0;\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            // 判断只决定计数器：只有「还没被满足的必需字符」才让 counts 减 1\n            if (need[c] > 0) {\n                counts--;\n            }\n            // 减法无条件执行：多余字符与不在 t 里的字符被减成负数，收缩时才有「可删」的凭证\n            need[c]--;\n            if (counts == 0) {\n                // 收缩只删多余（need < 0），恰好满足的字符留着\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                // 记录后把左端必需字符还回去，窗口整体前移继续找\n                need[s.charAt(start)]++;\n                counts++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }",
       "prev_code": "public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (Character c : t.toCharArray()) {\n            need[c]++;\n        }\n        int count = t.length();\n        int start = 0;\n        int i = 0;\n        int min = Integer.MAX_VALUE;\n        String ans = \"\";\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            // 该字符进入窗口前若仍缺，则未满足数 -1（先判后减）\n            if (need[c] > 0) {\n                count--;\n            }\n            need[c]--;\n            if (count == 0) {\n                // 先收缩：删掉左边多余字符，记录以 i 结尾的最短覆盖窗口\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                // 记录答案\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                // 还回左边界关键字符（need+1、count+1、start+1），覆盖被破坏，窗口继续右扩\n                need[s.charAt(start)]++;\n                count++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }\n",
       "mastery": "weak",
-      "pass": 1
+      "pass": 2
     }
   ],
   "approach_detail": "问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。\n关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]>0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]<0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。\n边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。\n复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。",
@@ -89,6 +104,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 同一思路：**滑动窗口 + 128 计数**，骨架仍是「扩展时先判后减 → `count == 0` 时先收缩掉多余字符 → 记录答案 → 再把最左的必需字符还回去让窗口重新失效」。\n- 与一刷的两处差异：按遗留要求把 `for (Character c : …)` 换成了 `for (char c : …)`（去掉装箱）；但一刷代码里那几条关键行注释（先判后减、先收缩、记录答案、还回左边界字符）本轮没有带过来 —— 这几步都不自解释，建议补回去。\n\n**② 这次的真实过程（首版本地「全绿」但其实是错的）**\n- 首版能过原有 11 组用例，但都是「恰好最后一次记录的窗口就是最短」的输入。我补了边界9（`s = \"xxabxxa\", t = \"ab\"`）后暴露真 bug：`min` 声明成 `MAX_VALUE` 后**从未被赋值**，`if (i - start + 1 < min)` 恒真，`ans` 每遇到一个合法窗口就被覆盖一次，最后返回的是**最后一个**窗口（`\"bxxa\"`）而不是最短窗口（`\"ab\"`）。\n- 反例同因还有 `s = \"zabczzab\", t = \"abc\"` → 得到 `\"czzab\"`，正确是 `\"abc\"`。\n- 修法是让比较与更新成对出现（`min` 与 `ans` 在同一分支里一起更新），修后 268/268 一次通过。\n\n**③ 掌握度判定**\n- 中途就 `< min` 只比较不更新这个点讨论过、得到过定位与方向 → **较弱**，间隔重置 2 天。\n\n**④ 下一步提醒（两天后回访）**\n- 默写这条自检口诀：**凡是「取最小/取最优」，先问「谁更新它」** —— 只比较不更新的条件恒真，答案会被更差的解覆盖。\n- 顺带复习 `count` 的语义（还差几个必需字符）与「记录后把最左必需字符还回去」这步的必要性，这是覆盖型滑窗区别于普通滑窗的地方。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-18",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "滑动窗口+计数",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：思路与一刷一致（滑动窗口 + need 计数 + counts 归零判覆盖），但**扩展阶段两行的门控写反了**，本地 8 个边界用例挂（示例全绿，是典型的「错误条件恰好被示例满足」）。\n\n**错在哪、怎么修的**：一刷的结构是「判断只决定计数器，need 的减法无条件执行」；这次写成 `if (need[c] > 0) need[c]--;` + 外面 `counts--;`，于是 ① counts 与 t 脱钩，扫满 t.length() 个字符就误判覆盖（XYZABC/ABC 记成 XYZ；最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 `while (need[start] < 0)` 收不动左端（xxabxxa/ab 给 xx 而非 ab）。把两行门控调回正确位置后 12 个用例全绿，提交 268/268 Accepted。\n\n**掌握度依据**：本地先失败、经提示后才改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。"
     }
   ]
 }

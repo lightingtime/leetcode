@@ -3512,6 +3512,28 @@
         "数组与矩阵"
       ],
       "last_seen": "2026-09-18"
+    },
+    {
+      "habit": "覆盖计数的自减没和「字符是否必需」绑定：count-- 写在 if 外面，导致 count 与 t 的覆盖无关——扫满 t.length() 个字符就误判成覆盖完成（LC0076 二刷：s=XYZABC/t=ABC 记成 XYZ；最小复现 s=xa/t=a 得 x）",
+      "count": 1,
+      "examples": [
+        "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-09-18"
+    },
+    {
+      "habit": "滑动窗口 need 的减法被塞进 if 里：一刷是「if (need[c] > 0) count--; need[c]--;」（判断只决定 count，减法必须无条件执行），二刷写成了「if (need[c] > 0) need[c]--; count--;」。need 因此永不为负，标记「多余字符」的负值消失了，收缩循环 while (need[start] < 0) 收不动窗口左端（左端是无关字符时 need==0 也停），窗口永远收不到最短（s=xxabxxa/t=ab 给出 xx 而非 ab）",
+      "count": 1,
+      "examples": [
+        "minimum-window-substring"
+      ],
+      "categories": [
+        "双指针与滑动窗口"
+      ],
+      "last_seen": "2026-09-18"
     }
   ],
   "category_hints": {
