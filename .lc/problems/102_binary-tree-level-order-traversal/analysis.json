@@ -20,20 +20,39 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-08",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "35/35",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 47280000,
+      "memory_bytes": 47036000,
       "approach": "层序 BFS",
       "time_complexity": "O(n)",
-      "space_complexity": "O(n)",
+      "space_complexity": "O(w)",
       "optimal": true,
-      "notes": "二叉树的层序遍历：BFS 队列按层弹出当前层再扩展下一层，一次 Accepted（35/35）"
+      "notes": "**与一刷对比**：思路与写法一致（BFS 队列按层处理），结构干净。\n\n**关键点都处理对了**：① 每轮开头先取 `int size = queue.size()`，用它锁定「当前层有几个节点」，再一次性弹出这么多——这样收集出来正好一层一个列表；② `size` 是在内层循环之前取的，循环里边弹边入队不会污染本层计数；③ 子节点为 null 时直接跳过不入队，避免结果里多出空层；④ 空树直接返回空列表（不是含一个空列表的列表）。本地示例 3 + 边界 6（全左链/全右链/不平衡混合/负值/极值/完全二叉树）全过，一次提交 Accepted（35/35）。\n\n**可精简点**：队列用 `new LinkedList<>()` 只是为了可读，这题入队前已经过滤掉 null，可以换成 `new ArrayDeque<>()`（更快、内存更省，且不会触发 ArrayDeque 拒收 null 的问题）；另外 `Deque<TreeNode>` 声明配 `ArrayDeque` 实现是 Java 里更常见的组合。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public List<List<Integer>> levelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new LinkedList<>();\n        queue.offerLast(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.pollFirst();\n                list.add(cur.val);\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n        }\n        return ans;\n    }",
+      "prev_code": "public List<List<Integer>> levelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new LinkedList<>();\n        queue.offerLast(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.pollFirst();\n                list.add(cur.val);\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n        }\n        return ans;\n    }\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "二叉树题绝大多数是递归：先想「对当前节点做什么，再递归左右子树」，别急着写迭代。"
   ],
-  "approach_detail": "问题本质：按层输出二叉树 = BFS。关键是不能让层与层混在一起，所以每层先记录队列大小再一次性处理。\n关键设计：while 队列非空：size=queue.size()，for size 次出队收集本层节点值、同时把下一层子节点入队；这样一轮恰好处理一层，ans 按层追加。空树直接返回空列表。\n边界：空树；单节点一层；斜树每层一个节点；节点值重复不影响（按结构输出）；宽层（满二叉树最后一层 n/2 个节点）考验队列容量。\n复杂度：O(n) 时间、O(w) 空间（w 为最大层宽，最坏 O(n)），最优。"
+  "approach_detail": "问题本质：按层输出二叉树 = BFS。关键是不能让层与层混在一起，所以每层先记录队列大小再一次性处理。\n关键设计：while 队列非空：size=queue.size()，for size 次出队收集本层节点值、同时把下一层子节点入队；这样一轮恰好处理一层，ans 按层追加。空树直接返回空列表。\n边界：空树；单节点一层；斜树每层一个节点；节点值重复不影响（按结构输出）；宽层（满二叉树最后一层 n/2 个节点）考验队列容量。\n复杂度：O(n) 时间、O(w) 空间（w 为最大层宽，最坏 O(n)），最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "层序 BFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(w)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路与写法一致（BFS 队列按层处理），结构干净。\n\n**关键点都处理对了**：① 每轮开头先取 `int size = queue.size()`，用它锁定「当前层有几个节点」，再一次性弹出这么多——这样收集出来正好一层一个列表；② `size` 是在内层循环之前取的，循环里边弹边入队不会污染本层计数；③ 子节点为 null 时直接跳过不入队，避免结果里多出空层；④ 空树直接返回空列表（不是含一个空列表的列表）。本地示例 3 + 边界 6（全左链/全右链/不平衡混合/负值/极值/完全二叉树）全过，一次提交 Accepted（35/35）。\n\n**可精简点**：队列用 `new LinkedList<>()` 只是为了可读，这题入队前已经过滤掉 null，可以换成 `new ArrayDeque<>()`（更快、内存更省，且不会触发 ArrayDeque 拒收 null 的问题）；另外 `Deque<TreeNode>` 声明配 `ArrayDeque` 实现是 Java 里更常见的组合。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
