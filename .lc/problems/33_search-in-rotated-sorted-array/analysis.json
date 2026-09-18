@@ -15,7 +15,6 @@
   "time_complexity": "O(log n)",
   "space_complexity": "O(1)",
   "notes": "旋转数组二分：有序半段判定用 >=、值域归属 target、mid 命中即返回，O(log n)/O(1) 一次 Accepted（196/196）",
-  "code_notes": [],
   "mistakes": [
     {
       "habit": "二分中点公式错：mid = (right-left)/2 是区间长度的一半，left>0 时落在区间外；应为 mid = left + (right-left)/2，保证 mid 在 [left, right] 闭区间内",
@@ -32,8 +31,16 @@
     {
       "habit": "有序半段判定用 > 而非 >=：区间只剩两个元素时 mid == left，nums[mid] > nums[left] 恒为 false，错误进入右半段分支（此时右半段未必有序），target 被丢出；左半段有序判定应为 nums[left] <= nums[mid]",
       "count": 1
+    },
+    {
+      "habit": "二分（含旋转数组二分）分支写成两个互不兜底的 if：mid 的段位/值域条件都不命中时不移动任何端点，区间不收缩 → 死循环（本机表现为 Java 进程被 20s 超时杀掉、一行输出都没有）。每轮必须保证 mid 被明确归入一侧（保留 [mid,right] 或 [left,mid]），即分支互斥且完备",
+      "count": 1
     }
   ],
+  "hints": [
+    "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ],
+  "code_notes": [],
   "patterns": [
     {
       "title": "旋转有序数组二分：先判有序半段，再用值域归属 target",
@@ -41,24 +48,47 @@
       "category": "数组与矩阵",
       "problem": "search-in-rotated-sorted-array",
       "date": "2026-08-05"
+    },
+    {
+      "title": "二分的分支必须互斥且完备：条件都不命中 = 区间不收缩 = 死循环",
+      "text": "旋转数组二分每轮的本质是「丢掉半边、保留含答案的另一半」，所以分支必须覆盖 mid 的全部情形。只写两个独立 if（① mid 在左段且 target 在左段值域内 → 保留左半边；② mid 在右段且 target 在右段值域内 → 保留右半边）时，剩下的情形——mid 落在下标 0、target == nums[mid]、mid 在左段但 target 更大、mid 在右段但 target 更小——两端都不动，mid 不变 → 死循环（本机表现：Java 进程被超时杀掉、连一行输出都没有，不是 WA）。对照一刷闭区间写法：命中即 return、否则 mid±1，天然保证每轮收缩。自检口诀：每轮末尾问「这一轮区间一定变小了吗」；两元素输入（如 {1,2}、target=2）是死循环的照妖镜。解法方向可以不同（闭区间命中即返回 / 开区间 lower bound 收口），但「每轮必缩」是无条件要求。",
+      "category": "数组与矩阵",
+      "problem": "search-in-rotated-sorted-array",
+      "date": "2026-09-18"
     }
   ],
   "submissions": [
     {
-      "date": "2026-08-05",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "196/196",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 44340000,
+      "memory_bytes": 44200000,
       "approach": "旋转数组二分",
       "time_complexity": "O(log n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "旋转数组二分：有序半段判定用 >=、值域归属 target、mid 命中即返回，O(log n)/O(1) 一次 Accepted（196/196）"
+      "notes": "二刷：经引导重写。沿用开区间模板 left=-1/right=n，命中即返回 + 固定参照物 nums[0] 判段位 + 段内值域判归属；中途踩过「两个 if 不兜底 → 区间不收缩 → 死循环」",
+      "code": "    public int search(int[] nums, int target) {\n        // 待查下标是开区间 (left, right) 内的 left+1 .. right-1，left/right 本身不在待查范围内\n        int left = -1, right = nums.length;\n        // left+1 < right 表示待查范围内还有元素；退出时待查为空\n        while (left + 1 < right) {\n            int mid = left + (right - left) / 2;\n            // 端点移动会把 mid 甩出待查范围，命中必须当场返回\n            if (nums[mid] == target) {\n                return mid;\n            }\n            // 段位参照物必须是固定的 nums[0]：右段的值全部小于 nums[0]\n            if (nums[mid] >= nums[0]) {\n                // 左段：mid 左边那一半的值域是 [nums[0], nums[mid]]\n                if (target >= nums[0] && target < nums[mid]) {\n                    right = mid;\n                } else {\n                    left = mid;\n                }\n            } else {\n                // 右段：mid 右边那一半的值域是 [nums[mid], nums[n-1]]\n                if (target < nums[0] && target > nums[mid]) {\n                    left = mid;\n                } else {\n                    right = mid;\n                }\n            }\n        }\n        // 待查区间已空，target 不在数组中\n        return -1;\n    }",
+      "prev_code": "public int search(int[] nums, int target) {\n        int left = 0, right = nums.length - 1;\n        while (left < right) {\n            int mid = left + (right - left) / 2;\n            if (nums[mid] == target) {\n                return mid;\n            }\n            if (nums[mid] >= nums[left]) {\n                if (target >= nums[left] && target < nums[mid]) {\n                    right = mid - 1;\n                } else {\n                    left = mid + 1;\n                }\n            } else {\n                if (nums[mid] < target && target <= nums[right]) {\n                    left = mid + 1;\n                } else {\n                    right = mid - 1;\n                }\n            }\n        }\n        return nums[left] == target ? left : -1;\n    }\n",
+      "mastery": "weak",
+      "pass": 1
     }
   ],
-  "hints": [
-    "矩阵题先想如何用行列信息/排序/原地操作降维。"
-  ],
-  "approach_detail": "问题本质：旋转后的有序数组是「两段各自递增」。二分时不能直接比较 nums[mid] 与 target，必须先判断 mid 落在哪一段，再按段内有序性收窄区间。\n关键设计：nums[mid] >= nums[left] 说明左段递增：target 落在 [left, mid) 内则 right=mid-1，否则去右段；否则 mid 在右段：target 落在 (mid, right] 内则 left=mid+1，否则去左段。段内有序保证每步排除一半。\n边界：数组长度为 1 时循环不进入，最后统一检查 nums[left]；旋转点恰在 0 处（等价未旋转）走 nums[mid]>=nums[left] 分支仍正确；题目无重复元素，比较不受重复干扰。\n复杂度：O(log n) 时间、O(1) 空间，最优。"
+  "approach_detail": "问题本质：旋转后的有序数组是「两段各自递增」。二分时不能直接比较 nums[mid] 与 target，必须先判断 mid 落在哪一段，再按段内有序性收窄区间。\n关键设计：nums[mid] >= nums[left] 说明左段递增：target 落在 [left, mid) 内则 right=mid-1，否则去右段；否则 mid 在右段：target 落在 (mid, right] 内则 left=mid+1，否则去左段。段内有序保证每步排除一半。\n边界：数组长度为 1 时循环不进入，最后统一检查 nums[left]；旋转点恰在 0 处（等价未旋转）走 nums[mid]>=nums[left] 分支仍正确；题目无重复元素，比较不受重复干扰。\n复杂度：O(log n) 时间、O(1) 空间，最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "weak",
+      "firstTry": false,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "旋转数组二分",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "二刷：经引导重写。沿用开区间模板 left=-1/right=n，命中即返回 + 固定参照物 nums[0] 判段位 + 段内值域判归属；中途踩过「两个 if 不兜底 → 区间不收缩 → 死循环」"
+    }
+  ]
 }

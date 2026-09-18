@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-17",
+  "updated": "2026-09-18",
   "current_seq": 170,
   "done": [
     {
@@ -3501,6 +3501,17 @@
         "动态规划"
       ],
       "last_seen": "2026-09-17"
+    },
+    {
+      "habit": "二分（含旋转数组二分）分支写成两个互不兜底的 if：mid 的段位/值域条件都不命中时不移动任何端点，区间不收缩 → 死循环（本机表现为 Java 进程被 20s 超时杀掉、一行输出都没有）。每轮必须保证 mid 被明确归入一侧（保留 [mid,right] 或 [left,mid]），即分支互斥且完备",
+      "count": 1,
+      "examples": [
+        "search-in-rotated-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-09-18"
     }
   ],
   "category_hints": {
