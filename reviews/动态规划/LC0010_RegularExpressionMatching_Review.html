@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    
+    <span class="badge plain">二刷 ×1</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>10. 正则表达式匹配 (Regular Expression Matching)</h1><p>&gt; <a href="https://leetcode.cn/problems/regular-expression-matching/" rel="noopener">https://leetcode.cn/problems/regular-expression-matching/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：递归、字符串、动态规划</p><h2>题目描述</h2><p>给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。</p><p>'.' 匹配任意单个字符</p><p>'*' 匹配零个或多个前面的那一个元素</p><p>返回一个布尔值，表示匹配是否覆盖整个输入字符串（而非部分）。</p><p>示例 1：</p><p>输入：s = "aa", p = "a"</p><p>输出：false</p><p>解释："a" 无法匹配 "aa" 整个字符串。</p><p>示例 2:</p><p>输入：s = "aa", p = "a*"</p><p>输出：true</p><p>解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。</p><p>示例 3：</p><p>输入：s = "ab", p = ".*"</p><p>输出：true</p><p>解释：".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。</p><p>提示：</p><p>1</p><p>1</p><p>s 只包含从 a-z 的小写字母。</p><p>p 只包含从 a-z 的小写字母，以及字符 . 和 *。</p><p>保证每次出现字符 * 时，前面都匹配到有效的字符</p><h2>示例</h2><ol><li>输入：s = "aa"，p = "a"</li></ol><p>输出：false</p><p>解释："a" 无法匹配 "aa" 整个字符串。</p><ol><li>输入：s = "aa"，p = "a*"</li></ol><p>输出：true</p><p>解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。</p><ol><li>输入：s = "ab"，p = ".*"</li></ol><p>输出：true</p><p>解释：".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。</p></div></details>
-  
+  <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（354/354）｜ 一次 AC ｜ 二维DP（前缀长度语义） ｜ O(|s|·|p|) · O(|s|·|p|)</p>
+      <div class="review-note md"><p>二刷独立重写，一遍写出二维 DP，提交一次 354/354 Accepted。</p><p><strong>与一刷对比</strong>：状态定义（前缀长度语义）、转移分支与复杂度都与一刷一致，没有换思路；差别在代码形态——一刷把 <code>i &gt; 0 &amp;&amp; 匹配</code> 写在星号分支里、再单独初始化一行 <code>dp[0][j]</code>，这次把下标守卫前置成 <code>if (i &gt; 0 &amp;&amp; (s.charAt(i-1) == c || c == \".\"))</code>，省掉了那趟初始化循环，转移更集中在一处。</p><p><strong>为什么这次直接想起来了</strong>：一刷沉淀的「字符串匹配 DP：前缀长度语义 + 循环含端点 + 星号分支三要素」这次直接复用——<code>i</code> 从 0 到 <code>s.length()</code>、<code>j</code> 从 1 到 <code>p.length()</code> 含端点，取字符一律 <code>charAt(i-1)</code>/<code>charAt(j-1)</code>，星号同时写出零次 <code>dp[i][j-2]</code> 与多次 <code>dp[i-1][j]</code>。一刷踩过的「循环端点漏掉导致答案格没填」这次没有复现。</p><p><strong>掌握度依据</strong>：一次提交 Accepted，全程无探讨、无提示 → 较强。</p><p><strong>下一步提醒</strong>：空间可以压到一维 <code>O(|p|)</code>（滚动数组，需额外留住 <code>dp[i-1][j-2]</code> 供星号零次分支用），当前 <code>O(|s|·|p|)</code> 不是空间下限，想练滚动数组时再回来。</p></div>
+    </div></div></div></section>
   <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
       <h3>1. 第一轮（一刷）</h3>
       <ul class="round-meta">
@@ -33,11 +37,18 @@
         <li><span>复杂度</span><b>O(|s|·|p|) · O(|s|·|p|)</b></li>
         
       </ul>
+    </div><div class="round-card strong">
+      <h3>2. 第 1 轮（二刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>二维DP（前缀长度语义）</b></li>
+        <li><span>复杂度</span><b>O(|s|·|p|) · O(|s|·|p|)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+      </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二维DP（前缀长度语义）</h3>
-    <p><span class="chip">时间 O(|s|·|p|)</span><span class="chip">空间 O(|s|·|p|)</span><span class="chip">内存 ≈ 41.7 MB</span><span class="chip">用例 354/354</span></p>
-    <div class="code-wrap"><div class="code-head"><span>src/动态规划/LC0010_RegularExpressionMatching.java</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
+    <p><span class="chip">时间 O(|s|·|p|)</span><span class="chip">空间 O(|s|·|p|)</span><span class="chip">内存 ≈ 41.6 MB</span><span class="chip">用例 354/354</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0010_RegularExpressionMatching.java · 二维DP（前缀长度语义）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
         <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>][p.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
         dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = <span class="tk-k">true</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt;= s.<span class="tk-f">length</span>(); i++) {
@@ -52,6 +63,22 @@
         }
         <span class="tk-k">return</span> dp[s.<span class="tk-f">length</span>()][p.<span class="tk-f">length</span>()];
     }</pre></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0010_RegularExpressionMatching.java · 二维DP（前缀长度语义） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
+        <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>][p.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
+        dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = <span class="tk-k">true</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt;= s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= p.<span class="tk-f">length</span>(); j++) {
+                <span class="tk-k">char</span> c = p.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>);
+                <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; (s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == c || c == <span class="tk-s">'.'</span>)) {
+                    dp[i][j] = dp[i - <span class="tk-n">1</span>][j - <span class="tk-n">1</span>];
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">'*'</span>) {
+                    dp[i][j] = dp[i][j - <span class="tk-n">2</span>] || (i &gt; <span class="tk-n">0</span> &amp;&amp; dp[i - <span class="tk-n">1</span>][j] &amp;&amp; (s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == p.<span class="tk-f">charAt</span>(j - <span class="tk-n">2</span>) || p.<span class="tk-f">charAt</span>(j - <span class="tk-n">2</span>) == <span class="tk-s">'.'</span>));
+                }
+            }
+        }
+        <span class="tk-k">return</span> dp[s.<span class="tk-f">length</span>()][p.<span class="tk-f">length</span>()];
+    }
+</pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择</strong></p><p>判断 s 能否被模式 p 完全匹配：'.' 通配任意单字符，'x*' 通配零个或多个 x。这是字符串匹配的经典 DP：把「s 前缀 vs p 前缀」的匹配结果存表，子问题同构且可复用；直接递归/回溯会指数级重复。难点在 * 的「零次 vs 多次」两种语义，DP 用 j−2（跳过 x*）和 i−1（消费字符后 x* 保留）两个方向分别覆盖。</p><p><strong>关键设计决策（按用户实际写法）</strong></p><ol><li>状态：dp[i][j] = s 的前 i 个字符与 p 的前 j 个字符能否匹配（前缀长度语义，i=0..|s|、j=0..|p|）；dp[0][0]=true，其余默认 false（第一列语义正确：空模式只匹配空串）。</li><li>普通字符/.'：i&gt;0 且 s[i−1] 与 p[j−1] 匹配（'.' 恒匹配）时，dp[i][j] = dp[i−1][j−1]。</li><li>'*'（与 p[j−2] 绑定成 x*）：dp[i][j] = dp[i][j−2]（零次，直接跳过 x*）或 (i&gt;0 &amp;&amp; dp[i−1][j] &amp;&amp; (s[i−1]==x || x=='.'))（一次及以上：消费一个 s 字符，x* 保留继续匹配）。</li><li>循环：i 从 0..|s|（含，第一行参与转移），j 从 1..|p|（含，最后一列参与转移）；答案 dp[|s|][|p|]。</li></ol><p><strong>边界与细节</strong></p><ul><li>i=0 行：普通字符分支靠 i&gt;0 短路为 false；只有 * 的零次分支能置 true（如 dp[0][2] for 'a*'）。</li><li>越界防护：所有取 s.charAt(i−1) 的分支先判 i&gt;0；遇到 * 时 j≥2（题目保证 * 前有字符），charAt(j−2) 安全。</li><li>'.' 通配：普通分支用 c=='.'；星号分支用 x=='.' 或 x==s[i−1]。</li><li>推演 case：s='aa'、p='a*'。</li></ul><ol><li>dp[0][0]=true；i=0 行：dp[0][1]=false（普通 a，i&gt;0 短路）；dp[0][2]=dp[0][0]（* 零次）→ true。</li><li>i=1：dp[1][1]=dp[0][0] 且 'a'=='a' → true；dp[1][2]=dp[1][0](false) 或 (i&gt;0 &amp;&amp; dp[0][2]=true &amp;&amp; 'a'=='a') → true。</li><li>i=2：dp[2][1]=dp[1][0](false) → false；dp[2][2]=dp[2][0](false) 或 (dp[1][2]=true &amp;&amp; 'a'=='a') → true ✓。</li></ol><ul><li>推演 case：s='ab'、p='.*'：i=1 时 dp[1][1]=dp[0][0] 且 '.' 通配 → true；dp[1][2]=dp[1][0](false) 或 (dp[0][2]=true &amp;&amp; x=='.') → true；i=2 同理 → true ✓。</li><li>经典不匹配：s='mississippi'、p='mis*is*p*.' → false，末段 p* 无法消化剩余字符。</li></ul><p><strong>复杂度与下限论证</strong></p><ul><li>时间 O(|s|·|p|)：两重循环各格常数次运算；|s|≤20、|p|≤30，规模极小。任何正确解法至少要覆盖全部 (i,j) 状态（或等价搜索空间），O(mn) 是该问题 DP 的标准最优档。</li><li>空间 O(|s|·|p|)：二维 boolean 表；转移只依赖 i−1 行，可滚动为一维 O(|p|)，但本题规模下无必要。</li></ul></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>DP 循环边界与数组维度不一致：dp 为 len+1 但循环用 i&lt;len / j&lt;len，漏算最后一行/列，答案格永不填充</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>正则星号分支：取 s.charAt(i-1) 前缺 i&gt;0 守卫（i=0 越界），且 x 为 '.' 时漏掉任意匹配</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>354/354 用例一次通过。</p></div></div></div></section>

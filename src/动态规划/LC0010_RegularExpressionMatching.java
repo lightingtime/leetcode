@@ -2,8 +2,13 @@
 // LeetCode 10. 正则表达式匹配 (Regular Expression Matching)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/regular-expression-matching/
-// 刷题日期：2026-08-10
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-10）
+//
+// 思路：前缀长度语义的二维 DP，滚动匹配 `*` 的零次/多次两种分支。
+// 复杂度：时间 O(|s|·|p|)，空间 O(|s|·|p|)
 // ============================================================
+
+import java.util.*;
 
 public class LC0010_RegularExpressionMatching {
 
