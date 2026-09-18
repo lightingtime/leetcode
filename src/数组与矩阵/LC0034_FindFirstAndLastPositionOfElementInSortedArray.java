@@ -2,8 +2,13 @@
 // LeetCode 34. 在排序数组中查找元素的第一个和最后一个位置 (Find First and Last Position of Element in Sorted Array)
 // 难度：Medium | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/
-// 刷题日期：2026-08-05
+// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-06 · 一刷一次 Accepted）
+// 一刷写法：两次二分找下界——lowerBound(target) 给左端点，lowerBound(target + 1) - 1 给右端点；下界模板的右端点是开区间 n（target 可能大于所有元素，答案可以在数组外）。O(log n)/O(1)
+// 这题的历史坑（错误习惯库里有 6 条，是二分边界最密集的一题）：① 下界模板右端点取 n-1、循环退出却不验证最后一个元素，target 大于所有元素时返回 n-1；② left = mid 配下取整会死循环；③④ 保留/排除条件写反（nums[mid] < target 才排除 mid，nums[mid] >= target 时 mid 仍是候选）；⑤ 为凑末尾差一去掉了 -1 补偿；⑥ 全开区间模板返回 left 而不是 right
+// 测试用例与一刷归档保持一致（示例 3 个 + 边界 8 个）
 //
+// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
+// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -12,18 +17,16 @@ public class LC0034_FindFirstAndLastPositionOfElementInSortedArray {
 
     // ==== 提交代码开始 ====
     public int[] searchRange(int[] nums, int target) {
-        if (nums.length == 0) {
-            return new int[]{-1, -1};
-        }
-        int left = findFirstIndex(nums, target);
-        int right = findFirstIndex(nums, target + 1);
-        if (left >= nums.length || right < left || nums[left] != target ) {
+        if (nums.length == 0) return new int[]{-1, -1};
+        int left = find(nums, target);
+        int right = find(nums, target + 1);
+        if (left >= nums.length || right < left || nums[left] != target) {
             return new int[]{-1, -1};
         }
         return new int[] {left, right - 1};
     }
 
-	private int findFirstIndex(int[] nums, int target) {
+    private int find(int[] nums, int target) {
         int left = -1, right = nums.length;
         while (left + 1 < right) {
             int mid = left + (right - left) / 2;
@@ -33,8 +36,8 @@ public class LC0034_FindFirstAndLastPositionOfElementInSortedArray {
                 right = mid;
             }
         }
-		return right;
-	}
+        return right;
+    }
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

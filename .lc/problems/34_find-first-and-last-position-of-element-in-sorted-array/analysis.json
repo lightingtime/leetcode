@@ -81,20 +81,39 @@
   ],
   "submissions": [
     {
-      "date": "2026-08-06",
+      "date": "2026-09-18",
       "verdict": "Accepted",
-      "testcases": "88/88",
+      "testcases": "",
       "runtime_ms": null,
-      "memory_bytes": 48788000,
+      "memory_bytes": 48676000,
       "approach": "二分查找",
       "time_complexity": "O(log n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "排序数组找首尾：两次二分分别找 target 与 target+1 的插入位置，O(log n)/O(1)，一次 Accepted（88/88）"
+      "notes": "**与一刷对比**：思路一致（两次 lower bound：`find(target)` 得左端点，`find(target + 1) - 1` 得右端点），辅助方法从 `findFirstIndex` 改名成 `find`，其余结构相同。\n\n**这次避开了 6 条历史坑**：下界模板用开区间 `left = -1, right = nums.length`（答案是「第一个 ≥ target 的位置」，可以落在数组外，右端点必须是 n）；排除条件是 `nums[mid] < target → left = mid`，`nums[mid] >= target` 时 mid 仍是候选 → `right = mid`；返回的是 `right`（第一个满足条件的位置）而不是 `left`；区间只剩一个元素时循环退出，那唯一候选就是 `right`，不需要额外验证。存在性判断靠 `nums[left] != target`（配合 `left >= nums.length` 防越界），而不是靠减法凑差一。\n\n**可精简点**：① `nums.length == 0` 的提前返回是冗余的——空数组时 `find` 返回 0，后面 `left >= nums.length` 已经拦住；② `right < left` 恒为假（下界对更大的 target 单调不减），可以删掉。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
+      "code": "    public int[] searchRange(int[] nums, int target) {\n        if (nums.length == 0) return new int[]{-1, -1};\n        int left = find(nums, target);\n        int right = find(nums, target + 1);\n        if (left >= nums.length || right < left || nums[left] != target) {\n            return new int[]{-1, -1};\n        }\n        return new int[] {left, right - 1};\n    }\n\n    private int find(int[] nums, int target) {\n        int left = -1, right = nums.length;\n        while (left + 1 < right) {\n            int mid = left + (right - left) / 2;\n            if (nums[mid] < target) {\n                left = mid;\n            } else {\n                right = mid;\n            }\n        }\n        return right;\n    }",
+      "prev_code": "public int[] searchRange(int[] nums, int target) {\n        if (nums.length == 0) {\n            return new int[]{-1, -1};\n        }\n        int left = findFirstIndex(nums, target);\n        int right = findFirstIndex(nums, target + 1);\n        if (left >= nums.length || right < left || nums[left] != target ) {\n            return new int[]{-1, -1};\n        }\n        return new int[] {left, right - 1};\n    }\n\n\tprivate int findFirstIndex(int[] nums, int target) {\n        int left = -1, right = nums.length;\n        while (left + 1 < right) {\n            int mid = left + (right - left) / 2;\n            if (nums[mid] < target) {\n                left = mid;\n            } else {\n                right = mid;\n            }\n        }\n\t\treturn right;\n\t}\n",
+      "mastery": "strong",
+      "pass": 1
     }
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
   ],
-  "approach_detail": "问题本质：有序数组中找 target 的左右边界 = 两个二分：第一个 ≥ target 的位置，与第一个 > target 的位置，右边界 = lowerBound(target+1)-1。\n关键设计：只写一个 lowerBound（返回第一个 ≥ x 的下标）：左开右开区间 (left=-1, right=len)，mid 小于 x 时 left=mid（排除左侧），否则 right=mid，循环 left+1<right 结束后 right 即答案。对 target 和 target+1 各调一次，逻辑完全复用，避免两份边界二分不一致。\n边界：空数组直接返回 [-1,-1]；target 不存在时 left>=len 或 nums[left]!=target，返回 [-1,-1]；target 是最大元素时 target+1 让 lowerBound 返回 len，right-1 仍正确；全数组等于 target。\n复杂度：O(log n) 时间、O(1) 空间，最优。"
+  "approach_detail": "问题本质：有序数组中找 target 的左右边界 = 两个二分：第一个 ≥ target 的位置，与第一个 > target 的位置，右边界 = lowerBound(target+1)-1。\n关键设计：只写一个 lowerBound（返回第一个 ≥ x 的下标）：左开右开区间 (left=-1, right=len)，mid 小于 x 时 left=mid（排除左侧），否则 right=mid，循环 left+1<right 结束后 right 即答案。对 target 和 target+1 各调一次，逻辑完全复用，避免两份边界二分不一致。\n边界：空数组直接返回 [-1,-1]；target 不存在时 left>=len 或 nums[left]!=target，返回 [-1,-1]；target 是最大元素时 target+1 让 lowerBound 返回 len，right-1 仍正确；全数组等于 target。\n复杂度：O(log n) 时间、O(1) 空间，最优。",
+  "reviews": [
+    {
+      "pass": 1,
+      "date": "2026-09-18",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "",
+      "approach": "二分查找",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与一刷对比**：思路一致（两次 lower bound：`find(target)` 得左端点，`find(target + 1) - 1` 得右端点），辅助方法从 `findFirstIndex` 改名成 `find`，其余结构相同。\n\n**这次避开了 6 条历史坑**：下界模板用开区间 `left = -1, right = nums.length`（答案是「第一个 ≥ target 的位置」，可以落在数组外，右端点必须是 n）；排除条件是 `nums[mid] < target → left = mid`，`nums[mid] >= target` 时 mid 仍是候选 → `right = mid`；返回的是 `right`（第一个满足条件的位置）而不是 `left`；区间只剩一个元素时循环退出，那唯一候选就是 `right`，不需要额外验证。存在性判断靠 `nums[left] != target`（配合 `left >= nums.length` 防越界），而不是靠减法凑差一。\n\n**可精简点**：① `nums.length == 0` 的提前返回是冗余的——空数组时 `find` 返回 0，后面 `left >= nums.length` 已经拦住；② `right < left` 恒为假（下界对更大的 target 单调不减），可以删掉。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    }
+  ]
 }
