@@ -2,10 +2,11 @@
 // LeetCode 17. 电话号码的字母组合 (Letter Combinations of a Phone Number)
 // 难度：Medium | 分类：回溯
 // 链接：https://leetcode.cn/problems/letter-combinations-of-a-phone-number/
-// 复习日期：2026-09-15（第 5 次复习 · 一刷 2026-08-08 · 上次复习 2026-09-12）
+// 刷题日期：2026-09-21
 //
-// 思路：回溯 DFS；每层只处理当前 digit，枚举字母后递归到下一位。
-// 复杂度：时间 O(n·4^n)，空间 O(n)（不计结果集）
+// 二刷第 6 次 · 一刷 2026-08-08 · 上次复习 2026-09-15（较强，间隔 5 天）
+// 一刷思路：回溯 DFS——按下标逐位选字母，用 StringBuilder 拼接、返回前撤销；空输入要返回 [] 而不是 [""]
+// 测试用例与一刷归档保持一致（示例 2 + 边界若干），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class LC0017_LetterCombinationsOfAPhoneNumber {
     List<String> ans;
     public List<String> letterCombinations(String digits) {
         ans = new ArrayList<>();
+        // 空输入必须返回 []：不能指望递归自然收尾，那样会把空串当成一种组合返回 [""]
         if (digits.isEmpty()) {
             return ans;
         }
@@ -24,18 +26,19 @@ public class LC0017_LetterCombinationsOfAPhoneNumber {
         return ans;
     }
 
-    private void dfs(String digits, int len, StringBuilder sb) {
-        if (len == digits.length()) {
+    private void dfs(String digits, int i, StringBuilder sb) {
+        if (i == digits.length()) {
             ans.add(sb.toString());
             return;
         }
-
-        for (char c : numbers[digits.charAt(len) - '0'].toCharArray()) {
+        for (char c : numbers[digits.charAt(i) - '0'].toCharArray()) {
             sb.append(c);
-            dfs(digits, len + 1, sb);
+            dfs(digits, i + 1, sb);
+            // 撤销：兄弟分支必须基于干净的 sb，本层选的字母要原样摘掉
             sb.deleteCharAt(sb.length() - 1);
         }
     }
+
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

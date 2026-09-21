@@ -36,20 +36,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-15",
+      "date": "2026-09-21",
       "verdict": "Accepted",
       "testcases": "24/24",
       "runtime_ms": null,
-      "memory_bytes": 43760000,
+      "memory_bytes": 43688000,
       "approach": "回溯 DFS",
       "time_complexity": "O(n·4^n)",
-      "space_complexity": "O(n)（不计结果集）",
+      "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：上次 `dfs` 多了一层从`index`开始的冗余位置循环，本次已删除，只在当前层处理`digits.charAt(len)`；`append → dfs(len+1) → deleteCharAt`骨架完整，复杂度 O(n·4^n) / O(n)。\n\n② 这次为什么想起来：递归参数`len`同时表示已选字母数和下一个待处理 digit 下标；候选字母只来自当前 digit，下一层由`len+1`推进，不再重复承担位置推进。\n\n③ 掌握度判定：本次首次提交 Accepted 24/24，但提交前已明确提示上一轮的冗余循环问题，按规则记 weak。\n\n④ 下一步提醒：继续维持“每层只处理当前下标、递归负责推进下标”的回溯结构；不要再用外层位置循环重复推进。",
-      "code": "    String[] numbers = new String[]{\"\", \"\", \"abc\", \"def\", \"ghi\", \"jkl\", \"mno\", \"pqrs\", \"tuv\", \"wxyz\"};\n    List<String> ans;\n    public List<String> letterCombinations(String digits) {\n        ans = new ArrayList<>();\n        if (digits.isEmpty()) {\n            return ans;\n        }\n        dfs(digits, 0, new StringBuilder());\n        return ans;\n    }\n\n    private void dfs(String digits, int len, StringBuilder sb) {\n        if (len == digits.length()) {\n            ans.add(sb.toString());\n            return;\n        }\n\n        for (char c : numbers[digits.charAt(len) - '0'].toCharArray()) {\n            sb.append(c);\n            dfs(digits, len + 1, sb);\n            sb.deleteCharAt(sb.length() - 1);\n        }\n    }",
+      "notes": "**① 与上一轮对比**\n- 第 5 次复习（2026-09-15）较强。本次（第 6 次复习）写法与上一轮一致：回溯 DFS，按下标逐位选字母，用 StringBuilder 拼接、返回前撤销；复杂度 O(n·4^n) 时间 / O(n) 空间（不计结果集）。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 一刷踩的是空输入边界：没提前返回，靠递归自然收尾会把空串当成一种组合、返回 [\"\"]。这次入口先判空并返回空列表，边界用例（digits 为空、单键、四字母键 7 与 9、重复键 22、三键 23）一次全过。\n- 撤销路径干净：sb.deleteCharAt(sb.length() - 1) 紧跟递归调用之后、与 append 严格配对，兄弟分支拿到的是干净状态，没有共享状态污染。\n- 本地 8 组用例首次运行全绿。\n\n**③ 掌握度判定**\n- 本轮无提示、无探讨；本地一次通过、力扣一次提交 Accepted（24/24）→ 较强。这是本题连续第 2 次较强，打破了此前强/弱交替的节奏。\n\n**④ 下一步提醒**\n- 同族可顺带复习 LC0022 括号生成、LC0078 子集、LC0039 组合总和：都是「逐层选、选完撤销」的同一骨架，差异只在候选集范围与剪枝条件。",
+      "code": "String[] numbers = new String[]{\"\", \"\", \"abc\", \"def\", \"ghi\", \"jkl\", \"mno\", \"pqrs\", \"tuv\", \"wxyz\"};\n    List<String> ans;\n    public List<String> letterCombinations(String digits) {\n        ans = new ArrayList<>();\n        // 空输入必须返回 []：不能指望递归自然收尾，那样会把空串当成一种组合返回 [\"\"]\n        if (digits.isEmpty()) {\n            return ans;\n        }\n        dfs(digits, 0, new StringBuilder());\n        return ans;\n    }\n\n    private void dfs(String digits, int i, StringBuilder sb) {\n        if (i == digits.length()) {\n            ans.add(sb.toString());\n            return;\n        }\n        for (char c : numbers[digits.charAt(i) - '0'].toCharArray()) {\n            sb.append(c);\n            dfs(digits, i + 1, sb);\n            // 撤销：兄弟分支必须基于干净的 sb，本层选的字母要原样摘掉\n            sb.deleteCharAt(sb.length() - 1);\n        }\n    }",
       "prev_code": "List<String> ans;\n    String[] map = {\"\", \"\", \"abc\", \"def\", \"ghi\", \"jkl\", \"mno\", \"pqrs\", \"tuv\", \"wxyz\"};\n    public List<String> letterCombinations(String digits) {\n        ans = new ArrayList<>();\n        if (digits.length() == 0) {\n            return ans;\n        }\n        dfs(digits, new StringBuilder(), 0);\n        return ans;\n    }\n\n    private void dfs(String digits, StringBuilder sb, int len) {\n        if (len == digits.length()) {\n            ans.add(sb.toString());\n            return;\n        }\n\n        for (char c : map[digits.charAt(len) - '0'].toCharArray()) {\n            sb.append(c);\n            dfs(digits, sb, len + 1);\n            sb.deleteCharAt(sb.length() - 1);\n        }\n\n    }\n",
       "mastery": "strong",
-      "pass": 5
+      "pass": 6
     }
   ],
   "reviews": [
@@ -117,6 +117,19 @@
       "space_complexity": "O(n)（不计结果集）",
       "optimal": true,
       "notes": "① 与上一轮对比：上次 `dfs` 多了一层从`index`开始的冗余位置循环，本次已删除，只在当前层处理`digits.charAt(len)`；`append → dfs(len+1) → deleteCharAt`骨架完整，复杂度 O(n·4^n) / O(n)。\n\n② 这次为什么想起来：递归参数`len`同时表示已选字母数和下一个待处理 digit 下标；候选字母只来自当前 digit，下一层由`len+1`推进，不再重复承担位置推进。\n\n③ 掌握度判定：本次首次提交 Accepted 24/24；此前关于冗余循环的提醒并非用户主动求助，不应据此降级，按独立完成记 strong。\n\n④ 下一步提醒：继续维持“每层只处理当前下标、递归负责推进下标”的回溯结构；不要再用外层位置循环重复推进。"
+    },
+    {
+      "pass": 6,
+      "date": "2026-09-21",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "24/24",
+      "approach": "回溯 DFS",
+      "time_complexity": "O(n·4^n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 第 5 次复习（2026-09-15）较强。本次（第 6 次复习）写法与上一轮一致：回溯 DFS，按下标逐位选字母，用 StringBuilder 拼接、返回前撤销；复杂度 O(n·4^n) 时间 / O(n) 空间（不计结果集）。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 一刷踩的是空输入边界：没提前返回，靠递归自然收尾会把空串当成一种组合、返回 [\"\"]。这次入口先判空并返回空列表，边界用例（digits 为空、单键、四字母键 7 与 9、重复键 22、三键 23）一次全过。\n- 撤销路径干净：sb.deleteCharAt(sb.length() - 1) 紧跟递归调用之后、与 append 严格配对，兄弟分支拿到的是干净状态，没有共享状态污染。\n- 本地 8 组用例首次运行全绿。\n\n**③ 掌握度判定**\n- 本轮无提示、无探讨；本地一次通过、力扣一次提交 Accepted（24/24）→ 较强。这是本题连续第 2 次较强，打破了此前强/弱交替的节奏。\n\n**④ 下一步提醒**\n- 同族可顺带复习 LC0022 括号生成、LC0078 子集、LC0039 组合总和：都是「逐层选、选完撤销」的同一骨架，差异只在候选集范围与剪枝条件。"
     }
   ],
   "approach_detail": "**问题本质**：给定数字串（每位是 2-9），每位映射到固定字母集（7/9 是 4 个字母，其余 3 个），求所有「每位置取一个字母」的组合串。本质是**多路选择的枚举**：每层递归决定一位选哪个字母，枚举所有路径。\n\n**解法选择理由**：组合枚举的标准工具是回溯（递归 + 选择/撤销）。组合总数是指数级（最多 4^n），必须枚举全部，没有多项式捷径；回溯每次在一条路径上增量构造（StringBuilder），相比「每层复制整串」省内存，是本题最直接写法。\n\n**关键设计决策**：\n- `map` 数组：下标 = 数字（0-9），值 = 该键字母串，`map[digits.charAt(len)-'0']` 取当前位可选字母。\n- 终止条件 `len == digits.length()`：len 既是已选位数也是下一层的下标，走到末尾收集 `path.toString()`。\n- 选择/撤销：`path.append(c)` 进入下一层，返回后 `deleteCharAt(last)` 撤销，保证兄弟分支互不污染。\n- 空输入单独返回：`len==0==digits.length()` 会直接把空串当组合收集（得到 `[\"\"]`），题目要求空输入返回空列表，故入口处提前 `return`。\n\n**边界与细节**：空输入 → []；单数字 7/9（4 字母键）→ 4 个单字母；全相同数字（22）→ 3×3 笛卡尔积；混合四字母键（27）→ 3×4；多数字（234）→ 3×3×3。以上边界 1-6 已覆盖，且输入都在约束内（仅 2-9、长度 0-4）。\n\n**具体 case 推演**（digits = \"27\"，期望 12 个组合）：\n1. `dfs(\"27\", path=\"\", len=0)`：`map[2]=\"abc\"`，先选 'a' → path=\"a\"，进入 len=1。\n2. `dfs(..., path=\"a\", len=1)`：`map[7]=\"pqrs\"`，依次选 'p','q','r','s' → 收集 \"ap\",\"aq\",\"ar\",\"as\"，每选一个后 `deleteCharAt` 撤销。\n3. 回到 len=0，撤销 'a' → path=\"\"，再选 'b' → 重复第 2 步收集 \"bp\"...\"bs\"；再选 'c' 同理。\n4. 共 3×4=12 条，与边界6 期望一致。\n\n**复杂度与下限论证**：设每位字母数 c_i，组合总数 = ∏c_i，最坏全 4 字母键 = 4^n；每生成一个长度 n 的串要 O(n) 复制，总 O(4^n·n)。因为输出本身就有 4^n 个串，任何解法都至少 O(4^n·n)，时间达下界。空间 O(n)（递归栈深度 n + StringBuilder 长度 n），无额外结果存储（结果本身不算）。\n"
