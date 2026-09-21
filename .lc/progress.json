@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-18",
-  "current_seq": 170,
+  "updated": "2026-09-21",
+  "current_seq": 171,
   "done": [
     {
       "seq": 1,
@@ -1871,6 +1871,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "设计推特：写法1 二分归并；写法2 优先队列多路归并（Node 封装提升可读性），AC 22/22"
+    },
+    {
+      "seq": 171,
+      "id": "25",
+      "title": "K 个一组翻转链表",
+      "slug": "reverse-nodes-in-k-group",
+      "category": "链表",
+      "date": "2026-09-21",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "哨兵定段、先探尾再反转；本地先栽在「拿会被循环体改写的 tail.next 当循环判据」上（循环停不下来并 NPE），改成快照区间外后继后 62/62 一次提交 Accepted"
     }
   ],
   "error_habits": [
@@ -3545,6 +3556,28 @@
         "图与并查集"
       ],
       "last_seen": "2026-09-18"
+    },
+    {
+      "habit": "区间反转漏掉闭区间右端点：reverse(head, tail) 的循环写成 while (cur != tail)，只重连了前 k-1 个节点，tail 自身（翻转后成为新头）的 next 从未被改写，仍指向原组外后继 → 新头直接跳过整组，组内其余节点与后续链全部脱链；循环结束判据必须覆盖闭区间 [head, tail] 的全部节点，且「区间右边界」与「滚动前驱 pre」不能共用同一变量",
+      "count": 1,
+      "examples": [
+        "reverse-nodes-in-k-group"
+      ],
+      "categories": [
+        "链表"
+      ],
+      "last_seen": "2026-09-21"
+    },
+    {
+      "habit": "把「会被循环体自身改写」的字段当循环判据：reverse 写成 while (cur != tail.next)。tail 这个引用确实不变，但 tail.next 是每轮判据都要重读的字段，而循环体在 cur==tail 那一轮执行 cur.next = pre，把 tail.next 从后继改成了前驱，哨兵当场漂移 → 循环停不下来，还把区间外的节点一并拖进翻转，最后 cur 走到 null 解引用报 NPE。判据只能用「进循环前快照好的不变量」（或 null 这种字面量），不能用会被本次操作改写的活字段",
+      "count": 1,
+      "examples": [
+        "reverse-nodes-in-k-group"
+      ],
+      "categories": [
+        "链表"
+      ],
+      "last_seen": "2026-09-21"
     }
   ],
   "category_hints": {
