@@ -68,20 +68,20 @@
       "pass": 2
     },
     {
-      "date": "2026-09-05",
+      "date": "2026-09-21",
       "verdict": "Accepted",
       "testcases": "71/71",
       "runtime_ms": null,
-      "memory_bytes": 43480000,
+      "memory_bytes": 43608000,
       "approach": "迭代栈（cur指针）",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 上一轮（08-31，strong）写的是递归 DFS（函数栈隐式）；本轮回到**迭代显式栈**（与一刷思路一致）：`cur` 沿左链压栈 → 弹栈访问 → 转右子树。两种写法 O(n)/O(n) 相同，本轮刻意选迭代版练「不用递归」的写法。\n- 相比一刷迭代版（当时 4 轮修正才过：重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）：本轮一次成型，外层条件 `!stack.isEmpty() || cur != null` 与内层左链循环直接写对，没有再踩「右子树没接上 cur」的坑。一刷迭代代码在 submissions prev_code 保留。\n\n**② 为什么这次能想起来**\n- 中序迭代是固定套路：记忆锚点是「**cur 指针 + 先一路向左压栈**」，弹栈即访问、立刻转右；外层 while 同时管「栈空但有右子树要走」。前两轮分别写过递归与迭代，两个模板都已内化，本轮未参考直接写出迭代版。\n- 空树提前 return 的写法也沿用一刷教训，避免主循环特判。\n\n**③ 掌握度判定**\n- strong：全程无探讨（本轮未给任何提示），本地 9 组（示例 3 + 边界 6：全左链/全右链/负数/大数/混合非平衡/BST 有序）一次全绿，力扣一次提交 Accepted 71/71。\n\n**④ 下一步提醒**\n- 中序的递归/迭代都已掌握；可串练 144 前序、145 后序的迭代写法（后序较 tricky：需标记第二次访问或反转法），巩固显式栈模拟。\n- 延伸（非必需）：Morris 中序 O(1) 空间（线索树），了解即可，面试常规不要求。",
-      "code": "public List<Integer> inorderTraversal(TreeNode root) {\n        List<Integer> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new ArrayDeque<>();\n        TreeNode cur = root;\n        while (!queue.isEmpty() || cur != null) {\n            while (cur != null) {\n                queue.offerLast(cur);\n                cur = cur.left;\n            }\n            cur = queue.pollLast();\n            ans.add(cur.val);\n            cur = cur.right;\n        }\n        return ans;\n    }",
+      "notes": "**① 与上一轮对比**\n- 第 3 次复习（2026-09-05）较强：用迭代栈 cur 指针版一次 AC。\n- 本次（第 4 次复习）：仍是迭代版，骨架与上一轮完全一致——外层 while 的条件是「栈非空 或 cur 非空」，内层沿左链一路压栈（cur 自身也压进去），弹出访问后 cur 一律移到右孩子。O(n) / O(n)。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 一刷那 4 轮修正都发生在迭代版的三个交汇点上，这次三个点都对：内层压栈把 cur 自己一起压进去（不漏当前节点）；访问后无条件执行 cur = cur.right（右孩子为空也要移）；外层用「栈非空 或 cur 非空」兜住「弹出后 cur 已空、但栈里还有祖先没访问」的收尾场景。\n- 栈容器统一用 offerLast / pollLast，两端操作都落在队尾，没有再出现一刷那种「入栈走一端、出栈走另一端」的端点混用。\n- 本地 9 组用例（示例 3 + 边界 6，含全左链、全右链、非平衡树）首次运行全绿。\n\n**③ 掌握度判定**\n- 本轮无提示、无探讨；本地一次通过、力扣一次提交 Accepted（71/71）→ 较强。这是连续第 4 次较强，间隔从 15 天继续拉长。\n\n**④ 下一步提醒**\n- 这套「cur 指针 + 显式栈」是所有迭代版遍历题的通用模板，可直接迁移到 LC0144 前序、LC0145 后序（后序要额外记住上一次访问的节点，或用双栈倒序）。想验证自己是否真的吃透，可以再写一版 Morris 遍历——O(1) 空间，靠临时改指针找前驱。",
+      "code": "public List<Integer> inorderTraversal(TreeNode root) {\n        List<Integer> ans = new ArrayList<>();\n        Deque<TreeNode> queue = new ArrayDeque<>();\n        TreeNode cur = root;\n        // 收尾条件：栈非空或 cur 非空——弹出后 cur 可能为空，但栈里还有祖先没访问\n        while (!queue.isEmpty() || cur != null) {\n            while (cur != null) {\n                queue.offerLast(cur);\n                cur = cur.left;\n            }\n            cur = queue.pollLast();\n            ans.add(cur.val);\n            // 无论右孩子是否为空都要移过去；不移会重复压同一条左链，移了才靠外层条件决定是否收尾\n            cur = cur.right;\n        }\n        return ans;\n    }",
       "prev_code": "    public List<Integer> inorderTraversal(TreeNode root) {\n        List<Integer> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> stack = new ArrayDeque<>();\n        TreeNode cur = root;\n        while (!stack.isEmpty() || cur != null) {\n            while (cur != null) {\n                stack.push(cur);\n                cur = cur.left;\n            }\n            cur = stack.poll();\n            ans.add(cur.val);\n                cur = cur.right;\n        }\n        return ans;\n    }",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "hints": [
@@ -126,6 +126,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 上一轮（08-31，strong）写的是递归 DFS（函数栈隐式）；本轮回到**迭代显式栈**（与一刷思路一致）：`cur` 沿左链压栈 → 弹栈访问 → 转右子树。两种写法 O(n)/O(n) 相同，本轮刻意选迭代版练「不用递归」的写法。\n- 相比一刷迭代版（当时 4 轮修正才过：重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）：本轮一次成型，外层条件 `!stack.isEmpty() || cur != null` 与内层左链循环直接写对，没有再踩「右子树没接上 cur」的坑。一刷迭代代码在 submissions prev_code 保留。\n\n**② 为什么这次能想起来**\n- 中序迭代是固定套路：记忆锚点是「**cur 指针 + 先一路向左压栈**」，弹栈即访问、立刻转右；外层 while 同时管「栈空但有右子树要走」。前两轮分别写过递归与迭代，两个模板都已内化，本轮未参考直接写出迭代版。\n- 空树提前 return 的写法也沿用一刷教训，避免主循环特判。\n\n**③ 掌握度判定**\n- strong：全程无探讨（本轮未给任何提示），本地 9 组（示例 3 + 边界 6：全左链/全右链/负数/大数/混合非平衡/BST 有序）一次全绿，力扣一次提交 Accepted 71/71。\n\n**④ 下一步提醒**\n- 中序的递归/迭代都已掌握；可串练 144 前序、145 后序的迭代写法（后序较 tricky：需标记第二次访问或反转法），巩固显式栈模拟。\n- 延伸（非必需）：Morris 中序 O(1) 空间（线索树），了解即可，面试常规不要求。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-21",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "71/71",
+      "approach": "迭代栈（cur指针）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 第 3 次复习（2026-09-05）较强：用迭代栈 cur 指针版一次 AC。\n- 本次（第 4 次复习）：仍是迭代版，骨架与上一轮完全一致——外层 while 的条件是「栈非空 或 cur 非空」，内层沿左链一路压栈（cur 自身也压进去），弹出访问后 cur 一律移到右孩子。O(n) / O(n)。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 一刷那 4 轮修正都发生在迭代版的三个交汇点上，这次三个点都对：内层压栈把 cur 自己一起压进去（不漏当前节点）；访问后无条件执行 cur = cur.right（右孩子为空也要移）；外层用「栈非空 或 cur 非空」兜住「弹出后 cur 已空、但栈里还有祖先没访问」的收尾场景。\n- 栈容器统一用 offerLast / pollLast，两端操作都落在队尾，没有再出现一刷那种「入栈走一端、出栈走另一端」的端点混用。\n- 本地 9 组用例（示例 3 + 边界 6，含全左链、全右链、非平衡树）首次运行全绿。\n\n**③ 掌握度判定**\n- 本轮无提示、无探讨；本地一次通过、力扣一次提交 Accepted（71/71）→ 较强。这是连续第 4 次较强，间隔从 15 天继续拉长。\n\n**④ 下一步提醒**\n- 这套「cur 指针 + 显式栈」是所有迭代版遍历题的通用模板，可直接迁移到 LC0144 前序、LC0145 后序（后序要额外记住上一次访问的节点，或用双栈倒序）。想验证自己是否真的吃透，可以再写一版 Morris 遍历——O(1) 空间，靠临时改指针找前驱。"
     }
   ],
   "approach_detail": "**问题本质与解法选择**\n\n二叉树中序 = 左子树 → 根 → 右子树。递归版本最直白（`dfs(root.left)` → 访问 → `dfs(root.right)`），但本质是借系统调用栈；迭代版要把这个「栈」显式写出来，规则完全一样：**沿左链一路压栈，弹栈即访问，然后转向右子树**。\n\n选择迭代而非递归的原因：练习显式栈模拟（面试常考「不用递归做遍历」），且空间可精确控制；与上一轮递归版是同一复杂度的两种写法。\n\n**关键设计决策**\n\n| 决策 | 理由 |\n| --- | --- |\n| `cur` 指针 + 两层 while | 内层 `while (cur != null) { push(cur); cur = cur.left; }` 模拟「一路向左」；弹栈后 `cur = cur.right` 转右 |\n| 外层条件 `!stack.isEmpty() \\|\\| cur != null` | 两个状态都要覆盖：栈空但 cur 非空（刚处理完一个根，要去它右子树）；cur 空但栈非空（回退到父节点） |\n| 用 `Deque` + `offerLast`/`pollLast` | 明确当作栈用（`push`/`pop` 等价）；数组双端队列避免 `Stack` 的同步开销 |\n| 空树提前返回空表 | 让主循环无需特判；测试示例2 空树直接覆盖 |\n\n**具体 case 推演（示例1：`[1, null, 2, 3]`，即 1 的右孩子 2，2 的左孩子 3）**\n\n| 步骤 | 栈（底→顶） | cur | 动作 / ans |\n| --- | --- | --- | --- |\n| 0 | [] | 1 | 内层：push 1，cur=null |\n| 1 | [1] | null | 内层结束；外层：栈非空 → pop 1，访问，ans=[1]，cur=1.right=2 |\n| 2 | [] | 2 | 内层：push 2，cur=2.left=3；push 3，cur=null |\n| 3 | [2,3] | null | pop 3，访问，ans=[1,3]，cur=3.right=null |\n| 4 | [2] | null | pop 2，访问，ans=[1,3,2]，cur=2.right=null |\n| 5 | [] | null | 栈空且 cur 空 → 结束 |\n\n输出 `[1,3,2]`，与题目一致。注意每个节点恰好入栈一次、出栈一次，访问顺序严格左-根-右。\n\n**边界与细节**\n\n- 空树 `[]` → 直接返回空表，不 NullPointer。\n- 全左链 `[3,2,1]`（边界1）：一路压栈到底，再逐个弹出，顺序 = 1,2,3（即树高方向上由深到浅 = 中序）。\n- 全右链 `[1,null,2,null,3]`（边界2）：每层「压一个、弹一个」，外层靠 cur 非空驱动。\n- 单节点 / 负数值 / 大数：与结构无关，按值原样收集即可。\n- 测试本地用了 `treeNode(层序数组)` 构造，`norm` 只比较收集到的中序列表顺序。\n\n**复杂度与下限论证**\n\n- 时间 O(n)：每个节点入栈/出栈各一次，总操作常数倍 n；中序遍历必须访问全部 n 个节点，Ω(n) 是下界，已达成。\n- 空间 O(n)：最坏（全左链）栈深 = n；递归版调用栈同样 O(n)。\n- 是否有更优：题目 Follow-up 提到能否用迭代（本解即达标）；若要 O(1) 空间可学 Morris 线索树（利用叶子空指针临时改造树结构），但会改动树且代码复杂，常规面试写显式栈 O(n) 即可，本题不要求 O(1) 空间，故本解为「满足题意 + 常数友好」档。"

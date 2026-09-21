@@ -2,9 +2,12 @@
 // LeetCode 94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)
 // 难度：Easy | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/binary-tree-inorder-traversal/
-// 复习日期：2026-09-05（复习 · 一刷 2026-08-07，上次复习 2026-08-31，较强）
-// 一刷思路：迭代中序遍历（显式栈）——先沿左链入栈，出栈访问后转右子树
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 刷题日期：2026-09-21
+//
+// 二刷第 4 次 · 一刷 2026-08-07 · 上次复习 2026-09-05（较强，间隔 15 天）
+// 一刷思路：迭代栈 + cur 指针——沿左链一路压栈，弹出访问后把 cur 移到右孩子
+// 已有的两种写法：① 递归 DFS（中序，08-31）；② 迭代栈 cur 指针（09-05）。本次沿用哪种就按哪种合并
+// 测试用例与一刷归档保持一致（示例 3 + 边界若干），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -14,11 +17,9 @@ public class LC0094_BinaryTreeInorderTraversal {
     // ==== 提交代码开始 ====
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
-        if (root == null) {
-            return ans;
-        }
         Deque<TreeNode> queue = new ArrayDeque<>();
         TreeNode cur = root;
+        // 收尾条件：栈非空或 cur 非空——弹出后 cur 可能为空，但栈里还有祖先没访问
         while (!queue.isEmpty() || cur != null) {
             while (cur != null) {
                 queue.offerLast(cur);
@@ -26,6 +27,7 @@ public class LC0094_BinaryTreeInorderTraversal {
             }
             cur = queue.pollLast();
             ans.add(cur.val);
+            // 无论右孩子是否为空都要移过去；不移会重复压同一条左链，移了才靠外层条件决定是否收尾
             cur = cur.right;
         }
         return ans;

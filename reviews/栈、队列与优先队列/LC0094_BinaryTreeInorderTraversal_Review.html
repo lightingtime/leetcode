@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>94. 二叉树的中序遍历 (Binary Tree Inorder Traversal)</h1><p>&gt; <a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/" rel="noopener">https://leetcode.cn/problems/binary-tree-inorder-traversal/</a></p><p>难度：Easy ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、二叉树</p><h2>题目描述</h2><p>给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。</p><p>示例 1：</p><p>输入：root = [1,null,2,3]</p><p>输出：[1,3,2]</p><p>示例 2：</p><p>输入：root = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：root = [1]</p><p>输出：[1]</p><p>提示：</p><p>树中节点数目在范围 [0, 100] 内</p><p>-100</p><p>进阶: 递归算法很简单，你可以通过迭代算法完成吗？</p><h2>示例</h2><ol><li>输入：root = [1,null,2,3]</li></ol><p>输出：[1,3,2]</p><ol><li>输入：root = []</li></ol><p>输出：[]</p><ol><li>输入：root = [1]</li></ol><p>输出：[1]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-21 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（71/71）｜ 一次 AC ｜ 迭代栈（cur指针） ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>第 3 次复习（2026-09-05）较强：用迭代栈 cur 指针版一次 AC。</li><li>本次（第 4 次复习）：仍是迭代版，骨架与上一轮完全一致——外层 while 的条件是「栈非空 或 cur 非空」，内层沿左链一路压栈（cur 自身也压进去），弹出访问后 cur 一律移到右孩子。O(n) / O(n)。</li></ul><p><strong>② 这次为什么想起来 / 上次的错怎么规避</strong></p><ul><li>一刷那 4 轮修正都发生在迭代版的三个交汇点上，这次三个点都对：内层压栈把 cur 自己一起压进去（不漏当前节点）；访问后无条件执行 cur = cur.right（右孩子为空也要移）；外层用「栈非空 或 cur 非空」兜住「弹出后 cur 已空、但栈里还有祖先没访问」的收尾场景。</li><li>栈容器统一用 offerLast / pollLast，两端操作都落在队尾，没有再出现一刷那种「入栈走一端、出栈走另一端」的端点混用。</li><li>本地 9 组用例（示例 3 + 边界 6，含全左链、全右链、非平衡树）首次运行全绿。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>本轮无提示、无探讨；本地一次通过、力扣一次提交 Accepted（71/71）→ 较强。这是连续第 4 次较强，间隔从 15 天继续拉长。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>这套「cur 指针 + 显式栈」是所有迭代版遍历题的通用模板，可直接迁移到 LC0144 前序、LC0145 后序（后序要额外记住上一次访问的节点，或用双栈倒序）。想验证自己是否真的吃透，可以再写一版 Morris 遍历——O(1) 空间，靠临时改指针找前驱。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-05 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（71/71）｜ 一次 AC ｜ 迭代栈（cur指针） ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮（08-31，strong）写的是递归 DFS（函数栈隐式）；本轮回到<strong>迭代显式栈</strong>（与一刷思路一致）：<code>cur</code> 沿左链压栈 → 弹栈访问 → 转右子树。两种写法 O(n)/O(n) 相同，本轮刻意选迭代版练「不用递归」的写法。</li><li>相比一刷迭代版（当时 4 轮修正才过：重复压栈、当前节点未入栈、右空未移 cur、内层 null 解引用）：本轮一次成型，外层条件 <code>!stack.isEmpty() || cur != null</code> 与内层左链循环直接写对，没有再踩「右子树没接上 cur」的坑。一刷迭代代码在 submissions prev_code 保留。</li></ul><p><strong>② 为什么这次能想起来</strong></p><ul><li>中序迭代是固定套路：记忆锚点是「<strong>cur 指针 + 先一路向左压栈</strong>」，弹栈即访问、立刻转右；外层 while 同时管「栈空但有右子树要走」。前两轮分别写过递归与迭代，两个模板都已内化，本轮未参考直接写出迭代版。</li><li>空树提前 return 的写法也沿用一刷教训，避免主循环特判。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：全程无探讨（本轮未给任何提示），本地 9 组（示例 3 + 边界 6：全左链/全右链/负数/大数/混合非平衡/BST 有序）一次全绿，力扣一次提交 Accepted 71/71。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>中序的递归/迭代都已掌握；可串练 144 前序、145 后序的迭代写法（后序较 tricky：需标记第二次访问或反转法），巩固显式栈模拟。</li><li>延伸（非必需）：Morris 中序 O(1) 空间（线索树），了解即可，面试常规不要求。</li></ul></div>
@@ -46,7 +50,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>迭代栈（cur指针）</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
@@ -88,14 +92,12 @@
     }</pre></div></details>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 迭代栈（cur指针）</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.5 MB</span><span class="chip">用例 71/71</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.6 MB</span><span class="chip">用例 71/71</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0094_BinaryTreeInorderTraversal.java · 迭代栈（cur指针）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; <span class="tk-f">inorderTraversal</span>(<span class="tk-t">TreeNode</span> root) {
         <span class="tk-t">List</span>&lt;<span class="tk-t">Integer</span>&gt; ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
-        <span class="tk-k">if</span> (root == <span class="tk-k">null</span>) {
-            <span class="tk-k">return</span> ans;
-        }
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">TreeNode</span>&gt; queue = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
         <span class="tk-t">TreeNode</span> cur = root;
+        <span class="tk-c">// 收尾条件：栈非空或 cur 非空——弹出后 cur 可能为空，但栈里还有祖先没访问</span>
         <span class="tk-k">while</span> (!queue.<span class="tk-f">isEmpty</span>() || cur != <span class="tk-k">null</span>) {
             <span class="tk-k">while</span> (cur != <span class="tk-k">null</span>) {
                 queue.<span class="tk-f">offerLast</span>(cur);
@@ -103,6 +105,7 @@
             }
             cur = queue.<span class="tk-f">pollLast</span>();
             ans.<span class="tk-f">add</span>(cur.val);
+            <span class="tk-c">// 无论右孩子是否为空都要移过去；不移会重复压同一条左链，移了才靠外层条件决定是否收尾</span>
             cur = cur.right;
         }
         <span class="tk-k">return</span> ans;
