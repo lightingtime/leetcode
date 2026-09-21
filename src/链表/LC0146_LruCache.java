@@ -2,9 +2,12 @@
 // LeetCode 146. LRU 缓存 (LRU Cache)
 // 难度：Medium | 分类：链表
 // 链接：https://leetcode.cn/problems/lru-cache/
-// 刷题日期：2026-09-05（复习轮二刷重开 · 一刷 2026-08-07）
-// 测试用例与一刷归档保持一致（示例 + 边界，见 .bak）
+// 刷题日期：2026-09-21
 //
+// 二刷第 4 次 · 一刷 2026-08-07 · 上次复习 2026-09-05（较强，间隔 15 天）
+// 一刷思路：HashMap 存 key -> 节点 + 双向链表维护访问顺序，get/put 都是 O(1)
+// 已有的两种写法：① 哈希表+双向链表（08-07）；② HashMap+双向链表（哨兵头尾，09-05）。本次沿用哪种就按哪种合并
+// 测试用例与一刷归档保持一致（示例调用序列 1 + 边界 3），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -14,15 +17,13 @@ public class LC0146_LruCache {
     // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 LRUCache 在提交时自动处理。
     // ==== 提交代码开始 ====
     static class LRUCache {
+        Map<Integer, Node> map;
+        int capacity;
         Node head;
         Node tail;
-        int capacity;
-        int size;
-        Map<Integer, Node> map;
         public LRUCache(int capacity) {
             map = new HashMap<>();
             this.capacity = capacity;
-            this.size = 0;
             head = new Node();
             tail = new Node();
             head.next = tail;
@@ -33,21 +34,21 @@ public class LC0146_LruCache {
                 return -1;
             }
             Node node = map.get(key);
-            unLinkNode(node);
+            unLinkNoe(node);
             move2Head(node);
             return node.val;
         }
 
         private void move2Head(Node node) {
+            head.next.pre = node;
             node.next = head.next;
             node.pre = head;
-            head.next.pre = node;
             head.next = node;
         }
 
-        private void unLinkNode(Node node) {
-            node.next.pre = node.pre;
+        private void unLinkNoe(Node node) {
             node.pre.next = node.next;
+            node.next.pre = node.pre;
         }
 
         public void put(int key, int value) {
@@ -55,30 +56,28 @@ public class LC0146_LruCache {
             if (map.containsKey(key)) {
                 node = map.get(key);
                 node.val = value;
-                unLinkNode(node);
+                unLinkNoe(node);
             } else {
                 node = new Node(key, value);
                 map.put(key, node);
-                size++;
             }
             move2Head(node);
-            if (size > capacity) {
-                Node delete = map.get(tail.pre.key);
-                unLinkNode(delete);
-                map.remove(delete.key);
-                size--;
-                delete = null;
+            if (map.size() > capacity) {
+                Node last = tail.pre;
+                unLinkNoe(last);
+                // 两份结构必须同步增删：断链的同时要从 map 里移除，否则 map 与链表会失去一致性
+                map.remove(last.key);
             }
         }
     }
 
-    static class Node {
-        Node pre;
-        Node next;
+    private static class Node {
         int key;
         int val;
+        Node next;
+        Node pre;
+        public Node(){
 
-        public Node() {
         }
 
         public Node(int key, int val) {
