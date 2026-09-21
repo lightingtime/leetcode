@@ -31,6 +31,10 @@
     {
       "habit": "可变状态字段未在方法入口重置，跨调用残留污染：ans 声明为字段且 longestIncreasingPath 开头没有清零，测试驱动复用同一个对象连续跑多组用例，上一组更大的答案被带进下一组（[[1]] 期望 1 实际 4、[[0,2^31-1]] 期望 2 实际 399）；字段状态要么入口重置，要么降为局部变量",
       "count": 1
+    },
+    {
+      "habit": "递归入口硬编码起点：外层双层循环本来要遍历每个格子当起点，循环体里却写成 dfs(matrix, 0, 0, -1)，循环变量 i、j 一次都没被使用，答案只反映从左上角出发的那条路径（示例1 [[9,9,4],[6,6,8],[2,1,1]] 实际 1、期望 4；其余 8 组恰好最长路径起点就是 (0,0) 而侥幸通过）；多起点枚举必须把当前下标传进递归，写完回看「外层循环变量在体内出现过吗」是最快的自检",
+      "count": 1
     }
   ],
   "hints": [
@@ -53,24 +57,31 @@
       "category": "动态规划",
       "problem": "longest-increasing-path-in-a-matrix",
       "date": "2026-09-15"
+    },
+    {
+      "title": "多起点 DP/DFS：外层枚举必须把当前下标传进递归，否则退化成单起点",
+      "text": "出处 LC0329（复习轮）。双层 for 遍历每个格子当起点，但体内写成 dfs(matrix, 0, 0, -1)，循环变量 i、j 一次都没用到 —— 结果只反映从左上角出发的路径：示例1 [[9,9,4],[6,6,8],[2,1,1]] 实际 1、期望 4。之所以难发现，是因为示例2 [[3,4,5],[3,2,6],[2,2,1]] 的最长路径 3->4->5->6 恰好从 (0,0) 起步，边界用例也大多把 (0,0) 设计成起点，9 组里过了 8 组，只挂 1 组。取舍与自检：多起点结构的入口必须显式传当前坐标；写完后扫一眼「外层循环变量在循环体内出现过吗」——没有被用到就说明循环白转。配套点：这类题的记忆化入口哨兵要对着值域下界选（本题值 >= 0 才敢用 -1），否则会误拦第一个格子。",
+      "category": "动态规划",
+      "problem": "longest-increasing-path-in-a-matrix",
+      "date": "2026-09-21"
     }
   ],
   "submissions": [
     {
-      "date": "2026-09-17",
+      "date": "2026-09-21",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "139/139",
       "runtime_ms": null,
-      "memory_bytes": 47316000,
+      "memory_bytes": 47708000,
       "approach": "记忆化DFS(DAG最长路径)",
       "time_complexity": "O(m·n)",
       "space_complexity": "O(m·n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n\n- 一刷（08-26，非一次 AC）：同一骨架，踩了「DFS 未记忆化 → 200×200 指数爆炸卡死」和「守卫写成 `< pre` 放行等值 → 2-环 StackOverflow」。\n- 上次复习（09-15，weak）：骨架不变、一次 AC，写法定型为 `matrix[i][j] <= pre` 一条守卫同时兜住越界与等值，memo 每格只算一次。\n- 本轮（09-17）：仍是同一写法，按原 approach 合并，`prev_code` 保留 09-15 版本；复杂度 O(m·n)/O(m·n)，内存 47.3MB（上轮 47.5MB）。\n\n**② 这轮的过程与错在哪**\n\n- 第一版退回纯 DFS（`dfs` 返回 void、全局 ans 累加、visited 当回溯标记）→ 200×200 用例跑满 20 秒被超时杀掉，正是 08-26 那个坑的复现（对应错误习惯计数 1→2）。\n- 第二版补了 memo，但仍有两处写法错：① 四个方向复制漏项，`j - 1` 没写、`j + 1` 写了两遍 → 示例1 返回 3，而唯一长度 4 的路径 `1(2,1)→2(2,0)→6(1,0)→9(0,0)` 第一步就要往左；② `ans` 是字段且入口没重置，测试复用同一对象时上一组更大的答案被带进下一组（`[[1]]` 返回 4、`[[0,2^31-1]]` 返回 399）。\n- 修正后本地 9 组用例全绿，力扣一次提交 Accepted（139/139，47.3MB）。两处写法错都已记入错误习惯库。\n\n**③ 掌握度判定**\n\n- weak：本轮**有探讨**——两版都是分析指出具体错处后才改对（第一版超时、第二版 6 组失败），即使最后提交一次 AC 也按较弱记录，间隔重置 2 天。\n\n**④ 下一步提醒**\n\n- 这轮教训集中在写法而非思路：四方向枚举写完逐个念一遍上下左右；方法用到的可变状态逐个问「换一次调用会不会残留、能不能降成局部变量」。\n- 可精简处：`ans` 完全可以降为方法内的局部变量，`pre` 参数也能省掉（直接拿 `matrix[i][j]` 与邻居比较），想练手下轮可以试。",
-      "code": "    int ans;\n    int[][] memo;\n\n    public int longestIncreasingPath(int[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        ans = 0;\n        memo = new int[m][n];\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                ans = Math.max(ans, dfs(matrix, i, j, -1));\n            }\n        }\n        return ans;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        // 守卫兼防环：等值不通过（只有严格递增才继续展开），状态图必然无环；此分支直接 return 0 且不写 memo，\n        // 所以 memo[i][j] 存的值与调用方传入的 pre 无关，缓存才成立\n        if (i < 0 || j < 0 || i > matrix.length - 1 || j > matrix[0].length - 1 || matrix[i][j] <= pre) {\n            return 0;\n        }\n        // 0 作「未计算」哨兵：能走到这里说明守卫已通过，合法答案至少为 1\n        if (memo[i][j] > 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        memo[i][j] = count + 1;\n        return memo[i][j];\n    }",
+      "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路与复杂度一直没变——记忆化 DFS（DAG 最长路径），O(m·n) / O(m·n)。\n- 本次（第 3 次复习）：整体写法与上一轮一致（守卫拦截 + memo 缓存 + 四方向取 max），但**首次本地运行就挂了**：外层双循环本该遍历每个格子当起点，体内却写死 dfs(matrix, 0, 0, -1)，i、j 一次都没被用到，答案只反映从左上角出发的那条路径。\n\n**② 错在哪、怎么暴露的**\n- 示例1 [[9,9,4],[6,6,8],[2,1,1]] 期望 4、实际 1：从 (0,0)=9 出发没有任何更大的邻居，dfs 立刻返回 1；正确答案是 1 -> 2 -> 6 -> 9。\n- 9 组用例只挂了这 1 组，很能说明问题：示例2 的最长路径 3 -> 4 -> 5 -> 6 恰好从 (0,0) 起步，几组边界用例也把 (0,0) 设计成了终点，bug 被数据藏住了。\n- 改成 dfs(matrix, i, j, -1) 后 9 组全绿，力扣一次提交 Accepted（139/139）。\n- 定位信号很直接：**外层循环变量在循环体里一次都没出现**，说明循环白转。\n\n**③ 掌握度判定**\n- 本地先失败（起点硬编码）后自己定位修正，力扣一次提交 AC；按流程记较弱，间隔重置 2 天。\n\n**④ 下一步提醒**\n- 守卫与缓存的顺序这次是对的（拦截分支返回 0 且不写 memo，防止截断值被固化），继续保持。\n- 「多起点枚举必须把当前下标传进递归」已沉淀为套路 #73，下次动笔前用「外层循环变量在体内出现过吗」做三秒自检即可。",
+      "code": "int[][] memo;\n    public int longestIncreasingPath(int[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        memo = new int[m][n];\n        int ans = 0;\n        // 每个格子都要当起点枚举一次：i、j 必须传进 dfs，写死坐标就只剩左上角那一条路径\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                ans = Math.max(ans, dfs(matrix, i, j, -1));\n            }\n        }\n        return ans;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || matrix[i][j] <= pre) {\n            return 0;\n        }\n\n        // 顺序固定：守卫在前（拦截分支返回 0 且不写 memo），查缓存与写缓存在后，否则截断值会被固化\n        if (memo[i][j] != 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        memo[i][j] = count + 1;\n        return memo[i][j];\n    }",
       "prev_code": "int max;\n    int[][] memo;\n    public int longestIncreasingPath(int[][] matrix) {\n        max = 0;\n        memo = new int[matrix.length][matrix[0].length];\n        for (int i = 0; i < matrix.length; i++) {\n            for (int j = 0; j < matrix[0].length; j++) {\n                memo[i][j] = dfs(matrix, i, j, -1);\n                max = Math.max(max, memo[i][j]);\n            }\n        }\n        return max;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] <= pre) {\n            return 0;\n        }\n        if (memo[i][j] != 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        memo[i][j] = count + 1;\n        return count + 1;\n    }\n",
       "mastery": "weak",
-      "pass": 2
+      "pass": 3
     }
   ],
   "reviews": [
@@ -99,6 +110,19 @@
       "space_complexity": "O(m·n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n\n- 一刷（08-26，非一次 AC）：同一骨架，踩了「DFS 未记忆化 → 200×200 指数爆炸卡死」和「守卫写成 `< pre` 放行等值 → 2-环 StackOverflow」。\n- 上次复习（09-15，weak）：骨架不变、一次 AC，写法定型为 `matrix[i][j] <= pre` 一条守卫同时兜住越界与等值，memo 每格只算一次。\n- 本轮（09-17）：仍是同一写法，按原 approach 合并，`prev_code` 保留 09-15 版本；复杂度 O(m·n)/O(m·n)，内存 47.3MB（上轮 47.5MB）。\n\n**② 这轮的过程与错在哪**\n\n- 第一版退回纯 DFS（`dfs` 返回 void、全局 ans 累加、visited 当回溯标记）→ 200×200 用例跑满 20 秒被超时杀掉，正是 08-26 那个坑的复现（对应错误习惯计数 1→2）。\n- 第二版补了 memo，但仍有两处写法错：① 四个方向复制漏项，`j - 1` 没写、`j + 1` 写了两遍 → 示例1 返回 3，而唯一长度 4 的路径 `1(2,1)→2(2,0)→6(1,0)→9(0,0)` 第一步就要往左；② `ans` 是字段且入口没重置，测试复用同一对象时上一组更大的答案被带进下一组（`[[1]]` 返回 4、`[[0,2^31-1]]` 返回 399）。\n- 修正后本地 9 组用例全绿，力扣一次提交 Accepted（139/139，47.3MB）。两处写法错都已记入错误习惯库。\n\n**③ 掌握度判定**\n\n- weak：本轮**有探讨**——两版都是分析指出具体错处后才改对（第一版超时、第二版 6 组失败），即使最后提交一次 AC 也按较弱记录，间隔重置 2 天。\n\n**④ 下一步提醒**\n\n- 这轮教训集中在写法而非思路：四方向枚举写完逐个念一遍上下左右；方法用到的可变状态逐个问「换一次调用会不会残留、能不能降成局部变量」。\n- 可精简处：`ans` 完全可以降为方法内的局部变量，`pre` 参数也能省掉（直接拿 `matrix[i][j]` 与邻居比较），想练手下轮可以试。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-21",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "139/139",
+      "approach": "记忆化DFS(DAG最长路径)",
+      "time_complexity": "O(m·n)",
+      "space_complexity": "O(m·n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路与复杂度一直没变——记忆化 DFS（DAG 最长路径），O(m·n) / O(m·n)。\n- 本次（第 3 次复习）：整体写法与上一轮一致（守卫拦截 + memo 缓存 + 四方向取 max），但**首次本地运行就挂了**：外层双循环本该遍历每个格子当起点，体内却写死 dfs(matrix, 0, 0, -1)，i、j 一次都没被用到，答案只反映从左上角出发的那条路径。\n\n**② 错在哪、怎么暴露的**\n- 示例1 [[9,9,4],[6,6,8],[2,1,1]] 期望 4、实际 1：从 (0,0)=9 出发没有任何更大的邻居，dfs 立刻返回 1；正确答案是 1 -> 2 -> 6 -> 9。\n- 9 组用例只挂了这 1 组，很能说明问题：示例2 的最长路径 3 -> 4 -> 5 -> 6 恰好从 (0,0) 起步，几组边界用例也把 (0,0) 设计成了终点，bug 被数据藏住了。\n- 改成 dfs(matrix, i, j, -1) 后 9 组全绿，力扣一次提交 Accepted（139/139）。\n- 定位信号很直接：**外层循环变量在循环体里一次都没出现**，说明循环白转。\n\n**③ 掌握度判定**\n- 本地先失败（起点硬编码）后自己定位修正，力扣一次提交 AC；按流程记较弱，间隔重置 2 天。\n\n**④ 下一步提醒**\n- 守卫与缓存的顺序这次是对的（拦截分支返回 0 且不写 memo，防止截断值被固化），继续保持。\n- 「多起点枚举必须把当前下标传进递归」已沉淀为套路 #73，下次动笔前用「外层循环变量在体内出现过吗」做三秒自检即可。"
     }
   ]
 }
