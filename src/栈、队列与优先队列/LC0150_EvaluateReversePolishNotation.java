@@ -2,11 +2,11 @@
 // LeetCode 150. 逆波兰表达式求值 (Evaluate Reverse Polish Notation)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/evaluate-reverse-polish-notation/
-// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-24）
-// 一刷写法：栈——遇数字 push、遇算符弹两个算完再 push，除法靠 Java int 除法天然向零截断，O(n) / O(n)
-// 一刷问题：ArrayDeque 当栈用时混用 offerLast（队尾）与 pop（队头）——数字入栈走队尾、算符弹栈走队头，后入的数字反而最后被取，栈序错乱
-// 上次复习写法：ArrayDeque 当栈、push/pop 统一走队头，一次 AC
-// 测试用例：与一刷归档保持一致（示例 3 + 边界 6，含 9999 tokens；覆盖负除正向零截断与 200^4 大中间结果）
+// 刷题日期：2026-09-21
+//
+// 二刷第 4 次 · 一刷 2026-08-24 · 上次复习 2026-09-17（较弱，间隔重置）
+// 一刷思路：栈——遇数字 push、遇到算符弹两个算完再 push；除法用 Java int 除法天然向零截断
+// 测试用例与一刷归档保持一致（示例 3 + 边界 6），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -14,33 +14,31 @@ import java.util.*;
 public class LC0150_EvaluateReversePolishNotation {
 
     // ==== 提交代码开始 ====
-    // 参数 tokens：逆波兰表达式 token 数组（数字或 + - * /）；返回表达式整数值
     public int evalRPN(String[] tokens) {
-        // 栈端点统一走队尾：入栈 offerLast、出栈 pollLast、读栈顶 peekLast，混用另一端会取到旧值
+        // Deque 当栈用：push / pop / peek 必须统一在同一端，不能与 offerLast / pollLast 混用
         Deque<Integer> stack = new ArrayDeque<>();
         for (String token : tokens) {
             if (token.equals("+")) {
-                int a = stack.pollLast();
-                int b = stack.pollLast();
-                stack.offerLast(a + b);
+                int a = stack.pop();
+                int b = stack.pop();
+                stack.push(a + b);
             } else if (token.equals("-")) {
-                // 先弹出的是右操作数 b，后弹出的是左操作数 a：减法和除法的顺序不能颠倒
-                int b = stack.pollLast();
-                int a = stack.pollLast();
-                stack.offerLast(a - b);
+                int b = stack.pop();
+                int a = stack.pop();
+                stack.push(a - b);
             } else if (token.equals("*")) {
-                int b = stack.pollLast();
-                int a = stack.pollLast();
-                stack.offerLast(a * b);
+                int a = stack.pop();
+                int b = stack.pop();
+                stack.push(a * b);
             } else if (token.equals("/")) {
-                int b = stack.pollLast();
-                int a = stack.pollLast();
-                stack.offerLast(a / b);
+                int b = stack.pop();
+                int a = stack.pop();
+                stack.push(a / b);
             } else {
-                stack.offerLast(Integer.parseInt(token));
+                stack.push(Integer.parseInt(token));
             }
         }
-        return stack.peekLast();
+        return stack.peek();
     }
     // ==== 提交代码结束 ====
 

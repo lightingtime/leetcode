@@ -42,20 +42,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-17",
+      "date": "2026-09-21",
       "verdict": "Accepted",
       "testcases": "23/23",
       "runtime_ms": null,
-      "memory_bytes": 45372000,
+      "memory_bytes": 45924000,
       "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）非一次 AC：`ArrayDeque` 当栈用时混了 `offerLast`（队尾）与 `pop`（队头），栈序错乱。\n- 第 1、2 次复习（2026-09-08 / 09-12）：都一次 AC。\n- 本次（第 3 次复习）：**第一次没写对**，又是栈端点混用，只是形态换了——数字入栈 `offerLast`、出栈 `pollLast`、读结果 `peekLast` 都落在队尾，唯独算完的结果用 `push`（队头）写回：四个操作里三个在队尾、一个在队头。\n- 思路与复杂度没变（栈求值，O(n) / O(n)），内存 45.4MB。\n\n**② 错在哪、怎么暴露的（示例 3 前 8 个 token）**\n\n| token | 动作 | 栈内容（队头 … 队尾） |\n| --- | --- | --- |\n| 10, 6, 9, 3 | 依次入队尾 | `[10, 6, 9, 3]` |\n| `+` | 弹 3、9 得 12，`push` 写进队头 | `[12, 10, 6]` |\n| `-11` | 入队尾 | `[12, 10, 6, -11]` |\n| `*` | 弹队尾的 -11、6 → -66（应取 12、-11 → -132） | `[-66, 12, 10]` |\n\n- 本地报 `示例3 期望=22 实际=-44`，就是这个偏差一路放大的结果。\n- 定位手法：把四类操作（入栈 / 出栈 / 写结果 / 读栈顶）分别落在 deque 的哪一端列一遍，找出唯一落在另一端的那个——比逐行读代码快得多。\n\n**③ 掌握度判定**\n- 非一次 AC（本地先失败 → 分析定位 → 改好后才通过）+ 经过提示 → weak；间隔重置，连续较强计数清零。\n\n**④ 下一步提醒**\n- 端点混用已经出现第 2 次（一刷一次、本次一次）。下次用 `Deque` 当栈时，动手前先把四个操作点名到同一端：`offerLast` / `pollLast` / `peekLast`（或统一 `push` / `pop` / `peek`），再写分支。\n- 可迁移点与套路 #53 是同一件事：**写回的位置必须和读取的位置同端**，栈类题通用。",
-      "code": "    // ==== 提交代码开始 ====\n    // 参数 tokens：逆波兰表达式 token 数组（数字或 + - * /）；返回表达式整数值\n    public int evalRPN(String[] tokens) {\n        // 栈端点统一走队尾：入栈 offerLast、出栈 pollLast、读栈顶 peekLast，混用另一端会取到旧值\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String token : tokens) {\n            if (token.equals(\"+\")) {\n                int a = stack.pollLast();\n                int b = stack.pollLast();\n                stack.offerLast(a + b);\n            } else if (token.equals(\"-\")) {\n                // 先弹出的是右操作数 b，后弹出的是左操作数 a：减法和除法的顺序不能颠倒\n                int b = stack.pollLast();\n                int a = stack.pollLast();\n                stack.offerLast(a - b);\n            } else if (token.equals(\"*\")) {\n                int b = stack.pollLast();\n                int a = stack.pollLast();\n                stack.offerLast(a * b);\n            } else if (token.equals(\"/\")) {\n                int b = stack.pollLast();\n                int a = stack.pollLast();\n                stack.offerLast(a / b);\n            } else {\n                stack.offerLast(Integer.parseInt(token));\n            }\n        }\n        return stack.peekLast();\n    }\n    // ==== 提交代码结束 ====",
+      "notes": "**① 与上一轮对比**\n- 第 3 次复习（2026-09-17）较弱：第一次没写对，又是 ArrayDeque 端点混用——数字入栈、出栈、读结果都落在队尾（offerLast / pollLast / peekLast），唯独算完的结果用 push 写回队头，四个操作三个在一端、一个在另一端，示例 3 算出 -44。\n- 本次（第 4 次复习）：端点收敛到一端，数字与运算结果全部走 push / pop / peek（队头当栈顶），没有再混入队尾 API。\n- 减除法的操作数顺序沿用「先弹右操作数 b、再弹左操作数 a，然后 a 运算符 b」，与第 1、2 次复习一致。\n- 思路与复杂度不变：栈求值，O(n) / O(n)。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 后缀表达式里算符永远作用于它前面两个已经算好的操作数，天然 LIFO，栈模型是条件反射，这一层从第 1 次复习起就稳。\n- 真正的风险点一直是「Deque 的四个操作落在哪一端」。这次动手前先把 API 定死成一套 push / pop / peek，再写分支，没有混用 offerLast / pollLast——正是 09-17 复盘留下的那条提醒。\n- 操作数左右顺序靠命名固定（先弹 b 再弹 a，写 a 运算符 b），没有出错。\n\n**③ 掌握度判定依据**\n- 本轮全程无提示、无探讨；本地 9 组用例（3 示例 + 6 边界）首次运行全绿，力扣一次提交 Accepted（23/23）→ 较强。\n\n**④ 下一步提醒**\n- 「端点统一」已经连续两轮写在复盘里，可以固化成栈类题的前置动作：动手前先把入栈 / 出栈 / 写回 / 读顶四个操作点名到同一端。\n- 同族可顺带复习：LC0224 基本计算器、LC0227 基本计算器 II、LC0394 字符串解码，它们比本题多出运算符优先级与括号层次。",
+      "code": "public int evalRPN(String[] tokens) {\n        // Deque 当栈用：push / pop / peek 必须统一在同一端，不能与 offerLast / pollLast 混用\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String token : tokens) {\n            if (token.equals(\"+\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a + b);\n            } else if (token.equals(\"-\")) {\n                int b = stack.pop();\n                int a = stack.pop();\n                stack.push(a - b);\n            } else if (token.equals(\"*\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a * b);\n            } else if (token.equals(\"/\")) {\n                int b = stack.pop();\n                int a = stack.pop();\n                stack.push(a / b);\n            } else {\n                stack.push(Integer.parseInt(token));\n            }\n        }\n        return stack.peek();\n    }",
       "prev_code": "public int evalRPN(String[] tokens) {\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String token : tokens) {\n            if (token.equals(\"+\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a + b);\n            } else if (token.equals(\"-\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(b - a);\n            } else if (token.equals(\"*\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(a * b);\n            } else if (token.equals(\"/\")) {\n                int a = stack.pop();\n                int b = stack.pop();\n                stack.push(b / a);\n            } else {\n                stack.push(Integer.parseInt(token));\n            }\n        }\n        return stack.pop();\n    }\n",
-      "mastery": "weak",
-      "pass": 3
+      "mastery": "strong",
+      "pass": 4
     }
   ],
   "reviews": [
@@ -97,6 +97,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）非一次 AC：`ArrayDeque` 当栈用时混了 `offerLast`（队尾）与 `pop`（队头），栈序错乱。\n- 第 1、2 次复习（2026-09-08 / 09-12）：都一次 AC。\n- 本次（第 3 次复习）：**第一次没写对**，又是栈端点混用，只是形态换了——数字入栈 `offerLast`、出栈 `pollLast`、读结果 `peekLast` 都落在队尾，唯独算完的结果用 `push`（队头）写回：四个操作里三个在队尾、一个在队头。\n- 思路与复杂度没变（栈求值，O(n) / O(n)），内存 45.4MB。\n\n**② 错在哪、怎么暴露的（示例 3 前 8 个 token）**\n\n| token | 动作 | 栈内容（队头 … 队尾） |\n| --- | --- | --- |\n| 10, 6, 9, 3 | 依次入队尾 | `[10, 6, 9, 3]` |\n| `+` | 弹 3、9 得 12，`push` 写进队头 | `[12, 10, 6]` |\n| `-11` | 入队尾 | `[12, 10, 6, -11]` |\n| `*` | 弹队尾的 -11、6 → -66（应取 12、-11 → -132） | `[-66, 12, 10]` |\n\n- 本地报 `示例3 期望=22 实际=-44`，就是这个偏差一路放大的结果。\n- 定位手法：把四类操作（入栈 / 出栈 / 写结果 / 读栈顶）分别落在 deque 的哪一端列一遍，找出唯一落在另一端的那个——比逐行读代码快得多。\n\n**③ 掌握度判定**\n- 非一次 AC（本地先失败 → 分析定位 → 改好后才通过）+ 经过提示 → weak；间隔重置，连续较强计数清零。\n\n**④ 下一步提醒**\n- 端点混用已经出现第 2 次（一刷一次、本次一次）。下次用 `Deque` 当栈时，动手前先把四个操作点名到同一端：`offerLast` / `pollLast` / `peekLast`（或统一 `push` / `pop` / `peek`），再写分支。\n- 可迁移点与套路 #53 是同一件事：**写回的位置必须和读取的位置同端**，栈类题通用。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-21",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "23/23",
+      "approach": "栈：遇数字 push、遇算符弹两个算完再 push，除向零截断用 Java int 除法",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 第 3 次复习（2026-09-17）较弱：第一次没写对，又是 ArrayDeque 端点混用——数字入栈、出栈、读结果都落在队尾（offerLast / pollLast / peekLast），唯独算完的结果用 push 写回队头，四个操作三个在一端、一个在另一端，示例 3 算出 -44。\n- 本次（第 4 次复习）：端点收敛到一端，数字与运算结果全部走 push / pop / peek（队头当栈顶），没有再混入队尾 API。\n- 减除法的操作数顺序沿用「先弹右操作数 b、再弹左操作数 a，然后 a 运算符 b」，与第 1、2 次复习一致。\n- 思路与复杂度不变：栈求值，O(n) / O(n)。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 后缀表达式里算符永远作用于它前面两个已经算好的操作数，天然 LIFO，栈模型是条件反射，这一层从第 1 次复习起就稳。\n- 真正的风险点一直是「Deque 的四个操作落在哪一端」。这次动手前先把 API 定死成一套 push / pop / peek，再写分支，没有混用 offerLast / pollLast——正是 09-17 复盘留下的那条提醒。\n- 操作数左右顺序靠命名固定（先弹 b 再弹 a，写 a 运算符 b），没有出错。\n\n**③ 掌握度判定依据**\n- 本轮全程无提示、无探讨；本地 9 组用例（3 示例 + 6 边界）首次运行全绿，力扣一次提交 Accepted（23/23）→ 较强。\n\n**④ 下一步提醒**\n- 「端点统一」已经连续两轮写在复盘里，可以固化成栈类题的前置动作：动手前先把入栈 / 出栈 / 写回 / 读顶四个操作点名到同一端。\n- 同族可顺带复习：LC0224 基本计算器、LC0227 基本计算器 II、LC0394 字符串解码，它们比本题多出运算符优先级与括号层次。"
     }
   ]
 }
