@@ -17,23 +17,31 @@
   "notes": "搜索二维矩阵 II：从右上角出发，大于 target 左移、小于下移，O(m+n)/O(1)，一次 Accepted（130/130）",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "二维有序矩阵从右上角消行消列",
+      "text": "行列分别单调时，从右上角或左下角出发，每次比较可安全排除一整行或一整列；适用于需要在矩阵中高效查找目标且不能把整体视作一维有序数组的场景。",
+      "category": "数组与矩阵",
+      "problem": "search-a-2d-matrix-ii",
+      "date": "2026-09-22"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "130/130",
       "runtime_ms": null,
-      "memory_bytes": 48780000,
+      "memory_bytes": 48552000,
       "approach": "右上角消行消列",
       "time_complexity": "O(m+n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路一致（右上角出发的消行消列）。\n\n**关键点都处理对了**：① 起点 (0, n-1) 是右上角——它是所在行的最大值、所在列的最小值，所以 `matrix[x][y] > target` 时 y-- 能一次排除整列，`< target` 时 x++ 能一次排除整行；② 空矩阵与空行先判，避免 `matrix[0]` 越界；③ 命中就返回 true，越界退出循环后返回 false。本地示例 2 + 边界 16（空矩阵/空行/单元素/单行/单列/极值/四个角/负数/重复值）全过，一次提交 Accepted（130/130）。\n\n**可精简点**：循环条件里 `x >= 0` 与 `y < n` 是冗余的——x 从 0 出发只增、y 从 n-1 出发只减，永远不会反向越界，`while (x < m && y >= 0)` 就够。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix.length == 0 || matrix[0].length == 0) {\n            return false;\n        }\n        int m = matrix.length;\n        int n = matrix[0].length;\n\n        int x = 0, y = n - 1;\n        while (x >= 0 && x < m && y >= 0 && y < n) {\n            if (matrix[x][y] == target) {\n                return true;\n            } else if (matrix[x][y] > target) {\n                y--;\n            } else {\n                x++;\n            }\n        }\n        return false;\n    }",
+      "notes": "### 与上一轮对比\n仍沿用一刷的右上角消行消列思路，复杂度维持 `O(m+n)` / `O(1)`；本次实现没有引入额外变量或结构。\n\n### 回想情况\n能直接回忆出从右上角开始比较，通过大小关系消去整行或整列，没有查看旧写法或中途讨论。\n\n### 掌握度依据\n本次首交即 Accepted，130/130 通过，全程无提示与额外探讨，判定为较强。\n\n### 下一步\n保持先判断当前角点与目标值的大小关系，再检查退出条件和单行/单列边界的习惯。",
+      "code": "public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix.length == 0 || matrix[0].length == 0) {\n            return false;\n        }\n        int m = matrix.length;\n        int n = matrix[0].length;\n\n        int x = 0, y = n - 1;\n        while (x >= 0 && x < m && y >= 0 && y < n) {\n            if (matrix[x][y] == target) {\n                return true;\n            } else if (matrix[x][y] > target) {\n                y--;\n            } else {\n                x++;\n            }\n        }\n        return false;\n    }",
       "prev_code": "public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix.length == 0 || matrix[0].length == 0) {\n            return false;\n        }\n        int m = matrix.length;\n        int n = matrix[0].length;\n\n        int x = 0, y = n - 1;\n        while (x >= 0 && x < m && y >= 0 && y < n) {\n            if (matrix[x][y] == target) {\n                return true;\n            } else if (matrix[x][y] > target) {\n                y--;\n            } else {\n                x++;\n            }\n        }\n        return false;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +61,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**与一刷对比**：思路一致（右上角出发的消行消列）。\n\n**关键点都处理对了**：① 起点 (0, n-1) 是右上角——它是所在行的最大值、所在列的最小值，所以 `matrix[x][y] > target` 时 y-- 能一次排除整列，`< target` 时 x++ 能一次排除整行；② 空矩阵与空行先判，避免 `matrix[0]` 越界；③ 命中就返回 true，越界退出循环后返回 false。本地示例 2 + 边界 16（空矩阵/空行/单元素/单行/单列/极值/四个角/负数/重复值）全过，一次提交 Accepted（130/130）。\n\n**可精简点**：循环条件里 `x >= 0` 与 `y < n` 是冗余的——x 从 0 出发只增、y 从 n-1 出发只减，永远不会反向越界，`while (x < m && y >= 0)` 就够。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "approach": "右上角消行消列",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n仍沿用一刷的右上角消行消列思路，复杂度维持 `O(m+n)` / `O(1)`；本次实现没有引入额外变量或结构。\n\n### 回想情况\n能直接回忆出从右上角开始比较，通过大小关系消去整行或整列，没有查看旧写法或中途讨论。\n\n### 掌握度依据\n本次首交即 Accepted，130/130 通过，全程无提示与额外探讨，判定为较强。\n\n### 下一步\n保持先判断当前角点与目标值的大小关系，再检查退出条件和单行/单列边界的习惯。"
     }
   ]
 }

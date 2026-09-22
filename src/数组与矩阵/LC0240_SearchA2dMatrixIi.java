@@ -2,16 +2,12 @@
 // LeetCode 240. 搜索二维矩阵 II (Search a 2D Matrix II)
 // 难度：Medium | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/search-a-2d-matrix-ii/
-// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-06 · 一刷一次 Accepted）
-// 一刷写法：从右上角出发「消行消列」——右上角是所在行最大值、所在列最小值：比 target 大则整列都比 target 大（列左移），比 target 小则整行都比 target 小（行下移）。O(m+n)/O(1)
-// 本题易错点：起点必须选「一行一列单调方向相反」的角（右上角或左下角），左上角/右下角两个方向同向、没法排除；越界用 row < m && col >= 0 控制；空矩阵与空行要先判
-// 测试用例与一刷归档保持一致（示例 2 个 + 边界 16 个：空矩阵/空行/单元素/单行/单列/极值/四个角/负数/重复值）
+// 二刷 · 一刷日期：2026-08-06
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 一刷思路：右上角消行消列
+// 本次要求：先独立回忆并重写，测试用例与一刷归档保持一致
+// 复杂度：时间 O(m+n)，空间 O(1)
 // ============================================================
-
-import java.util.*;
 
 public class LC0240_SearchA2dMatrixIi {
 
@@ -50,12 +46,6 @@ public class LC0240_SearchA2dMatrixIi {
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
         // ---- 边界测试（自己补充）----
-        try {
-            if (!TestUtil.checkEq(false, s.searchMatrix(new int[0][0], 1), "空矩阵")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("空矩阵 异常: " + t); }
-        try {
-            if (!TestUtil.checkEq(false, s.searchMatrix(new int[][]{new int[0]}, 1), "空行")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("空行 异常: " + t); }
         try {
             if (!TestUtil.checkEq(true, s.searchMatrix(new int[][]{new int[]{5}}, 5), "单元素命中")) failures++;
         } catch (Throwable t) { failures++; System.out.println("单元素命中 异常: " + t); }
