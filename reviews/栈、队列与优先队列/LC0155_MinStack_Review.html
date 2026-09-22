@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>155. 最小栈 (Min Stack)</h1><p>&gt; <a href="https://leetcode.cn/problems/min-stack/" rel="noopener">https://leetcode.cn/problems/min-stack/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、设计</p><h2>题目描述</h2><p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</p><p>实现 MinStack 类:</p><p>MinStack() 初始化堆栈对象。</p><p>void push(int value) 将元素 value 推入堆栈。</p><p>void pop() 删除堆栈顶部的元素。</p><p>int top() 获取堆栈顶部的元素。</p><p>int getMin() 获取堆栈中的最小元素。</p><p>示例 1:</p><p>输入：</p><p>["MinStack","push","push","push","getMin","pop","top","getMin"]</p><p>[[],[-2],[0],[-3],[],[],[],[]]</p><p>输出：</p><p>[null,null,null,null,-3,null,0,-2]</p><p>解释：</p><p>MinStack minStack = new MinStack();</p><p>minStack.push(-2);</p><p>minStack.push(0);</p><p>minStack.push(-3);</p><p>minStack.getMin(); --&gt; 返回 -3.</p><p>minStack.pop();</p><p>minStack.top(); --&gt; 返回 0.</p><p>minStack.getMin(); --&gt; 返回 -2.</p><p>提示：</p><p>-231 31 - 1</p><p>pop、top 和 getMin 操作总是在 非空栈 上调用</p><p>push, pop, top, and getMin最多被调用 3 * 104 次</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-22 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（45/45）｜ 一次 AC ｜ 单栈+Node（值+当前最小） ｜ O(1) 每次操作 · O(n)</p>
+      <div class="review-note md"><ul><li>与上次复习相比：仍沿用“单栈+Node（值+当前最小）”，思路和 O(1)/O(n) 复杂度未变；本次只移除了无参节点构造器，并把 <code>cur</code> 命名为 <code>val</code>，状态定义更直接。</li><li>这次能立即想起来：一刷形成的关键不变量是每个节点保存“入栈时的当前最小”，<code>pop</code> 后前一个节点自然恢复最小值，因此没有走扫描思路。</li><li>掌握度：本次一到就提交，第一次提交 45/45 Accepted，过程中没有看提示或讨论，判为较强。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 单栈+Node（值+当前最小） ｜ O(1) · O(n)</p>
       <div class="review-note md"><p><strong>与一刷对比</strong>：思路一致（单栈 + 每个节点自带「入栈时的最小值」），写法与归档版本基本相同。</p><p><strong>关键点都处理对了</strong>：① 每个操作 O(1)——push 时算好 <code>min(value, 栈顶.min)</code> 存进新节点，getMin 直接读栈顶的 min 字段；② 空栈的首个节点用 <code>new Node(value, value)</code>（此时没有栈顶可参考），之后才有 min 的递推；③ pop 直接弹顶层即可，最小值随节点一起回退，不会出现「最小值提前丢失」的两栈同步问题（这也是选单栈写法的好处）。本地示例 1 + 边界 6（单元素与后压更大值/新最小后 pop 回退/重复最小值/降序压栈逐层回退/升序压栈最小在底/int 极值）全过，一次提交 Accepted（45/45）。</p><p><strong>可精简点</strong>：① <code>Node</code> 里那个无参构造器没人用，可以删；② 字段建议写成 <code>private final Deque&lt;Node&gt; stack</code>（构造器里唯一赋值、外部不需要访问）；③ <code>push</code> 的 if/else 可以合并成一句三元：空栈时 <code>stack.peek()</code> 不可用，所以要么保留分支、要么用最后一次 min 变量兜住。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
@@ -38,17 +42,17 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>单栈+Node（值+当前最小）</b></li>
-        <li><span>复杂度</span><b>O(1) · O(n)</b></li>
+        <li><span>复杂度</span><b>O(1) 每次操作 · O(n)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单栈+Node（值+当前最小）</h3>
-    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.5 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0155_MinStack.java · 单栈+Node（值+当前最小）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">MinStack</span> {
+    <p><span class="chip">时间 O(1) 每次操作</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 96.3 MB</span><span class="chip">用例 45/45</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0155_MinStack.java · 单栈+Node（值+当前最小）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">MinStack</span> {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">Node</span>&gt; stack;
         <span class="tk-k">public</span> <span class="tk-t">MinStack</span>() {
             stack = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
@@ -64,22 +68,18 @@
             stack.<span class="tk-f">pop</span>();
         }
         <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">top</span>() {
-            <span class="tk-k">return</span> stack.<span class="tk-f">peek</span>().cur;
+            <span class="tk-k">return</span> stack.<span class="tk-f">peek</span>().val;
         }
         <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">getMin</span>() {
             <span class="tk-k">return</span> stack.<span class="tk-f">peek</span>().min;
         }
     }
-
     <span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">Node</span> {
-        <span class="tk-k">int</span> cur;
+        <span class="tk-k">int</span> val;
         <span class="tk-k">int</span> min;
 
-        <span class="tk-k">public</span> <span class="tk-t">Node</span>() {
-        }
-
-        <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-k">int</span> cur, <span class="tk-k">int</span> min) {
-            <span class="tk-k">this</span>.cur = cur;
+        <span class="tk-k">public</span> <span class="tk-t">Node</span>(<span class="tk-k">int</span> val, <span class="tk-k">int</span> min) {
+            <span class="tk-k">this</span>.val = val;
             <span class="tk-k">this</span>.min = min;
         }
     }</pre></div>
@@ -123,7 +123,7 @@
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：O(1) 取最小值。普通栈做不到，做法是让每个元素入栈时记录「当时的栈内最小值」，空间换时间。</p><p>关键设计：栈内元素是 (cur, min) 二元组：push 时 min=Math.min(value, 当前栈顶 min)，栈空时 min=value；getMin 直接读栈顶的 min。因为 min 是入栈时刻的快照，元素弹出后历史最小值自然保留，不需要额外结构。</p><p>边界：题目约定不会对空栈调用 top/pop/getMin；连续 push 递减序列后逐次 pop，min 要能正确回退到上一状态；重复最小值不影响。</p><p>复杂度：push/pop/top/getMin 全部 O(1) 时间、O(n) 空间，满足题目全部要求。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>45/45 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>套路沉淀</h2><div class="card md"><h3>单栈同步维护最小值</h3><p>压栈节点同时保存当前值和该节点入栈时的全局最小值；弹出节点即恢复前一最小值。适合需要在 LIFO 过程中维护可回退聚合量的问题。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
