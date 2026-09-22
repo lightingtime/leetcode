@@ -765,12 +765,12 @@
       "title": "不同路径",
       "category": "动态规划",
       "first_pass_date": "2026-08-09",
-      "last_review_date": "2026-09-07",
-      "next_review_date": "2026-09-22",
-      "interval_days": 15,
-      "review_count": 3,
+      "last_review_date": "2026-09-22",
+      "next_review_date": "2026-11-01",
+      "interval_days": 40,
+      "review_count": 4,
       "mastery": "strong",
-      "consecutive_strong": 3,
+      "consecutive_strong": 4,
       "mastered": false
     },
     "word-break": {

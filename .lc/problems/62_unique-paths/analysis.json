@@ -34,20 +34,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-02",
+      "date": "2026-09-22",
       "verdict": "Accepted",
       "testcases": "64/64",
       "runtime_ms": null,
-      "memory_bytes": 42420000,
+      "memory_bytes": 42372000,
       "approach": "一维滚动 DP",
       "time_complexity": "O(m*n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-09）：一维滚动 DP O(mn)/O(n)，非一次 AC。\n- 复习①（2026-09-01）：同思路一次 AC，较强。\n- 本次（第 2 次复习）：独立写出同款滚动 DP——Arrays.fill(dp,1) 铺第一行，双层循环 i=1..m-1、j=1..n-1 执行 dp[j] = dp[j-1] + dp[j]，返回 dp[n-1]；本地 9 组全绿 + 力扣 64/64 一次 Accepted。\n\n**② 为什么想起来**\n- 网格路径 DP 套路：dp[i][j] = 上 + 左；滚动到一维后，dp[j] 在更新前还是上一行值（上），dp[j-1] 已是本行新值（左），dp[j] += dp[j-1] 恰好等于 上+左，无需额外变量。\n- 第一行、第一列都只有 1 种走法，Arrays.fill(dp,1) 一步覆盖，循环从 i=1、j=1 起即可。\n\n**③ 掌握度判定**\n- 本次一次提交 Accepted（64/64）、全程无探讨 → strong；连续较强 +1，间隔 ×2.5 拉长。\n\n**④ 下一步提醒**\n- 同骨架滚动 DP：LC63 带障碍不同路径（障碍处 dp=0）、LC64 最小路径和、LC120 三角形最小路径和。\n- 组合数解法 C(m+n-2, m-1) 时间 O(min(m,n)) 可作了解，中间值需 long（本题结果不超 int）。",
-      "code": "public int uniquePaths(int m, int n) {\n    int[] dp = new int[n];\n    Arrays.fill(dp, 1);\n    for (int i = 1; i < m; i++) {\n        for (int j = 1; j < n; j++) {\n            dp[j] = dp[j - 1] + dp[j];\n        }\n    }\n    return dp[n - 1];\n}",
+      "notes": "**① 与上一轮对比**\n- 上次复习（2026-09-07）与本次都采用一维滚动 DP，时间 O(m*n)、空间 O(n)，代码结构与复杂度均未变化。\n- 本次一次提交 Accepted（64/64），内存 42.37MB，与上次约 42.62MB 基本持平。\n\n**② 为什么想起来**\n- 网格路径属于线性 DP：到达某格只能来自上格或左格。按行从左到右滚动时，dp[j] 更新前代表上格，dp[j-1] 已是本行左格，因此 dp[j] = dp[j-1] + dp[j] 能保持正确语义。\n- Arrays.fill(dp, 1) 同时覆盖第一行与第一列全为 1 的边界；外层从 i=1 开始，避免再把已表示第一行的状态重复推进一次。\n\n**③ 掌握度判定**\n- 一次提交 Accepted，全程无提示或探讨，因此判定为 strong。\n\n**④ 下一步提醒**\n- 可尝试组合数 C(m+n-2, m-1)，把时间降到 O(min(m,n))，但中间乘法需要用 long 防溢出。\n- 同骨架可顺带复习 LC63 带障碍不同路径与 LC64 最小路径和。",
+      "code": "public int uniquePaths(int m, int n) {\n        int[] dp = new int[n];\n        Arrays.fill(dp, 1);\n        for (int i = 1; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                dp[j] = dp[j - 1] + dp[j];\n            }\n        }\n        return dp[n - 1];\n    }",
       "prev_code": "public int uniquePaths(int m, int n) {\n        int[] dp = new int[n];\n        dp[0] = 1;\n        for (int i = 0; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                dp[j] = dp[j - 1] + dp[j];\n            }\n        }\n        return dp[n - 1];\n    }\n",
       "mastery": "strong",
-      "pass": 2
+      "pass": 4
     }
   ],
   "hints": [
@@ -92,6 +92,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 复习②（2026-09-02）：一维滚动 DP，一次 AC 较强。\n- 本次（第 3 次复习）：独立写出同款滚动 DP——`Arrays.fill(dp,1)` 铺第一行，双层循环 `dp[j] = dp[j-1] + dp[j]`，返回 `dp[n-1]`；本地测试全绿 + 力扣 64/64 一次 Accepted，内存 42.6MB 与上轮持平。代码与上轮一致（无命名/结构改动），同思路合并不新增条目。\n\n**② 为什么想起来**\n- 网格路径 DP 套路：`dp[i][j] = 上 + 左`；滚动到一维后，`dp[j]` 更新前仍是上一行的值（上），`dp[j-1]` 已是本行新值（左），`dp[j] += dp[j-1]` 恰好实现 上+左，不需要额外变量。\n- 第一行、第一列都只有 1 种走法，`Arrays.fill(dp,1)` 一步覆盖，双层循环从 `i=1`、`j=1` 起即可——初始化与循环边界这次没有犹豫直接写对。\n\n**③ 掌握度判定**\n- 一次提交 Accepted（64/64）、全程无探讨 → strong；连续较强 3 次，间隔 ×2.5 +2 拉长。\n\n**④ 下一步提醒**\n- 若想换写法：组合数 `C(m+n-2, m-1)` 可把时间压到 O(min(m,n))（中间值用 long），是这条路径数问题的数学最优解，可作为进阶尝试。\n- 同骨架滚动 DP：LC63 带障碍不同路径（障碍处 dp=0）、LC64 最小路径和，适合顺带复习。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "64/64",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(m*n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**\n- 上次复习（2026-09-07）与本次都采用一维滚动 DP，时间 O(m*n)、空间 O(n)，代码结构与复杂度均未变化。\n- 本次一次提交 Accepted（64/64），内存 42.37MB，与上次约 42.62MB 基本持平。\n\n**② 为什么想起来**\n- 网格路径属于线性 DP：到达某格只能来自上格或左格。按行从左到右滚动时，dp[j] 更新前代表上格，dp[j-1] 已是本行左格，因此 dp[j] = dp[j-1] + dp[j] 能保持正确语义。\n- Arrays.fill(dp, 1) 同时覆盖第一行与第一列全为 1 的边界；外层从 i=1 开始，避免再把已表示第一行的状态重复推进一次。\n\n**③ 掌握度判定**\n- 一次提交 Accepted，全程无提示或探讨，因此判定为 strong。\n\n**④ 下一步提醒**\n- 可尝试组合数 C(m+n-2, m-1)，把时间降到 O(min(m,n))，但中间乘法需要用 long 防溢出。\n- 同骨架可顺带复习 LC63 带障碍不同路径与 LC64 最小路径和。"
     }
   ]
 }
