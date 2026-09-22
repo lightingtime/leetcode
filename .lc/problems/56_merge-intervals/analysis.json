@@ -15,29 +15,42 @@
   "time_complexity": "O(n log n)",
   "space_complexity": "O(n)",
   "notes": "排序后单遍合并，边界覆盖完整（空/单元素/首尾相接/包含/大数）",
-  "code_notes": [],
-  "mistakes": [],
-  "patterns": [],
-  "submissions": [
+  "mistakes": [
     {
-      "date": "2026-09-18",
-      "verdict": "Accepted",
-      "testcases": "",
-      "runtime_ms": null,
-      "memory_bytes": 49708000,
-      "approach": "排序+单遍合并",
-      "time_complexity": "O(n log n)",
-      "space_complexity": "O(n)",
-      "optimal": true,
-      "notes": "**与一刷对比**：思路一致（按左端点排序 + 单遍合并），用 List 收集结果、`toArray(new int[0][])` 收口。\n\n**关键点都处理对了**：① 排序键取左端点 `a[0]`，排完只需和「结果集最后一个区间」比较；② 相交判据写的是 `last[1] >= interval[0]`——用了 >= 而不是 >，所以首尾相接的 [1,2]、[2,3] 会被并成 [1,3]（本题正是这么要求的）；③ 合并时右端点只在 `last[1] < interval[1]` 时才更新，等价于取 max，被包含的区间（[1,10]、[2,3]）不会把右端点改小。本地示例 3 + 边界 7（空输入/单元素/全相同/大数/包含/首尾相接/互不重叠）全过，一次提交 Accepted（172/172）。\n\n**可精简点**：`if (last[1] < interval[1]) last[1] = interval[1];` 可以直接写成 `last[1] = Math.max(last[1], interval[1]);`；`list.isEmpty()` 的分支也可以用「先放入第一个区间、循环从下标 1 开始」消掉。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));\n        List<int[]> list = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (list.isEmpty()) {\n                list.add(new int[] {interval[0], interval[1]});\n            } else {\n                int[] last = list.get(list.size() - 1);\n                if (last[1] >= interval[0]) {\n                    if (last[1] < interval[1]) {\n                        last[1] = interval[1];\n                    }\n                } else {\n                    list.add(new int[] {interval[0], interval[1]});\n                }\n            }\n        }\n        return list.toArray(new int[0][]);\n    }",
-      "prev_code": "public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));\n        List<int[]> list = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (list.isEmpty()) {\n                list.add(new int[]{interval[0], interval[1]});\n            } else {\n                int[] last = list.get(list.size() - 1);\n                if (last[1] >= interval[0]) {\n                    if (last[1] < interval[1]) {\n                        last[1] = interval[1];\n                    }\n                } else {\n                    list.add(new int[]{interval[0], interval[1]});\n                }\n            }\n        }\n        return list.toArray(new int[0][]);\n    }\n",
-      "mastery": "strong",
-      "pass": 1
+      "habit": "合并重叠区间时直接覆盖当前右端点，未取两者的最大值，遇到被包含区间会错误缩小合并范围",
+      "count": 1
     }
   ],
   "hints": [
     "矩阵题先想如何用行列信息/排序/原地操作降维。"
+  ],
+  "code_notes": [],
+  "patterns": [
+    {
+      "title": "合并区间：维护覆盖终点",
+      "text": "排序后单遍合并时，当前合并区间的终点表示已经覆盖到的最右位置。处理新区间不能只沿用新区间终点，必须考虑旧区间仍向右延伸的情况；用 [[1,10],[2,3],[4,5]] 可逐层检查终点是否会错误回退。",
+      "category": "数组与矩阵",
+      "problem": "merge-intervals",
+      "date": "2026-09-22"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-09-22",
+      "verdict": "Accepted",
+      "testcases": "172/172",
+      "runtime_ms": null,
+      "memory_bytes": 49452000,
+      "approach": "排序+单遍合并",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n仍沿用一刷和上次复习的「按左端点排序 + 单遍合并」，复杂度保持 O(n log n)/O(n)；本轮右端点更新写成条件赋值，逻辑等价于取 max。\n\n### 这次如何规避旧错\n一刷复盘已提醒「合并右端点取 max」；本次起初在包含区间上漏掉这一步，本地用例 [[1,10],[2,3],[4,5]] 暴露后自行补回判断。\n\n### 掌握度依据\n未请求解题思路提示，修正后力扣首次提交 172/172 一次 AC，判定较强。\n\n### 下一步提醒\n条件赋值可压缩为 Math.max，但只是写法精简；后续继续抓住排序后只需比较最后一个合并区间的特性。",
+      "code": "public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));\n        List<int[]> list = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (list.isEmpty()) {\n                list.add(new int[] {interval[0], interval[1]});\n            } else {\n                int[] last = list.get(list.size() - 1);\n                if (last[1] >= interval[0]) {\n                    if (last[1] < interval[1]) {\n                        last[1] = interval[1];\n                    }\n                } else {\n                    list.add(new int[] {interval[0], interval[1]});\n                }\n            }\n        }\n        return list.toArray(new int[0][]);\n    }",
+      "prev_code": "public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));\n        List<int[]> list = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (list.isEmpty()) {\n                list.add(new int[]{interval[0], interval[1]});\n            } else {\n                int[] last = list.get(list.size() - 1);\n                if (last[1] >= interval[0]) {\n                    if (last[1] < interval[1]) {\n                        last[1] = interval[1];\n                    }\n                } else {\n                    list.add(new int[]{interval[0], interval[1]});\n                }\n            }\n        }\n        return list.toArray(new int[0][]);\n    }\n",
+      "mastery": "strong",
+      "pass": 2
+    }
   ],
   "approach_detail": "问题本质：把重叠区间合并。区间按 start 排序后，问题变成顺序扫描：当前区间与上一个合并段重叠就扩展，否则开新段。\n关键设计：排序后遍历，用 list 存合并结果；新区间与最后一个重叠（last[1] >= interval[0]，含端点相接）时，end 更新为 max(last[1], interval[1])——必须取 max 而不能直接赋值，因为排序只保证 start 有序，后一个区间可能完全被包含（end 更小）。不重叠则直接追加新区间。\n边界：空数组；单个区间；完全包含（如 [1,10] 与 [2,3]）；端点相接 [1,2]+[2,3] 要合并；多个区间同 start 时按 end 正确合并。\n复杂度：O(n log n) 时间（排序主导）、O(log n) 排序栈空间（不计输出），最优。",
   "reviews": [
@@ -53,6 +66,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**与一刷对比**：思路一致（按左端点排序 + 单遍合并），用 List 收集结果、`toArray(new int[0][])` 收口。\n\n**关键点都处理对了**：① 排序键取左端点 `a[0]`，排完只需和「结果集最后一个区间」比较；② 相交判据写的是 `last[1] >= interval[0]`——用了 >= 而不是 >，所以首尾相接的 [1,2]、[2,3] 会被并成 [1,3]（本题正是这么要求的）；③ 合并时右端点只在 `last[1] < interval[1]` 时才更新，等价于取 max，被包含的区间（[1,10]、[2,3]）不会把右端点改小。本地示例 3 + 边界 7（空输入/单元素/全相同/大数/包含/首尾相接/互不重叠）全过，一次提交 Accepted（172/172）。\n\n**可精简点**：`if (last[1] < interval[1]) last[1] = interval[1];` 可以直接写成 `last[1] = Math.max(last[1], interval[1]);`；`list.isEmpty()` 的分支也可以用「先放入第一个区间、循环从下标 1 开始」消掉。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "172/172",
+      "approach": "排序+单遍合并",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n仍沿用一刷和上次复习的「按左端点排序 + 单遍合并」，复杂度保持 O(n log n)/O(n)；本轮右端点更新写成条件赋值，逻辑等价于取 max。\n\n### 这次如何规避旧错\n一刷复盘已提醒「合并右端点取 max」；本次起初在包含区间上漏掉这一步，本地用例 [[1,10],[2,3],[4,5]] 暴露后自行补回判断。\n\n### 掌握度依据\n未请求解题思路提示，修正后力扣首次提交 172/172 一次 AC，判定较强。\n\n### 下一步提醒\n条件赋值可压缩为 Math.max，但只是写法精简；后续继续抓住排序后只需比较最后一个合并区间的特性。"
     }
   ]
 }

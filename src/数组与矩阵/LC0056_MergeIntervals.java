@@ -2,13 +2,10 @@
 // LeetCode 56. 合并区间 (Merge Intervals)
 // 难度：Medium | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/merge-intervals/
-// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-06 · 一刷一次 Accepted）
-// 一刷写法：按左端点排序 + 单遍合并——排序后相邻区间只可能重叠/相接或完全分离；用一个「当前区间」依次比较，能并就更新右端点，不能并就落袋再换新的。O(n log n)/O(n)
-// 本题易错点（错误习惯库里这题暂为干净）：排序键是左端点；首尾相接（[1,2] 与 [2,3]）在本题算重叠，比较要用 <= 而非 <；合并右端点取两段的 max 而不是直接取后一段；结果用 List 收集，避免预分配大小
-// 测试用例与一刷归档保持一致（示例 3 个 + 边界 7 个：空输入/单元素/全相同/大数/包含/首尾相接/互不重叠）
+// 复习日期：2026-09-22（第 2 次复习 · 一刷 2026-08-06）
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
+// 思路：按左端点排序后单遍合并，重叠时把当前区间右端点扩展到两段的较大值。
+// 复杂度：时间 O(n log n)，空间 O(n)
 // ============================================================
 
 import java.util.*;
@@ -52,10 +49,7 @@ public class LC0056_MergeIntervals {
             if (!TestUtil.checkEq(new int[][]{new int[]{1, 7}}, s.merge(new int[][]{new int[]{4, 7}, new int[]{1, 4}}), "示例3")) failures++;
         } catch (Throwable t) { failures++; System.out.println("示例3 异常: " + t); }
 
-        // ---- 边界测试（自己补充）----
-        try {
-            if (!TestUtil.checkEq(new int[0][0], s.merge(new int[0][0]), "空输入")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("空输入 异常: " + t); }
+        // ---- 边界测试（按题目约束）----
         try {
             if (!TestUtil.checkEq(new int[][]{new int[]{1, 3}}, s.merge(new int[][]{new int[]{1, 3}}), "单元素")) failures++;
         } catch (Throwable t) { failures++; System.out.println("单元素 异常: " + t); }
