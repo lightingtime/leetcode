@@ -2,13 +2,8 @@
 // LeetCode 21. 合并两个有序链表 (Merge Two Sorted Lists)
 // 难度：Easy | 分类：链表
 // 链接：https://leetcode.cn/problems/merge-two-sorted-lists/
-// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-06 · 一刷一次 Accepted）
-// 一刷写法：迭代合并 + dummy 哨兵——两个指针各指一条链的头，每次把较小节点接到结果链尾（复用原节点），某条链走空后把另一条剩余整段直接接上。O(m+n)/O(1)
-// 本题易错点：① dummy 哨兵省掉「结果链还为空」的特判；② 循环条件是 while (a != null && b != null)，退出后剩余链整段拼接、不要再逐节点接；③ 每轮接完节点必须让对应指针前移，否则原地打转；④ 题目要求原地复用节点，不要 new 新节点
-// 测试用例与一刷归档保持一致（示例 3 个 + 边界 7 个：单元素/一边为空/全相同/长度悬殊/负数/极端大数/交错升序）
+// 刷题日期：2026-09-22
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -16,33 +11,26 @@ import java.util.*;
 public class LC0021_MergeTwoSortedLists {
 
     // ==== 提交代码开始 ====
-    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        if (list1 == null) {
-            return list2;
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
         }
-        if (list2 == null) {
-            return list1;
+        if (l2 == null) {
+            return l1;
         }
         ListNode dummy = new ListNode();
-        ListNode p1 = list1, p2 = list2, p = dummy;
-        while (p1 != null && p2 != null) {
-            if (p1.val < p2.val) {
-                ListNode node = new ListNode(p1.val);
-                p.next = node;
-                p1 = p1.next;
+        ListNode pre = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                pre.next = l1;
+                l1 = l1.next;
             } else {
-                ListNode node = new ListNode(p2.val);
-                p.next = node;
-                p2 = p2.next;
+                pre.next = l2;
+                l2 = l2.next;
             }
-            p = p.next;
+            pre = pre.next;
         }
-        if (p1 != null) {
-            p.next = p1;
-        }
-        if (p2 != null) {
-            p.next = p2;
-        }
+        pre.next = l1 == null ? l2 : l1;
         return dummy.next;
     }
     // ==== 提交代码结束 ====

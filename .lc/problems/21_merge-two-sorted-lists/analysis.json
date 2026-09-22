@@ -17,23 +17,31 @@
   "notes": "合并两个有序链表：dummy 哨兵 + 双指针迭代，每次接较小节点，剩余部分直接拼接；一次 Accepted（208/208）。",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "dummy 哨兵 + 双指针拼接有序链表",
+      "text": "有序链表合并时，用 dummy 哨兵避免单独处理结果头节点，用双指针每次接较小节点，循环结束后把非空剩余段直接整体挂到尾部。关键是直接改 next 指针复用原节点；若每次 new 节点，逻辑直观但会多出 O(m+n) 额外空间。该套路可迁移到 23 合并 K 个链表的分治 merge 与 148 排序链表的归并 merge。",
+      "category": "链表",
+      "problem": "merge-two-sorted-lists",
+      "date": "2026-09-22"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "208/208",
       "runtime_ms": null,
-      "memory_bytes": 44868000,
+      "memory_bytes": 44888000,
       "approach": "迭代合并：dummy哨兵+双指针",
       "time_complexity": "O(m+n)",
-      "space_complexity": "O(m+n)",
-      "optimal": false,
-      "notes": "**与一刷对比**：算法思路一致（dummy 哨兵 + 双指针迭代合并），但节点处理方式退化了——一刷是**原地复用原节点**（额外空间 O(1)），这次在交错合并阶段每次都 `new ListNode(p1.val)` 复制节点，只有最后剩余的那一段是直接拼接，所以额外空间变成 O(m+n)。结果是正确的、Accepted（208/208），但空间没有达最优。\n\n**写对的地方**：dummy 哨兵 + `while (p1 != null && p2 != null)` 逐轮接较小节点、每轮接完指针前移；退出循环后剩余链整段拼接（`p.next = p1/p2`），没有再逐节点接。\n\n**可优化点**：① 交错阶段直接接原节点（把当前节点挂上、指针后移）就能把额外空间压回 O(1)——本题不要求新链表副本，复用节点是标准写法；② 开头两个 null 判断冗余，dummy 结构本身能兜住空链；③ 拼接剩余段用的两个 if 可以保留其一（两者必有一个为 null）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强（但写法未达空间最优，已按 optimal=false 记录）。",
-      "code": "    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {\n        if (list1 == null) {\n            return list2;\n        }\n        if (list2 == null) {\n            return list1;\n        }\n        ListNode dummy = new ListNode();\n        ListNode p1 = list1, p2 = list2, p = dummy;\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                ListNode node = new ListNode(p1.val);\n                p.next = node;\n                p1 = p1.next;\n            } else {\n                ListNode node = new ListNode(p2.val);\n                p.next = node;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) {\n            p.next = p1;\n        }\n        if (p2 != null) {\n            p.next = p2;\n        }\n        return dummy.next;\n    }",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 本轮复盘\n- 与上一轮对比：上次复习虽然思路同为 dummy 哨兵加双指针，但每次合并都 new 新节点，额外空间 O(m+n)；本轮最初也复现了这一点，收到空间优化提示后改为直接改 next 指针复用原节点，额外空间回到 O(1)，与一刷复杂度一致。\n- 为什么最初没直接写最优：说明对“新链表通过拼接原链表节点组成”的语义没有第一反应到；修正后抓住剩余段已有序、可整体挂接这一不变量。\n- 掌握度依据：最终代码一次提交 Accepted，但中途接受了空间优化提示并修改写法，按规则记较弱。\n- 下一步提醒：复习 23 合并 K 个升序链表、148 排序链表时，优先考虑复用节点以及让 merge 返回尾节点，避免额外的节点分配和重复走链。",
+      "code": "public ListNode mergeTwoLists(ListNode l1, ListNode l2) {\n        if (l1 == null) {\n            return l2;\n        }\n        if (l2 == null) {\n            return l1;\n        }\n        ListNode dummy = new ListNode();\n        ListNode pre = dummy;\n        while (l1 != null && l2 != null) {\n            if (l1.val < l2.val) {\n                pre.next = l1;\n                l1 = l1.next;\n            } else {\n                pre.next = l2;\n                l2 = l2.next;\n            }\n            pre = pre.next;\n        }\n        pre.next = l1 == null ? l2 : l1;\n        return dummy.next;\n    }",
       "prev_code": "public ListNode mergeTwoLists(ListNode list1, ListNode list2) {\n        if (list1 == null) {\n            return list2;\n        }\n        if (list2 == null) {\n            return list1;\n        }\n        ListNode dummy = new ListNode();\n        ListNode p1 = list1, p2 = list2, p = dummy;\n        while (p1 != null && p2 != null) {\n            if (p1.val < p2.val) {\n                ListNode node = new ListNode(p1.val);\n                p.next = node;\n                p1 = p1.next;\n            } else {\n                ListNode node = new ListNode(p2.val);\n                p.next = node;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        if (p1 != null) {\n            p.next = p1;\n        }\n        if (p2 != null) {\n            p.next = p2;\n        }\n        return dummy.next;\n    }\n",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +61,19 @@
       "space_complexity": "O(m+n)",
       "optimal": false,
       "notes": "**与一刷对比**：算法思路一致（dummy 哨兵 + 双指针迭代合并），但节点处理方式退化了——一刷是**原地复用原节点**（额外空间 O(1)），这次在交错合并阶段每次都 `new ListNode(p1.val)` 复制节点，只有最后剩余的那一段是直接拼接，所以额外空间变成 O(m+n)。结果是正确的、Accepted（208/208），但空间没有达最优。\n\n**写对的地方**：dummy 哨兵 + `while (p1 != null && p2 != null)` 逐轮接较小节点、每轮接完指针前移；退出循环后剩余链整段拼接（`p.next = p1/p2`），没有再逐节点接。\n\n**可优化点**：① 交错阶段直接接原节点（把当前节点挂上、指针后移）就能把额外空间压回 O(1)——本题不要求新链表副本，复用节点是标准写法；② 开头两个 null 判断冗余，dummy 结构本身能兜住空链；③ 拼接剩余段用的两个 if 可以保留其一（两者必有一个为 null）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强（但写法未达空间最优，已按 optimal=false 记录）。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "208/208",
+      "approach": "迭代合并：dummy哨兵+双指针",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 本轮复盘\n- 与上一轮对比：上次复习虽然思路同为 dummy 哨兵加双指针，但每次合并都 new 新节点，额外空间 O(m+n)；本轮最初也复现了这一点，收到空间优化提示后改为直接改 next 指针复用原节点，额外空间回到 O(1)，与一刷复杂度一致。\n- 为什么最初没直接写最优：说明对“新链表通过拼接原链表节点组成”的语义没有第一反应到；修正后抓住剩余段已有序、可整体挂接这一不变量。\n- 掌握度依据：最终代码一次提交 Accepted，但中途接受了空间优化提示并修改写法，按规则记较弱。\n- 下一步提醒：复习 23 合并 K 个升序链表、148 排序链表时，优先考虑复用节点以及让 merge 返回尾节点，避免额外的节点分配和重复走链。"
     }
   ]
 }
