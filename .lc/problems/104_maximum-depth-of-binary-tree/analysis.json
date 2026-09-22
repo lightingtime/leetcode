@@ -20,20 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "40/40",
       "runtime_ms": null,
-      "memory_bytes": 47176000,
+      "memory_bytes": 47204000,
       "approach": "递归 DFS",
       "time_complexity": "O(n)",
       "space_complexity": "O(h)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路与写法一致（递归 DFS，空节点返回 0），没有任何冗余分支。\n\n**关键点都处理对了**：① 出口 `root == null → 0`（深度按节点数算，空树为 0）；② 非空节点 `1 + max(左深度, 右深度)`，加 1 表示把自己这一层算进去；③ 没有给叶子写特判——`1 + max(0, 0) = 1` 自然成立（一刷笔记里也标过这条冗余）。本地示例 2 + 边界 7（空树/单节点/全左链/全右链/不平衡混合/负值/极值）全过，一次提交 Accepted（40/40）。\n\n**写法评价**：三行的递归写法已经是这道题最精简的形式，没有可删的冗余；唯一需要注意的是递归深度最坏为 n（链状树），若遇到超深用例可以换层序 BFS 迭代（额外空间也是 O(宽度)）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public int maxDepth(TreeNode root) {\n        if (root == null) {\n            return 0;\n        }\n        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;\n    }",
+      "notes": "## 与上一轮对比\n- 仍采用「递归 DFS」，没有更换思路，基本结构与复杂度都和上次复习一致。\n- 继续直接返回 `1 + Math.max(左右子树深度)`，没有加入多余叶子特判。\n\n## 这次为什么想起来\n- 抓住“最大深度 = 根到最远叶子路径上的节点数”这一定义，先确认空节点贡献 0，根节点自身贡献 1。\n- 因此只需后序汇总左右子树的最大深度再加 1，不需要额外状态或遍历顺序技巧。\n\n## 掌握度判定\n- 本地 9 项测试通过，力扣一次提交 Accepted（40/40），全程没有提示或讨论，判定为较强。\n\n## 下一步提醒\n- 当前思路与复杂度已最优，无需另换写法；下次复习继续保持空树、单节点和链状树的边界直觉。",
+      "code": "public int maxDepth(TreeNode root) {\n        if (root == null) {\n            return 0;\n        }\n        int max = Math.max(maxDepth(root.left), maxDepth(root.right));\n        return max + 1;\n    }",
       "prev_code": "public int maxDepth(TreeNode root) {\n        if (root == null) {\n            return 0;\n        }\n        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(h)",
       "optimal": true,
       "notes": "**与一刷对比**：思路与写法一致（递归 DFS，空节点返回 0），没有任何冗余分支。\n\n**关键点都处理对了**：① 出口 `root == null → 0`（深度按节点数算，空树为 0）；② 非空节点 `1 + max(左深度, 右深度)`，加 1 表示把自己这一层算进去；③ 没有给叶子写特判——`1 + max(0, 0) = 1` 自然成立（一刷笔记里也标过这条冗余）。本地示例 2 + 边界 7（空树/单节点/全左链/全右链/不平衡混合/负值/极值）全过，一次提交 Accepted（40/40）。\n\n**写法评价**：三行的递归写法已经是这道题最精简的形式，没有可删的冗余；唯一需要注意的是递归深度最坏为 n（链状树），若遇到超深用例可以换层序 BFS 迭代（额外空间也是 O(宽度)）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "40/40",
+      "approach": "递归 DFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": true,
+      "notes": "## 与上一轮对比\n- 仍采用「递归 DFS」，没有更换思路，基本结构与复杂度都和上次复习一致。\n- 继续直接返回 `1 + Math.max(左右子树深度)`，没有加入多余叶子特判。\n\n## 这次为什么想起来\n- 抓住“最大深度 = 根到最远叶子路径上的节点数”这一定义，先确认空节点贡献 0，根节点自身贡献 1。\n- 因此只需后序汇总左右子树的最大深度再加 1，不需要额外状态或遍历顺序技巧。\n\n## 掌握度判定\n- 本地 9 项测试通过，力扣一次提交 Accepted（40/40），全程没有提示或讨论，判定为较强。\n\n## 下一步提醒\n- 当前思路与复杂度已最优，无需另换写法；下次复习继续保持空树、单节点和链状树的边界直觉。"
     }
   ]
 }
