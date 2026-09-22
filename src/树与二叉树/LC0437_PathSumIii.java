@@ -2,10 +2,13 @@
 // LeetCode 437. 路径总和 III (Path Sum III)
 // 难度：Medium | 分类：树与二叉树
 // 链接：https://leetcode.cn/problems/path-sum-iii/
-// 复习日期：2026-09-18（第 5 次复习 · 一刷 2026-08-18 · 一刷第二次提交才 Accepted）
-// 一刷写法：前缀和 + 回溯哈希——DFS 一路维护「根到当前节点的前缀和」，map 记每个前缀和出现过几次；进节点先查 sum-target 的个数累加答案，再登记当前前缀，回溯时撤销
-// 一刷踩过的坑（错误习惯库有记录）：路径终点计数挂到了子递归入口（每个孩子入口各判一次），路径被重复计数（示例 3→6）；且入口 cur=0 时 target=0 会把空路径误算成命中
-// 测试用例与一刷归档保持一致（示例 2 个 + 边界 7 个）
+// 刷题日期：2026-09-21
+//
+// 二刷第 6 次 · 一刷 2026-08-18 · 上次复习 2026-09-18（较弱，间隔重置）
+// 一刷思路：前缀和 + 回溯哈希——DFS 维护根到当前节点的前缀和，map 记已见前缀的次数；
+// 先查 sum-target 累加答案、再登记当前前缀，子树返回后撤销当前前缀，防止串到兄弟分支
+// 已有的两种写法：① 双重 DFS（O(n²)，非最优）② 前缀和+回溯哈希（O(n)，最优）。本次写哪种就按哪种合并
+// 测试用例与一刷归档保持一致（示例 2 + 边界若干），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -15,28 +18,28 @@ public class LC0437_PathSumIii {
     // ==== 提交代码开始 ====
     int ans;
     public int pathSum(TreeNode root, int targetSum) {
-        ans = 0;
         Map<Long, Integer> map = new HashMap<>();
         map.put(0L, 1);
+        ans = 0;
         dfs(root, 0L, targetSum, map);
         return ans;
     }
 
-    private void dfs(TreeNode node, long sum, int targetSum, Map<Long, Integer> map) {
-        if (node == null) {
+    private void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {
+        if (root == null) {
             return;
         }
 
-        sum += node.val;
+        sum += root.val;
         ans += map.getOrDefault(sum - targetSum, 0);
-
         map.merge(sum, 1, Integer::sum);
 
-        dfs(node.left, sum, targetSum, map);
-        dfs(node.right,sum, targetSum, map);
+        dfs(root.left, sum, targetSum, map);
+        dfs(root.right, sum, targetSum, map);
 
         map.merge(sum, -1, Integer::sum);
     }
+
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

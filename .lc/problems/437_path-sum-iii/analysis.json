@@ -47,20 +47,20 @@
       "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        dfs(root, targetSum);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        countFrom(root, 0, targetSum);\n        dfs(root.left, targetSum);\n        dfs(root.right, targetSum);\n\n    }\n\n    private void countFrom(TreeNode root, long cur, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        cur += root.val;\n        if (cur == targetSum) {\n            ans++;\n        }\n        countFrom(root.left, cur, targetSum);\n        countFrom(root.right, cur, targetSum);\n    }"
     },
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "130/130",
       "runtime_ms": null,
-      "memory_bytes": 46944000,
+      "memory_bytes": 46692000,
       "approach": "前缀和+回溯哈希",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**与上一轮对比**：写法与一刷一致（前缀和 + 回溯哈希），`long sum` 防溢出、`map.merge(sum, ±1, Integer::sum)` 一进一出维护计数；复杂度仍 O(n)/O(n)。\n\n**这次为什么没踩一刷的坑**：一刷把计数挂到左右孩子入口，每条路径被数两遍（示例 3→6），且入口处 `cur=0` 在 target=0 时会把空路径算成命中；这次把计数放在「当前节点值已累加进 sum」之后、每条路径只数一次，回溯时 `map.merge(sum, -1, ...)` 撤销，兄弟分支不串扰。\n\n**掌握度依据**：一次提交 Accepted、无探讨；但本次提交区与二刷前归档的 `src/树与二叉树/LC0437_PathSumIii.java` 逐行对比只差一个空格和一个空行，据此按较弱记录（2 天后再见）。",
-      "code": "    int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        dfs(root, 0L, targetSum, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode node, long sum, int targetSum, Map<Long, Integer> map) {\n        if (node == null) {\n            return;\n        }\n\n        sum += node.val;\n        ans += map.getOrDefault(sum - targetSum, 0);\n\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(node.left, sum, targetSum, map);\n        dfs(node.right,sum, targetSum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }",
+      "notes": "",
+      "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        ans = 0;\n        dfs(root, 0L, targetSum, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n\n        sum += root.val;\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, sum, targetSum, map);\n        dfs(root.right, sum, targetSum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }",
       "prev_code": "int ans;\npublic int pathSum(TreeNode root, int targetSum) {\n    Map<Long, Integer> map = new HashMap<>();\n    map.put(0L, 1);\n    ans = 0;\n    dfs(root, 0L, targetSum, map);\n    return ans;\n}\n\nprivate void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n    if (root == null) {\n        return;\n    }\n\n    sum += root.val;\n    ans += map.getOrDefault(sum - targetSum, 0);\n    map.merge(sum, 1, Integer::sum);\n\n    dfs(root.left, sum, targetSum, map);\n    dfs(root.right, sum, targetSum, map);\n\n    map.merge(sum, -1, Integer::sum);\n}",
-      "mastery": "weak",
-      "pass": 5
+      "mastery": "strong",
+      "pass": 6
     }
   ],
   "hints": [
@@ -131,6 +131,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**与上一轮对比**：写法与一刷一致（前缀和 + 回溯哈希），`long sum` 防溢出、`map.merge(sum, ±1, Integer::sum)` 一进一出维护计数；复杂度仍 O(n)/O(n)。\n\n**这次为什么没踩一刷的坑**：一刷把计数挂到左右孩子入口，每条路径被数两遍（示例 3→6），且入口处 `cur=0` 在 target=0 时会把空路径算成命中；这次把计数放在「当前节点值已累加进 sum」之后、每条路径只数一次，回溯时 `map.merge(sum, -1, ...)` 撤销，兄弟分支不串扰。\n\n**掌握度依据**：一次提交 Accepted、无探讨；但本次提交区与二刷前归档的 `src/树与二叉树/LC0437_PathSumIii.java` 逐行对比只差一个空格和一个空行，据此按较弱记录（2 天后再见）。"
+    },
+    {
+      "pass": 6,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "approach": "前缀和+回溯哈希",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": ""
     }
   ]
 }

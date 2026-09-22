@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "deadline": "2026-09-15",
   "problems": {
     "two-sum": {
@@ -1129,12 +1129,12 @@
       "title": "路径总和 III",
       "category": "树与二叉树",
       "first_pass_date": "2026-08-18",
-      "last_review_date": "2026-09-18",
-      "next_review_date": "2026-09-20",
-      "interval_days": 2,
-      "review_count": 5,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-22",
+      "next_review_date": "2026-09-27",
+      "interval_days": 5,
+      "review_count": 6,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "convert-bst-to-greater-tree": {
