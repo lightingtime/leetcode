@@ -51,18 +51,18 @@
       "code": "public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[][] dp = new int[m][n];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            dp[i][0] = matrix[i][0] == '1' ? 1 : 0;\n            max = Math.max(max, dp[i][0]);\n        }\n        for (int j = 0; j < n; j++) {\n            dp[0][j] = matrix[0][j] == '1' ? 1 : 0;\n            max = Math.max(max, dp[0][j]);\n        }\n        for (int i = 1; i < m; i++) {\n            for (int j = 1; j < n; j++) {\n                if (matrix[i][j] == '1') {\n                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;\n                } else {\n                    dp[i][j] = 0;\n                }\n                max = Math.max(max, dp[i][j]);\n            }\n        }\n        return max * max;\n    }\n"
     },
     {
-      "date": "2026-09-15",
+      "date": "2026-09-22",
       "verdict": "Accepted",
       "testcases": "81/81",
       "approach": "一维滚动 DP",
       "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是 `一维滚动 DP`。上轮提交前就 `i>0 && j>0` 边界进行了讨论，因此记 weak；本轮未提问、未讨论，独立复写相同边界逻辑并一次提交 Accepted 81/81，因此改记 strong。\n\n② 状态与转移：`dp[j]` 表示上一行/当前行第 j 列作为右下角时的最大边长；`pre` 是正上方旧值，`dp[j-1]` 是当前行左方，`leftTop` 是左上方。第一行或第一列缺少三邻居，只能取 1；普通位置取三者的最小值加一。例 `[[\"1\",\"1\"],[\"1\",\"1\"]]`：第一行与第一列均为 1，右下角得到 `min(1,1,1)+1=2`，面积 4。\n\n③ 掌握度判定：没有算法提示或讨论，本地一次全过，力扣首次提交 Accepted，记 strong。\n\n④ 下一步提醒：继续固定三个邻居来源，并确保 `leftTop` 在使用后才更新为覆盖前的 `dp[j]`。",
+      "notes": "**与上一轮对比**：09-15 那次同为一维滚动 DP，但有空矩阵守卫 + 单独预初始化第 0 行；本版把首行/首列统一收进 i>0 && j>0 分支，首行不再单独处理，代码 972 → 约 750 字符，思路与复杂度不变（O(mn)/O(n)）。\n\n**这次为什么没踩老坑**：一刷首 WA 的根因是 '0' 格没清零、继承了左/上邻居的正数；本版保留 if (matrix[i][j]=='0') dp[j] = 0 的显式清零分支，正是针对那个坑，这次没有再犯。\n\n**掌握度依据**：一次提交即 Accepted（本地 13 项 + 力扣 81/81），全程无探讨 → 较强。\n\n**下一步**：空间已是本题最优 O(n)，无更进一步压空间的必要；可顺带回顾同族题 85. 最大矩形（以行为底的柱状图 DP，已在题库内）。",
       "mastery": "strong",
-      "pass": 4,
-      "memory_bytes": 79636000,
-      "code": "    public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        if (m == 0) {\n            return 0;\n        }\n        int n = matrix[0].length;\n        if (n == 0) {\n            return 0;\n        }\n        int[] dp = new int[n];\n        for (int j = 0; j < n; j++) {\n            dp[j] = matrix[0][j] == '1' ? 1 : 0;\n        }\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            int leftTop = dp[0];\n            for (int j = 0; j < n; j++) {\n                int pre = dp[j];\n                if (matrix[i][j] == '0') {\n                    dp[j] = 0;\n                } else {\n                    if (i > 0 && j > 0) {\n                        dp[j] = Math.min(dp[j - 1], Math.min(pre, leftTop)) + 1;\n                    } else {\n                        dp[j] = 1;\n                    }\n                }\n                leftTop = pre;\n                max = Math.max(max, dp[j]);\n            }\n        }\n        return max * max;\n    }",
+      "pass": 5,
+      "memory_bytes": 79476000,
+      "code": "public int maximalSquare(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] dp = new int[n];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            int leftTop = dp[0];\n            for (int j = 0; j < n; j++) {\n                int pre = dp[j];\n                if (matrix[i][j] == '0') {\n                    dp[j] = 0;\n                } else {\n                    if (i > 0 && j > 0) {\n                        dp[j] = Math.min(dp[j - 1], Math.min(leftTop, pre)) + 1;\n                    } else {\n                        dp[j] = 1;\n                    }\n                }\n                leftTop = pre;\n                max = Math.max(max, dp[j]);\n            }\n        }\n        return max * max;\n    }",
       "prev_code": "public int maximalSquare(char[][] matrix) {\n    int m = matrix.length;\n    int n = matrix[0].length;\n    int[] dp = new int[n];\n    for (int i = 0; i < n; i++) {\n        dp[i] = matrix[0][i] == '1' ? 1 :0;\n    }\n    int max = 0;\n    for (int i = 0; i < m; i++) {\n        int dig = dp[0];\n        for (int j = 0; j < n; j++) {\n            int pre = dp[j];\n            if (matrix[i][j] == '0') {\n                dp[j] = 0;\n            } else {\n                if (i > 0 && j > 0) {\n                    dp[j] = Math.min(dp[j - 1], Math.min(pre, dig)) + 1;\n                } else {\n                    dp[j] = 1;\n                }\n            }\n            dig = pre;\n            max = Math.max(max, dp[j]);\n        }\n    }\n    return max * max;\n}"
     }
   ],
@@ -122,6 +122,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是 `一维滚动 DP`。上轮提交前就 `i>0 && j>0` 边界进行了讨论，因此记 weak；本轮未提问、未讨论，独立复写相同边界逻辑并一次提交 Accepted 81/81，因此改记 strong。\n\n② 状态与转移：`dp[j]` 表示上一行/当前行第 j 列作为右下角时的最大边长；`pre` 是正上方旧值，`dp[j-1]` 是当前行左方，`leftTop` 是左上方。第一行或第一列缺少三邻居，只能取 1；普通位置取三者的最小值加一。例 `[[\"1\",\"1\"],[\"1\",\"1\"]]`：第一行与第一列均为 1，右下角得到 `min(1,1,1)+1=2`，面积 4。\n\n③ 掌握度判定：没有算法提示或讨论，本地一次全过，力扣首次提交 Accepted，记 strong。\n\n④ 下一步提醒：继续固定三个邻居来源，并确保 `leftTop` 在使用后才更新为覆盖前的 `dp[j]`。"
+    },
+    {
+      "pass": 5,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "81/81",
+      "approach": "一维滚动 DP",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：09-15 那次同为一维滚动 DP，但有空矩阵守卫 + 单独预初始化第 0 行；本版把首行/首列统一收进 i>0 && j>0 分支，首行不再单独处理，代码 972 → 约 750 字符，思路与复杂度不变（O(mn)/O(n)）。\n\n**这次为什么没踩老坑**：一刷首 WA 的根因是 '0' 格没清零、继承了左/上邻居的正数；本版保留 if (matrix[i][j]=='0') dp[j] = 0 的显式清零分支，正是针对那个坑，这次没有再犯。\n\n**掌握度依据**：一次提交即 Accepted（本地 13 项 + 力扣 81/81），全程无探讨 → 较强。\n\n**下一步**：空间已是本题最优 O(n)，无更进一步压空间的必要；可顺带回顾同族题 85. 最大矩形（以行为底的柱状图 DP，已在题库内）。"
     }
   ]
 }
