@@ -2,13 +2,8 @@
 // LeetCode 23. 合并 K 个升序链表 (Merge k Sorted Lists)
 // 难度：Hard | 分类：链表
 // 链接：https://leetcode.cn/problems/merge-k-sorted-lists/
-// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-07 · 一刷一次 Accepted）
-// 一刷写法：分治两两合并——每轮把相邻两条链两两合并，链表数量减半，重复到只剩一条；每层总共只走 N 个节点，共 log k 层。O(N log k)/O(log k)（递归栈）
-// 本题易错点：① 不用堆也能做到 O(N log k)，关键在「每轮两两合并」而不是「每次从头扫 k 条链取最小」（后者是 O(N·k)）；② 递归出口要同时管住 start > end（空区间）与 start == end（单链直接返回）；③ 本轮合并结果要写回 lists[i]，下一轮读的是合并后的链；④ 一刷的合并子过程每次 new 节点复制值，可改成原地复用节点改 next，省掉全部分配
-// 测试用例与一刷归档保持一致（示例 3 个 + 边界 6 个：单条单节点链/空链混入/全相同/负数与大数/单条长链夹短链/多条单节点链）
+// 刷题日期：2026-09-22
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -17,49 +12,42 @@ public class LC0023_MergeKSortedLists {
 
     // ==== 提交代码开始 ====
     public ListNode mergeKLists(ListNode[] lists) {
-        return mergeKLists(lists, 0, lists.length - 1);
+        return mergeHelper(lists, 0, lists.length - 1);
     }
 
-    private ListNode mergeKLists(ListNode[] lists, int start, int end) {
-        if (start >= lists.length) {
+    private ListNode mergeHelper(ListNode[] lists, int l, int r) {
+        if (l > r) {
             return null;
         }
-        if (start == end) {
-            return lists[start];
+        if (l == r) {
+            return lists[l];
         }
-        int mid = start + (end - start) / 2;
-        ListNode first = mergeKLists(lists, start, mid);
-        ListNode second = mergeKLists(lists, mid + 1, end);
-        return mergeTowList(first, second);
+        int mid = l + (r - l) / 2;
+        ListNode first = mergeHelper(lists, l, mid);
+        ListNode second = mergeHelper(lists, mid + 1, r);
+        return merge(first, second);
     }
 
-    private ListNode mergeTowList(ListNode first, ListNode second) {
-        if (first == null) {
-            return second;
+    private ListNode merge(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
         }
-        if (second == null) {
-            return first;
+        if (l2 == null) {
+            return l1;
         }
         ListNode dummy = new ListNode();
-        ListNode p1 = first, p2 = second, p = dummy;
-        while (p1 != null && p2 != null) {
-            ListNode node = new ListNode();
-            if (p1.val > p2.val) {
-                node.val = p2.val;
-                p2 = p2.next;
+        ListNode pre = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                pre.next = l1;
+                l1 = l1.next;
             } else {
-                node.val = p1.val;
-                p1 = p1.next;
+                pre.next = l2;
+                l2 = l2.next;
             }
-            p.next = node;
-            p = p.next;
+            pre = pre.next;
         }
-        if (p1 == null) {
-            p.next = p2;
-        }
-        if (p2 == null) {
-            p.next = p1;
-        }
+        pre.next = l1 == null ? l2 : l1;
         return dummy.next;
     }
     // ==== 提交代码结束 ====

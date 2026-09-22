@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-07</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>23. 合并 K 个升序链表 (Merge k Sorted Lists)</h1><p>&gt; <a href="https://leetcode.cn/problems/merge-k-sorted-lists/" rel="noopener">https://leetcode.cn/problems/merge-k-sorted-lists/</a></p><p>难度：Hard ｜ 分类：链表</p><p>标签：链表、分治、堆（优先队列）、归并排序、锦标赛排序</p><h2>题目描述</h2><p>给你一个链表数组，每个链表都已经按升序排列。</p><p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p><p>示例 1：</p><p>输入：lists = [[1,4,5],[1,3,4],[2,6]]</p><p>输出：[1,1,2,3,4,4,5,6]</p><p>解释：链表数组如下：</p><p>[</p><p>1-&gt;4-&gt;5,</p><p>1-&gt;3-&gt;4,</p><p>2-&gt;6</p><p>]</p><p>将它们合并到一个有序链表中得到。</p><p>1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</p><p>示例 2：</p><p>输入：lists = []</p><p>输出：[]</p><p>示例 3：</p><p>输入：lists = [[]]</p><p>输出：[]</p><p>提示：</p><p>k == lists.length</p><p>0</p><p>0</p><p>-10^4</p><p>lists[i] 按 升序 排列</p><p>lists[i].length 的总和不超过 10^4</p><h2>示例</h2><ol><li>输入：lists = [[1,4,5],[1,3,4],[2,6]]</li></ol><p>输出：[1,1,2,3,4,4,5,6]</p><p>解释：链表数组如下：</p><ol><li>输入：lists = []</li></ol><p>输出：[]</p><ol><li>输入：lists = [[]]</li></ol><p>输出：[]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-22 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（134/134）｜ 一次 AC ｜ 分治两两合并 ｜ O(N log k) · O(log k)</p>
+      <div class="review-note md"><h3>与上一轮对比</h3><ul><li>主线仍是分治两两合并，但 <code>merge</code> 从「每次 new 节点复制值」改成「直接复用原节点改 next」，辅助空间由 O(N) 降到 O(log k)（只剩递归栈），时间仍是 O(N log k)。</li><li>复杂度下限论证：结果链 N 个节点每个至少要读一次；用「每次从 k 个链头挑最小」是 O(N·k)，而分治每层总共只走 N 个节点、共 log k 层，所以 O(N log k) 已是比较模型下的下界，空间靠原地串接压到 O(log k)。</li></ul><h3>这次想起来的路径</h3><ul><li>看到「k 条有序链表」直接想到相邻两两合并使链表数减半，没有退化成每次从头扫 k 条链取最小（O(N·k)）。</li><li>上次沉淀的微调点（不 new 节点、改 next 复用）这次主动用上，说明该点已内化。</li></ul><h3>掌握度判定</h3><ul><li>独立完成，本地 9 组一次全过，力扣 134/134 一次 Accepted，全程无提示无探讨 → 较强。</li></ul><h3>下一步提醒</h3><ul><li>可对比堆写法（PriorityQueue 存 k 个链头，O(N log k)/O(k)）：k 远小于 N 时每次只需与 log k 个候选比较；分治胜在空间，堆胜在「k 小」的实时场景，两种都应能默写。</li><li>空数组/空链混入由 <code>l &gt; r</code> 与 <code>l == r</code> 两个出口覆盖，当前写法安全；若想再精简可把空数组判断提到顶层，但收益不大。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 分治两两合并 ｜ O(N log k) · O(N)</p>
       <div class="review-note md"><p><strong>与一刷对比</strong>：思路与写法都一致（分治递归两两合并 + <code>mergeTowList</code> 子过程），复杂度也相同。时间 O(N log k) 是本题最优档，但<strong>空间未达最优</strong>：子过程每接一个节点都 <code>new ListNode()</code> 复制值，额外分配 O(N)；一刷笔记里自己也标了这个微调点。</p><p><strong>写对的地方</strong>：① 分治的递归出口同时管住了「空区间」（<code>start &gt;= lists.length</code>）与「单链」（<code>start == end</code>）；② 每层只把所有节点各走一遍，共 log k 层，所以是 O(N log k) 而不是 O(N·k)；③ 子过程里某条链走空后把另一条整段接上（两个 if 只会命中一个）。</p><p><strong>可优化点</strong>：① 交错阶段直接接原节点（挂上后指针后移）即可省掉全部分配，额外空间回到 O(log k)（递归栈）；② <code>mergeTowList</code> 拼写应为 <code>mergeTwoList</code>；③ 末尾两个 if 可合并成 <code>p.next = (p1 != null) ? p1 : p2;</code>。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强（写法未达空间最优，按 optimal=false 记录）。</p></div>
@@ -38,60 +42,53 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>分治两两合并</b></li>
-        <li><span>复杂度</span><b>O(N log k) · O(N)</b></li>
+        <li><span>复杂度</span><b>O(N log k) · O(log k)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 分治两两合并</h3>
-    <p><span class="chip">时间 O(N log k)</span><span class="chip">空间 O(N)</span><span class="chip">内存 ≈ 45.5 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0023_MergeKSortedLists.java · 分治两两合并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists) {
-        <span class="tk-k">return</span> <span class="tk-f">mergeKLists</span>(lists, <span class="tk-n">0</span>, lists.length - <span class="tk-n">1</span>);
+    <p><span class="chip">时间 O(N log k)</span><span class="chip">空间 O(log k)</span><span class="chip">内存 ≈ 45.3 MB</span><span class="chip">用例 134/134</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0023_MergeKSortedLists.java · 分治两两合并</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists) {
+        <span class="tk-k">return</span> <span class="tk-f">mergeHelper</span>(lists, <span class="tk-n">0</span>, lists.length - <span class="tk-n">1</span>);
     }
 
-    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists, <span class="tk-k">int</span> start, <span class="tk-k">int</span> end) {
-        <span class="tk-k">if</span> (start &gt;= lists.length) {
+    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeHelper</span>(<span class="tk-t">ListNode</span>[] lists, <span class="tk-k">int</span> l, <span class="tk-k">int</span> r) {
+        <span class="tk-k">if</span> (l &gt; r) {
             <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
-        <span class="tk-k">if</span> (start == end) {
-            <span class="tk-k">return</span> lists[start];
+        <span class="tk-k">if</span> (l == r) {
+            <span class="tk-k">return</span> lists[l];
         }
-        <span class="tk-k">int</span> mid = start + (end - start) / <span class="tk-n">2</span>;
-        <span class="tk-t">ListNode</span> first = <span class="tk-f">mergeKLists</span>(lists, start, mid);
-        <span class="tk-t">ListNode</span> second = <span class="tk-f">mergeKLists</span>(lists, mid + <span class="tk-n">1</span>, end);
-        <span class="tk-k">return</span> <span class="tk-f">mergeTowList</span>(first, second);
+        <span class="tk-k">int</span> mid = l + (r - l) / <span class="tk-n">2</span>;
+        <span class="tk-t">ListNode</span> first = <span class="tk-f">mergeHelper</span>(lists, l, mid);
+        <span class="tk-t">ListNode</span> second = <span class="tk-f">mergeHelper</span>(lists, mid + <span class="tk-n">1</span>, r);
+        <span class="tk-k">return</span> <span class="tk-f">merge</span>(first, second);
     }
 
-    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeTowList</span>(<span class="tk-t">ListNode</span> first, <span class="tk-t">ListNode</span> second) {
-        <span class="tk-k">if</span> (first == <span class="tk-k">null</span>) {
-            <span class="tk-k">return</span> second;
+    <span class="tk-k">private</span> <span class="tk-t">ListNode</span> <span class="tk-f">merge</span>(<span class="tk-t">ListNode</span> l1, <span class="tk-t">ListNode</span> l2) {
+        <span class="tk-k">if</span> (l1 == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> l2;
         }
-        <span class="tk-k">if</span> (second == <span class="tk-k">null</span>) {
-            <span class="tk-k">return</span> first;
+        <span class="tk-k">if</span> (l2 == <span class="tk-k">null</span>) {
+            <span class="tk-k">return</span> l1;
         }
         <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
-        <span class="tk-t">ListNode</span> p1 = first, p2 = second, p = dummy;
-        <span class="tk-k">while</span> (p1 != <span class="tk-k">null</span> &amp;&amp; p2 != <span class="tk-k">null</span>) {
-            <span class="tk-t">ListNode</span> node = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>();
-            <span class="tk-k">if</span> (p1.val &gt; p2.val) {
-                node.val = p2.val;
-                p2 = p2.next;
+        <span class="tk-t">ListNode</span> pre = dummy;
+        <span class="tk-k">while</span> (l1 != <span class="tk-k">null</span> &amp;&amp; l2 != <span class="tk-k">null</span>) {
+            <span class="tk-k">if</span> (l1.val &lt; l2.val) {
+                pre.next = l1;
+                l1 = l1.next;
             } <span class="tk-k">else</span> {
-                node.val = p1.val;
-                p1 = p1.next;
+                pre.next = l2;
+                l2 = l2.next;
             }
-            p.next = node;
-            p = p.next;
+            pre = pre.next;
         }
-        <span class="tk-k">if</span> (p1 == <span class="tk-k">null</span>) {
-            p.next = p2;
-        }
-        <span class="tk-k">if</span> (p2 == <span class="tk-k">null</span>) {
-            p.next = p1;
-        }
+        pre.next = l1 == <span class="tk-k">null</span> ? l2 : l1;
         <span class="tk-k">return</span> dummy.next;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0023_MergeKSortedLists.java · 分治两两合并 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">mergeKLists</span>(<span class="tk-t">ListNode</span>[] lists) {

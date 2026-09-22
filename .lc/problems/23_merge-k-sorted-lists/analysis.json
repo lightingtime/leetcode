@@ -20,20 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "134/134",
       "runtime_ms": null,
-      "memory_bytes": 47668000,
+      "memory_bytes": 47464000,
       "approach": "分治两两合并",
       "time_complexity": "O(N log k)",
-      "space_complexity": "O(N)",
-      "optimal": false,
-      "notes": "**与一刷对比**：思路与写法都一致（分治递归两两合并 + `mergeTowList` 子过程），复杂度也相同。时间 O(N log k) 是本题最优档，但**空间未达最优**：子过程每接一个节点都 `new ListNode()` 复制值，额外分配 O(N)；一刷笔记里自己也标了这个微调点。\n\n**写对的地方**：① 分治的递归出口同时管住了「空区间」（`start >= lists.length`）与「单链」（`start == end`）；② 每层只把所有节点各走一遍，共 log k 层，所以是 O(N log k) 而不是 O(N·k)；③ 子过程里某条链走空后把另一条整段接上（两个 if 只会命中一个）。\n\n**可优化点**：① 交错阶段直接接原节点（挂上后指针后移）即可省掉全部分配，额外空间回到 O(log k)（递归栈）；② `mergeTowList` 拼写应为 `mergeTwoList`；③ 末尾两个 if 可合并成 `p.next = (p1 != null) ? p1 : p2;`。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强（写法未达空间最优，按 optimal=false 记录）。",
-      "code": "    public ListNode mergeKLists(ListNode[] lists) {\n        return mergeKLists(lists, 0, lists.length - 1);\n    }\n\n    private ListNode mergeKLists(ListNode[] lists, int start, int end) {\n        if (start >= lists.length) {\n            return null;\n        }\n        if (start == end) {\n            return lists[start];\n        }\n        int mid = start + (end - start) / 2;\n        ListNode first = mergeKLists(lists, start, mid);\n        ListNode second = mergeKLists(lists, mid + 1, end);\n        return mergeTowList(first, second);\n    }\n\n    private ListNode mergeTowList(ListNode first, ListNode second) {\n        if (first == null) {\n            return second;\n        }\n        if (second == null) {\n            return first;\n        }\n        ListNode dummy = new ListNode();\n        ListNode p1 = first, p2 = second, p = dummy;\n        while (p1 != null && p2 != null) {\n            ListNode node = new ListNode();\n            if (p1.val > p2.val) {\n                node.val = p2.val;\n                p2 = p2.next;\n            } else {\n                node.val = p1.val;\n                p1 = p1.next;\n            }\n            p.next = node;\n            p = p.next;\n        }\n        if (p1 == null) {\n            p.next = p2;\n        }\n        if (p2 == null) {\n            p.next = p1;\n        }\n        return dummy.next;\n    }",
+      "space_complexity": "O(log k)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 主线仍是分治两两合并，但 `merge` 从「每次 new 节点复制值」改成「直接复用原节点改 next」，辅助空间由 O(N) 降到 O(log k)（只剩递归栈），时间仍是 O(N log k)。\n- 复杂度下限论证：结果链 N 个节点每个至少要读一次；用「每次从 k 个链头挑最小」是 O(N·k)，而分治每层总共只走 N 个节点、共 log k 层，所以 O(N log k) 已是比较模型下的下界，空间靠原地串接压到 O(log k)。\n\n### 这次想起来的路径\n- 看到「k 条有序链表」直接想到相邻两两合并使链表数减半，没有退化成每次从头扫 k 条链取最小（O(N·k)）。\n- 上次沉淀的微调点（不 new 节点、改 next 复用）这次主动用上，说明该点已内化。\n\n### 掌握度判定\n- 独立完成，本地 9 组一次全过，力扣 134/134 一次 Accepted，全程无提示无探讨 → 较强。\n\n### 下一步提醒\n- 可对比堆写法（PriorityQueue 存 k 个链头，O(N log k)/O(k)）：k 远小于 N 时每次只需与 log k 个候选比较；分治胜在空间，堆胜在「k 小」的实时场景，两种都应能默写。\n- 空数组/空链混入由 `l > r` 与 `l == r` 两个出口覆盖，当前写法安全；若想再精简可把空数组判断提到顶层，但收益不大。",
+      "code": "public ListNode mergeKLists(ListNode[] lists) {\n        return mergeHelper(lists, 0, lists.length - 1);\n    }\n\n    private ListNode mergeHelper(ListNode[] lists, int l, int r) {\n        if (l > r) {\n            return null;\n        }\n        if (l == r) {\n            return lists[l];\n        }\n        int mid = l + (r - l) / 2;\n        ListNode first = mergeHelper(lists, l, mid);\n        ListNode second = mergeHelper(lists, mid + 1, r);\n        return merge(first, second);\n    }\n\n    private ListNode merge(ListNode l1, ListNode l2) {\n        if (l1 == null) {\n            return l2;\n        }\n        if (l2 == null) {\n            return l1;\n        }\n        ListNode dummy = new ListNode();\n        ListNode pre = dummy;\n        while (l1 != null && l2 != null) {\n            if (l1.val < l2.val) {\n                pre.next = l1;\n                l1 = l1.next;\n            } else {\n                pre.next = l2;\n                l2 = l2.next;\n            }\n            pre = pre.next;\n        }\n        pre.next = l1 == null ? l2 : l1;\n        return dummy.next;\n    }",
       "prev_code": "public ListNode mergeKLists(ListNode[] lists) {\n        return mergeKLists(lists, 0, lists.length - 1);\n    }\n\n    private ListNode mergeKLists(ListNode[] lists, int start, int end) {\n        if (start >= lists.length) {\n           return null;\n        }\n        if (start == end) {\n            return lists[start];\n        }\n        int mid = start + (end - start) / 2;\n        ListNode first = mergeKLists(lists, start, mid);\n        ListNode second = mergeKLists(lists, mid + 1, end);\n        return mergeTowList(first, second);\n    }\n\n    private ListNode mergeTowList(ListNode first, ListNode second) {\n        if (first == null) {\n            return second;\n        }\n        if (second == null) {\n            return first;\n        }\n        ListNode dummy = new ListNode();\n        ListNode p1 = first, p2 = second, p = dummy;\n        while (p1 != null && p2 != null) {\n            if (p1.val > p2.val) {\n                p.next = p2;\n                p2 = p2.next;\n            } else {\n                p.next = p1;\n                p1 = p1.next;\n            }\n            p = p.next;\n        }\n        p.next = p1 == null ? p2 : p1;\n        return dummy.next;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(N)",
       "optimal": false,
       "notes": "**与一刷对比**：思路与写法都一致（分治递归两两合并 + `mergeTowList` 子过程），复杂度也相同。时间 O(N log k) 是本题最优档，但**空间未达最优**：子过程每接一个节点都 `new ListNode()` 复制值，额外分配 O(N)；一刷笔记里自己也标了这个微调点。\n\n**写对的地方**：① 分治的递归出口同时管住了「空区间」（`start >= lists.length`）与「单链」（`start == end`）；② 每层只把所有节点各走一遍，共 log k 层，所以是 O(N log k) 而不是 O(N·k)；③ 子过程里某条链走空后把另一条整段接上（两个 if 只会命中一个）。\n\n**可优化点**：① 交错阶段直接接原节点（挂上后指针后移）即可省掉全部分配，额外空间回到 O(log k)（递归栈）；② `mergeTowList` 拼写应为 `mergeTwoList`；③ 末尾两个 if 可合并成 `p.next = (p1 != null) ? p1 : p2;`。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强（写法未达空间最优，按 optimal=false 记录）。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "134/134",
+      "approach": "分治两两合并",
+      "time_complexity": "O(N log k)",
+      "space_complexity": "O(log k)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 主线仍是分治两两合并，但 `merge` 从「每次 new 节点复制值」改成「直接复用原节点改 next」，辅助空间由 O(N) 降到 O(log k)（只剩递归栈），时间仍是 O(N log k)。\n- 复杂度下限论证：结果链 N 个节点每个至少要读一次；用「每次从 k 个链头挑最小」是 O(N·k)，而分治每层总共只走 N 个节点、共 log k 层，所以 O(N log k) 已是比较模型下的下界，空间靠原地串接压到 O(log k)。\n\n### 这次想起来的路径\n- 看到「k 条有序链表」直接想到相邻两两合并使链表数减半，没有退化成每次从头扫 k 条链取最小（O(N·k)）。\n- 上次沉淀的微调点（不 new 节点、改 next 复用）这次主动用上，说明该点已内化。\n\n### 掌握度判定\n- 独立完成，本地 9 组一次全过，力扣 134/134 一次 Accepted，全程无提示无探讨 → 较强。\n\n### 下一步提醒\n- 可对比堆写法（PriorityQueue 存 k 个链头，O(N log k)/O(k)）：k 远小于 N 时每次只需与 log k 个候选比较；分治胜在空间，堆胜在「k 小」的实时场景，两种都应能默写。\n- 空数组/空链混入由 `l > r` 与 `l == r` 两个出口覆盖，当前写法安全；若想再精简可把空数组判断提到顶层，但收益不大。"
     }
   ]
 }
