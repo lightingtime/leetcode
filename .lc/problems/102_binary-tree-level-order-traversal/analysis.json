@@ -20,20 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "35/35",
       "runtime_ms": null,
-      "memory_bytes": 47036000,
+      "memory_bytes": 47392000,
       "approach": "层序 BFS",
       "time_complexity": "O(n)",
       "space_complexity": "O(w)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路与写法一致（BFS 队列按层处理），结构干净。\n\n**关键点都处理对了**：① 每轮开头先取 `int size = queue.size()`，用它锁定「当前层有几个节点」，再一次性弹出这么多——这样收集出来正好一层一个列表；② `size` 是在内层循环之前取的，循环里边弹边入队不会污染本层计数；③ 子节点为 null 时直接跳过不入队，避免结果里多出空层；④ 空树直接返回空列表（不是含一个空列表的列表）。本地示例 3 + 边界 6（全左链/全右链/不平衡混合/负值/极值/完全二叉树）全过，一次提交 Accepted（35/35）。\n\n**可精简点**：队列用 `new LinkedList<>()` 只是为了可读，这题入队前已经过滤掉 null，可以换成 `new ArrayDeque<>()`（更快、内存更省，且不会触发 ArrayDeque 拒收 null 的问题）；另外 `Deque<TreeNode>` 声明配 `ArrayDeque` 实现是 Java 里更常见的组合。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public List<List<Integer>> levelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new LinkedList<>();\n        queue.offerLast(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.pollFirst();\n                list.add(cur.val);\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n        }\n        return ans;\n    }",
+      "notes": "① 与上一轮对比：仍沿用“层序 BFS”这一写法，核心是在每层处理前固定当前队列长度，保证本层节点不会与下一层混合；使用 Deque 的 offerLast/pollFirst，复杂度仍为时间 O(n)、空间 O(w)，与一刷和上次复习的复杂度一致。\n\n② 这次为什么能想起来：题目“按层返回”直接提示需要逐层处理，关键动作是先取 size 再扩展节点；以 [3,9,20,null,null,15,7] 推演：队列为 [3] 时 size=1，弹出 3 得到 [3] 并入队 9、20；随后 size=2，弹出 9、20 得到 [9,20] 并入队 15、7；最后 size=2，弹出 15、7 得到 [15,7]。空树单独返回空列表，空孩子不入队，因此不会产生多余空层。\n\n③ 掌握度判定：本地 9 项测试全部通过，随后一次提交即 Accepted（35/35），全程没有讨论或提示，因此判为较强。\n\n④ 下一步提醒：遇到“按层收集、层间比较、层序变体”时，继续优先确认是否需要在扩展前快照队列长度；这是防止跨层混入的核心不变量。",
+      "code": "public List<List<Integer>> levelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new LinkedList<>();\n        queue.offerLast(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.pollFirst();\n                list.add(cur.val);\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n        }\n        return ans;\n    }",
       "prev_code": "public List<List<Integer>> levelOrder(TreeNode root) {\n        List<List<Integer>> ans = new ArrayList<>();\n        if (root == null) {\n            return ans;\n        }\n        Deque<TreeNode> queue = new LinkedList<>();\n        queue.offerLast(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> list = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode cur = queue.pollFirst();\n                list.add(cur.val);\n                if (cur.left != null) {\n                    queue.offerLast(cur.left);\n                }\n                if (cur.right != null) {\n                    queue.offerLast(cur.right);\n                }\n            }\n            ans.add(list);\n        }\n        return ans;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(w)",
       "optimal": true,
       "notes": "**与一刷对比**：思路与写法一致（BFS 队列按层处理），结构干净。\n\n**关键点都处理对了**：① 每轮开头先取 `int size = queue.size()`，用它锁定「当前层有几个节点」，再一次性弹出这么多——这样收集出来正好一层一个列表；② `size` 是在内层循环之前取的，循环里边弹边入队不会污染本层计数；③ 子节点为 null 时直接跳过不入队，避免结果里多出空层；④ 空树直接返回空列表（不是含一个空列表的列表）。本地示例 3 + 边界 6（全左链/全右链/不平衡混合/负值/极值/完全二叉树）全过，一次提交 Accepted（35/35）。\n\n**可精简点**：队列用 `new LinkedList<>()` 只是为了可读，这题入队前已经过滤掉 null，可以换成 `new ArrayDeque<>()`（更快、内存更省，且不会触发 ArrayDeque 拒收 null 的问题）；另外 `Deque<TreeNode>` 声明配 `ArrayDeque` 实现是 Java 里更常见的组合。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "35/35",
+      "approach": "层序 BFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(w)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍沿用“层序 BFS”这一写法，核心是在每层处理前固定当前队列长度，保证本层节点不会与下一层混合；使用 Deque 的 offerLast/pollFirst，复杂度仍为时间 O(n)、空间 O(w)，与一刷和上次复习的复杂度一致。\n\n② 这次为什么能想起来：题目“按层返回”直接提示需要逐层处理，关键动作是先取 size 再扩展节点；以 [3,9,20,null,null,15,7] 推演：队列为 [3] 时 size=1，弹出 3 得到 [3] 并入队 9、20；随后 size=2，弹出 9、20 得到 [9,20] 并入队 15、7；最后 size=2，弹出 15、7 得到 [15,7]。空树单独返回空列表，空孩子不入队，因此不会产生多余空层。\n\n③ 掌握度判定：本地 9 项测试全部通过，随后一次提交即 Accepted（35/35），全程没有讨论或提示，因此判为较强。\n\n④ 下一步提醒：遇到“按层收集、层间比较、层序变体”时，继续优先确认是否需要在扩展前快照队列长度；这是防止跨层混入的核心不变量。"
     }
   ]
 }
