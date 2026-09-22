@@ -20,20 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "103/103",
       "runtime_ms": null,
-      "memory_bytes": 43664000,
+      "memory_bytes": 43784000,
       "approach": "栈（Deque）",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路一致（栈匹配，压入的是配对右括号），写法与归档版本相同。\n\n**关键点都处理对了**：① 遇左括号压入「对应的右括号」，遇到右括号时只需一次 `stack.pollLast() != c` 比较，不用写两套映射分支；② 两处早退都写全了——栈空时的多余右括号、弹出元素不匹配；③ 扫完用 `stack.isEmpty()` 收口，\"(((\" 这类只有左括号的输入不会被误判为有效。本地示例 5 + 边界 7（单个左/右括号、全左未闭合、多余右括号、深层嵌套、正确嵌套、交叉错配）全过，一次提交 Accepted（103/103）。\n\n**可精简点**：压栈/弹栈混用了 `offer` 与 `pollLast`（一个从尾进、一个从尾出，语义上是对的但读起来绕），`Deque` 当栈用建议直接 `push/pop` 成对使用。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public boolean isValid(String s) {\n        Deque<Character> stack = new ArrayDeque<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                stack.offer(')');\n            } else if (c == '{') {\n                stack.offer('}');\n            } else if (c == '[') {\n                stack.offer(']');\n            } else {\n                if (stack.isEmpty()) {\n                    return false;\n                }\n                if (stack.pollLast() != c) {\n                    return false;\n                }\n            }\n        }\n        return stack.isEmpty();\n    }",
+      "notes": "### 与上一轮对比\n本轮仍采用“左括号压入对应右括号，右括号弹栈比对”的 Deque 栈写法。核心不变量、时间复杂度和空间复杂度均未变化，提交前清理了占位注释。\n\n### 为什么能直接复现\n右括号到来时先处理空栈，再验证栈顶是否是对应右括号；扫描结束后仅在栈空时返回 true。复现过程没有依赖额外提示，说明关键分支已经形成稳定记忆。\n\n### 掌握度判定\n本地 12 项测试通过后，首次提交即 Accepted（103/103），本轮没有讨论具体解法或接收提示，判定为较强。\n\n### 下一步提醒\n同一思路继续复用原 approach，不再拆成新写法；后续可在相关题中复练“栈保存待匹配状态”的不变量。",
+      "code": "public boolean isValid(String s) {\n        Deque<Character> stack = new ArrayDeque<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                stack.offer(')');\n            } else if (c == '{') {\n                stack.offer('}');\n            } else if (c == '[') {\n                stack.offer(']');\n            } else {\n                if (stack.isEmpty()) {\n                    return false;\n                }\n                if (stack.pollLast() != c) {\n                    return false;\n                }\n            }\n        }\n        return stack.isEmpty();\n    }",
       "prev_code": "public boolean isValid(String s) {\n        Deque<Character> stack = new ArrayDeque<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                stack.offer(')');\n            } else if (c == '{') {\n                stack.offer('}');\n            } else if (c == '[') {\n                stack.offer(']');\n            } else {\n                if (stack.isEmpty()) {\n                    return false;\n                }\n                if (stack.pollLast() != c) {\n                    return false;\n                }\n            }\n        }\n        return stack.isEmpty();\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**与一刷对比**：思路一致（栈匹配，压入的是配对右括号），写法与归档版本相同。\n\n**关键点都处理对了**：① 遇左括号压入「对应的右括号」，遇到右括号时只需一次 `stack.pollLast() != c` 比较，不用写两套映射分支；② 两处早退都写全了——栈空时的多余右括号、弹出元素不匹配；③ 扫完用 `stack.isEmpty()` 收口，\"(((\" 这类只有左括号的输入不会被误判为有效。本地示例 5 + 边界 7（单个左/右括号、全左未闭合、多余右括号、深层嵌套、正确嵌套、交叉错配）全过，一次提交 Accepted（103/103）。\n\n**可精简点**：压栈/弹栈混用了 `offer` 与 `pollLast`（一个从尾进、一个从尾出，语义上是对的但读起来绕），`Deque` 当栈用建议直接 `push/pop` 成对使用。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "103/103",
+      "approach": "栈（Deque）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n本轮仍采用“左括号压入对应右括号，右括号弹栈比对”的 Deque 栈写法。核心不变量、时间复杂度和空间复杂度均未变化，提交前清理了占位注释。\n\n### 为什么能直接复现\n右括号到来时先处理空栈，再验证栈顶是否是对应右括号；扫描结束后仅在栈空时返回 true。复现过程没有依赖额外提示，说明关键分支已经形成稳定记忆。\n\n### 掌握度判定\n本地 12 项测试通过后，首次提交即 Accepted（103/103），本轮没有讨论具体解法或接收提示，判定为较强。\n\n### 下一步提醒\n同一思路继续复用原 approach，不再拆成新写法；后续可在相关题中复练“栈保存待匹配状态”的不变量。"
     }
   ]
 }
