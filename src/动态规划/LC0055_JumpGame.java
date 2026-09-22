@@ -1,24 +1,25 @@
 // ============================================================
 // LeetCode 55. 跳跃游戏 (Jump Game)
-// 难度：Medium | 分类：动态规划（贪心最优）
+// 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/jump-game/
-// 二刷日期：2026-09-07（第 3 次复习 · 一刷 2026-08-09 · 上次 2026-09-02 较强）
-// 一刷/上次思路：贪心维护最远可达下标（i<=reach 时才更新 reach=max(reach, i+nums[i])），reach>=n-1 即可达
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例）
+// 刷题日期：2026-09-22
+//
 // ============================================================
+
+import java.util.*;
 
 public class LC0055_JumpGame {
 
     // ==== 提交代码开始 ====
     public boolean canJump(int[] nums) {
-        int maxRight = 0;
+        int maxReach = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (maxRight < i) {
+            if (maxReach < i) {
                 return false;
             }
-            maxRight = Math.max(maxRight, i + nums[i]);
+            maxReach = Math.max(maxReach, i + nums[i]);
         }
-        return maxRight >= nums.length - 1;
+        return maxReach >= nums.length - 1;
     }
     // ==== 提交代码结束 ====
 
