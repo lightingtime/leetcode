@@ -33,20 +33,20 @@
       "code": "public int[] productExceptSelf(int[] nums) {\n        if (nums.length < 1) {\n            return nums;\n        }\n        int[] leftMul = new int[nums.length];\n        leftMul[0] = 1;\n        for (int i = 1; i < leftMul.length; i++) {\n            leftMul[i] = leftMul[i - 1] * nums[i - 1];\n        }\n        int[] rightMul = new int[nums.length];\n        rightMul[nums.length - 1] = 1;\n        for (int i = nums.length - 2; i >= 0; i--) {\n            rightMul[i] = rightMul[i + 1] * nums[i + 1];\n        }\n        for (int i = 0; i < nums.length; i++) {\n            nums[i] = leftMul[i] * rightMul[i];\n        }\n        return nums;\n    }"
     },
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "24/24",
       "runtime_ms": null,
-      "memory_bytes": 72288000,
+      "memory_bytes": 72444000,
       "approach": "答案数组前缀积+滚动后缀",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路一致（输出数组当前缀积容器 + 滚动后缀变量）。\n\n**关键点都处理对了**：① 全程没有除法，用「左侧积 × 右侧积」替代「总积 ÷ nums[i]」，天然规避 0 的问题；② 第一遍 `leftMul[0] = 1` 起步，`leftMul[i] = leftMul[i-1] * nums[i-1]` 写的是「不含 nums[i] 的左侧积」；③ 第二遍从右往左，先 `leftMul[i] *= right` 再 `right *= nums[i]`——顺序反过来就会把自身乘进去（因为 right 那时还没包含 nums[i]）；④ 额外空间只有一个滚动变量 right，输出数组不算额外空间，符合 O(1) 要求。本地示例 2 + 边界 8（空输入/单元素/最短长度2/全相同/单个0/多个0/负数/大数）全过，一次提交 Accepted（24/24）。\n\n**可精简点**：① `nums.length < 1` 的提前返回冗余——空数组时两个循环都不执行，直接返回空数组即可；② 数组名叫 `leftMul` 但它最终承载答案，命名成 `ans` 更贴合语义，滚动变量 `right` 叫 `rightMul` 与左侧对称。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public int[] productExceptSelf(int[] nums) {\n        if (nums.length < 1) return nums;\n        int [] leftMul = new int[nums.length];\n        leftMul[0] = 1;\n        for (int i = 1; i < leftMul.length; i++) {\n            leftMul[i] = leftMul[i - 1] * nums[i - 1];\n        }\n        int right = 1;\n        for (int i = nums.length - 1; i >= 0; i--) {\n            leftMul[i] = leftMul[i] * right;\n            right *= nums[i];\n        }\n        return leftMul;\n    }",
+      "notes": "**与上一轮对比**\n- 仍是「输出数组存左前缀积 + 从右向左滚动后缀积」，未更换思路；保持一刷已经达到的 O(n)/O(1)，本轮代码结构和复杂度一致。\n\n**这次为什么能想起来**\n- 抓住“不能除法”和“输出数组不计入额外空间”两个约束，先把答案位看作左侧乘积，再用反向扫描补上右侧乘积。\n- 以 nums=[1,2,3] 推演：第一遍得到 ans=[1,1,2]；反向 i=2 时 right=1，ans[2]=2，随后 right=3；i=1 时 ans[1]=3，随后 right=6；i=0 时 ans[0]=6。每个位置最终只乘左右两侧，不含自身。\n\n**掌握度依据**\n- 本地 9 项测试通过，力扣首次提交 Accepted，24/24；本轮没有讨论解法细节或获得正确代码提示，因此记为较强、一次 AC。\n\n**下一步提醒**\n- 下次闭卷重写时重点检查反向循环顺序：必须先用当前 right 更新 ans[i]，再执行 right *= nums[i]。",
+      "code": "public int[] productExceptSelf(int[] nums) {\n        if (nums.length < 1) return nums;\n        int [] leftMul = new int[nums.length];\n        leftMul[0] = 1;\n        for (int i = 1; i < leftMul.length; i++) {\n            leftMul[i] = leftMul[i - 1] * nums[i - 1];\n        }\n        int right = 1;\n        for (int i = nums.length - 1; i >= 0; i--) {\n            leftMul[i] = leftMul[i] * right;\n            right *= nums[i];\n        }\n        return leftMul;\n    }",
       "prev_code": "public int[] productExceptSelf(int[] nums) {\n        if (nums.length < 1) {\n            return nums;\n        }\n        int[] leftMul = new int[nums.length];\n        leftMul[0] = 1;\n        for (int i = 1; i < leftMul.length; i++) {\n            leftMul[i] = leftMul[i - 1] * nums[i - 1];\n        }\n        int right = 1;\n        for (int i = nums.length - 1; i >= 0; i--) {\n            leftMul[i] = leftMul[i] * right;\n            right *= nums[i];\n        }\n        return leftMul;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -66,6 +66,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**与一刷对比**：思路一致（输出数组当前缀积容器 + 滚动后缀变量）。\n\n**关键点都处理对了**：① 全程没有除法，用「左侧积 × 右侧积」替代「总积 ÷ nums[i]」，天然规避 0 的问题；② 第一遍 `leftMul[0] = 1` 起步，`leftMul[i] = leftMul[i-1] * nums[i-1]` 写的是「不含 nums[i] 的左侧积」；③ 第二遍从右往左，先 `leftMul[i] *= right` 再 `right *= nums[i]`——顺序反过来就会把自身乘进去（因为 right 那时还没包含 nums[i]）；④ 额外空间只有一个滚动变量 right，输出数组不算额外空间，符合 O(1) 要求。本地示例 2 + 边界 8（空输入/单元素/最短长度2/全相同/单个0/多个0/负数/大数）全过，一次提交 Accepted（24/24）。\n\n**可精简点**：① `nums.length < 1` 的提前返回冗余——空数组时两个循环都不执行，直接返回空数组即可；② 数组名叫 `leftMul` 但它最终承载答案，命名成 `ans` 更贴合语义，滚动变量 `right` 叫 `rightMul` 与左侧对称。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "24/24",
+      "approach": "答案数组前缀积+滚动后缀",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "**与上一轮对比**\n- 仍是「输出数组存左前缀积 + 从右向左滚动后缀积」，未更换思路；保持一刷已经达到的 O(n)/O(1)，本轮代码结构和复杂度一致。\n\n**这次为什么能想起来**\n- 抓住“不能除法”和“输出数组不计入额外空间”两个约束，先把答案位看作左侧乘积，再用反向扫描补上右侧乘积。\n- 以 nums=[1,2,3] 推演：第一遍得到 ans=[1,1,2]；反向 i=2 时 right=1，ans[2]=2，随后 right=3；i=1 时 ans[1]=3，随后 right=6；i=0 时 ans[0]=6。每个位置最终只乘左右两侧，不含自身。\n\n**掌握度依据**\n- 本地 9 项测试通过，力扣首次提交 Accepted，24/24；本轮没有讨论解法细节或获得正确代码提示，因此记为较强、一次 AC。\n\n**下一步提醒**\n- 下次闭卷重写时重点检查反向循环顺序：必须先用当前 right 更新 ans[i]，再执行 right *= nums[i]。"
     }
   ]
 }
