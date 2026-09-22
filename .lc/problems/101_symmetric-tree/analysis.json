@@ -20,17 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-08-07",
+      "date": "2026-09-22",
       "verdict": "Accepted",
       "testcases": "201/201",
       "runtime_ms": null,
-      "memory_bytes": 43936000,
+      "memory_bytes": 43848000,
       "approach": "递归镜像比较",
       "time_complexity": "O(n)",
-      "space_complexity": "O(树高)",
+      "space_complexity": "O(h)",
       "optimal": true,
-      "notes": "递归镜像比较：helper(root,root) 出口先判双 null/单 null/值不同，再镜像递归 left.left vs right.right 且 left.right vs right.left；8 组本地一次全过，力扣 201/201 一次 Accepted",
-      "code": "public boolean isSymmetric(TreeNode root) {\n    return isSymmetricHelper(root, root);\n}\n\nprivate boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n    if (left == null && right == null) {\n        return true;\n    }\n    if (left == null || right == null) {\n        return false;\n    }\n    if (left.val != right.val) {\n        return false;\n    }\n    return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n}"
+      "notes": "与上一轮对比：上次复习使用迭代栈成对比较，这次回到递归镜像比较；两者时间复杂度同为 O(n)，递归栈空间 O(h) 与显式栈同阶。\n这次能够直接写出“双空 -> 单空 -> 值不等 -> 交叉递归”的完整判断链，并复用了一刷已经出现过的递归镜像写法，说明该结构已能稳定回忆。\n掌握度判定：本地 8 项测试通过，力扣一次提交 Accepted，全程没有提示或探讨，记为较强。\n下一步提醒：递归最坏栈深为 O(h)，本题节点数上限 1000 且已通过；之后可继续保留递归与迭代两种写法的互证。",
+      "code": "public boolean isSymmetric(TreeNode root) {\n        return helper(root, root);\n    }\n\n    private boolean helper(TreeNode left, TreeNode right) {\n        if (left == null && right == null) {\n            return true;\n        }\n        if (left == null || right == null) {\n            return false;\n        }\n        if (left.val != right.val) {\n            return false;\n        }\n        return helper(left.left, right.right) && helper(left.right, right.left);\n    }",
+      "prev_code": "public boolean isSymmetric(TreeNode root) {\n    return isSymmetricHelper(root, root);\n}\n\nprivate boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n    if (left == null && right == null) {\n        return true;\n    }\n    if (left == null || right == null) {\n        return false;\n    }\n    if (left.val != right.val) {\n        return false;\n    }\n    return isSymmetricHelper(left.left, right.right) && isSymmetricHelper(left.right, right.left);\n}",
+      "mastery": "strong",
+      "pass": 2
     },
     {
       "date": "2026-09-18",
@@ -66,6 +69,19 @@
       "space_complexity": "O(h)",
       "optimal": true,
       "notes": "**与一刷对比**：一刷用的是迭代栈（LinkedList 成对比较），这次改成**递归**版：`isSymmetricHelper(root, root)` 把「自己和自己比」直接当成一对镜像节点传入，结构比迭代版更短。\n\n**关键点都处理对了**：① 镜像配对关系正确——递归的两对是 `(left.left, right.right)` 与 `(left.right, right.left)`，不是同侧的左左/右右；② 空值判断顺序正确——先双 null（对称）→ 再单 null（不对称）→ 最后比 val，避免了先取 val 造成空指针；③ 根节点用 `helper(root, root)` 传入，空树与单节点自然为 true。本地示例 2 + 边界 6（单节点/左右值不同/结构对称值错位/四层全对称/负值对称/极值对称）全过，一次提交 Accepted（201/201）。这次也自动绕开了一刷那个 ArrayDeque 不能存 null 的坑（递归不建集合）。\n\n**可精简点**：辅助方法名 `isSymmetricHelper` 可以短一些（如 `check`/`mirror`）；递归深度是树高，链状树最坏 O(n)，如果要避免深递归可以用显式栈（同样要注意 null 不能进 ArrayDeque）。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "201/201",
+      "approach": "递归镜像比较",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": true,
+      "notes": "与上一轮对比：上次复习使用迭代栈成对比较，这次回到递归镜像比较；两者时间复杂度同为 O(n)，递归栈空间 O(h) 与显式栈同阶。\n这次能够直接写出“双空 -> 单空 -> 值不等 -> 交叉递归”的完整判断链，并复用了一刷已经出现过的递归镜像写法，说明该结构已能稳定回忆。\n掌握度判定：本地 8 项测试通过，力扣一次提交 Accepted，全程没有提示或探讨，记为较强。\n下一步提醒：递归最坏栈深为 O(h)，本题节点数上限 1000 且已通过；之后可继续保留递归与迭代两种写法的互证。"
     }
   ]
 }
