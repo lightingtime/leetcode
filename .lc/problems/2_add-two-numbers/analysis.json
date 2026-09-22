@@ -20,20 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "1569/1569",
       "runtime_ms": null,
-      "memory_bytes": 46948000,
+      "memory_bytes": 47004000,
       "approach": "dummy+双指针逐位相加维护进位",
-      "time_complexity": "O(max(m,n))",
+      "time_complexity": "O(m+n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路一致（dummy 哨兵 + 单循环逐位相加、进位参与循环条件），写法和归档版本几乎逐行相同。\n\n**关键点都处理对了**：① 取位前先判空（`p1 == null ? 0 : p1.val`），两链等长不了也能跑；② 循环条件写成 `p1 != null || p2 != null || next != 0`，把最高位进位收进来（只写前两个条件时 999+1 这类输入会丢一位）；③ 新节点存 `sum % 10`、进位存 `sum / 10`；④ 指针只在非空时前移，避免越界；⑤ 数字倒序存储，正好从低位往高位接，全程不用反转链表。本地示例 3 + 边界 5（单元素进位/长度不同/连续进位/结果多一位/大数混合）全过，一次提交 Accepted（1569/1569）。\n\n**可精简点**：进位变量叫 `next`，在链表题里和「下一个节点」的语义撞车，建议改叫 `carry`；`p1 = p1 == null ? p1 : p1.next;` 写成 `if (p1 != null) p1 = p1.next;` 更直白。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode();\n        ListNode p1 = l1, p2 = l2, p = dummy;\n        int next = 0;\n        while (p1 != null || p2 != null || next != 0) {\n            int a = p1 == null ? 0 : p1.val;\n            int b = p2 == null ? 0 : p2.val;\n            int sum = a + b + next;\n            ListNode node = new ListNode(sum % 10);\n            next = sum / 10;\n            p.next = node;\n            p = p.next;\n            p1 = p1 == null ? p1 : p1.next;\n            p2 = p2 == null ? p2 : p2.next;\n        }\n        return dummy.next;\n    }",
+      "notes": "### 与上一轮对比\n一刷、2026-09-18 首次复习和本次均采用 dummy + 双指针逐位相加维护进位；本轮保持 O(m+n) 时间、O(1) 额外空间，没有复杂度层面的改进空间，差异只在变量命名与单循环收尾。\n\n### 本次回忆情况\n能直接复用逆序链表低位对齐、空节点按 0 处理、循环条件纳入末尾进位的核心结构，说明该写法已稳定；但建题后给过哑结点、长度不一致和末尾进位的泛化提示，因此不把本次记为完全独立回忆。\n\n### 掌握度判定\n本次力扣一次提交即 Accepted（1569/1569），firstTry=true；按复习轮“提示过即 weak”的规则保守记为较弱。\n\n### 下一步提醒\n下次复习先不看旧代码，重点手推长度不同与连续进位；同时留意本轮 code-notes 中 #138、#148 的链表指针精简要求，重写时减少临时变量和多余走链。",
+      "code": "public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode();\n        ListNode p1 = l1, p2 = l2, p = dummy;\n        int next = 0;\n        while (p1 != null || p2 != null || next != 0) {\n            int a = p1 == null ? 0 : p1.val;\n            int b = p2 == null ? 0 : p2.val;\n            int sum = a + b + next;\n            ListNode node = new ListNode(sum % 10);\n            next = sum / 10;\n            p.next = node;\n            p = p.next;\n            p1 = p1 == null ? p1 : p1.next;\n            p2 = p2 == null ? p2 : p2.next;\n        }\n        return dummy.next;\n    }",
       "prev_code": "public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode();\n        ListNode p1 = l1, p2 = l2, p = dummy;\n        int next = 0;\n        while (p1 != null || p2 != null || next != 0) {\n            int a = p1 == null ? 0 : p1.val;\n            int b = p2 == null ? 0 : p2.val;\n            int sum = a + b + next;\n            ListNode node = new ListNode(sum % 10);\n            next = sum / 10;\n            p.next = node;\n            p = p.next;\n            p1 = p1 == null ? p1 : p1.next;\n            p2 = p2 == null ? p2 : p2.next;\n        }\n        return dummy.next;\n    }\n",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**与一刷对比**：思路一致（dummy 哨兵 + 单循环逐位相加、进位参与循环条件），写法和归档版本几乎逐行相同。\n\n**关键点都处理对了**：① 取位前先判空（`p1 == null ? 0 : p1.val`），两链等长不了也能跑；② 循环条件写成 `p1 != null || p2 != null || next != 0`，把最高位进位收进来（只写前两个条件时 999+1 这类输入会丢一位）；③ 新节点存 `sum % 10`、进位存 `sum / 10`；④ 指针只在非空时前移，避免越界；⑤ 数字倒序存储，正好从低位往高位接，全程不用反转链表。本地示例 3 + 边界 5（单元素进位/长度不同/连续进位/结果多一位/大数混合）全过，一次提交 Accepted（1569/1569）。\n\n**可精简点**：进位变量叫 `next`，在链表题里和「下一个节点」的语义撞车，建议改叫 `carry`；`p1 = p1 == null ? p1 : p1.next;` 写成 `if (p1 != null) p1 = p1.next;` 更直白。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "1569/1569",
+      "approach": "dummy+双指针逐位相加维护进位",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n一刷、2026-09-18 首次复习和本次均采用 dummy + 双指针逐位相加维护进位；本轮保持 O(m+n) 时间、O(1) 额外空间，没有复杂度层面的改进空间，差异只在变量命名与单循环收尾。\n\n### 本次回忆情况\n能直接复用逆序链表低位对齐、空节点按 0 处理、循环条件纳入末尾进位的核心结构，说明该写法已稳定；但建题后给过哑结点、长度不一致和末尾进位的泛化提示，因此不把本次记为完全独立回忆。\n\n### 掌握度判定\n本次力扣一次提交即 Accepted（1569/1569），firstTry=true；按复习轮“提示过即 weak”的规则保守记为较弱。\n\n### 下一步提醒\n下次复习先不看旧代码，重点手推长度不同与连续进位；同时留意本轮 code-notes 中 #138、#148 的链表指针精简要求，重写时减少临时变量和多余走链。"
     }
   ]
 }
