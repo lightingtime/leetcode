@@ -29,24 +29,31 @@
       "category": "树与二叉树",
       "problem": "validate-binary-search-tree",
       "date": "2026-08-07"
+    },
+    {
+      "title": "递归传递上下界",
+      "text": "树中节点不只受直接父节点约束，而受整条祖先路径共同约束。递归时把 lower/upper 当作不变量向下传递：进入左子树收紧上界，进入右子树收紧下界；遇到相等或越界立即失败。",
+      "category": "树与二叉树",
+      "problem": "validate-binary-search-tree",
+      "date": "2026-09-22"
     }
   ],
   "submissions": [
     {
-      "date": "2026-09-07",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "86/86",
       "runtime_ms": null,
-      "memory_bytes": 45360000,
+      "memory_bytes": 45516000,
       "approach": "递归上下界",
       "time_complexity": "O(n)",
       "space_complexity": "O(树高)",
       "optimal": true,
-      "notes": "**与上一轮（09-02 较强）对比**：思路与写法保持一致——递归上下界校验，左右子树分别收紧 `upper`/`lower`，用 `Long` 的 `±2^63` 处理 int 极值初值；本地 10 个用例（单节点、右子树整体违规、相等值、左子树大于根、全右链、负值、int 极值、深层 BST）首跑全过，力扣一次提交 Accepted（86/86）。\n\n**为什么这次想起来了**：BST 判定的关键约束是「只和父节点比较不够，必须沿路径维护 (lower, upper) 可允许区间」；上一轮沉淀的 int 极值用例（`0, MIN, MAX`）直接提醒了用 Long 传界的必要性，写法上先写空节点返回 true、再判 `root.val` 越界、最后递归收紧两侧。\n\n**掌握度依据**：会话全程无探讨、无提示；本地首跑 10 用例全过，力扣一次提交 Accepted → 较强；连续第 3 次较强，间隔 ×2.5 后再上浮。",
-      "code": "public boolean isValidBST(TreeNode root) {\n    return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n}\n\nprivate boolean isValidBSTHelper(TreeNode root, long upper, long lower) {\n    if (root == null) {\n        return true;\n    }\n    if (root.val >= upper || root.val <= lower) {\n        return false;\n    }\n    return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);\n}",
+      "notes": "与上一轮对比：仍然采用递归上下界，核心不变量与一刷一致，复杂度保持 O(n)/O(树高)；本轮清理了占位注释，提交区实现完整。\\n\\n这次为什么想起来：一刷曾因只收紧当前一侧、把另一侧重置为无穷而丢失祖先约束；这次明确把 lower/upper 作为祖先共同约定向下传递，因此左子树只更新 upper，右子树只更新 lower，并用 long 哨兵覆盖 int 极值。\\n\\n掌握度判定：本次一次提交即 Accepted，全程没有提示或探讨，因此记为较强。\\n\\n下一步提醒：递归上下界已是 O(n) 最优复杂度；若后续只想练不同实现方式，可另写中序迭代并用显式栈检查严格递增，但它不会降低复杂度。",
+      "code": "public boolean isValidBST(TreeNode root) {\n        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n    }\n\n    private boolean isValidBSTHelper(TreeNode root, long upper, long lower) {\n        if (root == null) {\n            return true;\n        }\n        if (root.val >= upper || root.val <= lower) {\n            return false;\n        }\n\n        return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);\n    }",
       "prev_code": "public boolean isValidBST(TreeNode root) {\n        return isValidBSTHelper(root, Long.MAX_VALUE, Long.MIN_VALUE);\n    }\n\n    private boolean isValidBSTHelper(TreeNode root, long upper, long lower) {\n        if (root == null) {\n            return true;\n        }\n        if (root.val >= upper || root.val <= lower) {\n            return false;\n        }\n        return isValidBSTHelper(root.left, root.val, lower) && isValidBSTHelper(root.right, upper, root.val);\n    }\n",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "hints": [
@@ -91,6 +98,19 @@
       "space_complexity": "O(树高)",
       "optimal": true,
       "notes": "**与上一轮（09-02 较强）对比**：思路与写法保持一致——递归上下界校验，左右子树分别收紧 `upper`/`lower`，用 `Long` 的 `±2^63` 处理 int 极值初值；本地 10 个用例（单节点、右子树整体违规、相等值、左子树大于根、全右链、负值、int 极值、深层 BST）首跑全过，力扣一次提交 Accepted（86/86）。\n\n**为什么这次想起来了**：BST 判定的关键约束是「只和父节点比较不够，必须沿路径维护 (lower, upper) 可允许区间」；上一轮沉淀的 int 极值用例（`0, MIN, MAX`）直接提醒了用 Long 传界的必要性，写法上先写空节点返回 true、再判 `root.val` 越界、最后递归收紧两侧。\n\n**掌握度依据**：会话全程无探讨、无提示；本地首跑 10 用例全过，力扣一次提交 Accepted → 较强；连续第 3 次较强，间隔 ×2.5 后再上浮。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "86/86",
+      "approach": "递归上下界",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(树高)",
+      "optimal": true,
+      "notes": "与上一轮对比：仍然采用递归上下界，核心不变量与一刷一致，复杂度保持 O(n)/O(树高)；本轮清理了占位注释，提交区实现完整。\\n\\n这次为什么想起来：一刷曾因只收紧当前一侧、把另一侧重置为无穷而丢失祖先约束；这次明确把 lower/upper 作为祖先共同约定向下传递，因此左子树只更新 upper，右子树只更新 lower，并用 long 哨兵覆盖 int 极值。\\n\\n掌握度判定：本次一次提交即 Accepted，全程没有提示或探讨，因此记为较强。\\n\\n下一步提醒：递归上下界已是 O(n) 最优复杂度；若后续只想练不同实现方式，可另写中序迭代并用显式栈检查严格递增，但它不会降低复杂度。"
     }
   ]
 }
