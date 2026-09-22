@@ -2,11 +2,10 @@
 // LeetCode 227. 基本计算器 II (Basic Calculator II)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/basic-calculator-ii/
-// 复习日期：2026-09-17（第 3 次复习 · 一刷 2026-08-24）
-// 一刷写法：带符号栈——+ / - 把带符号的操作数压栈，* / 与栈顶结算，最后求和（O(n) 空间，写法1）
-// 一刷问题：减号被绑到上一项而不是后一个操作数；扫描状态机缺「上一个运算符」状态，数字未及时清零、末尾操作数漏结算
-// 上次复习写法：O(1) 空间 sum/last 两变量——* / 合并进 last、+ / - 定稿进 sum（写法2）；上次复习同样不是一次 AC
-// 测试用例：与一刷归档保持一致（示例 3 + 边界 7，含 299999 字符上限与连续乘除左结合）
+// 刷题日期：2026-09-22
+// 思路：扫描表达式，加减时定稿上一项，乘除时更新当前项，末尾统一结算。
+// 复杂度：时间 O(n)，额外空间 O(1)。
+//
 // ============================================================
 
 import java.util.*;
@@ -14,35 +13,34 @@ import java.util.*;
 public class LC0227_BasicCalculatorIi {
 
     // ==== 提交代码开始 ====
-    // 参数 s：合法中缀表达式（非负整数、+ - * / 与空格，无括号）；返回其整数值
     public int calculate(String s) {
         int sum = 0, last = 0, num = 0;
-        // sign：上一个运算符（初始 '+' 等价于表达式前面垫一个 0），决定 num 是定稿进 last 还是并入乘除
         char sign = '+';
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isDigit(c)) {
                 num = num * 10 + (c - '0');
             }
-            // 末尾必须单独触发一次结算，否则最后一个操作数只算进 num、没进 last/sum
             if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {
                 switch (sign) {
-                    case '+' :
+                    case '+' -> {
                         sum += last;
                         last = num;
                         break;
-                    case '-' :
-                        // 减号绑到后面这个操作数上：结算旧的 last 后，把 -num 作为新的 last
+                    }
+                    case '-' -> {
                         sum += last;
                         last = -num;
                         break;
-                    case '*' :
+                    }
+                    case '*' -> {
                         last *= num;
                         break;
-
-                    case '/' :
+                    }
+                    case '/' -> {
                         last /= num;
                         break;
+                    }
                 }
                 num = 0;
                 sign = c;

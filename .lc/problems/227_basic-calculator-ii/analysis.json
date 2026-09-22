@@ -47,20 +47,20 @@
       "code": "    public int calculate(String s) {\n        int index = 0;\n        Deque<Integer> stack = new ArrayDeque<>();\n        int num = 0;\n        char sign = '+';\n        while (index < s.length()) {\n            if (Character.isDigit(s.charAt(index))) {\n                num = num * 10 + (s.charAt(index) - '0');\n            }\n            if (!Character.isDigit(s.charAt(index)) && s.charAt(index) != ' ' || index == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> {\n                        stack.push(num);\n                        break;\n                    }\n                    case '-' -> {\n                        stack.push(-num);\n                        break;\n                    }\n                    case '*' -> {\n                        stack.push(stack.pop() * num);\n                        break;\n                    }\n                    case '/' -> {\n                        stack.push(stack.pop() / num);\n                        break;\n                    }\n                }\n                sign = s.charAt(index);\n                num = 0;\n            }\n            index++;\n        }\n        int ans = 0;\n        while (!stack.isEmpty()) {\n            ans += stack.pop();\n        }\n        return ans;\n    }"
     },
     {
-      "date": "2026-09-17",
+      "date": "2026-09-22",
       "verdict": "Accepted",
       "testcases": "111/111",
       "runtime_ms": null,
-      "memory_bytes": 46576000,
+      "memory_bytes": 46840000,
       "approach": "O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC，用的是带符号栈（写法1）；踩的坑是减号被绑到上一项、以及扫描状态机缺「上一个运算符」状态导致末尾操作数漏结算。\n- 第 1、2 次复习（2026-09-12 / 09-15）：都换成 O(1) 空间写法2，但两次都不是一次 AC（都是 weak）。\n- 本次（第 3 次复习）：**一次 AC**，仍用写法2（`sum` / `last` 两变量 + `sign` 状态机），111/111，内存 46.6MB。历史那两个坑这次都没再出现。\n\n**② 这次写对的关键：`sign` 状态机、减号归属、末尾触发**\n\n| 环节 | 这次的处理 |\n| --- | --- |\n| 运算符状态 | `sign` 记住「上一个」运算符，初始 `'+'`（相当于表达式前面垫一个 0），遇到数字只累积 `num`，不结算 |\n| 结算时机 | 遇到运算符字符才用 `sign` 结算上一段：`+`/`-` 把 `last` 定稿进 `sum`、把 `num` 变为新 `last`；`*`/`/` 直接并入 `last` |\n| 减号归属 | `-` 分支先把旧 `last` 结算进 `sum`，再把 `-num` 作为新的 `last`，符号绑在**后面**这个操作数上 |\n| 末尾操作数 | 触发条件里带 `i == s.length() - 1`，最后一项即使没有收尾运算符也会被结算 |\n\n具体推演（边界用例 `1-2*3+3`，期望 -2）：\n\n| 读到 | 累积/结算 | 状态（sum / last / num / sign） |\n| --- | --- | --- |\n| `1` | 只累积 | 0 / 0 / 1 / `+` |\n| `-` | 结算 `+`：`sum += 0`，`last = 1` | 0 / 1 / 0 / `-` |\n| `2` | 只累积 | 0 / 1 / 2 / `-` |\n| `*` | 结算 `-`：`sum += 1`，`last = -2` | 1 / -2 / 0 / `*` |\n| `3` | 只累积 | 1 / -2 / 3 / `*` |\n| `+` | 结算 `*`：`last = -2 * 3 = -6` | 1 / -6 / 0 / `+` |\n| `3`（末尾） | 结算 `+`：`sum += -6`，`last = 3` | -5 / 3 / 0 / `+` |\n| 返回 | `sum + last = -5 + 3` | **-2** ✓ |\n\n**③ 掌握度判定**\n- 一次提交即 Accepted，无失败轮次、无中途探讨 → strong。\n- （建题时按复习流程提示过这题历史上的两个坑位，与文件头记录的「一刷问题」同源，没有额外给过写法层面的提示。）\n\n**④ 下一步提醒**\n- 写法2 已稳定，写法1（带符号栈）自 2026-08-24 后再没重写过；想确认它也已内化，可手写一遍压栈版（本地通过即可，不必重提力扣）。\n- 该写法的隐含依赖是 `i == s.length() - 1` 兜底；若日后改成「只在遇到运算符时结算」的常规写法，末尾必须单独补一次结算，否则最后一项会丢。",
-      "code": "    // ==== 提交代码开始 ====\n    // 参数 s：合法中缀表达式（非负整数、+ - * / 与空格，无括号）；返回其整数值\n    public int calculate(String s) {\n        int sum = 0, last = 0, num = 0;\n        // sign：上一个运算符（初始 '+' 等价于表达式前面垫一个 0），决定 num 是定稿进 last 还是并入乘除\n        char sign = '+';\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            // 末尾必须单独触发一次结算，否则最后一个操作数只算进 num、没进 last/sum\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+' :\n                        sum += last;\n                        last = num;\n                        break;\n                    case '-' :\n                        // 减号绑到后面这个操作数上：结算旧的 last 后，把 -num 作为新的 last\n                        sum += last;\n                        last = -num;\n                        break;\n                    case '*' :\n                        last *= num;\n                        break;\n\n                    case '/' :\n                        last /= num;\n                        break;\n                }\n                num = 0;\n                sign = c;\n            }\n        }\n        return sum + last;\n    }\n    // ==== 提交代码结束 ====",
+      "notes": "### 与上一轮对比\n- 继续使用一刷沉淀的 O(1) 空间两变量写法，没有退回带符号栈写法；复杂度维持 O(n)/O(1)。\n- 本轮的结算边界处理完整，一次 AC。\n### 这次为什么能想起来\n- 先区分“已完成项”和“当前乘除项”，遇到 * / 更新 last，遇到 + - 才把上一项并入 sum。\n- 末尾统一结算最后一个 num，覆盖单数字和末尾没有运算符的情况。\n### 掌握度判定\n- 本地 11 项测试通过，力扣 111/111 一次 Accepted；本轮没有使用提示或讨论，评为 strong。\n### 下一步提醒\n- 已满足时间下界与常数空间要求。后续遇到同类题时先检查两点：空格是否被误当成结算符，以及连续乘除是否保持左结合。",
+      "code": "public int calculate(String s) {\n        int sum = 0, last = 0, num = 0;\n        char sign = '+';\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> {\n                        sum += last;\n                        last = num;\n                        break;\n                    }\n                    case '-' -> {\n                        sum += last;\n                        last = -num;\n                        break;\n                    }\n                    case '*' -> {\n                        last *= num;\n                        break;\n                    }\n                    case '/' -> {\n                        last /= num;\n                        break;\n                    }\n                }\n                num = 0;\n                sign = c;\n            }\n        }\n        return sum + last;\n    }",
       "prev_code": "    public int calculate(String s) {\n        int num = 0, last = 0, sum = 0;\n        char sign = '+';\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isDigit(c)) {\n                num = num * 10 + (c - '0');\n            }\n            if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {\n                switch (sign) {\n                    case '+' -> { sum += last; last = num; }\n                    case '-' -> { sum += last; last = -num; }\n                    case '*' -> { last *= num; }\n                    case '/' -> { last /= num; }\n                }\n                sign = c;\n                num = 0;\n            }\n        }\n        return sum + last;\n    }",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "reviews": [
@@ -102,6 +102,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-24）：非一次 AC，用的是带符号栈（写法1）；踩的坑是减号被绑到上一项、以及扫描状态机缺「上一个运算符」状态导致末尾操作数漏结算。\n- 第 1、2 次复习（2026-09-12 / 09-15）：都换成 O(1) 空间写法2，但两次都不是一次 AC（都是 weak）。\n- 本次（第 3 次复习）：**一次 AC**，仍用写法2（`sum` / `last` 两变量 + `sign` 状态机），111/111，内存 46.6MB。历史那两个坑这次都没再出现。\n\n**② 这次写对的关键：`sign` 状态机、减号归属、末尾触发**\n\n| 环节 | 这次的处理 |\n| --- | --- |\n| 运算符状态 | `sign` 记住「上一个」运算符，初始 `'+'`（相当于表达式前面垫一个 0），遇到数字只累积 `num`，不结算 |\n| 结算时机 | 遇到运算符字符才用 `sign` 结算上一段：`+`/`-` 把 `last` 定稿进 `sum`、把 `num` 变为新 `last`；`*`/`/` 直接并入 `last` |\n| 减号归属 | `-` 分支先把旧 `last` 结算进 `sum`，再把 `-num` 作为新的 `last`，符号绑在**后面**这个操作数上 |\n| 末尾操作数 | 触发条件里带 `i == s.length() - 1`，最后一项即使没有收尾运算符也会被结算 |\n\n具体推演（边界用例 `1-2*3+3`，期望 -2）：\n\n| 读到 | 累积/结算 | 状态（sum / last / num / sign） |\n| --- | --- | --- |\n| `1` | 只累积 | 0 / 0 / 1 / `+` |\n| `-` | 结算 `+`：`sum += 0`，`last = 1` | 0 / 1 / 0 / `-` |\n| `2` | 只累积 | 0 / 1 / 2 / `-` |\n| `*` | 结算 `-`：`sum += 1`，`last = -2` | 1 / -2 / 0 / `*` |\n| `3` | 只累积 | 1 / -2 / 3 / `*` |\n| `+` | 结算 `*`：`last = -2 * 3 = -6` | 1 / -6 / 0 / `+` |\n| `3`（末尾） | 结算 `+`：`sum += -6`，`last = 3` | -5 / 3 / 0 / `+` |\n| 返回 | `sum + last = -5 + 3` | **-2** ✓ |\n\n**③ 掌握度判定**\n- 一次提交即 Accepted，无失败轮次、无中途探讨 → strong。\n- （建题时按复习流程提示过这题历史上的两个坑位，与文件头记录的「一刷问题」同源，没有额外给过写法层面的提示。）\n\n**④ 下一步提醒**\n- 写法2 已稳定，写法1（带符号栈）自 2026-08-24 后再没重写过；想确认它也已内化，可手写一遍压栈版（本地通过即可，不必重提力扣）。\n- 该写法的隐含依赖是 `i == s.length() - 1` 兜底；若日后改成「只在遇到运算符时结算」的常规写法，末尾必须单独补一次结算，否则最后一项会丢。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "111/111",
+      "approach": "O(1) 空间：sum/last 两变量，乘除合并进 last、加减定稿入 sum（写法2）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 继续使用一刷沉淀的 O(1) 空间两变量写法，没有退回带符号栈写法；复杂度维持 O(n)/O(1)。\n- 本轮的结算边界处理完整，一次 AC。\n### 这次为什么能想起来\n- 先区分“已完成项”和“当前乘除项”，遇到 * / 更新 last，遇到 + - 才把上一项并入 sum。\n- 末尾统一结算最后一个 num，覆盖单数字和末尾没有运算符的情况。\n### 掌握度判定\n- 本地 11 项测试通过，力扣 111/111 一次 Accepted；本轮没有使用提示或讨论，评为 strong。\n### 下一步提醒\n- 已满足时间下界与常数空间要求。后续遇到同类题时先检查两点：空格是否被误当成结算符，以及连续乘除是否保持左结合。"
     }
   ]
 }
