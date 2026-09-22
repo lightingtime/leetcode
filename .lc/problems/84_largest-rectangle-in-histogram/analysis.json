@@ -17,23 +17,31 @@
   "notes": "单调递增栈 + 左右高度0哨兵：弹栈结算（左边界=新栈顶，右边界=i），O(n)。思路从朴素 O(n²)（每根柱子左右扫更矮）引导到单调栈；10 组本地用例一次全过，力扣 99/99 一次 Accepted",
   "code_notes": [],
   "mistakes": [],
-  "patterns": [],
+  "patterns": [
+    {
+      "title": "单调栈求左右第一更小",
+      "text": "若要为每个元素找左右第一个更小值并用两者确定可扩展区间，维护单调递增栈；当前值更小时弹栈结算，新栈顶即左边界，当前下标即右边界。",
+      "category": "栈、队列与优先队列",
+      "problem": "largest-rectangle-in-histogram",
+      "date": "2026-09-22"
+    }
+  ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "99/99",
       "runtime_ms": null,
-      "memory_bytes": 89724000,
+      "memory_bytes": 89648000,
       "approach": "单调递增栈+哨兵",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路一致（首尾加 0 哨兵 + 单调递增栈，栈存下标），写法与归档版本基本相同。\n\n**关键点都处理对了**：① 栈里存的是下标（宽度要靠下标差算，存高度算不出宽度）；② 弹栈结算用 `height = heights[栈顶下标]`、`width = i - 弹栈后的新栈顶 - 1`——新栈顶就是左边界、i 就是右边界；③ 首尾两个 0 哨兵同时解决了两件事：左端不用判空（下标 0 高度为 0，永远不会被弹出，所以 `stack.peekLast()` 安全）、右端不用在循环后再清一次栈（最后那个 0 会把剩下的柱子全部结算掉）。本地示例 2 + 边界 8（单元素/递增/递减/全相同/含零分隔/全零/V形/极值）全过，一次提交 Accepted（99/99）。\n\n**可精简点**：把入参 `heights` 重新赋值成加了哨兵的新数组（`heights = newHeights;`）读起来有点绕，换成独立局部变量（如 `h = newHeights`）语义更清楚；哨兵数组也可以直接分配后用 `for` 逐个搬。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    public int largestRectangleArea(int[] heights) {\n        int[] newHeights = new int[heights.length + 2];\n        System.arraycopy(heights, 0, newHeights, 1, heights.length);\n        heights = newHeights;\n        Deque<Integer> stack = new ArrayDeque<>();\n        int max = 0;\n        for (int i = 0; i < heights.length; i++) {\n            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {\n                int height = heights[stack.pollLast()];\n                int width = i - stack.peekLast() -1;\n                max = Math.max(max, height * width);\n            }\n            stack.offerLast(i);\n        }\n        return max;\n    }",
+      "notes": "① 与上一轮对比：2026-09-18 也是一次 AC，仍是单调递增栈 + 哨兵，时间 O(n)、空间 O(n)；本次没有更换思路，保持线性最优。\n② 本次实现直接围绕“每根柱子第一次遇到左右更矮柱子的位置”展开，哨兵让左右边界统一在弹栈时结算，没有额外的左右数组。\n③ 掌握度依据：本地 10 项测试通过，力扣 99/99 一次 Accepted，本次全程没有讨论或提示，因此记为 strong。\n④ 下一步：该解法已达到时间复杂度下限；后续复习可重点回忆“为什么当前柱高小于栈顶时才开始结算，以及等号时为何可以不弹出”。",
+      "code": "public int largestRectangleArea(int[] heights) {\n        int[] copy = new int[heights.length + 2];\n        System.arraycopy(heights, 0, copy, 1, heights.length);\n        heights = copy;\n        Deque<Integer> stack = new ArrayDeque<>();\n        int max = 0;\n        for (int i = 0; i < heights.length; i++) {\n            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {\n                int height = heights[stack.pollLast()];\n                int width = i - stack.peekLast() - 1;\n                int area = height * width;\n                max = Math.max(max, area);\n            }\n            stack.offerLast(i);\n        }\n        return max;\n    }",
       "prev_code": "public int largestRectangleArea(int[] heights) {\n        int[] newHeights = new int[heights.length + 2];\n        System.arraycopy(heights, 0, newHeights, 1, heights.length);\n        heights = newHeights;\n        int max = 0;\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (int i = 0; i < heights.length; i++) {\n            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {\n                int height = heights[stack.pollLast()];\n                int width = i - stack.peekLast() - 1;\n                max = Math.max(max, height * width);\n            }\n            stack.offerLast(i);\n        }\n        return max;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +61,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**与一刷对比**：思路一致（首尾加 0 哨兵 + 单调递增栈，栈存下标），写法与归档版本基本相同。\n\n**关键点都处理对了**：① 栈里存的是下标（宽度要靠下标差算，存高度算不出宽度）；② 弹栈结算用 `height = heights[栈顶下标]`、`width = i - 弹栈后的新栈顶 - 1`——新栈顶就是左边界、i 就是右边界；③ 首尾两个 0 哨兵同时解决了两件事：左端不用判空（下标 0 高度为 0，永远不会被弹出，所以 `stack.peekLast()` 安全）、右端不用在循环后再清一次栈（最后那个 0 会把剩下的柱子全部结算掉）。本地示例 2 + 边界 8（单元素/递增/递减/全相同/含零分隔/全零/V形/极值）全过，一次提交 Accepted（99/99）。\n\n**可精简点**：把入参 `heights` 重新赋值成加了哨兵的新数组（`heights = newHeights;`）读起来有点绕，换成独立局部变量（如 `h = newHeights`）语义更清楚；哨兵数组也可以直接分配后用 `for` 逐个搬。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "99/99",
+      "approach": "单调递增栈+哨兵",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：2026-09-18 也是一次 AC，仍是单调递增栈 + 哨兵，时间 O(n)、空间 O(n)；本次没有更换思路，保持线性最优。\n② 本次实现直接围绕“每根柱子第一次遇到左右更矮柱子的位置”展开，哨兵让左右边界统一在弹栈时结算，没有额外的左右数组。\n③ 掌握度依据：本地 10 项测试通过，力扣 99/99 一次 Accepted，本次全程没有讨论或提示，因此记为 strong。\n④ 下一步：该解法已达到时间复杂度下限；后续复习可重点回忆“为什么当前柱高小于栈顶时才开始结算，以及等号时为何可以不弹出”。"
     }
   ]
 }
