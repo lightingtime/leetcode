@@ -2,13 +2,8 @@
 // LeetCode 46. 全排列 (Permutations)
 // 难度：Medium | 分类：回溯
 // 链接：https://leetcode.cn/problems/permutations/
-// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-09 · 一刷一次 Accepted）
-// 一刷写法：回溯 + used 标记——每层从「还没用过的数」里挑一个追加到路径尾部，递归到底收集答案，返回前撤销这次选择（used 归位、路径去掉末尾）。O(n·n!)/O(n)
-// 本题易错点：① 选择与撤销必须一一对应、严格对称；② 收集答案要放路径的**拷贝**（new ArrayList<>(path)），直接放引用会被后续回溯改坏；③ 本题元素互不相同，不需要去重（对比 LC47 有重复元素时才要在同层跳过重复值）；④ 题目约束 nums.length ≤ 6，别用越界规模的输入当测试
-// 测试用例与一刷归档保持一致（示例 3 个 + 边界 1 个：长度 6 的 720 个互不相同排列）
+// 刷题日期：2026-09-22
 //
-// 思路：TODO 写下你的思路（先在纸面想清楚再写代码）
-// 复杂度：TODO 时间 O(?) 空间 O(?)
 // ============================================================
 
 import java.util.*;
@@ -21,14 +16,13 @@ public class LC0046_Permutations {
     public List<List<Integer>> permute(int[] nums) {
         ans = new ArrayList<>();
         visited = new boolean[nums.length];
-        Arrays.sort(nums);
         dfs(nums, new ArrayList<>());
         return ans;
     }
 
-    private void dfs(int[] nums, ArrayList<Integer> list) {
-        if (list.size() == nums.length) {
-            ans.add(new ArrayList<>(list));
+    private void dfs(int[] nums, ArrayList<Integer> path) {
+        if (path.size() == nums.length) {
+            ans.add(new ArrayList<>(path));
             return;
         }
 
@@ -37,13 +31,12 @@ public class LC0046_Permutations {
                 continue;
             }
             visited[i] = true;
-            list.add(nums[i]);
-            dfs(nums, list);
-            list.remove(list.size() - 1);
+            path.add(nums[i]);
+            dfs(nums, path);
+            path.remove(path.size() - 1);
             visited[i] = false;
         }
     }
-
     // ==== 提交代码结束 ====
 
     public static void main(String[] args) {

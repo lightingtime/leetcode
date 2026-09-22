@@ -21,20 +21,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-22",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "26/26",
       "runtime_ms": null,
-      "memory_bytes": 45700000,
+      "memory_bytes": 45820000,
       "approach": "回溯（used 标记）",
       "time_complexity": "O(n·n!)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路与写法一致（回溯 + used 数组 + 结果收集时拷贝路径）。\n\n**关键点都处理对了**：① 用 `visited[]` 记录已用元素，每层从「没用过」的数里挑候选；② 选择/撤销严格对称——`visited[i]=true` + `list.add` 进，`list.remove(list.size()-1)` + `visited[i]=false` 出，两者顺序调过来也不影响正确性（这里是先删列表再还标记）；③ 收集答案用了 `new ArrayList<>(list)` 拷贝，避免回溯过程把已收集的结果改坏；④ 终止条件 `list.size() == nums.length` 与题目约束（长度 ≤ 6）匹配。本地示例 3 + 边界 2（长度 6 的 720 个互不相同排列、负数元素逐条校验集合）全过，一次提交 Accepted（26/26）。\n\n**可精简点**：① `Arrays.sort(nums)` 在这里是多余的——全排列的结果集合与输入顺序无关，排序只有「带重复元素的版本（LC47）」才需要，那时靠「排序 + 同层跳过相邻重复」去重；② `ans`、`visited` 作为实例字段每次调用重建，改成局部变量传参更安全（同 LC105 那处提醒）。\n\n**测试区补充**：一刷归档的 main 里只有 1 个边界用例（长度 6），我按你要求的「提交前复查边界」补了负数元素用例，覆盖 0/负值这类约束允许但原来没测的输入。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。",
-      "code": "    List<List<Integer>> ans;\n    boolean[] visited;\n    public List<List<Integer>> permute(int[] nums) {\n        ans = new ArrayList<>();\n        visited = new boolean[nums.length];\n        Arrays.sort(nums);\n        dfs(nums, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, ArrayList<Integer> list) {\n        if (list.size() == nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n\n        for (int i = 0; i < nums.length; i++) {\n            if (visited[i]) {\n                continue;\n            }\n            visited[i] = true;\n            list.add(nums[i]);\n            dfs(nums, list);\n            list.remove(list.size() - 1);\n            visited[i] = false;\n        }\n    }",
+      "notes": "① 与上一轮对比：继续使用 used 标记回溯，路径增删与标记恢复严格对称，复杂度仍为 O(n·n!)/O(n)，没有引入额外集合或排序。\n② 本次能直接想起：把问题看成逐层选择未访问元素，递归树走到叶子就得到一个排列；一刷容易出错的 path 复制时机和撤销顺序这次都保持正确。\n③ 掌握度依据：本次一次提交即 Accepted，且没有提示或讨论。\n④ 下一步提醒：后续复习重点验证终止时是否复制 path，以及返回后 visited 与 path 是否同时恢复。",
+      "code": "List<List<Integer>> ans;\n    boolean[] visited;\n    public List<List<Integer>> permute(int[] nums) {\n        ans = new ArrayList<>();\n        visited = new boolean[nums.length];\n        dfs(nums, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, ArrayList<Integer> path) {\n        if (path.size() == nums.length) {\n            ans.add(new ArrayList<>(path));\n            return;\n        }\n\n        for (int i = 0; i < nums.length; i++) {\n            if (visited[i]) {\n                continue;\n            }\n            visited[i] = true;\n            path.add(nums[i]);\n            dfs(nums, path);\n            path.remove(path.size() - 1);\n            visited[i] = false;\n        }\n    }",
       "prev_code": "boolean[] used;\n    List<List<Integer>> ans;\n    public List<List<Integer>> permute(int[] nums) {\n        ans = new ArrayList<>();\n        if (nums.length == 0) {\n            return ans;\n        }\n        used = new boolean[nums.length];\n        dfs(nums, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(int[] nums, ArrayList<Integer> list) {\n        if (list.size() == nums.length) {\n            ans.add(new ArrayList<>(list));\n            return;\n        }\n        for (int i = 0; i < nums.length; i++) {\n            if (used[i]) {\n                continue;\n            }\n            used[i] = true;\n            list.add(nums[i]);\n            dfs(nums, list);\n            list.remove(list.size() - 1);\n            used[i] = false;\n        }\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "**与一刷对比**：思路与写法一致（回溯 + used 数组 + 结果收集时拷贝路径）。\n\n**关键点都处理对了**：① 用 `visited[]` 记录已用元素，每层从「没用过」的数里挑候选；② 选择/撤销严格对称——`visited[i]=true` + `list.add` 进，`list.remove(list.size()-1)` + `visited[i]=false` 出，两者顺序调过来也不影响正确性（这里是先删列表再还标记）；③ 收集答案用了 `new ArrayList<>(list)` 拷贝，避免回溯过程把已收集的结果改坏；④ 终止条件 `list.size() == nums.length` 与题目约束（长度 ≤ 6）匹配。本地示例 3 + 边界 2（长度 6 的 720 个互不相同排列、负数元素逐条校验集合）全过，一次提交 Accepted（26/26）。\n\n**可精简点**：① `Arrays.sort(nums)` 在这里是多余的——全排列的结果集合与输入顺序无关，排序只有「带重复元素的版本（LC47）」才需要，那时靠「排序 + 同层跳过相邻重复」去重；② `ans`、`visited` 作为实例字段每次调用重建，改成局部变量传参更安全（同 LC105 那处提醒）。\n\n**测试区补充**：一刷归档的 main 里只有 1 个边界用例（长度 6），我按你要求的「提交前复查边界」补了负数元素用例，覆盖 0/负值这类约束允许但原来没测的输入。\n\n**掌握度依据**：一次提交 Accepted、全程无探讨 → 较强。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "26/26",
+      "approach": "回溯（used 标记）",
+      "time_complexity": "O(n·n!)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：继续使用 used 标记回溯，路径增删与标记恢复严格对称，复杂度仍为 O(n·n!)/O(n)，没有引入额外集合或排序。\n② 本次能直接想起：把问题看成逐层选择未访问元素，递归树走到叶子就得到一个排列；一刷容易出错的 path 复制时机和撤销顺序这次都保持正确。\n③ 掌握度依据：本次一次提交即 Accepted，且没有提示或讨论。\n④ 下一步提醒：后续复习重点验证终止时是否复制 path，以及返回后 visited 与 path 是否同时恢复。"
     }
   ]
 }
