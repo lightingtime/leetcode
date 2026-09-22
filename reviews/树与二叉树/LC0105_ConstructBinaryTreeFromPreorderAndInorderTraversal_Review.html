@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-08</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>105. 从前序与中序遍历序列构造二叉树 (Construct Binary Tree from Preorder and Inorder Traversal)</h1><p>&gt; <a href="https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/" rel="noopener">https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/</a></p><p>难度：Medium ｜ 分类：树与二叉树</p><p>标签：树、数组、哈希表、分治、二叉树</p><h2>题目描述</h2><p>给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。</p><p>示例 1:</p><p>输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]</p><p>输出: [3,9,20,null,null,15,7]</p><p>示例 2:</p><p>输入: preorder = [-1], inorder = [-1]</p><p>输出: [-1]</p><p>提示:</p><p>1</p><p>inorder.length == preorder.length</p><p>-3000</p><p>preorder 和 inorder 均 无重复 元素</p><p>inorder 均出现在 preorder</p><p>preorder 保证 为二叉树的前序遍历序列</p><p>inorder 保证 为二叉树的中序遍历序列</p><h2>示例</h2><ol><li>输入：preorder = [3,9,20,15,7]，inorder = [9,3,15,20,7]</li></ol><p>输出：[3,9,20,null,null,15,7]</p><ol><li>输入：preorder = [-1]，inorder = [-1]</li></ol><p>输出：[-1]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-22 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（203/203）｜ 一次 AC ｜ 前序定根+哈希定位+递归分治 ｜ O(n) · O(n)</p>
+      <div class="review-note md"><p>与上一轮对比：仍采用前序定根、中序哈希定位、递归分治，核心思路和 O(n)/O(n) 复杂度未变；本轮实现把哈希表作为实例字段并在每次 buildTree 时重建，左右区间边界一次算清。</p><p>为什么想起来：一刷沉淀的关键信号“前序首元素定根、中序根位置切分左右子树”仍清晰，本轮全程未借助提示。</p><p>掌握度依据：本次一次提交即 Accepted，203/203，全程无探讨，因此判为较强。</p><p>下一步提醒：若继续优化空间，可利用本题值域 -3000..3000 用数组辅助定位；若担心极端链的递归栈，可另行挑战迭代写法。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 前序定根+哈希定位+递归分治 ｜ O(n) · O(n)</p>
       <div class="review-note md"><p><strong>与一刷对比</strong>：思路与写法一致（前序定根 + 中序哈希定位 + 递归分治）。</p><p><strong>关键点都处理对了</strong>：① 用 <code>preorder[preStart]</code> 取当前子树的根，靠哈希表拿到它在 <code>inorder</code> 中的下标 <code>index</code>；② 左子树大小 <code>leftLen = index - inStart</code>，前序左区间 <code>[preStart+1, preStart+leftLen]</code>、右区间 <code>[preStart+1+leftLen, preEnd]</code>，中序左右区间是 <code>[inStart, index-1]</code> 与 <code>[index+1, inEnd]</code>——两边的区间长度严格对应，所以不会切错；③ 递归出口判的是区间为空（<code>preStart &gt; preEnd</code>），空输入与单节点都自然兜住。本地示例 2 + 边界 6（空输入/全左链/全右链/不平衡混合/极值/完全二叉树）全过，一次提交 Accepted（203/203）。</p><p><strong>可精简点</strong>：① <code>map</code> 写成实例字段、每次调用重建——虽然本题只会调用一次没问题，但换成局部变量 + 传参更安全（避免多次调用/并发时的状态残留）；② <code>map.get(root.val)</code> 里的 <code>root.val</code> 就是 <code>preorder[preStart]</code>，可以直接用后者，少一次字段读取。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>前序定根+哈希定位+递归分治</b></li>
         <li><span>复杂度</span><b>O(n) · O(n)</b></li>
@@ -47,27 +51,25 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前序定根+哈希定位+递归分治</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.6 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal.java · 前序定根+哈希定位+递归分治</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map;
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 44.5 MB</span><span class="chip">用例 203/203</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal.java · 前序定根+哈希定位+递归分治</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map;
     <span class="tk-k">public</span> <span class="tk-t">TreeNode</span> <span class="tk-f">buildTree</span>(<span class="tk-k">int</span>[] preorder, <span class="tk-k">int</span>[] inorder) {
         map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; inorder.length; i++) {
             map.<span class="tk-f">put</span>(inorder[i], i);
         }
-        <span class="tk-t">TreeNode</span> root = <span class="tk-f">buildHelper</span>(preorder, <span class="tk-n">0</span>, preorder.length - <span class="tk-n">1</span>, inorder, <span class="tk-n">0</span>, inorder.length - <span class="tk-n">1</span>);
-        <span class="tk-k">return</span> root;
+        <span class="tk-k">return</span> <span class="tk-f">helper</span>(preorder, <span class="tk-n">0</span>, preorder.length - <span class="tk-n">1</span>, inorder, <span class="tk-n">0</span>, inorder.length -<span class="tk-n">1</span>);
     }
 
-    <span class="tk-k">private</span> <span class="tk-t">TreeNode</span> <span class="tk-f">buildHelper</span>(<span class="tk-k">int</span>[] preorder, <span class="tk-k">int</span> preStart, <span class="tk-k">int</span> preEnd, <span class="tk-k">int</span>[] inorder, <span class="tk-k">int</span> inStart, <span class="tk-k">int</span> inEnd) {
+    <span class="tk-k">private</span> <span class="tk-t">TreeNode</span> <span class="tk-f">helper</span>(<span class="tk-k">int</span>[] preorder, <span class="tk-k">int</span> preStart, <span class="tk-k">int</span> preEnd, <span class="tk-k">int</span>[] inorder, <span class="tk-k">int</span> inStart, <span class="tk-k">int</span> inEnd) {
         <span class="tk-k">if</span> (preStart &gt; preEnd) {
             <span class="tk-k">return</span> <span class="tk-k">null</span>;
         }
-
         <span class="tk-t">TreeNode</span> root = <span class="tk-k">new</span> <span class="tk-t">TreeNode</span>(preorder[preStart]);
         <span class="tk-k">int</span> index = map.<span class="tk-f">get</span>(root.val);
-        <span class="tk-k">int</span> leftLen = index - inStart;
-        root.left = <span class="tk-f">buildHelper</span>(preorder, preStart + <span class="tk-n">1</span>, preStart + leftLen, inorder, inStart, index - <span class="tk-n">1</span>);
-        root.right = <span class="tk-f">buildHelper</span>(preorder, preStart + <span class="tk-n">1</span> + leftLen, preEnd, inorder, index + <span class="tk-n">1</span>, inEnd);
+        <span class="tk-k">int</span> left = index - inStart;
+        root.left = <span class="tk-f">helper</span>(preorder, preStart + <span class="tk-n">1</span>, preStart + left, inorder, inStart, index - <span class="tk-n">1</span>);
+        root.right = <span class="tk-f">helper</span>(preorder, preStart + left + <span class="tk-n">1</span>, preEnd, inorder, index + <span class="tk-n">1</span>, inEnd);
         <span class="tk-k">return</span> root;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0105_ConstructBinaryTreeFromPreorderAndInorderTraversal.java · 前序定根+哈希定位+递归分治 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">Map</span>&lt;<span class="tk-t">Integer</span>, <span class="tk-t">Integer</span>&gt; map;
