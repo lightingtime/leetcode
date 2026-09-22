@@ -233,12 +233,12 @@
       "title": "滑动窗口最大值",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-05",
-      "last_review_date": "2026-09-17",
-      "next_review_date": "2026-09-19",
-      "interval_days": 2,
-      "review_count": 1,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-22",
+      "next_review_date": "2026-09-27",
+      "interval_days": 5,
+      "review_count": 2,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "search-in-rotated-sorted-array": {

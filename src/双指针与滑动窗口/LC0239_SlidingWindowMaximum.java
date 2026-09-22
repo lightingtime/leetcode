@@ -2,14 +2,8 @@
 // LeetCode 239. 滑动窗口最大值 (Sliding Window Maximum)
 // 难度：Hard | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sliding-window-maximum/
-// 复习日期：2026-09-16（第 1 次复习 · 一刷 2026-08-05）
-// 一刷写法：单调队列存下标——入队前弹队尾小值、读答案前弹过期队头（下标 <= i-k），O(n)/O(k)
-// 测试用例：示例 2 个 + 边界 10 个（原有 7 个，本次补齐：长度 1e5 递增 k=5e4 / 长度 1e5 递减 k=5e4，
-// 后者专压过期队头淘汰；边界10 为二刷发现的回归用例：队内积压多个候选后遇到更大值）
+// 刷题日期：2026-09-22
 //
-// 思路：单调队列存下标。入队前 while 弹掉队尾所有比新元素小的值（它们更小又更早过期，永无出头之日），
-// 保持队列值单调递减、队头即窗口最大；窗口完整（i >= k-1）后先弹过期队头（下标 < i-k+1）再取队头记答案。
-// 复杂度：时间 O(n)（每个下标至多进出队一次），空间 O(k)
 // ============================================================
 
 import java.util.*;
@@ -18,21 +12,24 @@ public class LC0239_SlidingWindowMaximum {
 
     // ==== 提交代码开始 ====
     public int[] maxSlidingWindow(int[] nums, int k) {
-        Deque<Integer> queue = new ArrayDeque<>();
-        List<Integer> ans = new ArrayList<>();
-        for(int i = 0; i < nums.length; i++) {
-            while (!queue.isEmpty() && nums[queue.peekLast()] < nums[i]) {
-                queue.pollLast();
+        Deque<Integer> deque = new ArrayDeque<>();
+        int[] ans = new int[nums.length - k + 1];
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+                deque.pollLast();
             }
-            queue.offerLast(i);
+            deque.offerLast(i);
             if (i - k + 1 >= 0) {
-                while (queue.peekFirst() < i - k + 1) {
-                    queue.pollFirst();
+                while (deque.peekFirst() < i - k + 1) {
+                    deque.pollFirst();
                 }
-                ans.add(nums[queue.peekFirst()]);
+                ans[index] = nums[deque.peekFirst()];
+                index++;
             }
+
         }
-        return ans.stream().mapToInt(Integer::intValue).toArray();
+        return ans;
     }
     // ==== 提交代码结束 ====
 
