@@ -50,18 +50,18 @@
       "pass": 2
     },
     {
-      "date": "2026-09-17",
+      "date": "2026-09-22",
       "verdict": "Accepted",
       "testcases": "235/235",
       "approach": "两遍计数贪心",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比（09-15 较弱，同为两遍计数）**\n- 思路一致：双向计数扫描，时间 O(n)、空间 O(1)，都是不用栈、不用 DP 数组的写法。\n- 差异只在外层结构：上一轮把「结算」放在 `if (left == right)` 分支、清零放进 `else if`；本次先判零再判等，两个判断都独立成 `if`。语义等价，读起来更平。\n- 一刷的一维 DP（O(n) 空间）在这题被计数法彻底取代，空间降了一档。\n\n**② 这次为什么一次写对**\n- 记住的是两条反向的失效条件：正向扫时 `right > left` 表示这一段右括号已经多过左括号、无论后面接什么都不可能再补齐，必须清零；反向扫时对称地用 `left > right` 清零。\n- 反向那一趟不是冗余：`\"(()\"` 这类左括号偏多的前缀，正向永远等不到 `left == right`，只有从右往左看才能把中间的 `\"()\"` 截出来。\n- 一刷 DP 的三处越界边界（`j < 0` 仍 `+2`、向前拼接误用 `dp[j]`、把 `j-1 >= 0` 的越界保护当成配对条件）这次整类消失——没有「回头找配对左括号」的下标运算，就没有这类 off-by-one。\n\n**③ 掌握度依据**\n- 本地 12 组用例（示例 3 + 边界 9，含 `\"()\".repeat(500)` 长连续合法）全部通过；力扣一次提交 Accepted（235/235，内存 45380000 字节）。\n- 全程无提示、无讨论 → strong；连续较强计数从 0 回到 1。\n\n**④ 下一步提醒**\n- `for (int i = s.length()-  1; ...)` 里 `-` 后多了一个空格，格式统一成 `s.length() - 1`。\n- 同一题另两种写法值得对照保留：栈写法（栈底压最后一个未匹配的 `)` 下标，弹出后用当前下标减栈顶得长度）；一维 DP（`dp[i]` = 以 `i` 结尾的最长有效长度，难点仍是配对后向前拼接 `dp[j-1]` 的下标边界）。",
+      "notes": "① 与上一轮对比：仍采用两遍计数贪心，时间/空间维持 O(n)/O(1)，不再退回一刷的 O(n)/O(n) DP；本次反向循环写成 `s.toCharArray().length` 作为边界表达式，功能一致，但它每轮都可能新分配数组，写法不如上一轮的 `s.length() - 1`。\n② 这次为什么想起来：已经把“正向清多余右括号、反向清多余左括号，计数相等时更新”沉淀成固定套路，较一刷 DP 的三处边界修正更稳，因此一次 AC。\n③ 掌握度依据：全程未看提示、未讨论解法，本地通过后首次提交即 Accepted，判为较强。\n④ 下一步提醒：后续重写把反向循环上界改为 `s.length() - 1`，避免看似 O(1) 空间却在循环条件里反复构造数组；本次仍按原代码归档，不改写已判定逻辑。",
       "mastery": "strong",
-      "pass": 4,
-      "memory_bytes": 45380000,
-      "code": "    public int longestValidParentheses(String s) {\n        int left = 0, right = 0;\n        int leftMax = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                left++;\n            } else {\n                right++;\n            }\n            if (left < right) {\n                left = right = 0;\n            }\n            if (left == right) {\n                leftMax = Math.max(leftMax, right * 2);\n            }\n        }\n        left = right = 0;\n        int rightMax = 0;\n        for (int i = s.length()-  1; i >= 0; i--) {\n            char c = s.charAt(i);\n            if (c == '(') {\n                left++;\n            } else {\n                right++;\n            }\n            if (left > right) {\n                left = right = 0;\n            }\n            if (left == right) {\n                rightMax = Math.max(rightMax, left * 2);\n            }\n        }\n        return Math.max(leftMax, rightMax);\n    }\n    ",
+      "pass": 5,
+      "memory_bytes": 45596000,
+      "code": "public int longestValidParentheses(String s) {\n        int left = 0, right = 0;\n        int leftMax = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '(') {\n                left++;\n            } else {\n                right++;\n            }\n            if (left == right) {\n                leftMax = Math.max(leftMax, right * 2);\n            }\n            if (right > left) {\n                left = right = 0;\n            }\n        }\n        left = right = 0;\n        int rightMax = 0;\n        for (int i = s.toCharArray().length - 1; i >= 0; i--) {\n            char c = s.charAt(i);\n            if (c == '(') {\n                left++;\n            } else {\n                right++;\n            }\n            if (left == right) {\n                rightMax = Math.max(rightMax, left * 2);\n            }\n            if (left > right) {\n                left = right = 0;\n            }\n        }\n        return Math.max(leftMax, rightMax);\n    }",
       "prev_code": "    public int longestValidParentheses(String s) {\n        int left = 0, right = 0;\n        int leftMax = 0;\n        for (int i = 0; i < s.length(); i++) {\n            if (s.charAt(i) == '(') {\n                left++;\n            } else {\n                right++;\n            }\n            if (left == right) {\n                leftMax = Math.max(leftMax, left * 2);\n            } else if (right > left) {\n                left = 0;\n                right = 0;\n            }\n        }\n        int rightMax = 0;\n        left = right = 0;\n        for (int i = s.length() - 1; i >= 0; i--) {\n            if (s.charAt(i) == '(') {\n                left++;\n            } else {\n                right++;\n            }\n            if (left == right) {\n                rightMax = Math.max(rightMax, left * 2);\n            } else if (left > right) {\n                left = 0;\n                right = 0;\n            }\n        }\n        return Math.max(leftMax, rightMax);\n    }"
     }
   ],
@@ -121,6 +121,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比（09-15 较弱，同为两遍计数）**\n- 思路一致：双向计数扫描，时间 O(n)、空间 O(1)，都是不用栈、不用 DP 数组的写法。\n- 差异只在外层结构：上一轮把「结算」放在 `if (left == right)` 分支、清零放进 `else if`；本次先判零再判等，两个判断都独立成 `if`。语义等价，读起来更平。\n- 一刷的一维 DP（O(n) 空间）在这题被计数法彻底取代，空间降了一档。\n\n**② 这次为什么一次写对**\n- 记住的是两条反向的失效条件：正向扫时 `right > left` 表示这一段右括号已经多过左括号、无论后面接什么都不可能再补齐，必须清零；反向扫时对称地用 `left > right` 清零。\n- 反向那一趟不是冗余：`\"(()\"` 这类左括号偏多的前缀，正向永远等不到 `left == right`，只有从右往左看才能把中间的 `\"()\"` 截出来。\n- 一刷 DP 的三处越界边界（`j < 0` 仍 `+2`、向前拼接误用 `dp[j]`、把 `j-1 >= 0` 的越界保护当成配对条件）这次整类消失——没有「回头找配对左括号」的下标运算，就没有这类 off-by-one。\n\n**③ 掌握度依据**\n- 本地 12 组用例（示例 3 + 边界 9，含 `\"()\".repeat(500)` 长连续合法）全部通过；力扣一次提交 Accepted（235/235，内存 45380000 字节）。\n- 全程无提示、无讨论 → strong；连续较强计数从 0 回到 1。\n\n**④ 下一步提醒**\n- `for (int i = s.length()-  1; ...)` 里 `-` 后多了一个空格，格式统一成 `s.length() - 1`。\n- 同一题另两种写法值得对照保留：栈写法（栈底压最后一个未匹配的 `)` 下标，弹出后用当前下标减栈顶得长度）；一维 DP（`dp[i]` = 以 `i` 结尾的最长有效长度，难点仍是配对后向前拼接 `dp[j-1]` 的下标边界）。"
+    },
+    {
+      "pass": 5,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "235/235",
+      "approach": "两遍计数贪心",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "① 与上一轮对比：仍采用两遍计数贪心，时间/空间维持 O(n)/O(1)，不再退回一刷的 O(n)/O(n) DP；本次反向循环写成 `s.toCharArray().length` 作为边界表达式，功能一致，但它每轮都可能新分配数组，写法不如上一轮的 `s.length() - 1`。\n② 这次为什么想起来：已经把“正向清多余右括号、反向清多余左括号，计数相等时更新”沉淀成固定套路，较一刷 DP 的三处边界修正更稳，因此一次 AC。\n③ 掌握度依据：全程未看提示、未讨论解法，本地通过后首次提交即 Accepted，判为较强。\n④ 下一步提醒：后续重写把反向循环上界改为 `s.length() - 1`，避免看似 O(1) 空间却在循环条件里反复构造数组；本次仍按原代码归档，不改写已判定逻辑。"
     }
   ]
 }
