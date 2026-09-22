@@ -2,32 +2,24 @@
 // LeetCode 334. 递增的三元子序列 (Increasing Triplet Subsequence)
 // 难度：Medium | 分类：贪心与区间
 // 链接：https://leetcode.cn/problems/increasing-triplet-subsequence/
-// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-27 · 一刷非一次 AC）
-// 一刷思路：双变量贪心（first / second 单链更新），时间 O(n) 空间 O(1)；一刷为 3 轮随机对拍才收敛（second 被写成 ≤ first 的不变量破坏）
-// 上一次复习：同思路，一次 AC 且无探讨（判较强）；写法补了长度 < 3 提前返回与显式条件分支，与紧凑版等价
-// 子类型：双变量贪心 —— 维护「已扫描部分的最小值」+「前面存在更小值的最小候选」这组不变量
-// 测试用例与一刷归档保持一致（示例 + 边界 + 回归用例，含随机对拍沉淀的 10~15 号回归例）
+// 刷题日期：2026-09-22
 //
-// 思路：双变量贪心——first 记已扫描部分的最小值，second 记「前面存在比它更小的值」的最小候选；每个数只走一条 if/else 链：
-//       更小则刷新 first，落在 (first, second) 之间则刷新 second，一旦出现比 second 大的数（且 second > first）即命中递增三元组
-// 复杂度：时间 O(n) 空间 O(1)
 // ============================================================
+
+import java.util.*;
 
 public class LC0334_IncreasingTripletSubsequence {
 
     // ==== 提交代码开始 ====
     public boolean increasingTriplet(int[] nums) {
-        if (nums.length < 3) return false;
         int first = nums[0];
         int second = Integer.MAX_VALUE;
         for (int i = 1; i < nums.length; i++) {
-            // 不变量：first 是已扫描部分的最小值；second 只在「num > first」时刷新，所以恒有 second > first，
-            // 且 second 的前驱 first 必定出现在它之前 —— 每个数只进一条分支，等号不落任何分支（严格递增）
             if (nums[i] < first) {
                 first = nums[i];
             } else if (nums[i] > first && nums[i] < second) {
                 second = nums[i];
-            } else if (nums[i] > second && second > first) {
+            } else if (nums[i] > second){
                 return true;
             }
         }
