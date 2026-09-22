@@ -58,20 +58,20 @@
       "mastery": "weak"
     },
     {
-      "date": "2026-09-17",
+      "date": "2026-09-22",
       "verdict": "Accepted",
       "testcases": "1812/1812",
       "runtime_ms": null,
-      "memory_bytes": 45404000,
+      "memory_bytes": 45608000,
       "approach": "贪心双指针+星号回溯",
       "time_complexity": "最坏 O(nm)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 一刷（2026-08-26）：非一次 AC，走的是二维 DP，在空前缀行的 `*` 初始化上翻车（`\"c*a*b\"` 误匹配 `\"aab\"`）。\n- 第 1 次复习（2026-09-15，判较弱）：DP 与贪心两条路都重写并提交，DP 同样先错在空串行初始化；贪心首版有收尾比较方向写反、循环以模式长度为界、`&&`/`||` 漏括号越界三处错，反复修正后才过。\n- 本次（第 2 次复习）：**一次 AC**，直接选贪心双指针+星号回溯，1812/1812，内存 45.4MB。上次三处错全部没再出现。\n\n**② 这次写对的关键（状态只有两个变量 + 一个 case）**\n- `start`：最近一个 `*` 目前吃到 `s` 的下标；`matchIdx`：该 `*` 之后第一个待匹配的模式下标。两者在「遇 `*`」时更新一次，此后只被回溯用到——这就是整个贪心的全部状态（O(1) 空间）。\n- 三支主循环：能配 `*` 就**先按吃掉 0 个字符**处理（记下 `start` / `matchIdx`）；能一对一配（字母相等或 `?`）就双指针前进；都配不上时若存在最近星号，就让 `start++`（星号多吃一个字符）并从 `matchIdx` 重试，没有星号可退则直接 false。\n- 收尾比较的是 `j == n`（模式是否走完）而不是 `s` 是否走完，并先跳过尾部剩下的 `*`——这两处正是上次翻车的点。\n\ncase：`s = \"aab\"`、`p = \"c*a*b\"`（一刷 DP 误判为 true 的那个输入）\n\n| 步骤 | i / j | 说明 |\n| --- | --- | --- |\n| 起始 | 0 / 0 | `p[0]='c'` 与 `s[0]='a'` 配不上，且没有星号可退 → false ✓ |\n\ncase：`s = \"abc\"`、`p = \"a*c\"`\n\n| 步骤 | i / j | 动作 |\n| --- | --- | --- |\n| 起始 | 0 / 0 | `a` 对 `a` → 前进 |\n| — | 1 / 1 | 遇 `*`：先当吃 0 个，记 `start=1`、`matchIdx=2`，`j=2` |\n| — | 1 / 2 | `s[1]='b'` 与 `c` 配不上 → 有星号：`start=2`、`i=2`、`j=2` |\n| — | 2 / 2 | `s[2]='c'` 对 `c` → 双指针前进到 `i=3, j=3`，退出主循环 |\n| 收尾 | 3 / 3 | `j == n` → true ✓ |\n\n**③ 掌握度判定**\n- 一次提交即 Accepted，无失败轮次、无中途探讨 → strong。本次选的是贪心而非 DP，说明「双序列 DP 的边界初始化坑」已被主动绕开，但也意味着 DP 那条路本轮没被重新验证。\n- 间隔按 ×2.5 → 5 天（连续较强第 1 次）。\n\n**④ 下一步提醒**\n- 贪心已稳定，下次若要补 DP：重点仍是空串行/空串列的初始化（第 0 行只有前缀全是 `*` 时才为 true），这是本题唯一的初始化陷阱。\n- 该写法最坏仍是 O(nm)（回溯重扫），只是均摊很快；面试若问「能不能保证 O(n+m)」，需要说明这一点而不是含糊带过。",
-      "code": "    // ==== 提交代码开始 ====\n    // 参数 s：待匹配字符串；参数 p：模式串（`?` 配任意单字符、`*` 配任意长度含空串）；返回整体是否匹配\n    public boolean isMatch(String s, String p) {\n        int m = s.length();\n        int n = p.length();\n        // start：最近那个 `*` 目前吃到 s 的下标（回溯时 ++ 表示多吃一个字符）；matchIdx：该 `*` 之后第一个待匹配的模式下标\n        int start = -1, matchIdx = -1;\n        int i = 0, j = 0;\n        while (i < m) {\n            if (j < n && p.charAt(j) == '*') {\n                start = i;\n                matchIdx = j + 1;\n                j++;\n            } else if (j < n && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?')) {\n                i++;\n                j++;\n            } else {\n                if (start > -1) {\n                    start++;\n                    i = start;\n                    j = matchIdx;\n                } else {\n                    return false;\n                }\n            }\n        }\n        // 收尾：模式可能还剩尾部的 `*`（匹配空串），所以比较方向是「模式是否走到头」而不是「s 是否走到头」\n        while (j < n && p.charAt(j) == '*') {\n            j++;\n        }\n        return j == n;\n    }\n    // ==== 提交代码结束 ====",
+      "notes": "与上一次复习采用同一套贪心双指针+星号回溯，没有切换到二维 DP；这次能独立复用，时间和空间复杂度保持最坏 O(nm)、O(1)。\n\n本地 16 项测试全部通过，随后首次提交 Accepted（1812/1812），全程没有提示或探讨，因此掌握度判为较强。\n\n下一步：这种写法的关键是回溯基准的更新时机，后续再复习时重点验证“连续星号”和“回溯后再次遇到星号”两类边界。",
+      "code": "public boolean isMatch(String s, String p) {\n        int i = 0, j = 0;\n        int matchIdx = -1, start = -1;\n        while (i < s.length()) {\n            if (j < p.length() && p.charAt(j) == '*') {\n                matchIdx = j + 1;\n                start = i;\n                j++;\n            } else if (j < p.length() && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?')) {\n                i++;\n                j++;\n            } else {\n                if (matchIdx > -1) {\n                    start++;\n                    i = start;\n                    j = matchIdx;\n                } else {\n                    return false;\n                }\n            }\n        }\n        while (j < p.length() && p.charAt(j) == '*') {\n            j++;\n        }\n        return j == p.length();\n    }",
       "prev_code": "public boolean isMatch(String s, String p) {\n        int i = 0, j = 0, starIdx = -1, match = 0;\n        while (i < s.length()) {\n            if (j < p.length() && (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i))) {\n                // 普通字符或 ?：对上就双指针前进\n                i++;\n                j++;\n            } else if (j < p.length() && p.charAt(j) == '*') {\n                // 当作 * 先不存在（吞空），记住位置，i 不动\n                starIdx = j++;\n                match = i;\n            } else if (starIdx != -1) {\n                // 失配或模式走完：让最近的 * 多吞一个字符，回到 * 之后重新开始\n                i = ++match;\n                j = starIdx + 1;\n            } else {\n                return false;\n            }\n        }\n        while (j < p.length() && p.charAt(j) == '*') {\n            j++;\n        }\n        return j == p.length();\n    }",
       "mastery": "strong",
-      "pass": 2
+      "pass": 3
     }
   ],
   "reviews": [
@@ -100,6 +100,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 一刷（2026-08-26）：非一次 AC，走的是二维 DP，在空前缀行的 `*` 初始化上翻车（`\"c*a*b\"` 误匹配 `\"aab\"`）。\n- 第 1 次复习（2026-09-15，判较弱）：DP 与贪心两条路都重写并提交，DP 同样先错在空串行初始化；贪心首版有收尾比较方向写反、循环以模式长度为界、`&&`/`||` 漏括号越界三处错，反复修正后才过。\n- 本次（第 2 次复习）：**一次 AC**，直接选贪心双指针+星号回溯，1812/1812，内存 45.4MB。上次三处错全部没再出现。\n\n**② 这次写对的关键（状态只有两个变量 + 一个 case）**\n- `start`：最近一个 `*` 目前吃到 `s` 的下标；`matchIdx`：该 `*` 之后第一个待匹配的模式下标。两者在「遇 `*`」时更新一次，此后只被回溯用到——这就是整个贪心的全部状态（O(1) 空间）。\n- 三支主循环：能配 `*` 就**先按吃掉 0 个字符**处理（记下 `start` / `matchIdx`）；能一对一配（字母相等或 `?`）就双指针前进；都配不上时若存在最近星号，就让 `start++`（星号多吃一个字符）并从 `matchIdx` 重试，没有星号可退则直接 false。\n- 收尾比较的是 `j == n`（模式是否走完）而不是 `s` 是否走完，并先跳过尾部剩下的 `*`——这两处正是上次翻车的点。\n\ncase：`s = \"aab\"`、`p = \"c*a*b\"`（一刷 DP 误判为 true 的那个输入）\n\n| 步骤 | i / j | 说明 |\n| --- | --- | --- |\n| 起始 | 0 / 0 | `p[0]='c'` 与 `s[0]='a'` 配不上，且没有星号可退 → false ✓ |\n\ncase：`s = \"abc\"`、`p = \"a*c\"`\n\n| 步骤 | i / j | 动作 |\n| --- | --- | --- |\n| 起始 | 0 / 0 | `a` 对 `a` → 前进 |\n| — | 1 / 1 | 遇 `*`：先当吃 0 个，记 `start=1`、`matchIdx=2`，`j=2` |\n| — | 1 / 2 | `s[1]='b'` 与 `c` 配不上 → 有星号：`start=2`、`i=2`、`j=2` |\n| — | 2 / 2 | `s[2]='c'` 对 `c` → 双指针前进到 `i=3, j=3`，退出主循环 |\n| 收尾 | 3 / 3 | `j == n` → true ✓ |\n\n**③ 掌握度判定**\n- 一次提交即 Accepted，无失败轮次、无中途探讨 → strong。本次选的是贪心而非 DP，说明「双序列 DP 的边界初始化坑」已被主动绕开，但也意味着 DP 那条路本轮没被重新验证。\n- 间隔按 ×2.5 → 5 天（连续较强第 1 次）。\n\n**④ 下一步提醒**\n- 贪心已稳定，下次若要补 DP：重点仍是空串行/空串列的初始化（第 0 行只有前缀全是 `*` 时才为 true），这是本题唯一的初始化陷阱。\n- 该写法最坏仍是 O(nm)（回溯重扫），只是均摊很快；面试若问「能不能保证 O(n+m)」，需要说明这一点而不是含糊带过。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-22",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "1812/1812",
+      "approach": "贪心双指针+星号回溯",
+      "time_complexity": "最坏 O(nm)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "与上一次复习采用同一套贪心双指针+星号回溯，没有切换到二维 DP；这次能独立复用，时间和空间复杂度保持最坏 O(nm)、O(1)。\n\n本地 16 项测试全部通过，随后首次提交 Accepted（1812/1812），全程没有提示或探讨，因此掌握度判为较强。\n\n下一步：这种写法的关键是回溯基准的更新时机，后续再复习时重点验证“连续星号”和“回溯后再次遇到星号”两类边界。"
     }
   ]
 }

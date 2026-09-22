@@ -2109,12 +2109,12 @@
       "title": "通配符匹配",
       "category": "动态规划",
       "first_pass_date": "2026-08-26",
-      "last_review_date": "2026-09-17",
-      "next_review_date": "2026-09-22",
-      "interval_days": 5,
-      "review_count": 2,
+      "last_review_date": "2026-09-22",
+      "next_review_date": "2026-10-07",
+      "interval_days": 15,
+      "review_count": 3,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "word-break-ii": {

@@ -2,12 +2,11 @@
 // LeetCode 44. 通配符匹配 (Wildcard Matching)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/wildcard-matching/
-// 复习日期：2026-09-17（第 2 次复习 · 一刷 2026-08-26）
-// 子类型：线性 DP（双序列）——状态是「s 前 i 个字符 / p 前 j 个模式」的前缀能否匹配
-// 一刷写法：二维 DP，dp[i][j] = s 前 i 个字符与 p 前 j 个模式是否匹配；`?`/字母一对一，`*` 取「不吃字符」或「吃一个字符」两种转移
-// 一刷问题：空前缀行把任意位置的 `*` 都判 true（忽略它前面压着的字面字符），"c*a*b" 误匹配 "aab"；空串行的 `*` 转移方向短接写错
-// 上次复习写法：二维 DP（O(nm)/O(nm)）与贪心双指针+星号回溯（最坏 O(nm)/O(1)）两条都提交 Accepted；贪心首版收尾比较写反、循环以模式长度为界、&&/|| 漏括号越界
-// 测试用例：与一刷归档保持一致（示例 3 + 边界 8 组 + 回归，含 2000 长度上限三档与星号收尾继续扩展）
+// 复习日期：2026-09-22（第 3 次复习 · 一刷 2026-08-26）
+// 子类型：动态规划（线性 DP / 双序列）
+// 一刷思路：先自行回忆；卡住后再对照一刷归档与复盘页
+// 测试用例：与一刷归档保持一致（示例 + 边界 + 回归）
+//
 // ============================================================
 
 import java.util.*;
@@ -15,23 +14,19 @@ import java.util.*;
 public class LC0044_WildcardMatching {
 
     // ==== 提交代码开始 ====
-    // 参数 s：待匹配字符串；参数 p：模式串（`?` 配任意单字符、`*` 配任意长度含空串）；返回整体是否匹配
     public boolean isMatch(String s, String p) {
-        int m = s.length();
-        int n = p.length();
-        // start：最近那个 `*` 目前吃到 s 的下标（回溯时 ++ 表示多吃一个字符）；matchIdx：该 `*` 之后第一个待匹配的模式下标
-        int start = -1, matchIdx = -1;
         int i = 0, j = 0;
-        while (i < m) {
-            if (j < n && p.charAt(j) == '*') {
-                start = i;
+        int matchIdx = -1, start = -1;
+        while (i < s.length()) {
+            if (j < p.length() && p.charAt(j) == '*') {
                 matchIdx = j + 1;
+                start = i;
                 j++;
-            } else if (j < n && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?')) {
+            } else if (j < p.length() && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '?')) {
                 i++;
                 j++;
             } else {
-                if (start > -1) {
+                if (matchIdx > -1) {
                     start++;
                     i = start;
                     j = matchIdx;
@@ -40,11 +35,10 @@ public class LC0044_WildcardMatching {
                 }
             }
         }
-        // 收尾：模式可能还剩尾部的 `*`（匹配空串），所以比较方向是「模式是否走到头」而不是「s 是否走到头」
-        while (j < n && p.charAt(j) == '*') {
+        while (j < p.length() && p.charAt(j) == '*') {
             j++;
         }
-        return j == n;
+        return j == p.length();
     }
     // ==== 提交代码结束 ====
 
