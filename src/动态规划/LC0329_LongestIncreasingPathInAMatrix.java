@@ -2,12 +2,8 @@
 // LeetCode 329. 矩阵中的最长递增路径 (Longest Increasing Path in a Matrix)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/
-// 刷题日期：2026-09-21
+// 刷题日期：2026-09-24
 //
-// 二刷第 3 次 · 一刷 2026-08-26 · 上次复习 2026-09-17（较弱，间隔重置）
-// DP 子类型：DAG 最长路径（记忆化搜索）——状态 = 从格子 (i,j) 出发的最长递增路径长度
-// 一刷思路：记忆化 DFS——dfs(i,j) = 1 + max(四个严格更大邻居的 dfs)，memo 保证每格只算一次
-// 测试用例与一刷归档保持一致（示例 3 + 边界 6），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -17,26 +13,25 @@ public class LC0329_LongestIncreasingPathInAMatrix {
     // ==== 提交代码开始 ====
     int[][] memo;
     public int longestIncreasingPath(int[][] matrix) {
+        int ans = 0;
         int m = matrix.length;
         int n = matrix[0].length;
         memo = new int[m][n];
-        int ans = 0;
-        // 每个格子都要当起点枚举一次：i、j 必须传进 dfs，写死坐标就只剩左上角那一条路径
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                ans = Math.max(ans, dfs(matrix, i, j, -1));
+                if (memo[i][j] == 0) {
+                    ans = Math.max(ans, dfs(matrix, i, j, -1));
+                }
             }
         }
         return ans;
     }
 
     private int dfs(int[][] matrix, int i, int j, int pre) {
-        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || matrix[i][j] <= pre) {
+        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || pre >= matrix[i][j]) {
             return 0;
         }
-
-        // 顺序固定：守卫在前（拦截分支返回 0 且不写 memo），查缓存与写缓存在后，否则截断值会被固化
-        if (memo[i][j] != 0) {
+        if (memo[i][j] > 0) {
             return memo[i][j];
         }
         int count = 0;
@@ -44,7 +39,7 @@ public class LC0329_LongestIncreasingPathInAMatrix {
         count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));
         count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));
         count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));
-        memo[i][j] = count + 1;
+        memo[i][j] = Math.max(memo[i][j], count + 1);
         return memo[i][j];
     }
     // ==== 提交代码结束 ====

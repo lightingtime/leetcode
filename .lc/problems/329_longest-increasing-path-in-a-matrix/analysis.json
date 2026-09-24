@@ -68,20 +68,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-21",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "139/139",
       "runtime_ms": null,
-      "memory_bytes": 47708000,
+      "memory_bytes": 47652000,
       "approach": "记忆化DFS(DAG最长路径)",
       "time_complexity": "O(m·n)",
       "space_complexity": "O(m·n)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路与复杂度一直没变——记忆化 DFS（DAG 最长路径），O(m·n) / O(m·n)。\n- 本次（第 3 次复习）：整体写法与上一轮一致（守卫拦截 + memo 缓存 + 四方向取 max），但**首次本地运行就挂了**：外层双循环本该遍历每个格子当起点，体内却写死 dfs(matrix, 0, 0, -1)，i、j 一次都没被用到，答案只反映从左上角出发的那条路径。\n\n**② 错在哪、怎么暴露的**\n- 示例1 [[9,9,4],[6,6,8],[2,1,1]] 期望 4、实际 1：从 (0,0)=9 出发没有任何更大的邻居，dfs 立刻返回 1；正确答案是 1 -> 2 -> 6 -> 9。\n- 9 组用例只挂了这 1 组，很能说明问题：示例2 的最长路径 3 -> 4 -> 5 -> 6 恰好从 (0,0) 起步，几组边界用例也把 (0,0) 设计成了终点，bug 被数据藏住了。\n- 改成 dfs(matrix, i, j, -1) 后 9 组全绿，力扣一次提交 Accepted（139/139）。\n- 定位信号很直接：**外层循环变量在循环体里一次都没出现**，说明循环白转。\n\n**③ 掌握度判定**\n- 本地先失败（起点硬编码）后自己定位修正，力扣一次提交 AC；按流程记较弱，间隔重置 2 天。\n\n**④ 下一步提醒**\n- 守卫与缓存的顺序这次是对的（拦截分支返回 0 且不写 memo，防止截断值被固化），继续保持。\n- 「多起点枚举必须把当前下标传进递归」已沉淀为套路 #73，下次动笔前用「外层循环变量在体内出现过吗」做三秒自检即可。",
-      "code": "int[][] memo;\n    public int longestIncreasingPath(int[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        memo = new int[m][n];\n        int ans = 0;\n        // 每个格子都要当起点枚举一次：i、j 必须传进 dfs，写死坐标就只剩左上角那一条路径\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                ans = Math.max(ans, dfs(matrix, i, j, -1));\n            }\n        }\n        return ans;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || matrix[i][j] <= pre) {\n            return 0;\n        }\n\n        // 顺序固定：守卫在前（拦截分支返回 0 且不写 memo），查缓存与写缓存在后，否则截断值会被固化\n        if (memo[i][j] != 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        memo[i][j] = count + 1;\n        return memo[i][j];\n    }",
+      "notes": "**本轮结论**\n\n- 一次提交即 Accepted，139/139；本轮无提示、无讨论，判为较强。\n- 思路与一刷一致：严格递增把格子关系变成 DAG，`dfs(i,j)` 求从该格出发的最长路径。\n\n**与上一轮对比**\n\n- 仍使用 `pre` 拦截非递增邻居；通过拦截后，返回值只由 `(i,j)` 及其更大邻居决定，因此 `memo[i][j]` 语义稳定。\n- 与 09-21 轮相比，这次四个方向都明确从当前 `(i,j)` 出发，没有出现外层起点未传入递归的问题。\n- 时间和空间复杂度仍为 O(mn)；这次独立复现并一次通过。\n\n**具体状态推演**\n\n以 `[[1,2],[3,4]]` 为例：\n\n- `dfs(1,1)`：没有更大邻居，返回 1；\n- `dfs(0,1)`：2 的唯一更大邻居是 4，返回 `1 + dfs(1,1) = 2`；\n- `dfs(0,0)`：1 可走向 2 或 3，两个分支都能接上 4，返回 `1 + max(2,2) = 3`。\n\n**掌握度依据**\n\n一次提交即 Accepted，本地 9 项测试全部通过，过程中未看提示、未讨论，故本轮记为较强。\n\n**下一步提醒**\n\n复习时先检查守卫顺序：`pre >= matrix[i][j]` 必须在查/写 memo 之前；被守卫拦截得到的 0 不能写入缓存。",
+      "code": "int[][] memo;\n    public int longestIncreasingPath(int[][] matrix) {\n        int ans = 0;\n        int m = matrix.length;\n        int n = matrix[0].length;\n        memo = new int[m][n];\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (memo[i][j] == 0) {\n                    ans = Math.max(ans, dfs(matrix, i, j, -1));\n                }\n            }\n        }\n        return ans;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        if (i < 0 || j < 0 || i >= matrix.length || j >= matrix[0].length || pre >= matrix[i][j]) {\n            return 0;\n        }\n        if (memo[i][j] > 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        memo[i][j] = Math.max(memo[i][j], count + 1);\n        return memo[i][j];\n    }",
       "prev_code": "int max;\n    int[][] memo;\n    public int longestIncreasingPath(int[][] matrix) {\n        max = 0;\n        memo = new int[matrix.length][matrix[0].length];\n        for (int i = 0; i < matrix.length; i++) {\n            for (int j = 0; j < matrix[0].length; j++) {\n                memo[i][j] = dfs(matrix, i, j, -1);\n                max = Math.max(max, memo[i][j]);\n            }\n        }\n        return max;\n    }\n\n    private int dfs(int[][] matrix, int i, int j, int pre) {\n        if (i < 0 || i >= matrix.length || j < 0 || j >= matrix[0].length || matrix[i][j] <= pre) {\n            return 0;\n        }\n        if (memo[i][j] != 0) {\n            return memo[i][j];\n        }\n        int count = 0;\n        count = Math.max(count, dfs(matrix, i + 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i - 1, j, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j - 1, matrix[i][j]));\n        count = Math.max(count, dfs(matrix, i, j + 1, matrix[i][j]));\n        memo[i][j] = count + 1;\n        return count + 1;\n    }\n",
-      "mastery": "weak",
-      "pass": 3
+      "mastery": "strong",
+      "pass": 4
     }
   ],
   "reviews": [
@@ -123,6 +123,19 @@
       "space_complexity": "O(m·n)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路与复杂度一直没变——记忆化 DFS（DAG 最长路径），O(m·n) / O(m·n)。\n- 本次（第 3 次复习）：整体写法与上一轮一致（守卫拦截 + memo 缓存 + 四方向取 max），但**首次本地运行就挂了**：外层双循环本该遍历每个格子当起点，体内却写死 dfs(matrix, 0, 0, -1)，i、j 一次都没被用到，答案只反映从左上角出发的那条路径。\n\n**② 错在哪、怎么暴露的**\n- 示例1 [[9,9,4],[6,6,8],[2,1,1]] 期望 4、实际 1：从 (0,0)=9 出发没有任何更大的邻居，dfs 立刻返回 1；正确答案是 1 -> 2 -> 6 -> 9。\n- 9 组用例只挂了这 1 组，很能说明问题：示例2 的最长路径 3 -> 4 -> 5 -> 6 恰好从 (0,0) 起步，几组边界用例也把 (0,0) 设计成了终点，bug 被数据藏住了。\n- 改成 dfs(matrix, i, j, -1) 后 9 组全绿，力扣一次提交 Accepted（139/139）。\n- 定位信号很直接：**外层循环变量在循环体里一次都没出现**，说明循环白转。\n\n**③ 掌握度判定**\n- 本地先失败（起点硬编码）后自己定位修正，力扣一次提交 AC；按流程记较弱，间隔重置 2 天。\n\n**④ 下一步提醒**\n- 守卫与缓存的顺序这次是对的（拦截分支返回 0 且不写 memo，防止截断值被固化），继续保持。\n- 「多起点枚举必须把当前下标传进递归」已沉淀为套路 #73，下次动笔前用「外层循环变量在体内出现过吗」做三秒自检即可。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-24",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "139/139",
+      "approach": "记忆化DFS(DAG最长路径)",
+      "time_complexity": "O(m·n)",
+      "space_complexity": "O(m·n)",
+      "optimal": true,
+      "notes": "**本轮结论**\n\n- 一次提交即 Accepted，139/139；本轮无提示、无讨论，判为较强。\n- 思路与一刷一致：严格递增把格子关系变成 DAG，`dfs(i,j)` 求从该格出发的最长路径。\n\n**与上一轮对比**\n\n- 仍使用 `pre` 拦截非递增邻居；通过拦截后，返回值只由 `(i,j)` 及其更大邻居决定，因此 `memo[i][j]` 语义稳定。\n- 与 09-21 轮相比，这次四个方向都明确从当前 `(i,j)` 出发，没有出现外层起点未传入递归的问题。\n- 时间和空间复杂度仍为 O(mn)；这次独立复现并一次通过。\n\n**具体状态推演**\n\n以 `[[1,2],[3,4]]` 为例：\n\n- `dfs(1,1)`：没有更大邻居，返回 1；\n- `dfs(0,1)`：2 的唯一更大邻居是 4，返回 `1 + dfs(1,1) = 2`；\n- `dfs(0,0)`：1 可走向 2 或 3，两个分支都能接上 4，返回 `1 + max(2,2) = 3`。\n\n**掌握度依据**\n\n一次提交即 Accepted，本地 9 项测试全部通过，过程中未看提示、未讨论，故本轮记为较强。\n\n**下一步提醒**\n\n复习时先检查守卫顺序：`pre >= matrix[i][j]` 必须在查/写 memo 之前；被守卫拦截得到的 0 不能写入缓存。"
     }
   ]
 }
