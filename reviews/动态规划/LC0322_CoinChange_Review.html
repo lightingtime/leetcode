@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>322. 零钱兑换 (Coin Change)</h1><p>&gt; <a href="https://leetcode.cn/problems/coin-change/" rel="noopener">https://leetcode.cn/problems/coin-change/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：广度优先搜索、数组、动态规划、背包问题、完全背包</p><h2>题目描述</h2><p>给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。</p><p>计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。</p><p>你可以认为每种硬币的数量是无限的。</p><p>示例 1：</p><p>输入：coins = [1, 2, 5], amount = 11</p><p>输出：3</p><p>解释：11 = 5 + 5 + 1</p><p>示例 2：</p><p>输入：coins = [2], amount = 3</p><p>输出：-1</p><p>示例 3：</p><p>输入：coins = [1], amount = 0</p><p>输出：0</p><p>提示：</p><p>1</p><p>1 31 - 1</p><p>0 4</p><h2>示例</h2><ol><li>输入：coins = [1, 2, 5]，amount = 11</li></ol><p>输出：3</p><p>解释：11 = 5 + 5 + 1</p><ol><li>输入：coins = [2]，amount = 3</li></ol><p>输出：-1</p><ol><li>输入：coins = [1]，amount = 0</li></ol><p>输出：0</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-24 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（189/189）｜ 一次 AC ｜ 一维DP（完全背包） ｜ O(amount · coins) · O(amount)</p>
+      <div class="review-note md"><h2>与上一轮对比</h2><ul><li>仍采用一维完全背包，<code>dp[x]</code> 表示凑出金额 <code>x</code> 的最少硬币数；时间与空间复杂度均保持不变，代码只是用增强 <code>for</code> 遍历硬币。</li><li>上一轮已有的可达性哨兵和最终 <code>-1</code> 判断继续保留，没有为了缩短代码牺牲无解语义。</li></ul><h2>这次为什么想起来</h2><ul><li>从“每种硬币数量无限”直接识别到完全背包，先固定 <code>dp[0] = 0</code>，其余状态用哨兵表示尚未可达。</li><li>外层枚举金额、内层枚举硬币时，<code>dp[i - coin]</code> 读取的是更小金额的已计算状态，因此同一硬币可以在不同转移中反复使用。</li></ul><h2>掌握度依据</h2><ul><li>力扣一次提交 Accepted（189/189）。</li><li>开题阶段提供了完全背包子类型及一维更新方向的宽泛提示，因此按规则记较弱。</li></ul><h2>下一步提醒</h2><ul><li>下次重点复述外层金额与内层硬币为何允许硬币重复使用，并手算 <code>coins = [1,3,4], amount = 6</code>，与 0/1 背包的倒序更新区分开。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（189/189）｜ 一次 AC ｜ 一维DP（完全背包） ｜ O(amount·coins) · O(amount)</p>
       <div class="review-note md"><p><strong>与上一轮对比</strong>：一刷（2026-08-10）用的就是「一维 DP，外层金额内层硬币」，本次重写思路一致，没有换写法；差别只在不可达哨兵——一刷填 <code>amount + 1</code> 并用 <code>dp[amount] &gt; amount</code> 判定，这次写死 <code>100001</code> 并用 <code>== 100001</code> 判定。两轮复杂度同为 O(amount·coins)/O(amount)，本次内存 46.6MB。</p><p><strong>为什么能想起来</strong>：看到「每种硬币数量无限 + 求凑出金额的最少枚数」，直接定位到完全背包（金额是容量、硬币是可重复取的物品、每用一枚记 1 的代价）。填充顺序上抓住了关键不变量：一维完全背包从小到大枚举容量 i，dp[i - c] 才是本轮已更新过的状态，因此同一种硬币能无限次复用。</p><p><strong>掌握度判定</strong>：一次提交即 Accepted（189/189），全程没有询问提示或参与讨论，按规则记为较强。</p><p><strong>下一步提醒</strong>：哨兵建议回到 <code>amount + 1</code>，把「不可达」表达成 <code>dp[amount] &gt; amount</code>，就不必依赖题面 amount ≤ 10000 这个约束，语义也更自洽。内层 <code>if (i - coins[j] &gt;= 0)</code> 可写成 <code>coins[j] &lt;= i</code>，并把下标遍历换成增强 for，读起来更直白。相关题顺带复习 279. 完全平方数（同是完全背包求最小个数）。</p></div>
@@ -37,25 +41,25 @@
         <li><span>复杂度</span><b>O(amount·coins) · O(amount)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>一维DP（完全背包）</b></li>
-        <li><span>复杂度</span><b>O(amount·coins) · O(amount)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>复杂度</span><b>O(amount · coins) · O(amount)</b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维DP（完全背包）</h3>
-    <p><span class="chip">时间 O(amount·coins)</span><span class="chip">空间 O(amount)</span><span class="chip">内存 ≈ 44.5 MB</span><span class="chip">用例 189/189</span></p>
+    <p><span class="chip">时间 O(amount · coins)</span><span class="chip">空间 O(amount)</span><span class="chip">内存 ≈ 44.3 MB</span><span class="chip">用例 189/189</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0322_CoinChange.java · 一维DP（完全背包）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">coinChange</span>(<span class="tk-k">int</span>[] coins, <span class="tk-k">int</span> amount) {
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[amount + <span class="tk-n">1</span>];
         <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(dp, <span class="tk-n">100001</span>);
         dp[<span class="tk-n">0</span>] = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">1</span>; i &lt;= amount; i++) {
-            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; coins.length; j++) {
-                <span class="tk-k">if</span> (i - coins[j] &gt;= <span class="tk-n">0</span>) {
-                    dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i], dp[i - coins[j]] + <span class="tk-n">1</span>);
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> coin : coins) {
+                <span class="tk-k">if</span> (i - coin &gt;= <span class="tk-n">0</span>) {
+                    dp[i] = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(dp[i - coin] + <span class="tk-n">1</span>, dp[i]);
                 }
             }
         }

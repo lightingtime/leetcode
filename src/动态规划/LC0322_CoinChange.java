@@ -2,11 +2,12 @@
 // LeetCode 322. 零钱兑换 (Coin Change)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/coin-change/
-// 刷题日期：2026-09-18
-// 二刷 · 一刷 2026-08-10（一次 AC，非最优=否）：一维 DP（完全背包，外层金额内层硬币）
+// 刷题日期：2026-09-24
+// 复习 · 一刷 2026-08-10（一次 AC，最优=是）：一维 DP（完全背包，外层金额内层硬币）
 // 测试用例与一刷归档保持一致（示例 + 边界 + 回归）
 //
-// 思路：完全背包一维 DP，dp[i] = 凑出金额 i 的最少硬币数，dp[i] = min(dp[i - c] + 1)
+// 思路：一维完全背包 DP，dp[x] 表示凑出金额 x 的最少硬币数
+// DP 子类型：背包 DP（完全背包）
 // 复杂度：时间 O(amount · coins) 空间 O(amount)
 // ============================================================
 
@@ -20,9 +21,9 @@ public class LC0322_CoinChange {
         Arrays.fill(dp, 100001);
         dp[0] = 0;
         for (int i = 1; i <= amount; i++) {
-            for (int j = 0; j < coins.length; j++) {
-                if (i - coins[j] >= 0) {
-                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i - coin] + 1, dp[i]);
                 }
             }
         }
