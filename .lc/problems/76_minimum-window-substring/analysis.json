@@ -74,20 +74,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-24",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "268/268",
       "runtime_ms": null,
-      "memory_bytes": 46944000,
+      "memory_bytes": 46988000,
       "approach": "滑动窗口+计数",
       "time_complexity": "O(m+n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与上一轮对比**：思路与一刷一致（滑动窗口 + need 计数 + counts 归零判覆盖），但**扩展阶段两行的门控写反了**，本地 8 个边界用例挂（示例全绿，是典型的「错误条件恰好被示例满足」）。\n\n**错在哪、怎么修的**：一刷的结构是「判断只决定计数器，need 的减法无条件执行」；这次写成 `if (need[c] > 0) need[c]--;` + 外面 `counts--;`，于是 ① counts 与 t 脱钩，扫满 t.length() 个字符就误判覆盖（XYZABC/ABC 记成 XYZ；最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 `while (need[start] < 0)` 收不动左端（xxabxxa/ab 给 xx 而非 ab）。把两行门控调回正确位置后 12 个用例全绿，提交 268/268 Accepted。\n\n**掌握度依据**：本地先失败、经提示后才改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。",
-      "code": "    public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (char c : t.toCharArray()) {\n            need[c]++;\n        }\n        // counts：还差几个必需字符没被满足；0 表示当前窗口已覆盖 t\n        int counts = t.length();\n        String ans = \"\";\n        int min = Integer.MAX_VALUE;\n        int start = 0;\n        int i = 0;\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            // 判断只决定计数器：只有「还没被满足的必需字符」才让 counts 减 1\n            if (need[c] > 0) {\n                counts--;\n            }\n            // 减法无条件执行：多余字符与不在 t 里的字符被减成负数，收缩时才有「可删」的凭证\n            need[c]--;\n            if (counts == 0) {\n                // 收缩只删多余（need < 0），恰好满足的字符留着\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                // 记录后把左端必需字符还回去，窗口整体前移继续找\n                need[s.charAt(start)]++;\n                counts++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }",
+      "notes": "### 与上一轮对比\n- 沿用一刷的 `128 计数 + 滑动窗口`，仍是右扩左缩、一次 AC。\n- 整体结构与一刷基本一致；本次仍未采纳“只记 bestStart / bestLen，循环结束再截一次”的精简提示，最短窗口命中时依旧直接 `substring`。\n- 算法主流程复杂度保持 `O(m+n) / O(1)`；若严格计入 Java `substring` 的复制成本，最坏情况下会有额外字符串分配。\n\n### 本次回忆情况\n- 三步关键逻辑完整复现：扩张时“先判后减”、覆盖后收缩掉多余字符、记录后归还最左必需字符并让窗口重新失效。\n- 本轮开始前已经收到这三步的针对性提示，并非完全独立回忆；避免重复 `substring` 的提示也未落实到代码。\n\n### 掌握度依据\n- 力扣一次提交 Accepted（268/268），但解题前接受过提示，按复习标准记 `weak`。\n- 本次 LeetCode 仅提交一次，`firstTry=true`。\n\n### 下一步\n- 下次重点改为记录 `bestStart` 与 `bestLen`，只在结束时截取一次，并把 `start / i` 命名为 `left / right`；计数与收缩逻辑无需变化。",
+      "code": "public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (char c : t.toCharArray()) {\n            need[c]++;\n        }\n        int count = t.length();\n        int start = 0;\n        int min = Integer.MAX_VALUE;\n        String ans = \"\";\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            // 先判后减：只有仍缺少的必需字符才减少 count\n            if (need[c] > 0) {\n                count--;\n            }\n            need[c]--;\n            if (count == 0) {\n                // 收缩左边界，跳过所有多余字符，直到窗口刚好覆盖 t\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                // 记录后移出最左必需字符，让窗口重新变为未覆盖\n                need[s.charAt(start)]++;\n                count++;\n                start++;\n            }\n\n        }\n        return ans;\n    }",
       "prev_code": "public String minWindow(String s, String t) {\n        int[] need = new int[128];\n        for (Character c : t.toCharArray()) {\n            need[c]++;\n        }\n        int count = t.length();\n        int start = 0;\n        int i = 0;\n        int min = Integer.MAX_VALUE;\n        String ans = \"\";\n        while (i < s.length()) {\n            char c = s.charAt(i);\n            // 该字符进入窗口前若仍缺，则未满足数 -1（先判后减）\n            if (need[c] > 0) {\n                count--;\n            }\n            need[c]--;\n            if (count == 0) {\n                // 先收缩：删掉左边多余字符，记录以 i 结尾的最短覆盖窗口\n                while (need[s.charAt(start)] < 0) {\n                    need[s.charAt(start)]++;\n                    start++;\n                }\n                // 记录答案\n                if (i - start + 1 < min) {\n                    min = i - start + 1;\n                    ans = s.substring(start, i + 1);\n                }\n                // 还回左边界关键字符（need+1、count+1、start+1），覆盖被破坏，窗口继续右扩\n                need[s.charAt(start)]++;\n                count++;\n                start++;\n            }\n            i++;\n        }\n        return ans;\n    }\n",
       "mastery": "weak",
-      "pass": 2
+      "pass": 3
     }
   ],
   "approach_detail": "问题本质：找包含 t 全部字符（含重复次数）的最短连续子串。滑动窗口 + 计数：右端扩张到覆盖，再左端收缩找最短，如此往复。\n关键设计：need[128] 记录各字符还差多少（t 初始化），count 记录还缺几个字符。右扩：need[c]>0 说明该字符是当前缺的，count--，然后 need[c]--（多余字符变负）；count==0 时收缩：while need[s[start]]<0 说明左端字符是多余的，need++ 并 start++，直到左端是关键字符，此时记录最短窗口；再把左端关键字符还回去（need++、count++、start++），窗口重新变成缺状态，继续右扩找下一个覆盖。\n边界：s 中没有完整覆盖时返回空串；t 中重复字符（如 AABC 需要两个 A）靠 count 与 need 的正负区分「缺」与「多余」；字符范围按 128 覆盖 ASCII。\n复杂度：O(n) 时间（每个字符进出窗口各一次）、O(1) 空间（固定数组），最优。",
@@ -117,6 +117,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**与上一轮对比**：思路与一刷一致（滑动窗口 + need 计数 + counts 归零判覆盖），但**扩展阶段两行的门控写反了**，本地 8 个边界用例挂（示例全绿，是典型的「错误条件恰好被示例满足」）。\n\n**错在哪、怎么修的**：一刷的结构是「判断只决定计数器，need 的减法无条件执行」；这次写成 `if (need[c] > 0) need[c]--;` + 外面 `counts--;`，于是 ① counts 与 t 脱钩，扫满 t.length() 个字符就误判覆盖（XYZABC/ABC 记成 XYZ；最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 `while (need[start] < 0)` 收不动左端（xxabxxa/ab 给 xx 而非 ab）。把两行门控调回正确位置后 12 个用例全绿，提交 268/268 Accepted。\n\n**掌握度依据**：本地先失败、经提示后才改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-24",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "268/268",
+      "approach": "滑动窗口+计数",
+      "time_complexity": "O(m+n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 沿用一刷的 `128 计数 + 滑动窗口`，仍是右扩左缩、一次 AC。\n- 整体结构与一刷基本一致；本次仍未采纳“只记 bestStart / bestLen，循环结束再截一次”的精简提示，最短窗口命中时依旧直接 `substring`。\n- 算法主流程复杂度保持 `O(m+n) / O(1)`；若严格计入 Java `substring` 的复制成本，最坏情况下会有额外字符串分配。\n\n### 本次回忆情况\n- 三步关键逻辑完整复现：扩张时“先判后减”、覆盖后收缩掉多余字符、记录后归还最左必需字符并让窗口重新失效。\n- 本轮开始前已经收到这三步的针对性提示，并非完全独立回忆；避免重复 `substring` 的提示也未落实到代码。\n\n### 掌握度依据\n- 力扣一次提交 Accepted（268/268），但解题前接受过提示，按复习标准记 `weak`。\n- 本次 LeetCode 仅提交一次，`firstTry=true`。\n\n### 下一步\n- 下次重点改为记录 `bestStart` 与 `bestLen`，只在结束时截取一次，并把 `start / i` 命名为 `left / right`；计数与收缩逻辑无需变化。"
     }
   ]
 }

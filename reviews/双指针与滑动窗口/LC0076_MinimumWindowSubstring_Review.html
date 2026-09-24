@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     <span class="badge hard">重点复习</span>
-    <span class="badge plain">二刷 ×2</span>
+    <span class="badge plain">二刷 ×3</span>
     <span class="badge">2026-08-05</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>76. 最小覆盖子串 (Minimum Window Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/minimum-window-substring/" rel="noopener">https://leetcode.cn/problems/minimum-window-substring/</a></p><p>难度：Hard ｜ 分类：双指针与滑动窗口</p><p>标签：哈希表、字符串、滑动窗口</p><h2>题目描述</h2><p>给定两个字符串 s 和 t，长度分别是 m 和 n，返回 s 中的 最短窗口 子串，使得该子串包含 t 中的每一个字符（包括重复字符）。如果没有这样的子串，返回空字符串 ""。</p><p>测试用例保证答案唯一。</p><p>示例 1：</p><p>输入：s = "ADOBECODEBANC", t = "ABC"</p><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><p>示例 2：</p><p>输入：s = "a", t = "a"</p><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><p>示例 3:</p><p>输入: s = "a", t = "aa"</p><p>输出: ""</p><p>解释: t 中两个字符 'a' 均应包含在 s 的子串中，</p><p>因此没有符合条件的子字符串，返回空字符串。</p><p>提示：</p><p>m == s.length</p><p>n == t.length</p><p>1 5</p><p>s 和 t 由英文字母组成</p><p>进阶：你能设计一个在 O(m + n) 时间内解决此问题的算法吗？</p><h2>示例</h2><ol><li>输入：s = "ADOBECODEBANC"，t = "ABC"</li></ol><p>输出："BANC"</p><p>解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。</p><ol><li>输入：s = "a"，t = "a"</li></ol><p>输出："a"</p><p>解释：整个字符串 s 是最小覆盖子串。</p><ol><li>输入：s = "a"，t = "aa"</li></ol><p>输出：""</p><p>解释：t 中两个字符 'a' 均应包含在 s 的子串中，</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 3 次复习 · 2026-09-24 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（268/268）｜ 一次 AC ｜ 滑动窗口+计数 ｜ O(m+n) · O(1)</p>
+      <div class="review-note md"><h3>与上一轮对比</h3><ul><li>沿用一刷的 <code>128 计数 + 滑动窗口</code>，仍是右扩左缩、一次 AC。</li><li>整体结构与一刷基本一致；本次仍未采纳“只记 bestStart / bestLen，循环结束再截一次”的精简提示，最短窗口命中时依旧直接 <code>substring</code>。</li><li>算法主流程复杂度保持 <code>O(m+n) / O(1)</code>；若严格计入 Java <code>substring</code> 的复制成本，最坏情况下会有额外字符串分配。</li></ul><h3>本次回忆情况</h3><ul><li>三步关键逻辑完整复现：扩张时“先判后减”、覆盖后收缩掉多余字符、记录后归还最左必需字符并让窗口重新失效。</li><li>本轮开始前已经收到这三步的针对性提示，并非完全独立回忆；避免重复 <code>substring</code> 的提示也未落实到代码。</li></ul><h3>掌握度依据</h3><ul><li>力扣一次提交 Accepted（268/268），但解题前接受过提示，按复习标准记 <code>weak</code>。</li><li>本次 LeetCode 仅提交一次，<code>firstTry=true</code>。</li></ul><h3>下一步</h3><ul><li>下次重点改为记录 <code>bestStart</code> 与 <code>bestLen</code>，只在结束时截取一次，并把 <code>start / i</code> 命名为 <code>left / right</code>；计数与收缩逻辑无需变化。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 2 次复习 · 2026-09-18 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（—）｜ 多次提交 ｜ 滑动窗口+计数 ｜ O(m+n) · O(1)</p>
       <div class="review-note md"><p><strong>与上一轮对比</strong>：思路与一刷一致（滑动窗口 + need 计数 + counts 归零判覆盖），但<strong>扩展阶段两行的门控写反了</strong>，本地 8 个边界用例挂（示例全绿，是典型的「错误条件恰好被示例满足」）。</p><p><strong>错在哪、怎么修的</strong>：一刷的结构是「判断只决定计数器，need 的减法无条件执行」；这次写成 <code>if (need[c] &gt; 0) need[c]--;</code> + 外面 <code>counts--;</code>，于是 ① counts 与 t 脱钩，扫满 t.length() 个字符就误判覆盖（XYZABC/ABC 记成 XYZ；最小复现 xa/a 得 x）；② need 永不为负，「多余字符」的负标记消失，收缩循环 <code>while (need[start] &lt; 0)</code> 收不动左端（xxabxxa/ab 给 xx 而非 ab）。把两行门控调回正确位置后 12 个用例全绿，提交 268/268 Accepted。</p><p><strong>掌握度依据</strong>：本地先失败、经提示后才改对（非一次 AC + 有探讨）→ 较弱，2 天后再见。</p></div>
@@ -42,7 +46,7 @@
         
       </ul>
     </div><div class="round-card weak">
-      <h3>2. 第 2 轮（二刷）</h3>
+      <h3>2. 第 3 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>滑动窗口+计数</b></li>
         <li><span>复杂度</span><b>O(m+n) · O(1)</b></li>
@@ -51,28 +55,25 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 滑动窗口+计数</h3>
-    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.8 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0076_MinimumWindowSubstring.java · 滑动窗口+计数</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">minWindow</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
+    <p><span class="chip">时间 O(m+n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 44.8 MB</span><span class="chip">用例 268/268</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0076_MinimumWindowSubstring.java · 滑动窗口+计数</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">minWindow</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
         <span class="tk-k">int</span>[] need = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];
         <span class="tk-k">for</span> (<span class="tk-k">char</span> c : t.<span class="tk-f">toCharArray</span>()) {
             need[c]++;
         }
-        <span class="tk-c">// counts：还差几个必需字符没被满足；0 表示当前窗口已覆盖 t</span>
-        <span class="tk-k">int</span> counts = t.<span class="tk-f">length</span>();
-        <span class="tk-t">String</span> ans = <span class="tk-s">""</span>;
-        <span class="tk-k">int</span> min = <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
+        <span class="tk-k">int</span> count = t.<span class="tk-f">length</span>();
         <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
-        <span class="tk-k">int</span> i = <span class="tk-n">0</span>;
-        <span class="tk-k">while</span> (i &lt; s.<span class="tk-f">length</span>()) {
+        <span class="tk-k">int</span> min = <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
+        <span class="tk-t">String</span> ans = <span class="tk-s">""</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
             <span class="tk-k">char</span> c = s.<span class="tk-f">charAt</span>(i);
-            <span class="tk-c">// 判断只决定计数器：只有「还没被满足的必需字符」才让 counts 减 1</span>
+            <span class="tk-c">// 先判后减：只有仍缺少的必需字符才减少 count</span>
             <span class="tk-k">if</span> (need[c] &gt; <span class="tk-n">0</span>) {
-                counts--;
+                count--;
             }
-            <span class="tk-c">// 减法无条件执行：多余字符与不在 t 里的字符被减成负数，收缩时才有「可删」的凭证</span>
             need[c]--;
-            <span class="tk-k">if</span> (counts == <span class="tk-n">0</span>) {
-                <span class="tk-c">// 收缩只删多余（need &lt; 0），恰好满足的字符留着</span>
+            <span class="tk-k">if</span> (count == <span class="tk-n">0</span>) {
+                <span class="tk-c">// 收缩左边界，跳过所有多余字符，直到窗口刚好覆盖 t</span>
                 <span class="tk-k">while</span> (need[s.<span class="tk-f">charAt</span>(start)] &lt; <span class="tk-n">0</span>) {
                     need[s.<span class="tk-f">charAt</span>(start)]++;
                     start++;
@@ -81,12 +82,12 @@
                     min = i - start + <span class="tk-n">1</span>;
                     ans = s.<span class="tk-f">substring</span>(start, i + <span class="tk-n">1</span>);
                 }
-                <span class="tk-c">// 记录后把左端必需字符还回去，窗口整体前移继续找</span>
+                <span class="tk-c">// 记录后移出最左必需字符，让窗口重新变为未覆盖</span>
                 need[s.<span class="tk-f">charAt</span>(start)]++;
-                counts++;
+                count++;
                 start++;
             }
-            i++;
+
         }
         <span class="tk-k">return</span> ans;
     }</pre></div>

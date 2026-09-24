@@ -219,10 +219,10 @@
       "title": "最小覆盖子串",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-05",
-      "last_review_date": "2026-09-18",
-      "next_review_date": "2026-09-20",
+      "last_review_date": "2026-09-24",
+      "next_review_date": "2026-09-26",
       "interval_days": 2,
-      "review_count": 2,
+      "review_count": 3,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
