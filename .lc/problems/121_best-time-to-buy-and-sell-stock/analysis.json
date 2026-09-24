@@ -29,20 +29,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "213/213",
       "runtime_ms": null,
-      "memory_bytes": 94720000,
+      "memory_bytes": 94936000,
       "approach": "单趟扫描维护历史最低",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "- 与上一轮对比：一刷（2026-08-09）与本次思路、复杂度完全一致，都是单趟扫描维护历史最低价、O(n)/O(1)，两轮都是一次 AC。代码层面这次用显式 if 更新最低价 + Math.max 累计利润两步表达，比一刷写法更直白；两版代码在复盘页「上一版写法」可对照。\n\n- 这次为什么想起来：题面「只能先买后卖、最多一次交易」直接指向「对每个卖出日只要知道此前的最低价」。这次没有去同时找全局最小值与它后面的最大值（那样会无视先后顺序），说明「最小值必须是前缀最小值」这个不变量已经记牢。\n\n- 掌握度判定依据：本地 7 项测试（两个示例、单元素、全递增、全递减、全相同、n=10^5 非递减）全通过，提交一次 AC（213/213），全程无提示、无探讨 → 较强。\n\n- 下一步提醒：容易混的是 122（可多次交易）——122 的答案是所有上坡差价之和，状态是「持有/空仓」逐日转移；本题只在一次交易里取最大前缀差。复习 122 时把两者状态设计对照一遍。若本题改问具体买卖日期，min 需同时记住 minIndex 与 minPrice。",
+      "notes": "#### 与上一轮对比\n- 思路与上次复习（2026-09-18）完全一致：单趟扫描维护历史最低买入价 min，再用 `prices[i] - min` 更新最大利润。\n- 代码逐行相同，本次没有产生新写法，submissions 走合并分支、旧版存入 `prev_code`；复杂度保持 O(n)/O(1)。\n\n#### 这次为什么没卡\n- 直接抓住不变量「买入价只需取今天之前的最低价」，没有走「两两配对 / 先找全局最大最小值再相减」的弯路，说明这个模型已经固化。\n\n#### 掌握度依据\n- 提交一次即 Accepted（213/213），本轮全程无提示、无探讨 → 较强（strong）。\n\n#### 下一步提醒\n- 同族进阶：122（允许多次交易）会逼你把「持有 / 空仓」拆成两个状态，可作为本题状态压缩的对照练习。",
       "code": "public int maxProfit(int[] prices) {\n        int min = prices[0];\n        int max = 0;\n        for (int i = 1; i < prices.length; i++) {\n            if (prices[i] < min) {\n                min = prices[i];\n            }\n            max = Math.max(prices[i] - min, max);\n        }\n        return max;\n    }",
       "prev_code": "public int maxProfit(int[] prices) {\n        int max = 0;\n        int minPrice = prices[0];\n        for (int i = 0; i < prices.length; i++) {\n            max = Math.max(max, prices[i] - minPrice);\n            minPrice = Math.min(prices[i], minPrice);\n        }\n        return max;\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -61,6 +61,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "- 与上一轮对比：一刷（2026-08-09）与本次思路、复杂度完全一致，都是单趟扫描维护历史最低价、O(n)/O(1)，两轮都是一次 AC。代码层面这次用显式 if 更新最低价 + Math.max 累计利润两步表达，比一刷写法更直白；两版代码在复盘页「上一版写法」可对照。\n\n- 这次为什么想起来：题面「只能先买后卖、最多一次交易」直接指向「对每个卖出日只要知道此前的最低价」。这次没有去同时找全局最小值与它后面的最大值（那样会无视先后顺序），说明「最小值必须是前缀最小值」这个不变量已经记牢。\n\n- 掌握度判定依据：本地 7 项测试（两个示例、单元素、全递增、全递减、全相同、n=10^5 非递减）全通过，提交一次 AC（213/213），全程无提示、无探讨 → 较强。\n\n- 下一步提醒：容易混的是 122（可多次交易）——122 的答案是所有上坡差价之和，状态是「持有/空仓」逐日转移；本题只在一次交易里取最大前缀差。复习 122 时把两者状态设计对照一遍。若本题改问具体买卖日期，min 需同时记住 minIndex 与 minPrice。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-24",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "213/213",
+      "approach": "单趟扫描维护历史最低",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "#### 与上一轮对比\n- 思路与上次复习（2026-09-18）完全一致：单趟扫描维护历史最低买入价 min，再用 `prices[i] - min` 更新最大利润。\n- 代码逐行相同，本次没有产生新写法，submissions 走合并分支、旧版存入 `prev_code`；复杂度保持 O(n)/O(1)。\n\n#### 这次为什么没卡\n- 直接抓住不变量「买入价只需取今天之前的最低价」，没有走「两两配对 / 先找全局最大最小值再相减」的弯路，说明这个模型已经固化。\n\n#### 掌握度依据\n- 提交一次即 Accepted（213/213），本轮全程无提示、无探讨 → 较强（strong）。\n\n#### 下一步提醒\n- 同族进阶：122（允许多次交易）会逼你把「持有 / 空仓」拆成两个状态，可作为本题状态压缩的对照练习。"
     }
   ]
 }

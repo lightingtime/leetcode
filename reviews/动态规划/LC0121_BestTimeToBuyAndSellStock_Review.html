@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>121. 买卖股票的最佳时机 (Best Time to Buy and Sell Stock)</h1><p>&gt; <a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/" rel="noopener">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/</a></p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：数组、动态规划</p><h2>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。</p><p>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p><p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p><p>示例 1：</p><p>输入：[7,1,5,3,6,4]</p><p>输出：5</p><p>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</p><p>注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p><p>示例 2：</p><p>输入：prices = [7,6,4,3,1]</p><p>输出：0</p><p>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p><p>提示：</p><p>1 5</p><p>0 4</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：5</p><p>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。</p><ol><li>输入：prices = [7,6,4,3,1]</li></ol><p>输出：0</p><p>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-24 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（213/213）｜ 一次 AC ｜ 单趟扫描维护历史最低 ｜ O(n) · O(1)</p>
+      <div class="review-note md"><p>#### 与上一轮对比</p><ul><li>思路与上次复习（2026-09-18）完全一致：单趟扫描维护历史最低买入价 min，再用 <code>prices[i] - min</code> 更新最大利润。</li><li>代码逐行相同，本次没有产生新写法，submissions 走合并分支、旧版存入 <code>prev_code</code>；复杂度保持 O(n)/O(1)。</li></ul><p>#### 这次为什么没卡</p><ul><li>直接抓住不变量「买入价只需取今天之前的最低价」，没有走「两两配对 / 先找全局最大最小值再相减」的弯路，说明这个模型已经固化。</li></ul><p>#### 掌握度依据</p><ul><li>提交一次即 Accepted（213/213），本轮全程无提示、无探讨 → 较强（strong）。</li></ul><p>#### 下一步提醒</p><ul><li>同族进阶：122（允许多次交易）会逼你把「持有 / 空仓」拆成两个状态，可作为本题状态压缩的对照练习。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（213/213）｜ 一次 AC ｜ 单趟扫描维护历史最低 ｜ O(n) · O(1)</p>
       <div class="review-note md"><ul><li>与上一轮对比：一刷（2026-08-09）与本次思路、复杂度完全一致，都是单趟扫描维护历史最低价、O(n)/O(1)，两轮都是一次 AC。代码层面这次用显式 if 更新最低价 + Math.max 累计利润两步表达，比一刷写法更直白；两版代码在复盘页「上一版写法」可对照。</li></ul><ul><li>这次为什么想起来：题面「只能先买后卖、最多一次交易」直接指向「对每个卖出日只要知道此前的最低价」。这次没有去同时找全局最小值与它后面的最大值（那样会无视先后顺序），说明「最小值必须是前缀最小值」这个不变量已经记牢。</li></ul><ul><li>掌握度判定依据：本地 7 项测试（两个示例、单元素、全递增、全递减、全相同、n=10^5 非递减）全通过，提交一次 AC（213/213），全程无提示、无探讨 → 较强。</li></ul><ul><li>下一步提醒：容易混的是 122（可多次交易）——122 的答案是所有上坡差价之和，状态是「持有/空仓」逐日转移；本题只在一次交易里取最大前缀差。复习 122 时把两者状态设计对照一遍。若本题改问具体买卖日期，min 需同时记住 minIndex 与 minPrice。</li></ul></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>单趟扫描维护历史最低</b></li>
         <li><span>复杂度</span><b>O(n) · O(1)</b></li>
@@ -47,7 +51,7 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 单趟扫描维护历史最低</h3>
-    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.3 MB</span><span class="chip">用例 213/213</span></p>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 90.5 MB</span><span class="chip">用例 213/213</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0121_BestTimeToBuyAndSellStock.java · 单趟扫描维护历史最低</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">maxProfit</span>(<span class="tk-k">int</span>[] prices) {
         <span class="tk-k">int</span> min = prices[<span class="tk-n">0</span>];
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
