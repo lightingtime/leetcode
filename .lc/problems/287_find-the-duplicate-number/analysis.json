@@ -33,20 +33,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-24",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "59/59",
       "runtime_ms": null,
-      "memory_bytes": 83076000,
+      "memory_bytes": 83276000,
       "approach": "Floyd 判圈",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "**与上一轮/一刷对比**：思路一致（数组当下标链 + Floyd 判圈）；第二阶段循环体里两句赋值顺序与归档版相反，因为两个指针互不依赖、各自只读数组，顺序无所谓，语义等价。\n\n**这次为什么没踩一刷的坑**：相遇阶段用 `do-while`——先移动再比较，避免了两指针同起点时 `fast != slow` 一开始就为假、循环体一次都不执行的问题。起点取 `0`（而不是常见写法的 `nums[0]`）同样成立：下标 0 只有出边没有入边（任何位置的取值都 ≥ 1），所以它必然在环外，第二阶段把它当起点、和相遇点同速走，仍然同时落到环入口。\n\n**掌握度依据**：一次提交 Accepted，但这次提交前我按你的要求把「第二阶段为什么相遇在环入口」完整讲了一遍（含 `a + x ≡ 0 (mod b)` 的推导和具体数字推演），按「探讨过 → 较弱」记，2 天后再见。",
-      "code": "    public int findDuplicate(int[] nums) {\n        int fast = 0;\n        int slow = 0;\n        do {\n            fast = nums[nums[fast]];\n            slow = nums[slow];\n        } while (fast != slow);\n        slow = 0;\n        while (slow != fast) {\n            slow = nums[slow];\n            fast = nums[fast];\n        }\n        return fast;\n    }",
+      "notes": "本轮与上一轮对比：仍沿用一刷的 Floyd 判圈（把数组当下标链，找环入口），复杂度保持 O(n)/O(1)，路线没有再改，说明这条思路已经能稳定复现。\n\n这次为什么能想起来：一刷曾踩过『相遇阶段不能用 while 先判』的坑（两指针同起点出发时循环体一次都不执行），这次直接用 do-while 先走一步再比较；数组取值都在 [1,n]，所以快指针 nums[nums[fast]] 两层下标都合法，不需要判空兜底。\n\n掌握度依据：本地 7 组用例（示例 3 组 + 最小规模 n=1、重复最小值、重复值居中、n=10^5 大数组）全部通过后一次提交力扣 Accepted，59/59，全程无探讨、无问题特定提示介入，判为较强。\n\n下一步提醒：本题的不改数组 + O(1) 空间约束已到理论下界，后续可顺手回忆 142 环形链表 II 的同一模板（相遇后一指针回起点同速走找入口）。",
+      "code": "public int findDuplicate(int[] nums) {\n        // 阶段一：先移动再比较，在环内相遇\n        int fast = 0, slow = 0;\n        do {\n            fast = nums[nums[fast]];\n            slow = nums[slow];\n        } while (fast != slow);\n        // 阶段二：慢指针回起点，两者同速前进，交点即环入口\n        slow = 0;\n        while (fast != slow) {\n            fast = nums[fast];\n            slow = nums[slow];\n        }\n        return fast;\n    }",
       "prev_code": "    public int findDuplicate(int[] nums) {\n        int fast = 0, slow = 0;\n        do {\n            fast = nums[nums[fast]];\n            slow = nums[slow];\n        } while ( fast != slow);\n        slow = 0;\n        while (fast != slow) {\n            fast = nums[fast];\n            slow = nums[slow];\n        }\n        return fast;\n    }",
-      "mastery": "weak",
-      "pass": 2
+      "mastery": "strong",
+      "pass": 3
     }
   ],
   "hints": [
@@ -79,6 +79,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**与上一轮/一刷对比**：思路一致（数组当下标链 + Floyd 判圈）；第二阶段循环体里两句赋值顺序与归档版相反，因为两个指针互不依赖、各自只读数组，顺序无所谓，语义等价。\n\n**这次为什么没踩一刷的坑**：相遇阶段用 `do-while`——先移动再比较，避免了两指针同起点时 `fast != slow` 一开始就为假、循环体一次都不执行的问题。起点取 `0`（而不是常见写法的 `nums[0]`）同样成立：下标 0 只有出边没有入边（任何位置的取值都 ≥ 1），所以它必然在环外，第二阶段把它当起点、和相遇点同速走，仍然同时落到环入口。\n\n**掌握度依据**：一次提交 Accepted，但这次提交前我按你的要求把「第二阶段为什么相遇在环入口」完整讲了一遍（含 `a + x ≡ 0 (mod b)` 的推导和具体数字推演），按「探讨过 → 较弱」记，2 天后再见。"
+    },
+    {
+      "pass": 3,
+      "date": "2026-09-24",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "59/59",
+      "approach": "Floyd 判圈",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "本轮与上一轮对比：仍沿用一刷的 Floyd 判圈（把数组当下标链，找环入口），复杂度保持 O(n)/O(1)，路线没有再改，说明这条思路已经能稳定复现。\n\n这次为什么能想起来：一刷曾踩过『相遇阶段不能用 while 先判』的坑（两指针同起点出发时循环体一次都不执行），这次直接用 do-while 先走一步再比较；数组取值都在 [1,n]，所以快指针 nums[nums[fast]] 两层下标都合法，不需要判空兜底。\n\n掌握度依据：本地 7 组用例（示例 3 组 + 最小规模 n=1、重复最小值、重复值居中、n=10^5 大数组）全部通过后一次提交力扣 Accepted，59/59，全程无探讨、无问题特定提示介入，判为较强。\n\n下一步提醒：本题的不改数组 + O(1) 空间约束已到理论下界，后续可顺手回忆 142 环形链表 II 的同一模板（相遇后一指针回起点同速走找入口）。"
     }
   ]
 }
