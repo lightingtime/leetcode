@@ -43,6 +43,20 @@
       "prev_code": "public int maxSubArray(int[] nums) {\n        int max = Integer.MIN_VALUE;\n        int preMax = Integer.MIN_VALUE;\n        for (int i = 0; i < nums.length; i++) {\n            if (i == 0) {\n                preMax = nums[i];\n            } else {\n                preMax = Math.max(preMax + nums[i], nums[i]);\n            }\n            max = Math.max(max, preMax);\n        }\n        return max;\n    }\n",
       "mastery": "strong",
       "pass": 1
+    },
+    {
+      "date": "2026-09-24",
+      "verdict": "Accepted",
+      "testcases": "210/210",
+      "approach": "Kadane（dp 数组）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "## 与上一轮对比\n- 一刷/上次复习都是 Kadane **滚动变量 O(1) 空间**；这次用 `int[] dp` 保存「以每个位置结尾的最大和」，骨架一致但空间从 O(1) 退到 O(n)，属于「想起来了但没做空间精简」。\n\n## 为什么这次想起来\n- 状态定义记得牢（以 i 结尾、负贡献归零、全局取 max），一次写对；但没把「只依赖前一项」迁移成滚动变量，空间优化的反射还不足。\n\n## 掌握度依据\n- 一次提交 Accepted（210/210），全程无提示、无探讨 → 较强。\n\n## 下一步提醒\n- 下次直接上 `cur` + `best` 两变量压回 O(1)；可顺带对比 LC152 最大乘积子数组（需同时维护 max/min 的变体）。",
+      "mastery": "strong",
+      "pass": 2,
+      "memory_bytes": 79292000,
+      "code": "public int maxSubArray(int[] nums) {\n        int n = nums.length;\n        int[] dp = new int[n];\n        int max = nums[0];\n        dp[0] = nums[0];\n        for (int i = 1; i < n; i++) {\n            dp[i] = Math.max(0, dp[i - 1]) + nums[i];\n            max = Math.max(max, dp[i]);\n        }\n        return max;\n    }"
     }
   ],
   "hints": [
@@ -61,6 +75,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与一刷对比**：一刷即为 Kadane（一维滚动）O(n)/O(1)，这次思路一致；写法差别是把 i==0 单独用 if 分支处理，复杂度与内存量级无变化。\n\n**② 为什么能想起来**：一刷沉淀的关键句「状态 = 以 i 结尾的最大子数组和」直接决定了转移形式，先定结尾状态、再写「接上 or 重启」两个候选，没有退回枚举区间的做法。\n\n**③ 掌握度依据**：全程无提示、无探讨，本地 8 组用例一次通过，提交一次 AC（210/210），判 strong。\n\n**④ 下一步提醒**：写法可再压缩——preMax 初值取 nums[0]、循环从 1 开始，就能省掉循环体内的 i==0 分支。紧接着复习的 152 乘积最大子数组（seq=57）同属线性 DP，但负负得正，必须同时维护 max 与 min 两个状态。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-24",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "210/210",
+      "approach": "Kadane（dp 数组）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": false,
+      "notes": "## 与上一轮对比\n- 一刷/上次复习都是 Kadane **滚动变量 O(1) 空间**；这次用 `int[] dp` 保存「以每个位置结尾的最大和」，骨架一致但空间从 O(1) 退到 O(n)，属于「想起来了但没做空间精简」。\n\n## 为什么这次想起来\n- 状态定义记得牢（以 i 结尾、负贡献归零、全局取 max），一次写对；但没把「只依赖前一项」迁移成滚动变量，空间优化的反射还不足。\n\n## 掌握度依据\n- 一次提交 Accepted（210/210），全程无提示、无探讨 → 较强。\n\n## 下一步提醒\n- 下次直接上 `cur` + `best` 两变量压回 O(1)；可顺带对比 LC152 最大乘积子数组（需同时维护 max/min 的变体）。"
     }
   ]
 }
