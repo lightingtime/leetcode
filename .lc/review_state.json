@@ -863,12 +863,12 @@
       "title": "正则表达式匹配",
       "category": "动态规划",
       "first_pass_date": "2026-08-10",
-      "last_review_date": "2026-09-18",
-      "next_review_date": "2026-09-19",
-      "interval_days": 1,
-      "review_count": 1,
-      "mastery": "strong",
-      "consecutive_strong": 1,
+      "last_review_date": "2026-09-24",
+      "next_review_date": "2026-09-26",
+      "interval_days": 2,
+      "review_count": 2,
+      "mastery": "weak",
+      "consecutive_strong": 0,
       "mastered": false
     },
     "trapping-rain-water": {

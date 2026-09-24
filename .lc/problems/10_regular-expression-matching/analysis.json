@@ -38,20 +38,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "354/354",
       "runtime_ms": null,
-      "memory_bytes": 43644000,
+      "memory_bytes": 44064000,
       "approach": "二维DP（前缀长度语义）",
       "time_complexity": "O(|s|·|p|)",
       "space_complexity": "O(|s|·|p|)",
       "optimal": true,
-      "notes": "二刷独立重写，一遍写出二维 DP，提交一次 354/354 Accepted。\n\n**与一刷对比**：状态定义（前缀长度语义）、转移分支与复杂度都与一刷一致，没有换思路；差别在代码形态——一刷把 `i > 0 && 匹配` 写在星号分支里、再单独初始化一行 `dp[0][j]`，这次把下标守卫前置成 `if (i > 0 && (s.charAt(i-1) == c || c == \\\".\\\"))`，省掉了那趟初始化循环，转移更集中在一处。\n\n**为什么这次直接想起来了**：一刷沉淀的「字符串匹配 DP：前缀长度语义 + 循环含端点 + 星号分支三要素」这次直接复用——`i` 从 0 到 `s.length()`、`j` 从 1 到 `p.length()` 含端点，取字符一律 `charAt(i-1)`/`charAt(j-1)`，星号同时写出零次 `dp[i][j-2]` 与多次 `dp[i-1][j]`。一刷踩过的「循环端点漏掉导致答案格没填」这次没有复现。\n\n**掌握度依据**：一次提交 Accepted，全程无探讨、无提示 → 较强。\n\n**下一步提醒**：空间可以压到一维 `O(|p|)`（滚动数组，需额外留住 `dp[i-1][j-2]` 供星号零次分支用），当前 `O(|s|·|p|)` 不是空间下限，想练滚动数组时再回来。",
-      "code": "public boolean isMatch(String s, String p) {\n        boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];\n        dp[0][0] = true;\n        for (int i = 0; i <= s.length(); i++) {\n            for (int j = 1; j <= p.length(); j++) {\n                char c = p.charAt(j - 1);\n                if (i > 0 && (s.charAt(i - 1) == c || c == '.')) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else if (c == '*') {\n                    dp[i][j] = dp[i][j - 2] || (i > 0 && dp[i - 1][j] && (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.'));\n                }\n            }\n        }\n        return dp[s.length()][p.length()];\n    }",
+      "notes": "**与上一轮对比**：一刷与本轮都是前缀长度语义的二维 DP，转移主线没变（普通字符/`.` 走对角；`*` 分零次与一次及以上），复杂度维持 O(|s|·|p|) 时间、O(|s|·|p|) 空间。\n\n**这次为什么想起来 / 卡在哪**：`*` 的两条分支（dp[i][j-2] 弃掉整个 x*、dp[i-1][j] 继续吃一个 s 字符）能直接回忆出来；卡在细节——`*` 分支里 x 为 `.` 也算匹配，以及取 s.charAt(i-1) 前要有 `i>0` 守卫。这两点正是一刷记下的老坑，说明「主线记得住、守卫条件没内化」。\n\n**掌握度判定依据**：本次一次提交即 Accepted，但过程中就 `*` 的转移分支与助手确认过，按规则记较弱，间隔重置 2 天。\n\n**下一步提醒**：目前用了 m×n 的二维布尔表；空间可压到一行——只留长度为 n+1 的 dp 数组，外层扫 s、内层扫 p 时注意 `*` 分支同时要读「上一行的 j」（当前 dp[j] 已被覆盖前的值）与「当前行的 j-2」，需用一个临时变量保存旧值才能滚动。同类「双串对齐」的 44 通配符匹配、72 编辑距离可顺带回顾。",
+      "code": "public boolean isMatch(String s, String p) {\n        int m = s.length();\n        int n = p.length();\n        // dp[i][j]：s 的前 i 个字符能否被 p 的前 j 个字符完整匹配\n        boolean[][] dp = new boolean[m + 1][n + 1];\n        dp[0][0] = true;\n        for (int i = 0; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                char c = p.charAt(j - 1);\n                if (i > 0 && (s.charAt(i - 1) == c || c == '.')) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else if (c == '*') {\n                    // 零次：弃掉 x*；一次及以上：吃掉 s 一个字符后仍停在 j，要求 i>0 才能取 s.charAt(i-1)\n                    dp[i][j] = dp[i][j - 2] || (i > 0 && dp[i - 1][j] && (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.'));\n                }\n            }\n        }\n        return dp[m][n];\n    }",
       "prev_code": "public boolean isMatch(String s, String p) {\n        boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];\n        dp[0][0] = true;\n        for (int i = 0; i <= s.length(); i++) {\n            for (int j = 1; j <= p.length(); j++) {\n                char c = p.charAt(j - 1);\n                if (i > 0 && (s.charAt(i - 1) == c || c == '.')) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else if (c == '*') {\n                    dp[i][j] = dp[i][j - 2] || (i > 0 && dp[i - 1][j] && (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.'));\n                }\n            }\n        }\n        return dp[s.length()][p.length()];\n    }\n",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
   ],
   "hints": [
@@ -70,6 +70,19 @@
       "space_complexity": "O(|s|·|p|)",
       "optimal": true,
       "notes": "二刷独立重写，一遍写出二维 DP，提交一次 354/354 Accepted。\n\n**与一刷对比**：状态定义（前缀长度语义）、转移分支与复杂度都与一刷一致，没有换思路；差别在代码形态——一刷把 `i > 0 && 匹配` 写在星号分支里、再单独初始化一行 `dp[0][j]`，这次把下标守卫前置成 `if (i > 0 && (s.charAt(i-1) == c || c == \\\".\\\"))`，省掉了那趟初始化循环，转移更集中在一处。\n\n**为什么这次直接想起来了**：一刷沉淀的「字符串匹配 DP：前缀长度语义 + 循环含端点 + 星号分支三要素」这次直接复用——`i` 从 0 到 `s.length()`、`j` 从 1 到 `p.length()` 含端点，取字符一律 `charAt(i-1)`/`charAt(j-1)`，星号同时写出零次 `dp[i][j-2]` 与多次 `dp[i-1][j]`。一刷踩过的「循环端点漏掉导致答案格没填」这次没有复现。\n\n**掌握度依据**：一次提交 Accepted，全程无探讨、无提示 → 较强。\n\n**下一步提醒**：空间可以压到一维 `O(|p|)`（滚动数组，需额外留住 `dp[i-1][j-2]` 供星号零次分支用），当前 `O(|s|·|p|)` 不是空间下限，想练滚动数组时再回来。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-24",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "354/354",
+      "approach": "二维DP（前缀长度语义）",
+      "time_complexity": "O(|s|·|p|)",
+      "space_complexity": "O(|s|·|p|)",
+      "optimal": true,
+      "notes": "**与上一轮对比**：一刷与本轮都是前缀长度语义的二维 DP，转移主线没变（普通字符/`.` 走对角；`*` 分零次与一次及以上），复杂度维持 O(|s|·|p|) 时间、O(|s|·|p|) 空间。\n\n**这次为什么想起来 / 卡在哪**：`*` 的两条分支（dp[i][j-2] 弃掉整个 x*、dp[i-1][j] 继续吃一个 s 字符）能直接回忆出来；卡在细节——`*` 分支里 x 为 `.` 也算匹配，以及取 s.charAt(i-1) 前要有 `i>0` 守卫。这两点正是一刷记下的老坑，说明「主线记得住、守卫条件没内化」。\n\n**掌握度判定依据**：本次一次提交即 Accepted，但过程中就 `*` 的转移分支与助手确认过，按规则记较弱，间隔重置 2 天。\n\n**下一步提醒**：目前用了 m×n 的二维布尔表；空间可压到一行——只留长度为 n+1 的 dp 数组，外层扫 s、内层扫 p 时注意 `*` 分支同时要读「上一行的 j」（当前 dp[j] 已被覆盖前的值）与「当前行的 j-2」，需用一个临时变量保存旧值才能滚动。同类「双串对齐」的 44 通配符匹配、72 编辑距离可顺带回顾。"
     }
   ]
 }

@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>10. 正则表达式匹配 (Regular Expression Matching)</h1><p>&gt; <a href="https://leetcode.cn/problems/regular-expression-matching/" rel="noopener">https://leetcode.cn/problems/regular-expression-matching/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：递归、字符串、动态规划</p><h2>题目描述</h2><p>给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。</p><p>'.' 匹配任意单个字符</p><p>'*' 匹配零个或多个前面的那一个元素</p><p>返回一个布尔值，表示匹配是否覆盖整个输入字符串（而非部分）。</p><p>示例 1：</p><p>输入：s = "aa", p = "a"</p><p>输出：false</p><p>解释："a" 无法匹配 "aa" 整个字符串。</p><p>示例 2:</p><p>输入：s = "aa", p = "a*"</p><p>输出：true</p><p>解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。</p><p>示例 3：</p><p>输入：s = "ab", p = ".*"</p><p>输出：true</p><p>解释：".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。</p><p>提示：</p><p>1</p><p>1</p><p>s 只包含从 a-z 的小写字母。</p><p>p 只包含从 a-z 的小写字母，以及字符 . 和 *。</p><p>保证每次出现字符 * 时，前面都匹配到有效的字符</p><h2>示例</h2><ol><li>输入：s = "aa"，p = "a"</li></ol><p>输出：false</p><p>解释："a" 无法匹配 "aa" 整个字符串。</p><ol><li>输入：s = "aa"，p = "a*"</li></ol><p>输出：true</p><p>解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。</p><ol><li>输入：s = "ab"，p = ".*"</li></ol><p>输出：true</p><p>解释：".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-24 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（354/354）｜ 一次 AC ｜ 二维DP（前缀长度语义） ｜ O(|s|·|p|) · O(|s|·|p|)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：一刷与本轮都是前缀长度语义的二维 DP，转移主线没变（普通字符/<code>.</code> 走对角；<code>*</code> 分零次与一次及以上），复杂度维持 O(|s|·|p|) 时间、O(|s|·|p|) 空间。</p><p><strong>这次为什么想起来 / 卡在哪</strong>：<code>*</code> 的两条分支（dp[i][j-2] 弃掉整个 x*、dp[i-1][j] 继续吃一个 s 字符）能直接回忆出来；卡在细节——<code>*</code> 分支里 x 为 <code>.</code> 也算匹配，以及取 s.charAt(i-1) 前要有 <code>i&gt;0</code> 守卫。这两点正是一刷记下的老坑，说明「主线记得住、守卫条件没内化」。</p><p><strong>掌握度判定依据</strong>：本次一次提交即 Accepted，但过程中就 <code>*</code> 的转移分支与助手确认过，按规则记较弱，间隔重置 2 天。</p><p><strong>下一步提醒</strong>：目前用了 m×n 的二维布尔表；空间可压到一行——只留长度为 n+1 的 dp 数组，外层扫 s、内层扫 p 时注意 <code>*</code> 分支同时要读「上一行的 j」（当前 dp[j] 已被覆盖前的值）与「当前行的 j-2」，需用一个临时变量保存旧值才能滚动。同类「双串对齐」的 44 通配符匹配、72 编辑距离可顺带回顾。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（354/354）｜ 一次 AC ｜ 二维DP（前缀长度语义） ｜ O(|s|·|p|) · O(|s|·|p|)</p>
       <div class="review-note md"><p>二刷独立重写，一遍写出二维 DP，提交一次 354/354 Accepted。</p><p><strong>与一刷对比</strong>：状态定义（前缀长度语义）、转移分支与复杂度都与一刷一致，没有换思路；差别在代码形态——一刷把 <code>i &gt; 0 &amp;&amp; 匹配</code> 写在星号分支里、再单独初始化一行 <code>dp[0][j]</code>，这次把下标守卫前置成 <code>if (i &gt; 0 &amp;&amp; (s.charAt(i-1) == c || c == \".\"))</code>，省掉了那趟初始化循环，转移更集中在一处。</p><p><strong>为什么这次直接想起来了</strong>：一刷沉淀的「字符串匹配 DP：前缀长度语义 + 循环含端点 + 星号分支三要素」这次直接复用——<code>i</code> 从 0 到 <code>s.length()</code>、<code>j</code> 从 1 到 <code>p.length()</code> 含端点，取字符一律 <code>charAt(i-1)</code>/<code>charAt(j-1)</code>，星号同时写出零次 <code>dp[i][j-2]</code> 与多次 <code>dp[i-1][j]</code>。一刷踩过的「循环端点漏掉导致答案格没填」这次没有复现。</p><p><strong>掌握度依据</strong>：一次提交 Accepted，全程无探讨、无提示 → 较强。</p><p><strong>下一步提醒</strong>：空间可以压到一维 <code>O(|p|)</code>（滚动数组，需额外留住 <code>dp[i-1][j-2]</code> 供星号零次分支用），当前 <code>O(|s|·|p|)</code> 不是空间下限，想练滚动数组时再回来。</p></div>
@@ -37,31 +41,35 @@
         <li><span>复杂度</span><b>O(|s|·|p|) · O(|s|·|p|)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>二维DP（前缀长度语义）</b></li>
         <li><span>复杂度</span><b>O(|s|·|p|) · O(|s|·|p|)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 二维DP（前缀长度语义）</h3>
-    <p><span class="chip">时间 O(|s|·|p|)</span><span class="chip">空间 O(|s|·|p|)</span><span class="chip">内存 ≈ 41.6 MB</span><span class="chip">用例 354/354</span></p>
+    <p><span class="chip">时间 O(|s|·|p|)</span><span class="chip">空间 O(|s|·|p|)</span><span class="chip">内存 ≈ 42.0 MB</span><span class="chip">用例 354/354</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0010_RegularExpressionMatching.java · 二维DP（前缀长度语义）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
-        <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>][p.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
+        <span class="tk-k">int</span> m = s.<span class="tk-f">length</span>();
+        <span class="tk-k">int</span> n = p.<span class="tk-f">length</span>();
+        <span class="tk-c">// dp[i][j]：s 的前 i 个字符能否被 p 的前 j 个字符完整匹配</span>
+        <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[m + <span class="tk-n">1</span>][n + <span class="tk-n">1</span>];
         dp[<span class="tk-n">0</span>][<span class="tk-n">0</span>] = <span class="tk-k">true</span>;
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt;= s.<span class="tk-f">length</span>(); i++) {
-            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= p.<span class="tk-f">length</span>(); j++) {
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt;= m; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">1</span>; j &lt;= n; j++) {
                 <span class="tk-k">char</span> c = p.<span class="tk-f">charAt</span>(j - <span class="tk-n">1</span>);
                 <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; (s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == c || c == <span class="tk-s">'.'</span>)) {
                     dp[i][j] = dp[i - <span class="tk-n">1</span>][j - <span class="tk-n">1</span>];
                 } <span class="tk-k">else</span> <span class="tk-k">if</span> (c == <span class="tk-s">'*'</span>) {
+                    <span class="tk-c">// 零次：弃掉 x*；一次及以上：吃掉 s 一个字符后仍停在 j，要求 i&gt;0 才能取 s.charAt(i-1)</span>
                     dp[i][j] = dp[i][j - <span class="tk-n">2</span>] || (i &gt; <span class="tk-n">0</span> &amp;&amp; dp[i - <span class="tk-n">1</span>][j] &amp;&amp; (s.<span class="tk-f">charAt</span>(i - <span class="tk-n">1</span>) == p.<span class="tk-f">charAt</span>(j - <span class="tk-n">2</span>) || p.<span class="tk-f">charAt</span>(j - <span class="tk-n">2</span>) == <span class="tk-s">'.'</span>));
                 }
             }
         }
-        <span class="tk-k">return</span> dp[s.<span class="tk-f">length</span>()][p.<span class="tk-f">length</span>()];
+        <span class="tk-k">return</span> dp[m][n];
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0010_RegularExpressionMatching.java · 二维DP（前缀长度语义） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isMatch</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> p) {
         <span class="tk-k">boolean</span>[][] dp = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>][p.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
