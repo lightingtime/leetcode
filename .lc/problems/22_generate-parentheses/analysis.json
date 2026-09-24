@@ -29,20 +29,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "8/8",
       "runtime_ms": null,
-      "memory_bytes": 44796000,
+      "memory_bytes": 44608000,
       "approach": "回溯（剩余计数剪枝）",
       "time_complexity": "O(C_n·n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "### 与上一轮对比\n- 思路未变：仍是一刷的「剩余左右括号计数 + 前缀非法剪枝」；实现上把一刷的 String 拼接换成 StringBuilder 追加 + 撤销末字符，属于同一写法内的微调，复杂度同为 O(C_n·n)/O(n)。\n\n### 这次为什么能直接想起来\n- 本题核心约束是「任意前缀中 ( 不少于 )」；这次没有走先枚举 2^(2n) 再过滤的老路，而是直接构造式回溯：剩余左 > 剩余右 就意味着已放下的 ) 已超过 (，这条分支立刻回退。\n\n### 掌握度判定依据\n- 提交一次即 Accepted（8/8），全程无提示、无讨论 → strong。\n\n### 下一步提醒\n- 代码还能更精简：`l<0 || r<0` 的负值守卫与 `l==r && l==0` 的终止判断可以合并成「只在 l>0 / r>0 时才继续递归」，省掉负值分支；终止条件也可直接写成 `l==0 && r==0`。",
-      "code": "List<String> ans;\n    public List<String> generateParenthesis(int n) {\n        ans = new ArrayList<>();\n        dfs(n, n, new StringBuilder());\n        return ans;\n    }\n\n    // l/r：还剩几个左/右括号\n    private void dfs(int l, int r, StringBuilder sb) {\n        if (l < 0 || r < 0) {\n            return;\n        }\n        if (l == r && l == 0) {\n            ans.add(sb.toString());\n            return;\n        }\n        // 剩余左括号比右括号多 ⇒ 已放下的 ')' 已经超过 '('，前缀非法\n        if (l > r) {\n            return;\n        }\n        sb.append(\"(\");\n        dfs(l - 1, r, sb);\n        sb.deleteCharAt(sb.length() - 1);\n\n        sb.append(\")\");\n        dfs(l, r - 1, sb);\n        sb.deleteCharAt(sb.length() - 1);\n    }",
+      "notes": "### 与上一轮对比\n- 思路与骨架完全一致：仍是回溯 + 剩余括号计数剪枝，属于同一写法，本轮按同一 approach 合并，不新增 submissions 条目。\n- 差异只在可读性：变量从 `l/r` 改成 `left/right`，一刷挂在 `l > r` 上的注释这次没写，逻辑未变。\n\n### 这次为什么能想起来\n- 一刷的关键点「任意前缀里 `)` 不能多于 `(`」这轮直接落成状态守卫 `left > right` 就 return，没有走「生成全部 2^(2n) 候选再过滤」的弯路。\n\n### 掌握度依据\n- 一次提交即 Accepted（8/8），全程未提问、未看旧代码，判强。距上次复习 6 天，间隔按较强 ×2.5 拉长。\n\n### 下一步提醒\n- 本题输出规模本身是 Θ(C_n·n)，枚举型写法已到下限；若想换角度沉淀第二种写法，可按「第一对括号的位置」拆分做 DP 生成，作为独立 approach 追加。",
+      "code": "List<String> ans;\n    public List<String> generateParenthesis(int n) {\n        ans = new ArrayList<>();\n        dfs(n, n, new StringBuilder());\n        return ans;\n    }\n\n    private void dfs(int left, int right, StringBuilder sb) {\n        if (left < 0 || right < 0) {\n            return;\n        }\n\n        if (left == right  && left == 0) {\n            ans.add(sb.toString());\n            return;\n        }\n\n        if (left > right) {\n            return;\n        }\n\n        sb.append(\"(\");\n        dfs(left - 1, right, sb);\n        sb.deleteCharAt(sb.length() - 1);\n\n        sb.append(\")\");\n        dfs(left, right - 1, sb);\n        sb.deleteCharAt(sb.length() - 1);\n    }",
       "prev_code": "List<String> ans;\n    public List<String> generateParenthesis(int n) {\n        ans = new ArrayList<>();\n        dfs(n, n, \"\");\n        return ans;\n    }\n\n    private void dfs(int left, int right, String sb) {\n        if (left < 0 || right < 0) {\n            return;\n        }\n        if (left == right && left == 0) {\n            ans.add(sb);\n            return;\n        }\n        if (right < left) {\n            return;\n        }\n        dfs(left - 1, right, sb + \"(\");\n\n        dfs(left, right - 1, sb + \")\");\n    }\n",
       "mastery": "strong",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -61,6 +61,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "### 与上一轮对比\n- 思路未变：仍是一刷的「剩余左右括号计数 + 前缀非法剪枝」；实现上把一刷的 String 拼接换成 StringBuilder 追加 + 撤销末字符，属于同一写法内的微调，复杂度同为 O(C_n·n)/O(n)。\n\n### 这次为什么能直接想起来\n- 本题核心约束是「任意前缀中 ( 不少于 )」；这次没有走先枚举 2^(2n) 再过滤的老路，而是直接构造式回溯：剩余左 > 剩余右 就意味着已放下的 ) 已超过 (，这条分支立刻回退。\n\n### 掌握度判定依据\n- 提交一次即 Accepted（8/8），全程无提示、无讨论 → strong。\n\n### 下一步提醒\n- 代码还能更精简：`l<0 || r<0` 的负值守卫与 `l==r && l==0` 的终止判断可以合并成「只在 l>0 / r>0 时才继续递归」，省掉负值分支；终止条件也可直接写成 `l==0 && r==0`。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-24",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "8/8",
+      "approach": "回溯（剩余计数剪枝）",
+      "time_complexity": "O(C_n·n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 思路与骨架完全一致：仍是回溯 + 剩余括号计数剪枝，属于同一写法，本轮按同一 approach 合并，不新增 submissions 条目。\n- 差异只在可读性：变量从 `l/r` 改成 `left/right`，一刷挂在 `l > r` 上的注释这次没写，逻辑未变。\n\n### 这次为什么能想起来\n- 一刷的关键点「任意前缀里 `)` 不能多于 `(`」这轮直接落成状态守卫 `left > right` 就 return，没有走「生成全部 2^(2n) 候选再过滤」的弯路。\n\n### 掌握度依据\n- 一次提交即 Accepted（8/8），全程未提问、未看旧代码，判强。距上次复习 6 天，间隔按较强 ×2.5 拉长。\n\n### 下一步提醒\n- 本题输出规模本身是 Θ(C_n·n)，枚举型写法已到下限；若想换角度沉淀第二种写法，可按「第一对括号的位置」拆分做 DP 生成，作为独立 approach 追加。"
     }
   ]
 }
