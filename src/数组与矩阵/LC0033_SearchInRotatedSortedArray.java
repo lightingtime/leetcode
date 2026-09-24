@@ -2,43 +2,37 @@
 // LeetCode 33. 搜索旋转排序数组 (Search in Rotated Sorted Array)
 // 难度：Medium | 分类：数组与矩阵
 // 链接：https://leetcode.cn/problems/search-in-rotated-sorted-array/
-// 复习日期：2026-09-18（第 1 次复习 · 一刷 2026-08-05 · 一刷多次踩坑后才过）
-// 一刷写法：旋转数组二分——每轮先判 mid 落在哪一段（nums[mid] >= nums[left] 说明左段递增），再用「有序半段的值域」判断 target 归属，O(log n)/O(1)
-// 这题一刷踩过的四个坑（错误习惯库里都有记录）：中点写成 (right-left)/2 落到区间外；不用有序半段的值域判断 target 归属；丢掉 nums[mid] == target 的显式命中；左段有序判定写成 > 而不是 >=（剩两个元素时 mid == left，> 恒 false 会错入右段）
-// 测试用例与一刷归档保持一致（示例 3 个 + 边界 9 个）
+// 二刷 · 一刷日期：2026-08-05｜测试用例与一刷归档保持一致
+// 上次复习：2026-09-18（较弱）
 // ============================================================
+
+import java.util.*;
 
 public class LC0033_SearchInRotatedSortedArray {
 
     // ==== 提交代码开始 ====
     public int search(int[] nums, int target) {
-        // 待查下标是开区间 (left, right) 内的 left+1 .. right-1，left/right 本身不在待查范围内
-        int left = -1, right = nums.length;
-        // left+1 < right 表示待查范围内还有元素；退出时待查为空
-        while (left + 1 < right) {
-            int mid = left + (right - left) / 2;
-            // 端点移动会把 mid 甩出待查范围，命中必须当场返回
+        int l = -1, r = nums.length;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
             if (nums[mid] == target) {
                 return mid;
             }
-            // 段位参照物必须是固定的 nums[0]：右段的值全部小于 nums[0]
             if (nums[mid] >= nums[0]) {
-                // 左段：mid 左边那一半的值域是 [nums[0], nums[mid]]
                 if (target >= nums[0] && target < nums[mid]) {
-                    right = mid;
+                    r = mid;
                 } else {
-                    left = mid;
+                    l = mid;
                 }
             } else {
-                // 右段：mid 右边那一半的值域是 [nums[mid], nums[n-1]]
-                if (target < nums[0] && target > nums[mid]) {
-                    left = mid;
+                // target == nums[0] 属于左段（含下标 0），不能划进右段
+                if (target < nums[0] && target >= nums[mid]) {
+                    l = mid;
                 } else {
-                    right = mid;
+                    r = mid;
                 }
             }
         }
-        // 待查区间已空，target 不在数组中
         return -1;
     }
     // ==== 提交代码结束 ====
@@ -88,6 +82,11 @@ public class LC0033_SearchInRotatedSortedArray {
         try {
             if (!TestUtil.checkEq(1, s.search(new int[]{2, 1}, 1), "边界9-旋转一位两元素")) failures++;
         } catch (Throwable t) { failures++; System.out.println("边界9-旋转一位两元素 异常: " + t); }
+
+        // ---- 力扣 WA 回归用例：target 恰好等于 nums[0] ----
+        try {
+            if (!TestUtil.checkEq(0, s.search(new int[]{5, 1, 3}, 5), "边界10-target等于nums[0]")) failures++;
+        } catch (Throwable t) { failures++; System.out.println("边界10-target等于nums[0] 异常: " + t); }
 
         if (failures > 0) {
             System.out.println("测试未全部通过，失败 " + failures + " 个");

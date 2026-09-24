@@ -247,10 +247,10 @@
       "title": "搜索旋转排序数组",
       "category": "数组与矩阵",
       "first_pass_date": "2026-08-05",
-      "last_review_date": "2026-09-18",
-      "next_review_date": "2026-09-20",
+      "last_review_date": "2026-09-24",
+      "next_review_date": "2026-09-26",
       "interval_days": 2,
-      "review_count": 1,
+      "review_count": 2,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
