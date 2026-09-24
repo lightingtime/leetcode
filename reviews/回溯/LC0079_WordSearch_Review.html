@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>79. 单词搜索 (Word Search)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-search/" rel="noopener">https://leetcode.cn/problems/word-search/</a></p><p>难度：Medium ｜ 分类：回溯</p><p>标签：深度优先搜索、数组、字符串、回溯、矩阵</p><h2>题目描述</h2><p>给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。</p><p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p><p>示例 1：</p><p>输入：board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], word = "ABCCED"</p><p>输出：true</p><p>示例 2：</p><p>输入：board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], word = "SEE"</p><p>输出：true</p><p>示例 3：</p><p>输入：board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], word = "ABCB"</p><p>输出：false</p><p>提示：</p><p>m == board.length</p><p>n = board[i].length</p><p>1</p><p>1</p><p>board 和 word 仅由大小写英文字母组成</p><p>进阶：你可以使用搜索剪枝的技术来优化解决方案，使其在 board 更大的情况下可以更快解决问题？</p><h2>示例</h2><ol><li>输入：board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]，word = "ABCCED"</li></ol><p>输出：true</p><ol><li>输入：board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]，word = "SEE"</li></ol><p>输出：true</p><ol><li>输入：board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']]，word = "ABCB"</li></ol><p>输出：false</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-24 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（88/88）｜ 多次提交 ｜ DFS 回溯 + visited 剪枝 ｜ O(m·n·3^L) · O(L+m·n)</p>
+      <div class="review-note md"><p>补上失败分支撤销 visited 后通过；visited 属于当前递归路径而非全局状态</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ DFS 回溯 + visited 剪枝 ｜ O(m·n·3^L) · O(L+m·n)</p>
       <div class="review-note md"><p><strong>与一刷对比</strong>：思路与写法一致（外层枚举起点 + 网格 DFS 回溯 + visited 标记）。</p><p><strong>关键点都处理对了</strong>：① 外层双重循环枚举每个格子当起点，不会只在 (0,0) 起搜；② 越界与 visited 的判断写在同一个 if 里靠 <code>||</code> 短路——先判下标再访问 <code>visited[i][j]</code>，不会越界访问；③ 字符匹配放在占位之前，匹配失败直接返回，不污染状态；④ 选择/撤销对称（<code>visited[i][j]=true</code> 进、<code>false</code> 出），四个方向用 <code>ans = ans || dfs(...)</code> 串联，短路后一旦命中就不再搜其余方向。本地示例 3 + 边界 7（单格命中/未命中/词过长/斜向不可达/竖直可达/同格不可复用/全相同长路径）全过，一次提交 Accepted（88/88）。</p><p><strong>可精简点</strong>：① <code>int index = 0;</code> 配合 <code>dfs(board, i, j, index, word)</code> 可以直接传字面量 0；② dfs 里 <code>boolean ans; ans = dfs(...);</code> 两行可以并成一行；③ 另一种常用写法是「把走过的格子临时改成特殊字符、回溯时还原」，能省掉 visited 数组（空间降到 O(L)）；④ <code>visited</code> 作为实例字段每次重建，改成局部变量或作为参数传递更安全。</p><p><strong>掌握度依据</strong>：一次提交 Accepted、全程无探讨 → 较强。</p></div>
@@ -37,50 +41,53 @@
         <li><span>复杂度</span><b>O(m*n*3^L) · O(L+m*n)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>DFS 回溯 + visited 剪枝</b></li>
         <li><span>复杂度</span><b>O(m·n·3^L) · O(L+m·n)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · DFS 回溯 + visited 剪枝</h3>
-    <p><span class="chip">时间 O(m·n·3^L)</span><span class="chip">空间 O(L+m·n)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 —</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0079_WordSearch.java · DFS 回溯 + visited 剪枝</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">boolean</span>[][] visited;
+    <p><span class="chip">时间 O(m·n·3^L)</span><span class="chip">空间 O(L+m·n)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 88/88</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0079_WordSearch.java · DFS 回溯 + visited 剪枝</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[][] visited;
     <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">exist</span>(<span class="tk-k">char</span>[][] board, <span class="tk-t">String</span> word) {
-        <span class="tk-k">int</span> m = board.length;
-        <span class="tk-k">int</span> n = board[<span class="tk-n">0</span>].length;
-        visited = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[m][n];
+        visited = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[board.length][board[<span class="tk-n">0</span>].length];
         <span class="tk-k">boolean</span> ans = <span class="tk-k">false</span>;
-        <span class="tk-k">int</span> index = <span class="tk-n">0</span>;
-        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; m; i++) {
-            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; n; j++) {
-                ans = ans || <span class="tk-f">dfs</span>(board, i, j, index, word);
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; board.length; i++) {
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> j = <span class="tk-n">0</span>; j &lt; board[<span class="tk-n">0</span>].length; j++) {
+                <span class="tk-k">if</span> (!visited[i][j]) {
+                    ans = <span class="tk-f">dfs</span>(board, i, j, word, <span class="tk-n">0</span>);
+                }
+                <span class="tk-k">if</span> (ans) {
+                    <span class="tk-k">return</span> <span class="tk-k">true</span>;
+                }
             }
         }
         <span class="tk-k">return</span> ans;
     }
 
-    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] board, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j, <span class="tk-k">int</span> index, <span class="tk-t">String</span> word) {
-        <span class="tk-k">if</span> (index == word.<span class="tk-f">length</span>()) {
+    <span class="tk-k">private</span> <span class="tk-k">boolean</span> <span class="tk-f">dfs</span>(<span class="tk-k">char</span>[][] board, <span class="tk-k">int</span> i, <span class="tk-k">int</span> j, <span class="tk-t">String</span> word, <span class="tk-k">int</span> len) {
+        <span class="tk-k">if</span> (len == word.<span class="tk-f">length</span>()) {
             <span class="tk-k">return</span> <span class="tk-k">true</span>;
         }
         <span class="tk-k">if</span> (i &lt; <span class="tk-n">0</span> || j &lt; <span class="tk-n">0</span> || i &gt;= board.length || j &gt;= board[<span class="tk-n">0</span>].length || visited[i][j]) {
             <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
-        <span class="tk-k">if</span> (board[i][j] != word.<span class="tk-f">charAt</span>(index)) {
+        <span class="tk-k">if</span> (word.<span class="tk-f">charAt</span>(len) != board[i][j]) {
             <span class="tk-k">return</span> <span class="tk-k">false</span>;
         }
         visited[i][j] = <span class="tk-k">true</span>;
-        <span class="tk-k">boolean</span> ans;
-        ans = <span class="tk-f">dfs</span>(board, i + <span class="tk-n">1</span>, j, index + <span class="tk-n">1</span>, word);
-        ans = ans || <span class="tk-f">dfs</span>(board, i - <span class="tk-n">1</span>, j, index + <span class="tk-n">1</span>, word);
-        ans = ans || <span class="tk-f">dfs</span>(board, i, j - <span class="tk-n">1</span>, index + <span class="tk-n">1</span>, word);
-        ans = ans || <span class="tk-f">dfs</span>(board, i, j + <span class="tk-n">1</span>, index + <span class="tk-n">1</span>, word);
+        <span class="tk-k">boolean</span> search;
+        search = <span class="tk-f">dfs</span>(board, i + <span class="tk-n">1</span>, j, word, len + <span class="tk-n">1</span>);
+        search = search || <span class="tk-f">dfs</span>(board, i - <span class="tk-n">1</span>, j, word, len + <span class="tk-n">1</span>);
+        search = search || <span class="tk-f">dfs</span>(board, i, j + <span class="tk-n">1</span>, word, len + <span class="tk-n">1</span>);
+        search = search || <span class="tk-f">dfs</span>(board, i, j - <span class="tk-n">1</span>, word, len + <span class="tk-n">1</span>);
+        <span class="tk-c">// visited 表示当前递归路径占用的格子，回退时必须释放。</span>
         visited[i][j] = <span class="tk-k">false</span>;
-        <span class="tk-k">return</span> ans;
+        <span class="tk-k">return</span> search;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0079_WordSearch.java · DFS 回溯 + visited 剪枝 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">boolean</span>[][] visited;
 
@@ -125,8 +132,8 @@
 </pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：在 m×n 网格中判断单词是否存在——按字母顺序走水平/垂直相邻格，同一格不能重复使用。这是网格上的路径搜索，DFS（回溯）天然适配：沿一条路径深入匹配，走不通就撤销回退换方向。</p><p>关键设计：</p><ol><li>状态：dfs(i, j, index) 表示当前站在 (i,j)、要匹配 word 的第 index 个字母；visited[i][j] 记录当前路径是否占用过该格；</li><li>终止条件：index == word.length() 时所有字母已匹配，返回 true——这个判断必须在访问 board 之前做，否则匹配完还会越界访问；</li><li>剪枝顺序：越界 → visited → 字母不相等，任一不满足直接返回 false；只有字母相等才继续深入；</li><li>主循环：word 第一个字母可能出现在任意格，遍历全部格子作为起点；</li><li>选择/撤销对称：匹配当前格后 visited[i][j]=true，向四个方向递归 index+1，全部方向结束后 visited[i][j]=false。</li></ol><p>具体 case 推演：</p><ul><li>命中：board=[[A,B],[C,D]]，word=「AC」：从 (0,0) 的 A 匹配 index=0 → 标记 visited → 向下到 (1,0) 的 C 匹配 index=1 → 进入下一层时 index==2 返回 true；</li><li>撤销的必要性：board=[[A,A]]，word=「AAA」：从 (0,0) 匹配后向右到 (0,1)，index=2 时已无路可走返回 false；若返回时未把 (0,1) 还原，其他起点的搜索会误以为该格被占用；</li><li>成功路径依赖逐层还原：2×2 全 A 网格找「AAA」，(0,0)→(0,1)→(1,1) 能走通，前提是每层返回时都把上一格释放；</li><li>同一格不可重复用（示例 3）：word=「ABCB」走 A(0,0)→B(0,1)→C(0,2) 后想再找 B 只能回到 (0,1)，但 visited 已标记 → false。</li></ul><p>边界与细节：</p><ul><li>单词长度为 1：任意格字母相等即 true；</li><li>词比格子总数还长时必然 false（路径长度上限 = 格子数）；</li><li>斜对角不算相邻，只能上下左右；单行/单列网格由越界判断自然处理。</li></ul><p>复杂度分析：</p><ul><li>时间 O(m·n·3^L)：m·n 个起点，每个起点最多探索 3^L 条路径（除回头方向外每步 3 个选择），L 为单词长度；</li><li>空间 O(L + m·n)：递归栈深度 L + visited 数组。</li></ul><p>为什么是可接受/最优：单词搜索没有多项式优化的一般算法（网格字符可任意重复），标准做法就是 DFS + 剪枝；O(m·n·3^L) 是本题标准复杂度，visited 与字母不匹配两层剪枝把实际搜索量压得很低。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>88/88 用例一次通过。</p></div></div></div></section>
-  
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>网格回溯搜索失败后未撤销 visited 标记，导致失败分支污染后续起点或分支</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>88/88 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>网格回溯撤销访问标记</h3><p>visited 是路径级状态：进入格子标记，探索完该格子的所有方向后恢复。失败分支不撤销会污染后续起点/分支；区别于连通分量 DFS 的全局 visited。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
       <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
@@ -139,7 +146,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 回溯</h3><div class="quote">回溯 = 递归 + 选择/撤销：先画递归树，想清楚剪枝条件。</div>
-      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>错误习惯复盘</h3><p><b>网格回溯搜索失败后未撤销 visited 标记，导致失败分支污染后续起点或分支</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 48 · word-search</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>

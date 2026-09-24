@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-22",
+  "updated": "2026-09-24",
   "deadline": "2026-09-15",
   "problems": {
     "two-sum": {
@@ -667,12 +667,12 @@
       "title": "单词搜索",
       "category": "回溯",
       "first_pass_date": "2026-08-09",
-      "last_review_date": "2026-09-18",
-      "next_review_date": "2026-09-19",
-      "interval_days": 1,
-      "review_count": 1,
-      "mastery": "strong",
-      "consecutive_strong": 1,
+      "last_review_date": "2026-09-24",
+      "next_review_date": "2026-09-26",
+      "interval_days": 2,
+      "review_count": 2,
+      "mastery": "weak",
+      "consecutive_strong": 0,
       "mastered": false
     },
     "climbing-stairs": {
