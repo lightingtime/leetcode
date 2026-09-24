@@ -2,9 +2,8 @@
 // LeetCode 300. 最长递增子序列 (Longest Increasing Subsequence)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-increasing-subsequence/
-// 刷题日期：2026-09-18
-// 二刷 · 一刷 2026-08-10（贪心 + 二分，tails 数组，O(n log n)/O(n)）｜测试用例与一刷归档保持一致
-// DP 子类型：线性 DP（阶段是「处理到第 i 位」，状态要能描述「已选序列的结尾」）
+// 刷题日期：2026-09-24
+//
 // ============================================================
 
 import java.util.*;
@@ -13,25 +12,27 @@ public class LC0300_LongestIncreasingSubsequence {
 
     // ==== 提交代码开始 ====
     public int lengthOfLIS(int[] nums) {
-        int[] tails = new int[nums.length];
-        int tail = 0;
+        int[] ans = new int[nums.length];
+        Arrays.fill(ans, Integer.MAX_VALUE);
+        int k = 0;
         for (int i = 0; i < nums.length; i++) {
-            int index = find(tails, tail, nums[i]);
-            if (index < tail) {
-                tails[index] = nums[i];
+            // ans 未使用槽位为 MAX_VALUE，find 的二分会把它当作上界哨兵
+            int index = find(ans, k, nums[i]);
+            if (index >= k) {
+                ans[k] = nums[i];
+                k++;
             } else {
-                tails[tail] = nums[i];
-                tail++;
+                ans[index] = nums[i];
             }
         }
-        return tail;
+        return k;
     }
 
-    private int find(int[] tails, int end, int num) {
-        int l = -1, r = end + 1;
+    private int find(int[] ans, int tail, int target) {
+        int l = -1, r = tail + 1;
         while (l + 1 < r) {
             int mid = l + (r - l) / 2;
-            if (tails[mid] < num) {
+            if (ans[mid] < target) {
                 l = mid;
             } else {
                 r = mid;

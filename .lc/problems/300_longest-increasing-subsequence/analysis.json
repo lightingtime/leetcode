@@ -21,20 +21,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "57/57",
       "runtime_ms": null,
-      "memory_bytes": 46316000,
+      "memory_bytes": 46572000,
       "approach": "贪心+二分（tails数组）",
       "time_complexity": "O(n log n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "## 本轮情况\n\n- 思路与一刷完全一致：贪心维护 tails 数组，做 binary search 找到第一个不小于当前数的位置；落在数组末尾则长度加一。\n- 复杂度与一刷持平：O(n log n)/O(n)，本次提交 57/57 一次通过（内存 46.3 MB）。\n\n## 为什么这次能直接写出来\n\n- 关键不变量被完整复现：把当前位置替换成更小的结尾值，只会让该长度的最优结尾更小，不会破坏后续接续的可能性；二分的 l = -1 / r = end + 1 边界写法也与一刷一致，说明「找第一个大于等于 nums[i] 的位置」这步已经内化。\n- 与一刷唯一差异是辅助函数名（findNumIndex 改成 find），属于命名层面，不构成新写法，因此按同一 approach 合并记录。\n\n## 掌握度判定\n\n- 一次提交即 Accepted，全程无提示、无正误探讨，判定 strong，间隔按上次乘 2.5 拉长。\n\n## 下一步提醒\n\n- 提交区 if / else 两支各写了一次赋值，可合并为：先写入 tails[index]，再判断 index == tail 时长度加一，省掉重复赋值；tail 的语义是长度而非下标，命名成 len 更贴切。\n- 同一不变量还有两个变形值得顺带复习：673 最长递增子序列的个数（计数）、354 俄罗斯套娃信封问题（二维排序后化为一维）。",
-      "code": "public int lengthOfLIS(int[] nums) {\n        int[] tails = new int[nums.length];\n        int tail = 0;\n        for (int i = 0; i < nums.length; i++) {\n            int index = find(tails, tail, nums[i]);\n            if (index < tail) {\n                tails[index] = nums[i];\n            } else {\n                tails[tail] = nums[i];\n                tail++;\n            }\n        }\n        return tail;\n    }\n\n    private int find(int[] tails, int end, int num) {\n        int l = -1, r = end + 1;\n        while (l + 1 < r) {\n            int mid = l + (r - l) / 2;\n            if (tails[mid] < num) {\n                l = mid;\n            } else {\n                r = mid;\n            }\n        }\n        return r;\n    }",
+      "notes": "### 与上一轮对比\n与一刷一样采用贪心 tails + lower_bound，复杂度仍为 O(n log n)/O(n)，一次 AC，思路上没有更换。\n\n### 这次能独立复现的关键\n代码直接维护“每个长度对应的最小结尾”，并在严格递增处用第一个 >= x 的位置做替换或追加，说明该不变量这次能独立回忆出来。\n\n### 掌握度判定依据\n本地 8 项测试通过，力扣一次提交即 Accepted；但提交前就 find 的 tail 是否可去掉进行了探讨，按复习规则记为 weak。\n\n### 下一步提醒\n可以自己比较两种二分边界：当前把 tail 当最后一个有效下标，搜索依赖 MAX_VALUE 哨兵；把 k 当作有效长度并搜索 [0,k) 会更自洽，也不依赖哨兵。",
+      "code": "public int lengthOfLIS(int[] nums) {\n        int[] ans = new int[nums.length];\n        Arrays.fill(ans, Integer.MAX_VALUE);\n        int k = 0;\n        for (int i = 0; i < nums.length; i++) {\n            // ans 未使用槽位为 MAX_VALUE，find 的二分会把它当作上界哨兵\n            int index = find(ans, k, nums[i]);\n            if (index >= k) {\n                ans[k] = nums[i];\n                k++;\n            } else {\n                ans[index] = nums[i];\n            }\n        }\n        return k;\n    }\n\n    private int find(int[] ans, int tail, int target) {\n        int l = -1, r = tail + 1;\n        while (l + 1 < r) {\n            int mid = l + (r - l) / 2;\n            if (ans[mid] < target) {\n                l = mid;\n            } else {\n                r = mid;\n            }\n        }\n        return r;\n    }",
       "prev_code": "public int lengthOfLIS(int[] nums) {\n        int[] tails = new int[nums.length];\n        int tail = 0;\n        for (int i = 0; i < nums.length; i++) {\n            int index = findNumIndex(tails, tail, nums[i]);\n            if (index < tail) {\n                tails[index] = nums[i];\n            } else {\n                tails[tail] = nums[i];\n                tail++;\n            }\n        }\n        return tail;\n    }\n\n    private int findNumIndex(int[] tails, int end, int num) {\n        int l = -1, r = end + 1;\n        while (l + 1 < r) {\n            int mid = l + (r - l) / 2;\n            if (tails[mid] < num) {\n                l = mid;\n            } else {\n                r = mid;\n            }\n        }\n        return r;\n    }\n",
-      "mastery": "strong",
-      "pass": 1
+      "mastery": "weak",
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "## 本轮情况\n\n- 思路与一刷完全一致：贪心维护 tails 数组，做 binary search 找到第一个不小于当前数的位置；落在数组末尾则长度加一。\n- 复杂度与一刷持平：O(n log n)/O(n)，本次提交 57/57 一次通过（内存 46.3 MB）。\n\n## 为什么这次能直接写出来\n\n- 关键不变量被完整复现：把当前位置替换成更小的结尾值，只会让该长度的最优结尾更小，不会破坏后续接续的可能性；二分的 l = -1 / r = end + 1 边界写法也与一刷一致，说明「找第一个大于等于 nums[i] 的位置」这步已经内化。\n- 与一刷唯一差异是辅助函数名（findNumIndex 改成 find），属于命名层面，不构成新写法，因此按同一 approach 合并记录。\n\n## 掌握度判定\n\n- 一次提交即 Accepted，全程无提示、无正误探讨，判定 strong，间隔按上次乘 2.5 拉长。\n\n## 下一步提醒\n\n- 提交区 if / else 两支各写了一次赋值，可合并为：先写入 tails[index]，再判断 index == tail 时长度加一，省掉重复赋值；tail 的语义是长度而非下标，命名成 len 更贴切。\n- 同一不变量还有两个变形值得顺带复习：673 最长递增子序列的个数（计数）、354 俄罗斯套娃信封问题（二维排序后化为一维）。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-24",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "57/57",
+      "approach": "贪心+二分（tails数组）",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n与一刷一样采用贪心 tails + lower_bound，复杂度仍为 O(n log n)/O(n)，一次 AC，思路上没有更换。\n\n### 这次能独立复现的关键\n代码直接维护“每个长度对应的最小结尾”，并在严格递增处用第一个 >= x 的位置做替换或追加，说明该不变量这次能独立回忆出来。\n\n### 掌握度判定依据\n本地 8 项测试通过，力扣一次提交即 Accepted；但提交前就 find 的 tail 是否可去掉进行了探讨，按复习规则记为 weak。\n\n### 下一步提醒\n可以自己比较两种二分边界：当前把 tail 当最后一个有效下标，搜索依赖 MAX_VALUE 哨兵；把 k 当作有效长度并搜索 [0,k) 会更自洽，也不依赖哨兵。"
     }
   ]
 }
