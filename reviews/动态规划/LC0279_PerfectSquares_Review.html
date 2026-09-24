@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>279. 完全平方数 (Perfect Squares)</h1><p>&gt; <a href="https://leetcode.cn/problems/perfect-squares/" rel="noopener">https://leetcode.cn/problems/perfect-squares/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：广度优先搜索、数学、动态规划、背包问题、完全背包</p><h2>题目描述</h2><p>给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。</p><p>完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。</p><p>示例 1：</p><p>输入：n = 12</p><p>输出：3</p><p>解释：12 = 4 + 4 + 4</p><p>示例 2：</p><p>输入：n = 13</p><p>输出：2</p><p>解释：13 = 4 + 9</p><p>提示：</p><p>1 4</p><h2>示例</h2><ol><li>输入：n = 12</li></ol><p>输出：3</p><p>解释：12 = 4 + 4 + 4</p><ol><li>输入：n = 13</li></ol><p>输出：2</p><p>解释：13 = 4 + 9</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-24 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（589/589）｜ 一次 AC ｜ 一维DP（枚举最后一块平方数） ｜ O(n·√n) · O(n)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong>：继续采用一维 DP，状态含义和“枚举最后一个完全平方数”的转移与一刷一致；时间复杂度仍为 O(n·√n)，空间 O(n)，没有引入新的边界偏差。</p><p><strong>这次为什么能想起来</strong>：一刷和上一次复习都一次通过，<code>dp[i]</code> 表示凑成 i 的最少数量这一状态定义保持稳定，看到约束后直接沿用了可验证的递推。</p><p><strong>掌握度判定依据</strong>：本地 8 项测试通过后，本次只提交一次即 Accepted（589/589），全程未使用提示或额外探讨，因此判定为较强。</p><p><strong>下一步提醒</strong>：核心 DP 已是这题的常规最优复杂度；代码细节上可把内层上界 <code>Math.sqrt(i)</code> 改成 <code>j * j &lt;= i</code>，避免循环条件重复调用浮点平方根，结果与复杂度不变。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（589/589）｜ 一次 AC ｜ 一维DP（枚举最后一块平方数） ｜ O(n·√n) · O(n)</p>
       <div class="review-note md"><p><strong>思路拆解（状态与转移）</strong></p><ul><li>状态：dp[i] = 恰好凑成 i 的最少完全平方数个数；容量维度就是 i 本身，物品是 1²、2²、3²…，每件可无限次使用，属完全背包（DP 子类型：背包DP）。</li><li>转移：dp[i] = min(dp[i - j²] + 1)，j 取 1..√i；正序枚举平方数保证同一件可重复使用。</li><li>结束：返回 dp[n]；dp[0]=0，其余初值 Integer.MAX_VALUE。</li></ul><p><strong>用具体输入逐层走一遍</strong></p><ul><li>从 dp[0]=0 出发：i=1 时只有 j=1，dp[1]=dp[0]+1=1。</li><li>i=4：j=1 得 dp[3]+1=4，j=2 得 dp[0]+1=1，取较小值 dp[4]=1，对应 4=2²。</li><li>i=12：j=1 得 dp[11]+1=4，j=2 得 dp[8]+1=3，j=3 得 dp[3]+1=4，最小 3，对应 12=4+4+4。</li><li>i=13：j=1 得 dp[12]+1=4，j=2 得 dp[9]+1=2，j=3 得 dp[4]+1=2，最小 2，对应 13=4+9。</li></ul><p><strong>与上一轮对比</strong></p><p>思路与一刷完全一致（一维 DP 枚举最后一块平方数），复杂度同为 O(n·√n)/O(n)；本轮没有换写法，代码骨架与一刷等价。</p><p><strong>这次为什么能想起来</strong></p><p>一刷一次 AC 留下的状态定义仍然清晰，重写时直接锁定「以容量 i 为阶段、枚举最后一块平方数 j²」，没有退化成二维 DP 或 BFS。</p><p><strong>掌握度判定</strong></p><p>本次一次提交 Accepted，全程没有提示、没有探讨，判为较强。</p><p><strong>下一步提醒</strong></p><p>DP 主线已是标准解。若想再深一层：拉格朗日四平方定理下答案只可能是 1..4，先用 Legendre 判定 n=4^a(8b+7) 时答案为 4，再依次判完全平方数（1）与两平方和（2），可把 O(n·√n) 降到 O(√n)；这属于数论特判，不是通用 DP，不必现在追。</p></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>一维DP（枚举最后一块平方数）</b></li>
         <li><span>复杂度</span><b>O(n·√n) · O(n)</b></li>
@@ -47,7 +51,7 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 一维DP（枚举最后一块平方数）</h3>
-    <p><span class="chip">时间 O(n·√n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.8 MB</span><span class="chip">用例 589/589</span></p>
+    <p><span class="chip">时间 O(n·√n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.7 MB</span><span class="chip">用例 589/589</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0279_PerfectSquares.java · 一维DP（枚举最后一块平方数）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">numSquares</span>(<span class="tk-k">int</span> n) {
         <span class="tk-k">int</span>[] dp = <span class="tk-k">new</span> <span class="tk-k">int</span>[n + <span class="tk-n">1</span>];
         <span class="tk-t">Arrays</span>.<span class="tk-f">fill</span>(dp, <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>);
