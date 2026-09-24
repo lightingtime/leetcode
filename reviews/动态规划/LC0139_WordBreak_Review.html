@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×1</span>
+    <span class="badge plain">二刷 ×2</span>
     <span class="badge">2026-08-10</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>139. 单词拆分 (Word Break)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-break/" rel="noopener">https://leetcode.cn/problems/word-break/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：字典树、记忆化、数组、哈希表、字符串、动态规划、Brute-Force Search</p><h2>题目描述</h2><p>给你一个字符串 s 和一个字符串列表 wordDict 作为字典。如果可以利用字典中出现的一个或多个单词拼接出 s 则返回 true。</p><p>注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。</p><p>示例 1：</p><p>输入: s = "leetcode", wordDict = ["leet", "code"]</p><p>输出: true</p><p>解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。</p><p>示例 2：</p><p>输入: s = "applepenapple", wordDict = ["apple", "pen"]</p><p>输出: true</p><p>解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。</p><p>注意，你可以重复使用字典中的单词。</p><p>示例 3：</p><p>输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]</p><p>输出: false</p><p>提示：</p><p>1</p><p>1</p><p>1</p><p>s 和 wordDict[i] 仅由小写英文字母组成</p><p>wordDict 中的所有字符串 互不相同</p><h2>示例</h2><ol><li>输入：s = "leetcode"，wordDict = ["leet", "code"]</li></ol><p>输出：true</p><p>解释：返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。</p><ol><li>输入：s = "applepenapple"，wordDict = ["apple", "pen"]</li></ol><p>输出：true</p><p>解释：返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。</p><ol><li>输入：s = "catsandog"，wordDict = ["cats", "dog", "sand", "and", "cat"]</li></ol><p>输出：false</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 2 次复习 · 2026-09-24 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（49/49）｜ 一次 AC ｜ 前缀DP ｜ O(n·m·L) · O(n + m·L)</p>
+      <div class="review-note md"><p><strong>与上轮对比</strong>：思路 / 写法 / 复杂度三项都与 2026-09-18 那轮一致——仍是「从右往左的前缀 DP」：<code>canReach[i]</code> 表示后缀 <code>s[i..n)</code> 能否被拆成词典单词，内层枚举 <code>wordDict</code> 并配合 <code>s.startsWith(word, i)</code> 判断；本次提交区代码与上一版逐字节相同（diff 无差异）。没有换写法，因为上一版已是 O(n·m·L) 的最优形态，改 Trie 或正向 DP 只是把同一状态转移换方向，不构成改进。</p><p><strong>这次为什么能直接写出来</strong>：两个关键设计决策——用 <code>canReach[n] = true</code> 当哨兵、从右往左递推——在一刷复盘里已被点破，本轮是凭记忆复现而非现推。一刷踩的坑是 dp 初值 / 覆盖方向写错，本轮落笔前先定死哨兵位与递推方向，没有重踩。</p><p><strong>掌握度判定</strong>：本地 9 项测试一次通过，提交 49/49 一次 Accepted，全程未看一刷代码、未要提示 → 较强（strong）。</p><p><strong>下一步提醒</strong>：<code>HashSet</code> + <code>startsWith</code> 的常数因子大于 Trie，若以后要压时间可对比 Trie 写法；相邻的 140. 单词拆分 II 复用同一状态定义再回溯收集结果，适合顺带复习。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 1 次复习 · 2026-09-18 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（49/49）｜ 一次 AC ｜ 前缀DP ｜ O(n·m·L) · O(n + m·L)</p>
       <div class="review-note md"><p><strong>与上一轮对比</strong>：一刷是正序（dp[i] = 前缀 s[0, i) 能否拼出，从 dp[i - len] 转移），这次改成倒序（canReach[i] = 后缀 s[i..n) 能否拼出，从 canReach[i + len] 转移），是同一条递推的镜像写法；字典同样用 HashSet 去重，复杂度同级 O(n·m·L) / O(n + m·L)，变量名换成 canReach 更贴合「可达」语义。</p><p><strong>这次为什么能想起来</strong>：骨架（按位置切分 + 枚举词典）记牢了，直接从「最后一段从哪开始」倒推状态；一刷复盘里记的 dp 覆盖问题这次用「命中即 break」规避，倒着填表也不会被更长词覆盖。</p><p><strong>掌握度判定依据</strong>：本地 9 项用例先过，提交第一次即 Accepted（49/49），写码与调试全程独立、没有针对做法展开讨论，判 strong。</p><p><strong>下一步提醒</strong>：想再快一步可以用 Trie 建词典、DP 时沿树走（省掉 m 个词的重复前缀比较）；同族题 140 单词拆分 II 是它的「输出所有方案」版本，回看时注意回溯 + 记忆化的剪枝。</p></div>
@@ -38,7 +42,7 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 1 轮（二刷）</h3>
+      <h3>2. 第 2 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>前缀DP</b></li>
         <li><span>复杂度</span><b>O(n·m·L) · O(n + m·L)</b></li>
@@ -47,7 +51,7 @@
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 前缀DP</h3>
-    <p><span class="chip">时间 O(n·m·L)</span><span class="chip">空间 O(n + m·L)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 49/49</span></p>
+    <p><span class="chip">时间 O(n·m·L)</span><span class="chip">空间 O(n + m·L)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 49/49</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0139_WordBreak.java · 前缀DP</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
         <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
         <span class="tk-k">boolean</span>[] canReach = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[n + <span class="tk-n">1</span>];
