@@ -20,12 +20,16 @@
     <span class="badge plain">一次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×6</span>
+    <span class="badge plain">二刷 ×7</span>
     <span class="badge">2026-08-06</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>4. 寻找两个正序数组的中位数 (Median of Two Sorted Arrays)</h1><p>&gt; <a href="https://leetcode.cn/problems/median-of-two-sorted-arrays/" rel="noopener">https://leetcode.cn/problems/median-of-two-sorted-arrays/</a></p><p>难度：Hard ｜ 分类：数组与矩阵</p><p>标签：数组、二分查找、分治</p><h2>题目描述</h2><p>给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。</p><p>算法的时间复杂度应该为 O(log (m+n)) 。</p><p>示例 1：</p><p>输入：nums1 = [1,3], nums2 = [2]</p><p>输出：2.00000</p><p>解释：合并数组 = [1,2,3] ，中位数 2</p><p>示例 2：</p><p>输入：nums1 = [1,2], nums2 = [3,4]</p><p>输出：2.50000</p><p>解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5</p><p>提示：</p><p>nums1.length == m</p><p>nums2.length == n</p><p>0</p><p>0</p><p>1</p><p>-106 6</p><h2>示例</h2><ol><li>输入：nums1 = [1,3]，nums2 = [2]</li></ol><p>输出：2.00000</p><p>解释：合并数组 = [1,2,3] ，中位数 2</p><ol><li>输入：nums1 = [1,2]，nums2 = [3,4]</li></ol><p>输出：2.50000</p><p>解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 7 次复习 · 2026-09-24 <span class="tl-badge bug">较弱</span></span>
+      <p class="muted">Accepted（2099/2099）｜ 一次 AC ｜ 划分数组二分切分点（O(log(min(m,n)))） ｜ O(log(min(m,n))) · O(1)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong></p><ul><li>上次复习（2026-09-15）已采用同样的划分数组二分，复杂度 O(log(min(m,n)))/O(1)。本次思路一致，但首次本地测试暴露两个收尾错误：j &lt; 0 时左半哨兵方向反了，以及奇偶分支误用整除判断。修正后力扣一次提交 Accepted。</li></ul><p><strong>这次为什么没直接写对</strong></p><ul><li>划分位置本身收缩正确，但写完后没有先手推「短数组没有元素进入左半」和「总长度为偶数」这两个边界，导致最后取 maxInMin 时被错误哨兵污染。现有边界用例直接复现了问题，说明构造长度为 1、2 和大小悬殊的输入有效。</li></ul><p><strong>掌握度依据</strong></p><ul><li>力扣一次提交即 Accepted，但提交前有探讨和提示，按复习规则判定为较弱。</li></ul><p><strong>下一步提醒</strong></p><ul><li>下次先明确每个哨兵参与 max 还是 min，再用总长度为奇、偶各一个最小输入检查最终返回分支。另可简化：循环结束时 l + 1 == r，收尾的 i 可直接复用 l。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 6 次复习 · 2026-09-15 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（—）｜ 一次 AC ｜ 划分数组二分切分点（O(log(min(m,n)))） ｜ O(log(min(m,n))) · O(1)</p>
       <div class="review-note md"><p><strong>① 与上一轮对比</strong></p><ul><li>上一轮及前三轮（09-03 / 09-06 / 09-12）都是「划分数组二分切分点」，但均判较弱；本轮同思路独立写出并<strong>一次提交 Accepted</strong>（2099/2099），是这条思路第一次在本轮拿到 strong。</li><li>与一刷（08-06）的「两数组第 k 小、每轮排除较小侧 k/2」相比，本轮仍是 O(log(min(m,n))) 的划分法，比一刷的 O(log(m+n)) 更优，<code>optimal</code> 保持 true。</li></ul><p><strong>② 这次为什么稳</strong></p><ul><li>两个历史坑都避开了：① 划分法不再借用「1 基第 k 小」的辅助函数，切分点全程用<strong>下标空间</strong>（<code>left=-1, right=m</code>，<code>i</code> 是 nums1 左半边的最后一个下标），从根上消除了 0 基/1 基换算差 1；② 失败分支只改 <code>right = i</code>、成功分支只改 <code>left = i</code>，区间每轮必收缩，不会出现把 j 赋给 right 的下标空间混用死循环。</li><li>收尾用「左半最大 maxInMin / 右半最小 minInMax」两句话定位答案：奇数取 maxInMin、偶数取两者均值；越界用 MIN/MAX 哨兵处理空半边，空数组用例不特判也能过。</li></ul><p><strong>③ 掌握度判定</strong></p><ul><li>strong：本地 9 组用例一次全绿，另跑 30 万组随机小数组与暴力 <code>Arrays.sort</code> 对拍零差异（含 m 或 n 为 0 的全部情形）；力扣一次提交 Accepted 2099/2099。</li></ul><p><strong>④ 下一步提醒</strong></p><ul><li>可顺带串练：LC295 数据流的中位数（对顶堆，动态中位数）、LC33 搜索旋转排序数组（同样是「区间每轮必收缩」的二分范式）。</li></ul></div>
@@ -57,12 +61,12 @@
         <li><span>复杂度</span><b>O(log(m+n)) · O(1)</b></li>
         
       </ul>
-    </div><div class="round-card strong">
-      <h3>2. 第 6 轮（二刷）</h3>
+    </div><div class="round-card weak">
+      <h3>2. 第 7 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>划分数组二分切分点（O(log(min(m,n)))）</b></li>
         <li><span>复杂度</span><b>O(log(min(m,n))) · O(1)</b></li>
-        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
+        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
@@ -150,30 +154,35 @@
 </pre></div></details>
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 划分数组二分切分点（O(log(min(m,n)))）</h3>
-    <p><span class="chip">时间 O(log(min(m,n)))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.8 MB</span><span class="chip">用例 —</span></p>
+    <p><span class="chip">时间 O(log(min(m,n)))</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.7 MB</span><span class="chip">用例 2099/2099</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0004_MedianOfTwoSortedArrays.java · 划分数组二分切分点（O(log(min(m,n)))）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">double</span> <span class="tk-f">findMedianSortedArrays</span>(<span class="tk-k">int</span>[] nums1, <span class="tk-k">int</span>[] nums2) {
         <span class="tk-k">if</span> (nums1.length &gt; nums2.length) {
             <span class="tk-k">return</span> <span class="tk-f">findMedianSortedArrays</span>(nums2, nums1);
         }
+
         <span class="tk-k">int</span> m = nums1.length;
         <span class="tk-k">int</span> n = nums2.length;
-        <span class="tk-k">int</span> left = -<span class="tk-n">1</span>, right = m;
-        <span class="tk-k">while</span> (left + <span class="tk-n">1</span>  &lt;right) {
-            <span class="tk-k">int</span> i = left + (right - left) / <span class="tk-n">2</span>;
+        <span class="tk-k">int</span> l = -<span class="tk-n">1</span>, r = m;
+        <span class="tk-k">while</span> (l + <span class="tk-n">1</span> &lt; r) {
+            <span class="tk-k">int</span> i = l + (r - l) / <span class="tk-n">2</span>;
             <span class="tk-k">int</span> j = (m + n + <span class="tk-n">1</span>) / <span class="tk-n">2</span> - i - <span class="tk-n">2</span>;
             <span class="tk-k">if</span> (nums1[i] &lt;= nums2[j + <span class="tk-n">1</span>]) {
-                left = i;
+                l = i;
             } <span class="tk-k">else</span> {
-                right = i;
-            }}
-        <span class="tk-k">int</span> i = left + (right - left) / <span class="tk-n">2</span>;
+                r = i;
+            }
+        }
+        <span class="tk-k">int</span> i = l + (r - l) / <span class="tk-n">2</span>;
         <span class="tk-k">int</span> j = (m + n + <span class="tk-n">1</span>) / <span class="tk-n">2</span> - i - <span class="tk-n">2</span>;
         <span class="tk-k">int</span> ai = i &gt;= <span class="tk-n">0</span> ? nums1[i] : <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
+        <span class="tk-c">// j &lt; 0 表示 nums2 未进入左半，用 Math.max 的单位元避免污染左半最大值</span>
         <span class="tk-k">int</span> bj = j &gt;= <span class="tk-n">0</span> ? nums2[j] : <span class="tk-t">Integer</span>.<span class="tk-t">MIN_VALUE</span>;
         <span class="tk-k">int</span> aip1 = i + <span class="tk-n">1</span> &lt; m ? nums1[i + <span class="tk-n">1</span>] : <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
         <span class="tk-k">int</span> bjp1 = j + <span class="tk-n">1</span> &lt; n ? nums2[j + <span class="tk-n">1</span>] : <span class="tk-t">Integer</span>.<span class="tk-t">MAX_VALUE</span>;
         <span class="tk-k">int</span> maxInMin = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(ai, bj);
         <span class="tk-k">int</span> minInMax = <span class="tk-t">Math</span>.<span class="tk-f">min</span>(aip1, bjp1);
+
+        <span class="tk-c">// 奇数长度取左半最大，偶数长度取左半最大与右半最小的平均</span>
         <span class="tk-k">return</span> (m + n) % <span class="tk-n">2</span> != <span class="tk-n">0</span> ? maxInMin : (maxInMin + minInMax) / <span class="tk-n">2.0</span>;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0004_MedianOfTwoSortedArrays.java · 划分数组二分切分点（O(log(min(m,n)))） · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">double</span> <span class="tk-f">findMedianSortedArrays</span>(<span class="tk-k">int</span>[] nums1, <span class="tk-k">int</span>[] nums2) {
@@ -207,7 +216,7 @@
 </pre></div></details>
   </div></section>
   <section><h2>思路拆解</h2><div class="card md"><p>问题本质：两个有序数组合并后的中位数，要求 O(log(m+n))，所以不能真合并，只能用二分排除求第 k 小。</p><p>关键设计：中位数换算成第 k 小：奇数总长取第 totLen/2+1 小，偶数取第 totLen/2 与第 totLen/2+1 小的平均。kthSmallest 维护两数组的有效起点 p1、p2，每轮从两侧各取第 k/2 个候选，比较后排除较小一侧的 k/2 个元素并让 k 减去实际排除数量——每轮 k 减半，达到 log 复杂度。</p><p>边界：k==1 时取两侧有效区头部较小者；某一侧排空时答案在另一侧 p+k-1；候选下标超界时封顶到数组末尾（cand=min(len-1, p+k/2-1)），排除数量按实际移除计算；偶数长度要算两个 k。</p><p>复杂度：O(log(m+n)) 时间、O(1) 空间，最优；合并法 O(m+n) 不满足题目要求。</p></div></section>
-  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>划分数组二分的失败分支把 nums2 切分点 j 赋给 nums1 搜索上界 right（下标空间混用），某些输入区间不收缩 → 死循环（[1,2,3,4,5] vs [6] 复现）；失败分支应向 nums1 区间收缩（right=i），j 只能由 i 推导</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 提交<span class="tl-badge ok">Accepted</span></span><p>2099/2099 用例一次通过。</p></div></div></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 踩坑<span class="tl-badge bug">已记录</span></span><p>划分数组二分的失败分支把 nums2 切分点 j 赋给 nums1 搜索上界 right（下标空间混用），某些输入区间不收缩 → 死循环（[1,2,3,4,5] vs [6] 复现）；失败分支应向 nums1 区间收缩（right=i），j 只能由 i 推导</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 踩坑<span class="tl-badge bug">已记录</span></span><p>划分数组中，取左半最大值时对不存在的左半元素用了 Integer.MAX_VALUE 哨兵；左半空值应作为 max 的单位元，否则会污染 maxInMin。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">04 · 踩坑<span class="tl-badge bug">已记录</span></span><p>中位数奇偶分支把取余判断写成整除：用 (m+n)/2 != 0 判奇数，导致总长度为偶数时也走奇数分支，没有计算两侧中位数的平均。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">05 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">06 · 提交<span class="tl-badge ok">Accepted</span></span><p>2099/2099 用例一次通过。</p></div></div></div></section>
   <section><h2>套路沉淀</h2><div class="card md"><h3>第k小/中位数的排名换算：1基第k小 vs 0基下标</h3><p>辅助函数若以「第k小」(1基)为语义，出口特征为 nums[p + k - 1]、k==1 返回头部；调用方按0基下标算中间位置（totLen/2）直接传入会整体偏小1：奇数中位数应为 k = totLen/2 + 1，偶数应为 k = totLen/2 与 totLen/2 + 1；totLen=1 时 k=0 会越界。换算关系：0基下标 i 对应第 i+1 小。</p></div><div class="card md"><h3>划分二分：下标空间自洽 + 每轮必收缩</h3><p>划分法只在「下标空间」推理：left=-1/right=m 表示 nums1 左半边最后一个元素的下标，i 是切分点下标而非「第 k 小」的 1 基排名，从根上避免 0 基/1 基差 1。循环里成功分支只 left=i、失败分支只 right=i，保证区间每轮必收缩（把另一个数组的切分点 j 赋给 right 会下标空间混用导致死循环）。收尾用左半最大 maxInMin、右半最小 minInMax 定位答案，越界半边用 MIN/MAX 哨兵，空数组无需特判。</p></div></section>
   <section><h2>分析结果</h2>
     <div class="metrics">
@@ -221,7 +230,7 @@
       <h3>算法判定</h3>
       <p>思路已达该题最优复杂度。</p>
       <h3>分类提醒 · 数组与矩阵</h3><div class="quote">矩阵题先想如何用行列信息/排序/原地操作降维。</div>
-      <h3>错误习惯复盘</h3><p><b>第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）</b>（累计 1 次）</p><p><b>划分数组二分的失败分支把 nums2 切分点 j 赋给 nums1 搜索上界 right（下标空间混用），某些输入区间不收缩 → 死循环（[1,2,3,4,5] vs [6] 复现）；失败分支应向 nums1 区间收缩（right=i），j 只能由 i 推导</b>（累计 1 次）</p>
+      <h3>错误习惯复盘</h3><p><b>第k小/中位数换算错误：主方法按0基下标计算中间位置（totLen/2）直接传给按1基语义的辅助函数，导致整体偏小1（奇数取到前一位、偶数取到前两位，空数组时k=0越界）</b>（累计 1 次）</p><p><b>划分数组二分的失败分支把 nums2 切分点 j 赋给 nums1 搜索上界 right（下标空间混用），某些输入区间不收缩 → 死循环（[1,2,3,4,5] vs [6] 复现）；失败分支应向 nums1 区间收缩（right=i），j 只能由 i 推导</b>（累计 1 次）</p><p><b>划分数组中，取左半最大值时对不存在的左半元素用了 Integer.MAX_VALUE 哨兵；左半空值应作为 max 的单位元，否则会污染 maxInMin。</b>（累计 1 次）</p><p><b>中位数奇偶分支把取余判断写成整除：用 (m+n)/2 != 0 判奇数，导致总长度为偶数时也走奇数分支，没有计算两侧中位数的平均。</b>（累计 1 次）</p>
       
       <h3>完成记录</h3>
       <p><span class="chip">seq 23 · median-of-two-sorted-arrays</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>

@@ -317,12 +317,12 @@
       "title": "寻找两个正序数组的中位数",
       "category": "数组与矩阵",
       "first_pass_date": "2026-08-06",
-      "last_review_date": "2026-09-15",
-      "next_review_date": "2026-09-20",
-      "interval_days": 5,
-      "review_count": 6,
-      "mastery": "strong",
-      "consecutive_strong": 1,
+      "last_review_date": "2026-09-24",
+      "next_review_date": "2026-09-26",
+      "interval_days": 2,
+      "review_count": 7,
+      "mastery": "weak",
+      "consecutive_strong": 0,
       "mastered": false
     },
     "merge-two-sorted-lists": {
