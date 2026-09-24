@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×4</span>
+    <span class="badge plain">二刷 ×5</span>
     <span class="badge">2026-08-24</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>341. 扁平化嵌套列表迭代器 (Flatten Nested List Iterator)</h1><p>&gt; <a href="https://leetcode.cn/problems/flatten-nested-list-iterator/" rel="noopener">https://leetcode.cn/problems/flatten-nested-list-iterator/</a></p><p>难度：Medium ｜ 分类：栈、队列与优先队列</p><p>标签：栈、树、深度优先搜索、设计、队列、迭代器</p><h2>题目描述</h2><p>给你一个嵌套的整数列表 nestedList 。每个元素要么是一个整数，要么是一个列表；该列表的元素也可能是整数或者是其他列表。请你实现一个迭代器将其扁平化，使之能够遍历这个列表中的所有整数。</p><p>实现扁平迭代器类 NestedIterator ：</p><p>NestedIterator(List nestedList) 用嵌套列表 nestedList 初始化迭代器。</p><p>int next() 返回嵌套列表的下一个整数。</p><p>boolean hasNext() 如果仍然存在待迭代的整数，返回 true ；否则，返回 false 。</p><p>你的代码将会用下述伪代码检测：</p><p>initialize iterator with nestedList</p><p>res = []</p><p>while iterator.hasNext()</p><p>append iterator.next() to the end of res</p><p>return res</p><p>如果 res 与预期的扁平化列表匹配，那么你的代码将会被判为正确。</p><p>示例 1：</p><p>输入：nestedList = [[1,1],2,[1,1]]</p><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><p>示例 2：</p><p>输入：nestedList = [1,[4,[6]]]</p><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p><p>提示：</p><p>1</p><p>嵌套列表中的整数值在范围 [-106, 106] 内</p><h2>示例</h2><ol><li>输入：nestedList = [[1,1],2,[1,1]]</li></ol><p>输出：[1,1,2,1,1]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。</p><ol><li>输入：nestedList = [1,[4,[6]]]</li></ol><p>输出：[1,4,6]</p><p>解释：通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 5 次复习 · 2026-09-24 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（43/43）｜ 一次 AC ｜ 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶 ｜ O(n)（构造 + 均摊 O(1)/元素） · O(n)</p>
+      <div class="review-note md"><p><strong>① 与上一轮对比</strong>：写法与一刷、上一轮完全同构（构造逆序压栈 → hasNext 惰性展开栈顶列表 → next 弹栈顶），思路与复杂度都维持 O(n)/O(n)，没有更换数据结构。相比 09-22 那版多了一处 hasNext 入口先判空早退，语义等价，只是少一次 while 条件判断。</p><p><strong>② 这次为什么想起来</strong>：一刷与 09-12/09-15/09-22 的失败点集中在三点——展开后栈可能变空、hasNext 只展开一次、next 只 peek 不消费。这次把 hasNext 写成 while 循环 + 末尾 <code>return !stack.isEmpty()</code>，一次把这三个坑兜住，没有再犯。</p><p><strong>③ 掌握度判定依据</strong>：本地 8 项用例（示例 2 + 边界 6）通过后一次提交即 Accepted（43/43），全程无提示、无探讨 → strong。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-22 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（43/43）｜ 一次 AC ｜ 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶 ｜ O(n)（构造+均摊 O(1)/元素） · O(n)</p>
       <div class="review-note md"><h3>与上一轮对比</h3><p>本轮沿用与一刷相同的惰性栈：构造逆序压栈，hasNext 连续展开栈顶列表，next 消费整数；数据结构和 O(n)/O(n) 复杂度未变化，没有更换思路。</p><h3>关键机制与推演</h3><p>输入 [[1,1],2,[1,1]]：构造后栈顶是 [1,1]；hasNext 弹出该列表并从右向左压入两个 1，栈顶为第一个 1；next 消费后栈顶才是第二个 1，再之后是 2。输入 [1,[4,[6]]]：next 先取 1；hasNext 展开 [4,[6]] 后取 4；必须继续展开 [6] 才能取到 6，说明 hasNext 要一直处理到栈顶为整数或栈空。空列表展开后可能直接清空栈，因此最后要依据展开后的栈状态返回。</p><h3>本次问题与修正</h3><p>首版 next 使用 peek，只读取但未消费栈顶；测试的 while(hasNext()) 会反复取到同一个整数，最终本地 OOM。经明确提示后改为让 next 消费当前元素，8 项本地测试通过，力扣首次提交 43/43 Accepted。</p><h3>掌握度依据</h3><p>判定为较弱：虽然 LeetCode 一次提交 AC，但本地阶段经过了明确探讨与提示，不属于全程独立一次完成。</p><h3>下一步提醒</h3><p>复习迭代器题时优先检查：next 是否推进状态、hasNext 是否只读且可重复调用、展开空列表后是否可能栈空。</p></div>
@@ -49,17 +53,17 @@
         <li><span>复杂度</span><b>O(n)（构造+均摊 O(1)/元素） · O(n)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 4 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</b></li>
-        <li><span>复杂度</span><b>O(n)（构造+均摊 O(1)/元素） · O(n)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>复杂度</span><b>O(n)（构造 + 均摊 O(1)/元素） · O(n)</b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</h3>
-    <p><span class="chip">时间 O(n)（构造+均摊 O(1)/元素）</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.1 MB</span><span class="chip">用例 43/43</span></p>
+    <p><span class="chip">时间 O(n)（构造 + 均摊 O(1)/元素）</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 46.1 MB</span><span class="chip">用例 43/43</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0341_FlattenNestedListIterator.java · 惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">NestedIterator</span> {
         <span class="tk-t">Deque</span>&lt;<span class="tk-t">NestedInteger</span>&gt; stack;
         <span class="tk-k">public</span> <span class="tk-t">NestedIterator</span>(<span class="tk-t">List</span>&lt;<span class="tk-t">NestedInteger</span>&gt; nestedList) {

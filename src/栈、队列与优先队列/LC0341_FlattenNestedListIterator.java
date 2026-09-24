@@ -2,15 +2,16 @@
 // LeetCode 341. 扁平化嵌套列表迭代器 (Flatten Nested List Iterator)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/flatten-nested-list-iterator/
-// 刷题日期：2026-09-22
+// 二刷复习：2026-09-24（一刷 2026-08-24）
+// 测试用例与一刷归档保持一致（示例 + 边界 + 回归）
 //
 // ============================================================
 
 import java.util.*;
 
-
 public class LC0341_FlattenNestedListIterator {
 
+    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 NestedIterator 在提交时自动处理。
     // 本地 NestedInteger 接口（判题环境自带，这里仅为本地测试镜像）
     interface NestedInteger {
         boolean isInteger();
@@ -50,7 +51,6 @@ public class LC0341_FlattenNestedListIterator {
         }
     }
 
-    // 设计题：补全 NestedIterator 的字段、构造器与方法体，类名在提交时自动处理。
     // ==== 提交代码开始 ====
     static class NestedIterator {
         Deque<NestedInteger> stack;

@@ -50,20 +50,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-22",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "43/43",
       "runtime_ms": null,
-      "memory_bytes": 48308000,
+      "memory_bytes": 48340000,
       "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
-      "time_complexity": "O(n)（构造+均摊 O(1)/元素）",
+      "time_complexity": "O(n)（构造 + 均摊 O(1)/元素）",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "### 与上一轮对比\n本轮沿用与一刷相同的惰性栈：构造逆序压栈，hasNext 连续展开栈顶列表，next 消费整数；数据结构和 O(n)/O(n) 复杂度未变化，没有更换思路。\n\n### 关键机制与推演\n输入 [[1,1],2,[1,1]]：构造后栈顶是 [1,1]；hasNext 弹出该列表并从右向左压入两个 1，栈顶为第一个 1；next 消费后栈顶才是第二个 1，再之后是 2。输入 [1,[4,[6]]]：next 先取 1；hasNext 展开 [4,[6]] 后取 4；必须继续展开 [6] 才能取到 6，说明 hasNext 要一直处理到栈顶为整数或栈空。空列表展开后可能直接清空栈，因此最后要依据展开后的栈状态返回。\n\n### 本次问题与修正\n首版 next 使用 peek，只读取但未消费栈顶；测试的 while(hasNext()) 会反复取到同一个整数，最终本地 OOM。经明确提示后改为让 next 消费当前元素，8 项本地测试通过，力扣首次提交 43/43 Accepted。\n\n### 掌握度依据\n判定为较弱：虽然 LeetCode 一次提交 AC，但本地阶段经过了明确探讨与提示，不属于全程独立一次完成。\n\n### 下一步提醒\n复习迭代器题时优先检查：next 是否推进状态、hasNext 是否只读且可重复调用、展开空列表后是否可能栈空。",
+      "notes": "**① 与上一轮对比**：写法与一刷、上一轮完全同构（构造逆序压栈 → hasNext 惰性展开栈顶列表 → next 弹栈顶），思路与复杂度都维持 O(n)/O(n)，没有更换数据结构。相比 09-22 那版多了一处 hasNext 入口先判空早退，语义等价，只是少一次 while 条件判断。\n\n**② 这次为什么想起来**：一刷与 09-12/09-15/09-22 的失败点集中在三点——展开后栈可能变空、hasNext 只展开一次、next 只 peek 不消费。这次把 hasNext 写成 while 循环 + 末尾 `return !stack.isEmpty()`，一次把这三个坑兜住，没有再犯。\n\n**③ 掌握度判定依据**：本地 8 项用例（示例 2 + 边界 6）通过后一次提交即 Accepted（43/43），全程无提示、无探讨 → strong。",
       "code": "static class NestedIterator {\n        Deque<NestedInteger> stack;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >= 0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        public boolean hasNext() {\n            if (stack.isEmpty()) {\n                return false;\n            }\n            while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                List<NestedInteger> list = stack.pop().getList();\n                for (int i = list.size() - 1; i >= 0; i--) {\n                    stack.push(list.get(i));\n                }\n            }\n            return !stack.isEmpty();\n        }\n    }",
       "prev_code": "static class NestedIterator implements Iterator<Integer> {\n        Deque<NestedInteger> stack;\n        public NestedIterator(List<NestedInteger> nestedList) {\n            stack = new ArrayDeque<>();\n            for (int i = nestedList.size() - 1; i >= 0; i--) {\n                stack.push(nestedList.get(i));\n            }\n        }\n\n        @Override\n        public Integer next() {\n            return stack.pop().getInteger();\n        }\n\n        @Override\n        public boolean hasNext() {\n            if (stack.isEmpty()) {\n                return false;\n            }\n            if (stack.peek().isInteger()) {\n                return true;\n            } else {\n                while (!stack.isEmpty() && !stack.peek().isInteger()) {\n                    NestedInteger pop = stack.pop();\n                    for (int i = pop.getList().size() - 1; i >= 0; i--) {\n                        stack.push(pop.getList().get(i));\n                    }\n                }\n            }\n            return !stack.isEmpty();\n        }\n    }\n",
-      "mastery": "weak",
-      "pass": 4
+      "mastery": "strong",
+      "pass": 5
     }
   ],
   "reviews": [
@@ -118,6 +118,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "### 与上一轮对比\n本轮沿用与一刷相同的惰性栈：构造逆序压栈，hasNext 连续展开栈顶列表，next 消费整数；数据结构和 O(n)/O(n) 复杂度未变化，没有更换思路。\n\n### 关键机制与推演\n输入 [[1,1],2,[1,1]]：构造后栈顶是 [1,1]；hasNext 弹出该列表并从右向左压入两个 1，栈顶为第一个 1；next 消费后栈顶才是第二个 1，再之后是 2。输入 [1,[4,[6]]]：next 先取 1；hasNext 展开 [4,[6]] 后取 4；必须继续展开 [6] 才能取到 6，说明 hasNext 要一直处理到栈顶为整数或栈空。空列表展开后可能直接清空栈，因此最后要依据展开后的栈状态返回。\n\n### 本次问题与修正\n首版 next 使用 peek，只读取但未消费栈顶；测试的 while(hasNext()) 会反复取到同一个整数，最终本地 OOM。经明确提示后改为让 next 消费当前元素，8 项本地测试通过，力扣首次提交 43/43 Accepted。\n\n### 掌握度依据\n判定为较弱：虽然 LeetCode 一次提交 AC，但本地阶段经过了明确探讨与提示，不属于全程独立一次完成。\n\n### 下一步提醒\n复习迭代器题时优先检查：next 是否推进状态、hasNext 是否只读且可重复调用、展开空列表后是否可能栈空。"
+    },
+    {
+      "pass": 5,
+      "date": "2026-09-24",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "43/43",
+      "approach": "惰性栈：构造逆序压栈，hasNext 循环展开栈顶列表到整数，next 弹栈顶",
+      "time_complexity": "O(n)（构造 + 均摊 O(1)/元素）",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "**① 与上一轮对比**：写法与一刷、上一轮完全同构（构造逆序压栈 → hasNext 惰性展开栈顶列表 → next 弹栈顶），思路与复杂度都维持 O(n)/O(n)，没有更换数据结构。相比 09-22 那版多了一处 hasNext 入口先判空早退，语义等价，只是少一次 while 条件判断。\n\n**② 这次为什么想起来**：一刷与 09-12/09-15/09-22 的失败点集中在三点——展开后栈可能变空、hasNext 只展开一次、next 只 peek 不消费。这次把 hasNext 写成 while 循环 + 末尾 `return !stack.isEmpty()`，一次把这三个坑兜住，没有再犯。\n\n**③ 掌握度判定依据**：本地 8 项用例（示例 2 + 边界 6）通过后一次提交即 Accepted（43/43），全程无提示、无探讨 → strong。"
     }
   ]
 }
