@@ -2,12 +2,11 @@
 // LeetCode 140. 单词拆分 II (Word Break II)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/word-break-ii/
-// 刷题日期：2026-09-21
-//
-// 二刷第 3 次 · 一刷 2026-08-26 · 上次复习 2026-09-17（较弱，间隔重置）
-// DP 子类型：线性 DP（状态 = 从下标 i 开始的后缀能否被拆分）
-// 一刷思路：后缀可拆预判 + 回溯——先右往左算后缀可拆表做剪枝，再 DFS 枚举切分点拼句子
-// 测试用例与一刷归档保持一致（示例 3 + 边界若干），结果顺序任意故统一用无序比较，未重新设计
+// 刷题日期：2026-09-24
+// 二刷 · 一刷完成日期：2026-08-26（一刷原思路见复盘页，先自己回忆再对照）
+// 测试用例与一刷归档保持一致（示例 3 组 + 边界 6 组）
+// 思路：后缀可达预判 canReach（从右往左标记能走到末尾的下标）+ DFS 回溯枚举切分，剪掉到不了终点的分支
+// 复杂度：时间 O(n·|dict|·L + 输出规模) 空间 O(n + 输出规模)
 // ============================================================
 
 import java.util.*;
@@ -15,18 +14,17 @@ import java.util.*;
 public class LC0140_WordBreakIi {
 
     // ==== 提交代码开始 ====
-    boolean[] canReach;
     List<String> ans;
+    boolean[] canReach;
 
     public List<String> wordBreak(String s, List<String> wordDict) {
         ans = new ArrayList<>();
         canReach = new boolean[s.length() + 1];
         canReach[s.length()] = true;
         Set<String> set = new HashSet<>(wordDict);
-        // canReach[i] 判的是「从 i 开始的后缀」能否拆开，方向必须与状态定义一致，不能挪用前缀可拆表
-        for (int i = s.length() - 1; i >= 0; i--) {
-            for (String str : set) {
-                if (i + str.length() <= s.length() && canReach[i + str.length()] && s.startsWith(str, i)) {
+        for (int i = s.length(); i >= 0; i--) {
+            for (String word : set) {
+                if (s.startsWith(word, i) && canReach[i + word.length()]) {
                     canReach[i] = true;
                     break;
                 }
@@ -36,22 +34,20 @@ public class LC0140_WordBreakIi {
         return ans;
     }
 
-    private void dfs(String s, int index, Set<String> set, List<String> list) {
-        if (index == s.length()) {
+    private void dfs(String s, int i, Set<String> set, List<String> list) {
+        if (i == s.length()) {
             ans.add(String.join(" ", list));
             return;
         }
-        if (!canReach[index]) {
+
+        if (!canReach[i]) {
             return;
         }
-        for (String str : set) {
-            if (index + str.length() > s.length()) {
-                continue;
-            }
-            if (s.startsWith(str, index)) {
-                list.add(str);
-                dfs(s, index + str.length(), set, list);
-                // 撤销：返回父层前把本层选的单词摘掉，兄弟分支才拿到干净的 list
+
+        for (String word : set) {
+            if (s.startsWith(word, i)) {
+                list.add(word);
+                dfs(s, i + word.length(), set, list);
                 list.remove(list.size() - 1);
             }
         }

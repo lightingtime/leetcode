@@ -49,20 +49,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-21",
+      "date": "2026-09-24",
       "verdict": "Accepted",
       "testcases": "29/29",
       "runtime_ms": null,
-      "memory_bytes": 43724000,
+      "memory_bytes": 43172000,
       "approach": "后缀可拆预判+回溯",
       "time_complexity": "O(n·|dict|·L + 输出规模)",
       "space_complexity": "O(n + 输出规模)",
       "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路一直没变——后缀可拆预判 + 回溯，复杂度 O(n·|dict|·L + 输出规模) / O(n + 输出规模)。\n- 本次（第 3 次复习）：写法与复杂度与上一轮一致，两处历史坑都主动规避了。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 本题的关键不是枚举切分，而是「先剪枝再枚举」：没有后缀可拆表，DFS 会在到不了终点的分支上指数展开；而这张表的方向必须和状态定义同向。\n- 两处都做对了：canReach[i] 的含义是「从 i 开始的后缀能否拆开」，填充方向右往左与之同向，DFS 入口用 !canReach[index] 提前返回；撤销用 list.remove(list.size() - 1) 紧跟递归调用之后，与 list.add 严格配对。\n\n**③ 掌握度判定依据**\n- 本地 9 组用例首次运行全绿，力扣一次提交 Accepted（29/29）；因开写前提示过本题两处历史易错点，按标准记较弱，间隔重置 2 天。\n\n**④ 下一步提醒**\n- 「后缀可拆表方向与状态定义同向」已连续三轮没出错，可以从提醒列表里降级；真正躲不开的是输出规模——方案数本身是指数量级，任何正确解法都要支付这份代价，所以本题的复杂度只能用「+ 输出规模」表达。\n- 同族可顺带复习 LC0139 单词拆分：同一张后缀表，只要 true/false，正好对照「判存在」与「枚举全部」的差别。",
-      "code": "boolean[] canReach;\n    List<String> ans;\n\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        ans = new ArrayList<>();\n        canReach = new boolean[s.length() + 1];\n        canReach[s.length()] = true;\n        Set<String> set = new HashSet<>(wordDict);\n        // canReach[i] 判的是「从 i 开始的后缀」能否拆开，方向必须与状态定义一致，不能挪用前缀可拆表\n        for (int i = s.length() - 1; i >= 0; i--) {\n            for (String str : set) {\n                if (i + str.length() <= s.length() && canReach[i + str.length()] && s.startsWith(str, i)) {\n                    canReach[i] = true;\n                    break;\n                }\n            }\n        }\n        dfs(s, 0, set, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(String s, int index, Set<String> set, List<String> list) {\n        if (index == s.length()) {\n            ans.add(String.join(\" \", list));\n            return;\n        }\n        if (!canReach[index]) {\n            return;\n        }\n        for (String str : set) {\n            if (index + str.length() > s.length()) {\n                continue;\n            }\n            if (s.startsWith(str, index)) {\n                list.add(str);\n                dfs(s, index + str.length(), set, list);\n                // 撤销：返回父层前把本层选的单词摘掉，兄弟分支才拿到干净的 list\n                list.remove(list.size() - 1);\n            }\n        }\n    }",
+      "notes": "本轮与上一轮思路一致（后缀可拆预判 + 回溯枚举），改动只在写法：删掉 DP 循环与 dfs 里两处冗余的长度判断（`startsWith` 越界自带 false），泛型简写为 `<>`，dfs 形参收敛为 `List`；复杂度与一刷记录一致。\n\n一刷的失分点就是「没先判剩余能否切到终点」→ 本轮上来先做右→左可达性标记，再 DFS 只走能到终点的分支，一次提交 AC（29/29）。\n\n掌握度判定：一次提交即 Accepted，但本次重写时查看过 dfs 部分代码，按约定记较弱。\n\n下一次需完全脱稿回忆两段式结构（先标记 canReach 再回溯），间隔按较弱重置为 2 天。",
+      "code": "List<String> ans;\n    boolean[] canReach;\n\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        ans = new ArrayList<>();\n        canReach = new boolean[s.length() + 1];\n        canReach[s.length()] = true;\n        Set<String> set = new HashSet<>(wordDict);\n        for (int i = s.length(); i >= 0; i--) {\n            for (String word : set) {\n                if (s.startsWith(word, i) && canReach[i + word.length()]) {\n                    canReach[i] = true;\n                    break;\n                }\n            }\n        }\n        dfs(s, 0, set, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(String s, int i, Set<String> set, List<String> list) {\n        if (i == s.length()) {\n            ans.add(String.join(\" \", list));\n            return;\n        }\n\n        if (!canReach[i]) {\n            return;\n        }\n\n        for (String word : set) {\n            if (s.startsWith(word, i)) {\n                list.add(word);\n                dfs(s, i + word.length(), set, list);\n                list.remove(list.size() - 1);\n            }\n        }\n    }",
       "prev_code": "boolean[] suffixOK;\n    Set<String> set;\n    List<String> ans;\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        set = new HashSet<>(wordDict);\n        ans = new ArrayList<>();\n        int n = s.length();\n\n        // 后缀可拆预判：suffixOK[i] = s[i..n) 能否由字典词拼完（从右往左算）\n        suffixOK = new boolean[n + 1];\n        suffixOK[n] = true;\n        for (int i = n - 1; i >= 0; i--) {\n            for (String word : set) {\n                int next = i + word.length();\n                if (next <= n && suffixOK[next] && s.startsWith(word, i)) {\n                    suffixOK[i] = true;\n                    break;\n                }\n            }\n        }\n        // DFS 从哪里出发，DP 就最好描述“从哪里能不能到终点”。\n        dfs(s, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(String s, int start, List<String> path) {\n        if (start == s.length()) {\n            ans.add(String.join(\" \", path));\n            return;\n        }\n        // 从start直接看后面能不能满足，不满足说明从start出发无论怎么拆都没有结果，直接剪枝\n        if (!suffixOK[start]) {\n            return;\n        }\n        for (int i = start; i <= s.length(); i++) {\n            String temp = s.substring(start, i);\n            if (set.contains(temp)) {           // 当前段是字典词\n                path.add(temp);\n                dfs(s, i, path);\n                path.remove(path.size() - 1);\n            }\n        }\n    }\n",
       "mastery": "weak",
-      "pass": 3
+      "pass": 4
     }
   ],
   "reviews": [
@@ -104,6 +104,19 @@
       "space_complexity": "O(n + 输出规模)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路一直没变——后缀可拆预判 + 回溯，复杂度 O(n·|dict|·L + 输出规模) / O(n + 输出规模)。\n- 本次（第 3 次复习）：写法与复杂度与上一轮一致，两处历史坑都主动规避了。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 本题的关键不是枚举切分，而是「先剪枝再枚举」：没有后缀可拆表，DFS 会在到不了终点的分支上指数展开；而这张表的方向必须和状态定义同向。\n- 两处都做对了：canReach[i] 的含义是「从 i 开始的后缀能否拆开」，填充方向右往左与之同向，DFS 入口用 !canReach[index] 提前返回；撤销用 list.remove(list.size() - 1) 紧跟递归调用之后，与 list.add 严格配对。\n\n**③ 掌握度判定依据**\n- 本地 9 组用例首次运行全绿，力扣一次提交 Accepted（29/29）；因开写前提示过本题两处历史易错点，按标准记较弱，间隔重置 2 天。\n\n**④ 下一步提醒**\n- 「后缀可拆表方向与状态定义同向」已连续三轮没出错，可以从提醒列表里降级；真正躲不开的是输出规模——方案数本身是指数量级，任何正确解法都要支付这份代价，所以本题的复杂度只能用「+ 输出规模」表达。\n- 同族可顺带复习 LC0139 单词拆分：同一张后缀表，只要 true/false，正好对照「判存在」与「枚举全部」的差别。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-24",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "29/29",
+      "approach": "后缀可拆预判+回溯",
+      "time_complexity": "O(n·|dict|·L + 输出规模)",
+      "space_complexity": "O(n + 输出规模)",
+      "optimal": true,
+      "notes": "本轮与上一轮思路一致（后缀可拆预判 + 回溯枚举），改动只在写法：删掉 DP 循环与 dfs 里两处冗余的长度判断（`startsWith` 越界自带 false），泛型简写为 `<>`，dfs 形参收敛为 `List`；复杂度与一刷记录一致。\n\n一刷的失分点就是「没先判剩余能否切到终点」→ 本轮上来先做右→左可达性标记，再 DFS 只走能到终点的分支，一次提交 AC（29/29）。\n\n掌握度判定：一次提交即 Accepted，但本次重写时查看过 dfs 部分代码，按约定记较弱。\n\n下一次需完全脱稿回忆两段式结构（先标记 canReach 再回溯），间隔按较弱重置为 2 天。"
     }
   ]
 }
