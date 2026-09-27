@@ -47,20 +47,20 @@
       "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        ans = 0;\n        dfs(root, targetSum);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        countFrom(root, 0, targetSum);\n        dfs(root.left, targetSum);\n        dfs(root.right, targetSum);\n\n    }\n\n    private void countFrom(TreeNode root, long cur, int targetSum) {\n        if (root == null) {\n            return;\n        }\n        cur += root.val;\n        if (cur == targetSum) {\n            ans++;\n        }\n        countFrom(root.left, cur, targetSum);\n        countFrom(root.right, cur, targetSum);\n    }"
     },
     {
-      "date": "2026-09-22",
+      "date": "2026-09-27",
       "verdict": "Accepted",
       "testcases": "130/130",
       "runtime_ms": null,
-      "memory_bytes": 46692000,
+      "memory_bytes": 46856000,
       "approach": "前缀和+回溯哈希",
       "time_complexity": "O(n)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "",
+      "notes": "### 与上一轮对比\n- 本轮继续使用前缀和加回溯哈希，把「以当前节点结尾、起点在祖先链上的路径计数」转化为查询历史前缀和，时间 O(n)、空间 O(n)。\n- 一刷曾用双重 DFS 做 O(n²)；这次直接保留哈希写法，说明已经不再从每个节点重新向下枚举。\n\n### 具体推演与错误规避\n- 输入右链 `1 -> 2 -> -3`，目标值 0。初始前缀和表为 `{0:1}`。\n- 到节点 1 时前缀和为 1，查询 `1-0=1` 得 0，随后登记 `{0:1,1:1}`；到节点 2 时前缀和为 3，查询 `3-0=3` 得 0，再登记 `{0:1,1:1,3:1}`。\n- 到节点 -3 时前缀和回到 0，查询 `0-0=0` 得到 1，因此答案加一；对应路径就是 `1+2-3=0`。\n- 返回父节点时把当前前缀和的计数减一。这样进入兄弟分支时，左子树产生的中间前缀不会冒充右子树的祖先前缀；查询到零计数就得到 0。\n- 前缀和变量使用 long。节点值上限约为 10^9、节点数上限 1000，累计和会超过 int 范围；本次大数边界用例验证了这一点。\n\n### 掌握度判定依据\n- 本地测试通过后首次提交即 Accepted，130/130；本轮没有查看题解或讨论具体实现，因此记为较强。",
       "code": "int ans;\n    public int pathSum(TreeNode root, int targetSum) {\n        Map<Long, Integer> map = new HashMap<>();\n        map.put(0L, 1);\n        ans = 0;\n        dfs(root, 0L, targetSum, map);\n        return ans;\n    }\n\n    private void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n        if (root == null) {\n            return;\n        }\n\n        sum += root.val;\n        ans += map.getOrDefault(sum - targetSum, 0);\n        map.merge(sum, 1, Integer::sum);\n\n        dfs(root.left, sum, targetSum, map);\n        dfs(root.right, sum, targetSum, map);\n\n        map.merge(sum, -1, Integer::sum);\n    }",
       "prev_code": "int ans;\npublic int pathSum(TreeNode root, int targetSum) {\n    Map<Long, Integer> map = new HashMap<>();\n    map.put(0L, 1);\n    ans = 0;\n    dfs(root, 0L, targetSum, map);\n    return ans;\n}\n\nprivate void dfs(TreeNode root, long sum, int targetSum, Map<Long, Integer> map) {\n    if (root == null) {\n        return;\n    }\n\n    sum += root.val;\n    ans += map.getOrDefault(sum - targetSum, 0);\n    map.merge(sum, 1, Integer::sum);\n\n    dfs(root.left, sum, targetSum, map);\n    dfs(root.right, sum, targetSum, map);\n\n    map.merge(sum, -1, Integer::sum);\n}",
       "mastery": "strong",
-      "pass": 6
+      "pass": 7
     }
   ],
   "hints": [
@@ -144,6 +144,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": ""
+    },
+    {
+      "pass": 7,
+      "date": "2026-09-27",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "130/130",
+      "approach": "前缀和+回溯哈希",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 本轮继续使用前缀和加回溯哈希，把「以当前节点结尾、起点在祖先链上的路径计数」转化为查询历史前缀和，时间 O(n)、空间 O(n)。\n- 一刷曾用双重 DFS 做 O(n²)；这次直接保留哈希写法，说明已经不再从每个节点重新向下枚举。\n\n### 具体推演与错误规避\n- 输入右链 `1 -> 2 -> -3`，目标值 0。初始前缀和表为 `{0:1}`。\n- 到节点 1 时前缀和为 1，查询 `1-0=1` 得 0，随后登记 `{0:1,1:1}`；到节点 2 时前缀和为 3，查询 `3-0=3` 得 0，再登记 `{0:1,1:1,3:1}`。\n- 到节点 -3 时前缀和回到 0，查询 `0-0=0` 得到 1，因此答案加一；对应路径就是 `1+2-3=0`。\n- 返回父节点时把当前前缀和的计数减一。这样进入兄弟分支时，左子树产生的中间前缀不会冒充右子树的祖先前缀；查询到零计数就得到 0。\n- 前缀和变量使用 long。节点值上限约为 10^9、节点数上限 1000，累计和会超过 int 范围；本次大数边界用例验证了这一点。\n\n### 掌握度判定依据\n- 本地测试通过后首次提交即 Accepted，130/130；本轮没有查看题解或讨论具体实现，因此记为较强。"
     }
   ]
 }
