@@ -61,19 +61,19 @@
       "code": "public void sortColors(int[] nums) {\n        int start = 0, end = nums.length - 1;\n        int mid = start;\n        while (mid <= end) {\n            if (nums[mid] == 0) {\n                int temp = nums[start];\n                nums[start] = nums[mid];\n                nums[mid] = temp;\n                start++;\n                mid = start;\n            } else if (nums[mid] == 2) {\n                int temp = nums[end];\n                nums[end] = nums[mid];\n                nums[mid] = temp;\n                end--;\n            } else {\n                mid++;\n            }\n        }\n    }"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-27",
       "verdict": "Accepted",
       "testcases": "90/90",
       "runtime_ms": null,
-      "memory_bytes": 44140000,
+      "memory_bytes": 43524000,
       "approach": "三指针分区（荷兰国旗）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是三指针荷兰国旗分区，`lt` 维护已确定的 0 区、`i` 扫描未知区、`gt` 维护已确定的 2 区；本次三个分支的指针推进规则完整且一次通过，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：不变量是 `[0,lt)=0`、`[lt,i)=1`、`(gt,n-1]=2`。遇到 2 与 `gt` 交换后 `gt--` 但不推进 `i`，因为换进来的值还没检查；遇到 0 与 `lt` 交换后 `lt++、i++`；遇到 1 直接 `i++`。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：最易错点是处理 2 后不能立刻 `i++`，否则会漏查从右侧换入的未知值；处理 0 后则可以推进，因为换入值来自已确认的 1 区或当前位置本身。",
+      "notes": "### 与上一轮对比\n- 思路一致，仍是荷兰国旗三指针分区；三个指针分别维护 0 区右边界、待扫描位置和 2 区左边界，保持一趟 O(n)、O(1)。\n- 这次分支顺序把 `nums[i] == 2` 放在前面，之后处理 0 和 1；交换 2 后扫描指针停住，交换 0 后才前进，关键步进与已有套路一致。\n\n### 具体推演与错误规避\n- 输入 `[1,2,0]`，初始 `lt=0, i=0, gt=2`。`nums[0]=1`，只执行 `i++`，状态变为 `lt=0, i=1, gt=2`。\n- `nums[1]=2`，交换下标 1 与 2，得到 `[1,0,2]`，再执行 `gt--`；`i` 仍为 1，用来回看刚换入的值。\n- 此时 `nums[1]=0`，交换下标 1 与 `lt=0`，得到 `[0,1,2]`，再执行 `lt++、i++`；随后 `i=2` 大于 `gt=1`，循环结束。\n- 本次没有重现一刷早期把 0 和 2 的推进规则混用的问题，也没有在换入 2 后跳过未检查元素。\n\n### 掌握度判定依据\n- 本地测试通过后首次提交即 Accepted，90/90；本轮没有查看题解或讨论具体实现，因此记为较强。\n- 命中已有套路「三路原地分区：两个边界指针 + 一个扫描指针」，说明交换后的回看规则已经稳定。",
       "mastery": "strong",
-      "pass": 5,
-      "code": "    public void sortColors(int[] nums) {\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            if (nums[i] == 2) {\n                swap(nums, i, gt);\n                gt--;\n            } else if (nums[i] == 0) {\n                swap(nums, i, lt);\n                lt++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private void swap(int[] nums, int i, int r) {\n        int temp = nums[r];\n        nums[r] = nums[i];\n        nums[i] = temp;\n    }",
+      "pass": 6,
+      "code": "public void sortColors(int[] nums) {\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            if (nums[i] == 2) {\n                swap(nums, i, gt);\n                gt--;\n            } else if (nums[i] == 0) {\n                swap(nums, i, lt);\n                lt++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private void swap(int[] nums, int i, int r) {\n        int temp = nums[r];\n        nums[r] = nums[i];\n        nums[i] = temp;\n    }",
       "prev_code": "public void sortColors(int[] nums) {\n        // 分区不变量：\n        //   [0,lt)   全 0\n        //   [lt,i)   全 1\n        //   (gt,n-1] 全 2\n        //   [i,gt]   未处理 → 循环条件 i<=gt（i==gt 时那一格仍未处理）\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            if (nums[i] == 2) {\n                swap(nums, i, gt);\n                gt--;\n            } else if (nums[i] == 0) {\n                swap(nums, lt, i);\n                lt++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }\n"
     }
   ],
@@ -142,6 +142,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是三指针荷兰国旗分区，`lt` 维护已确定的 0 区、`i` 扫描未知区、`gt` 维护已确定的 2 区；本次三个分支的指针推进规则完整且一次通过，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：不变量是 `[0,lt)=0`、`[lt,i)=1`、`(gt,n-1]=2`。遇到 2 与 `gt` 交换后 `gt--` 但不推进 `i`，因为换进来的值还没检查；遇到 0 与 `lt` 交换后 `lt++、i++`；遇到 1 直接 `i++`。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：最易错点是处理 2 后不能立刻 `i++`，否则会漏查从右侧换入的未知值；处理 0 后则可以推进，因为换入值来自已确认的 1 区或当前位置本身。"
+    },
+    {
+      "pass": 6,
+      "date": "2026-09-27",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "90/90",
+      "approach": "三指针分区（荷兰国旗）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "### 与上一轮对比\n- 思路一致，仍是荷兰国旗三指针分区；三个指针分别维护 0 区右边界、待扫描位置和 2 区左边界，保持一趟 O(n)、O(1)。\n- 这次分支顺序把 `nums[i] == 2` 放在前面，之后处理 0 和 1；交换 2 后扫描指针停住，交换 0 后才前进，关键步进与已有套路一致。\n\n### 具体推演与错误规避\n- 输入 `[1,2,0]`，初始 `lt=0, i=0, gt=2`。`nums[0]=1`，只执行 `i++`，状态变为 `lt=0, i=1, gt=2`。\n- `nums[1]=2`，交换下标 1 与 2，得到 `[1,0,2]`，再执行 `gt--`；`i` 仍为 1，用来回看刚换入的值。\n- 此时 `nums[1]=0`，交换下标 1 与 `lt=0`，得到 `[0,1,2]`，再执行 `lt++、i++`；随后 `i=2` 大于 `gt=1`，循环结束。\n- 本次没有重现一刷早期把 0 和 2 的推进规则混用的问题，也没有在换入 2 后跳过未检查元素。\n\n### 掌握度判定依据\n- 本地测试通过后首次提交即 Accepted，90/90；本轮没有查看题解或讨论具体实现，因此记为较强。\n- 命中已有套路「三路原地分区：两个边界指针 + 一个扫描指针」，说明交换后的回看规则已经稳定。"
     }
   ]
 }

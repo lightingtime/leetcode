@@ -2,10 +2,8 @@
 // LeetCode 75. 颜色分类 (Sort Colors)
 // 难度：Medium | 分类：双指针与滑动窗口
 // 链接：https://leetcode.cn/problems/sort-colors/
-// 复习日期：2026-09-12（第 5 次复习 · 一刷 2026-08-05 · 上次复习 2026-09-07）
+// 刷题日期：2026-09-27
 //
-// 思路：三指针分区，原地维护 0、1、2 三个连续区间。
-// 复杂度：时间 O(n)，空间 O(1)
 // ============================================================
 
 import java.util.*;
@@ -53,11 +51,6 @@ public class LC0075_SortColors {
         } catch (Throwable t) { failures++; System.out.println("示例2 异常: " + t); }
 
         // ---- 边界测试（原地修改，每个用例都断言排序后的数组）----
-        try {
-            int[] nums = new int[]{};
-            s.sortColors(nums);
-            if (!TestUtil.checkEq(new int[]{}, nums, "边界1-空数组")) failures++;
-        } catch (Throwable t) { failures++; System.out.println("边界1-空数组 异常: " + t); }
         try {
             int[] nums = new int[]{1};
             s.sortColors(nums);

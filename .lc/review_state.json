@@ -177,12 +177,12 @@
       "title": "颜色分类",
       "category": "双指针与滑动窗口",
       "first_pass_date": "2026-08-05",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-27",
-      "interval_days": 15,
-      "review_count": 5,
+      "last_review_date": "2026-09-27",
+      "next_review_date": "2026-11-06",
+      "interval_days": 40,
+      "review_count": 6,
       "mastery": "strong",
-      "consecutive_strong": 2,
+      "consecutive_strong": 3,
       "mastered": false
     },
     "sort-list": {
