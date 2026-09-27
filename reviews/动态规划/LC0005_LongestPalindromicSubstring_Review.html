@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×4</span>
+    <span class="badge plain">二刷 ×5</span>
     <span class="badge">2026-08-09</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>5. 最长回文子串 (Longest Palindromic Substring)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-palindromic-substring/" rel="noopener">https://leetcode.cn/problems/longest-palindromic-substring/</a></p><p>难度：Medium ｜ 分类：动态规划</p><p>标签：双指针、字符串、动态规划、Manacher 算法</p><h2>题目描述</h2><p>给你一个字符串 s，找到 s 中最长的 回文 子串。</p><p>示例 1：</p><p>输入：s = "babad"</p><p>输出："bab"</p><p>解释："aba" 同样是符合题意的答案。</p><p>示例 2：</p><p>输入：s = "cbbd"</p><p>输出："bb"</p><p>提示：</p><p>1</p><p>s 仅由数字和英文字母组成</p><h2>示例</h2><ol><li>输入：s = "babad"</li></ol><p>输出："bab"</p><p>解释："aba" 同样是符合题意的答案。</p><ol><li>输入：s = "cbbd"</li></ol><p>输出："bb"</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 5 次复习 · 2026-09-27 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（144/144）｜ 一次 AC ｜ 中心扩散 ｜ O(n²) · O(1)</p>
+      <div class="review-note md"><h3>与上一轮对比</h3><ul><li>本轮继续使用中心扩散，枚举奇数中心 <code>(i,i)</code> 和偶数中心 <code>(i,i+1)</code>，共 2n-1 个中心，复杂度 O(n²)/O(1)。</li><li>与区间 DP 写法相比，中心扩散省掉了二维布尔表；与一刷最近版本相比，结构保持一致，仍然直接维护最长长度和起点。</li></ul><h3>具体推演与错误规避</h3><ul><li>输入 <code>cbbd</code>。扫描到 i=1 时，偶数中心调用 <code>getLen(1,2)</code>：<code>b</code> 与 <code>b</code> 相等，于是 l=0、r=3；接着比较 <code>c</code> 与 <code>d</code> 不相等，返回 <code>3-0-1=2</code>。</li><li>此时 max 从 1 更新为 2，start 计算为 <code>1-(2-1)/2=1</code>，最终截取 <code>s.substring(1,3)</code> 得到 <code>bb</code>。</li><li>输入 <code>babad</code> 时，i=1 的奇数中心先得到回文 <code>bab</code>；i=2 的奇数中心继续得到 <code>aba</code>，长度同样是 3，因此保留先记录的 <code>bab</code>。两种答案都合法。</li><li>本次没有把偶数中心和奇数中心漏掉，也没有在失配后错误截取长度；这避开了此前全相同长串因冗余扫描导致的 TLE 问题。</li></ul><h3>掌握度判定依据</h3><ul><li>本地测试通过后首次提交即 Accepted，144/144；本轮没有查看题解或讨论具体实现，因此记为较强。</li></ul></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（144/144）｜ 一次 AC ｜ 中心扩散 ｜ O(n^2) · O(1)</p>
       <div class="review-note md"><p>① 与上一轮对比：仍是中心扩散，单层枚举 <code>2n-1</code> 个中心；每个中心分别测奇中心 <code>(i,i)</code> 和偶中心 <code>(i,i+1)</code>，没有额外套长度循环。复杂度保持 O(n^2) / O(1)，最多同时只有一个最长结果需要保存。</p><p>② 起点公式：<code>getLen</code> 返回回文长度 <code>maxLen</code>，而 <code>start = i - (maxLen - 1) / 2</code> 是从中心 <code>i</code> 向左回推首字符。奇回文长度为 <code>2k+1</code> 时，<code>(maxLen-1)/2=k</code>，起点是 <code>i-k</code>；偶回文长度为 <code>2k</code> 时，<code>(maxLen-1)/2=k-1</code>，起点是 <code>i-k+1</code>，所以同一公式同时覆盖奇偶中心。例：<code>"cbbd"</code> 在 <code>i=1</code> 得到偶数回文 <code>"bb"</code>，<code>start=1-(2-1)/2=1</code>；<code>"babad"</code> 在 <code>i=1</code> 得到 <code>"bab"</code>，<code>start=1-(3-1)/2=0</code>。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：当前 O(n^2)/O(1) 已是常用最优档；Manacher O(n) 只作为进阶，不作为本题复习必做项。</p></div>
@@ -50,10 +54,10 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 4 轮（二刷）</h3>
+      <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>中心扩散</b></li>
-        <li><span>复杂度</span><b>O(n^2) · O(1)</b></li>
+        <li><span>复杂度</span><b>O(n²) · O(1)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
@@ -85,20 +89,17 @@
     
   </div><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 2 · 中心扩散</h3>
-    <p><span class="chip">时间 O(n^2)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 144/144</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
-        <span class="tk-k">if</span> (s.<span class="tk-f">isEmpty</span>()) {
-            <span class="tk-k">return</span> <span class="tk-s">""</span>;
-        }
+    <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.8 MB</span><span class="chip">用例 144/144</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0005_LongestPalindromicSubstring.java · 中心扩散</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
         <span class="tk-k">int</span> max = <span class="tk-n">0</span>;
-        <span class="tk-k">int</span> start = -<span class="tk-n">1</span>;
+        <span class="tk-k">int</span> start = <span class="tk-n">0</span>;
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
             <span class="tk-k">int</span> len1 = <span class="tk-f">getLen</span>(s, i, i);
             <span class="tk-k">int</span> len2 = <span class="tk-f">getLen</span>(s, i, i + <span class="tk-n">1</span>);
-            <span class="tk-k">int</span> maxLen = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(len1, len2);
-            <span class="tk-k">if</span> (maxLen &gt; max) {
-                max = maxLen;
-                start = i - (maxLen - <span class="tk-n">1</span>) / <span class="tk-n">2</span>;
+            <span class="tk-k">int</span> len = <span class="tk-t">Math</span>.<span class="tk-f">max</span>(len1, len2);
+            <span class="tk-k">if</span> (len &gt; max) {
+                max = len;
+                start = i - (max - <span class="tk-n">1</span>) / <span class="tk-n">2</span>;
             }
         }
         <span class="tk-k">return</span> s.<span class="tk-f">substring</span>(start, start + max);

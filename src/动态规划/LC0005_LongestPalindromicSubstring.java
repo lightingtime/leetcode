@@ -2,30 +2,23 @@
 // LeetCode 5. 最长回文子串 (Longest Palindromic Substring)
 // 难度：Medium | 分类：动态规划
 // 链接：https://leetcode.cn/problems/longest-palindromic-substring/
-// 复习日期：2026-09-12（第 4 次复习 · 一刷 2026-08-09 · 上次复习 2026-09-05）
+// 刷题日期：2026-09-27
 //
-// 思路：枚举奇数和偶数中心并向外扩散，更新最长长度与起点。
-// 复杂度：时间 O(n^2)，空间 O(1)
 // ============================================================
-
-import java.util.*;
 
 public class LC0005_LongestPalindromicSubstring {
 
     // ==== 提交代码开始 ====
     public String longestPalindrome(String s) {
-        if (s.isEmpty()) {
-            return "";
-        }
         int max = 0;
-        int start = -1;
+        int start = 0;
         for (int i = 0; i < s.length(); i++) {
             int len1 = getLen(s, i, i);
             int len2 = getLen(s, i, i + 1);
-            int maxLen = Math.max(len1, len2);
-            if (maxLen > max) {
-                max = maxLen;
-                start = i - (maxLen - 1) / 2;
+            int len = Math.max(len1, len2);
+            if (len > max) {
+                max = len;
+                start = i - (max - 1) / 2;
             }
         }
         return s.substring(start, start + max);
