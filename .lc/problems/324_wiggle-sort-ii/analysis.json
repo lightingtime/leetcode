@@ -49,20 +49,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-21",
+      "date": "2026-09-27",
       "verdict": "Accepted",
       "testcases": "52/52",
       "runtime_ms": null,
-      "memory_bytes": 49636000,
+      "memory_bytes": 49808000,
       "approach": "快速选择中位数 + 虚拟下标三路划分",
-      "time_complexity": "O(n)",
-      "space_complexity": "O(1)",
-      "optimal": true,
-      "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路与复杂度与一刷同源——快速选择求中位数 + 虚拟下标三路划分，平均 O(n) / O(1)。\n- 本次（第 3 次复习）：写法与上一轮一致，中位数用 Lomuto 分区快速选择（pivot 取末元素，k = n/2），三路划分在虚拟下标 f(i) = (1 + 2i) % (n | 1) 上进行，三个游标 lt / i / gt 走同一套荷兰国旗骨架。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 一刷刷在这题上的两处是：虚拟下标映射的定义域越界（游标跑到 n），以及快速选择分区点语义没定死。这次两处都守住了：gt 从 n-1 起步、f 的自变量始终落在 0..n-1；分区固定用 Lomuto，分界点就是收尾 swap 后的 i，且左右递归区间保证严格缩小。\n- 三路划分里「不可前进」的分支也对：从 gt 换进来的值还没看过，i 不前进，避免漏查。\n- 本地 10 组用例（示例 2 + 边界 8，含 5 万规模上限）首次运行全绿。\n\n**③ 掌握度判定**\n- 本轮全程没有提示与探讨，力扣一次提交 Accepted（52/52）→ 较强，间隔按 2.5 倍拉长。\n\n**④ 下一步提醒**\n- 一个本次没被触发、但值得记住的风险：快速选择的 pivot 固定取末元素，遇到已排序的大数组会退化成 O(n²)，递归深度也会达到 n/2。要更保险就把 pivot 取随机或三数取中，或把递归改成显式循环——复杂度不变，抗数据能力更强。\n- 同族可顺带复习 LC0215 数组中的第 K 个最大元素、LC0075 颜色分类：同一套分区骨架，LC0075 基本就是本题三路划分的退化版。",
-      "code": "public void wiggleSort(int[] nums) {\n        int n = nums.length;\n        int mid = quickSort(nums, 0, n - 1, n / 2);\n        // f 只在虚拟下标 0..n-1 上有定义：三个游标都必须落在该范围内，故 gt 从 n-1 起步而非 n\n        int lt = 0, i = 0, gt = n - 1;\n        while (i <= gt) {\n            if (nums[f(n, i)] > mid) {\n                swap(nums, f(n, i), f(n, lt));\n                i++;\n                lt++;\n            } else if (nums[f(n, i)] < mid) {\n                swap(nums, f(n, i), f(n, gt));\n                // 从 gt 换进来的值还没看过，i 不能前进（否则会漏查）\n                gt--;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private int f(int n, int i) {\n        return (1 + 2 * i) % (n | 1);\n    }\n\n    private int quickSort(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[l];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i, r);\n        if (i == k) {\n            return nums[k];\n        } else if (i < k) {\n            return quickSort(nums, i + 1, r, k);\n        } else {\n            return quickSort(nums, l, i - 1, k);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
+      "time_complexity": "平均 O(n)，最坏 O(n²)",
+      "space_complexity": "平均 O(log n) 递归栈，最坏 O(n)",
+      "optimal": false,
+      "notes": "### 与上一轮对比\n- 思路未变，仍是「快速选择求中位数 + 虚拟下标三路划分」；划分实现从一刷的 Hoare 改成了取右端为 pivot 的 Lomuto 递归快速选择。\n- 复杂度不再是无条件 O(n)/O(1)：当前写法平均 O(n)，固定右端 pivot 在有序输入上会退化到最坏 O(n²)；递归栈平均 O(log n)、最坏 O(n)。\n\n### 具体推演与一刷错误的规避\n- 输入 `[1,5,1,1,6,4]`，n=6，虚拟下标为 `1,3,5,0,2,4`。快速选择先得到中位数 4，并可能把数组调整为 `[1,1,1,4,6,5]`。\n- 按虚拟顺序读到 `[1,4,5,1,1,6]` 后做三路划分：大于 4 的值换到左侧并落入真实峰位，小于 4 的值换到右侧并落入真实谷位，等于 4 的值留在中间。\n- 跟踪交换后可得 `[1,6,1,5,1,4]`：真实奇数位为 6、5，偶数位为 1、1、1，满足相邻摆动关系。重复值边界 `[1,1,2,2]` 得到 `[1,2,1,2]`。\n- 这次避免了虚拟下标越界的两个关键点：取模使用 `n | 1` 保证偶数长度不撞位；换到右端 `gt` 时 `i` 不前进，换到左端 `lt` 时 `i` 前进。\n- 命中已有套路「虚拟下标映射：划分方向必须与虚拟分段的角色对齐」。本次划分方向正确，没有出现峰谷整体颠倒。\n\n### 掌握度判定依据\n- 本地测试一次通过，力扣首次提交即 Accepted，52/52；本轮没有查看题解或讨论具体实现，因此记为较强。\n\n### 下一步提醒\n- 当前 Lomuto 固定右端 pivot 不是严格的 O(n)/O(1) 最优实现。后续重写时优先恢复随机 pivot 或一刷已验证的 Hoare 分区，避免顺序和逆序输入退化。",
+      "code": "public void wiggleSort(int[] nums) {\n        int n = nums.length;\n        int mid = quickSort(nums, 0, n - 1, n / 2);\n        int lt = 0, i = 0, gt = n - 1;\n        while (i <= gt) {\n            if (nums[f(n, i)] < mid) {\n                swap(nums, f(n, i), f(n, gt));\n                gt--;\n            } else if (nums[f(n, i)] > mid) {\n                swap(nums, f(n, i), f(n, lt));\n                lt++;\n                i++;\n            } else {\n                i++;\n            }\n        }\n    }\n\n    private int f(int n, int i) {\n        return (1 + 2 * i) % (n | 1);\n    }\n\n    private int quickSort(int[] nums, int l, int r, int k) {\n        if (l == r) {\n            return nums[l];\n        }\n        int p = nums[r];\n        int i = l, j = l;\n        while (j < r) {\n            if (nums[j] < p) {\n                swap(nums, i, j);\n                i++;\n            }\n            j++;\n        }\n        swap(nums, i, r);\n        if (i == k) {\n            return nums[i];\n        } else if (i < k) {\n            return quickSort(nums, i + 1, r, k);\n        } else {\n            return quickSort(nums, l, i - 1, k);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }",
       "prev_code": "public void wiggleSort(int[] nums) {\n        int mid = quickSort(nums, 0, nums.length - 1);\n        int lt = 0, i = 0, gt = nums.length - 1;\n        while (i <= gt) {\n            int fi = (1 + 2 * i) % (nums.length | 1);\n            int flt = (1 + 2 * lt) % (nums.length | 1);\n            int fgt = (1 + 2 * gt) % (nums.length | 1);\n            if (nums[fi] > mid) {\n                swap(nums, fi, flt);\n                i++;\n                lt++;\n            } else if (nums[fi] == mid) {\n                i++;\n            } else {\n                swap(nums, fi, fgt);\n                gt--;\n            }\n        }\n\n    }\n\n    private int quickSort(int[] nums, int l, int r) {\n        if (l == r) {\n            return nums[l];\n        }\n        int x = nums[l], i = l - 1, j = r + 1;\n        while (i < j) {\n            do {\n                i++;\n            } while (nums[i] < x);\n            do {\n                j--;\n            } while (nums[j] > x);\n            if (i < j) {\n                swap(nums, i, j);\n            }\n        }\n        int k = nums.length / 2;\n        if (k <= j) {\n            return quickSort(nums, l, j);\n        } else {\n            return quickSort(nums, j + 1, r);\n        }\n    }\n\n    private void swap(int[] nums, int i, int j) {\n        int temp = nums[i];\n        nums[i] = nums[j];\n        nums[j] = temp;\n    }\n",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "reviews": [
@@ -104,6 +104,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "**① 与上一轮对比**\n- 第 2 次复习（2026-09-17）较弱：一次 AC，但经过探讨。思路与复杂度与一刷同源——快速选择求中位数 + 虚拟下标三路划分，平均 O(n) / O(1)。\n- 本次（第 3 次复习）：写法与上一轮一致，中位数用 Lomuto 分区快速选择（pivot 取末元素，k = n/2），三路划分在虚拟下标 f(i) = (1 + 2i) % (n | 1) 上进行，三个游标 lt / i / gt 走同一套荷兰国旗骨架。\n\n**② 这次为什么想起来 / 上次的错怎么规避**\n- 一刷刷在这题上的两处是：虚拟下标映射的定义域越界（游标跑到 n），以及快速选择分区点语义没定死。这次两处都守住了：gt 从 n-1 起步、f 的自变量始终落在 0..n-1；分区固定用 Lomuto，分界点就是收尾 swap 后的 i，且左右递归区间保证严格缩小。\n- 三路划分里「不可前进」的分支也对：从 gt 换进来的值还没看过，i 不前进，避免漏查。\n- 本地 10 组用例（示例 2 + 边界 8，含 5 万规模上限）首次运行全绿。\n\n**③ 掌握度判定**\n- 本轮全程没有提示与探讨，力扣一次提交 Accepted（52/52）→ 较强，间隔按 2.5 倍拉长。\n\n**④ 下一步提醒**\n- 一个本次没被触发、但值得记住的风险：快速选择的 pivot 固定取末元素，遇到已排序的大数组会退化成 O(n²)，递归深度也会达到 n/2。要更保险就把 pivot 取随机或三数取中，或把递归改成显式循环——复杂度不变，抗数据能力更强。\n- 同族可顺带复习 LC0215 数组中的第 K 个最大元素、LC0075 颜色分类：同一套分区骨架，LC0075 基本就是本题三路划分的退化版。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-27",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "52/52",
+      "approach": "快速选择中位数 + 虚拟下标三路划分",
+      "time_complexity": "平均 O(n)，最坏 O(n²)",
+      "space_complexity": "平均 O(log n) 递归栈，最坏 O(n)",
+      "optimal": false,
+      "notes": "### 与上一轮对比\n- 思路未变，仍是「快速选择求中位数 + 虚拟下标三路划分」；划分实现从一刷的 Hoare 改成了取右端为 pivot 的 Lomuto 递归快速选择。\n- 复杂度不再是无条件 O(n)/O(1)：当前写法平均 O(n)，固定右端 pivot 在有序输入上会退化到最坏 O(n²)；递归栈平均 O(log n)、最坏 O(n)。\n\n### 具体推演与一刷错误的规避\n- 输入 `[1,5,1,1,6,4]`，n=6，虚拟下标为 `1,3,5,0,2,4`。快速选择先得到中位数 4，并可能把数组调整为 `[1,1,1,4,6,5]`。\n- 按虚拟顺序读到 `[1,4,5,1,1,6]` 后做三路划分：大于 4 的值换到左侧并落入真实峰位，小于 4 的值换到右侧并落入真实谷位，等于 4 的值留在中间。\n- 跟踪交换后可得 `[1,6,1,5,1,4]`：真实奇数位为 6、5，偶数位为 1、1、1，满足相邻摆动关系。重复值边界 `[1,1,2,2]` 得到 `[1,2,1,2]`。\n- 这次避免了虚拟下标越界的两个关键点：取模使用 `n | 1` 保证偶数长度不撞位；换到右端 `gt` 时 `i` 不前进，换到左端 `lt` 时 `i` 前进。\n- 命中已有套路「虚拟下标映射：划分方向必须与虚拟分段的角色对齐」。本次划分方向正确，没有出现峰谷整体颠倒。\n\n### 掌握度判定依据\n- 本地测试一次通过，力扣首次提交即 Accepted，52/52；本轮没有查看题解或讨论具体实现，因此记为较强。\n\n### 下一步提醒\n- 当前 Lomuto 固定右端 pivot 不是严格的 O(n)/O(1) 最优实现。后续重写时优先恢复随机 pivot 或一刷已验证的 Hoare 分区，避免顺序和逆序输入退化。"
     }
   ]
 }

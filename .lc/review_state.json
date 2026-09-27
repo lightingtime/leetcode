@@ -2179,12 +2179,12 @@
       "title": "摆动排序 II",
       "category": "贪心与区间",
       "first_pass_date": "2026-08-27",
-      "last_review_date": "2026-09-21",
-      "next_review_date": "2026-09-26",
-      "interval_days": 5,
-      "review_count": 3,
+      "last_review_date": "2026-09-27",
+      "next_review_date": "2026-10-12",
+      "interval_days": 15,
+      "review_count": 4,
       "mastery": "strong",
-      "consecutive_strong": 1,
+      "consecutive_strong": 2,
       "mastered": false
     },
     "increasing-triplet-subsequence": {

@@ -2,11 +2,8 @@
 // LeetCode 324. 摆动排序 II (Wiggle Sort II)
 // 难度：Medium | 分类：贪心与区间
 // 链接：https://leetcode.cn/problems/wiggle-sort-ii/
-// 刷题日期：2026-09-21
+// 刷题日期：2026-09-27
 //
-// 二刷第 3 次 · 一刷 2026-08-27 · 上次复习 2026-09-17（较弱，间隔重置）
-// 一刷思路：快速选择求中位数 + 虚拟下标三路划分（把真实下标按摆动位置重映射后再分区）
-// 测试用例与一刷归档保持一致（示例 2 + 边界若干），原地修改题统一断言「摆动性质 + 多重集不变」，未重新设计
 // ============================================================
 
 import java.util.*;
@@ -17,17 +14,15 @@ public class LC0324_WiggleSortIi {
     public void wiggleSort(int[] nums) {
         int n = nums.length;
         int mid = quickSort(nums, 0, n - 1, n / 2);
-        // f 只在虚拟下标 0..n-1 上有定义：三个游标都必须落在该范围内，故 gt 从 n-1 起步而非 n
         int lt = 0, i = 0, gt = n - 1;
         while (i <= gt) {
-            if (nums[f(n, i)] > mid) {
-                swap(nums, f(n, i), f(n, lt));
-                i++;
-                lt++;
-            } else if (nums[f(n, i)] < mid) {
+            if (nums[f(n, i)] < mid) {
                 swap(nums, f(n, i), f(n, gt));
-                // 从 gt 换进来的值还没看过，i 不能前进（否则会漏查）
                 gt--;
+            } else if (nums[f(n, i)] > mid) {
+                swap(nums, f(n, i), f(n, lt));
+                lt++;
+                i++;
             } else {
                 i++;
             }
@@ -53,7 +48,7 @@ public class LC0324_WiggleSortIi {
         }
         swap(nums, i, r);
         if (i == k) {
-            return nums[k];
+            return nums[i];
         } else if (i < k) {
             return quickSort(nums, i + 1, r, k);
         } else {
