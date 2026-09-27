@@ -1,10 +1,13 @@
 // ============================================================
 // LeetCode 85. 最大矩形 (Maximal Rectangle)
-// 难度：Hard | 分类：动态规划（线性 DP + 单调栈）
+// 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/maximal-rectangle/
-// 复习日期：2026-09-12（第 3 次复习 · 一刷 2026-08-20 · 上次复习 2026-09-07）
+// 二刷复习：2026-09-28 | 一刷：2026-08-20
+// 一刷思路：单调栈 + 逐行高度（先独立回忆，再对照归档）
+// 子类型：线性 DP（按行递推每列连续 1 的高度）
+// 测试用例与一刷归档保持一致
 //
-// 思路：逐行更新柱状图高度，再用单调栈求每行对应的最大矩形面积。
+// 思路：逐行累计连续 1 的高度，每行用单调栈求直方图最大矩形
 // 复杂度：时间 O(mn)，空间 O(n)
 // ============================================================
 
@@ -17,7 +20,7 @@ public class LC0085_MaximalRectangle {
         int m = matrix.length;
         int n = matrix[0].length;
         int[] heights = new int[n + 2];
-        int maxArea = 0;
+        int max = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (i == 0) {
@@ -28,17 +31,18 @@ public class LC0085_MaximalRectangle {
             }
 
             Deque<Integer> stack = new ArrayDeque<>();
+
             for (int j = 0; j < heights.length; j++) {
                 while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {
                     int height = heights[stack.pollLast()];
                     int width = j - stack.peekLast() - 1;
-                    int max = height * width;
-                    maxArea = Math.max(maxArea, max);
+                    int area = height * width;
+                    max = Math.max(max, area);
                 }
                 stack.offerLast(j);
             }
         }
-        return maxArea;
+        return max;
     }
     // ==== 提交代码结束 ====
 

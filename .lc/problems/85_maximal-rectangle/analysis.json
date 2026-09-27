@@ -34,19 +34,19 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-12",
+      "date": "2026-09-28",
       "verdict": "Accepted",
       "testcases": "76/76",
       "runtime_ms": null,
-      "memory_bytes": 51140000,
+      "memory_bytes": 51060000,
       "approach": "单调栈 + 逐行高度",
       "time_complexity": "O(mn)",
       "space_complexity": "O(n)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是「逐行高度表 + 单调栈」，每一行先更新 `heights[j+1]`，再用递增栈求该直方图的最大矩形；两端哨兵高度 0 保证结束时栈自动清空。复杂度 O(mn) / O(n)。\n\n② 这次为什么想起来：把二维矩阵逐行压成一维柱状图，`heights[j]` 表示第 j 列截至当前行连续 1 的高度；栈中保存的是高度递增的下标，遇到更矮柱时弹出并确定宽度。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：宽度公式可固定为`j - 新栈顶 - 1`，两端哨兵分别负责清栈和避免空栈判断；不要漏掉最后一行弹栈。",
-      "code": "    public int maximalRectangle(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] heights = new int[n + 2];\n        int maxArea = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n\n            Deque<Integer> stack = new ArrayDeque<>();\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int max = height * width;\n                    maxArea = Math.max(maxArea, max);\n                }\n                stack.offerLast(j);\n            }\n        }\n        return maxArea;\n    }",
+      "notes": "## 与上一轮对比\n这次独立重写了同一思路：逐行维护每列向上的连续 1 高度，再把当前行视为直方图，用递增单调栈求最大矩形。与 9 月 12 日记录的写法相同，时间 O(mn)、额外空间 O(n)，没有更换算法。代码用左右各一个 0 作为哨兵，右侧 0 会结算剩余正高度。\n\n## 关键状态与边界\nheights[j + 1] 表示当前行第 j 列向上连续 1 的个数。遇 1 在旧高度上加一，遇 0 归零。栈保存高度不递减的下标；当前高度更小时，弹出的高度已找到右边界，弹出后栈顶就是左边界，宽度为当前下标减左边界下标再减一。\n例如两行 11、10：第一行高度为 [1,1]，最大面积为 2；第二行更新为 [2,0]，首列的高度 2 产生面积 2，第二列不能跨过 0。对单行 110，末尾 0 会依次结算前两个 1，宽度 2、面积 2。左右 0 哨兵使边界始终有栈顶可用。单行、单列、全 0、全 1、行间断开等 13 项本地测试通过。\n\n## 掌握度与后续\n本轮没有求助或讨论，力扣一次提交 Accepted，76/76，记为较强。此前一刷因下标入栈问题返工；本轮的栈始终存下标，弹栈后用新的栈顶算左边界，未重现该错误。每个单元至少需读一次，时间下限为 O(mn)；每行只保留 n 个高度及栈，额外空间 O(n)。代码可把首行的特殊分支合并到统一高度递推，因为高度数组初始为 0；这是写法精简，不改变复杂度。",
+      "code": "public int maximalRectangle(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] heights = new int[n + 2];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n\n            Deque<Integer> stack = new ArrayDeque<>();\n\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int area = height * width;\n                    max = Math.max(max, area);\n                }\n                stack.offerLast(j);\n            }\n        }\n        return max;\n    }",
       "mastery": "strong",
-      "pass": 3,
+      "pass": 4,
       "prev_code": "public int maximalRectangle(char[][] matrix) {\n        int m = matrix.length;\n        int n = matrix[0].length;\n        int[] heights = new int[n + 2];\n        int max = 0;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (i == 0) {\n                    heights[j + 1] = matrix[i][j] == '1' ? 1 : 0;\n                } else {\n                    heights[j + 1] = matrix[i][j] == '1' ? (1 + heights[j + 1]): 0;\n                }\n            }\n            Deque<Integer> stack = new ArrayDeque<>();\n            for (int j = 0; j < heights.length; j++) {\n                while (!stack.isEmpty() && heights[stack.peekLast()] > heights[j]) {\n                    int height = heights[stack.pollLast()];\n                    int width = j - stack.peekLast() - 1;\n                    int area = height * width;\n                    max = Math.max(max, area);\n                }\n                stack.offerLast(j);\n            }\n        }\n        return max;\n    }\n"
     }
   ],
@@ -93,6 +93,19 @@
       "space_complexity": "O(n)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是「逐行高度表 + 单调栈」，每一行先更新 `heights[j+1]`，再用递增栈求该直方图的最大矩形；两端哨兵高度 0 保证结束时栈自动清空。复杂度 O(mn) / O(n)。\n\n② 这次为什么想起来：把二维矩阵逐行压成一维柱状图，`heights[j]` 表示第 j 列截至当前行连续 1 的高度；栈中保存的是高度递增的下标，遇到更矮柱时弹出并确定宽度。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：宽度公式可固定为`j - 新栈顶 - 1`，两端哨兵分别负责清栈和避免空栈判断；不要漏掉最后一行弹栈。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-28",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "76/76",
+      "approach": "单调栈 + 逐行高度",
+      "time_complexity": "O(mn)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "## 与上一轮对比\n这次独立重写了同一思路：逐行维护每列向上的连续 1 高度，再把当前行视为直方图，用递增单调栈求最大矩形。与 9 月 12 日记录的写法相同，时间 O(mn)、额外空间 O(n)，没有更换算法。代码用左右各一个 0 作为哨兵，右侧 0 会结算剩余正高度。\n\n## 关键状态与边界\nheights[j + 1] 表示当前行第 j 列向上连续 1 的个数。遇 1 在旧高度上加一，遇 0 归零。栈保存高度不递减的下标；当前高度更小时，弹出的高度已找到右边界，弹出后栈顶就是左边界，宽度为当前下标减左边界下标再减一。\n例如两行 11、10：第一行高度为 [1,1]，最大面积为 2；第二行更新为 [2,0]，首列的高度 2 产生面积 2，第二列不能跨过 0。对单行 110，末尾 0 会依次结算前两个 1，宽度 2、面积 2。左右 0 哨兵使边界始终有栈顶可用。单行、单列、全 0、全 1、行间断开等 13 项本地测试通过。\n\n## 掌握度与后续\n本轮没有求助或讨论，力扣一次提交 Accepted，76/76，记为较强。此前一刷因下标入栈问题返工；本轮的栈始终存下标，弹栈后用新的栈顶算左边界，未重现该错误。每个单元至少需读一次，时间下限为 O(mn)；每行只保留 n 个高度及栈，额外空间 O(n)。代码可把首行的特殊分支合并到统一高度递推，因为高度数组初始为 0；这是写法精简，不改变复杂度。"
     }
   ]
 }
