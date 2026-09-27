@@ -2,11 +2,9 @@
 // LeetCode 140. 单词拆分 II (Word Break II)
 // 难度：Hard | 分类：动态规划
 // 链接：https://leetcode.cn/problems/word-break-ii/
-// 刷题日期：2026-09-24
-// 二刷 · 一刷完成日期：2026-08-26（一刷原思路见复盘页，先自己回忆再对照）
+// 二刷 · 一刷完成日期：2026-08-26（一刷思路先自己回忆，提交后再对照复盘页）
 // 测试用例与一刷归档保持一致（示例 3 组 + 边界 6 组）
-// 思路：后缀可达预判 canReach（从右往左标记能走到末尾的下标）+ DFS 回溯枚举切分，剪掉到不了终点的分支
-// 复杂度：时间 O(n·|dict|·L + 输出规模) 空间 O(n + 输出规模)
+//
 // ============================================================
 
 import java.util.*;
@@ -16,7 +14,6 @@ public class LC0140_WordBreakIi {
     // ==== 提交代码开始 ====
     List<String> ans;
     boolean[] canReach;
-
     public List<String> wordBreak(String s, List<String> wordDict) {
         ans = new ArrayList<>();
         canReach = new boolean[s.length() + 1];
@@ -24,19 +21,19 @@ public class LC0140_WordBreakIi {
         Set<String> set = new HashSet<>(wordDict);
         for (int i = s.length(); i >= 0; i--) {
             for (String word : set) {
-                if (s.startsWith(word, i) && canReach[i + word.length()]) {
+                if (i + word.length() <= s.length() && canReach[i + word.length()] && s.startsWith(word, i)) {
                     canReach[i] = true;
                     break;
                 }
             }
         }
-        dfs(s, 0, set, new ArrayList<>());
+        dfs(s, 0, set, new ArrayList<String>());
         return ans;
     }
 
-    private void dfs(String s, int i, Set<String> set, List<String> list) {
+    private void dfs(String s, int i, Set<String> set, ArrayList<String> path) {
         if (i == s.length()) {
-            ans.add(String.join(" ", list));
+            ans.add(String.join(" ", path));
             return;
         }
 
@@ -45,10 +42,13 @@ public class LC0140_WordBreakIi {
         }
 
         for (String word : set) {
+            if (i + word.length() > s.length()) {
+                continue;
+            }
             if (s.startsWith(word, i)) {
-                list.add(word);
-                dfs(s, i + word.length(), set, list);
-                list.remove(list.size() - 1);
+                path.add(word);
+                dfs(s, i + word.length(), set, path);
+                path.remove(path.size() - 1);
             }
         }
     }

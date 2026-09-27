@@ -2123,12 +2123,12 @@
       "title": "单词拆分 II",
       "category": "动态规划",
       "first_pass_date": "2026-08-26",
-      "last_review_date": "2026-09-24",
-      "next_review_date": "2026-09-26",
-      "interval_days": 2,
-      "review_count": 4,
-      "mastery": "weak",
-      "consecutive_strong": 0,
+      "last_review_date": "2026-09-27",
+      "next_review_date": "2026-10-02",
+      "interval_days": 5,
+      "review_count": 5,
+      "mastery": "strong",
+      "consecutive_strong": 1,
       "mastered": false
     },
     "longest-increasing-path-in-a-matrix": {

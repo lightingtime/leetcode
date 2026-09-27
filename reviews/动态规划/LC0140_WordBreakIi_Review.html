@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×4</span>
+    <span class="badge plain">二刷 ×5</span>
     <span class="badge">2026-08-26</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>140. 单词拆分 II (Word Break II)</h1><p>&gt; <a href="https://leetcode.cn/problems/word-break-ii/" rel="noopener">https://leetcode.cn/problems/word-break-ii/</a></p><p>难度：Hard ｜ 分类：动态规划</p><p>标签：字典树、记忆化、数组、哈希表、字符串、动态规划、回溯</p><h2>题目描述</h2><p>给定一个字符串 s 和一个字符串字典 wordDict ，在字符串 s 中增加空格来构建一个句子，使得句子中所有的单词都在词典中。以任意顺序 返回所有这些可能的句子。</p><p>注意：词典中的同一个单词可能在分段中被重复使用多次。</p><p>示例 1：</p><p>输入:s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]</p><p>输出:["cats and dog","cat sand dog"]</p><p>示例 2：</p><p>输入:s = "pineapplepenapple", wordDict = ["apple","pen","applepen","pine","pineapple"]</p><p>输出:["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释: 注意你可以重复使用字典中的单词。</p><p>示例 3：</p><p>输入:s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]</p><p>输出:[]</p><p>提示：</p><p>1</p><p>1</p><p>1</p><p>s 和 wordDict[i] 仅有小写英文字母组成</p><p>wordDict 中所有字符串都 不同</p><h2>示例</h2><ol><li>输入：s = "catsanddog"，wordDict = ["cat","cats","and","sand","dog"]</li></ol><p>输出：["cats and dog","cat sand dog"]</p><ol><li>输入：s = "pineapplepenapple"，wordDict = ["apple","pen","applepen","pine","pineapple"]</li></ol><p>输出：["pine apple pen apple","pineapple pen apple","pine applepen apple"]</p><p>解释：注意你可以重复使用字典中的单词。</p><ol><li>输入：s = "catsandog"，wordDict = ["cats","dog","sand","and","cat"]</li></ol><p>输出：[]</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 5 次复习 · 2026-09-27 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（29/29）｜ 一次 AC ｜ 后缀可拆预判+回溯 ｜ O(n·|dict|·L + 输出规模) · O(n + 输出规模)</p>
+      <div class="review-note md"><p><strong>与上一轮对比</strong></p><p>仍是“后缀可拆预判 + 回溯枚举”的同一写法，时间与空间量级未变；上次复习为 2026-09-24，本次直接一次提交 Accepted。</p><p><strong>这次为什么能想起来</strong></p><p>先确定每个后缀能否完整拆分，再从下标 0 开始枚举单词；<code>canReach</code> 同时用于预判和在 DFS 入口剪枝，避免在注定到不了末尾的分支上继续搜索。减法和除法无关，本题关键是不要把可行性判断与方案枚举混成一件事。</p><p><strong>掌握度依据</strong></p><p>本轮在一次提交中通过 29/29，未经过失败分析、错因讨论或代码纠正，按较强记录。</p><p><strong>下一步提醒</strong></p><p>继续保留“DP 可行性表负责剪枝、回溯负责枚举输出”的分工；若输出规模很大，优化重点不在改变这个分工，而在降低重复字符串拼接成本。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 4 次复习 · 2026-09-24 <span class="tl-badge bug">较弱</span></span>
       <p class="muted">Accepted（29/29）｜ 一次 AC ｜ 后缀可拆预判+回溯 ｜ O(n·|dict|·L + 输出规模) · O(n + 输出规模)</p>
       <div class="review-note md"><p>本轮与上一轮思路一致（后缀可拆预判 + 回溯枚举），改动只在写法：删掉 DP 循环与 dfs 里两处冗余的长度判断（<code>startsWith</code> 越界自带 false），泛型简写为 <code>&lt;&gt;</code>，dfs 形参收敛为 <code>List</code>；复杂度与一刷记录一致。</p><p>一刷的失分点就是「没先判剩余能否切到终点」→ 本轮上来先做右→左可达性标记，再 DFS 只走能到终点的分支，一次提交 AC（29/29）。</p><p>掌握度判定：一次提交即 Accepted，但本次重写时查看过 dfs 部分代码，按约定记较弱。</p><p>下一次需完全脱稿回忆两段式结构（先标记 canReach 再回溯），间隔按较弱重置为 2 天。</p></div>
@@ -49,20 +53,19 @@
         <li><span>复杂度</span><b>O(n·|dict| + 方案数·n) · O(n + 方案数)</b></li>
         
       </ul>
-    </div><div class="round-card weak">
-      <h3>2. 第 4 轮（二刷）</h3>
+    </div><div class="round-card strong">
+      <h3>2. 第 5 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>后缀可拆预判+回溯</b></li>
         <li><span>复杂度</span><b>O(n·|dict|·L + 输出规模) · O(n + 输出规模)</b></li>
-        <li><span>掌握度</span><b><span class="badge hard">较弱 · 间隔重置</span></b></li>
+        <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 后缀可拆预判+回溯</h3>
-    <p><span class="chip">时间 O(n·|dict|·L + 输出规模)</span><span class="chip">空间 O(n + 输出规模)</span><span class="chip">内存 ≈ 41.2 MB</span><span class="chip">用例 29/29</span></p>
+    <p><span class="chip">时间 O(n·|dict|·L + 输出规模)</span><span class="chip">空间 O(n + 输出规模)</span><span class="chip">内存 ≈ 41.5 MB</span><span class="chip">用例 29/29</span></p>
     <div class="code-wrap"><div class="code-head"><span>LC0140_WordBreakIi.java · 后缀可拆预判+回溯</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; ans;
     <span class="tk-k">boolean</span>[] canReach;
-
     <span class="tk-k">public</span> <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; <span class="tk-f">wordBreak</span>(<span class="tk-t">String</span> s, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; wordDict) {
         ans = <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;();
         canReach = <span class="tk-k">new</span> <span class="tk-k">boolean</span>[s.<span class="tk-f">length</span>() + <span class="tk-n">1</span>];
@@ -70,19 +73,19 @@
         <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set = <span class="tk-k">new</span> <span class="tk-t">HashSet</span>&lt;&gt;(wordDict);
         <span class="tk-k">for</span> (<span class="tk-k">int</span> i = s.<span class="tk-f">length</span>(); i &gt;= <span class="tk-n">0</span>; i--) {
             <span class="tk-k">for</span> (<span class="tk-t">String</span> word : set) {
-                <span class="tk-k">if</span> (s.<span class="tk-f">startsWith</span>(word, i) &amp;&amp; canReach[i + word.<span class="tk-f">length</span>()]) {
+                <span class="tk-k">if</span> (i + word.<span class="tk-f">length</span>() &lt;= s.<span class="tk-f">length</span>() &amp;&amp; canReach[i + word.<span class="tk-f">length</span>()] &amp;&amp; s.<span class="tk-f">startsWith</span>(word, i)) {
                     canReach[i] = <span class="tk-k">true</span>;
                     <span class="tk-k">break</span>;
                 }
             }
         }
-        <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, set, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;&gt;());
+        <span class="tk-f">dfs</span>(s, <span class="tk-n">0</span>, set, <span class="tk-k">new</span> <span class="tk-t">ArrayList</span>&lt;<span class="tk-t">String</span>&gt;());
         <span class="tk-k">return</span> ans;
     }
 
-    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> i, <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set, <span class="tk-t">List</span>&lt;<span class="tk-t">String</span>&gt; list) {
+    <span class="tk-k">private</span> <span class="tk-k">void</span> <span class="tk-f">dfs</span>(<span class="tk-t">String</span> s, <span class="tk-k">int</span> i, <span class="tk-t">Set</span>&lt;<span class="tk-t">String</span>&gt; set, <span class="tk-t">ArrayList</span>&lt;<span class="tk-t">String</span>&gt; path) {
         <span class="tk-k">if</span> (i == s.<span class="tk-f">length</span>()) {
-            ans.<span class="tk-f">add</span>(<span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">" "</span>, list));
+            ans.<span class="tk-f">add</span>(<span class="tk-t">String</span>.<span class="tk-f">join</span>(<span class="tk-s">" "</span>, path));
             <span class="tk-k">return</span>;
         }
 
@@ -91,10 +94,13 @@
         }
 
         <span class="tk-k">for</span> (<span class="tk-t">String</span> word : set) {
+            <span class="tk-k">if</span> (i + word.<span class="tk-f">length</span>() &gt; s.<span class="tk-f">length</span>()) {
+                <span class="tk-k">continue</span>;
+            }
             <span class="tk-k">if</span> (s.<span class="tk-f">startsWith</span>(word, i)) {
-                list.<span class="tk-f">add</span>(word);
-                <span class="tk-f">dfs</span>(s, i + word.<span class="tk-f">length</span>(), set, list);
-                list.<span class="tk-f">remove</span>(list.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
+                path.<span class="tk-f">add</span>(word);
+                <span class="tk-f">dfs</span>(s, i + word.<span class="tk-f">length</span>(), set, path);
+                path.<span class="tk-f">remove</span>(path.<span class="tk-f">size</span>() - <span class="tk-n">1</span>);
             }
         }
     }</pre></div>

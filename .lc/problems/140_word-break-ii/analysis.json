@@ -49,20 +49,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-24",
+      "date": "2026-09-27",
       "verdict": "Accepted",
       "testcases": "29/29",
       "runtime_ms": null,
-      "memory_bytes": 43172000,
+      "memory_bytes": 43492000,
       "approach": "后缀可拆预判+回溯",
       "time_complexity": "O(n·|dict|·L + 输出规模)",
       "space_complexity": "O(n + 输出规模)",
       "optimal": true,
-      "notes": "本轮与上一轮思路一致（后缀可拆预判 + 回溯枚举），改动只在写法：删掉 DP 循环与 dfs 里两处冗余的长度判断（`startsWith` 越界自带 false），泛型简写为 `<>`，dfs 形参收敛为 `List`；复杂度与一刷记录一致。\n\n一刷的失分点就是「没先判剩余能否切到终点」→ 本轮上来先做右→左可达性标记，再 DFS 只走能到终点的分支，一次提交 AC（29/29）。\n\n掌握度判定：一次提交即 Accepted，但本次重写时查看过 dfs 部分代码，按约定记较弱。\n\n下一次需完全脱稿回忆两段式结构（先标记 canReach 再回溯），间隔按较弱重置为 2 天。",
-      "code": "List<String> ans;\n    boolean[] canReach;\n\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        ans = new ArrayList<>();\n        canReach = new boolean[s.length() + 1];\n        canReach[s.length()] = true;\n        Set<String> set = new HashSet<>(wordDict);\n        for (int i = s.length(); i >= 0; i--) {\n            for (String word : set) {\n                if (s.startsWith(word, i) && canReach[i + word.length()]) {\n                    canReach[i] = true;\n                    break;\n                }\n            }\n        }\n        dfs(s, 0, set, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(String s, int i, Set<String> set, List<String> list) {\n        if (i == s.length()) {\n            ans.add(String.join(\" \", list));\n            return;\n        }\n\n        if (!canReach[i]) {\n            return;\n        }\n\n        for (String word : set) {\n            if (s.startsWith(word, i)) {\n                list.add(word);\n                dfs(s, i + word.length(), set, list);\n                list.remove(list.size() - 1);\n            }\n        }\n    }",
+      "notes": "**与上一轮对比**\n\n仍是“后缀可拆预判 + 回溯枚举”的同一写法，时间与空间量级未变；上次复习为 2026-09-24，本次直接一次提交 Accepted。\n\n**这次为什么能想起来**\n\n先确定每个后缀能否完整拆分，再从下标 0 开始枚举单词；`canReach` 同时用于预判和在 DFS 入口剪枝，避免在注定到不了末尾的分支上继续搜索。减法和除法无关，本题关键是不要把可行性判断与方案枚举混成一件事。\n\n**掌握度依据**\n\n本轮在一次提交中通过 29/29，未经过失败分析、错因讨论或代码纠正，按较强记录。\n\n**下一步提醒**\n\n继续保留“DP 可行性表负责剪枝、回溯负责枚举输出”的分工；若输出规模很大，优化重点不在改变这个分工，而在降低重复字符串拼接成本。",
+      "code": "List<String> ans;\n    boolean[] canReach;\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        ans = new ArrayList<>();\n        canReach = new boolean[s.length() + 1];\n        canReach[s.length()] = true;\n        Set<String> set = new HashSet<>(wordDict);\n        for (int i = s.length(); i >= 0; i--) {\n            for (String word : set) {\n                if (i + word.length() <= s.length() && canReach[i + word.length()] && s.startsWith(word, i)) {\n                    canReach[i] = true;\n                    break;\n                }\n            }\n        }\n        dfs(s, 0, set, new ArrayList<String>());\n        return ans;\n    }\n\n    private void dfs(String s, int i, Set<String> set, ArrayList<String> path) {\n        if (i == s.length()) {\n            ans.add(String.join(\" \", path));\n            return;\n        }\n\n        if (!canReach[i]) {\n            return;\n        }\n\n        for (String word : set) {\n            if (i + word.length() > s.length()) {\n                continue;\n            }\n            if (s.startsWith(word, i)) {\n                path.add(word);\n                dfs(s, i + word.length(), set, path);\n                path.remove(path.size() - 1);\n            }\n        }\n    }",
       "prev_code": "boolean[] suffixOK;\n    Set<String> set;\n    List<String> ans;\n    public List<String> wordBreak(String s, List<String> wordDict) {\n        set = new HashSet<>(wordDict);\n        ans = new ArrayList<>();\n        int n = s.length();\n\n        // 后缀可拆预判：suffixOK[i] = s[i..n) 能否由字典词拼完（从右往左算）\n        suffixOK = new boolean[n + 1];\n        suffixOK[n] = true;\n        for (int i = n - 1; i >= 0; i--) {\n            for (String word : set) {\n                int next = i + word.length();\n                if (next <= n && suffixOK[next] && s.startsWith(word, i)) {\n                    suffixOK[i] = true;\n                    break;\n                }\n            }\n        }\n        // DFS 从哪里出发，DP 就最好描述“从哪里能不能到终点”。\n        dfs(s, 0, new ArrayList<>());\n        return ans;\n    }\n\n    private void dfs(String s, int start, List<String> path) {\n        if (start == s.length()) {\n            ans.add(String.join(\" \", path));\n            return;\n        }\n        // 从start直接看后面能不能满足，不满足说明从start出发无论怎么拆都没有结果，直接剪枝\n        if (!suffixOK[start]) {\n            return;\n        }\n        for (int i = start; i <= s.length(); i++) {\n            String temp = s.substring(start, i);\n            if (set.contains(temp)) {           // 当前段是字典词\n                path.add(temp);\n                dfs(s, i, path);\n                path.remove(path.size() - 1);\n            }\n        }\n    }\n",
-      "mastery": "weak",
-      "pass": 4
+      "mastery": "strong",
+      "pass": 5
     }
   ],
   "reviews": [
@@ -117,6 +117,19 @@
       "space_complexity": "O(n + 输出规模)",
       "optimal": true,
       "notes": "本轮与上一轮思路一致（后缀可拆预判 + 回溯枚举），改动只在写法：删掉 DP 循环与 dfs 里两处冗余的长度判断（`startsWith` 越界自带 false），泛型简写为 `<>`，dfs 形参收敛为 `List`；复杂度与一刷记录一致。\n\n一刷的失分点就是「没先判剩余能否切到终点」→ 本轮上来先做右→左可达性标记，再 DFS 只走能到终点的分支，一次提交 AC（29/29）。\n\n掌握度判定：一次提交即 Accepted，但本次重写时查看过 dfs 部分代码，按约定记较弱。\n\n下一次需完全脱稿回忆两段式结构（先标记 canReach 再回溯），间隔按较弱重置为 2 天。"
+    },
+    {
+      "pass": 5,
+      "date": "2026-09-27",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "29/29",
+      "approach": "后缀可拆预判+回溯",
+      "time_complexity": "O(n·|dict|·L + 输出规模)",
+      "space_complexity": "O(n + 输出规模)",
+      "optimal": true,
+      "notes": "**与上一轮对比**\n\n仍是“后缀可拆预判 + 回溯枚举”的同一写法，时间与空间量级未变；上次复习为 2026-09-24，本次直接一次提交 Accepted。\n\n**这次为什么能想起来**\n\n先确定每个后缀能否完整拆分，再从下标 0 开始枚举单词；`canReach` 同时用于预判和在 DFS 入口剪枝，避免在注定到不了末尾的分支上继续搜索。减法和除法无关，本题关键是不要把可行性判断与方案枚举混成一件事。\n\n**掌握度依据**\n\n本轮在一次提交中通过 29/29，未经过失败分析、错因讨论或代码纠正，按较强记录。\n\n**下一步提醒**\n\n继续保留“DP 可行性表负责剪枝、回溯负责枚举输出”的分工；若输出规模很大，优化重点不在改变这个分工，而在降低重复字符串拼接成本。"
     }
   ]
 }
