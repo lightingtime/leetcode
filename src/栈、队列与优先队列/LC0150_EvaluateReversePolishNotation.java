@@ -2,11 +2,10 @@
 // LeetCode 150. 逆波兰表达式求值 (Evaluate Reverse Polish Notation)
 // 难度：Medium | 分类：栈、队列与优先队列
 // 链接：https://leetcode.cn/problems/evaluate-reverse-polish-notation/
-// 刷题日期：2026-09-21
+// 二刷 · 一刷日期：2026-08-24
+// 一刷思路：数字入栈；遇运算符取出右操作数和左操作数，计算后再入栈；Java 整数除法按向零截断。
+// 测试用例与一刷归档保持一致。
 //
-// 二刷第 4 次 · 一刷 2026-08-24 · 上次复习 2026-09-17（较弱，间隔重置）
-// 一刷思路：栈——遇数字 push、遇到算符弹两个算完再 push；除法用 Java int 除法天然向零截断
-// 测试用例与一刷归档保持一致（示例 3 + 边界 6），未重新设计
 // ============================================================
 
 import java.util.*;
@@ -15,7 +14,6 @@ public class LC0150_EvaluateReversePolishNotation {
 
     // ==== 提交代码开始 ====
     public int evalRPN(String[] tokens) {
-        // Deque 当栈用：push / pop / peek 必须统一在同一端，不能与 offerLast / pollLast 混用
         Deque<Integer> stack = new ArrayDeque<>();
         for (String token : tokens) {
             if (token.equals("+")) {
@@ -27,8 +25,8 @@ public class LC0150_EvaluateReversePolishNotation {
                 int a = stack.pop();
                 stack.push(a - b);
             } else if (token.equals("*")) {
-                int a = stack.pop();
                 int b = stack.pop();
+                int a = stack.pop();
                 stack.push(a * b);
             } else if (token.equals("/")) {
                 int b = stack.pop();
@@ -38,7 +36,7 @@ public class LC0150_EvaluateReversePolishNotation {
                 stack.push(Integer.parseInt(token));
             }
         }
-        return stack.peek();
+        return stack.peekLast();
     }
     // ==== 提交代码结束 ====
 
