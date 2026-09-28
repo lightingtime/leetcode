@@ -35,20 +35,20 @@
   ],
   "submissions": [
     {
-      "date": "2026-09-12",
+      "date": "2026-09-28",
       "verdict": "Accepted",
       "testcases": "149/149",
       "runtime_ms": null,
-      "memory_bytes": 42532000,
+      "memory_bytes": 42508000,
       "approach": "异或 + 位计数",
-      "time_complexity": "O(1)",
+      "time_complexity": "O(1)（int 固定 32 位）",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是异或 + 逐位计数，`t = x ^ y` 中为 1 的位恰好就是两个数不同的位；本轮用 `t & 1` 累加后 `t >>>= 1`，复杂度 O(1) / O(1)。\n\n② 这次为什么想起来：二进制差异计数先统一转成异或结果，再只数 1；使用无符号右移 `>>>`，即使异或结果最高位为 1 变成负数，也能按 32 个位稳定扫描。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：保持 XOR 结果使用无符号移位；也可用 `t &= t - 1` 只遍历 1 的个数，但当前写法已经足够。",
-      "code": "    public int hammingDistance(int x, int y) {\n        int t = x ^ y;\n        int ans = 0;\n        while (t != 0) {\n            ans += (t & 1);\n            t >>>= 1;\n        }\n        return ans;\n    }",
+      "notes": "二刷一次AC；异或得到差异掩码，逐位统计 1 的个数。",
+      "code": "public int hammingDistance(int x, int y) {\n        int count = 0;\n        int t = x ^ y;\n        while (t != 0) {\n            count += (t & 1);\n            t >>>= 1;\n        }\n        return count;\n    }",
       "prev_code": "public int hammingDistance(int x, int y) {\n        int t = x ^ y;\n        int ans = 0;\n        while (t != 0) {\n            if ((t & 1) == 1) {\n                ans++;\n            }\n            t >>>= 1;\n        }\n        return ans;\n    }\n",
       "mastery": "strong",
-      "pass": 3
+      "pass": 4
     }
   ],
   "hints": [
@@ -93,6 +93,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是异或 + 逐位计数，`t = x ^ y` 中为 1 的位恰好就是两个数不同的位；本轮用 `t & 1` 累加后 `t >>>= 1`，复杂度 O(1) / O(1)。\n\n② 这次为什么想起来：二进制差异计数先统一转成异或结果，再只数 1；使用无符号右移 `>>>`，即使异或结果最高位为 1 变成负数，也能按 32 个位稳定扫描。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：保持 XOR 结果使用无符号移位；也可用 `t &= t - 1` 只遍历 1 的个数，但当前写法已经足够。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-28",
+      "mastery": "strong",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "149/149",
+      "approach": "异或 + 位计数",
+      "time_complexity": "O(1)（int 固定 32 位）",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "二刷一次AC；异或得到差异掩码，逐位统计 1 的个数。"
     }
   ]
 }

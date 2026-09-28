@@ -20,12 +20,16 @@
     <span class="badge plain">多次通过</span>
     <span class="badge ok">最优解</span>
     
-    <span class="badge plain">二刷 ×3</span>
+    <span class="badge plain">二刷 ×4</span>
     <span class="badge">2026-08-20</span>
   </div>
 </div>
   <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>461. 汉明距离 (Hamming Distance)</h1><p>&gt; <a href="https://leetcode.cn/problems/hamming-distance/" rel="noopener">https://leetcode.cn/problems/hamming-distance/</a></p><p>难度：Easy ｜ 分类：数学与位运算</p><p>标签：位运算</p><h2>题目描述</h2><p>两个整数之间的 汉明距离 指的是这两个数字对应二进制位不同的位置的数目。</p><p>给你两个整数 x 和 y，计算并返回它们之间的汉明距离。</p><p>示例 1：</p><p>输入：x = 1, y = 4</p><p>输出：2</p><p>解释：</p><p>1 (0 0 0 1)</p><p>4 (0 1 0 0)</p><p>↑ ↑</p><p>上面的箭头指出了对应二进制位不同的位置。</p><p>示例 2：</p><p>输入：x = 3, y = 1</p><p>输出：1</p><p>提示：</p><p>0 31 - 1</p><p>注意：本题与 2220. 转换数字的最少位翻转次数 相同。</p><h2>示例</h2><ol><li>输入：x = 1，y = 4</li></ol><p>输出：2</p><ol><li>输入：x = 3，y = 1</li></ol><p>输出：1</p></div></details>
   <section><h2>复习记录</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
+      <span class="tl-title">第 4 次复习 · 2026-09-28 <span class="tl-badge ok">较强</span></span>
+      <p class="muted">Accepted（149/149）｜ 一次 AC ｜ 异或 + 位计数 ｜ O(1)（int 固定 32 位） · O(1)</p>
+      <div class="review-note md"><p>二刷一次AC；异或得到差异掩码，逐位统计 1 的个数。</p></div>
+    </div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body">
       <span class="tl-title">第 3 次复习 · 2026-09-12 <span class="tl-badge ok">较强</span></span>
       <p class="muted">Accepted（149/149）｜ 一次 AC ｜ 异或 + 位计数 ｜ O(1) · O(1)</p>
       <div class="review-note md"><p>① 与上一轮对比：仍是异或 + 逐位计数，<code>t = x ^ y</code> 中为 1 的位恰好就是两个数不同的位；本轮用 <code>t &amp; 1</code> 累加后 <code>t &gt;&gt;&gt;= 1</code>，复杂度 O(1) / O(1)。</p><p>② 这次为什么想起来：二进制差异计数先统一转成异或结果，再只数 1；使用无符号右移 <code>&gt;&gt;&gt;</code>，即使异或结果最高位为 1 变成负数，也能按 32 个位稳定扫描。</p><p>③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。</p><p>④ 下一步提醒：保持 XOR 结果使用无符号移位；也可用 <code>t &amp;= t - 1</code> 只遍历 1 的个数，但当前写法已经足够。</p></div>
@@ -46,24 +50,24 @@
         
       </ul>
     </div><div class="round-card strong">
-      <h3>2. 第 3 轮（二刷）</h3>
+      <h3>2. 第 4 轮（二刷）</h3>
       <ul class="round-meta">
         <li><span>思路</span><b>异或 + 位计数</b></li>
-        <li><span>复杂度</span><b>O(1) · O(1)</b></li>
+        <li><span>复杂度</span><b>O(1)（int 固定 32 位） · O(1)</b></li>
         <li><span>掌握度</span><b><span class="badge ok">较强 · 间隔 ×2.5</span></b></li>
       </ul>
     </div></div></section>
   <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
     <h3 style="margin:0 0 8px">写法 1 · 异或 + 位计数</h3>
-    <p><span class="chip">时间 O(1)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 40.6 MB</span><span class="chip">用例 149/149</span></p>
-    <div class="code-wrap"><div class="code-head"><span>LC0461_HammingDistance.java · 异或 + 位计数</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre>    <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">hammingDistance</span>(<span class="tk-k">int</span> x, <span class="tk-k">int</span> y) {
+    <p><span class="chip">时间 O(1)（int 固定 32 位）</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 40.5 MB</span><span class="chip">用例 149/149</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0461_HammingDistance.java · 异或 + 位计数</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">hammingDistance</span>(<span class="tk-k">int</span> x, <span class="tk-k">int</span> y) {
+        <span class="tk-k">int</span> count = <span class="tk-n">0</span>;
         <span class="tk-k">int</span> t = x ^ y;
-        <span class="tk-k">int</span> ans = <span class="tk-n">0</span>;
         <span class="tk-k">while</span> (t != <span class="tk-n">0</span>) {
-            ans += (t &amp; <span class="tk-n">1</span>);
+            count += (t &amp; <span class="tk-n">1</span>);
             t &gt;&gt;&gt;= <span class="tk-n">1</span>;
         }
-        <span class="tk-k">return</span> ans;
+        <span class="tk-k">return</span> count;
     }</pre></div>
     <details style="margin-top:10px"><summary style="cursor:pointer">上一版写法（被覆盖前，已保留）</summary><div class="code-wrap"><div class="code-head"><span>LC0461_HammingDistance.java · 异或 + 位计数 · 上一版</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">hammingDistance</span>(<span class="tk-k">int</span> x, <span class="tk-k">int</span> y) {
         <span class="tk-k">int</span> t = x ^ y;

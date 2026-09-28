@@ -1381,12 +1381,12 @@
       "title": "汉明距离",
       "category": "数学与位运算",
       "first_pass_date": "2026-08-20",
-      "last_review_date": "2026-09-12",
-      "next_review_date": "2026-09-27",
-      "interval_days": 15,
-      "review_count": 3,
+      "last_review_date": "2026-09-28",
+      "next_review_date": "2026-11-07",
+      "interval_days": 40,
+      "review_count": 4,
       "mastery": "strong",
-      "consecutive_strong": 3,
+      "consecutive_strong": 4,
       "mastered": false
     },
     "roman-to-integer": {
