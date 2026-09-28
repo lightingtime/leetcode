@@ -52,20 +52,20 @@
       "code": "public int missingNumber(int[] nums) {\n        for (int i = 0; i < nums.length; i++) {\n            if (nums[i] == nums.length) {\n                continue;\n            }\n            while (nums[i] != i) {\n                int temp = nums[nums[i]];\n                nums[nums[i]] = nums[i];\n                nums[i] = temp;\n                if (nums[i] == nums.length) {\n                    break;\n                }\n            }\n        }\n        for (int i = 0; i < nums.length; i++) {\n            if (nums[i] != i) {\n                return i;\n            }\n        }\n        return nums.length;\n    }"
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-28",
       "verdict": "Accepted",
       "testcases": "122/122",
       "runtime_ms": null,
-      "memory_bytes": 47624000,
+      "memory_bytes": 47824000,
       "approach": "求和（差值累加）",
       "time_complexity": "O(n)",
       "space_complexity": "O(1)",
       "optimal": true,
-      "notes": "① 与上一轮对比：仍是差值累加，把 `ans` 初始化为 `nums.length`，循环中执行 `ans += i - nums[i]`；它等价于「[0,n] 的总和 − 数组总和」，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：完整范围只缺一个数，因此总和之差必然就是缺失值；`ans` 先包含右端点 n，再逐项抵消 0..n-1 与数组值，不需要额外哈希集合。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：当前 n≤10^4，int 求和安全；若未来范围更大，可改用 XOR 方法避免总和溢出。",
-      "code": "    public int missingNumber(int[] nums) {\n        int ans = nums.length;\n        for (int i = 0; i < nums.length; i++) {\n            ans = ans + i - nums[i];\n        }\n        return ans;\n    }",
+      "notes": "与一刷最近一次的求和差分写法相同，时间和额外空间仍为 O(n)/O(1)；本次将累计变量用 int，一刷曾用 long 与 Math.toIntExact 防溢出。独立推演过程未记录，不能据此推断为何想起；本地 12 项通过、在线一次 Accepted，但选题后已看到分类方向提示，按较弱掌握记录。可对照一刷原地交换写法在空间和代码复杂度上的取舍。",
+      "code": "public int missingNumber(int[] nums) {\n        int sum = nums.length;\n        for (int i = 0; i < nums.length; i++) {\n            sum = sum + i - nums[i];\n        }\n        return sum;\n    }",
       "prev_code": "public int missingNumber(int[] nums) {\n        long ans = nums.length;\n        for (int i = 0; i < nums.length; i++) {\n            ans = ans + i - nums[i];\n        }\n        return Math.toIntExact(ans);\n    }",
-      "mastery": "strong",
-      "pass": 3
+      "mastery": "weak",
+      "pass": 4
     }
   ],
   "hints": [
@@ -110,6 +110,19 @@
       "space_complexity": "O(1)",
       "optimal": true,
       "notes": "① 与上一轮对比：仍是差值累加，把 `ans` 初始化为 `nums.length`，循环中执行 `ans += i - nums[i]`；它等价于「[0,n] 的总和 − 数组总和」，复杂度 O(n) / O(1)。\n\n② 这次为什么想起来：完整范围只缺一个数，因此总和之差必然就是缺失值；`ans` 先包含右端点 n，再逐项抵消 0..n-1 与数组值，不需要额外哈希集合。\n\n③ 掌握度判定：本次没有算法提示或讨论，首次提交 Accepted，判为较强。\n\n④ 下一步提醒：当前 n≤10^4，int 求和安全；若未来范围更大，可改用 XOR 方法避免总和溢出。"
+    },
+    {
+      "pass": 4,
+      "date": "2026-09-28",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "122/122",
+      "approach": "求和（差值累加）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "与一刷最近一次的求和差分写法相同，时间和额外空间仍为 O(n)/O(1)；本次将累计变量用 int，一刷曾用 long 与 Math.toIntExact 防溢出。独立推演过程未记录，不能据此推断为何想起；本地 12 项通过、在线一次 Accepted，但选题后已看到分类方向提示，按较弱掌握记录。可对照一刷原地交换写法在空间和代码复杂度上的取舍。"
     }
   ]
 }
