@@ -20,20 +20,20 @@
   "patterns": [],
   "submissions": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-28",
       "verdict": "Accepted",
-      "testcases": "",
+      "testcases": "33/33",
       "runtime_ms": null,
-      "memory_bytes": 70120000,
+      "memory_bytes": 70156000,
       "approach": "递归分治：两侧搜索合并",
       "time_complexity": "O(n)",
       "space_complexity": "O(h)",
       "optimal": true,
-      "notes": "**与一刷对比**：思路与写法一致（后序递归分治：左右两侧搜索结果合并），和归档版本代码基本相同。\n\n**关键点都处理对了**：① 返回值语义是「这棵子树里找到的 p、q 或已确定的 LCA」；② 三个出口齐备——`root == null` 返回 null、`root == p || root == q` 立刻返回 root（找到就停，不往子树里钻）；③ 递归回来后先判 `left != null && right != null` → 当前节点即答案，否则把非空的那一侧往上带。本地示例 3 + 边界 5（左链祖先/右链自身/不平衡/极值/空树）全过，一次提交 Accepted（33/33）。\n\n**掌握度依据**：提交前你问了「为什么不能把『两边都不为空』放在最前面」，我把递归出口与后序判断的时机差异完整讲了一遍（含具体调用顺序推演），属于探讨过 → 按较弱记，2 天后再见。",
-      "code": "    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n        if (root == null) {\n            return null;\n        }\n        if (root == p || root == q) {\n            return root;\n        }\n        TreeNode left = lowestCommonAncestor(root.left, p, q);\n        TreeNode right = lowestCommonAncestor(root.right, p, q);\n        if (left != null && right != null) return root;\n        if (left == null) {\n            return right;\n        }\n        return left;\n    }",
+      "notes": "与上一轮对比：思路仍是递归搜索左右子树并合并命中结果，时间 O(n)、递归栈 O(h) 不变；本次把单侧结果返回简化为 left == null ? right : left。\\n\\n回忆情况：提交前并非独立重写，无法确认能独立复现。\\n\\n掌握度依据：首次提交 Accepted（33/33），但本次未独立完成，按较弱记录，复习间隔重置为 2 天。\\n\\n下一步提醒：下次闭卷先说清递归返回值是当前子树找到的 p/q，或已确定的最近公共祖先。以 root=3、p=5、q=1 推演：左侧返回 5、右侧返回 1，两侧都命中后返回 3。",
+      "code": "public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n        if (root == null) {\n            return null;\n        }\n        if (p == root || q == root) {\n            return root;\n        }\n        TreeNode left = lowestCommonAncestor(root.left, p, q);\n        TreeNode right = lowestCommonAncestor(root.right, p, q);\n        if (left != null && right != null) {\n            return root;\n        }\n        return left == null ? right : left;\n    }",
       "prev_code": "public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n        if (root == null) {\n            return null;\n        }\n        if (root == p || root == q) {\n            return root;\n        }\n        TreeNode left = lowestCommonAncestor(root.left, p, q);\n        TreeNode right = lowestCommonAncestor(root.right, p, q);\n        if (left == null) {\n            return right;\n        }\n        if (right == null) {\n            return left;\n        }\n        return root;\n    }\n",
       "mastery": "weak",
-      "pass": 1
+      "pass": 2
     }
   ],
   "hints": [
@@ -53,6 +53,19 @@
       "space_complexity": "O(h)",
       "optimal": true,
       "notes": "**与一刷对比**：思路与写法一致（后序递归分治：左右两侧搜索结果合并），和归档版本代码基本相同。\n\n**关键点都处理对了**：① 返回值语义是「这棵子树里找到的 p、q 或已确定的 LCA」；② 三个出口齐备——`root == null` 返回 null、`root == p || root == q` 立刻返回 root（找到就停，不往子树里钻）；③ 递归回来后先判 `left != null && right != null` → 当前节点即答案，否则把非空的那一侧往上带。本地示例 3 + 边界 5（左链祖先/右链自身/不平衡/极值/空树）全过，一次提交 Accepted（33/33）。\n\n**掌握度依据**：提交前你问了「为什么不能把『两边都不为空』放在最前面」，我把递归出口与后序判断的时机差异完整讲了一遍（含具体调用顺序推演），属于探讨过 → 按较弱记，2 天后再见。"
+    },
+    {
+      "pass": 2,
+      "date": "2026-09-28",
+      "mastery": "weak",
+      "firstTry": true,
+      "verdict": "Accepted",
+      "testcases": "33/33",
+      "approach": "递归分治：两侧搜索合并",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "optimal": true,
+      "notes": "与上一轮对比：思路仍是递归搜索左右子树并合并命中结果，时间 O(n)、递归栈 O(h) 不变；本次把单侧结果返回简化为 left == null ? right : left。\\n\\n回忆情况：提交前并非独立重写，无法确认能独立复现。\\n\\n掌握度依据：首次提交 Accepted（33/33），但本次未独立完成，按较弱记录，复习间隔重置为 2 天。\\n\\n下一步提醒：下次闭卷先说清递归返回值是当前子树找到的 p/q，或已确定的最近公共祖先。以 root=3、p=5、q=1 推演：左侧返回 5、右侧返回 1，两侧都命中后返回 3。"
     }
   ]
 }

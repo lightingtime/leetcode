@@ -555,10 +555,10 @@
       "title": "二叉树的最近公共祖先",
       "category": "树与二叉树",
       "first_pass_date": "2026-08-08",
-      "last_review_date": "2026-09-18",
-      "next_review_date": "2026-09-20",
+      "last_review_date": "2026-09-28",
+      "next_review_date": "2026-09-30",
       "interval_days": 2,
-      "review_count": 1,
+      "review_count": 2,
       "mastery": "weak",
       "consecutive_strong": 0,
       "mastered": false
