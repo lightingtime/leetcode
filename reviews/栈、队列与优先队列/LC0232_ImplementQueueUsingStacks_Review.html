@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC232 用栈实现队列 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 173</div>
+  <h1>LC232 · 用栈实现队列</h1>
+  <div class="sub">双栈惰性倒序 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 23/23</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 栈、队列与优先队列</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-09-30</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>232. 用栈实现队列 (Implement Queue using Stacks)</h1><p>&gt; <a href="https://leetcode.cn/problems/implement-queue-using-stacks/" rel="noopener">https://leetcode.cn/problems/implement-queue-using-stacks/</a></p><p>难度：Easy ｜ 分类：栈、队列与优先队列</p><p>标签：栈、设计、队列</p><h2>题目描述</h2><p>请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：</p><p>实现 MyQueue 类：</p><p>void push(int x) 将元素 x 推到队列的末尾</p><p>int pop() 从队列的开头移除并返回元素</p><p>int peek() 返回队列开头的元素</p><p>boolean empty() 如果队列为空，返回 true ；否则，返回 false</p><p>说明：</p><p>你 只能 使用标准的栈操作 —— 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。</p><p>你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</p><p>示例 1：</p><p>输入：</p><p>["MyQueue", "push", "push", "peek", "pop", "empty"]</p><p>[[], [1], [2], [], [], []]</p><p>输出：</p><p>[null, null, null, 1, 1, false]</p><p>解释：</p><p>MyQueue myQueue = new MyQueue();</p><p>myQueue.push(1); // queue is: [1]</p><p>myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)</p><p>myQueue.peek(); // return 1</p><p>myQueue.pop(); // return 1, queue is [2]</p><p>myQueue.empty(); // return false</p><p>提示：</p><p>1</p><p>最多调用 100 次 push、pop、peek 和 empty</p><p>假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）</p><p>进阶：</p><p>你能否实现每个操作均摊时间复杂度为 O(1) 的队列？换句话说，执行 n 个操作的总时间复杂度为 O(n) ，即使其中一个操作可能花费较长时间。</p><h2>示例</h2><ol><li>输入：</li></ol><p>输出：</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双栈惰性倒序</b></li>
+        <li><span>复杂度</span><b>均摊 O(1)，单次搬运最坏 O(n) · O(n)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 双栈惰性倒序</h3>
+    <p><span class="chip">时间 均摊 O(1)，单次搬运最坏 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 23/23</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0232_ImplementQueueUsingStacks.java · 双栈惰性倒序</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">static</span> <span class="tk-k">class</span> <span class="tk-t">MyQueue</span> {
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack1;
+        <span class="tk-t">Deque</span>&lt;<span class="tk-t">Integer</span>&gt; stack2;
+        <span class="tk-k">public</span> <span class="tk-t">MyQueue</span>() {
+            stack1 = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+            stack2 = <span class="tk-k">new</span> <span class="tk-t">ArrayDeque</span>&lt;&gt;();
+        }
+        <span class="tk-k">public</span> <span class="tk-k">void</span> <span class="tk-f">push</span>(<span class="tk-k">int</span> x) {
+            stack1.<span class="tk-f">push</span>(x);
+        }
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">pop</span>() {
+            <span class="tk-k">if</span> (stack2.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">while</span> (!stack1.<span class="tk-f">isEmpty</span>()) {
+                    stack2.<span class="tk-f">push</span>(stack1.<span class="tk-f">pop</span>());
+                }
+            }
+            <span class="tk-k">return</span> stack2.<span class="tk-f">pop</span>();
+        }
+        <span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">peek</span>() {
+            <span class="tk-k">if</span> (stack2.<span class="tk-f">isEmpty</span>()) {
+                <span class="tk-k">while</span> (!stack1.<span class="tk-f">isEmpty</span>()) {
+                    stack2.<span class="tk-f">push</span>(stack1.<span class="tk-f">pop</span>());
+                }
+            }
+            <span class="tk-k">return</span> stack2.<span class="tk-f">peek</span>();
+        }
+        <span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">empty</span>() {
+            <span class="tk-k">return</span> stack1.<span class="tk-f">isEmpty</span>() &amp;&amp; stack2.<span class="tk-f">isEmpty</span>();
+        }
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：两个栈各自只能后进先出；用输入栈收集新元素，用输出栈提供队首。只有输出栈为空时才把输入栈逐个弹出并压入输出栈，倒序后最早入队的元素位于栈顶。</p><p>关键设计：push 只压入输入栈；pop 与 peek 先检查输出栈，只有它为空才执行搬运。搬运后输入栈为空，输出栈里的已有元素继续排在新元素前面，因此不会打乱队列顺序。empty 只需同时检查两个栈。</p><p>具体推演：依次 push(1)、push(2) 后，输入栈从顶到底是 [2,1]，输出栈为空。peek 触发搬运，输出栈从顶到底成为 [1,2]，返回 1；随后 pop 弹出 1。</p><p>边界与细节：题目保证 pop/peek 时队列非空，所以不需要定义空队列的返回值。重复 peek 不移除队首；输出栈未空时新 push 不触发搬运，既有队首仍保持优先。</p><p>复杂度：每个元素最多从输入栈弹出并压入输出栈一次，之后最多再从输出栈弹出一次，所以 n 次操作总计 O(n)，均摊每次 O(1)；两个栈合计保存队列中的全部元素，空间 O(n)。队列需保存 n 个元素，因此空间量级不可再降。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>23/23 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">23/23</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">均摊 O(1)，单次搬运最坏 O(n) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 栈、队列与优先队列</h3><div class="quote">看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 173 · implement-queue-using-stacks</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">输出栈非空时保留队首顺序，仅在为空时将输入栈整体倒入。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 栈、队列与优先队列</h2><ul class="similar-list"><li><a href="../栈、队列与优先队列/LC0020_ValidParentheses_Review.html">LC20 · 有效的括号</a><span class="chip">EASY</span></li><li><a href="../栈、队列与优先队列/LC0094_BinaryTreeInorderTraversal_Review.html">LC94 · 二叉树的中序遍历</a><span class="chip">EASY</span></li><li><a href="../栈、队列与优先队列/LC0155_MinStack_Review.html">LC155 · 最小栈</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0215_KthLargestElementInAnArray_Review.html">LC215 · 数组中的第K个最大元素</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0347_TopKFrequentElements_Review.html">LC347 · 前 K 个高频元素</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0084_LargestRectangleInHistogram_Review.html">LC84 · 柱状图中最大的矩形</a><span class="chip">HARD</span></li><li><a href="../栈、队列与优先队列/LC0394_DecodeString_Review.html">LC394 · 字符串解码</a><span class="chip">MEDIUM</span></li><li><a href="../栈、队列与优先队列/LC0621_TaskScheduler_Review.html">LC621 · 任务调度器</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/232_implement-queue-using-stacks/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E6%A0%88%E3%80%81%E9%98%9F%E5%88%97%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/LC0232_ImplementQueueUsingStacks.java">src/栈、队列与优先队列/LC0232_ImplementQueueUsingStacks.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-09-30
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

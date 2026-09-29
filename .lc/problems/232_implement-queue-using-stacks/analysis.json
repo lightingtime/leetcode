@@ -1,0 +1,41 @@
+{
+  "seq": 173,
+  "id": "232",
+  "slug": "implement-queue-using-stacks",
+  "title": "用栈实现队列",
+  "category": "栈、队列与优先队列",
+  "date": "2026-09-30",
+  "verdict": "Accepted",
+  "testcases": "23/23",
+  "runtime_ms": null,
+  "memory_bytes": 43316000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双栈惰性倒序",
+  "dp_subtype": "",
+  "approach_detail": "问题本质：两个栈各自只能后进先出；用输入栈收集新元素，用输出栈提供队首。只有输出栈为空时才把输入栈逐个弹出并压入输出栈，倒序后最早入队的元素位于栈顶。\\n\\n关键设计：push 只压入输入栈；pop 与 peek 先检查输出栈，只有它为空才执行搬运。搬运后输入栈为空，输出栈里的已有元素继续排在新元素前面，因此不会打乱队列顺序。empty 只需同时检查两个栈。\\n\\n具体推演：依次 push(1)、push(2) 后，输入栈从顶到底是 [2,1]，输出栈为空。peek 触发搬运，输出栈从顶到底成为 [1,2]，返回 1；随后 pop 弹出 1。\\n\\n边界与细节：题目保证 pop/peek 时队列非空，所以不需要定义空队列的返回值。重复 peek 不移除队首；输出栈未空时新 push 不触发搬运，既有队首仍保持优先。\\n\\n复杂度：每个元素最多从输入栈弹出并压入输出栈一次，之后最多再从输出栈弹出一次，所以 n 次操作总计 O(n)，均摊每次 O(1)；两个栈合计保存队列中的全部元素，空间 O(n)。队列需保存 n 个元素，因此空间量级不可再降。",
+  "time_complexity": "均摊 O(1)，单次搬运最坏 O(n)",
+  "space_complexity": "O(n)",
+  "notes": "输出栈非空时保留队首顺序，仅在为空时将输入栈整体倒入。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-09-30",
+      "verdict": "Accepted",
+      "testcases": "23/23",
+      "runtime_ms": null,
+      "memory_bytes": 43316000,
+      "approach": "双栈惰性倒序",
+      "time_complexity": "均摊 O(1)，单次搬运最坏 O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "输出栈非空时保留队首顺序，仅在为空时将输入栈整体倒入。",
+      "code": "static class MyQueue {\n        Deque<Integer> stack1;\n        Deque<Integer> stack2;\n        public MyQueue() {\n            stack1 = new ArrayDeque<>();\n            stack2 = new ArrayDeque<>();\n        }\n        public void push(int x) {\n            stack1.push(x);\n        }\n        public int pop() {\n            if (stack2.isEmpty()) {\n                while (!stack1.isEmpty()) {\n                    stack2.push(stack1.pop());\n                }\n            }\n            return stack2.pop();\n        }\n        public int peek() {\n            if (stack2.isEmpty()) {\n                while (!stack1.isEmpty()) {\n                    stack2.push(stack1.pop());\n                }\n            }\n            return stack2.peek();\n        }\n        public boolean empty() {\n            return stack1.isEmpty() && stack2.isEmpty();\n        }\n    }"
+    }
+  ],
+  "hints": [
+    "看到「下一个更大/更小元素」、括号匹配、单调性，先想单调栈；Top-K / 合并 K 路，先想优先队列。"
+  ]
+}
