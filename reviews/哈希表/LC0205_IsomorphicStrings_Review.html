@@ -56,7 +56,7 @@
     }</pre></div>
     
   </div></section>
-  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong>：需要检查每种源字符始终对应同一种目标字符，同时不同源字符不能共用目标字符。按位置扫描，分别维护源到目标、目标到源的映射，能在每个字符处立即发现冲突。</p><p><strong>关键设计决策</strong>：</p><ul><li>保存源字符到目标字符，检查同一源字符后续是否仍映射到原目标。</li><li>保存目标字符到源字符，检查映射是否一对一。</li><li>新字符对两边都登记；已见字符必须与两张表中的关系同时一致。</li></ul><p><strong>具体推演</strong>：输入 、：</p><ol><li>下标 0：登记  和 。</li><li>下标 1：登记  和 。</li><li>下标 2：再次看到  与 ，两张表的映射都一致，返回 true。</li></ol><p>若输入 、，下标 0 登记 ；下标 1 的目标  已反向映射到 ，但当前源字符是 ，因此返回 false。</p><p><strong>边界与复杂度</strong>：长度为 1 时正常登记一对字符；非字母 ASCII 字符也可作为哈希键。扫描 n 个位置，时间 O(n)。ASCII 字符总数固定，最多记录 128 种字符映射，额外空间 O(1)。最坏情况下必须检查到末尾才能确认所有位置关系一致，因此时间下界为 Ω(n)。</p></div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质与解法选择理由：要保证每个源字符总映射到同一个目标字符，并且两个不同源字符不能映射到同一目标字符。按位置遍历，用源到目标、目标到源两张映射及时发现冲突。</p><p>关键设计决策：第一张表检查已有源字符是否仍对应当前目标字符；反向表检查当前目标字符是否已属于另一个源字符。两侧都一致才继续。</p><p>具体推演：s 为 egg，t 为 add。下标 0 登记 e 到 a；下标 1 登记 g 到 d；下标 2 再次检查 g 到 d，两张表都一致，返回 true。若 s 为 ab、t 为 cc，下标 0 登记 a 到 c；下标 1 发现 c 已反向对应 a，但当前源字符为 b，因此返回 false。</p><p>边界与复杂度：长度为 1 时也会登记并验证一对字符；任意 ASCII 符号都能作为映射键。扫描 n 个字符，时间 O(n)。ASCII 字符集固定，最多保存 128 个字符映射，额外空间 O(1)。最坏情况下必须检查所有位置才能确认映射一致，因此时间下界为 Ω(n)。</p></div></section>
   <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>48/48 用例一次通过。</p></div></div></div></section>
   
   <section><h2>分析结果</h2>
