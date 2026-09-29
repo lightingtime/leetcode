@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-30",
-  "current_seq": 176,
+  "current_seq": 177,
   "done": [
     {
       "seq": 1,
@@ -1926,6 +1926,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "本地 7 项用例通过后一次在线提交 Accepted。先前本地回归暴露频次到长度的换算错误，修正后提交；因经历过错误分析与讨论，掌握度记为较弱。"
+    },
+    {
+      "seq": 177,
+      "id": "392",
+      "title": "判断子序列",
+      "slug": "is-subsequence",
+      "category": "双指针与滑动窗口",
+      "date": "2026-09-30",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "用两个游标顺序扫描：仅在当前字符相等时推进 s 的游标，每次匹配都保留 t 中最早可用的位置。"
     }
   ],
   "error_habits": [

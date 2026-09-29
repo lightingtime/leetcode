@@ -1,0 +1,52 @@
+{
+  "id": "392",
+  "slug": "is-subsequence",
+  "title": "Is Subsequence",
+  "titleCn": "判断子序列",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/is-subsequence/",
+  "tags": [
+    "Two Pointers",
+    "String",
+    "Dynamic Programming"
+  ],
+  "tagsCn": [
+    "双指针",
+    "字符串",
+    "动态规划"
+  ],
+  "category": "动态规划",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"abc\""
+        },
+        {
+          "name": "t",
+          "value": "\"ahbgdc\""
+        }
+      ],
+      "output": "true",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"axc\""
+        },
+        {
+          "name": "t",
+          "value": "\"ahbgdc\""
+        }
+      ],
+      "output": "false",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"abc\"\n\"ahbgdc\"\n\"axc\"\n\"ahbgdc\"",
+  "javaSnippet": "class Solution {\n    public boolean isSubsequence(String s, String t) {\n        \n    }\n}",
+  "fetchedAt": "2026-09-29T17:32:50.262Z"
+}

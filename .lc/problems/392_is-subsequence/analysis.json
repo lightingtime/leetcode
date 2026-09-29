@@ -1,0 +1,41 @@
+{
+  "seq": 177,
+  "id": "392",
+  "slug": "is-subsequence",
+  "title": "判断子序列",
+  "category": "双指针与滑动窗口",
+  "date": "2026-09-30",
+  "verdict": "Accepted",
+  "testcases": "23/23",
+  "runtime_ms": null,
+  "memory_bytes": 43280000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双指针线性扫描",
+  "dp_subtype": "",
+  "approach_detail": "问题本质与解法选择理由：判断 s 能否按原顺序从 t 中选出字符。扫描 t 时，匹配到 s 当前需要的字符就立即确认它；越早匹配，留给 s 后续字符的 t 后缀越长，因此贪心选择不会减少后续匹配机会。\n\n关键设计决策：i 指向 s 中下一个待匹配字符，j 指向 t 当前字符。相等时 i、j 都前进；不相等时只让 j 前进。扫描结束后，i 到达 s.length() 才表示全部匹配。对于 s=\"ab\"、t=\"acb\"，状态依次为 (i,j)=(0,0)，匹配 a 后为 (1,1)，跳过 c 后为 (1,2)，匹配 b 后为 (2,3)，结果为 true。\n\n边界与细节：s 为空时 i 已等于 s.length()，应返回 true；t 为空而 s 非空时循环不执行，返回 false。重复字符必须保持先后顺序，例如 s=\"aab\"、t=\"aaab\" 可以匹配；s=\"aba\"、t=\"baa\" 不能匹配。\n\n复杂度与下限：最坏情况下需要检查 t 的每个字符，时间 O(|t|)，额外空间 O(1)。判定任意输入都可能依赖 t 的末尾字符，因此线性扫描符合输入规模下的紧确上界。",
+  "time_complexity": "O(|t|)",
+  "space_complexity": "O(1)",
+  "notes": "用两个游标顺序扫描：仅在当前字符相等时推进 s 的游标，每次匹配都保留 t 中最早可用的位置。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-09-30",
+      "verdict": "Accepted",
+      "testcases": "23/23",
+      "runtime_ms": null,
+      "memory_bytes": 43280000,
+      "approach": "双指针线性扫描",
+      "time_complexity": "O(|t|)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "用两个游标顺序扫描：仅在当前字符相等时推进 s 的游标，每次匹配都保留 t 中最早可用的位置。",
+      "code": "public boolean isSubsequence(String s, String t) {\n        int i = 0, j = 0;\n        while (j < t.length()) {\n            if (i == s.length()) {\n                return true;\n            }\n            if (s.charAt(i) == t.charAt(j)) {\n                i++;\n                j++;\n            } else {\n                j++;\n            }\n        }\n        return i == s.length();\n    }"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

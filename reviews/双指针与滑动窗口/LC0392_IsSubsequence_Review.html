@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC392 判断子序列 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 177</div>
+  <h1>LC392 · 判断子序列</h1>
+  <div class="sub">双指针线性扫描 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 23/23</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 双指针与滑动窗口</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-09-30</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>392. 判断子序列 (Is Subsequence)</h1><p>&gt; <a href="https://leetcode.cn/problems/is-subsequence/" rel="noopener">https://leetcode.cn/problems/is-subsequence/</a></p><p>难度：Easy ｜ 分类：动态规划</p><p>标签：双指针、字符串、动态规划</p><h2>题目描述</h2><p>给定字符串 s 和 t ，判断 s 是否为 t 的子序列。</p><p>字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。</p><p>进阶：</p><p>如果有大量输入的 S，称作 S1, S2, ... , Sk 其中 k &gt;= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？</p><p>致谢：</p><p>特别感谢 @pbrother 添加此问题并且创建所有测试用例。</p><p>示例 1：</p><p>输入：s = "abc", t = "ahbgdc"</p><p>输出：true</p><p>示例 2：</p><p>输入：s = "axc", t = "ahbgdc"</p><p>输出：false</p><p>提示：</p><p>0</p><p>0</p><p>两个字符串都只由小写字符组成。</p><h2>示例</h2><ol><li>输入：s = "abc"，t = "ahbgdc"</li></ol><p>输出：true</p><ol><li>输入：s = "axc"，t = "ahbgdc"</li></ol><p>输出：false</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双指针线性扫描</b></li>
+        <li><span>复杂度</span><b>O(|t|) · O(1)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 双指针线性扫描</h3>
+    <p><span class="chip">时间 O(|t|)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.3 MB</span><span class="chip">用例 23/23</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0392_IsSubsequence.java · 双指针线性扫描</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isSubsequence</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>, j = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (j &lt; t.<span class="tk-f">length</span>()) {
+            <span class="tk-k">if</span> (i == s.<span class="tk-f">length</span>()) {
+                <span class="tk-k">return</span> <span class="tk-k">true</span>;
+            }
+            <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(i) == t.<span class="tk-f">charAt</span>(j)) {
+                i++;
+                j++;
+            } <span class="tk-k">else</span> {
+                j++;
+            }
+        }
+        <span class="tk-k">return</span> i == s.<span class="tk-f">length</span>();
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质与解法选择理由：判断 s 能否按原顺序从 t 中选出字符。扫描 t 时，匹配到 s 当前需要的字符就立即确认它；越早匹配，留给 s 后续字符的 t 后缀越长，因此贪心选择不会减少后续匹配机会。</p><p>关键设计决策：i 指向 s 中下一个待匹配字符，j 指向 t 当前字符。相等时 i、j 都前进；不相等时只让 j 前进。扫描结束后，i 到达 s.length() 才表示全部匹配。对于 s="ab"、t="acb"，状态依次为 (i,j)=(0,0)，匹配 a 后为 (1,1)，跳过 c 后为 (1,2)，匹配 b 后为 (2,3)，结果为 true。</p><p>边界与细节：s 为空时 i 已等于 s.length()，应返回 true；t 为空而 s 非空时循环不执行，返回 false。重复字符必须保持先后顺序，例如 s="aab"、t="aaab" 可以匹配；s="aba"、t="baa" 不能匹配。</p><p>复杂度与下限：最坏情况下需要检查 t 的每个字符，时间 O(|t|)，额外空间 O(1)。判定任意输入都可能依赖 t 的末尾字符，因此线性扫描符合输入规模下的紧确上界。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>23/23 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">23/23</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(|t|) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 177 · is-subsequence</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">用两个游标顺序扫描：仅在当前字符相等时推进 s 的游标，每次匹配都保留 t 中最早可用的位置。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/392_is-subsequence/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0392_IsSubsequence.java">src/双指针与滑动窗口/LC0392_IsSubsequence.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-09-30
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
