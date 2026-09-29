@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-21",
-  "current_seq": 171,
+  "updated": "2026-09-30",
+  "current_seq": 172,
   "done": [
     {
       "seq": 1,
@@ -1882,6 +1882,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "哨兵定段、先探尾再反转；本地先栽在「拿会被循环体改写的 tail.next 当循环判据」上（循环停不下来并 NPE），改成快照区间外后继后 62/62 一次提交 Accepted"
+    },
+    {
+      "seq": 172,
+      "id": "86",
+      "title": "分隔链表",
+      "slug": "partition-list",
+      "category": "链表",
+      "date": "2026-09-30",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "分别稳定收集小于 x 与大于等于 x 的节点，最后连接两段。"
     }
   ],
   "error_habits": [
@@ -3578,6 +3589,94 @@
         "链表"
       ],
       "last_seen": "2026-09-21"
+    },
+    {
+      "habit": "递归入口硬编码起点：外层双层循环本来要遍历每个格子当起点，循环体里却写成 dfs(matrix, 0, 0, -1)，循环变量 i、j 一次都没被使用，答案只反映从左上角出发的那条路径（示例1 [[9,9,4],[6,6,8],[2,1,1]] 实际 1、期望 4；其余 8 组恰好最长路径起点就是 (0,0) 而侥幸通过）；多起点枚举必须把当前下标传进递归，写完回看「外层循环变量在体内出现过吗」是最快的自检",
+      "count": 1,
+      "examples": [
+        "longest-increasing-path-in-a-matrix"
+      ],
+      "categories": [
+        "动态规划"
+      ],
+      "last_seen": "2026-09-21"
+    },
+    {
+      "habit": "迭代器 next 只 peek 栈顶而未消费当前元素，调用方 hasNext/next 循环会反复取到同一个整数，最终无限循环并 OOM；next 必须让当前迭代位置前进",
+      "count": 1,
+      "examples": [
+        "flatten-nested-list-iterator"
+      ],
+      "categories": [
+        "栈、队列与优先队列"
+      ],
+      "last_seen": "2026-09-22"
+    },
+    {
+      "habit": "合并重叠区间时直接覆盖当前右端点，未取两者的最大值，遇到被包含区间会错误缩小合并范围",
+      "count": 1,
+      "examples": [
+        "merge-intervals"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-09-22"
+    },
+    {
+      "habit": "网格回溯搜索失败后未撤销 visited 标记，导致失败分支污染后续起点或分支",
+      "count": 1,
+      "examples": [
+        "word-search"
+      ],
+      "categories": [
+        "回溯"
+      ],
+      "last_seen": "2026-09-24"
+    },
+    {
+      "habit": "旋转数组二分判断目标是否属于右段时用了 target <= nums[0]，把 target == nums[0] 误判进右段，搜索区间因此排除下标 0；最小复现 nums=[5,1,3], target=5 期望 0 实际 -1。相等边界要单独归属/处理，不能与「更小的一段」共用同一侧条件",
+      "count": 1,
+      "examples": [
+        "search-in-rotated-sorted-array"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-09-24"
+    },
+    {
+      "habit": "划分数组中，取左半最大值时对不存在的左半元素用了 Integer.MAX_VALUE 哨兵；左半空值应作为 max 的单位元，否则会污染 maxInMin。",
+      "count": 1,
+      "examples": [
+        "median-of-two-sorted-arrays"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-09-24"
+    },
+    {
+      "habit": "中位数奇偶分支把取余判断写成整除：用 (m+n)/2 != 0 判奇数，导致总长度为偶数时也走奇数分支，没有计算两侧中位数的平均。",
+      "count": 1,
+      "examples": [
+        "median-of-two-sorted-arrays"
+      ],
+      "categories": [
+        "数组与矩阵"
+      ],
+      "last_seen": "2026-09-24"
+    },
+    {
+      "habit": "分区链表重连时没有断开已处理节点的旧 next；小于 x 的尾节点接到 >= x 分区后可能形成环，需在每轮重连前保留后继并隔离当前节点，或在连接分区后正确终止尾节点",
+      "count": 1,
+      "examples": [
+        "partition-list"
+      ],
+      "categories": [
+        "linked-list"
+      ],
+      "last_seen": "2026-09-28"
     }
   ],
   "category_hints": {

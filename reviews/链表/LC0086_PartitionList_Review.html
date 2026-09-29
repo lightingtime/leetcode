@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC86 分隔链表 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 172</div>
+  <h1>LC86 · 分隔链表</h1>
+  <div class="sub">双指针分链 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 169/169</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 链表</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-09-30</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>86. 分隔链表 (Partition List)</h1><p>&gt; <a href="https://leetcode.cn/problems/partition-list/" rel="noopener">https://leetcode.cn/problems/partition-list/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：链表、双指针</p><h2>题目描述</h2><p>给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。</p><p>你应当 保留 两个分区中每个节点的初始相对位置。</p><p>示例 1：</p><p>输入：head = [1,4,3,2,5,2], x = 3</p><p>输出：[1,2,2,4,3,5]</p><p>示例 2：</p><p>输入：head = [2,1], x = 2</p><p>输出：[1,2]</p><p>提示：</p><p>链表中节点的数目在范围 [0, 200] 内</p><p>-100</p><p>-200</p><h2>示例</h2><ol><li>输入：head = [1,4,3,2,5,2]，x = 3</li></ol><p>输出：[1,2,2,4,3,5]</p><ol><li>输入：head = [2,1]，x = 2</li></ol><p>输出：[1,2]</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双指针分链</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 双指针分链</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 42.1 MB</span><span class="chip">用例 169/169</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0086_PartitionList.java · 双指针分链</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">partition</span>(<span class="tk-t">ListNode</span> head, <span class="tk-k">int</span> x) {
+        <span class="tk-t">ListNode</span> dummy1 = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(-<span class="tk-n">1</span>);
+        <span class="tk-t">ListNode</span> dummy2 = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(-<span class="tk-n">1</span>);
+        <span class="tk-t">ListNode</span> p1 = dummy1, p2 = dummy2, p = head;
+        <span class="tk-k">while</span> (p != <span class="tk-k">null</span>) {
+            <span class="tk-k">if</span> (p.val &lt; x) {
+                p1.next = p;
+                p1 = p1.next;
+            } <span class="tk-k">else</span> {
+                p2.next = p;
+                p2 = p2.next;
+            }
+            p = p.next;
+        }
+        p2.next = <span class="tk-k">null</span>;
+        p1.next = dummy2.next;
+        <span class="tk-k">return</span> dummy1.next;
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：按节点值与 x 的关系稳定划分链表；每个节点都要检查，因此至少需要 O(n) 时间。</p><p>设计：用两个哑节点分别构造 &lt; x 和 &gt;= x 两条链，各自尾指针只向后追加当前节点；遍历结束后先将 &gt;= x 链尾置空，再把两条链连接。</p><p>边界推演（2, 1, x=2）：读到 2 时追加到 &gt;= 链；读到 1 时追加到 &lt; 链；遍历完把 &lt; 链尾连到 &gt;= 链头，得到 1→2，原分区内顺序不变。若所有值都等于 x，&lt; 链为空，结果直接从 &gt;= 链头开始。空输入时两链均空，返回空。</p><p>复杂度：遍历每个节点一次，时间 O(n)；只用固定数量哑节点和指针，额外空间 O(1)。必须查看每个节点才能判断所属分区，所以时间已达下限。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>分区链表重连时没有断开已处理节点的旧 next；小于 x 的尾节点接到 &gt;= x 分区后可能形成环，需在每轮重连前保留后继并隔离当前节点，或在连接分区后正确终止尾节点</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>169/169 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>分区重连前保留后继并隔离节点</h3><p>原地把链表节点分到多个结果链时，不能边遍历边覆盖 next 后仍依赖旧链推进；先保存待处理节点的原后继，再将当前节点接入对应尾部并断开旧链接，最后拼接各分区，避免遗漏节点或形成环。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">169/169</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 42.1 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 链表</h3><div class="quote">看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。</div>
+      <h3>错误习惯复盘</h3><p><b>分区链表重连时没有断开已处理节点的旧 next；小于 x 的尾节点接到 &gt;= x 分区后可能形成环，需在每轮重连前保留后继并隔离当前节点，或在连接分区后正确终止尾节点</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 172 · partition-list</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">分别稳定收集小于 x 与大于等于 x 的节点，最后连接两段。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 链表</h2><ul class="similar-list"><li><a href="../链表/LC0021_MergeTwoSortedLists_Review.html">LC21 · 合并两个有序链表</a><span class="chip">EASY</span></li><li><a href="../链表/LC0206_ReverseLinkedList_Review.html">LC206 · 反转链表</a><span class="chip">EASY</span></li><li><a href="../链表/LC0002_AddTwoNumbers_Review.html">LC2 · 两数相加</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0146_LruCache_Review.html">LC146 · LRU 缓存</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0023_MergeKSortedLists_Review.html">LC23 · 合并 K 个升序链表</a><span class="chip">HARD</span></li><li><a href="../链表/LC0114_FlattenBinaryTreeToLinkedList_Review.html">LC114 · 二叉树展开为链表</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0116_PopulatingNextRightPointersInEachNode_Review.html">LC116 · 填充每个节点的下一个右侧节点指针</a><span class="chip">MEDIUM</span></li><li><a href="../链表/LC0138_CopyListWithRandomPointer_Review.html">LC138 · 随机链表的复制</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/86_partition-list/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E9%93%BE%E8%A1%A8/LC0086_PartitionList.java">src/链表/LC0086_PartitionList.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-09-30
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

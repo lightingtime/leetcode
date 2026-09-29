@@ -1,0 +1,54 @@
+{
+  "seq": 172,
+  "id": "86",
+  "slug": "partition-list",
+  "title": "分隔链表",
+  "category": "链表",
+  "date": "2026-09-30",
+  "verdict": "Accepted",
+  "testcases": "169/169",
+  "runtime_ms": null,
+  "memory_bytes": 44156000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双指针分链",
+  "dp_subtype": "",
+  "approach_detail": "问题本质：按节点值与 x 的关系稳定划分链表；每个节点都要检查，因此至少需要 O(n) 时间。\\n\\n设计：用两个哑节点分别构造 < x 和 >= x 两条链，各自尾指针只向后追加当前节点；遍历结束后先将 >= x 链尾置空，再把两条链连接。\\n\\n边界推演（2, 1, x=2）：读到 2 时追加到 >= 链；读到 1 时追加到 < 链；遍历完把 < 链尾连到 >= 链头，得到 1→2，原分区内顺序不变。若所有值都等于 x，< 链为空，结果直接从 >= 链头开始。空输入时两链均空，返回空。\\n\\n复杂度：遍历每个节点一次，时间 O(n)；只用固定数量哑节点和指针，额外空间 O(1)。必须查看每个节点才能判断所属分区，所以时间已达下限。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "分别稳定收集小于 x 与大于等于 x 的节点，最后连接两段。",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "分区链表重连时没有断开已处理节点的旧 next；小于 x 的尾节点接到 >= x 分区后可能形成环，需在每轮重连前保留后继并隔离当前节点，或在连接分区后正确终止尾节点",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "分区重连前保留后继并隔离节点",
+      "text": "原地把链表节点分到多个结果链时，不能边遍历边覆盖 next 后仍依赖旧链推进；先保存待处理节点的原后继，再将当前节点接入对应尾部并断开旧链接，最后拼接各分区，避免遗漏节点或形成环。",
+      "category": "链表",
+      "problem": "partition-list",
+      "date": "2026-09-28"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-09-30",
+      "verdict": "Accepted",
+      "testcases": "169/169",
+      "runtime_ms": null,
+      "memory_bytes": 44156000,
+      "approach": "双指针分链",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "分别稳定收集小于 x 与大于等于 x 的节点，最后连接两段。",
+      "code": "public ListNode partition(ListNode head, int x) {\n        ListNode dummy1 = new ListNode(-1);\n        ListNode dummy2 = new ListNode(-1);\n        ListNode p1 = dummy1, p2 = dummy2, p = head;\n        while (p != null) {\n            if (p.val < x) {\n                p1.next = p;\n                p1 = p1.next;\n            } else {\n                p2.next = p;\n                p2 = p2.next;\n            }\n            p = p.next;\n        }\n        p2.next = null;\n        p1.next = dummy2.next;\n        return dummy1.next;\n    }"
+    }
+  ],
+  "hints": [
+    "看到链表题，先想哨兵节点（dummy）、快慢指针、递归三件套。"
+  ]
+}
