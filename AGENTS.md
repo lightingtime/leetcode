@@ -28,7 +28,7 @@ Java 21 刷题仓库（IntelliJ IDEA 打开），170 题一刷 + 间隔二刷。
 2. 讲解与复盘禁止用「隐含 / 显然 / 自然」带过关键逻辑：必须配 2~3 个元素的具体输入逐层推演状态变化（approach_detail 与复盘页同样要求）。
 3. 每题「已完成」只在 lc-submit 确认 Accepted 后写入 `progress.json`；拉题失败或题目需会员时按 `order.json` 跳到下一题，不标记完成。
 4. 本地测试用 `node ".agents/skills/lc-practice/scripts/run_tests.js" --file src/<文件>.java`（默认紧凑输出，失败自动展开；需完整输出加 `--full`），或用户在 IDEA 里跑 `main`。测试失败走 lc-analyze，通过走 lc-submit。
-5. Accepted 后收尾走一条命令 `node ".agents/skills/lc-submit/scripts/finish.js" --seq N --approach ... --time ... --space ... --approachDetail ...`（一刷/二刷自动判别；内部完成记录 + 归档 + 复盘页 + 打卡 + commit + push）。思路拆解必写（问题本质与解法选择理由、关键设计决策、边界细节、复杂度下限论证）；讨论中确认过的关键注释由 Codex 在跑 finish 之前补进提交区代码；用户事后又改代码用 `finish.js --code-only` 同步，不重写判题日期。推送失败时明确报告失败并保留本地提交，不把本题汇报为已推送。
+5. Accepted 后收尾走一条命令 `node ".agents/skills/lc-submit/scripts/finish.js" --seq N --approach ... --time ... --space ... --approachDetail ...`（一刷/二刷自动判别；内部完成记录 + 归档 + 复盘页 + 打卡 + 将仓库内全部非忽略改动一并 commit + push）。思路拆解必写（问题本质与解法选择理由、关键设计决策、边界细节、复杂度下限论证）；讨论中确认过的关键注释由 Codex 在跑 finish 之前补进提交区代码；用户事后又改代码用 `finish.js --code-only` 同步，不重写判题日期。推送失败时明确报告失败并保留本地提交，不把本题汇报为已推送。
 6. 复习轮（二刷）走 lc-review：Accepted 后调 `review.js done` 写 `analysis.json` 的 `reviews` + 更新 `review_state.json`，**不覆盖 `progress.json` 的一刷事实**（仅 optimal 可更新）。掌握度：一次 AC 且无探讨 = 较强；探讨过/非一次 AC = 较弱。
 7. 错误习惯只记录算法思路/边界/逻辑类问题；环境配置、编译错误、占位未实现不计入。
 8. 新增文件按类别放进 `src/`、`reviews/`、`tools/`、`.lc/`、`.agents/`，不要堆在仓库根目录。

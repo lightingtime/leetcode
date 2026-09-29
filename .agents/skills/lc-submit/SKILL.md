@@ -9,7 +9,7 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
 
 - 项目：仓库根目录；状态目录：`仓库根目录\.lc`
 - 依赖 `lc-practice` 的脚本：`.agents/skills/lc-practice/scripts/run_tests.js`、`update_state.js`
-- **Accepted 后的收尾一条命令**：`scripts/finish.js`（记录 + 套路 + 归档 + 复盘页 + 打卡 + commit + push 到当前分支 upstream；`--code-only` 只同步代码）
+- **Accepted 后的收尾一条命令**：`scripts/finish.js`（记录 + 套路 + 归档 + 复盘页 + 打卡 + 全仓库改动 commit + push 到当前分支 upstream；`--code-only` 也同步并推送全仓库改动）
 
 ## 上下文纪律（省 token，必守）
 
@@ -47,8 +47,8 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
      ```
 
      - 脚本自动判别一刷/二刷（`progress.json` 已有该 seq → 走 `review.js done`，此时 `--mastery` 必填）；提交区代码由脚本从文件自行提取，**不要把代码贴进命令行**。
-     - 内部顺序：清理占位注释 → 本地测试（不通过就中止且不写任何状态）→ 记录（含代码）→ 套路入库 → 归档 → 复盘页 → 打卡（含 `build_site.js`）→ 只提交本题相关文件 → 推送当前分支的配置 upstream；归档位已有旧版会先报错，确认覆盖再加 `--overwrite-archive`。
-     - 推送成功以脚本明确输出「已推送到 <upstream>」为准。提交成功但推送失败时，脚本报错并保留本地提交，修复连接或权限后再 push；没有 upstream 时按报错配置跟踪分支。`--dry-run` 显示提交/推送计划；`--no-commit` 跳过提交与推送，仅用于多写法暂存；用时/内存/用例数从 `submit.js` 的输出里取，不要编。
+     - 内部顺序：清理占位注释 → 本地测试（不通过就中止且不写任何状态）→ 记录（含代码）→ 套路入库 → 归档 → 复盘页 → 打卡（含 `build_site.js`）→ 将仓库内全部非忽略改动一并提交 → 推送当前分支的配置 upstream；包括已有的暂存、已跟踪修改和未跟踪仓库文件。归档位已有旧版会先报错，确认覆盖再加 `--overwrite-archive`。
+     - 推送成功以脚本明确输出「已推送到 <upstream>」为准。提交成功但推送失败时，脚本报错并保留本地提交，修复连接或权限后再 push；没有 upstream 时按报错配置跟踪分支。`--dry-run` 显示全仓库提交/推送计划；`--no-commit` 跳过提交与推送，仅用于多写法暂存；用时/内存/用例数从 `submit.js` 的输出里取，不要编。
    - **完整思路拆解（每题必做，一次 AC 也不能省略）**——`--approachDetail` 必写四块：① 问题本质与解法选择理由；② 关键设计决策（状态定义、终止条件、选择/撤销、去重/剪枝）；③ 边界与细节（典型边界、约束外情况）；④ 复杂度与「为什么是最优/可接受」的下限论证。只写「解法名 + 复杂度」视为偷懒。
      - 写法：轻量 Markdown（空行分段；`- ` / `1. ` 列表；行内代码；`**加粗**`）；具体 case 推演单独成段、用列表逐层展开；存在「编号/下标 → 变量 → 语义」「状态 → 转移结果」映射时用 Markdown 表格逐行展示并配一个小输入；公式要说明每个变量的含义。
    - **子类型记录**：分类是「动态规划」时，收尾必须加 `--dpSubtype <子类型>`（线性/区间/树形/背包/状态机/数位/状压），且 approachDetail 的状态定义、转移、填表顺序要与该子类型套路对应（速查表见 lc-practice 的 `references/dp-subtypes.md`）。
@@ -62,13 +62,13 @@ description: 力扣提交与复盘。当用户测试通过后说「提交」「�
    - **讨论中形成的关键注释由 Codex 补进代码（用户明确要求）**：讲解/探讨（lc-guide、lc-analyze）确认过的参数语义、循环与边界不变量、易错点理由，收尾前由 Codex 直接补进提交区代码——一行一条「精确定义」式注释，只加在易错与曾错点，正确直白的代码保持无注释，禁止行尾注释与成段解释。注释必须在跑 `finish.js` **之前**补完（它保存的代码就是归档版与复盘页展示的版本）。
    - **Accepted 后用户又改代码（必做同步）**：本地测试通过即视为完成，**不要求重新提交力扣**；用
      `node ".agents/skills/lc-submit/scripts/finish.js" --seq <seq> --code-only [--approach "<原写法名>"]`
-     同步最新提交区代码（旧代码自动进 `prev_code`，判题日期不动）并重生成复盘页 + commit。
+     同步最新提交区代码（旧代码自动进 `prev_code`，判题日期不动），重生成复盘页，并提交、推送仓库内全部非忽略改动。
    - 存储约定：`progress.json` 只留精简完成索引；判题结果、复杂度、错误习惯等明细写入 `.lc/problems/{题号}_{slug}/analysis.json`（查看用 `update_state.js show --seq <seq>`，不要整篇 dump）；不同解法才追加 `submissions`，同解法的代码微调只覆盖代码字段。
    - 多写法等待约定（用户明确要求）：用户说「先提交 X 写法」时，`finish.js --no-commit` 只记录判题结果与最优性，**暂缓归档 / 复盘 / 打卡 / 收尾**；等所有写法写完，最后统一收尾一次，复盘页按「写法 1 / 写法 2 …」逐一呈现（`generate_review.js` 已支持）。
    - **收尾前核对 submissions 不缺代码（必做）**：任何写法缺 `code` 都用 `git log --follow -- <旧路径>` + `git show <commit>:<路径>` 从历史找回写入（旧版存 `prev_code`）；禁止复盘页出现「写法 N 无代码」，禁止留空、禁止让用户自己翻 git。
    - 打卡与进度：`finish.js` 内部已跑 `checkin`（重新生成 `reviews/index.html`），输出含完成题数 X/170、打卡天数、剩余天数与需日均量（目标：8.30 前刷完一刷、9.15 前完成二刷），把这部分汇报给用户。
    - **报告范围**：只写算法相关（思路、踩坑与修复、判题、错误习惯、复杂度）；工具/环境问题（提交脚本、cookie、IDE、判题包装、编译包装等）**一律不写进报告**，也不进 analysis.json / progress.json 的笔记。解题过程时间线只记真实环节（独立实现 → 本地测试 → 提交 Accepted），不含「选题建题」。
-   - **归档与提交**：`finish.js` 负责 `git mv` 归档（冲突时先报错）、清理占位注释、重生成复盘页与主页，并只提交本题相关文件（源码、`.lc/progress.json` 或 `review_state.json`、analysis.json、复盘页、`reviews/index.html`）；汇报时把复盘报告链接主动发给用户。
+   - **归档与提交**：`finish.js` 负责 `git mv` 归档（冲突时先报错）、清理占位注释、重生成复盘页与主页，并将仓库内全部非忽略改动一起提交和推送；汇报时把复盘报告链接主动发给用户。
    - 类似题型提醒：分类是「动态规划」时，从 `update_state.js show --seq <seq>` 的输出拿 `DP子类型`，用 `references/dp-subtypes.md` 对应子类型的宽泛提示强调（如「区间 DP 先想最后一步处理谁、按区间长度填表」）；其他分类用 `update_state.js hint --seq <seq>` 取分类提示。
 
    **Wrong Answer / Time Limit Exceeded / Runtime Error / Compile Error**

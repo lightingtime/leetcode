@@ -15,7 +15,7 @@
 //
 // 说明：一刷/二刷自动判定（progress.json 的 done 里已有该 seq → 二刷，走 review.js done）。
 //       提交区代码由本脚本从 src 文件自动提取并写入 analysis.json，调用方不用把代码贴进命令行。
-//       git 只 stage 本题相关文件（源码/analysis/复盘页/主页/状态文件），不碰工作区里其它改动；提交成功后推送当前分支 upstream。
+//       正常收尾把仓库内全部非忽略改动一起提交，再推送当前分支 upstream。
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -36,6 +36,48 @@ const dry = has('--dry-run');
 const verbose = has('--verbose');
 function step(msg, msgDry) { console.log(dry && msgDry ? `[dry-run] ${msgDry}` : msg); }
 function fail(msg) { console.error(`✗ ${msg}`); process.exit(1); }
+
+function commitAndPush(message) {
+  if (has('--no-commit')) {
+    step('已跳过仓库提交与推送（--no-commit）', `将提交并推送仓库内全部改动：${message}（--no-commit）`);
+    return;
+  }
+  if (dry) {
+    console.log(`[dry-run] 将提交仓库内全部非忽略改动：${message}`);
+    console.log('[dry-run] 将推送当前分支到配置的 upstream');
+    return;
+  }
+
+  const add = spawnSync('git', ['add', '-A'], { encoding: 'utf8', cwd: ROOT });
+  if (add.status !== 0) fail('git add -A 失败：' + (add.stderr || '').trim());
+  const staged = spawnSync('git', ['diff', '--cached', '--name-only', '-z'], { encoding: 'utf8', cwd: ROOT });
+  if (staged.status !== 0) fail('读取暂存文件失败：' + (staged.stderr || '').trim());
+  const stagedCount = staged.stdout ? staged.stdout.split('\0').filter(Boolean).length : 0;
+  const hasStaged = spawnSync('git', ['diff', '--cached', '--quiet'], { cwd: ROOT });
+  if (hasStaged.status === 1) {
+    const c = spawnSync('git', ['commit', '-q', '-m', message], { encoding: 'utf8', cwd: ROOT });
+    if (c.status !== 0) fail('git commit 失败：' + (c.stderr || c.stdout || '').trim());
+    const sha = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', cwd: ROOT }).stdout.trim();
+    console.log(`  已提交 ${sha}（${stagedCount} 个仓库文件）：${message}`);
+  } else if (hasStaged.status === 0) {
+    console.log('  （仓库没有待提交改动，跳过提交）');
+  } else {
+    fail('检查暂存区失败');
+  }
+
+  const upstream = spawnSync('git', ['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'], { encoding: 'utf8', cwd: ROOT });
+  if (upstream.status !== 0) {
+    console.error('✗ 本地提交已完成，但当前分支没有配置 upstream，无法自动推送；请配置跟踪分支后运行 git push。');
+    process.exit(1);
+  }
+  const push = spawnSync('git', ['push'], { encoding: 'utf8', cwd: ROOT });
+  if (push.status !== 0) {
+    console.error(`✗ 本地提交已完成，但推送到 ${upstream.stdout.trim()} 失败：`);
+    console.error((push.stderr || push.stdout || '').trim());
+    process.exit(1);
+  }
+  console.log(`  已推送到 ${upstream.stdout.trim()}`);
+}
 
 function run(argsArr, { label, silent = true } = {}) {
   if (dry) { console.log(`[dry-run] node ${argsArr.join(' ').slice(0, 160)}`); return ''; }
@@ -107,7 +149,7 @@ if (archiveConflict && !overwriteArchive) {
     '  一刷收尾默认不覆盖既有归档。确认要用当前文件覆盖（旧版仍保留在 git 历史与 analysis.json 的 submissions 里）再加 --overwrite-archive。');
 }
 
-// 2.6) --code-only：Accepted 之后用户又改过代码时，只同步代码 + 重生成复盘页 + 提交
+// 2.6) --code-only：Accepted 之后用户又改过代码时，同步代码 + 重生成复盘页 + 提交并推送仓库改动
 //      （不重写完成日期、不追加复习记录；旧代码存进该写法的 prev_code）
 if (has('--code-only')) {
   const ap = path.join(LC, 'problems', `${q.id}_${q.slug}`, 'analysis.json');
@@ -130,20 +172,8 @@ if (has('--code-only')) {
   step(`已同步代码：${path.relative(ROOT, ap)}`, `将同步代码到 ${path.relative(ROOT, ap)}`);
   run([path.join(SKILLS, 'lc-submit/scripts/generate_review.js'), '--slug', q.slug], { label: '生成复盘页' });
   run([path.join(SKILLS, 'lc-practice/scripts/build_site.js')], { label: '重建主页' });
-  const files = [ap, reviewHtml, path.join(ROOT, 'reviews', 'index.html')];
   const msg = `chore(LC${id4}): 同步最新代码到复盘（${approach || fileBase}）`;
-  if (has('--no-commit')) {
-    console.log(`  （--no-commit）未提交，改动留在工作区`);
-  } else if (dry) {
-    console.log(`[dry-run] 将提交：${msg}`);
-  } else {
-    const rel = files.filter(p => fs.existsSync(p)).map(p => path.relative(ROOT, p));
-    const add = spawnSync('git', ['add', '-A', '--', ...rel], { encoding: 'utf8', cwd: ROOT });
-    if (add.status !== 0) fail('git add 失败：' + (add.stderr || '').trim());
-    const c = spawnSync('git', ['commit', '-q', '-m', msg], { encoding: 'utf8', cwd: ROOT });
-    if (c.status === 0) console.log(`  已提交：${msg}`);
-    else console.log('  （没有实际变化，跳过提交）');
-  }
+  commitAndPush(msg);
   console.log('');
   console.log(`✅ 代码同步完成：${q.id}. ${q.title}（${path.relative(ROOT, ap)}，复盘页已重生成）`);
   process.exit(0);
@@ -243,7 +273,7 @@ run([path.join(SKILLS, 'lc-submit/scripts/generate_review.js'), '--slug', q.slug
 run([path.join(SKILLS, 'lc-practice/scripts/update_state.js'), 'checkin', '--seq', String(seq)], { label: '打卡' });
 touched.push(reviewHtml, path.join(ROOT, 'reviews', 'index.html'));
 
-// 9) git 提交（只 stage 本题相关文件）
+// 9) 提交并推送仓库内全部非忽略改动
 touched.push(
   path.join(LC, 'problems', `${q.id}_${q.slug}`, 'analysis.json'),
   path.join(LC, isReview ? 'review_state.json' : 'progress.json')
@@ -256,43 +286,7 @@ if (isReview) {
 } else {
   message = `完成力扣${q.id} ${q.title}（${approach}）并打卡复盘`;
 }
-if (!has('--no-commit')) {
-  if (dry) {
-    console.log(`[dry-run] 将提交：${message}`);
-    console.log('[dry-run] 将推送当前分支到配置的 upstream');
-  } else {
-    // 只 stage 本题相关路径：磁盘上存在的，或已被 git 跟踪（删除也要 stage）；空路径/不存在且未跟踪的跳过
-    const stageable = touched.filter(Boolean).map(p => path.relative(ROOT, p)).filter(rel => {
-      if (fs.existsSync(path.join(ROOT, rel))) return true;
-      const t = spawnSync('git', ['ls-files', '--error-unmatch', '--', rel], { cwd: ROOT, stdio: 'ignore' });
-      return t.status === 0;
-    });
-    const add = spawnSync('git', ['add', '-A', '--', ...stageable], { encoding: 'utf8', cwd: ROOT });
-    if (add.status !== 0) { console.error('✗ git add 失败：' + (add.stderr || '').trim()); process.exit(1); }
-    const st = spawnSync('git', ['diff', '--cached', '--quiet'], { cwd: ROOT });
-    if (st.status === 0) console.log('  （本题相关文件没有变化，跳过提交）');
-    else {
-      const c = spawnSync('git', ['commit', '-q', '-m', message], { encoding: 'utf8', cwd: ROOT });
-      if (c.status !== 0) { console.error('✗ git commit 失败：' + (c.stderr || c.stdout || '').trim()); process.exit(1); }
-      const sha = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', cwd: ROOT }).stdout.trim();
-      console.log(`  已提交 ${sha}：${message}`);
-    }
-    const upstream = spawnSync('git', ['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'], { encoding: 'utf8', cwd: ROOT });
-    if (upstream.status !== 0) {
-      console.error('✗ 本地提交已完成，但当前分支没有配置 upstream，无法自动推送；请配置跟踪分支后运行 git push。');
-      process.exit(1);
-    }
-    const push = spawnSync('git', ['push'], { encoding: 'utf8', cwd: ROOT });
-    if (push.status !== 0) {
-      console.error(`✗ 本地提交已完成，但推送到 ${upstream.stdout.trim()} 失败：`);
-      console.error((push.stderr || push.stdout || '').trim());
-      process.exit(1);
-    }
-    console.log(`  已推送到 ${upstream.stdout.trim()}`);
-  }
-} else {
-  step('已跳过 git 提交与推送（--no-commit）', `将提交并推送：${message}（--no-commit）`);
-}
+commitAndPush(message);
 
 // 10) 收尾摘要
 console.log('');
