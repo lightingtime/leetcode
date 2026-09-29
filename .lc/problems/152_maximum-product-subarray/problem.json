@@ -38,5 +38,5 @@
   ],
   "exampleTestcases": "[2,3,-2,4]\n[-2,0,-1]",
   "javaSnippet": "class Solution {\n    public int maxProduct(int[] nums) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-09T21:37:42.096Z"
+  "fetchedAt": "2026-09-18T08:06:56.537Z"
 }

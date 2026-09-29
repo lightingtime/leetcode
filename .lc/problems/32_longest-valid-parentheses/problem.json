@@ -52,5 +52,5 @@
   ],
   "exampleTestcases": "\"(()\"\n\")()())\"\n\"\"",
   "javaSnippet": "class Solution {\n    public int longestValidParentheses(String s) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-20T10:30:48.841Z"
+  "fetchedAt": "2026-09-22T13:12:57.284Z"
 }

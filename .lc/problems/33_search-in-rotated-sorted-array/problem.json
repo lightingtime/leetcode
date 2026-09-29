@@ -60,5 +60,5 @@
   ],
   "exampleTestcases": "[4,5,6,7,0,1,2]\n0\n[4,5,6,7,0,1,2]\n3\n[1]\n0",
   "javaSnippet": "class Solution {\n    public int search(int[] nums, int target) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-04T22:09:01.452Z"
+  "fetchedAt": "2026-09-24T09:25:43.909Z"
 }

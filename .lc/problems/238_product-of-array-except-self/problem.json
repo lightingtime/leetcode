@@ -38,5 +38,5 @@
   ],
   "exampleTestcases": "[1,2,3,4]\n[-1,1,0,-3,3]",
   "javaSnippet": "class Solution {\n    public int[] productExceptSelf(int[] nums) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-05T20:41:50.065Z"
+  "fetchedAt": "2026-09-22T14:32:02.237Z"
 }

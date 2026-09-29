@@ -1,0 +1,29 @@
+{
+  "id": "232",
+  "slug": "implement-queue-using-stacks",
+  "title": "Implement Queue using Stacks",
+  "titleCn": "用栈实现队列",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/implement-queue-using-stacks/",
+  "tags": [
+    "Stack",
+    "Design",
+    "Queue"
+  ],
+  "tagsCn": [
+    "栈",
+    "设计",
+    "队列"
+  ],
+  "category": "栈、队列与优先队列",
+  "examples": [
+    {
+      "inputs": [],
+      "output": "",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[\"MyQueue\",\"push\",\"push\",\"peek\",\"pop\",\"empty\"]\n[[],[1],[2],[],[],[]]",
+  "javaSnippet": "class MyQueue {\n\n    public MyQueue() {\n        \n    }\n    \n    public void push(int x) {\n        \n    }\n    \n    public int pop() {\n        \n    }\n    \n    public int peek() {\n        \n    }\n    \n    public boolean empty() {\n        \n    }\n}\n\n/**\n * Your MyQueue object will be instantiated and called as such:\n * MyQueue obj = new MyQueue();\n * obj.push(x);\n * int param_2 = obj.pop();\n * int param_3 = obj.peek();\n * boolean param_4 = obj.empty();\n */",
+  "fetchedAt": "2026-09-29T16:12:40.318Z"
+}

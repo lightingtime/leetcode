@@ -62,5 +62,5 @@
   ],
   "exampleTestcases": "[[9,9,4],[6,6,8],[2,1,1]]\n[[3,4,5],[3,2,6],[2,2,1]]\n[[1]]",
   "javaSnippet": "class Solution {\n    public int longestIncreasingPath(int[][] matrix) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-26T11:13:39.789Z"
+  "fetchedAt": "2026-09-21T12:43:01.332Z"
 }

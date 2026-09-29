@@ -40,5 +40,5 @@
   ],
   "exampleTestcases": "2\n3",
   "javaSnippet": "class Solution {\n    public int climbStairs(int n) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-08T20:27:35.287Z"
+  "fetchedAt": "2026-09-24T05:39:31.737Z"
 }

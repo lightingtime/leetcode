@@ -44,5 +44,5 @@
   ],
   "exampleTestcases": "1\n4\n3\n1",
   "javaSnippet": "class Solution {\n    public int hammingDistance(int x, int y) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-20T15:43:26.307Z"
+  "fetchedAt": "2026-09-28T14:29:26.781Z"
 }

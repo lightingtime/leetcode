@@ -52,8 +52,9 @@ function extractSnippetInfo(snippet) {
   const code = snippet
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/\/\/[^\n]*/g, '');
-  const cls = (code.match(/class\s+(\w+)/) || [])[1] || 'Solution';
-  const body = (code.match(/class\s+\w+\s*\{([\s\S]*)\}/) || [])[1] || '';
+  const classMatch = code.match(/\bclass\s+(\w+)[^{]*\{([\s\S]*)\}/);
+  const cls = classMatch ? classMatch[1] : 'Solution';
+  const body = classMatch ? classMatch[2] : '';
   const methods = [...body.matchAll(/public\s+(?:static\s+)?[\w<>,.\[\]\s]+\s+\w+\s*\(/g)];
   const ctors = [...body.matchAll(/public\s+\w+\s*\(/g)].filter(m => !methods.includes(m));
   const total = methods.length + ctors.length;
@@ -128,6 +129,7 @@ function buildTemplate(problem, method, snippetClsName) {
   // 标准结构（val+next / val+left+right）用公共节点类 src/ListNode.java、src/TreeNode.java；结构不同才在题文件内生成本地类
   const standardListNode = /\bListNode\s+next\b/.test(snippet);
   const standardTreeNode = /\bTreeNode\s+left\b/.test(snippet) && /\bTreeNode\s+right\b/.test(snippet);
+  const needsNestedInteger = /\binterface\s+NestedInteger\b/.test(snippet);
   // 节点类的格式化依赖本题的 ListNode/TreeNode，需要本地包装；其余题目直接用共享的 TestUtil
   const useLocalHelpers = needListNode || needTreeNode;
   const checkEqCall = useLocalHelpers ? 'checkEq' : 'TestUtil.checkEq';
@@ -154,11 +156,52 @@ function buildTemplate(problem, method, snippetClsName) {
     const innerCls = snippetClsName || 'Solution';
     L.push(`    // 设计题：补全下面的成员（字段 / 构造器 / 方法体），类名 ${innerCls} 在提交时自动处理。`);
   }
+  if (!method && needsNestedInteger) {
+    L.push('    // 本地 NestedInteger 接口（判题环境自带，这里仅为本地测试镜像）');
+    L.push('    interface NestedInteger {');
+    L.push('        boolean isInteger();');
+    L.push('');
+    L.push('        Integer getInteger();');
+    L.push('');
+    L.push('        List<NestedInteger> getList();');
+    L.push('    }');
+    L.push('');
+    L.push('    static class NestedIntegerImpl implements NestedInteger {');
+    L.push('        private final Integer value;');
+    L.push('        private final List<NestedInteger> list;');
+    L.push('');
+    L.push('        NestedIntegerImpl(Integer value) {');
+    L.push('            this.value = value;');
+    L.push('            this.list = null;');
+    L.push('        }');
+    L.push('');
+    L.push('        NestedIntegerImpl(List<NestedInteger> list) {');
+    L.push('            this.value = null;');
+    L.push('            this.list = list;');
+    L.push('        }');
+    L.push('');
+    L.push('        @Override');
+    L.push('        public boolean isInteger() {');
+    L.push('            return value != null;');
+    L.push('        }');
+    L.push('');
+    L.push('        @Override');
+    L.push('        public Integer getInteger() {');
+    L.push('            return value;');
+    L.push('        }');
+    L.push('');
+    L.push('        @Override');
+    L.push('        public List<NestedInteger> getList() {');
+    L.push('            return list != null ? list : Collections.emptyList();');
+    L.push('        }');
+    L.push('    }');
+    L.push('');
+  }
   L.push('    // ==== 提交代码开始 ====');
 
   if (!method) {
     // 设计题：预填所有方法签名，用户补全方法体
-    const body = (problem.javaSnippet.match(/class\s+\w+\s*\{([\s\S]*)\}/) || [])[1] || '';
+    const body = extractSnippetInfo(problem.javaSnippet).body;
     const sigs = [...body.matchAll(/public\s+(?:[\w<>,.\[\]\s]+\s+)?\w+\s*\([^)]*\)\s*\{/g)];
     const innerCls = snippetClsName || 'Solution';
     L.push(`    static class ${innerCls} {`);

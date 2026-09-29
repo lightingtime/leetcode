@@ -66,5 +66,5 @@
   ],
   "exampleTestcases": "[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"ABCCED\"\n[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"SEE\"\n[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]]\n\"ABCB\"",
   "javaSnippet": "class Solution {\n    public boolean exist(char[][] board, String word) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-08T20:12:28.416Z"
+  "fetchedAt": "2026-09-22T15:40:02.472Z"
 }

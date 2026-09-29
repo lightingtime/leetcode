@@ -50,5 +50,5 @@
   ],
   "exampleTestcases": "[1,2,3,4,5]\n[5,4,3,2,1]\n[2,1,5,0,4,6]",
   "javaSnippet": "class Solution {\n    public boolean increasingTriplet(int[] nums) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-27T13:12:02.256Z"
+  "fetchedAt": "2026-09-22T13:42:52.986Z"
 }

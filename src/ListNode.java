@@ -4,7 +4,7 @@
 // 不参与力扣提交：判题环境自带 ListNode，提交脚本不会再附带
 // ============================================================
 
-public class ListNode {
+public class  ListNode {
     int val;
     ListNode next;
     ListNode() {}

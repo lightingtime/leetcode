@@ -28,5 +28,5 @@
   ],
   "exampleTestcases": "[1,2,3,1]\n[2,7,9,3,1]",
   "javaSnippet": "class Solution {\n    public int rob(int[] nums) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-09T21:47:16.494Z"
+  "fetchedAt": "2026-09-18T08:21:14.358Z"
 }

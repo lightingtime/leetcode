@@ -25,5 +25,5 @@
   "examples": [],
   "exampleTestcases": "[3,0,1]\n[0,1]\n[9,6,4,2,3,5,7,0,1]",
   "javaSnippet": "class Solution {\n    public int missingNumber(int[] nums) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-21T04:50:48.217Z"
+  "fetchedAt": "2026-09-28T14:58:06.965Z"
 }

@@ -44,5 +44,5 @@
   ],
   "exampleTestcases": "12\n13",
   "javaSnippet": "class Solution {\n    public int numSquares(int n) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-09T22:10:08.554Z"
+  "fetchedAt": "2026-09-24T06:18:39.546Z"
 }

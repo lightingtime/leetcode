@@ -40,5 +40,5 @@
   ],
   "exampleTestcases": "\"23\"\n\"2\"",
   "javaSnippet": "class Solution {\n    public List<String> letterCombinations(String digits) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-08T00:28:49.306Z"
+  "fetchedAt": "2026-09-21T13:41:53.322Z"
 }

@@ -64,5 +64,5 @@
   ],
   "exampleTestcases": "\"aa\"\n\"a\"\n\"aa\"\n\"*\"\n\"cb\"\n\"?a\"",
   "javaSnippet": "class Solution {\n    public boolean isMatch(String s, String p) {\n        \n    }\n}",
-  "fetchedAt": "2026-09-17T09:22:36.613Z"
+  "fetchedAt": "2026-09-22T13:35:30.603Z"
 }

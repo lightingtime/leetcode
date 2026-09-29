@@ -52,5 +52,5 @@
   ],
   "exampleTestcases": "[10,9,2,5,3,7,101,18]\n[0,1,0,3,2,3]\n[7,7,7,7,7,7,7]",
   "javaSnippet": "class Solution {\n    public int lengthOfLIS(int[] nums) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-09T23:08:43.736Z"
+  "fetchedAt": "2026-09-18T08:46:43.113Z"
 }

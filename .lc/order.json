@@ -1708,5 +1708,385 @@
     "difficulty": "HARD",
     "category": "链表",
     "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/"
+  },
+  {
+    "seq": 172,
+    "phase": 4,
+    "id": "86",
+    "title": "分隔链表",
+    "slug": "partition-list",
+    "difficulty": "MEDIUM",
+    "category": "链表",
+    "url": "https://leetcode.cn/problems/partition-list/"
+  },
+  {
+    "seq": 173,
+    "phase": 4,
+    "id": "232",
+    "title": "用栈实现队列",
+    "slug": "implement-queue-using-stacks",
+    "difficulty": "EASY",
+    "category": "栈、队列与优先队列",
+    "url": "https://leetcode.cn/problems/implement-queue-using-stacks/"
+  },
+  {
+    "seq": 174,
+    "phase": 4,
+    "id": "205",
+    "title": "同构字符串",
+    "slug": "isomorphic-strings",
+    "difficulty": "EASY",
+    "category": "哈希表",
+    "url": "https://leetcode.cn/problems/isomorphic-strings/"
+  },
+  {
+    "seq": 175,
+    "phase": 4,
+    "id": "266",
+    "title": "回文排列",
+    "slug": "palindrome-permutation",
+    "difficulty": "EASY",
+    "category": "哈希表",
+    "url": "https://leetcode.cn/problems/palindrome-permutation/"
+  },
+  {
+    "seq": 176,
+    "phase": 4,
+    "id": "409",
+    "title": "最长回文串",
+    "slug": "longest-palindrome",
+    "difficulty": "EASY",
+    "category": "哈希表",
+    "url": "https://leetcode.cn/problems/longest-palindrome/"
+  },
+  {
+    "seq": 177,
+    "phase": 4,
+    "id": "392",
+    "title": "判断子序列",
+    "slug": "is-subsequence",
+    "difficulty": "EASY",
+    "category": "双指针与滑动窗口",
+    "url": "https://leetcode.cn/problems/is-subsequence/"
+  },
+  {
+    "seq": 178,
+    "phase": 4,
+    "id": "876",
+    "title": "链表的中间结点",
+    "slug": "middle-of-the-linked-list",
+    "difficulty": "EASY",
+    "category": "双指针与滑动窗口",
+    "url": "https://leetcode.cn/problems/middle-of-the-linked-list/"
+  },
+  {
+    "seq": 179,
+    "phase": 4,
+    "id": "167",
+    "title": "两数之和 II - 输入有序数组",
+    "slug": "two-sum-ii-input-array-is-sorted",
+    "difficulty": "MEDIUM",
+    "category": "双指针与滑动窗口",
+    "url": "https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/"
+  },
+  {
+    "seq": 180,
+    "phase": 4,
+    "id": "151",
+    "title": "反转字符串中的单词",
+    "slug": "reverse-words-in-a-string",
+    "difficulty": "MEDIUM",
+    "category": "双指针与滑动窗口",
+    "url": "https://leetcode.cn/problems/reverse-words-in-a-string/"
+  },
+  {
+    "seq": 181,
+    "phase": 4,
+    "id": "415",
+    "title": "字符串相加",
+    "slug": "add-strings",
+    "difficulty": "EASY",
+    "category": "字符串",
+    "url": "https://leetcode.cn/problems/add-strings/"
+  },
+  {
+    "seq": 182,
+    "phase": 4,
+    "id": "796",
+    "title": "旋转字符串",
+    "slug": "rotate-string",
+    "difficulty": "EASY",
+    "category": "字符串",
+    "url": "https://leetcode.cn/problems/rotate-string/"
+  },
+  {
+    "seq": 183,
+    "phase": 4,
+    "id": "946",
+    "title": "验证栈序列",
+    "slug": "validate-stack-sequences",
+    "difficulty": "MEDIUM",
+    "category": "栈、队列与优先队列",
+    "url": "https://leetcode.cn/problems/validate-stack-sequences/"
+  },
+  {
+    "seq": 184,
+    "phase": 4,
+    "id": "6",
+    "title": "Z 字形变换",
+    "slug": "zigzag-conversion",
+    "difficulty": "MEDIUM",
+    "category": "字符串",
+    "url": "https://leetcode.cn/problems/zigzag-conversion/"
+  },
+  {
+    "seq": 185,
+    "phase": 4,
+    "id": "59",
+    "title": "螺旋矩阵 II",
+    "slug": "spiral-matrix-ii",
+    "difficulty": "MEDIUM",
+    "category": "数组与矩阵",
+    "url": "https://leetcode.cn/problems/spiral-matrix-ii/"
+  },
+  {
+    "seq": 186,
+    "phase": 4,
+    "id": "704",
+    "title": "二分查找",
+    "slug": "binary-search",
+    "difficulty": "EASY",
+    "category": "数组与矩阵",
+    "url": "https://leetcode.cn/problems/binary-search/"
+  },
+  {
+    "seq": 187,
+    "phase": 4,
+    "id": "278",
+    "title": "第一个错误的版本",
+    "slug": "first-bad-version",
+    "difficulty": "EASY",
+    "category": "数组与矩阵",
+    "url": "https://leetcode.cn/problems/first-bad-version/"
+  },
+  {
+    "seq": 188,
+    "phase": 4,
+    "id": "724",
+    "title": "寻找数组的中心下标",
+    "slug": "find-pivot-index",
+    "difficulty": "EASY",
+    "category": "数组与矩阵",
+    "url": "https://leetcode.cn/problems/find-pivot-index/"
+  },
+  {
+    "seq": 189,
+    "phase": 4,
+    "id": "154",
+    "title": "寻找旋转排序数组中的最小值 II",
+    "slug": "find-minimum-in-rotated-sorted-array-ii",
+    "difficulty": "HARD",
+    "category": "数组与矩阵",
+    "url": "https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array-ii/"
+  },
+  {
+    "seq": 190,
+    "phase": 4,
+    "id": "235",
+    "title": "二叉搜索树的最近公共祖先",
+    "slug": "lowest-common-ancestor-of-a-binary-search-tree",
+    "difficulty": "MEDIUM",
+    "category": "树与二叉树",
+    "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/"
+  },
+  {
+    "seq": 191,
+    "phase": 4,
+    "id": "426",
+    "title": "将二叉搜索树转化为排序的双向链表",
+    "slug": "convert-binary-search-tree-to-sorted-doubly-linked-list",
+    "difficulty": "MEDIUM",
+    "category": "树与二叉树",
+    "url": "https://leetcode.cn/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/"
+  },
+  {
+    "seq": 192,
+    "phase": 4,
+    "id": "113",
+    "title": "路径总和 II",
+    "slug": "path-sum-ii",
+    "difficulty": "MEDIUM",
+    "category": "树与二叉树",
+    "url": "https://leetcode.cn/problems/path-sum-ii/"
+  },
+  {
+    "seq": 193,
+    "phase": 4,
+    "id": "47",
+    "title": "全排列 II",
+    "slug": "permutations-ii",
+    "difficulty": "MEDIUM",
+    "category": "回溯",
+    "url": "https://leetcode.cn/problems/permutations-ii/"
+  },
+  {
+    "seq": 194,
+    "phase": 4,
+    "id": "40",
+    "title": "组合总和 II",
+    "slug": "combination-sum-ii",
+    "difficulty": "MEDIUM",
+    "category": "回溯",
+    "url": "https://leetcode.cn/problems/combination-sum-ii/"
+  },
+  {
+    "seq": 195,
+    "phase": 4,
+    "id": "110",
+    "title": "平衡二叉树",
+    "slug": "balanced-binary-tree",
+    "difficulty": "EASY",
+    "category": "树与二叉树",
+    "url": "https://leetcode.cn/problems/balanced-binary-tree/"
+  },
+  {
+    "seq": 196,
+    "phase": 4,
+    "id": "509",
+    "title": "斐波那契数",
+    "slug": "fibonacci-number",
+    "difficulty": "EASY",
+    "category": "动态规划",
+    "url": "https://leetcode.cn/problems/fibonacci-number/"
+  },
+  {
+    "seq": 197,
+    "phase": 4,
+    "id": "1480",
+    "title": "一维数组的动态和",
+    "slug": "running-sum-of-1d-array",
+    "difficulty": "EASY",
+    "category": "动态规划",
+    "url": "https://leetcode.cn/problems/running-sum-of-1d-array/"
+  },
+  {
+    "seq": 198,
+    "phase": 4,
+    "id": "213",
+    "title": "打家劫舍 II",
+    "slug": "house-robber-ii",
+    "difficulty": "MEDIUM",
+    "category": "动态规划",
+    "url": "https://leetcode.cn/problems/house-robber-ii/"
+  },
+  {
+    "seq": 199,
+    "phase": 4,
+    "id": "264",
+    "title": "丑数 II",
+    "slug": "ugly-number-ii",
+    "difficulty": "MEDIUM",
+    "category": "动态规划",
+    "url": "https://leetcode.cn/problems/ugly-number-ii/"
+  },
+  {
+    "seq": 200,
+    "phase": 4,
+    "id": "135",
+    "title": "分发糖果",
+    "slug": "candy",
+    "difficulty": "HARD",
+    "category": "贪心与区间",
+    "url": "https://leetcode.cn/problems/candy/"
+  },
+  {
+    "seq": 201,
+    "phase": 4,
+    "id": "768",
+    "title": "最多能完成排序的块 II",
+    "slug": "max-chunks-to-make-sorted-ii",
+    "difficulty": "HARD",
+    "category": "贪心与区间",
+    "url": "https://leetcode.cn/problems/max-chunks-to-make-sorted-ii/"
+  },
+  {
+    "seq": 202,
+    "phase": 4,
+    "id": "231",
+    "title": "2 的幂",
+    "slug": "power-of-two",
+    "difficulty": "EASY",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/power-of-two/"
+  },
+  {
+    "seq": 203,
+    "phase": 4,
+    "id": "137",
+    "title": "只出现一次的数字 II",
+    "slug": "single-number-ii",
+    "difficulty": "MEDIUM",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/single-number-ii/"
+  },
+  {
+    "seq": 204,
+    "phase": 4,
+    "id": "343",
+    "title": "整数拆分",
+    "slug": "integer-break",
+    "difficulty": "MEDIUM",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/integer-break/"
+  },
+  {
+    "seq": 205,
+    "phase": 4,
+    "id": "89",
+    "title": "格雷编码",
+    "slug": "gray-code",
+    "difficulty": "MEDIUM",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/gray-code/"
+  },
+  {
+    "seq": 206,
+    "phase": 4,
+    "id": "1823",
+    "title": "找出游戏的获胜者",
+    "slug": "find-the-winner-of-the-circular-game",
+    "difficulty": "MEDIUM",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/find-the-winner-of-the-circular-game/"
+  },
+  {
+    "seq": 207,
+    "phase": 4,
+    "id": "65",
+    "title": "有效数字",
+    "slug": "valid-number",
+    "difficulty": "HARD",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/valid-number/"
+  },
+  {
+    "seq": 208,
+    "phase": 4,
+    "id": "400",
+    "title": "第 N 位数字",
+    "slug": "nth-digit",
+    "difficulty": "MEDIUM",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/nth-digit/"
+  },
+  {
+    "seq": 209,
+    "phase": 4,
+    "id": "233",
+    "title": "数字 1 的个数",
+    "slug": "number-of-digit-one",
+    "difficulty": "HARD",
+    "category": "数学与位运算",
+    "url": "https://leetcode.cn/problems/number-of-digit-one/"
   }
 ]

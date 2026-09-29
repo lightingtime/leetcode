@@ -42,5 +42,5 @@
   ],
   "exampleTestcases": "\"babad\"\n\"cbbd\"",
   "javaSnippet": "class Solution {\n    public String longestPalindrome(String s) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-08T20:42:35.861Z"
+  "fetchedAt": "2026-09-27T11:30:50.642Z"
 }

@@ -1,0 +1,50 @@
+{
+  "id": "86",
+  "slug": "partition-list",
+  "title": "Partition List",
+  "titleCn": "分隔链表",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/partition-list/",
+  "tags": [
+    "Linked List",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "链表",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,4,3,2,5,2]"
+        },
+        {
+          "name": "x",
+          "value": "3"
+        }
+      ],
+      "output": "[1,2,2,4,3,5]",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[2,1]"
+        },
+        {
+          "name": "x",
+          "value": "2"
+        }
+      ],
+      "output": "[1,2]",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "[1,4,3,2,5,2]\n3\n[2,1]\n2",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode partition(ListNode head, int x) {\n        \n    }\n}",
+  "fetchedAt": "2026-09-28T15:17:11.840Z"
+}

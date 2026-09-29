@@ -13,11 +13,13 @@ extends = ":workspace"
 
 [permissions.lc-repo.filesystem.":workspace_roots"]
 ".git" = "write"
+".agents/skills/lc-submit" = "write"
 
 [permissions.lc-repo.network]
 enabled = true
 
 [permissions.lc-repo.network.domains]
+"leetcode.cn" = "allow"
 "**.leetcode.cn" = "allow"
 "127.0.0.1" = "allow"
 "localhost" = "allow"

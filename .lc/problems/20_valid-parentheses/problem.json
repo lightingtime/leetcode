@@ -19,5 +19,5 @@
   "examples": [],
   "exampleTestcases": "\"()\"\n\"()[]{}\"\n\"(]\"\n\"([])\"\n\"([)]\"",
   "javaSnippet": "class Solution {\n    public boolean isValid(String s) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-06T18:57:25.148Z"
+  "fetchedAt": "2026-09-22T14:55:53.602Z"
 }

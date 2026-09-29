@@ -66,5 +66,5 @@
   ],
   "exampleTestcases": "[1,2,5]\n11\n[2]\n3\n[1]\n0",
   "javaSnippet": "class Solution {\n    public int coinChange(int[] coins, int amount) {\n        \n    }\n}",
-  "fetchedAt": "2026-08-09T23:35:22.956Z"
+  "fetchedAt": "2026-09-24T08:46:19.712Z"
 }

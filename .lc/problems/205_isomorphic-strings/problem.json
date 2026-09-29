@@ -1,0 +1,21 @@
+{
+  "id": "205",
+  "slug": "isomorphic-strings",
+  "title": "Isomorphic Strings",
+  "titleCn": "同构字符串",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/isomorphic-strings/",
+  "tags": [
+    "Hash Table",
+    "String"
+  ],
+  "tagsCn": [
+    "哈希表",
+    "字符串"
+  ],
+  "category": "哈希表",
+  "examples": [],
+  "exampleTestcases": "\"egg\"\n\"add\"\n\"foo\"\n\"bar\"\n\"paper\"\n\"title\"",
+  "javaSnippet": "class Solution {\n    public boolean isIsomorphic(String s, String t) {\n        \n    }\n}",
+  "fetchedAt": "2026-09-29T16:45:29.295Z"
+}
