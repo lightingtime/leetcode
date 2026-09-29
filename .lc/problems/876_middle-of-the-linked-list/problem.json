@@ -1,0 +1,42 @@
+{
+  "id": "876",
+  "slug": "middle-of-the-linked-list",
+  "title": "Middle of the Linked List",
+  "titleCn": "链表的中间结点",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/middle-of-the-linked-list/",
+  "tags": [
+    "Linked List",
+    "Two Pointers"
+  ],
+  "tagsCn": [
+    "链表",
+    "双指针"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,3,4,5]"
+        }
+      ],
+      "output": "[3,4,5]",
+      "explain": "链表只有一个中间结点，值为 3 。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "head",
+          "value": "[1,2,3,4,5,6]"
+        }
+      ],
+      "output": "[4,5,6]",
+      "explain": "该链表有两个中间结点，值分别为 3 和 4 ，返回第二个结点。"
+    }
+  ],
+  "exampleTestcases": "[1,2,3,4,5]\n[1,2,3,4,5,6]",
+  "javaSnippet": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode middleNode(ListNode head) {\n        \n    }\n}",
+  "fetchedAt": "2026-09-29T17:38:43.153Z"
+}

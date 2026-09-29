@@ -1,0 +1,49 @@
+{
+  "seq": 178,
+  "id": "876",
+  "slug": "middle-of-the-linked-list",
+  "title": "链表的中间结点",
+  "category": "双指针与滑动窗口",
+  "date": "2026-09-30",
+  "verdict": "Accepted",
+  "testcases": "36/36",
+  "runtime_ms": null,
+  "memory_bytes": 43096000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "快慢指针",
+  "dp_subtype": "",
+  "approach_detail": "**问题本质与解法选择理由**\\n单链表无法从尾部反向定位中点；让两个指针按 1:2 的步幅同步前进，可在快指针到尾时用慢指针定位中点，单次遍历完成。\\n\\n**关键设计决策**\\n-  与  从 dummy 节点开始。每轮先让  前进一步，再让  前进一步；若  仍非空，再前进第二步。\\n- 循环以  为条件。奇数长度时快指针第二步后到 null；偶数长度时快指针第一步就可能到 null，此时慢指针正好落在两个中点中的后一个。\\n\\n**具体推演**\\n输入链表 ，dummy 记作 ：\\n1. 初始 。\\n2. 第 1 轮后 、。\\n3. 第 2 轮后 、。\\n4. 第 3 轮后 、，停止并返回从节点 3 开始的后缀。\\n\\n输入  时，快指针第 4 轮前进一步到 null，慢指针同步到节点 4，因此返回第二个中点。单节点时首轮后慢指针仍为该节点；最大长度 100 的用例验证遍历能到达中部。\\n\\n**边界与复杂度**\\n题目节点数范围为 ，无需处理空链表。每个节点被快指针至多经过一次、慢指针至多经过一次，时间 O(n)，额外空间 O(1)。定位中点需要确认链表后半段的边界，因此 O(n) 时间已达渐进下限。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "一次提交 Accepted；快指针每轮前进两步、慢指针前进一步，借链表末尾确定慢指针所在的中点。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "快慢指针按比例推进定位链表中点",
+      "text": "两个指针从同一起点出发，按 1:2 的速度推进。快指针到达末尾时，慢指针走过约一半；循环终止条件与每轮快指针的空值检查共同决定偶数长度时返回第二个中点。",
+      "category": "双指针与滑动窗口",
+      "problem": "middle-of-the-linked-list",
+      "date": "2026-09-30"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-09-30",
+      "verdict": "Accepted",
+      "testcases": "36/36",
+      "runtime_ms": null,
+      "memory_bytes": 43096000,
+      "approach": "快慢指针",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "一次提交 Accepted；快指针每轮前进两步、慢指针前进一步，借链表末尾确定慢指针所在的中点。",
+      "code": "public ListNode middleNode(ListNode head) {\n        ListNode dummy = new ListNode(-1, head);\n        ListNode slow = dummy, fast = dummy;\n        while (fast != null) {\n            fast = fast.next;\n            slow = slow.next;\n            if (fast != null) {\n                fast = fast.next;\n            }\n        }\n        return slow;\n    }"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

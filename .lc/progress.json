@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-30",
-  "current_seq": 177,
+  "current_seq": 178,
   "done": [
     {
       "seq": 1,
@@ -1937,6 +1937,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "用两个游标顺序扫描：仅在当前字符相等时推进 s 的游标，每次匹配都保留 t 中最早可用的位置。"
+    },
+    {
+      "seq": 178,
+      "id": "876",
+      "title": "链表的中间结点",
+      "slug": "middle-of-the-linked-list",
+      "category": "双指针与滑动窗口",
+      "date": "2026-09-30",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次提交 Accepted；快指针每轮前进两步、慢指针前进一步，借链表末尾确定慢指针所在的中点。"
     }
   ],
   "error_habits": [

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC876 链表的中间结点 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 178</div>
+  <h1>LC876 · 链表的中间结点</h1>
+  <div class="sub">快慢指针 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 36/36</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 双指针与滑动窗口</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-09-30</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>876. 链表的中间结点 (Middle of the Linked List)</h1><p>&gt; <a href="https://leetcode.cn/problems/middle-of-the-linked-list/" rel="noopener">https://leetcode.cn/problems/middle-of-the-linked-list/</a></p><p>难度：Easy ｜ 分类：双指针与滑动窗口</p><p>标签：链表、双指针</p><h2>题目描述</h2><p>给你单链表的头结点 head ，请你找出并返回链表的中间结点。</p><p>如果有两个中间结点，则返回第二个中间结点。</p><p>示例 1：</p><p>输入：head = [1,2,3,4,5]</p><p>输出：[3,4,5]</p><p>解释：链表只有一个中间结点，值为 3 。</p><p>示例 2：</p><p>输入：head = [1,2,3,4,5,6]</p><p>输出：[4,5,6]</p><p>解释：该链表有两个中间结点，值分别为 3 和 4 ，返回第二个结点。</p><p>提示：</p><p>链表的结点数范围是 [1, 100]</p><p>1</p><h2>示例</h2><ol><li>输入：head = [1,2,3,4,5]</li></ol><p>输出：[3,4,5]</p><p>解释：链表只有一个中间结点，值为 3 。</p><ol><li>输入：head = [1,2,3,4,5,6]</li></ol><p>输出：[4,5,6]</p><p>解释：该链表有两个中间结点，值分别为 3 和 4 ，返回第二个结点。</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>快慢指针</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 快慢指针</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.1 MB</span><span class="chip">用例 36/36</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0876_MiddleOfTheLinkedList.java · 快慢指针</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">ListNode</span> <span class="tk-f">middleNode</span>(<span class="tk-t">ListNode</span> head) {
+        <span class="tk-t">ListNode</span> dummy = <span class="tk-k">new</span> <span class="tk-t">ListNode</span>(-<span class="tk-n">1</span>, head);
+        <span class="tk-t">ListNode</span> slow = dummy, fast = dummy;
+        <span class="tk-k">while</span> (fast != <span class="tk-k">null</span>) {
+            fast = fast.next;
+            slow = slow.next;
+            <span class="tk-k">if</span> (fast != <span class="tk-k">null</span>) {
+                fast = fast.next;
+            }
+        }
+        <span class="tk-k">return</span> slow;
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong></p><p>单链表无法从尾部反向定位中点；让两个指针按 1:2 的步幅同步前进，可在快指针到尾时用慢指针定位中点，单次遍历完成。</p><p><strong>关键设计决策</strong></p><ul><li>与  从 dummy 节点开始。每轮先让  前进一步，再让  前进一步；若  仍非空，再前进第二步。</li><li>循环以  为条件。奇数长度时快指针第二步后到 null；偶数长度时快指针第一步就可能到 null，此时慢指针正好落在两个中点中的后一个。</li></ul><p><strong>具体推演</strong></p><p>输入链表 ，dummy 记作 ：</p><ol><li>初始 。</li><li>第 1 轮后 、。</li><li>第 2 轮后 、。</li><li>第 3 轮后 、，停止并返回从节点 3 开始的后缀。</li></ol><p>输入  时，快指针第 4 轮前进一步到 null，慢指针同步到节点 4，因此返回第二个中点。单节点时首轮后慢指针仍为该节点；最大长度 100 的用例验证遍历能到达中部。</p><p><strong>边界与复杂度</strong></p><p>题目节点数范围为 ，无需处理空链表。每个节点被快指针至多经过一次、慢指针至多经过一次，时间 O(n)，额外空间 O(1)。定位中点需要确认链表后半段的边界，因此 O(n) 时间已达渐进下限。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>36/36 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>快慢指针按比例推进定位链表中点</h3><p>两个指针从同一起点出发，按 1:2 的速度推进。快指针到达末尾时，慢指针走过约一半；循环终止条件与每轮快指针的空值检查共同决定偶数长度时返回第二个中点。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">36/36</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.1 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 178 · middle-of-the-linked-list</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">一次提交 Accepted；快指针每轮前进两步、慢指针前进一步，借链表末尾确定慢指针所在的中点。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/876_middle-of-the-linked-list/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0876_MiddleOfTheLinkedList.java">src/双指针与滑动窗口/LC0876_MiddleOfTheLinkedList.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-09-30
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
