@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Accepted 后收尾一把梭：清理占位 → 本地测试 → 记录(done / review done) → 套路 → 归档 → 复盘页 → 打卡(含 build_site) → git commit
+// Accepted 后收尾一把梭：清理占位 → 本地测试 → 记录(done / review done) → 套路 → 归档 → 复盘页 → 打卡(含 build_site) → git commit + push
 //
 // 用法（仓库根目录）：
 //   node ".agents/skills/lc-submit/scripts/finish.js" --seq 92 \
@@ -15,7 +15,7 @@
 //
 // 说明：一刷/二刷自动判定（progress.json 的 done 里已有该 seq → 二刷，走 review.js done）。
 //       提交区代码由本脚本从 src 文件自动提取并写入 analysis.json，调用方不用把代码贴进命令行。
-//       git 只 stage 本题相关文件（源码/analysis/复盘页/主页/状态文件），不碰工作区里其它改动。
+//       git 只 stage 本题相关文件（源码/analysis/复盘页/主页/状态文件），不碰工作区里其它改动；提交成功后推送当前分支 upstream。
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
@@ -259,6 +259,7 @@ if (isReview) {
 if (!has('--no-commit')) {
   if (dry) {
     console.log(`[dry-run] 将提交：${message}`);
+    console.log('[dry-run] 将推送当前分支到配置的 upstream');
   } else {
     // 只 stage 本题相关路径：磁盘上存在的，或已被 git 跟踪（删除也要 stage）；空路径/不存在且未跟踪的跳过
     const stageable = touched.filter(Boolean).map(p => path.relative(ROOT, p)).filter(rel => {
@@ -276,9 +277,21 @@ if (!has('--no-commit')) {
       const sha = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', cwd: ROOT }).stdout.trim();
       console.log(`  已提交 ${sha}：${message}`);
     }
+    const upstream = spawnSync('git', ['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'], { encoding: 'utf8', cwd: ROOT });
+    if (upstream.status !== 0) {
+      console.error('✗ 本地提交已完成，但当前分支没有配置 upstream，无法自动推送；请配置跟踪分支后运行 git push。');
+      process.exit(1);
+    }
+    const push = spawnSync('git', ['push'], { encoding: 'utf8', cwd: ROOT });
+    if (push.status !== 0) {
+      console.error(`✗ 本地提交已完成，但推送到 ${upstream.stdout.trim()} 失败：`);
+      console.error((push.stderr || push.stdout || '').trim());
+      process.exit(1);
+    }
+    console.log(`  已推送到 ${upstream.stdout.trim()}`);
   }
 } else {
-  step('已跳过 git 提交（--no-commit）', `将提交：${message}（--no-commit）`);
+  step('已跳过 git 提交与推送（--no-commit）', `将提交并推送：${message}（--no-commit）`);
 }
 
 // 10) 收尾摘要
