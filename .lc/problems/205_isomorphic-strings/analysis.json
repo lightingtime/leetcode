@@ -1,0 +1,41 @@
+{
+  "seq": 174,
+  "id": "205",
+  "slug": "isomorphic-strings",
+  "title": "同构字符串",
+  "category": "哈希表",
+  "date": "2026-09-30",
+  "verdict": "Accepted",
+  "testcases": "48/48",
+  "runtime_ms": null,
+  "memory_bytes": 44960000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "双向哈希映射",
+  "dp_subtype": "",
+  "approach_detail": "\\n**问题本质与解法选择理由**：需要检查每种源字符始终对应同一种目标字符，同时不同源字符不能共用目标字符。按位置扫描，分别维护源到目标、目标到源的映射，能在每个字符处立即发现冲突。\\n\\n**关键设计决策**：\\n-  保存源字符到目标字符，检查同一源字符后续是否仍映射到原目标。\\n-  保存目标字符到源字符，检查映射是否一对一。\\n- 新字符对两边都登记；已见字符必须与两张表中的关系同时一致。\\n\\n**具体推演**：输入 、：\\n1. 下标 0：登记  和 。\\n2. 下标 1：登记  和 。\\n3. 下标 2：再次看到  与 ，两张表的映射都一致，返回 true。\\n若输入 、，下标 0 登记 ；下标 1 的目标  已反向映射到 ，但当前源字符是 ，因此返回 false。\\n\\n**边界与复杂度**：长度为 1 时正常登记一对字符；非字母 ASCII 字符也可作为哈希键。扫描 n 个位置，时间 O(n)。ASCII 字符总数固定，最多记录 128 种字符映射，额外空间 O(1)。最坏情况下必须检查到末尾才能确认所有位置关系一致，因此时间下界为 Ω(n)。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)（ASCII 字符集固定）",
+  "notes": "一次 AC；两张反向映射分别防止单字符映射不一致和多个字符映射到同一目标。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [],
+  "submissions": [
+    {
+      "date": "2026-09-30",
+      "verdict": "Accepted",
+      "testcases": "48/48",
+      "runtime_ms": null,
+      "memory_bytes": 44960000,
+      "approach": "双向哈希映射",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)（ASCII 字符集固定）",
+      "optimal": true,
+      "notes": "一次 AC；两张反向映射分别防止单字符映射不一致和多个字符映射到同一目标。",
+      "code": "public boolean isIsomorphic(String s, String t) {\n        Map<Character, Character> map = new HashMap<>();\n        Map<Character, Character> reverseMap = new HashMap<>();\n        for (int i = 0; i < s.length(); i++) {\n            if (map.containsKey(s.charAt(i))) {\n                if (map.get(s.charAt(i)) != t.charAt(i)) return false;\n            } else {\n                map.put(s.charAt(i), t.charAt(i));\n            }\n            if (reverseMap.containsKey(t.charAt(i))) {\n                if (reverseMap.get(t.charAt(i)) != s.charAt(i)) return false;\n            } else {\n                reverseMap.put(t.charAt(i), s.charAt(i));\n            }\n        }\n        return true;\n    }"
+    }
+  ],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}

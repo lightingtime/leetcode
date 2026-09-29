@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC205 同构字符串 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 174</div>
+  <h1>LC205 · 同构字符串</h1>
+  <div class="sub">双向哈希映射 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 48/48</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 哈希表</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-09-30</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>205. 同构字符串 (Isomorphic Strings)</h1><p>&gt; <a href="https://leetcode.cn/problems/isomorphic-strings/" rel="noopener">https://leetcode.cn/problems/isomorphic-strings/</a></p><p>难度：Easy ｜ 分类：哈希表</p><p>标签：哈希表、字符串</p><h2>题目描述</h2><p>给定两个字符串 s 和 t ，判断它们是否是同构的。</p><p>如果 s 中的字符可以按某种映射关系替换得到 t ，那么这两个字符串是同构的。</p><p>每个出现的字符都应当映射到另一个字符，同时不改变字符的顺序。不同字符不能映射到同一个字符上，相同字符只能映射到同一个字符上，字符可以映射到自己本身。</p><p>示例 1：</p><p>输入：s = "egg", t = "add"</p><p>输出：true</p><p>解释：</p><p>字符串 s 和 t 可以通过以下方式变得相同：</p><p>将 'e' 映射为 'a'。</p><p>将 'g' 映射为 'd'。</p><p>示例 2：</p><p>输入：s = "f11", t = "b23"</p><p>输出：false</p><p>解释：</p><p>字符串 s 和 t 无法变得相同，因为 '1' 需要同时映射到 '2' 和 '3'。</p><p>示例 3：</p><p>输入：s = "paper", t = "title"</p><p>输出：true</p><p>提示：</p><p>1 4</p><p>t.length == s.length</p><p>s 和 t 由任意有效的 ASCII 字符组成</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>双向哈希映射</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)（ASCII 字符集固定）</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 双向哈希映射</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)（ASCII 字符集固定）</span><span class="chip">内存 ≈ 42.9 MB</span><span class="chip">用例 48/48</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0205_IsomorphicStrings.java · 双向哈希映射</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">boolean</span> <span class="tk-f">isIsomorphic</span>(<span class="tk-t">String</span> s, <span class="tk-t">String</span> t) {
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Character</span>, <span class="tk-t">Character</span>&gt; map = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-t">Map</span>&lt;<span class="tk-t">Character</span>, <span class="tk-t">Character</span>&gt; reverseMap = <span class="tk-k">new</span> <span class="tk-t">HashMap</span>&lt;&gt;();
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; s.<span class="tk-f">length</span>(); i++) {
+            <span class="tk-k">if</span> (map.<span class="tk-f">containsKey</span>(s.<span class="tk-f">charAt</span>(i))) {
+                <span class="tk-k">if</span> (map.<span class="tk-f">get</span>(s.<span class="tk-f">charAt</span>(i)) != t.<span class="tk-f">charAt</span>(i)) <span class="tk-k">return</span> <span class="tk-k">false</span>;
+            } <span class="tk-k">else</span> {
+                map.<span class="tk-f">put</span>(s.<span class="tk-f">charAt</span>(i), t.<span class="tk-f">charAt</span>(i));
+            }
+            <span class="tk-k">if</span> (reverseMap.<span class="tk-f">containsKey</span>(t.<span class="tk-f">charAt</span>(i))) {
+                <span class="tk-k">if</span> (reverseMap.<span class="tk-f">get</span>(t.<span class="tk-f">charAt</span>(i)) != s.<span class="tk-f">charAt</span>(i)) <span class="tk-k">return</span> <span class="tk-k">false</span>;
+            } <span class="tk-k">else</span> {
+                reverseMap.<span class="tk-f">put</span>(t.<span class="tk-f">charAt</span>(i), s.<span class="tk-f">charAt</span>(i));
+            }
+        }
+        <span class="tk-k">return</span> <span class="tk-k">true</span>;
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p><strong>问题本质与解法选择理由</strong>：需要检查每种源字符始终对应同一种目标字符，同时不同源字符不能共用目标字符。按位置扫描，分别维护源到目标、目标到源的映射，能在每个字符处立即发现冲突。</p><p><strong>关键设计决策</strong>：</p><ul><li>保存源字符到目标字符，检查同一源字符后续是否仍映射到原目标。</li><li>保存目标字符到源字符，检查映射是否一对一。</li><li>新字符对两边都登记；已见字符必须与两张表中的关系同时一致。</li></ul><p><strong>具体推演</strong>：输入 、：</p><ol><li>下标 0：登记  和 。</li><li>下标 1：登记  和 。</li><li>下标 2：再次看到  与 ，两张表的映射都一致，返回 true。</li></ol><p>若输入 、，下标 0 登记 ；下标 1 的目标  已反向映射到 ，但当前源字符是 ，因此返回 false。</p><p><strong>边界与复杂度</strong>：长度为 1 时正常登记一对字符；非字母 ASCII 字符也可作为哈希键。扫描 n 个位置，时间 O(n)。ASCII 字符总数固定，最多记录 128 种字符映射，额外空间 O(1)。最坏情况下必须检查到末尾才能确认所有位置关系一致，因此时间下界为 Ω(n)。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>48/48 用例一次通过。</p></div></div></div></section>
+  
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">48/48</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 42.9 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)（ASCII 字符集固定）</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 174 · isomorphic-strings</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">一次 AC；两张反向映射分别防止单字符映射不一致和多个字符映射到同一目标。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0001_TwoSum_Review.html">LC1 · 两数之和</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0049_GroupAnagrams_Review.html">LC49 · 字母异位词分组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/205_isomorphic-strings/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0205_IsomorphicStrings.java">src/哈希表/LC0205_IsomorphicStrings.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-09-30
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

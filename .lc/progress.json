@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-30",
-  "current_seq": 173,
+  "current_seq": 174,
   "done": [
     {
       "seq": 1,
@@ -1904,6 +1904,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "输出栈非空时保留队首顺序，仅在为空时将输入栈整体倒入。"
+    },
+    {
+      "seq": 174,
+      "id": "205",
+      "title": "同构字符串",
+      "slug": "isomorphic-strings",
+      "category": "哈希表",
+      "date": "2026-09-30",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "一次 AC；两张反向映射分别防止单字符映射不一致和多个字符映射到同一目标。"
     }
   ],
   "error_habits": [
