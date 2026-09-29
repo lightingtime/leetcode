@@ -55,10 +55,16 @@ function has(name) { return process.argv.indexOf(name) >= 0; }
 const args = process.argv.slice(2);
 const cmd = args[0];
 const order = JSON.parse(fs.readFileSync(ORDER, 'utf8'));
+const unaudited = order.filter(o => typeof o.isPaidOnly !== 'boolean');
+if (unaudited.length && (cmd === 'next' || cmd === 'stats')) {
+  console.log(`题库有 ${unaudited.length} 道题尚未核实会员资格。请先运行：node ".agents/skills/lc-practice/scripts/fetch_problem.js" --audit-order`);
+  process.exit(2);
+}
+const eligibleOrder = order.filter(o => !o.isPaidOnly);
 const progress = JSON.parse(fs.readFileSync(PROGRESS, 'utf8'));
 const doneMap = new Map((progress.done || []).map(d => [d.seq, d]));
 // 题库中未完成一刷的题（可能随时新增）——有它们时复习模式不生效
-const pendingFirstPass = order.filter(o => !doneMap.has(o.seq) && !(progress.skipped || []).includes(o.seq));
+const pendingFirstPass = eligibleOrder.filter(o => !doneMap.has(o.seq) && !(progress.skipped || []).includes(o.seq));
 function warnPending() {
   if (pendingFirstPass.length) {
     console.log(`⚠ 题库有 ${pendingFirstPass.length} 道新题未完成一刷（如 ${pendingFirstPass[0].id}. ${pendingFirstPass[0].title} 等），建议先切回刷题模式：update_state.js mode practice`);
@@ -95,7 +101,7 @@ function ensureState() {
   }
   const state = readJson(STATE);
   let changed = false;
-  for (const q of order) {
+    for (const q of eligibleOrder) {
     if (!state.problems[q.slug]) { state.problems[q.slug] = seedEntry(q); changed = true; }
   }
   // 清理已不在题库中的旧条目（题库可能删除/替换题目）
@@ -127,7 +133,7 @@ if (cmd === 'init') {
   const daysLeft = Math.max(0, daysBetween(today, REVIEW_DEADLINE));
   const problems = state.problems;
   const pending = [], due = [], mastered = [];
-  for (const q of order) {
+  for (const q of eligibleOrder) {
     const st = problems[q.slug];
     if (!st) continue;
     if (st.mastered) { mastered.push(st); continue; }
@@ -146,7 +152,7 @@ if (cmd === 'init') {
   const base = quota > 0 ? quota : Math.min(10, queue.length);
   const n = base + due.length; // 今日推荐 = 全部到期 + 配额补足
   const todayList = queue.slice(0, n);
-  console.log(`二刷进度：${order.length - pending.length}/${order.length} 题 ｜ 已掌握 ${mastered.length} 题`);
+  console.log(`二刷进度：${eligibleOrder.length - pending.length}/${eligibleOrder.length} 题 ｜ 已掌握 ${mastered.length} 题`);
   console.log(`第一轮待刷 ${pending.length} 题，距 ${REVIEW_DEADLINE} 还有 ${daysLeft} 天 → 建议今日 ${quota || '—'} 题` +
     (due.length ? `（到期 ${due.length} 题优先，与配额一起推荐）` : ''));
   if (!todayList.length) { console.log('今日队列为空：全部已完成或未到期，进入间隔复习等待。'); process.exit(0); }
@@ -269,13 +275,15 @@ if (cmd === 'init') {
   const state = ensureState();
   const problems = Object.values(state.problems);
   const today = todayStr();
-  const reviewed = problems.filter(p => p.review_count > 0);
-  const pending = problems.filter(p => p.review_count === 0);
-  const mastered = problems.filter(p => p.mastered);
+  const eligibleSlugs = new Set(eligibleOrder.map(q => q.slug));
+  const eligibleProblems = problems.filter(p => eligibleSlugs.has(order.find(q => q.seq === p.seq)?.slug));
+  const reviewed = eligibleProblems.filter(p => p.review_count > 0);
+  const pending = eligibleProblems.filter(p => p.review_count === 0);
+  const mastered = eligibleProblems.filter(p => p.mastered);
   const strong = reviewed.filter(p => p.mastery === 'strong');
   const weak = reviewed.filter(p => p.mastery === 'weak');
   const dueToday = reviewed.filter(p => p.next_review_date && p.next_review_date <= today && !p.mastered).length;
-  console.log(`二刷进度：${reviewed.length}/${order.length} 题（已掌握 ${mastered.length} 题）`);
+  console.log(`二刷进度：${reviewed.length}/${eligibleOrder.length} 题（已掌握 ${mastered.length} 题）`);
   console.log(`第一轮待刷：${pending.length} 题 ｜ 今日到期（间隔）：${dueToday} 题`);
   console.log(`掌握度分布：较强 ${strong.length} ｜ 较弱 ${weak.length} ｜ 未复习 ${pending.length}`);
   const weakCat = {};

@@ -1,0 +1,44 @@
+{
+  "id": "409",
+  "slug": "longest-palindrome",
+  "title": "Longest Palindrome",
+  "titleCn": "最长回文串",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/longest-palindrome/",
+  "tags": [
+    "Greedy",
+    "Hash Table",
+    "String"
+  ],
+  "tagsCn": [
+    "贪心",
+    "哈希表",
+    "字符串"
+  ],
+  "category": "贪心与区间",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"abccccdd\""
+        }
+      ],
+      "output": "7",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"a\""
+        }
+      ],
+      "output": "1",
+      "explain": "可以构造的最长回文串是\"a\"，它的长度是 1。"
+    }
+  ],
+  "exampleTestcases": "\"abccccdd\"\n\"a\"",
+  "javaSnippet": "class Solution {\n    public int longestPalindrome(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-09-29T17:09:47.695Z"
+}

@@ -85,6 +85,57 @@ const args = process.argv.slice(2);
 function arg(name) { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : null; }
 
 async function main() {
+  if (args[0] === '--audit-order') {
+    const orderPath = path.join(LC_DIR, 'order.json');
+    const progressPath = path.join(LC_DIR, 'progress.json');
+    const order = JSON.parse(fs.readFileSync(orderPath, 'utf8'));
+    const progress = JSON.parse(fs.readFileSync(progressPath, 'utf8'));
+    const auditQuery = `query questionData($titleSlug: String!) {
+      question(titleSlug: $titleSlug) {
+        questionFrontendId translatedTitle title titleSlug isPaidOnly
+      }
+    }`;
+    const results = [];
+    const failures = [];
+    for (const q of order) {
+      try {
+        const resp = await fetch(GRAPHQL, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', origin: 'https://leetcode.cn', referer: 'https://leetcode.cn/' },
+          body: JSON.stringify({ query: auditQuery, variables: { titleSlug: q.slug }, operationName: 'questionData' })
+        });
+        const json = await resp.json();
+        const data = json.data && json.data.question;
+        if (!resp.ok || !data || typeof data.isPaidOnly !== 'boolean') throw new Error('API 未返回有效会员标记');
+        results.push({ q, data });
+      } catch (e) {
+        failures.push(`${q.seq}. ${q.id} ${q.slug}: ${e.message}`);
+      }
+      await new Promise(resolve => setTimeout(resolve, 120));
+    }
+    if (failures.length) {
+      console.error(`审计未完成：${results.length}/${order.length} 题成功，以下题目未核实：\n${failures.join('\n')}`);
+      process.exitCode = 1;
+      return;
+    }
+    const done = new Set((progress.done || []).map(d => d.seq));
+    progress.skipped = progress.skipped || [];
+    const paid = [];
+    for (const { q, data } of results) {
+      q.isPaidOnly = data.isPaidOnly;
+      q.premiumCheckedAt = new Date().toISOString().slice(0, 10);
+      if (data.isPaidOnly) {
+        paid.push(q);
+        if (!done.has(q.seq) && !progress.skipped.includes(q.seq)) progress.skipped.push(q.seq);
+      }
+    }
+    fs.writeFileSync(orderPath, JSON.stringify(order, null, 2), 'utf8');
+    fs.writeFileSync(progressPath, JSON.stringify(progress, null, 2), 'utf8');
+    console.log(`会员资格审计完成：${order.length} 题；会员题 ${paid.length} 题，已将未完成题标记为跳过（不计完成）。`);
+    paid.forEach(q => console.log(`  seq=${q.seq} | ${q.id}. ${q.title} (${q.slug})`));
+    return;
+  }
+
   let slug = arg('--slug');
   if (!slug && arg('--id')) {
     const id = arg('--id');
@@ -97,7 +148,7 @@ async function main() {
 
   const query = `query questionData($titleSlug: String!) {
     question(titleSlug: $titleSlug) {
-      questionId questionFrontendId title translatedTitle titleSlug difficulty
+      questionId questionFrontendId title translatedTitle titleSlug difficulty isPaidOnly
       translatedContent content
       topicTags { name translatedName }
       exampleTestcases
@@ -113,6 +164,20 @@ async function main() {
   const data = json.data && json.data.question;
   if (!data) {
     console.error('拉取失败：' + JSON.stringify(json.errors || json).slice(0, 500));
+    process.exitCode = 1;
+    return;
+  }
+
+  // LeetCode may return a question shell for Premium problems without its
+  // statement or Java template. Detect the entitlement flag before writing
+  // an empty problem file.
+  if (data.isPaidOnly) {
+    console.error(`题目需会员：${data.questionFrontendId || slug} ${data.translatedTitle || data.title}（${slug}）。请按题目顺序跳过，不标记完成。`);
+    process.exitCode = 2;
+    return;
+  }
+  if (!data.translatedContent && !data.content && !(data.codeSnippets || []).some(c => c.lang === 'Java')) {
+    console.error(`拉取失败：${slug} 返回的题目描述和 Java 模板均为空，未写入题目文件。`);
     process.exitCode = 1;
     return;
   }

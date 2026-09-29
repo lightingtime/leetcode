@@ -31,6 +31,7 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 ## 流程
 
 1. 运行 `node ".agents/skills/lc-practice/scripts/update_state.js" next` 查看进度与下一题，记录其 seq、slug、分类。
+   - `next` 若提示题目会员资格尚未核实，先运行 `node ".agents/skills/lc-practice/scripts/fetch_problem.js" --audit-order`。该审计逐题查询官方接口；只有全部题目都返回有效会员标记时才写回审计状态。题库新增题默认未审计，禁止直接推荐。
    - 若全部完成：进入复习模式（二刷 + 间隔复习），**改用 lc-review**——触发词「开始复习 / 二刷 / 复习下一题」，先跑 `node ".agents/skills/lc-review/scripts/review.js" next` 看今日队列与配额。
    - 复习模式 / 第二轮开始前：先跑 `node ".agents/skills/lc-practice/scripts/update_state.js" code-notes`，把「当时写法未达最精简」的题提醒给用户，合并进今日复习清单，重写时要求达到精简写法。
    - 若有历史错误习惯，只挑与当前题目分类/主题相关的读给用户听，提醒避免重犯；与本题无关的分类（如哈希表、树）跳过。
@@ -52,7 +53,7 @@ description: 力扣刷题主流程。当用户说「开始刷题」「执行 lc-
 
 - **联网命令单独执行（必做）**：拉题（fetch_problem.js）和提交（submit.js）等联网命令必须单独运行，禁止用 `&&` 与本地命令（run_tests.js / create_problem.js）拼在一条命令里，避免本地命令连带进入提权请求；本地命令在沙箱内直接跑。
 - **权限前缀用通用形式（必做）**：请求联网命令权限时，`prefix_rule` 用不带具体参数的通用前缀（如 `["node", ".agents/skills/lc-practice/scripts/fetch_problem.js"]`、`["node", ".agents/skills/lc-practice/scripts/create_problem.js"]`），禁止带 `--slug <具体值>` 等死参数，否则每次新题都要重新请求。
-- 拉取失败或题目需会员：报告用户并跳到顺序中的下一题，不写入 done。
+- 拉取失败或题目需会员：会员题加入 `progress.skipped`（不写入 done），报告用户并继续顺序中的下一道未完成、未跳过题。拉题脚本检查 `isPaidOnly`，不得为会员题生成空模板；题目描述与 Java 模板同时为空时按拉取失败处理。
 - 不要替用户写题解；用户索要答案时说明「先尝试，失败后让我分析」。
 - 边界测试必须在建题时由 Codex 按本题具体设计并写入 main（见流程 3）；缺失或套用偷懒模板视为流程违规，后续 lc-submit 提交前会复查。
 - 每题完成状态只由 lc-submit 在 Accepted 后写入；本 skill 不改 progress.json 的 done。

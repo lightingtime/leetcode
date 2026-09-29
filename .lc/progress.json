@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-30",
-  "current_seq": 174,
+  "current_seq": 176,
   "done": [
     {
       "seq": 1,
@@ -1915,6 +1915,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "一次 AC；两张反向映射分别防止单字符映射不一致和多个字符映射到同一目标。"
+    },
+    {
+      "seq": 176,
+      "id": "409",
+      "title": "最长回文串",
+      "slug": "longest-palindrome",
+      "category": "哈希表",
+      "date": "2026-09-30",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "本地 7 项用例通过后一次在线提交 Accepted。先前本地回归暴露频次到长度的换算错误，修正后提交；因经历过错误分析与讨论，掌握度记为较弱。"
     }
   ],
   "error_habits": [
@@ -3699,6 +3710,17 @@
         "linked-list"
       ],
       "last_seen": "2026-09-28"
+    },
+    {
+      "habit": "频次计数拼回文时，偶数次数只把次数除以 2 加入长度，少算一半字符；奇数次数只设置中心标记，漏掉可成对使用的部分。应先明确每个字符频次对左右两侧和中心的贡献，再汇总长度。",
+      "count": 1,
+      "examples": [
+        "longest-palindrome"
+      ],
+      "categories": [
+        "哈希表"
+      ],
+      "last_seen": "2026-09-30"
     }
   ],
   "category_hints": {
@@ -3717,5 +3739,8 @@
     "数组与矩阵": "矩阵题先想如何用行列信息/排序/原地操作降维。",
     "其他": "设计题先明确 API 与复杂度要求；分治想能否拆成左右两个子问题。"
   },
-  "skipped": []
+  "skipped": [
+    175,
+    191
+  ]
 }

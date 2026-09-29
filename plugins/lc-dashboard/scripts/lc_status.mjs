@@ -27,31 +27,42 @@ const root = findRoot(arg('--dir'));
 if (!root) { console.error('未找到力扣项目（向上找不到 .lc/mode.json）。请在仓库根目录运行，或加 --dir <项目根>。'); process.exit(1); }
 const LC = path.join(root, '.lc');
 const read = p => JSON.parse(fs.readFileSync(p, 'utf8'));
-const order = read(path.join(LC, 'order.json'));
-const progress = read(path.join(LC, 'progress.json'));
-let mode = 'practice';
-try { mode = (read(path.join(LC, 'mode.json')).mode || 'practice'); } catch {}
-let reviewState = null;
-try { reviewState = read(path.join(LC, 'review_state.json')); } catch {}
+let order, progress, mode, reviewState;
+function loadState() {
+  order = read(path.join(LC, 'order.json'));
+  progress = read(path.join(LC, 'progress.json'));
+  mode = 'practice';
+  try { mode = (read(path.join(LC, 'mode.json')).mode || 'practice'); } catch {}
+  reviewState = null;
+  try { reviewState = read(path.join(LC, 'review_state.json')); } catch {}
+}
+loadState();
 
 const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
 const REVIEW_DEADLINE = '2026-09-15';
 const daysBetween = (a, b) => { const p = a.split('-').map(Number), q = b.split('-').map(Number); return Math.round((new Date(q[0], q[1] - 1, q[2]) - new Date(p[0], p[1] - 1, p[2])) / 86400000); };
 const daysLeft = Math.max(0, daysBetween(today, REVIEW_DEADLINE));
 
-const done = progress.done || [];
-const doneMap = new Map(done.map(d => [d.seq, d]));
-const skipped = progress.skipped || [];
-const checkinDays = new Set(done.map(d => d.date)).size;
-const pendingFirst = order.filter(o => !doneMap.has(o.seq) && !skipped.includes(o.seq));
+let eligibleOrder, done, doneMap, skipped, checkinDays, pendingFirst;
+let problems, reviewed, pendingReview, mastered, strong, weak, dueToday;
+function refreshDerivedState() {
+  eligibleOrder = order.filter(o => o.isPaidOnly === false);
+  done = progress.done || [];
+  doneMap = new Map(done.map(d => [d.seq, d]));
+  skipped = progress.skipped || [];
+  checkinDays = new Set(done.map(d => d.date)).size;
+  pendingFirst = eligibleOrder.filter(o => !doneMap.has(o.seq) && !skipped.includes(o.seq));
 
-const problems = reviewState ? Object.values(reviewState.problems || {}) : [];
-const reviewed = problems.filter(p => p.review_count > 0);
-const pendingReview = problems.filter(p => p.review_count === 0);
-const mastered = problems.filter(p => p.mastered);
-const strong = reviewed.filter(p => p.mastery === 'strong');
-const weak = reviewed.filter(p => p.mastery === 'weak');
-const dueToday = reviewed.filter(p => p.next_review_date && p.next_review_date <= today && !p.mastered);
+  const eligibleSeqs = new Set(eligibleOrder.map(o => o.seq));
+  problems = reviewState ? Object.values(reviewState.problems || {}).filter(p => eligibleSeqs.has(p.seq)) : [];
+  reviewed = problems.filter(p => p.review_count > 0);
+  pendingReview = problems.filter(p => p.review_count === 0);
+  mastered = problems.filter(p => p.mastered);
+  strong = reviewed.filter(p => p.mastery === 'strong');
+  weak = reviewed.filter(p => p.mastery === 'weak');
+  dueToday = reviewed.filter(p => p.next_review_date && p.next_review_date <= today && !p.mastered);
+}
+refreshDerivedState();
 
 const isWeak = st => { const d = doneMap.get(st.seq) || {}; return !d.firstPass || !d.optimal; };
 const queue = [
@@ -71,8 +82,8 @@ const badge = (label, ok) => (ok ? `${C.grn}${label}${C.rst}` : `${C.yel}${label
 
 function render() {
   const modeLabel = mode === 'review' ? `${C.cyn}复习（二刷）${C.rst}` : `${C.grn}刷题（一刷）${C.rst}`;
-  const first = `${done.length}/${order.length}` + (pendingFirst.length === 0 ? ` ${C.grn}✓ 一刷完成${C.rst}` : ` ${C.yel}还有 ${pendingFirst.length} 道新题${C.rst}`);
-  const rv = reviewState ? `${reviewed.length}/${order.length} ｜ 待刷 ${pendingReview.length} ｜ 今日到期 ${dueToday.length}` : `${C.dim}未开始二刷${C.rst}`;
+  const first = `${done.length}/${eligibleOrder.length}` + (pendingFirst.length === 0 ? ` ${C.grn}✓ 一刷完成${C.rst}` : ` ${C.yel}还有 ${pendingFirst.length} 道新题${C.rst}`);
+  const rv = reviewState ? `${reviewed.length}/${eligibleOrder.length} ｜ 待刷 ${pendingReview.length} ｜ 今日到期 ${dueToday.length}` : `${C.dim}未开始二刷${C.rst}`;
   const master = reviewState ? `较强 ${strong.length} ｜ 较弱 ${weak.length} ｜ 已掌握 ${mastered.length}` : '—';
   const out = [];
   out.push(tline);
@@ -112,6 +123,8 @@ function render() {
 }
 
 function run() {
+  loadState();
+  refreshDerivedState();
   const s = render();
   if (watch) process.stdout.write('\x1b[2J\x1b[H');
   console.log(s);

@@ -31,16 +31,18 @@ if (!root) { process.stdout.write(''); process.exit(0); }
 const read = p => JSON.parse(fs.readFileSync(p, 'utf8'));
 const LC = root + '/.lc';
 const order = read(LC + '/order.json');
+const eligibleOrder = order.filter(o => o.isPaidOnly === false);
+const eligibleSeqs = new Set(eligibleOrder.map(o => o.seq));
 const progress = read(LC + '/progress.json');
 let mode = 'practice';
 try { mode = (read(LC + '/mode.json').mode || 'practice'); } catch {}
 let rs = null;
 try { rs = read(LC + '/review_state.json'); } catch {}
-const done = progress.done || [];
+const done = (progress.done || []).filter(d => eligibleSeqs.has(d.seq));
 const doneSeqs = new Set(done.map(d => d.seq));
 const skipped = progress.skipped || [];
-const pendingNew = order.filter(o => !doneSeqs.has(o.seq) && !skipped.includes(o.seq)).length;
-const probs = rs ? Object.values(rs.problems) : [];
+const pendingNew = eligibleOrder.filter(o => !doneSeqs.has(o.seq) && !skipped.includes(o.seq)).length;
+const probs = rs ? Object.values(rs.problems).filter(p => eligibleSeqs.has(p.seq)) : [];
 const reviewed = probs.filter(p => p.review_count > 0).length;
 const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
 const due = probs.filter(p => p.review_count > 0 && p.next_review_date && p.next_review_date <= today && !p.mastered).length;
@@ -50,11 +52,11 @@ const C = tmuxFmt
   : { grn: tty ? '\x1b[32m' : '', yel: tty ? '\x1b[33m' : '', cyn: tty ? '\x1b[36m' : '', red: tty ? '\x1b[31m' : '', rst: tty ? '\x1b[0m' : '' };
 const parts = [];
 if (pendingNew > 0) {
-  parts.push(`${C.yel}LC 刷题${C.rst} · 第一轮 ${done.length}/${order.length}${C.red} · 剩余 ${pendingNew} 题${C.rst}`);
+  parts.push(`${C.yel}LC 刷题${C.rst} · 第一轮 ${done.length}/${eligibleOrder.length}${C.red} · 剩余 ${pendingNew} 题${C.rst}`);
 } else if (mode === 'review') {
   const todayTxt = due > 0 ? `今日待复习 ${due} 题` : '今日无待复习题目';
-  parts.push(`${C.cyn}LC 复习${C.rst} · ${todayTxt} · 第二轮 ${reviewed}/${order.length}`);
+  parts.push(`${C.cyn}LC 复习${C.rst} · ${todayTxt} · 第二轮 ${reviewed}/${eligibleOrder.length}`);
 } else {
-  parts.push(`${C.grn}LC 刷题${C.rst} · 第一轮 ${done.length}/${order.length}`);
+  parts.push(`${C.grn}LC 刷题${C.rst} · 第一轮 ${done.length}/${eligibleOrder.length}`);
 }
 process.stdout.write(parts.join(' | '));

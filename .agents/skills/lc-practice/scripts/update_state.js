@@ -44,7 +44,7 @@ const progress = readJson(PROGRESS);
 const date = todayStr();
 const FIRST_PASS_DEADLINE = '2026-08-30';  // 硬性目标：第一遍刷完所有题
 const SECOND_PASS_DEADLINE = '2026-09-15'; // 硬性目标：第二遍完成时间
-const TOTAL_PROBLEMS = order.length;        // 全部题目数（order.json）
+const TOTAL_PROBLEMS = order.filter(q => !q.isPaidOnly).length; // 可练习题数（排除会员题）
 
 function daysBetween(a, b) {
   const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
@@ -81,6 +81,11 @@ function planReport(p) {
 }
 
 if (cmd === 'next') {
+  const unaudited = order.filter(o => typeof o.isPaidOnly !== 'boolean');
+  if (unaudited.length) {
+    console.log(`题库有 ${unaudited.length} 道题尚未核实会员资格。请先运行：node ".agents/skills/lc-practice/scripts/fetch_problem.js" --audit-order`);
+    process.exit(2);
+  }
   const MODE = path.join(LC_DIR, 'mode.json');
   let mode = 'practice';
   try { mode = (readJson(MODE).mode || 'practice'); } catch {}
@@ -90,15 +95,16 @@ if (cmd === 'next') {
   // 题库新增了未刷的题 → 复习模式失效，自动切回刷题模式（随时可能发生，不做死板绑定）
   if (mode === 'review' && hasPending) {
     writeJson(MODE, { mode: 'practice', updated: date });
-    console.log(`检测到题库有 ${order.length - doneSeqs.size - skippedSeqs.size} 道新题未刷，已自动切换为刷题模式（一刷）。`);
+    const pendingCount = order.filter(o => !o.isPaidOnly && !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq)).length;
+    console.log(`检测到题库有 ${pendingCount} 道新题未刷，已自动切换为刷题模式（一刷）。`);
     mode = 'practice';
   }
   if (mode === 'review') {
     const r = spawnSync('node', [path.join(__dirname, '..', '..', 'lc-review', 'scripts', 'review.js'), 'next', ...args.slice(1)], { encoding: 'utf8', stdio: 'inherit' });
     process.exit(r.status || 0);
   }
-  const next = order.find(o => !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq));
-  console.log(`进度：已完成 ${doneSeqs.size}/${order.length}`);
+  const next = order.find(o => !o.isPaidOnly && !doneSeqs.has(o.seq) && !skippedSeqs.has(o.seq));
+  console.log(`进度：已完成 ${doneSeqs.size}/${TOTAL_PROBLEMS}`);
   if (!next) {
     writeJson(MODE, { mode: 'review', updated: date });
     console.log('第一遍全部完成，已自动切换为复习模式（二刷 + 间隔复习）。');
@@ -411,7 +417,7 @@ if (cmd === 'next') {
   console.log(`共 ${hitProblems} 题 / ${hitNotes} 条精简提示${hitProblems > shown ? `（已列前 ${shown} 题，看全量加 --all）` : ''}`);
 } else if (cmd === 'stats') {
   const done = progress.done || [];
-  console.log(`已完成：${done.length}/${order.length}`);
+  console.log(`已完成：${done.length}/${TOTAL_PROBLEMS}`);
   const byCat = {};
   done.forEach(d => { byCat[d.category] = (byCat[d.category] || 0) + 1; });
   Object.entries(byCat).sort((a, b) => b[1] - a[1]).forEach(([c, n]) => console.log(`  ${c}: ${n}`));
@@ -432,7 +438,7 @@ if (cmd === 'next') {
   } else {
     let cur = 'practice';
     try { cur = (readJson(MODE).mode || 'practice'); } catch {}
-    const pending = order.filter(o => !(progress.done || []).some(d => d.seq === o.seq) && !(progress.skipped || []).includes(o.seq)).length;
+    const pending = order.filter(o => !o.isPaidOnly && !(progress.done || []).some(d => d.seq === o.seq) && !(progress.skipped || []).includes(o.seq)).length;
     const label = cur === 'review' ? '复习（二刷）' : '刷题（一刷）';
     if (cur === 'review' && pending > 0) {
       console.log(`当前模式：${label}，但题库有 ${pending} 道新题未刷（建议：mode practice 切回刷题）。`);

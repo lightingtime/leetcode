@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC409 最长回文串 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 176</div>
+  <h1>LC409 · 最长回文串</h1>
+  <div class="sub">字符频次统计 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 98/98</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 哈希表</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-09-30</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>409. 最长回文串 (Longest Palindrome)</h1><p>&gt; <a href="https://leetcode.cn/problems/longest-palindrome/" rel="noopener">https://leetcode.cn/problems/longest-palindrome/</a></p><p>难度：Easy ｜ 分类：贪心与区间</p><p>标签：贪心、哈希表、字符串</p><h2>题目描述</h2><p>给定一个包含大写字母和小写字母的字符串 s ，返回 通过这些字母构造成的 最长的 回文串 的长度。</p><p>在构造过程中，请注意 区分大小写 。比如 "Aa" 不能当做一个回文字符串。</p><p>示例 1:</p><p>输入:s = "abccccdd"</p><p>输出:7</p><p>解释:</p><p>我们可以构造的最长的回文串是"dccaccd", 它的长度是 7。</p><p>示例 2:</p><p>输入:s = "a"</p><p>输出:1</p><p>解释：可以构造的最长回文串是"a"，它的长度是 1。</p><p>提示:</p><p>1</p><p>s 只由小写 和/或 大写英文字母组成</p><h2>示例</h2><ol><li>输入：s = "abccccdd"</li></ol><p>输出：7</p><ol><li>输入：s = "a"</li></ol><p>输出：1</p><p>解释：可以构造的最长回文串是"a"，它的长度是 1。</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>字符频次统计</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 字符频次统计</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 41.5 MB</span><span class="chip">用例 98/98</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0409_LongestPalindrome.java · 字符频次统计</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span> <span class="tk-f">longestPalindrome</span>(<span class="tk-t">String</span> s) {
+        <span class="tk-k">int</span>[] count = <span class="tk-k">new</span> <span class="tk-k">int</span>[<span class="tk-n">128</span>];
+        <span class="tk-k">boolean</span> hasSingle = <span class="tk-k">false</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">char</span> c : s.<span class="tk-f">toCharArray</span>()) {
+            count[c]++;
+        }
+        <span class="tk-k">int</span> len = <span class="tk-n">0</span>;
+        <span class="tk-k">for</span> (<span class="tk-k">int</span> j : count) {
+            <span class="tk-k">if</span> (j % <span class="tk-n">2</span> == <span class="tk-n">0</span>) {
+                len += j;
+            } <span class="tk-k">else</span> {
+                len += j - <span class="tk-n">1</span>;
+                hasSingle = <span class="tk-k">true</span>;
+            }
+        }
+        <span class="tk-k">return</span> hasSingle ? len + <span class="tk-n">1</span> : len;
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><p>问题本质：回文两侧字符必须成对出现，最多再从一个奇数频次字符取一个中心字符。输入只含大小写英文字母，因此用固定长度计数表比构造字符集合或实际回文串更直接。设计：遍历字符串统计每个字符次数；扫描频次数组，偶数次数全部可用，奇数次数可用其成对部分并记录存在中心候选；最终最多给总长度增加一个中心字符。例子 aaabbc：a 出现 3 次可提供一对并留下中心候选，b 出现 2 次可提供一对，c 出现 1 次只增加中心候选；两侧字符共 4 个，只取一个中心，总长 5。多个奇数频次也只能共享一个中心。约束长度至少为 1，所以没有空串输入；大小写字符分别计数，不能混为同一个字符。时间 O(n+128)=O(n)，空间 O(128)=O(1)。时间下限是 Ω(n)，因为每个输入字符都可能改变频次结果，必须检查；字符集固定，所以辅助空间为常数，已达到渐近最优。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 踩坑<span class="tl-badge bug">已记录</span></span><p>频次计数拼回文时，偶数次数只把次数除以 2 加入长度，少算一半字符；奇数次数只设置中心标记，漏掉可成对使用的部分。应先明确每个字符频次对左右两侧和中心的贡献，再汇总长度。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">03 · 提交<span class="tl-badge ok">Accepted</span></span><p>98/98 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>频次统计计算最长回文长度</h3><p>固定字符集时用频次数组汇总贡献，回文两侧只能使用相同字符组成的配对；奇数频次也包含可配对部分，全串最多选择一个中心字符。只求长度时直接汇总可用字符数，无需构造结果字符串。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">98/98</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 41.5 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 哈希表</h3><div class="quote">看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。</div>
+      <h3>错误习惯复盘</h3><p><b>频次计数拼回文时，偶数次数只把次数除以 2 加入长度，少算一半字符；奇数次数只设置中心标记，漏掉可成对使用的部分。应先明确每个字符频次对左右两侧和中心的贡献，再汇总长度。</b>（累计 1 次）</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 176 · longest-palindrome</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">本地 7 项用例通过后一次在线提交 Accepted。先前本地回归暴露频次到长度的换算错误，修正后提交；因经历过错误分析与讨论，掌握度记为较弱。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 哈希表</h2><ul class="similar-list"><li><a href="../哈希表/LC0001_TwoSum_Review.html">LC1 · 两数之和</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0169_MajorityElement_Review.html">LC169 · 多数元素</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0049_GroupAnagrams_Review.html">LC49 · 字母异位词分组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0208_ImplementTriePrefixTree_Review.html">LC208 · 实现 Trie (前缀树)</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0448_FindAllNumbersDisappearedInAnArray_Review.html">LC448 · 找到所有数组中消失的数字</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0560_SubarraySumEqualsK_Review.html">LC560 · 和为 K 的子数组</a><span class="chip">MEDIUM</span></li><li><a href="../哈希表/LC0013_RomanToInteger_Review.html">LC13 · 罗马数字转整数</a><span class="chip">EASY</span></li><li><a href="../哈希表/LC0217_ContainsDuplicate_Review.html">LC217 · 存在重复元素</a><span class="chip">EASY</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/409_longest-palindrome/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%93%88%E5%B8%8C%E8%A1%A8/LC0409_LongestPalindrome.java">src/哈希表/LC0409_LongestPalindrome.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-09-30
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

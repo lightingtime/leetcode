@@ -7,7 +7,9 @@
     "slug": "two-sum",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/two-sum/"
+    "url": "https://leetcode.cn/problems/two-sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 2,
@@ -17,7 +19,9 @@
     "slug": "majority-element",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/majority-element/"
+    "url": "https://leetcode.cn/problems/majority-element/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 3,
@@ -27,7 +31,9 @@
     "slug": "group-anagrams",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/group-anagrams/"
+    "url": "https://leetcode.cn/problems/group-anagrams/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 4,
@@ -37,7 +43,9 @@
     "slug": "implement-trie-prefix-tree",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/implement-trie-prefix-tree/"
+    "url": "https://leetcode.cn/problems/implement-trie-prefix-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 5,
@@ -47,7 +55,9 @@
     "slug": "linked-list-cycle",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/linked-list-cycle/"
+    "url": "https://leetcode.cn/problems/linked-list-cycle/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 6,
@@ -57,7 +67,9 @@
     "slug": "intersection-of-two-linked-lists",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/intersection-of-two-linked-lists/"
+    "url": "https://leetcode.cn/problems/intersection-of-two-linked-lists/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 7,
@@ -67,7 +79,9 @@
     "slug": "palindrome-linked-list",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/palindrome-linked-list/"
+    "url": "https://leetcode.cn/problems/palindrome-linked-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 8,
@@ -77,7 +91,9 @@
     "slug": "move-zeroes",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/move-zeroes/"
+    "url": "https://leetcode.cn/problems/move-zeroes/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 9,
@@ -87,7 +103,9 @@
     "slug": "longest-substring-without-repeating-characters",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/longest-substring-without-repeating-characters/"
+    "url": "https://leetcode.cn/problems/longest-substring-without-repeating-characters/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 10,
@@ -97,7 +115,9 @@
     "slug": "container-with-most-water",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/container-with-most-water/"
+    "url": "https://leetcode.cn/problems/container-with-most-water/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 11,
@@ -107,7 +127,9 @@
     "slug": "3sum",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/3sum/"
+    "url": "https://leetcode.cn/problems/3sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 12,
@@ -117,7 +139,9 @@
     "slug": "remove-nth-node-from-end-of-list",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/remove-nth-node-from-end-of-list/"
+    "url": "https://leetcode.cn/problems/remove-nth-node-from-end-of-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 13,
@@ -127,7 +151,9 @@
     "slug": "sort-colors",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/sort-colors/"
+    "url": "https://leetcode.cn/problems/sort-colors/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 14,
@@ -137,7 +163,9 @@
     "slug": "sort-list",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/sort-list/"
+    "url": "https://leetcode.cn/problems/sort-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 15,
@@ -147,7 +175,9 @@
     "slug": "find-the-duplicate-number",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/find-the-duplicate-number/"
+    "url": "https://leetcode.cn/problems/find-the-duplicate-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 16,
@@ -157,7 +187,9 @@
     "slug": "minimum-window-substring",
     "difficulty": "HARD",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/minimum-window-substring/"
+    "url": "https://leetcode.cn/problems/minimum-window-substring/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 17,
@@ -167,7 +199,9 @@
     "slug": "sliding-window-maximum",
     "difficulty": "HARD",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/sliding-window-maximum/"
+    "url": "https://leetcode.cn/problems/sliding-window-maximum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 18,
@@ -177,7 +211,9 @@
     "slug": "search-in-rotated-sorted-array",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/search-in-rotated-sorted-array/"
+    "url": "https://leetcode.cn/problems/search-in-rotated-sorted-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 19,
@@ -187,7 +223,9 @@
     "slug": "find-first-and-last-position-of-element-in-sorted-array",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/"
+    "url": "https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 20,
@@ -197,7 +235,9 @@
     "slug": "merge-intervals",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/merge-intervals/"
+    "url": "https://leetcode.cn/problems/merge-intervals/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 21,
@@ -207,7 +247,9 @@
     "slug": "product-of-array-except-self",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/product-of-array-except-self/"
+    "url": "https://leetcode.cn/problems/product-of-array-except-self/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 22,
@@ -217,7 +259,9 @@
     "slug": "search-a-2d-matrix-ii",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/search-a-2d-matrix-ii/"
+    "url": "https://leetcode.cn/problems/search-a-2d-matrix-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 23,
@@ -227,7 +271,9 @@
     "slug": "median-of-two-sorted-arrays",
     "difficulty": "HARD",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/median-of-two-sorted-arrays/"
+    "url": "https://leetcode.cn/problems/median-of-two-sorted-arrays/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 24,
@@ -237,7 +283,9 @@
     "slug": "merge-two-sorted-lists",
     "difficulty": "EASY",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/merge-two-sorted-lists/"
+    "url": "https://leetcode.cn/problems/merge-two-sorted-lists/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 25,
@@ -247,7 +295,9 @@
     "slug": "reverse-linked-list",
     "difficulty": "EASY",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/reverse-linked-list/"
+    "url": "https://leetcode.cn/problems/reverse-linked-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 26,
@@ -257,7 +307,9 @@
     "slug": "add-two-numbers",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/add-two-numbers/"
+    "url": "https://leetcode.cn/problems/add-two-numbers/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 27,
@@ -267,7 +319,9 @@
     "slug": "lru-cache",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/lru-cache/"
+    "url": "https://leetcode.cn/problems/lru-cache/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 28,
@@ -277,7 +331,9 @@
     "slug": "merge-k-sorted-lists",
     "difficulty": "HARD",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/merge-k-sorted-lists/"
+    "url": "https://leetcode.cn/problems/merge-k-sorted-lists/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 29,
@@ -287,7 +343,9 @@
     "slug": "valid-parentheses",
     "difficulty": "EASY",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/valid-parentheses/"
+    "url": "https://leetcode.cn/problems/valid-parentheses/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 30,
@@ -297,7 +355,9 @@
     "slug": "binary-tree-inorder-traversal",
     "difficulty": "EASY",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/binary-tree-inorder-traversal/"
+    "url": "https://leetcode.cn/problems/binary-tree-inorder-traversal/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 31,
@@ -307,7 +367,9 @@
     "slug": "min-stack",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/min-stack/"
+    "url": "https://leetcode.cn/problems/min-stack/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 32,
@@ -317,7 +379,9 @@
     "slug": "kth-largest-element-in-an-array",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/kth-largest-element-in-an-array/"
+    "url": "https://leetcode.cn/problems/kth-largest-element-in-an-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 33,
@@ -327,7 +391,9 @@
     "slug": "top-k-frequent-elements",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/top-k-frequent-elements/"
+    "url": "https://leetcode.cn/problems/top-k-frequent-elements/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 34,
@@ -337,7 +403,9 @@
     "slug": "largest-rectangle-in-histogram",
     "difficulty": "HARD",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/largest-rectangle-in-histogram/"
+    "url": "https://leetcode.cn/problems/largest-rectangle-in-histogram/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 35,
@@ -347,7 +415,9 @@
     "slug": "symmetric-tree",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/symmetric-tree/"
+    "url": "https://leetcode.cn/problems/symmetric-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 36,
@@ -357,7 +427,9 @@
     "slug": "maximum-depth-of-binary-tree",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/maximum-depth-of-binary-tree/"
+    "url": "https://leetcode.cn/problems/maximum-depth-of-binary-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 37,
@@ -367,7 +439,9 @@
     "slug": "validate-binary-search-tree",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/validate-binary-search-tree/"
+    "url": "https://leetcode.cn/problems/validate-binary-search-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 38,
@@ -377,7 +451,9 @@
     "slug": "binary-tree-level-order-traversal",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/binary-tree-level-order-traversal/"
+    "url": "https://leetcode.cn/problems/binary-tree-level-order-traversal/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 39,
@@ -387,7 +463,9 @@
     "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+    "url": "https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 40,
@@ -397,7 +475,9 @@
     "slug": "lowest-common-ancestor-of-a-binary-tree",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/"
+    "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 41,
@@ -407,7 +487,9 @@
     "slug": "serialize-and-deserialize-binary-tree",
     "difficulty": "HARD",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/"
+    "url": "https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 42,
@@ -417,7 +499,9 @@
     "slug": "longest-consecutive-sequence",
     "difficulty": "MEDIUM",
     "category": "图与并查集",
-    "url": "https://leetcode.cn/problems/longest-consecutive-sequence/"
+    "url": "https://leetcode.cn/problems/longest-consecutive-sequence/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 43,
@@ -427,7 +511,9 @@
     "slug": "number-of-islands",
     "difficulty": "MEDIUM",
     "category": "图与并查集",
-    "url": "https://leetcode.cn/problems/number-of-islands/"
+    "url": "https://leetcode.cn/problems/number-of-islands/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 44,
@@ -437,7 +523,9 @@
     "slug": "course-schedule",
     "difficulty": "MEDIUM",
     "category": "图与并查集",
-    "url": "https://leetcode.cn/problems/course-schedule/"
+    "url": "https://leetcode.cn/problems/course-schedule/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 45,
@@ -447,7 +535,9 @@
     "slug": "letter-combinations-of-a-phone-number",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/letter-combinations-of-a-phone-number/"
+    "url": "https://leetcode.cn/problems/letter-combinations-of-a-phone-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 46,
@@ -457,7 +547,9 @@
     "slug": "permutations",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/permutations/"
+    "url": "https://leetcode.cn/problems/permutations/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 47,
@@ -467,7 +559,9 @@
     "slug": "subsets",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/subsets/"
+    "url": "https://leetcode.cn/problems/subsets/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 48,
@@ -477,7 +571,9 @@
     "slug": "word-search",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/word-search/"
+    "url": "https://leetcode.cn/problems/word-search/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 49,
@@ -487,7 +583,9 @@
     "slug": "climbing-stairs",
     "difficulty": "EASY",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/climbing-stairs/"
+    "url": "https://leetcode.cn/problems/climbing-stairs/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 50,
@@ -497,7 +595,9 @@
     "slug": "best-time-to-buy-and-sell-stock",
     "difficulty": "EASY",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/"
+    "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 51,
@@ -507,7 +607,9 @@
     "slug": "longest-palindromic-substring",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/longest-palindromic-substring/"
+    "url": "https://leetcode.cn/problems/longest-palindromic-substring/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 52,
@@ -517,7 +619,9 @@
     "slug": "generate-parentheses",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/generate-parentheses/"
+    "url": "https://leetcode.cn/problems/generate-parentheses/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 53,
@@ -527,7 +631,9 @@
     "slug": "maximum-subarray",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/maximum-subarray/"
+    "url": "https://leetcode.cn/problems/maximum-subarray/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 54,
@@ -537,7 +643,9 @@
     "slug": "jump-game",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/jump-game/"
+    "url": "https://leetcode.cn/problems/jump-game/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 55,
@@ -547,7 +655,9 @@
     "slug": "unique-paths",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/unique-paths/"
+    "url": "https://leetcode.cn/problems/unique-paths/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 56,
@@ -557,7 +667,9 @@
     "slug": "word-break",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/word-break/"
+    "url": "https://leetcode.cn/problems/word-break/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 57,
@@ -567,7 +679,9 @@
     "slug": "maximum-product-subarray",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/maximum-product-subarray/"
+    "url": "https://leetcode.cn/problems/maximum-product-subarray/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 58,
@@ -577,7 +691,9 @@
     "slug": "house-robber",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/house-robber/"
+    "url": "https://leetcode.cn/problems/house-robber/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 59,
@@ -587,7 +703,9 @@
     "slug": "perfect-squares",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/perfect-squares/"
+    "url": "https://leetcode.cn/problems/perfect-squares/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 60,
@@ -597,7 +715,9 @@
     "slug": "longest-increasing-subsequence",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/longest-increasing-subsequence/"
+    "url": "https://leetcode.cn/problems/longest-increasing-subsequence/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 61,
@@ -607,7 +727,9 @@
     "slug": "coin-change",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/coin-change/"
+    "url": "https://leetcode.cn/problems/coin-change/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 62,
@@ -617,7 +739,9 @@
     "slug": "regular-expression-matching",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/regular-expression-matching/"
+    "url": "https://leetcode.cn/problems/regular-expression-matching/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 63,
@@ -627,7 +751,9 @@
     "slug": "trapping-rain-water",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/trapping-rain-water/"
+    "url": "https://leetcode.cn/problems/trapping-rain-water/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 64,
@@ -637,7 +763,9 @@
     "slug": "binary-tree-maximum-path-sum",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/binary-tree-maximum-path-sum/"
+    "url": "https://leetcode.cn/problems/binary-tree-maximum-path-sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 65,
@@ -647,7 +775,9 @@
     "slug": "single-number",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/single-number/"
+    "url": "https://leetcode.cn/problems/single-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 66,
@@ -657,7 +787,9 @@
     "slug": "rotate-image",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/rotate-image/"
+    "url": "https://leetcode.cn/problems/rotate-image/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 67,
@@ -667,7 +799,9 @@
     "slug": "find-all-numbers-disappeared-in-an-array",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/"
+    "url": "https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 68,
@@ -677,7 +811,9 @@
     "slug": "subarray-sum-equals-k",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/subarray-sum-equals-k/"
+    "url": "https://leetcode.cn/problems/subarray-sum-equals-k/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 69,
@@ -687,7 +823,9 @@
     "slug": "next-permutation",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/next-permutation/"
+    "url": "https://leetcode.cn/problems/next-permutation/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 70,
@@ -697,7 +835,9 @@
     "slug": "linked-list-cycle-ii",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/linked-list-cycle-ii/"
+    "url": "https://leetcode.cn/problems/linked-list-cycle-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 71,
@@ -707,7 +847,9 @@
     "slug": "find-all-anagrams-in-a-string",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/find-all-anagrams-in-a-string/"
+    "url": "https://leetcode.cn/problems/find-all-anagrams-in-a-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 72,
@@ -717,7 +859,9 @@
     "slug": "shortest-unsorted-continuous-subarray",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/"
+    "url": "https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 73,
@@ -727,7 +871,9 @@
     "slug": "flatten-binary-tree-to-linked-list",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/"
+    "url": "https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 74,
@@ -737,7 +883,9 @@
     "slug": "decode-string",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/decode-string/"
+    "url": "https://leetcode.cn/problems/decode-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 75,
@@ -747,7 +895,9 @@
     "slug": "task-scheduler",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/task-scheduler/"
+    "url": "https://leetcode.cn/problems/task-scheduler/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 76,
@@ -757,7 +907,9 @@
     "slug": "daily-temperatures",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/daily-temperatures/"
+    "url": "https://leetcode.cn/problems/daily-temperatures/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 77,
@@ -767,7 +919,9 @@
     "slug": "invert-binary-tree",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/invert-binary-tree/"
+    "url": "https://leetcode.cn/problems/invert-binary-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 78,
@@ -777,7 +931,9 @@
     "slug": "diameter-of-binary-tree",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/diameter-of-binary-tree/"
+    "url": "https://leetcode.cn/problems/diameter-of-binary-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 79,
@@ -787,7 +943,9 @@
     "slug": "merge-two-binary-trees",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/merge-two-binary-trees/"
+    "url": "https://leetcode.cn/problems/merge-two-binary-trees/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 80,
@@ -797,7 +955,9 @@
     "slug": "queue-reconstruction-by-height",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/queue-reconstruction-by-height/"
+    "url": "https://leetcode.cn/problems/queue-reconstruction-by-height/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 81,
@@ -807,7 +967,9 @@
     "slug": "path-sum-iii",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/path-sum-iii/"
+    "url": "https://leetcode.cn/problems/path-sum-iii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 82,
@@ -817,7 +979,9 @@
     "slug": "convert-bst-to-greater-tree",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/convert-bst-to-greater-tree/"
+    "url": "https://leetcode.cn/problems/convert-bst-to-greater-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 83,
@@ -827,7 +991,9 @@
     "slug": "evaluate-division",
     "difficulty": "MEDIUM",
     "category": "图与并查集",
-    "url": "https://leetcode.cn/problems/evaluate-division/"
+    "url": "https://leetcode.cn/problems/evaluate-division/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 84,
@@ -837,7 +1003,9 @@
     "slug": "combination-sum",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/combination-sum/"
+    "url": "https://leetcode.cn/problems/combination-sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 85,
@@ -847,7 +1015,9 @@
     "slug": "remove-invalid-parentheses",
     "difficulty": "HARD",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/remove-invalid-parentheses/"
+    "url": "https://leetcode.cn/problems/remove-invalid-parentheses/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 86,
@@ -857,7 +1027,9 @@
     "slug": "counting-bits",
     "difficulty": "EASY",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/counting-bits/"
+    "url": "https://leetcode.cn/problems/counting-bits/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 87,
@@ -867,7 +1039,9 @@
     "slug": "minimum-path-sum",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/minimum-path-sum/"
+    "url": "https://leetcode.cn/problems/minimum-path-sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 88,
@@ -877,7 +1051,9 @@
     "slug": "edit-distance",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/edit-distance/"
+    "url": "https://leetcode.cn/problems/edit-distance/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 89,
@@ -887,7 +1063,9 @@
     "slug": "unique-binary-search-trees",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/unique-binary-search-trees/"
+    "url": "https://leetcode.cn/problems/unique-binary-search-trees/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 90,
@@ -897,7 +1075,9 @@
     "slug": "maximal-square",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/maximal-square/"
+    "url": "https://leetcode.cn/problems/maximal-square/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 91,
@@ -907,7 +1087,9 @@
     "slug": "best-time-to-buy-and-sell-stock-with-cooldown",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/"
+    "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 92,
@@ -917,7 +1099,9 @@
     "slug": "house-robber-iii",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/house-robber-iii/"
+    "url": "https://leetcode.cn/problems/house-robber-iii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 93,
@@ -927,7 +1111,9 @@
     "slug": "partition-equal-subset-sum",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/partition-equal-subset-sum/"
+    "url": "https://leetcode.cn/problems/partition-equal-subset-sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 94,
@@ -937,7 +1123,9 @@
     "slug": "target-sum",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/target-sum/"
+    "url": "https://leetcode.cn/problems/target-sum/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 95,
@@ -947,7 +1135,9 @@
     "slug": "palindromic-substrings",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/palindromic-substrings/"
+    "url": "https://leetcode.cn/problems/palindromic-substrings/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 96,
@@ -957,7 +1147,9 @@
     "slug": "longest-valid-parentheses",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/longest-valid-parentheses/"
+    "url": "https://leetcode.cn/problems/longest-valid-parentheses/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 97,
@@ -967,7 +1159,9 @@
     "slug": "maximal-rectangle",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/maximal-rectangle/"
+    "url": "https://leetcode.cn/problems/maximal-rectangle/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 98,
@@ -977,7 +1171,9 @@
     "slug": "burst-balloons",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/burst-balloons/"
+    "url": "https://leetcode.cn/problems/burst-balloons/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 99,
@@ -987,7 +1183,9 @@
     "slug": "hamming-distance",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/hamming-distance/"
+    "url": "https://leetcode.cn/problems/hamming-distance/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 100,
@@ -997,7 +1195,9 @@
     "slug": "roman-to-integer",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/roman-to-integer/"
+    "url": "https://leetcode.cn/problems/roman-to-integer/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 101,
@@ -1007,7 +1207,9 @@
     "slug": "contains-duplicate",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/contains-duplicate/"
+    "url": "https://leetcode.cn/problems/contains-duplicate/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 102,
@@ -1017,7 +1219,9 @@
     "slug": "valid-anagram",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/valid-anagram/"
+    "url": "https://leetcode.cn/problems/valid-anagram/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 103,
@@ -1027,7 +1231,9 @@
     "slug": "missing-number",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/missing-number/"
+    "url": "https://leetcode.cn/problems/missing-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 104,
@@ -1037,7 +1243,9 @@
     "slug": "valid-sudoku",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/valid-sudoku/"
+    "url": "https://leetcode.cn/problems/valid-sudoku/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 105,
@@ -1047,7 +1255,9 @@
     "slug": "set-matrix-zeroes",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/set-matrix-zeroes/"
+    "url": "https://leetcode.cn/problems/set-matrix-zeroes/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 106,
@@ -1057,7 +1267,9 @@
     "slug": "fraction-to-recurring-decimal",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/fraction-to-recurring-decimal/"
+    "url": "https://leetcode.cn/problems/fraction-to-recurring-decimal/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 107,
@@ -1067,7 +1279,9 @@
     "slug": "insert-delete-getrandom-o1",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/insert-delete-getrandom-o1/"
+    "url": "https://leetcode.cn/problems/insert-delete-getrandom-o1/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 108,
@@ -1077,7 +1291,9 @@
     "slug": "4sum-ii",
     "difficulty": "MEDIUM",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/4sum-ii/"
+    "url": "https://leetcode.cn/problems/4sum-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 109,
@@ -1087,7 +1303,9 @@
     "slug": "first-missing-positive",
     "difficulty": "HARD",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/first-missing-positive/"
+    "url": "https://leetcode.cn/problems/first-missing-positive/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 110,
@@ -1097,7 +1315,9 @@
     "slug": "max-points-on-a-line",
     "difficulty": "HARD",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/max-points-on-a-line/"
+    "url": "https://leetcode.cn/problems/max-points-on-a-line/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 111,
@@ -1107,7 +1327,9 @@
     "slug": "remove-duplicates-from-sorted-array",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-array/"
+    "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 112,
@@ -1117,7 +1339,9 @@
     "slug": "find-the-index-of-the-first-occurrence-in-a-string",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/"
+    "url": "https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 113,
@@ -1127,7 +1351,9 @@
     "slug": "merge-sorted-array",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/merge-sorted-array/"
+    "url": "https://leetcode.cn/problems/merge-sorted-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 114,
@@ -1137,7 +1363,9 @@
     "slug": "valid-palindrome",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/valid-palindrome/"
+    "url": "https://leetcode.cn/problems/valid-palindrome/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 115,
@@ -1147,7 +1375,9 @@
     "slug": "happy-number",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/happy-number/"
+    "url": "https://leetcode.cn/problems/happy-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 116,
@@ -1157,7 +1387,9 @@
     "slug": "reverse-string",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/reverse-string/"
+    "url": "https://leetcode.cn/problems/reverse-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 117,
@@ -1167,7 +1399,9 @@
     "slug": "intersection-of-two-arrays-ii",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/intersection-of-two-arrays-ii/"
+    "url": "https://leetcode.cn/problems/intersection-of-two-arrays-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 118,
@@ -1177,7 +1411,9 @@
     "slug": "rotate-array",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/rotate-array/"
+    "url": "https://leetcode.cn/problems/rotate-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 119,
@@ -1187,7 +1423,9 @@
     "slug": "longest-substring-with-at-least-k-repeating-characters",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/"
+    "url": "https://leetcode.cn/problems/longest-substring-with-at-least-k-repeating-characters/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 120,
@@ -1197,7 +1435,9 @@
     "slug": "find-median-from-data-stream",
     "difficulty": "HARD",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/find-median-from-data-stream/"
+    "url": "https://leetcode.cn/problems/find-median-from-data-stream/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 121,
@@ -1207,7 +1447,9 @@
     "slug": "spiral-matrix",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/spiral-matrix/"
+    "url": "https://leetcode.cn/problems/spiral-matrix/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 122,
@@ -1217,7 +1459,9 @@
     "slug": "find-peak-element",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/find-peak-element/"
+    "url": "https://leetcode.cn/problems/find-peak-element/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 123,
@@ -1227,7 +1471,9 @@
     "slug": "game-of-life",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/game-of-life/"
+    "url": "https://leetcode.cn/problems/game-of-life/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 124,
@@ -1237,7 +1483,9 @@
     "slug": "longest-common-prefix",
     "difficulty": "EASY",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/longest-common-prefix/"
+    "url": "https://leetcode.cn/problems/longest-common-prefix/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 125,
@@ -1247,7 +1495,9 @@
     "slug": "excel-sheet-column-number",
     "difficulty": "EASY",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/excel-sheet-column-number/"
+    "url": "https://leetcode.cn/problems/excel-sheet-column-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 126,
@@ -1257,7 +1507,9 @@
     "slug": "fizz-buzz",
     "difficulty": "EASY",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/fizz-buzz/"
+    "url": "https://leetcode.cn/problems/fizz-buzz/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 127,
@@ -1267,7 +1519,9 @@
     "slug": "string-to-integer-atoi",
     "difficulty": "MEDIUM",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/string-to-integer-atoi/"
+    "url": "https://leetcode.cn/problems/string-to-integer-atoi/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 128,
@@ -1277,7 +1531,9 @@
     "slug": "count-and-say",
     "difficulty": "MEDIUM",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/count-and-say/"
+    "url": "https://leetcode.cn/problems/count-and-say/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 129,
@@ -1287,7 +1543,9 @@
     "slug": "populating-next-right-pointers-in-each-node",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/"
+    "url": "https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 130,
@@ -1297,7 +1555,9 @@
     "slug": "copy-list-with-random-pointer",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/copy-list-with-random-pointer/"
+    "url": "https://leetcode.cn/problems/copy-list-with-random-pointer/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 131,
@@ -1307,7 +1567,9 @@
     "slug": "delete-node-in-a-linked-list",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/delete-node-in-a-linked-list/"
+    "url": "https://leetcode.cn/problems/delete-node-in-a-linked-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 132,
@@ -1317,7 +1579,9 @@
     "slug": "odd-even-linked-list",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/odd-even-linked-list/"
+    "url": "https://leetcode.cn/problems/odd-even-linked-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 133,
@@ -1327,7 +1591,9 @@
     "slug": "first-unique-character-in-a-string",
     "difficulty": "EASY",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/first-unique-character-in-a-string/"
+    "url": "https://leetcode.cn/problems/first-unique-character-in-a-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 134,
@@ -1337,7 +1603,9 @@
     "slug": "evaluate-reverse-polish-notation",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/evaluate-reverse-polish-notation/"
+    "url": "https://leetcode.cn/problems/evaluate-reverse-polish-notation/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 135,
@@ -1347,7 +1615,9 @@
     "slug": "basic-calculator-ii",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/basic-calculator-ii/"
+    "url": "https://leetcode.cn/problems/basic-calculator-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 136,
@@ -1357,7 +1627,9 @@
     "slug": "flatten-nested-list-iterator",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/flatten-nested-list-iterator/"
+    "url": "https://leetcode.cn/problems/flatten-nested-list-iterator/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 137,
@@ -1367,7 +1639,9 @@
     "slug": "kth-smallest-element-in-a-sorted-matrix",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/"
+    "url": "https://leetcode.cn/problems/kth-smallest-element-in-a-sorted-matrix/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 138,
@@ -1377,7 +1651,9 @@
     "slug": "the-skyline-problem",
     "difficulty": "HARD",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/the-skyline-problem/"
+    "url": "https://leetcode.cn/problems/the-skyline-problem/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 139,
@@ -1387,7 +1663,9 @@
     "slug": "convert-sorted-array-to-binary-search-tree",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/"
+    "url": "https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 140,
@@ -1397,7 +1675,9 @@
     "slug": "binary-tree-zigzag-level-order-traversal",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/"
+    "url": "https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 141,
@@ -1407,7 +1687,9 @@
     "slug": "kth-smallest-element-in-a-bst",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/kth-smallest-element-in-a-bst/"
+    "url": "https://leetcode.cn/problems/kth-smallest-element-in-a-bst/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 142,
@@ -1417,7 +1699,9 @@
     "slug": "count-of-smaller-numbers-after-self",
     "difficulty": "HARD",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/count-of-smaller-numbers-after-self/"
+    "url": "https://leetcode.cn/problems/count-of-smaller-numbers-after-self/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 143,
@@ -1427,7 +1711,9 @@
     "slug": "word-ladder",
     "difficulty": "HARD",
     "category": "DFS / BFS",
-    "url": "https://leetcode.cn/problems/word-ladder/"
+    "url": "https://leetcode.cn/problems/word-ladder/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 144,
@@ -1437,7 +1723,9 @@
     "slug": "surrounded-regions",
     "difficulty": "MEDIUM",
     "category": "图与并查集",
-    "url": "https://leetcode.cn/problems/surrounded-regions/"
+    "url": "https://leetcode.cn/problems/surrounded-regions/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 145,
@@ -1447,7 +1735,9 @@
     "slug": "course-schedule-ii",
     "difficulty": "MEDIUM",
     "category": "图与并查集",
-    "url": "https://leetcode.cn/problems/course-schedule-ii/"
+    "url": "https://leetcode.cn/problems/course-schedule-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 146,
@@ -1457,7 +1747,9 @@
     "slug": "word-search-ii",
     "difficulty": "HARD",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/word-search-ii/"
+    "url": "https://leetcode.cn/problems/word-search-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 147,
@@ -1467,7 +1759,9 @@
     "slug": "pascals-triangle",
     "difficulty": "EASY",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/pascals-triangle/"
+    "url": "https://leetcode.cn/problems/pascals-triangle/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 148,
@@ -1477,7 +1771,9 @@
     "slug": "decode-ways",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/decode-ways/"
+    "url": "https://leetcode.cn/problems/decode-ways/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 149,
@@ -1487,7 +1783,9 @@
     "slug": "best-time-to-buy-and-sell-stock-ii",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/"
+    "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 150,
@@ -1497,7 +1795,9 @@
     "slug": "palindrome-partitioning",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/palindrome-partitioning/"
+    "url": "https://leetcode.cn/problems/palindrome-partitioning/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 151,
@@ -1507,7 +1807,9 @@
     "slug": "wildcard-matching",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/wildcard-matching/"
+    "url": "https://leetcode.cn/problems/wildcard-matching/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 152,
@@ -1517,7 +1819,9 @@
     "slug": "word-break-ii",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/word-break-ii/"
+    "url": "https://leetcode.cn/problems/word-break-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 153,
@@ -1527,7 +1831,9 @@
     "slug": "longest-increasing-path-in-a-matrix",
     "difficulty": "HARD",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/"
+    "url": "https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 154,
@@ -1537,7 +1843,9 @@
     "slug": "gas-station",
     "difficulty": "MEDIUM",
     "category": "贪心与区间",
-    "url": "https://leetcode.cn/problems/gas-station/"
+    "url": "https://leetcode.cn/problems/gas-station/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 155,
@@ -1547,7 +1855,9 @@
     "slug": "largest-number",
     "difficulty": "MEDIUM",
     "category": "贪心与区间",
-    "url": "https://leetcode.cn/problems/largest-number/"
+    "url": "https://leetcode.cn/problems/largest-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 156,
@@ -1557,7 +1867,9 @@
     "slug": "wiggle-sort-ii",
     "difficulty": "MEDIUM",
     "category": "贪心与区间",
-    "url": "https://leetcode.cn/problems/wiggle-sort-ii/"
+    "url": "https://leetcode.cn/problems/wiggle-sort-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 157,
@@ -1567,7 +1879,9 @@
     "slug": "increasing-triplet-subsequence",
     "difficulty": "MEDIUM",
     "category": "贪心与区间",
-    "url": "https://leetcode.cn/problems/increasing-triplet-subsequence/"
+    "url": "https://leetcode.cn/problems/increasing-triplet-subsequence/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 158,
@@ -1577,7 +1891,9 @@
     "slug": "plus-one",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/plus-one/"
+    "url": "https://leetcode.cn/problems/plus-one/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 159,
@@ -1587,7 +1903,9 @@
     "slug": "sqrtx",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/sqrtx/"
+    "url": "https://leetcode.cn/problems/sqrtx/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 160,
@@ -1597,7 +1915,9 @@
     "slug": "reverse-bits",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/reverse-bits/"
+    "url": "https://leetcode.cn/problems/reverse-bits/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 161,
@@ -1607,7 +1927,9 @@
     "slug": "number-of-1-bits",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/number-of-1-bits/"
+    "url": "https://leetcode.cn/problems/number-of-1-bits/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 162,
@@ -1617,7 +1939,9 @@
     "slug": "power-of-three",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/power-of-three/"
+    "url": "https://leetcode.cn/problems/power-of-three/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 163,
@@ -1627,7 +1951,9 @@
     "slug": "reverse-integer",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/reverse-integer/"
+    "url": "https://leetcode.cn/problems/reverse-integer/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 164,
@@ -1637,7 +1963,9 @@
     "slug": "divide-two-integers",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/divide-two-integers/"
+    "url": "https://leetcode.cn/problems/divide-two-integers/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 165,
@@ -1647,7 +1975,9 @@
     "slug": "powx-n",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/powx-n/"
+    "url": "https://leetcode.cn/problems/powx-n/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 166,
@@ -1657,7 +1987,9 @@
     "slug": "factorial-trailing-zeroes",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/factorial-trailing-zeroes/"
+    "url": "https://leetcode.cn/problems/factorial-trailing-zeroes/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 167,
@@ -1667,7 +1999,9 @@
     "slug": "count-primes",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/count-primes/"
+    "url": "https://leetcode.cn/problems/count-primes/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 168,
@@ -1677,7 +2011,9 @@
     "slug": "sum-of-two-integers",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/sum-of-two-integers/"
+    "url": "https://leetcode.cn/problems/sum-of-two-integers/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 169,
@@ -1687,7 +2023,9 @@
     "slug": "shuffle-an-array",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/shuffle-an-array/"
+    "url": "https://leetcode.cn/problems/shuffle-an-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 170,
@@ -1697,7 +2035,9 @@
     "slug": "design-twitter",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/design-twitter/"
+    "url": "https://leetcode.cn/problems/design-twitter/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 171,
@@ -1707,7 +2047,9 @@
     "slug": "reverse-nodes-in-k-group",
     "difficulty": "HARD",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/"
+    "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 172,
@@ -1717,7 +2059,9 @@
     "slug": "partition-list",
     "difficulty": "MEDIUM",
     "category": "链表",
-    "url": "https://leetcode.cn/problems/partition-list/"
+    "url": "https://leetcode.cn/problems/partition-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 173,
@@ -1727,7 +2071,9 @@
     "slug": "implement-queue-using-stacks",
     "difficulty": "EASY",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/implement-queue-using-stacks/"
+    "url": "https://leetcode.cn/problems/implement-queue-using-stacks/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 174,
@@ -1737,7 +2083,9 @@
     "slug": "isomorphic-strings",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/isomorphic-strings/"
+    "url": "https://leetcode.cn/problems/isomorphic-strings/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 175,
@@ -1747,7 +2095,9 @@
     "slug": "palindrome-permutation",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/palindrome-permutation/"
+    "url": "https://leetcode.cn/problems/palindrome-permutation/",
+    "isPaidOnly": true,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 176,
@@ -1757,7 +2107,9 @@
     "slug": "longest-palindrome",
     "difficulty": "EASY",
     "category": "哈希表",
-    "url": "https://leetcode.cn/problems/longest-palindrome/"
+    "url": "https://leetcode.cn/problems/longest-palindrome/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 177,
@@ -1767,7 +2119,9 @@
     "slug": "is-subsequence",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/is-subsequence/"
+    "url": "https://leetcode.cn/problems/is-subsequence/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 178,
@@ -1777,7 +2131,9 @@
     "slug": "middle-of-the-linked-list",
     "difficulty": "EASY",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/middle-of-the-linked-list/"
+    "url": "https://leetcode.cn/problems/middle-of-the-linked-list/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 179,
@@ -1787,7 +2143,9 @@
     "slug": "two-sum-ii-input-array-is-sorted",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/"
+    "url": "https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 180,
@@ -1797,7 +2155,9 @@
     "slug": "reverse-words-in-a-string",
     "difficulty": "MEDIUM",
     "category": "双指针与滑动窗口",
-    "url": "https://leetcode.cn/problems/reverse-words-in-a-string/"
+    "url": "https://leetcode.cn/problems/reverse-words-in-a-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 181,
@@ -1807,7 +2167,9 @@
     "slug": "add-strings",
     "difficulty": "EASY",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/add-strings/"
+    "url": "https://leetcode.cn/problems/add-strings/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 182,
@@ -1817,7 +2179,9 @@
     "slug": "rotate-string",
     "difficulty": "EASY",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/rotate-string/"
+    "url": "https://leetcode.cn/problems/rotate-string/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 183,
@@ -1827,7 +2191,9 @@
     "slug": "validate-stack-sequences",
     "difficulty": "MEDIUM",
     "category": "栈、队列与优先队列",
-    "url": "https://leetcode.cn/problems/validate-stack-sequences/"
+    "url": "https://leetcode.cn/problems/validate-stack-sequences/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 184,
@@ -1837,7 +2203,9 @@
     "slug": "zigzag-conversion",
     "difficulty": "MEDIUM",
     "category": "字符串",
-    "url": "https://leetcode.cn/problems/zigzag-conversion/"
+    "url": "https://leetcode.cn/problems/zigzag-conversion/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 185,
@@ -1847,7 +2215,9 @@
     "slug": "spiral-matrix-ii",
     "difficulty": "MEDIUM",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/spiral-matrix-ii/"
+    "url": "https://leetcode.cn/problems/spiral-matrix-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 186,
@@ -1857,7 +2227,9 @@
     "slug": "binary-search",
     "difficulty": "EASY",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/binary-search/"
+    "url": "https://leetcode.cn/problems/binary-search/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 187,
@@ -1867,7 +2239,9 @@
     "slug": "first-bad-version",
     "difficulty": "EASY",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/first-bad-version/"
+    "url": "https://leetcode.cn/problems/first-bad-version/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 188,
@@ -1877,7 +2251,9 @@
     "slug": "find-pivot-index",
     "difficulty": "EASY",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/find-pivot-index/"
+    "url": "https://leetcode.cn/problems/find-pivot-index/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 189,
@@ -1887,7 +2263,9 @@
     "slug": "find-minimum-in-rotated-sorted-array-ii",
     "difficulty": "HARD",
     "category": "数组与矩阵",
-    "url": "https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array-ii/"
+    "url": "https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 190,
@@ -1897,7 +2275,9 @@
     "slug": "lowest-common-ancestor-of-a-binary-search-tree",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/"
+    "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 191,
@@ -1907,7 +2287,9 @@
     "slug": "convert-binary-search-tree-to-sorted-doubly-linked-list",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/"
+    "url": "https://leetcode.cn/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/",
+    "isPaidOnly": true,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 192,
@@ -1917,7 +2299,9 @@
     "slug": "path-sum-ii",
     "difficulty": "MEDIUM",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/path-sum-ii/"
+    "url": "https://leetcode.cn/problems/path-sum-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 193,
@@ -1927,7 +2311,9 @@
     "slug": "permutations-ii",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/permutations-ii/"
+    "url": "https://leetcode.cn/problems/permutations-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 194,
@@ -1937,7 +2323,9 @@
     "slug": "combination-sum-ii",
     "difficulty": "MEDIUM",
     "category": "回溯",
-    "url": "https://leetcode.cn/problems/combination-sum-ii/"
+    "url": "https://leetcode.cn/problems/combination-sum-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 195,
@@ -1947,7 +2335,9 @@
     "slug": "balanced-binary-tree",
     "difficulty": "EASY",
     "category": "树与二叉树",
-    "url": "https://leetcode.cn/problems/balanced-binary-tree/"
+    "url": "https://leetcode.cn/problems/balanced-binary-tree/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 196,
@@ -1957,7 +2347,9 @@
     "slug": "fibonacci-number",
     "difficulty": "EASY",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/fibonacci-number/"
+    "url": "https://leetcode.cn/problems/fibonacci-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 197,
@@ -1967,7 +2359,9 @@
     "slug": "running-sum-of-1d-array",
     "difficulty": "EASY",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/running-sum-of-1d-array/"
+    "url": "https://leetcode.cn/problems/running-sum-of-1d-array/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 198,
@@ -1977,7 +2371,9 @@
     "slug": "house-robber-ii",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/house-robber-ii/"
+    "url": "https://leetcode.cn/problems/house-robber-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 199,
@@ -1987,7 +2383,9 @@
     "slug": "ugly-number-ii",
     "difficulty": "MEDIUM",
     "category": "动态规划",
-    "url": "https://leetcode.cn/problems/ugly-number-ii/"
+    "url": "https://leetcode.cn/problems/ugly-number-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 200,
@@ -1997,7 +2395,9 @@
     "slug": "candy",
     "difficulty": "HARD",
     "category": "贪心与区间",
-    "url": "https://leetcode.cn/problems/candy/"
+    "url": "https://leetcode.cn/problems/candy/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 201,
@@ -2007,7 +2407,9 @@
     "slug": "max-chunks-to-make-sorted-ii",
     "difficulty": "HARD",
     "category": "贪心与区间",
-    "url": "https://leetcode.cn/problems/max-chunks-to-make-sorted-ii/"
+    "url": "https://leetcode.cn/problems/max-chunks-to-make-sorted-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 202,
@@ -2017,7 +2419,9 @@
     "slug": "power-of-two",
     "difficulty": "EASY",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/power-of-two/"
+    "url": "https://leetcode.cn/problems/power-of-two/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 203,
@@ -2027,7 +2431,9 @@
     "slug": "single-number-ii",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/single-number-ii/"
+    "url": "https://leetcode.cn/problems/single-number-ii/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 204,
@@ -2037,7 +2443,9 @@
     "slug": "integer-break",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/integer-break/"
+    "url": "https://leetcode.cn/problems/integer-break/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 205,
@@ -2047,7 +2455,9 @@
     "slug": "gray-code",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/gray-code/"
+    "url": "https://leetcode.cn/problems/gray-code/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 206,
@@ -2057,7 +2467,9 @@
     "slug": "find-the-winner-of-the-circular-game",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/find-the-winner-of-the-circular-game/"
+    "url": "https://leetcode.cn/problems/find-the-winner-of-the-circular-game/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 207,
@@ -2067,7 +2479,9 @@
     "slug": "valid-number",
     "difficulty": "HARD",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/valid-number/"
+    "url": "https://leetcode.cn/problems/valid-number/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 208,
@@ -2077,7 +2491,9 @@
     "slug": "nth-digit",
     "difficulty": "MEDIUM",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/nth-digit/"
+    "url": "https://leetcode.cn/problems/nth-digit/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   },
   {
     "seq": 209,
@@ -2087,6 +2503,8 @@
     "slug": "number-of-digit-one",
     "difficulty": "HARD",
     "category": "数学与位运算",
-    "url": "https://leetcode.cn/problems/number-of-digit-one/"
+    "url": "https://leetcode.cn/problems/number-of-digit-one/",
+    "isPaidOnly": false,
+    "premiumCheckedAt": "2026-09-29"
   }
 ]

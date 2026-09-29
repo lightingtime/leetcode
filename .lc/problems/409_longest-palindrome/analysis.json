@@ -1,0 +1,54 @@
+{
+  "seq": 176,
+  "id": "409",
+  "slug": "longest-palindrome",
+  "title": "最长回文串",
+  "category": "哈希表",
+  "date": "2026-09-30",
+  "verdict": "Accepted",
+  "testcases": "98/98",
+  "runtime_ms": null,
+  "memory_bytes": 43524000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "字符频次统计",
+  "dp_subtype": "",
+  "approach_detail": "问题本质：回文两侧字符必须成对出现，最多再从一个奇数频次字符取一个中心字符。输入只含大小写英文字母，因此用固定长度计数表比构造字符集合或实际回文串更直接。设计：遍历字符串统计每个字符次数；扫描频次数组，偶数次数全部可用，奇数次数可用其成对部分并记录存在中心候选；最终最多给总长度增加一个中心字符。例子 aaabbc：a 出现 3 次可提供一对并留下中心候选，b 出现 2 次可提供一对，c 出现 1 次只增加中心候选；两侧字符共 4 个，只取一个中心，总长 5。多个奇数频次也只能共享一个中心。约束长度至少为 1，所以没有空串输入；大小写字符分别计数，不能混为同一个字符。时间 O(n+128)=O(n)，空间 O(128)=O(1)。时间下限是 Ω(n)，因为每个输入字符都可能改变频次结果，必须检查；字符集固定，所以辅助空间为常数，已达到渐近最优。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "本地 7 项用例通过后一次在线提交 Accepted。先前本地回归暴露频次到长度的换算错误，修正后提交；因经历过错误分析与讨论，掌握度记为较弱。",
+  "code_notes": [],
+  "mistakes": [
+    {
+      "habit": "频次计数拼回文时，偶数次数只把次数除以 2 加入长度，少算一半字符；奇数次数只设置中心标记，漏掉可成对使用的部分。应先明确每个字符频次对左右两侧和中心的贡献，再汇总长度。",
+      "count": 1
+    }
+  ],
+  "patterns": [
+    {
+      "title": "频次统计计算最长回文长度",
+      "text": "固定字符集时用频次数组汇总贡献，回文两侧只能使用相同字符组成的配对；奇数频次也包含可配对部分，全串最多选择一个中心字符。只求长度时直接汇总可用字符数，无需构造结果字符串。",
+      "category": "哈希表",
+      "problem": "longest-palindrome",
+      "date": "2026-09-30"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-09-30",
+      "verdict": "Accepted",
+      "testcases": "98/98",
+      "runtime_ms": null,
+      "memory_bytes": 43524000,
+      "approach": "字符频次统计",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "本地 7 项用例通过后一次在线提交 Accepted。先前本地回归暴露频次到长度的换算错误，修正后提交；因经历过错误分析与讨论，掌握度记为较弱。",
+      "code": "public int longestPalindrome(String s) {\n        int[] count = new int[128];\n        boolean hasSingle = false;\n        for (char c : s.toCharArray()) {\n            count[c]++;\n        }\n        int len = 0;\n        for (int j : count) {\n            if (j % 2 == 0) {\n                len += j;\n            } else {\n                len += j - 1;\n                hasSingle = true;\n            }\n        }\n        return hasSingle ? len + 1 : len;\n    }"
+    }
+  ],
+  "hints": [
+    "看到需要 O(n²) 的查找/去重，先想用哈希表把查找降到 O(1)。"
+  ]
+}
