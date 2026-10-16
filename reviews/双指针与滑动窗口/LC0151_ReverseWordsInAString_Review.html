@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC151 反转字符串中的单词 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 180</div>
+  <h1>LC151 · 反转字符串中的单词</h1>
+  <div class="sub">整体反转后逐单词恢复字符顺序 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 62/62</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 双指针与滑动窗口</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    
+    
+    <span class="badge">2026-10-16</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>151. 反转字符串中的单词 (Reverse Words in a String)</h1><p>&gt; <a href="https://leetcode.cn/problems/reverse-words-in-a-string/" rel="noopener">https://leetcode.cn/problems/reverse-words-in-a-string/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：双指针、字符串</p><h2>题目描述</h2><p>给你一个字符串 s ，请你反转字符串中 单词 的顺序。</p><p>单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。</p><p>返回 单词 顺序颠倒且 单词 之间用单个空格连接的结果字符串。</p><p>注意：输入字符串 s中可能会存在前导空格、尾随空格或者单词间的多个空格。返回的结果字符串中，单词间应当仅用单个空格分隔，且不包含任何额外的空格。</p><p>示例 1：</p><p>输入：s = "the sky is blue"</p><p>输出："blue is sky the"</p><p>示例 2：</p><p>输入：s = " hello world "</p><p>输出："world hello"</p><p>解释：反转后的字符串中不能存在前导空格和尾随空格。</p><p>示例 3：</p><p>输入：s = "a good example"</p><p>输出："example good a"</p><p>解释：如果两个单词间有多余的空格，反转后的字符串需要将单词间的空格减少到仅有一个。</p><p>提示：</p><p>1 4</p><p>s 包含英文大小写字母、数字和空格 ' '</p><p>s 中 至少存在一个 单词</p><p>进阶：如果字符串在你使用的编程语言中是一种可变数据类型，请尝试使用 O(1) 额外空间复杂度的 原地 解法。</p><h2>示例</h2><ol><li>输入：s = "the sky is blue"</li></ol><p>输出："blue is sky the"</p><ol><li>输入：s = "  hello world  "</li></ol><p>输出："world hello"</p><p>解释：反转后的字符串中不能存在前导空格和尾随空格。</p><ol><li>输入：s = "a good   example"</li></ol><p>输出："example good a"</p><p>解释：如果两个单词间有多余的空格，反转后的字符串需要将单词间的空格减少到仅有一个。</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>整体反转后逐单词恢复字符顺序</b></li>
+        <li><span>复杂度</span><b>O(n) · O(n)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 整体反转后逐单词恢复字符顺序</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(n)</span><span class="chip">内存 ≈ 42.3 MB</span><span class="chip">用例 62/62</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0151_ReverseWordsInAString.java · 整体反转后逐单词恢复字符顺序</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">reverseWords</span>(<span class="tk-t">String</span> s) {
+        s = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>(s.<span class="tk-f">trim</span>()).<span class="tk-f">reverse</span>().<span class="tk-f">toString</span>();
+        <span class="tk-k">int</span> n = s.<span class="tk-f">length</span>();
+        <span class="tk-t">StringBuilder</span> ans = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+        <span class="tk-k">int</span> index = <span class="tk-n">0</span>;
+        <span class="tk-k">while</span> (index &lt; n) {
+            <span class="tk-k">if</span> (s.<span class="tk-f">charAt</span>(index) == <span class="tk-s">' '</span>) {
+                ans.<span class="tk-f">append</span>(<span class="tk-s">' '</span>);
+            }
+            <span class="tk-k">while</span> (index &lt; n &amp;&amp; s.<span class="tk-f">charAt</span>(index) == <span class="tk-s">' '</span>) {
+                index++;
+            }
+            <span class="tk-k">int</span> start = index;
+            <span class="tk-k">while</span> (index &lt; n &amp;&amp; <span class="tk-t">Character</span>.<span class="tk-f">isLetterOrDigit</span>(s.<span class="tk-f">charAt</span>(index))) {
+                index++;
+            }
+            <span class="tk-k">for</span> (<span class="tk-k">int</span> i = index - <span class="tk-n">1</span>; i &gt;= start; i--) {
+                ans.<span class="tk-f">append</span>(s.<span class="tk-f">charAt</span>(i));
+            }
+        }
+        <span class="tk-k">return</span> ans.<span class="tk-f">toString</span>();
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><h2>问题本质与解法选择</h2><p>目标是改变单词的排列顺序，保留每个单词内部的字符顺序，并规范空格。整体反转会同时翻转单词顺序和单词内部字符；再把每个单词反转一次，就只改变单词顺序。</p><h2>关键设计决策</h2><p>先 trim 去掉首尾空格，再整体反转。用 index 从左向右扫描，ans 保存已恢复字符顺序的单词。</p><div class="table-wrap"><table><thead><tr><th>变量</th><th>语义</th></tr></thead><tbody><tr><td>n</td><td>去除首尾空格并反转后字符串的长度</td></tr><tr><td>index</td><td>下一待处理字符的位置，始终单调增加</td></tr><tr><td>start</td><td>当前单词在反转字符串中的起点</td></tr><tr><td>[start,index)</td><td>当前单词的字符区间</td></tr><tr><td>ans</td><td>已处理单词按目标顺序连接的结果</td></tr></tbody></table></div><p>每次遇到空格段时先向 ans 追加一个空格，再跳过整个连续空格段；遇到单词时确定半开区间 [start,index)，然后逆序追加该区间的字符。首尾空格已去掉，因此不会产生输出首尾空格。</p><p>具体推演输入 "  ab   cd  "：</p><ol><li>trim 后为 "ab   cd"，整体反转得到 "dc   ba"，index=0、ans=""。</li><li>扫描 dc 得到 start=0、index=2；逆序追加得到 ans="cd"。</li><li>index=2 遇到空格，追加一次空格，跳过连续空格后 index=5、ans="cd "。</li><li>扫描 ba 得到 start=5、index=7，逆序追加得到 ans="cd ab"；index=n，循环结束。</li></ol><h2>边界与细节</h2><p>单字符 "a" 整体及局部反转后仍为 "a"。输入 "a b" 反转为 "b a"，先输出 b，再处理一个空格，最后输出 a。连续空格只追加一次，重复单词不去重。大小写与数字作为单词字符保留。输入只含英文字母、数字及普通空格，Character.isLetterOrDigit 在该范围内能识别全部非空格字符；也可用不等于普通空格的判断精简。题目保证至少一个单词，不需补充空字符串或全空格输入。长度上限为 10000，已覆盖单个长单词、长前导空格及大量短单词。</p><h2>复杂度与最优性</h2><p>trim、整体反转、扫描、逐单词逆序追加和构造结果均为线性；index 总共前进 n 次，所有单词的内部循环合计不超过 n 次，因此时间 O(n)。中间反转字符串与 StringBuilder 占用 O(n) 空间。最坏情况需读取并输出线性数量的字符，O(n) 时间达到下限；Java String 不可变，计入返回字符串及构造结果的空间时 O(n) 为最优量级。题目针对可变字符串提出的原地进阶不直接适用于本方法签名。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>62/62 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>整体反转与局部反转的组合</h3><p>反转单词顺序时，先整体反转改变单词次序，再逐单词反转恢复内部字符顺序。例：ab cd → dc ba → cd ab。用单调扫描划分单词区间，连续分隔符统一输出一次；所有局部扫描总长度为 O(n)。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">62/62</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 42.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(n)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 180 · reverse-words-in-a-string</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">独立实现整体反转、逐单词逆序追加并合并连续空格；本地 13 项测试通过，首次远端提交 Accepted（62/62）。时间 O(n)、空间 O(n)。可把 Character.isLetterOrDigit 简化为非空格判断，直接对应本题单词边界。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/151_reverse-words-in-a-string/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0151_ReverseWordsInAString.java">src/双指针与滑动窗口/LC0151_ReverseWordsInAString.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-10-16
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

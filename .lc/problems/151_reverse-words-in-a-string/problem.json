@@ -1,0 +1,52 @@
+{
+  "id": "151",
+  "slug": "reverse-words-in-a-string",
+  "title": "Reverse Words in a String",
+  "titleCn": "反转字符串中的单词",
+  "difficulty": "Medium",
+  "url": "https://leetcode.cn/problems/reverse-words-in-a-string/",
+  "tags": [
+    "Two Pointers",
+    "String"
+  ],
+  "tagsCn": [
+    "双指针",
+    "字符串"
+  ],
+  "category": "双指针与滑动窗口",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"the sky is blue\""
+        }
+      ],
+      "output": "\"blue is sky the\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"  hello world  \""
+        }
+      ],
+      "output": "\"world hello\"",
+      "explain": "反转后的字符串中不能存在前导空格和尾随空格。"
+    },
+    {
+      "inputs": [
+        {
+          "name": "s",
+          "value": "\"a good   example\""
+        }
+      ],
+      "output": "\"example good a\"",
+      "explain": "如果两个单词间有多余的空格，反转后的字符串需要将单词间的空格减少到仅有一个。"
+    }
+  ],
+  "exampleTestcases": "\"the sky is blue\"\n\"  hello world  \"\n\"a good   example\"",
+  "javaSnippet": "class Solution {\n    public String reverseWords(String s) {\n        \n    }\n}",
+  "fetchedAt": "2026-10-16T02:20:11.900Z"
+}

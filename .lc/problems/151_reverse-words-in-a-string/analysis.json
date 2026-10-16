@@ -1,0 +1,49 @@
+{
+  "seq": 180,
+  "id": "151",
+  "slug": "reverse-words-in-a-string",
+  "title": "反转字符串中的单词",
+  "category": "双指针与滑动窗口",
+  "date": "2026-10-16",
+  "verdict": "Accepted",
+  "testcases": "62/62",
+  "runtime_ms": null,
+  "memory_bytes": 44320000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "整体反转后逐单词恢复字符顺序",
+  "dp_subtype": "",
+  "approach_detail": "## 问题本质与解法选择\n目标是改变单词的排列顺序，保留每个单词内部的字符顺序，并规范空格。整体反转会同时翻转单词顺序和单词内部字符；再把每个单词反转一次，就只改变单词顺序。\n\n## 关键设计决策\n先 trim 去掉首尾空格，再整体反转。用 index 从左向右扫描，ans 保存已恢复字符顺序的单词。\n\n| 变量 | 语义 |\n| --- | --- |\n| n | 去除首尾空格并反转后字符串的长度 |\n| index | 下一待处理字符的位置，始终单调增加 |\n| start | 当前单词在反转字符串中的起点 |\n| [start,index) | 当前单词的字符区间 |\n| ans | 已处理单词按目标顺序连接的结果 |\n\n每次遇到空格段时先向 ans 追加一个空格，再跳过整个连续空格段；遇到单词时确定半开区间 [start,index)，然后逆序追加该区间的字符。首尾空格已去掉，因此不会产生输出首尾空格。\n\n具体推演输入 \"  ab   cd  \"：\n1. trim 后为 \"ab   cd\"，整体反转得到 \"dc   ba\"，index=0、ans=\"\"。\n2. 扫描 dc 得到 start=0、index=2；逆序追加得到 ans=\"cd\"。\n3. index=2 遇到空格，追加一次空格，跳过连续空格后 index=5、ans=\"cd \"。\n4. 扫描 ba 得到 start=5、index=7，逆序追加得到 ans=\"cd ab\"；index=n，循环结束。\n\n## 边界与细节\n单字符 \"a\" 整体及局部反转后仍为 \"a\"。输入 \"a b\" 反转为 \"b a\"，先输出 b，再处理一个空格，最后输出 a。连续空格只追加一次，重复单词不去重。大小写与数字作为单词字符保留。输入只含英文字母、数字及普通空格，Character.isLetterOrDigit 在该范围内能识别全部非空格字符；也可用不等于普通空格的判断精简。题目保证至少一个单词，不需补充空字符串或全空格输入。长度上限为 10000，已覆盖单个长单词、长前导空格及大量短单词。\n\n## 复杂度与最优性\ntrim、整体反转、扫描、逐单词逆序追加和构造结果均为线性；index 总共前进 n 次，所有单词的内部循环合计不超过 n 次，因此时间 O(n)。中间反转字符串与 StringBuilder 占用 O(n) 空间。最坏情况需读取并输出线性数量的字符，O(n) 时间达到下限；Java String 不可变，计入返回字符串及构造结果的空间时 O(n) 为最优量级。题目针对可变字符串提出的原地进阶不直接适用于本方法签名。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(n)",
+  "notes": "独立实现整体反转、逐单词逆序追加并合并连续空格；本地 13 项测试通过，首次远端提交 Accepted（62/62）。时间 O(n)、空间 O(n)。可把 Character.isLetterOrDigit 简化为非空格判断，直接对应本题单词边界。",
+  "code_notes": [],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "整体反转与局部反转的组合",
+      "text": "反转单词顺序时，先整体反转改变单词次序，再逐单词反转恢复内部字符顺序。例：ab cd → dc ba → cd ab。用单调扫描划分单词区间，连续分隔符统一输出一次；所有局部扫描总长度为 O(n)。",
+      "category": "双指针与滑动窗口",
+      "problem": "reverse-words-in-a-string",
+      "date": "2026-10-16"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-10-16",
+      "verdict": "Accepted",
+      "testcases": "62/62",
+      "runtime_ms": null,
+      "memory_bytes": 44320000,
+      "approach": "整体反转后逐单词恢复字符顺序",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "optimal": true,
+      "notes": "独立实现整体反转、逐单词逆序追加并合并连续空格；本地 13 项测试通过，首次远端提交 Accepted（62/62）。时间 O(n)、空间 O(n)。可把 Character.isLetterOrDigit 简化为非空格判断，直接对应本题单词边界。",
+      "code": "public String reverseWords(String s) {\n        s = new StringBuilder(s.trim()).reverse().toString();\n        int n = s.length();\n        StringBuilder ans = new StringBuilder();\n        int index = 0;\n        while (index < n) {\n            if (s.charAt(index) == ' ') {\n                ans.append(' ');\n            }\n            while (index < n && s.charAt(index) == ' ') {\n                index++;\n            }\n            int start = index;\n            while (index < n && Character.isLetterOrDigit(s.charAt(index))) {\n                index++;\n            }\n            for (int i = index - 1; i >= start; i--) {\n                ans.append(s.charAt(i));\n            }\n        }\n        return ans.toString();\n    }"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

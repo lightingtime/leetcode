@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-16",
-  "current_seq": 179,
+  "current_seq": 180,
   "done": [
     {
       "seq": 1,
@@ -1959,6 +1959,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "独立实现固定左端点后从右向左扫描，首次提交 Accepted；经复杂度提示后改为左右指针单调移动，新写法首次提交也 Accepted。当前时间 O(n)、空间 O(1)。跳过重复左端值的分支可删除，单调移动本身已保证线性复杂度。"
+    },
+    {
+      "seq": 180,
+      "id": "151",
+      "title": "反转字符串中的单词",
+      "slug": "reverse-words-in-a-string",
+      "category": "双指针与滑动窗口",
+      "date": "2026-10-16",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "独立实现整体反转、逐单词逆序追加并合并连续空格；本地 13 项测试通过，首次远端提交 Accepted（62/62）。时间 O(n)、空间 O(n)。可把 Character.isLetterOrDigit 简化为非空格判断，直接对应本题单词边界。"
     }
   ],
   "error_habits": [
