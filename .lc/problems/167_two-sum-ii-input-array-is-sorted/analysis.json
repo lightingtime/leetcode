@@ -1,0 +1,64 @@
+{
+  "seq": 179,
+  "id": "167",
+  "slug": "two-sum-ii-input-array-is-sorted",
+  "title": "两数之和 II - 输入有序数组",
+  "category": "双指针与滑动窗口",
+  "date": "2026-10-16",
+  "verdict": "Accepted",
+  "testcases": "26/26",
+  "runtime_ms": null,
+  "memory_bytes": 48520000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "有序数组相向双指针（左右指针单调移动）",
+  "dp_subtype": "",
+  "approach_detail": "## 问题本质与解法选择\n数组非递减，每次比较两端之和，可以排除一个端点参与的全部剩余组合。保留两个单调移动的指针，避免旧写法每轮重置右端点而重复扫描。\n\n## 关键设计决策\n| 变量 | 语义 |\n| --- | --- |\n| i | 剩余候选区间的左端下标，初值 0 |\n| j | 剩余候选区间的右端下标，初值 n-1 |\n| sum | numbers[i]+numbers[j] |\n\n保持 i<j，禁止同一下标使用两次。sum 小于目标时，固定 i 与任何更小的右端值相加仍小于目标，因此排除 i；sum 大于目标时，固定 j 与任何更大的左端值相加仍大于目标，因此排除 j。\n\n具体推演：numbers=[1,2,4]、target=6。\n1. i=0、j=2，sum=1+4=5；1 与剩余更小值 2 相加也不足 6，排除左端 1。\n2. i=1、j=2，sum=2+4=6，返回从 1 开始的下标 [2,3]。\n\n## 边界与细节\n[0,0]、target=0：i=0、j=1，两个不同位置可有相同数值，返回 [1,2]。[1,2,3]、target=4：先比较 1+3，返回 [1,3]，不能把中间的 2 使用两次。题目保证唯一答案，长度至少 2，无须处理空数组或无解输入。值和目标均在 [-1000,1000]，两数之和不会溢出 int。跳过重复左端值仅在此前左端被排除后发生，不影响正确性，但该分支并非必需，可删除以精简代码。\n\n## 复杂度与最优性\ni 只增加、j 只减少，每轮至少移动一个指针，二者相遇前总移动次数至多 n-1；时间 O(n)、额外空间 O(1)。一般有序数组比较模型下，最坏情况需要排除线性数量的候选位置，线性扫描达到该模型的最优量级。当前题值域固定为 2001 种整数；旧写法跳过重复左端值后，更精确的上界是 O(n*min(n,2001))，通常按可变值域分析记作 O(n²)。新版无需依赖值域限制来保证线性。",
+  "time_complexity": "O(n)",
+  "space_complexity": "O(1)",
+  "notes": "独立实现固定左端点后从右向左扫描，首次提交 Accepted；经复杂度提示后改为左右指针单调移动，新写法首次提交也 Accepted。当前时间 O(n)、空间 O(1)。跳过重复左端值的分支可删除，单调移动本身已保证线性复杂度。",
+  "code_notes": [
+    "相向双指针已保证线性复杂度，可删除循环开头跳过重复左端值的分支，减少不必要判断。"
+  ],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "有序数组相向双指针：按和的大小排除端点",
+      "text": "非递减数组中，和偏小则排除左端点，和偏大则排除右端点；每次排除需证明该端点与区间内其他元素均不可能组成目标。左右指针只向内移动，不要每轮重置右端。",
+      "category": "双指针与滑动窗口",
+      "problem": "two-sum-ii-input-array-is-sorted",
+      "date": "2026-10-16"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-10-16",
+      "verdict": "Accepted",
+      "testcases": "26/26",
+      "runtime_ms": null,
+      "memory_bytes": 48520000,
+      "approach": "有序数组相向双指针（左右指针单调移动）",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "optimal": true,
+      "notes": "独立实现固定左端点后从右向左扫描，首次提交 Accepted；经复杂度提示后改为左右指针单调移动，新写法首次提交也 Accepted。当前时间 O(n)、空间 O(1)。跳过重复左端值的分支可删除，单调移动本身已保证线性复杂度。",
+      "code": "public int[] twoSum(int[] numbers, int target) {\n        int i = 0;\n        int j = numbers.length - 1;\n        while (i < j) {\n            if (i > 0 && numbers[i] == numbers[i - 1]) {\n                i++;\n                continue;\n            }\n                int sum  = numbers[i] + numbers[j];\n                if (sum == target) {\n                    return new int[]{i + 1, j + 1};\n                } else if (sum < target) {\n                    i++;\n                } else {\n                    j--;\n                }\n        }\n        return new int[] {-1, -1};\n    }"
+    },
+    {
+      "date": "2026-10-16",
+      "verdict": "Accepted",
+      "testcases": "26/26",
+      "runtime_ms": null,
+      "memory_bytes": 48992000,
+      "approach": "固定左端点，重置右端点向左扫描",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "optimal": false,
+      "notes": "原写法首次提交 Accepted；固定左端值后重置右端指针，和偏小提前结束本轮，和偏大向左扫描。重复左端值跳过，减少重复搜索；一般可变值域分析为 O(n²)。",
+      "code": "public int[] twoSum(int[] numbers, int target) {\n    for (int i = 0; i < numbers.length - 1; i++) {\n        if (i > 0 && numbers[i] == numbers[i - 1]) {\n            continue;\n        }\n        int j = numbers.length - 1;\n        while (i < j) {\n            int sum  = numbers[i] + numbers[j];\n            if (sum == target) {\n                return new int[]{i + 1, j + 1};\n            } else if (sum < target) {\n                break;\n            } else {\n                j--;\n            }\n        }\n    }\n    return new int[] {-1, -1};\n}"
+    }
+  ],
+  "hints": [
+    "看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。"
+  ]
+}

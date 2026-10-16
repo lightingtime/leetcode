@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC167 两数之和 II - 输入有序数组 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 179</div>
+  <h1>LC167 · 两数之和 II - 输入有序数组</h1>
+  <div class="sub">有序数组相向双指针（左右指针单调移动） · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 26/26</span>
+    <span class="badge medium">难度 MEDIUM</span>
+    <span class="badge tag">分类 双指针与滑动窗口</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    <span class="badge hard">重点复习</span>
+    
+    <span class="badge">2026-10-16</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>167. 两数之和 II - 输入有序数组 (Two Sum II - Input Array Is Sorted)</h1><p>&gt; <a href="https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/" rel="noopener">https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/</a></p><p>难度：Medium ｜ 分类：双指针与滑动窗口</p><p>标签：数组、双指针、二分查找</p><h2>题目描述</h2><p>给你一个下标从 1 开始的整数数组 numbers ，该数组已按 非递减顺序排列。</p><p>请你从数组中找出满足相加之和等于目标数 target 的 两个 数。令这两个数分别是 numbers[index1] 和 numbers[index2] ，其中 1 1 2 。</p><p>以长度为 2 的整数数组 [index1, index2] 的形式返回这两个整数的下标 index1 和 index2。</p><p>你可以假设每个输入 只对应唯一的答案 ，而且你 不可以 重复使用相同的元素。</p><p>你所设计的解决方案必须只使用常数级的额外空间。</p><p>示例 1：</p><p>输入：numbers = [2,7,11,15], target = 9</p><p>输出：[1,2]</p><p>解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。</p><p>示例 2：</p><p>输入：numbers = [2,3,4], target = 6</p><p>输出：[1,3]</p><p>解释：2 与 4 之和等于目标数 6 。因此 index1 = 1, index2 = 3 。返回 [1, 3] 。</p><p>示例 3：</p><p>输入：numbers = [-1,0], target = -1</p><p>输出：[1,2]</p><p>解释：-1 与 0 之和等于目标数 -1 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。</p><p>提示：</p><p>2 4</p><p>-1000</p><p>numbers 按 非递减顺序 排列</p><p>-1000</p><p>仅存在一个有效答案</p><h2>示例</h2><ol><li>输入：numbers = [2,7,11,15]，target = 9</li></ol><p>输出：[1,2]</p><p>解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。</p><ol><li>输入：numbers = [2,3,4]，target = 6</li></ol><p>输出：[1,3]</p><p>解释：2 与 4 之和等于目标数 6 。因此 index1 = 1, index2 = 3 。返回 [1, 3] 。</p><ol><li>输入：numbers = [-1,0]，target = -1</li></ol><p>输出：[1,2]</p><p>解释：-1 与 0 之和等于目标数 -1 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>有序数组相向双指针（左右指针单调移动）</b></li>
+        <li><span>复杂度</span><b>O(n) · O(1)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 有序数组相向双指针（左右指针单调移动）</h3>
+    <p><span class="chip">时间 O(n)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.3 MB</span><span class="chip">用例 26/26</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0167_TwoSumIiInputArrayIsSorted.java · 有序数组相向双指针（左右指针单调移动）</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] numbers, <span class="tk-k">int</span> target) {
+        <span class="tk-k">int</span> i = <span class="tk-n">0</span>;
+        <span class="tk-k">int</span> j = numbers.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt; j) {
+            <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; numbers[i] == numbers[i - <span class="tk-n">1</span>]) {
+                i++;
+                <span class="tk-k">continue</span>;
+            }
+                <span class="tk-k">int</span> sum  = numbers[i] + numbers[j];
+                <span class="tk-k">if</span> (sum == target) {
+                    <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[]{i + <span class="tk-n">1</span>, j + <span class="tk-n">1</span>};
+                } <span class="tk-k">else</span> <span class="tk-k">if</span> (sum &lt; target) {
+                    i++;
+                } <span class="tk-k">else</span> {
+                    j--;
+                }
+        }
+        <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[] {-<span class="tk-n">1</span>, -<span class="tk-n">1</span>};
+    }</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 固定左端点，重置右端点向左扫描</h3>
+    <p><span class="chip">时间 O(n²)</span><span class="chip">空间 O(1)</span><span class="chip">内存 ≈ 46.7 MB</span><span class="chip">用例 26/26</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0167_TwoSumIiInputArrayIsSorted.java · 固定左端点，重置右端点向左扫描</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-k">int</span>[] <span class="tk-f">twoSum</span>(<span class="tk-k">int</span>[] numbers, <span class="tk-k">int</span> target) {
+    <span class="tk-k">for</span> (<span class="tk-k">int</span> i = <span class="tk-n">0</span>; i &lt; numbers.length - <span class="tk-n">1</span>; i++) {
+        <span class="tk-k">if</span> (i &gt; <span class="tk-n">0</span> &amp;&amp; numbers[i] == numbers[i - <span class="tk-n">1</span>]) {
+            <span class="tk-k">continue</span>;
+        }
+        <span class="tk-k">int</span> j = numbers.length - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &lt; j) {
+            <span class="tk-k">int</span> sum  = numbers[i] + numbers[j];
+            <span class="tk-k">if</span> (sum == target) {
+                <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[]{i + <span class="tk-n">1</span>, j + <span class="tk-n">1</span>};
+            } <span class="tk-k">else</span> <span class="tk-k">if</span> (sum &lt; target) {
+                <span class="tk-k">break</span>;
+            } <span class="tk-k">else</span> {
+                j--;
+            }
+        }
+    }
+    <span class="tk-k">return</span> <span class="tk-k">new</span> <span class="tk-k">int</span>[] {-<span class="tk-n">1</span>, -<span class="tk-n">1</span>};
+}</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><h2>问题本质与解法选择</h2><p>数组非递减，每次比较两端之和，可以排除一个端点参与的全部剩余组合。保留两个单调移动的指针，避免旧写法每轮重置右端点而重复扫描。</p><h2>关键设计决策</h2><div class="table-wrap"><table><thead><tr><th>变量</th><th>语义</th></tr></thead><tbody><tr><td>i</td><td>剩余候选区间的左端下标，初值 0</td></tr><tr><td>j</td><td>剩余候选区间的右端下标，初值 n-1</td></tr><tr><td>sum</td><td>numbers[i]+numbers[j]</td></tr></tbody></table></div><p>保持 i&lt;j，禁止同一下标使用两次。sum 小于目标时，固定 i 与任何更小的右端值相加仍小于目标，因此排除 i；sum 大于目标时，固定 j 与任何更大的左端值相加仍大于目标，因此排除 j。</p><p>具体推演：numbers=[1,2,4]、target=6。</p><ol><li>i=0、j=2，sum=1+4=5；1 与剩余更小值 2 相加也不足 6，排除左端 1。</li><li>i=1、j=2，sum=2+4=6，返回从 1 开始的下标 [2,3]。</li></ol><h2>边界与细节</h2><p>[0,0]、target=0：i=0、j=1，两个不同位置可有相同数值，返回 [1,2]。[1,2,3]、target=4：先比较 1+3，返回 [1,3]，不能把中间的 2 使用两次。题目保证唯一答案，长度至少 2，无须处理空数组或无解输入。值和目标均在 [-1000,1000]，两数之和不会溢出 int。跳过重复左端值仅在此前左端被排除后发生，不影响正确性，但该分支并非必需，可删除以精简代码。</p><h2>复杂度与最优性</h2><p>i 只增加、j 只减少，每轮至少移动一个指针，二者相遇前总移动次数至多 n-1；时间 O(n)、额外空间 O(1)。一般有序数组比较模型下，最坏情况需要排除线性数量的候选位置，线性扫描达到该模型的最优量级。当前题值域固定为 2001 种整数；旧写法跳过重复左端值后，更精确的上界是 O(n*min(n,2001))，通常按可变值域分析记作 O(n²)。新版无需依赖值域限制来保证线性。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>26/26 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>有序数组相向双指针：按和的大小排除端点</h3><p>非递减数组中，和偏小则排除左端点，和偏大则排除右端点；每次排除需证明该端点与区间内其他元素均不可能组成目标。左右指针只向内移动，不要每轮重置右端。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">26/26</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 46.3 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(n) · O(1)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 双指针与滑动窗口</h3><div class="quote">看到有序数组/子数组/子串问题，先想排序后双指针或滑动窗口，把 O(n²) 降到 O(n)。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>复习提醒</h3><div class="quote">★ 相向双指针已保证线性复杂度，可删除循环开头跳过重复左端值的分支，减少不必要判断。</div>
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 179 · two-sum-ii-input-array-is-sorted</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">独立实现固定左端点后从右向左扫描，首次提交 Accepted；经复杂度提示后改为左右指针单调移动，新写法首次提交也 Accepted。当前时间 O(n)、空间 O(1)。跳过重复左端值的分支可删除，单调移动本身已保证线性复杂度。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 双指针与滑动窗口</h2><ul class="similar-list"><li><a href="../双指针与滑动窗口/LC0141_LinkedListCycle_Review.html">LC141 · 环形链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0160_IntersectionOfTwoLinkedLists_Review.html">LC160 · 相交链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0234_PalindromeLinkedList_Review.html">LC234 · 回文链表</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0283_MoveZeroes_Review.html">LC283 · 移动零</a><span class="chip">EASY</span></li><li><a href="../双指针与滑动窗口/LC0003_LongestSubstringWithoutRepeatingCharacters_Review.html">LC3 · 无重复字符的最长子串</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0011_ContainerWithMostWater_Review.html">LC11 · 盛最多水的容器</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0015_3sum_Review.html">LC15 · 三数之和</a><span class="chip">MEDIUM</span></li><li><a href="../双指针与滑动窗口/LC0019_RemoveNthNodeFromEndOfList_Review.html">LC19 · 删除链表的倒数第 N 个结点</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/167_two-sum-ii-input-array-is-sorted/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%8F%8C%E6%8C%87%E9%92%88%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/LC0167_TwoSumIiInputArrayIsSorted.java">src/双指针与滑动窗口/LC0167_TwoSumIiInputArrayIsSorted.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-10-16
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>
