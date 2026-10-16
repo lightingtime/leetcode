@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC415 字符串相加 · 刷题复盘</title>
+<link rel="stylesheet" href="../review.css">
+</head>
+<body>
+<div class="markdown-body">
+  <div class="page-head">
+  <div class="kicker">LEETCODE 刷题复盘 · SEQ 181</div>
+  <h1>LC415 · 字符串相加</h1>
+  <div class="sub">逐位相加，尾部追加后反转 · Accepted</div>
+  <div class="badges">
+    <span class="badge ok">✓ Accepted 317/317</span>
+    <span class="badge easy">难度 EASY</span>
+    <span class="badge tag">分类 字符串</span>
+    
+    <span class="badge plain">一次通过</span>
+    <span class="badge ok">最优解</span>
+    <span class="badge hard">重点复习</span>
+    
+    <span class="badge">2026-10-16</span>
+  </div>
+</div>
+  <details class="review-problem"><summary>题目回顾 <span class="muted">点击展开 / 收起</span></summary><div class="card md"><h1>415. 字符串相加 (Add Strings)</h1><p>&gt; <a href="https://leetcode.cn/problems/add-strings/" rel="noopener">https://leetcode.cn/problems/add-strings/</a></p><p>难度：Easy ｜ 分类：字符串</p><p>标签：数学、字符串、模拟</p><h2>题目描述</h2><p>给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。</p><p>你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。</p><p>示例 1：</p><p>输入：num1 = "11", num2 = "123"</p><p>输出："134"</p><p>示例 2：</p><p>输入：num1 = "456", num2 = "77"</p><p>输出："533"</p><p>示例 3：</p><p>输入：num1 = "0", num2 = "0"</p><p>输出："0"</p><p>提示：</p><p>1 4</p><p>num1 和num2 都只包含数字 0-9</p><p>num1 和num2 都不包含任何前导零</p><h2>示例</h2><ol><li>输入：num1 = "11"，num2 = "123"</li></ol><p>输出："134"</p><ol><li>输入：num1 = "456"，num2 = "77"</li></ol><p>输出："533"</p><ol><li>输入：num1 = "0"，num2 = "0"</li></ol><p>输出："0"</p></div></details>
+  
+  <section><h2>历轮表现</h2><div class="rounds"><div class="round-card">
+      <h3>1. 第一轮（一刷）</h3>
+      <ul class="round-meta">
+        <li><span>思路</span><b>逐位相加，尾部追加后反转</b></li>
+        <li><span>复杂度</span><b>O(L) · O(L)</b></li>
+        
+      </ul>
+    </div></div></section>
+  <section><h2>我的解法</h2><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 1 · 逐位相加，尾部追加后反转</h3>
+    <p><span class="chip">时间 O(L)</span><span class="chip">空间 O(L)</span><span class="chip">内存 ≈ 42.4 MB</span><span class="chip">用例 317/317</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0415_AddStrings.java · 逐位相加，尾部追加后反转</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">addStrings</span>(<span class="tk-t">String</span> num1, <span class="tk-t">String</span> num2) {
+        <span class="tk-k">int</span> next = <span class="tk-n">0</span>;
+        <span class="tk-t">StringBuilder</span> ans = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+        <span class="tk-k">int</span> i = num1.<span class="tk-f">length</span>() - <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> j = num2.<span class="tk-f">length</span>() - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &gt;= <span class="tk-n">0</span> || j &gt;= <span class="tk-n">0</span> || next &gt; <span class="tk-n">0</span>) {
+            <span class="tk-k">int</span> a = i &gt;= <span class="tk-n">0</span> ? num1.<span class="tk-f">charAt</span>(i) - <span class="tk-s">'0'</span> : <span class="tk-n">0</span>;
+            <span class="tk-k">int</span> b = j &gt;= <span class="tk-n">0</span> ? num2.<span class="tk-f">charAt</span>(j) - <span class="tk-s">'0'</span> : <span class="tk-n">0</span>;
+            <span class="tk-k">int</span> sum = a + b + next;
+            ans.<span class="tk-f">append</span>(sum % <span class="tk-n">10</span>);
+            next = sum / <span class="tk-n">10</span>;
+            i--;
+            j--;
+        }
+        ans.<span class="tk-f">reverse</span>();
+        <span class="tk-k">return</span> ans.<span class="tk-f">toString</span>();
+    }</pre></div>
+    
+  </div><div class="card" style="margin-top:12px">
+    <h3 style="margin:0 0 8px">写法 2 · 逐位相加，结果头部插入</h3>
+    <p><span class="chip">时间 O(L²)</span><span class="chip">空间 O(L)</span><span class="chip">内存 ≈ 43.4 MB</span><span class="chip">用例 317/317</span></p>
+    <div class="code-wrap"><div class="code-head"><span>LC0415_AddStrings.java · 逐位相加，结果头部插入</span><span class="code-actions"><span class="code-tag">提交区</span><button type="button" class="copy-btn" onclick="copyCode(this)">复制代码</button></span></div><pre><span class="tk-k">public</span> <span class="tk-t">String</span> <span class="tk-f">addStrings</span>(<span class="tk-t">String</span> num1, <span class="tk-t">String</span> num2) {
+        <span class="tk-k">int</span> next = <span class="tk-n">0</span>;
+        <span class="tk-t">StringBuilder</span> ans = <span class="tk-k">new</span> <span class="tk-t">StringBuilder</span>();
+        <span class="tk-k">int</span> i = num1.<span class="tk-f">length</span>() - <span class="tk-n">1</span>;
+        <span class="tk-k">int</span> j = num2.<span class="tk-f">length</span>() - <span class="tk-n">1</span>;
+        <span class="tk-k">while</span> (i &gt;= <span class="tk-n">0</span> || j &gt;= <span class="tk-n">0</span> || next &gt; <span class="tk-n">0</span>) {
+            <span class="tk-k">int</span> a = i &gt;= <span class="tk-n">0</span> ? num1.<span class="tk-f">charAt</span>(i) - <span class="tk-s">'0'</span> : <span class="tk-n">0</span>;
+            <span class="tk-k">int</span> b = j &gt;= <span class="tk-n">0</span> ? num2.<span class="tk-f">charAt</span>(j) - <span class="tk-s">'0'</span> : <span class="tk-n">0</span>;
+            <span class="tk-k">int</span> sum = a + b + next;
+            ans.<span class="tk-f">insert</span>(<span class="tk-n">0</span>, sum % <span class="tk-n">10</span>);
+            next = sum / <span class="tk-n">10</span>;
+            i--;
+            j--;
+        }
+        <span class="tk-k">return</span> ans.<span class="tk-f">toString</span>();
+    }</pre></div>
+    
+  </div></section>
+  <section><h2>思路拆解</h2><div class="card md"><h2>问题本质与解法选择</h2><p>输入可以长达 10000 位，不能整体转整数或使用大整数库。模拟竖式加法，从个位开始相加，每次只需两位数字和上一位的进位。低位先计算，先按计算顺序尾部追加，最后统一反转，避免头插反复移动已有字符。</p><h2>关键设计决策</h2><div class="table-wrap"><table><thead><tr><th>变量</th><th>语义</th></tr></thead><tbody><tr><td>i、j</td><td>两个字符串当前待处理位的下标，从末尾向前移动</td></tr><tr><td>a、b</td><td>当前位数字，下标越界时补 0</td></tr><tr><td>next</td><td>低一位传入当前位的进位，取值 0 或 1</td></tr><tr><td>sum</td><td>a+b+next，范围 0～19</td></tr><tr><td>ans</td><td>已计算结果位，按低位到高位存储</td></tr></tbody></table></div><p>循环条件 i&gt;=0 或 j&gt;=0 或 next&gt;0：任何输入还有未处理数字，或者最后还存在进位，都要继续。sum%10 得到当前结果位，sum/10 得到下一轮进位。只要输入下标有效才 charAt，越界补 0 来统一处理长度差异。</p><p>推演 num1="99"、num2="1"：</p><ol><li>i=1、j=0、next=0，a=9、b=1，sum=10，追加 0；ans="0"、next=1。</li><li>i=0、j=-1，a=9、b=0，sum=10，追加 0；ans="00"、next=1。</li><li>i=-1、j=-2，两个输入已用完但仍有进位，sum=1，追加 1；ans="001"、next=0。</li><li>三个继续条件均不满足，退出并反转得到 "100"。</li></ol><h2>边界与细节</h2><p>"0"+"0" 至少执行一轮，输出 "0"。"2"+"3" 得到 sum=5、next=0，单轮输出 "5"。输入没有前导零，不能把前导零输入当成测试要求。已覆盖两个输入长短交换、内部零、连续进位、超出 int 和 long 范围，以及输入长度 10000 的上限。每轮 sum 至多 19，单轮 int 运算安全。</p><h2>复杂度与最优性</h2><p>令 L=max(num1.length,num2.length)。循环至多 L+1 次，StringBuilder 尾部追加摊还 O(1)，统一反转与构造字符串均为 O(L)，总时间 O(L)。结果构造器和返回字符串占用 O(L) 空间，指针及进位为 O(1)。最坏情况需读取 L 位并输出 L 或 L+1 位，因此时间达到线性下限；计入结果构造与返回值时空间为 O(L)。头插版第 k 次插入需搬移 k 个已有字符，总搬移量为 0+1+...+(L-1)，时间 O(L²)。</p></div></section>
+  <section><h2>解题过程</h2><div class="tl"><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">01 · 本地测试<span class="tl-badge ok">通过</span></span><p>示例 + 边界用例本地全部通过后提交。</p></div></div><div class="tl-item"><div class="tl-marker"></div><div class="tl-body"><span class="tl-title">02 · 提交<span class="tl-badge ok">Accepted</span></span><p>317/317 用例一次通过。</p></div></div></div></section>
+  <section><h2>套路沉淀</h2><div class="card md"><h3>竖式加法：低位先算，尾部追加后反转</h3><p>双下标从末尾开始，越界位补 0；sum=a+b+carry，当前位取 sum%10、进位取 sum/10。循环覆盖残留进位，结果尾部追加并最终反转。例：99+1 依次产生 0、0、1，反转得到 100；避免头插搬移字符造成平方时间。</p></div></section>
+  <section><h2>分析结果</h2>
+    <div class="metrics">
+      <div class="metric ok"><div class="v">Accepted</div><div class="l">判题状态</div></div>
+      <div class="metric ok"><div class="v">317/317</div><div class="l">通过用例</div></div>
+      <div class="metric"><div class="v">≈ 42.4 MB</div><div class="l">内存占用</div></div>
+      <div class="metric ok"><div class="v">O(L) · O(L)</div><div class="l">时间 · 空间</div></div>
+      <div class="metric ok"><div class="v">一次</div><div class="l">提交次数</div></div>
+    </div>
+    <div class="card">
+      <h3>算法判定</h3>
+      <p>思路已达该题最优复杂度。</p>
+      <h3>分类提醒 · 字符串</h3><div class="quote">字符串子串/子序列题先想双指针、滑动窗口、DP 三大件。</div>
+      <h3>错误习惯复盘</h3><p>本轮无新增算法/逻辑级错误习惯。</p>
+      <h3>复习提醒</h3><div class="quote">★ next 可命名为 carry，以直接表达进位含义；ans.reverse() 与 toString() 可链式调用。</div>
+      <h3>完成记录</h3>
+      <p><span class="chip">seq 181 · add-strings</span><span class="chip">firstPass: true</span><span class="chip">optimal: true</span></p>
+      <div class="quote">独立实现逐位相加并处理进位，头插版首次提交 Accepted；根据头插搬移字符的复杂度提示，改为尾部追加后统一反转，优化版首次提交也 Accepted。两版均通过 317/317；时间从 O(L²) 降到 O(L)，空间 O(L)。</div>
+    </div>
+  </section>
+  <section><h2>同类题 · 字符串</h2><ul class="similar-list"><li><a href="../字符串/LC0014_LongestCommonPrefix_Review.html">LC14 · 最长公共前缀</a><span class="chip">EASY</span></li><li><a href="../字符串/LC0171_ExcelSheetColumnNumber_Review.html">LC171 · Excel 表列序号</a><span class="chip">EASY</span></li><li><a href="../字符串/LC0412_FizzBuzz_Review.html">LC412 · Fizz Buzz</a><span class="chip">EASY</span></li><li><a href="../字符串/LC0008_StringToIntegerAtoi_Review.html">LC8 · 字符串转换整数 (atoi)</a><span class="chip">MEDIUM</span></li><li><a href="../字符串/LC0038_CountAndSay_Review.html">LC38 · 外观数列</a><span class="chip">MEDIUM</span></li></ul></section>
+  <div class="foot">
+    数据来源：力扣判题接口 · <code>.lc/problems/415_add-strings/analysis.json</code> · <code>.lc/progress.json</code> ｜ 环境：IntelliJ IDEA + Java 21 + 力扣中国站<br>
+    相关文件：<a href="../../src/%E5%AD%97%E7%AC%A6%E4%B8%B2/LC0415_AddStrings.java">src/字符串/LC0415_AddStrings.java</a> ·
+    <a href="../../index.html">训练主页</a><br>
+    生成于 2026-10-16
+  </div>
+</div>
+<script>
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  var done = function(){ flash(btn); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(btn, text, done); });
+  } else {
+    fallback(btn, text, done);
+  }
+}
+function fallback(btn, text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { alert('复制失败，请手动选择代码复制'); }
+  document.body.removeChild(ta);
+}
+function flash(btn) {
+  var old = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(function(){ btn.textContent = old; btn.classList.remove('copied'); }, 1200);
+}
+</script>
+</body>
+</html>

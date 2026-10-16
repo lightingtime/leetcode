@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-16",
-  "current_seq": 180,
+  "current_seq": 181,
   "done": [
     {
       "seq": 1,
@@ -1970,6 +1970,17 @@
       "firstPass": true,
       "optimal": true,
       "notes": "独立实现整体反转、逐单词逆序追加并合并连续空格；本地 13 项测试通过，首次远端提交 Accepted（62/62）。时间 O(n)、空间 O(n)。可把 Character.isLetterOrDigit 简化为非空格判断，直接对应本题单词边界。"
+    },
+    {
+      "seq": 181,
+      "id": "415",
+      "title": "字符串相加",
+      "slug": "add-strings",
+      "category": "字符串",
+      "date": "2026-10-16",
+      "firstPass": true,
+      "optimal": true,
+      "notes": "独立实现逐位相加并处理进位，头插版首次提交 Accepted；根据头插搬移字符的复杂度提示，改为尾部追加后统一反转，优化版首次提交也 Accepted。两版均通过 317/317；时间从 O(L²) 降到 O(L)，空间 O(L)。"
     }
   ],
   "error_habits": [

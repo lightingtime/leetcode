@@ -1,0 +1,64 @@
+{
+  "seq": 181,
+  "id": "415",
+  "slug": "add-strings",
+  "title": "字符串相加",
+  "category": "字符串",
+  "date": "2026-10-16",
+  "verdict": "Accepted",
+  "testcases": "317/317",
+  "runtime_ms": null,
+  "memory_bytes": 44452000,
+  "firstPass": true,
+  "optimal": true,
+  "approach": "逐位相加，尾部追加后反转",
+  "dp_subtype": "",
+  "approach_detail": "## 问题本质与解法选择\n输入可以长达 10000 位，不能整体转整数或使用大整数库。模拟竖式加法，从个位开始相加，每次只需两位数字和上一位的进位。低位先计算，先按计算顺序尾部追加，最后统一反转，避免头插反复移动已有字符。\n\n## 关键设计决策\n| 变量 | 语义 |\n| --- | --- |\n| i、j | 两个字符串当前待处理位的下标，从末尾向前移动 |\n| a、b | 当前位数字，下标越界时补 0 |\n| next | 低一位传入当前位的进位，取值 0 或 1 |\n| sum | a+b+next，范围 0～19 |\n| ans | 已计算结果位，按低位到高位存储 |\n\n循环条件 i>=0 或 j>=0 或 next>0：任何输入还有未处理数字，或者最后还存在进位，都要继续。sum%10 得到当前结果位，sum/10 得到下一轮进位。只要输入下标有效才 charAt，越界补 0 来统一处理长度差异。\n\n推演 num1=\"99\"、num2=\"1\"：\n1. i=1、j=0、next=0，a=9、b=1，sum=10，追加 0；ans=\"0\"、next=1。\n2. i=0、j=-1，a=9、b=0，sum=10，追加 0；ans=\"00\"、next=1。\n3. i=-1、j=-2，两个输入已用完但仍有进位，sum=1，追加 1；ans=\"001\"、next=0。\n4. 三个继续条件均不满足，退出并反转得到 \"100\"。\n\n## 边界与细节\n\"0\"+\"0\" 至少执行一轮，输出 \"0\"。\"2\"+\"3\" 得到 sum=5、next=0，单轮输出 \"5\"。输入没有前导零，不能把前导零输入当成测试要求。已覆盖两个输入长短交换、内部零、连续进位、超出 int 和 long 范围，以及输入长度 10000 的上限。每轮 sum 至多 19，单轮 int 运算安全。\n\n## 复杂度与最优性\n令 L=max(num1.length,num2.length)。循环至多 L+1 次，StringBuilder 尾部追加摊还 O(1)，统一反转与构造字符串均为 O(L)，总时间 O(L)。结果构造器和返回字符串占用 O(L) 空间，指针及进位为 O(1)。最坏情况需读取 L 位并输出 L 或 L+1 位，因此时间达到线性下限；计入结果构造与返回值时空间为 O(L)。头插版第 k 次插入需搬移 k 个已有字符，总搬移量为 0+1+...+(L-1)，时间 O(L²)。",
+  "time_complexity": "O(L)",
+  "space_complexity": "O(L)",
+  "notes": "独立实现逐位相加并处理进位，头插版首次提交 Accepted；根据头插搬移字符的复杂度提示，改为尾部追加后统一反转，优化版首次提交也 Accepted。两版均通过 317/317；时间从 O(L²) 降到 O(L)，空间 O(L)。",
+  "code_notes": [
+    "next 可命名为 carry，以直接表达进位含义；ans.reverse() 与 toString() 可链式调用。"
+  ],
+  "mistakes": [],
+  "patterns": [
+    {
+      "title": "竖式加法：低位先算，尾部追加后反转",
+      "text": "双下标从末尾开始，越界位补 0；sum=a+b+carry，当前位取 sum%10、进位取 sum/10。循环覆盖残留进位，结果尾部追加并最终反转。例：99+1 依次产生 0、0、1，反转得到 100；避免头插搬移字符造成平方时间。",
+      "category": "字符串",
+      "problem": "add-strings",
+      "date": "2026-10-16"
+    }
+  ],
+  "submissions": [
+    {
+      "date": "2026-10-16",
+      "verdict": "Accepted",
+      "testcases": "317/317",
+      "runtime_ms": null,
+      "memory_bytes": 44452000,
+      "approach": "逐位相加，尾部追加后反转",
+      "time_complexity": "O(L)",
+      "space_complexity": "O(L)",
+      "optimal": true,
+      "notes": "独立实现逐位相加并处理进位，头插版首次提交 Accepted；根据头插搬移字符的复杂度提示，改为尾部追加后统一反转，优化版首次提交也 Accepted。两版均通过 317/317；时间从 O(L²) 降到 O(L)，空间 O(L)。",
+      "code": "public String addStrings(String num1, String num2) {\n        int next = 0;\n        StringBuilder ans = new StringBuilder();\n        int i = num1.length() - 1;\n        int j = num2.length() - 1;\n        while (i >= 0 || j >= 0 || next > 0) {\n            int a = i >= 0 ? num1.charAt(i) - '0' : 0;\n            int b = j >= 0 ? num2.charAt(j) - '0' : 0;\n            int sum = a + b + next;\n            ans.append(sum % 10);\n            next = sum / 10;\n            i--;\n            j--;\n        }\n        ans.reverse();\n        return ans.toString();\n    }"
+    },
+    {
+      "date": "2026-10-16",
+      "verdict": "Accepted",
+      "testcases": "317/317",
+      "runtime_ms": null,
+      "memory_bytes": 45540000,
+      "approach": "逐位相加，结果头部插入",
+      "time_complexity": "O(L²)",
+      "space_complexity": "O(L)",
+      "optimal": false,
+      "notes": "独立实现逐位相加与进位，头插版首次提交 Accepted（317/317）。每次头插移动已有字符，总时间 O(L²)。",
+      "code": "public String addStrings(String num1, String num2) {\n        int next = 0;\n        StringBuilder ans = new StringBuilder();\n        int i = num1.length() - 1;\n        int j = num2.length() - 1;\n        while (i >= 0 || j >= 0 || next > 0) {\n            int a = i >= 0 ? num1.charAt(i) - '0' : 0;\n            int b = j >= 0 ? num2.charAt(j) - '0' : 0;\n            int sum = a + b + next;\n            ans.insert(0, sum % 10);\n            next = sum / 10;\n            i--;\n            j--;\n        }\n        return ans.toString();\n    }"
+    }
+  ],
+  "hints": [
+    "字符串子串/子序列题先想双指针、滑动窗口、DP 三大件。"
+  ]
+}

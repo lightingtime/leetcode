@@ -1,0 +1,66 @@
+{
+  "id": "415",
+  "slug": "add-strings",
+  "title": "Add Strings",
+  "titleCn": "字符串相加",
+  "difficulty": "Easy",
+  "url": "https://leetcode.cn/problems/add-strings/",
+  "tags": [
+    "Math",
+    "String",
+    "Simulation"
+  ],
+  "tagsCn": [
+    "数学",
+    "字符串",
+    "模拟"
+  ],
+  "category": "字符串",
+  "examples": [
+    {
+      "inputs": [
+        {
+          "name": "num1",
+          "value": "\"11\""
+        },
+        {
+          "name": "num2",
+          "value": "\"123\""
+        }
+      ],
+      "output": "\"134\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "num1",
+          "value": "\"456\""
+        },
+        {
+          "name": "num2",
+          "value": "\"77\""
+        }
+      ],
+      "output": "\"533\"",
+      "explain": ""
+    },
+    {
+      "inputs": [
+        {
+          "name": "num1",
+          "value": "\"0\""
+        },
+        {
+          "name": "num2",
+          "value": "\"0\""
+        }
+      ],
+      "output": "\"0\"",
+      "explain": ""
+    }
+  ],
+  "exampleTestcases": "\"11\"\n\"123\"\n\"456\"\n\"77\"\n\"0\"\n\"0\"",
+  "javaSnippet": "class Solution {\n    public String addStrings(String num1, String num2) {\n        \n    }\n}",
+  "fetchedAt": "2026-10-16T02:30:45.375Z"
+}
